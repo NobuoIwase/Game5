@@ -66,5 +66,6 @@
   },
   "art_method": "Eight independently generated views; no whole-character horizontal reflection. Symmetric hidden limb textures may be shared between anatomical legs.",
   "rig": "motion/rig.mjs",
-  "status": "first playable prototype; visual review pending"
+  "status": "prototype v2; direction, equipment and run-posture revision visually reviewed",
+  "revision": 2
 }

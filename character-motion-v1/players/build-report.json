@@ -1,7 +1,7 @@
 {
   "schema": "game5-mobile-player/1.0",
   "original_bundled_bytes": 34550379,
-  "index_bytes": 25590,
+  "index_bytes": 24890,
   "preview_frame_size": [
     192,
     256
@@ -10,50 +10,50 @@
     {
       "id": "warrior-walk",
       "path": "players/warrior-walk.html",
-      "bytes": 817852,
-      "webp_bytes": 602508,
+      "bytes": 795516,
+      "webp_bytes": 585756,
       "sheet_size": [
         1536,
         2048
       ],
-      "source_png_sha256": "3c958abe1dc6c561eb04f646f6e019736c10257f79cf9e6feb4e3678eeff8969",
-      "original_source_bytes": 6195487
+      "source_png_sha256": "f3a261d25de9a0ff10b0f614bb629e4ae60a83c41ba0d7c0124edaea48347495",
+      "original_source_bytes": 6022565
     },
     {
       "id": "warrior-run",
       "path": "players/warrior-run.html",
-      "bytes": 795234,
-      "webp_bytes": 585544,
+      "bytes": 753862,
+      "webp_bytes": 554516,
       "sheet_size": [
         1536,
         2048
       ],
-      "source_png_sha256": "220670d3241e2d98b8f9ea1ce08f8e4e3c50006f1275da3626254d334d89c801",
-      "original_source_bytes": 6076215
+      "source_png_sha256": "fa12be71296bef752349758e814063423b9fae30bf15b53d68deaceba55ea231",
+      "original_source_bytes": 5708354
     },
     {
       "id": "scout-walk",
       "path": "players/scout-walk.html",
-      "bytes": 750598,
-      "webp_bytes": 552060,
+      "bytes": 751826,
+      "webp_bytes": 552980,
       "sheet_size": [
         1536,
         2048
       ],
-      "source_png_sha256": "033cac0b581ba647cb78ec2618f7b80d6fe62a3124c9bba032e0cb6a2dde0f5b",
-      "original_source_bytes": 5989686
+      "source_png_sha256": "e330348538d029db555f637684006dd8ccb2a53205948502148187e5fc94325e",
+      "original_source_bytes": 5999217
     },
     {
       "id": "scout-run",
       "path": "players/scout-run.html",
-      "bytes": 719484,
-      "webp_bytes": 528726,
+      "bytes": 698536,
+      "webp_bytes": 513014,
       "sheet_size": [
         1536,
         2048
       ],
-      "source_png_sha256": "6109b5ca043182493ba160307f4ff38d77c35c2a6b6a07c0544d16b316966669",
-      "original_source_bytes": 5679166
+      "source_png_sha256": "2e94256b8f3935d153f472dcf812f2b402bb0a92c79892f93b8bc7d73211f501",
+      "original_source_bytes": 5468425
     },
     {
       "id": "generic-walk",
@@ -70,18 +70,18 @@
     {
       "id": "generic-run",
       "path": "players/generic-run.html",
-      "bytes": 406376,
-      "webp_bytes": 293898,
+      "bytes": 410400,
+      "webp_bytes": 296914,
       "sheet_size": [
         1536,
         2048
       ],
-      "source_png_sha256": "668f16bd5b2054d822a355821b1a5c50c9116f8b567164dc50fc81a535c65e8d",
-      "original_source_bytes": 1011508
+      "source_png_sha256": "c81f5b08a16f2dfab2079c5324614a6443d30f377ce0b7bf6ddc945ba53a5cfe",
+      "original_source_bytes": 1004415
     }
   ],
-  "total_page_bytes": 3948530,
-  "largest_page_bytes": 817852,
+  "total_page_bytes": 3869126,
+  "largest_page_bytes": 795516,
   "format": "One embedded WebP sprite sheet per standalone HTML page; no network dependencies",
   "original_pngs_unchanged": true
 }

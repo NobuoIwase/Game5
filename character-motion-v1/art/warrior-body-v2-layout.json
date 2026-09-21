@@ -1,0 +1,36 @@
+[
+  {
+    "direction": "front",
+    "generated_source_bounds": [
+      167,
+      6,
+      651,
+      1023
+    ],
+    "packed_offset": [
+      56,
+      12
+    ],
+    "packed_size": [
+      249,
+      523
+    ]
+  },
+  {
+    "direction": "down_left",
+    "generated_source_bounds": [
+      70,
+      25,
+      592,
+      1029
+    ],
+    "packed_offset": [
+      45,
+      12
+    ],
+    "packed_size": [
+      272,
+      523
+    ]
+  }
+]

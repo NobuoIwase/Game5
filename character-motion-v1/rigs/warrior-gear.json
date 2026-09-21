@@ -10,7 +10,12 @@
     "Polygons include only visible source equipment. Occluded handles and shield interiors are not reconstructed; source hands, body, and boots are excluded as far as the visible contours permit.",
     "Sword and shield anchors estimate source wrist joints, including wrists hidden by equipment. Scabbard anchors estimate the belt attachment so occluded upper sections retain their original offset from the hip.",
     "Layer back indicates equipment on the far side or behind the body. Renderer may apply more granular anatomical depth sorting.",
-    "Left profile has only a visible sword blade segment. Its grip is concealed by the body and shield. The source image itself does not establish an unambiguous wrist-to-hilt connection in that view."
+    "Left profile has only a visible sword blade segment. Its grip is concealed by the body and shield. The source image itself does not establish an unambiguous wrist-to-hilt connection in that view.",
+    "V2 calibrated attachments: source_grip is the contact point in equipped source artwork; bind_grip is the matching fist point in the current clean-body source cell. Both are mapped through the same lower-arm bone used to draw the glove.",
+    "Shield source_mount is moved to a calibrated midpoint of the left forearm, then transformed by precisely the same lower-arm bone matrix. No independent shield sway or fractional arm rotation is applied.",
+    "Equipment slot establishes intentional occlusion: back remains behind the body; under_arm lets the gripping hand or rear-view forearm cover equipment; cover_arm displays a near shield face over its own arm.",
+    "Hidden profile equipment uses an explicit invisible anatomical far-arm chain. It never borrows the visible opposite arm and never moves into a foreground slot.",
+    "Sword carry_angle_degrees is clockwise from screen right (90 means down). Every carry direction stays low, with only a small wrist-compensated swing; right-facing blades trail instead of pointing horizontally forward."
   ],
   "views": {
     "front": [
@@ -73,7 +78,21 @@
           ]
         ],
         "layer": "limb",
-        "notes": "Guard and exposed blade; glove remains with body."
+        "notes": "Guard and exposed blade; glove remains with body.",
+        "source_grip": [
+          96,
+          357
+        ],
+        "blade_tip": [
+          25,
+          517
+        ],
+        "bind_grip": [
+          78,
+          345
+        ],
+        "carry_angle_degrees": 112,
+        "slot": "under_arm"
       },
       {
         "id": "shield",
@@ -157,7 +176,15 @@
             258
           ]
         ],
-        "layer": "limb"
+        "layer": "limb",
+        "source_mount": [
+          282,
+          322
+        ],
+        "forearm_fraction": 0.5,
+        "forearm_outset": -7,
+        "bind_rotation_degrees": 0,
+        "slot": "cover_arm"
       },
       {
         "id": "scabbard",
@@ -230,7 +257,11 @@
           ]
         ],
         "layer": "back",
-        "notes": "Includes visible scabbard throat and lower sheath; excludes the hand contour."
+        "notes": "Includes visible scabbard throat and lower sheath; excludes the hand contour.",
+        "bind_anchor": [
+          212,
+          293
+        ]
       }
     ],
     "down_right": [
@@ -296,7 +327,21 @@
             360
           ]
         ],
-        "layer": "limb"
+        "layer": "limb",
+        "source_grip": [
+          98,
+          357
+        ],
+        "blade_tip": [
+          37,
+          518
+        ],
+        "bind_grip": [
+          101,
+          358
+        ],
+        "carry_angle_degrees": 110,
+        "slot": "under_arm"
       },
       {
         "id": "shield",
@@ -373,7 +418,15 @@
           ]
         ],
         "layer": "back",
-        "notes": "Visible shield back forms a crescent around far forearm and sheath; the occluded center is omitted."
+        "notes": "Visible shield back forms a crescent around far forearm and sheath; the occluded center is omitted.",
+        "source_mount": [
+          258,
+          313
+        ],
+        "forearm_fraction": 0.5,
+        "forearm_outset": -7,
+        "bind_rotation_degrees": 0,
+        "slot": "back"
       },
       {
         "id": "scabbard",
@@ -524,7 +577,21 @@
           ]
         ],
         "layer": "limb",
-        "notes": "Diagonal blade is isolated from the thigh and boot it crosses in the source."
+        "notes": "Diagonal blade is isolated from the thigh and boot it crosses in the source.",
+        "source_grip": [
+          173,
+          362
+        ],
+        "blade_tip": [
+          302,
+          494
+        ],
+        "bind_grip": [
+          177,
+          364
+        ],
+        "carry_angle_degrees": 105,
+        "slot": "under_arm"
       },
       {
         "id": "shield",
@@ -609,7 +676,29 @@
           ]
         ],
         "layer": "back",
-        "notes": "Only the exposed crescent behind the right forearm is extracted."
+        "notes": "Only the exposed crescent behind the right forearm is extracted.",
+        "source_mount": [
+          156,
+          315
+        ],
+        "forearm_fraction": 0.5,
+        "forearm_outset": 3,
+        "bind_rotation_degrees": 0,
+        "slot": "back",
+        "hidden_arm": [
+          [
+            164,
+            259
+          ],
+          [
+            156,
+            300
+          ],
+          [
+            149,
+            340
+          ]
+        ]
       },
       {
         "id": "scabbard",
@@ -752,7 +841,21 @@
             367
           ]
         ],
-        "layer": "limb"
+        "layer": "limb",
+        "source_grip": [
+          273,
+          367
+        ],
+        "blade_tip": [
+          339,
+          506
+        ],
+        "bind_grip": [
+          277,
+          365
+        ],
+        "carry_angle_degrees": 96,
+        "slot": "under_arm"
       },
       {
         "id": "shield",
@@ -829,7 +932,15 @@
           ]
         ],
         "layer": "back",
-        "notes": "Far-side shield crescent; exposed lower rim retained without the overlaid scabbard."
+        "notes": "Far-side shield crescent; exposed lower rim retained without the overlaid scabbard.",
+        "source_mount": [
+          131,
+          324
+        ],
+        "forearm_fraction": 0.5,
+        "forearm_outset": 4,
+        "bind_rotation_degrees": 0,
+        "slot": "back"
       },
       {
         "id": "scabbard",
@@ -975,7 +1086,21 @@
             348
           ]
         ],
-        "layer": "limb"
+        "layer": "limb",
+        "source_grip": [
+          282,
+          352
+        ],
+        "blade_tip": [
+          338,
+          477
+        ],
+        "bind_grip": [
+          290,
+          350
+        ],
+        "carry_angle_degrees": 68,
+        "slot": "under_arm"
       },
       {
         "id": "shield",
@@ -1068,7 +1193,15 @@
           ]
         ],
         "layer": "limb",
-        "notes": "Upper-right contour follows the occluding ponytail rather than including hair pixels."
+        "notes": "Upper-right contour follows the occluding ponytail rather than including hair pixels. Rear-view mount sits outside the forearm: the arm overlaps only the shield inner rim, never its central face.",
+        "source_mount": [
+          110,
+          310
+        ],
+        "forearm_fraction": 0.5,
+        "forearm_outset": 22,
+        "bind_rotation_degrees": 0,
+        "slot": "under_arm"
       },
       {
         "id": "scabbard",
@@ -1226,7 +1359,21 @@
             334
           ]
         ],
-        "layer": "back"
+        "layer": "back",
+        "source_grip": [
+          235,
+          342
+        ],
+        "blade_tip": [
+          316,
+          476
+        ],
+        "bind_grip": [
+          241,
+          343
+        ],
+        "carry_angle_degrees": 72,
+        "slot": "under_arm"
       },
       {
         "id": "shield",
@@ -1310,7 +1457,16 @@
             243
           ]
         ],
-        "layer": "limb"
+        "layer": "limb",
+        "source_mount": [
+          84,
+          307
+        ],
+        "forearm_fraction": 0.5,
+        "forearm_outset": 27,
+        "bind_rotation_degrees": 0,
+        "slot": "under_arm",
+        "notes": " Rear-view mount sits outside the forearm: the arm overlaps only the shield inner rim, never its central face."
       },
       {
         "id": "scabbard",
@@ -1433,7 +1589,35 @@
           ]
         ],
         "layer": "back",
-        "notes": "Only blade is exposed; estimated right wrist and completely occluded guard must stay behind the body and near shield."
+        "notes": "Only blade is exposed; estimated right wrist and completely occluded guard must stay behind the body and near shield.",
+        "source_grip": [
+          159,
+          338
+        ],
+        "blade_tip": [
+          60,
+          462
+        ],
+        "bind_grip": [
+          165,
+          345
+        ],
+        "carry_angle_degrees": 75,
+        "slot": "back",
+        "hidden_arm": [
+          [
+            172,
+            241
+          ],
+          [
+            170,
+            290
+          ],
+          [
+            163,
+            333
+          ]
+        ]
       },
       {
         "id": "shield",
@@ -1529,7 +1713,15 @@
             235
           ]
         ],
-        "layer": "limb"
+        "layer": "limb",
+        "source_mount": [
+          157,
+          302
+        ],
+        "forearm_fraction": 0.5,
+        "forearm_outset": 7,
+        "bind_rotation_degrees": 0,
+        "slot": "cover_arm"
       },
       {
         "id": "scabbard",
@@ -1675,7 +1867,21 @@
             333
           ]
         ],
-        "layer": "back"
+        "layer": "back",
+        "source_grip": [
+          97,
+          341
+        ],
+        "blade_tip": [
+          16,
+          503
+        ],
+        "bind_grip": [
+          71,
+          347
+        ],
+        "carry_angle_degrees": 110,
+        "slot": "under_arm"
       },
       {
         "id": "shield",
@@ -1763,7 +1969,15 @@
             250
           ]
         ],
-        "layer": "limb"
+        "layer": "limb",
+        "source_mount": [
+          269,
+          309
+        ],
+        "forearm_fraction": 0.5,
+        "forearm_outset": -8,
+        "bind_rotation_degrees": 0,
+        "slot": "cover_arm"
       },
       {
         "id": "scabbard",
@@ -1847,8 +2061,13 @@
             320
           ]
         ],
-        "layer": "back"
+        "layer": "back",
+        "bind_anchor": [
+          188,
+          293
+        ]
       }
     ]
-  }
+  },
+  "attachment_schema": "forearm-bind/2"
 }

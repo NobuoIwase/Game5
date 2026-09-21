@@ -55,6 +55,32 @@ function drawBone(c,img,a,b,u,v){
  c.save();c.translate(...u);c.rotate(Math.atan2(dv[1],dv[0]));c.scale(dl/sl,1);
  c.rotate(-Math.atan2(sv[1],sv[0]));c.translate(-a[0],-a[1]);c.drawImage(img,0,0);c.restore();
 }
+// Use the same map for a held object's contact point and the painted forearm.
+// Translating to a wrist and then applying a different angle makes attachments
+// slide, even when their nominal anchor has the right coordinates.
+function bonePoint(p,a,b,u,v){
+ const sv=sub(b,a),dv=sub(v,u),sl=Math.hypot(...sv),dl=Math.hypot(...dv);
+ if(sl<.001||dl<.001)return [...u];
+ const q=rotate(sub(p,a),-Math.atan2(sv[1],sv[0]));
+ return add(u,rotate([q[0]*dl/sl,q[1]],Math.atan2(dv[1],dv[0])));
+}
+function bodyProjection(pose){
+ const lean=pose.lean_degrees*Math.PI/180,yaw=pose.yaw*Math.PI/180;
+ // Sagittal lean, projected by the gait's x/z camera. Positive yaw is right:
+ // points above the pelvis move RIGHT, not backward. The front view also
+ // shortens in height, rather than silently losing all of its forward lean.
+ return [1,0,-Math.sin(lean)*Math.sin(yaw),Math.cos(lean)-.18*Math.sin(lean)*Math.cos(yaw)];
+}
+function matrixPoint(m,p){return [m[0]*p[0]+m[2]*p[1],m[1]*p[0]+m[3]*p[1]];}
+function localArmVector(pose,from,to){
+ const a=pose.joints[from],b=pose.joints[to];
+ if(pose.motion!=='run'||!a.world||!b.world)return sub(b.position,a.position);
+ const [l,y,z]=sub(b.world,a.world),lean=pose.lean_degrees*Math.PI/180,yaw=pose.yaw*Math.PI/180;
+ // The running rig has already rotated the arms with the thorax. Undo that
+ // once before applying the same source-art projection as the torso.
+ const localY=y*Math.cos(lean)-z*Math.sin(lean),localZ=y*Math.sin(lean)+z*Math.cos(lean);
+ return [Math.cos(yaw)*l+Math.sin(yaw)*localZ,localY+.18*(Math.cos(yaw)*localZ-Math.sin(yaw)*l)];
+}
 function upperLegMesh(img){
  const [x0,y0,x1,y1]=localBounds(img),triangles=[],step=10;
  for(let y=y0;y<y1;y+=step)for(let x=x0;x<x1;x+=step){
@@ -102,7 +128,10 @@ function drawPinnedUpperLeg(ctx,part,chain,bodyPoint){
 function rigLayer(source,part,kind){
  const pts=kind==='leg'?[part.hip,part.knee,part.ankle]:[part.shoulder,part.elbow,part.wrist];
  const raw=cut(source,part.polygon),axis=sub(pts[2],pts[0]);
- const upper=halfPlane(raw,pts[1],axis,-1,4),lower=halfPlane(raw,pts[1],axis,1,4);
+ // Painted armor may extend above the anatomical knee. Keep the entire plate
+ // on one bone instead of tearing its rim off when the lower leg folds.
+ const splitPoint=part.splitPoint||pts[1],splitOverlap=part.splitOverlap??4;
+ const upper=halfPlane(raw,splitPoint,axis,-1,splitOverlap),lower=halfPlane(raw,splitPoint,axis,1,splitOverlap);
  if(kind==='leg'){
   // Base-body removal erodes the polygon by two pixels. Restore a three-pixel
   // native overlap only at the pinned upper rim, not along hands or boots.
@@ -110,23 +139,34 @@ function rigLayer(source,part,kind){
   const rim=halfPlane(cutWithBleed(source,part.polygon,3),rimEnd,sub(pts[1],pts[0]),-1,0);
   upper.getContext('2d').drawImage(rim,0,0);
  }
- return {...part,kind,raw,upper,lower,points:pts,fill:sampleColor(raw,add(pts[0],mul(sub(pts[1],pts[0]),.18))),kneeFill:sampleColor(raw,pts[1]),upperMesh:kind==='leg'?upperLegMesh(upper):null,upperPixels:kind==='leg'?upper.getContext('2d').getImageData(0,0,upper.width,upper.height).data:null};
+ return {...part,kind,raw,upper,lower,points:pts,fill:sampleColor(raw,add(pts[0],mul(sub(pts[1],pts[0]),.18))),kneeFill:sampleColor(raw,part.jointFillSample||pts[1]),upperMesh:kind==='leg'?upperLegMesh(upper):null,upperPixels:kind==='leg'?upper.getContext('2d').getImageData(0,0,upper.width,upper.height).data:null};
 }
-function transformChain(part,pose,rest,def,bodyAngle,bodyMove,bodyScale){
+function transformChain(part,pose,rest,def,bodyMatrix,bodyMove,bodyScale,carryRole=null){
  const names=part.kind==='leg'?['hip','knee','ankle']:['shoulder','elbow','wrist'];
  const ids=names.map(n=>n+'_'+part.side),rs=ids.map(id=>rest.joints[id].position),ps=ids.map(id=>pose.joints[id].position);
  const pts=part.points;
  const factor=(dist(pts[0],pts[1])+dist(pts[1],pts[2]))/(dist(rs[0],rs[1])+dist(rs[1],rs[2]));
  let a;
  if(part.kind==='leg')a=add(pts[0],mul(sub(ps[0],rs[0]),bodyScale));
- else a=add(add(def.root,rotate(sub(pts[0],def.root),bodyAngle)),bodyMove);
- const gain=part.kind==='leg'?(pose.motion==='run'?.78:.92):.70;
- const b=add(a,add(sub(pts[1],pts[0]),mul(sub(sub(ps[1],ps[0]),sub(rs[1],rs[0])),factor*gain)));
- const d=add(b,add(sub(pts[2],pts[1]),mul(sub(sub(ps[2],ps[1]),sub(rs[2],rs[1])),factor*gain)));
- return {points:[a,b,d],source:pts,depth:(pose.joints[ids[1]].depth+pose.joints[ids[2]].depth)/2,ids};
+ else a=add(add(def.root,matrixPoint(bodyMatrix,sub(pts[0],def.root))),bodyMove);
+ const gain=part.kind==='leg'?(pose.motion==='run'?.78:.92):carryRole?(pose.motion==='run'?(carryRole==='shield'?.24:.28):.22):.70;
+ const vector=i=>{
+  const source=sub(pts[i+1],pts[i]),moving=part.kind==='leg'?sub(ps[i+1],ps[i]):localArmVector(pose,ids[i],ids[i+1]);
+  let result=add(source,mul(sub(moving,sub(rs[i+1],rs[i])),factor*gain));
+  if(part.kind==='arm'){
+   const length=Math.hypot(...result),native=Math.hypot(...source);
+   if(length>.001)result=mul(result,clamp(length/native,carryRole?.82:.60,carryRole?1.03:1.15)*native/length);
+   result=matrixPoint(bodyMatrix,result);
+  }
+  return result;
+ };
+ const b=add(a,vector(0)),d=add(b,vector(1));
+ const restingDepth=(rest.joints[ids[1]].depth+rest.joints[ids[2]].depth)/2;
+ const movingDepth=(pose.joints[ids[1]].depth+pose.joints[ids[2]].depth)/2;
+ return {points:[a,b,d],source:pts,depth:carryRole?restingDepth+(movingDepth-restingDepth)*gain:movingDepth,ids};
 }
 function localBounds(c){const a=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let minX=c.width,minY=c.height,maxX=-1,maxY=-1;for(let y=0;y<c.height;y++)for(let x=0;x<c.width;x++)if(a[(y*c.width+x)*4+3]>12){minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);}return [minX,minY,maxX,maxY];}
-async function loadCharacter(id){
+async function loadCharacter(id,{writeParts=true}={}){
  const reg=JSON.parse(fs.readFileSync(path.join(ROOT,'rigs',id+'.json'),'utf8'));
  const im=await loadImage(path.join(ROOT,reg.source));
  const gearReg=id==='warrior'?JSON.parse(fs.readFileSync(path.join(ROOT,'rigs/warrior-gear.json'),'utf8')):null;
@@ -162,7 +202,7 @@ async function loadCharacter(id){
   }
   largestComponent(body);
   if(id==='warrior'){
-   const skinSamples={front:{right:[154,352],left:[219,354]},down_right:{right:[166,350],left:[226,354]},right:{right:[238,350],left:[238,350]},up_right:{right:[228,354],left:[170,354]},back:{right:[231,338],left:[169,338]},up_left:{right:[190,338],left:[136,338]},left:{left:[145,340],right:[145,340]},down_left:{right:[149,340],left:[209,342]}};
+   const skinSamples={front:{right:[138,335],left:[197,337]},down_right:{right:[166,350],left:[226,354]},right:{right:[238,350],left:[238,350]},up_right:{right:[228,354],left:[170,354]},back:{right:[231,338],left:[169,338]},up_left:{right:[190,338],left:[136,338]},left:{left:[145,340],right:[145,340]},down_left:{right:[119,336],left:[168,338]}};
    for(const p of legs)p.fill=sampleColor(source,skinSamples[dir][p.side]);
   }
   const gear=[];
@@ -172,9 +212,11 @@ async function loadCharacter(id){
   }
   const bodyScale=legs.reduce((sum,p)=>sum+(dist(p.points[0],p.points[1])+dist(p.points[1],p.points[2]))/52.5,0)/Math.max(1,legs.length);
   result.views[dir]={source,body,def,legs,arms,extras,gear,bodyScale,bounds:localBounds(source)};
-  write(path.join(ROOT,'parts',id,dir,'body.png'),body.toBuffer('image/png'));
-  for(const p of [...originals,...arms])write(path.join(ROOT,'parts',id,dir,p.kind+'_'+p.side+'.png'),p.raw.toBuffer('image/png'));
-  for(const p of [...extras,...gear])write(path.join(ROOT,'parts',id,dir,p.id+'.png'),p.raw.toBuffer('image/png'));
+  if(writeParts){
+   write(path.join(ROOT,'parts',id,dir,'body.png'),body.toBuffer('image/png'));
+   for(const p of [...originals,...arms])write(path.join(ROOT,'parts',id,dir,p.kind+'_'+p.side+'.png'),p.raw.toBuffer('image/png'));
+   for(const p of [...extras,...gear])write(path.join(ROOT,'parts',id,dir,p.id+'.png'),p.raw.toBuffer('image/png'));
+  }
  }
  return result;
 }
@@ -183,29 +225,56 @@ function render(character,dir,motion,frame,withRig=false){
  const out=canvas(W,H),c=out.getContext('2d'),scale=character.id==='warrior'?.70:.93;
  const floor=v.bounds[3],ox=W/2-def.root[0]*scale,oy=470-floor*scale;
  c.translate(ox,oy);c.scale(scale,scale);
- const yaw=pose.yaw*Math.PI/180,bodyAngle=-pose.lean_degrees*Math.PI/180*Math.sin(yaw)*.65;
+ const bodyMatrix=bodyProjection(pose),bodyAngle=Math.atan2(-bodyMatrix[2],bodyMatrix[3]);
  const bodyMove=mul(pose.deltas.root,bodyScale);
- const bodyPoint=p=>add(add(def.root,rotate(sub(p,def.root),bodyAngle)),bodyMove);
- const legChains=v.legs.map(p=>({p,t:transformChain(p,pose,rest,def,bodyAngle,bodyMove,bodyScale)}));
- const armChains=v.arms.map(p=>({p,t:transformChain(p,pose,rest,def,bodyAngle,bodyMove,bodyScale)}));
- const targets={};
- for(const {p,t} of [...legChains,...armChains])t.ids.forEach((id,i)=>targets[id]=t.points[i]);
- for(const side of ['left','right'])if(!targets['wrist_'+side]){
-  const g=v.gear.find(g=>g.attach==='wrist_'+side);
-  targets['wrist_'+side]=g?add(g.anchor,bodyMove):bodyPoint(def.root);
+ const bodyPoint=p=>add(add(def.root,matrixPoint(bodyMatrix,sub(p,def.root))),bodyMove);
+ const carryRole=side=>v.gear.find(g=>g.side===side&&g.attach.startsWith('wrist'))?.id;
+ const legChains=v.legs.map(p=>({p,t:transformChain(p,pose,rest,def,bodyMatrix,bodyMove,bodyScale)}));
+ const armChains=v.arms.map(p=>({p,t:transformChain(p,pose,rest,def,bodyMatrix,bodyMove,bodyScale,carryRole(p.side))}));
+ // Profile art can hide an entire far arm. Animate its equipment behind the
+ // body with an explicitly annotated invisible chain, never the near arm.
+ const attachmentArms=[...armChains];
+ for(const g of v.gear)if(g.hidden_arm&&!attachmentArms.some(a=>a.p.side===g.side)){
+  const p={kind:'arm',side:g.side,points:g.hidden_arm};
+  attachmentArms.push({p,t:transformChain(p,pose,rest,def,bodyMatrix,bodyMove,bodyScale,g.id),hidden:true});
  }
+ const targets={};
+ for(const {p,t} of [...legChains,...attachmentArms])t.ids.forEach((id,i)=>targets[id]=t.points[i]);
  const gear=v.gear.map(g=>{
-  const arm=armChains.find(a=>a.p.side===g.side),p=targets[g.attach]||bodyPoint(g.anchor);
-  let angle=bodyAngle;
-  if(arm&&g.attach.startsWith('wrist')){
-   const a=sub(arm.t.points[2],arm.t.points[1]),b=sub(arm.p.points[2],arm.p.points[1]);
-   angle=Math.atan2(a[1],a[0])-Math.atan2(b[1],b[0]);
-   // A carried shield and down-pointing sword are stabilized by the wrist.
-   angle*=g.id==='shield'?.45:.50;
+  const arm=attachmentArms.find(a=>a.p.side===g.side);
+  if(!g.attach.startsWith('wrist')||!arm)return {g,arm:null,p:bodyPoint(g.bind_anchor||g.anchor),angle:bodyAngle,slot:'back'};
+  const [a,b]=arm.p.points.slice(1),[u,w]=arm.t.points.slice(1),sourceVector=sub(b,a),currentVector=sub(w,u);
+  const sourceAngle=Math.atan2(sourceVector[1],sourceVector[0]),currentAngle=Math.atan2(currentVector[1],currentVector[0]);
+  if(g.id==='shield'){
+   const n=mul([-sourceVector[1],sourceVector[0]],1/Math.max(.001,Math.hypot(...sourceVector)));
+   const bind=add(add(a,mul(sourceVector,g.forearm_fraction??.5)),mul(n,g.forearm_outset??0));
+   return {g,arm,bind,p:bonePoint(bind,a,b,u,w),angle:currentAngle-sourceAngle,slot:arm.hidden?'back':g.slot||'cover_arm'};
   }
-  return {g,p,angle,depth:pose.joints[g.attach]?.depth??-100};
+  const bind=g.bind_grip||add(b,mul(sourceVector,g.grip_fraction??.12));
+  const sourceGrip=g.source_grip||g.anchor,axis=sub(g.blade_tip||add(sourceGrip,[0,150]),sourceGrip);
+  const sourceBladeAngle=Math.atan2(axis[1],axis[0]),carryAngle=(g.carry_angle_degrees??90)*Math.PI/180;
+  // A relaxed wrist counters forearm rotation while carrying a drawn blade.
+  // Its point of contact stays exact; only the wrist angle is stabilized.
+  const wristAllowance=(motion==='run'?7:5)*Math.PI/180;
+  const sway=clamp(currentAngle-sourceAngle-bodyAngle,-wristAllowance,wristAllowance);
+  return {g,arm,bind,p:bonePoint(bind,a,b,u,w),angle:carryAngle-sourceBladeAngle+sway,slot:arm.hidden?'back':g.slot||'under_arm'};
  });
- function drawGear(o){c.save();c.translate(...o.p);c.rotate(o.angle);c.translate(-o.g.anchor[0],-o.g.anchor[1]);c.drawImage(o.g.raw,0,0);c.restore();}
+ function drawGear(o){
+  c.save();
+  if(o.g.id==='shield'&&o.arm){
+   // Calibrate the old shield art around its mount, then apply the exact same
+   // axial scale + rotation + translation used to paint this left forearm.
+   const [a,b]=o.arm.p.points.slice(1),[u,w]=o.arm.t.points.slice(1),sv=sub(b,a),dv=sub(w,u);
+   c.translate(...u);c.rotate(Math.atan2(dv[1],dv[0]));c.scale(Math.hypot(...dv)/Math.hypot(...sv),1);
+   c.rotate(-Math.atan2(sv[1],sv[0]));c.translate(o.bind[0]-a[0],o.bind[1]-a[1]);
+   c.rotate((o.g.bind_rotation_degrees||0)*Math.PI/180);
+   const mount=o.g.source_mount||o.g.anchor;c.translate(-mount[0],-mount[1]);
+  }else{
+   c.translate(...o.p);c.rotate(o.angle);
+   const anchor=o.g.id==='sword'?(o.g.source_grip||o.g.anchor):o.g.anchor;c.translate(-anchor[0],-anchor[1]);
+  }
+  c.drawImage(o.g.raw,0,0);c.restore();
+ }
  function drawExtra(e){const p=bodyPoint(e.pivot),a=bodyAngle+Math.sin(frame*Math.PI/4-.8)*(motion==='run'?.10:.055);c.save();c.translate(...p);c.rotate(a);c.translate(-e.pivot[0],-e.pivot[1]);c.drawImage(e.raw,0,0);c.restore();}
  function limb({p,t}){
   const source=p.texturePoints||p.points;
@@ -216,25 +285,54 @@ function render(character,dir,motion,frame,withRig=false){
    // The small concealed skin bridge stays under the pinned hip boundary.
    const hip=bodyPoint(p.points[0]);
    c.lineWidth=radius*2;c.beginPath();c.moveTo(...hip);c.lineTo(...t.points[1]);c.stroke();
-   c.fillStyle=p.kneeFill;c.beginPath();c.arc(...t.points[1],radius*.8,0,Math.PI*2);c.fill();c.restore();
+   c.fillStyle=p.kneeFill;c.beginPath();c.arc(...t.points[1],radius*(p.jointFillSample?1.02:.8),0,Math.PI*2);c.fill();c.restore();
   }
   if(p.kind==='leg')drawPinnedUpperLeg(c,p,t,bodyPoint);
   else drawBone(c,p.upper,source[0],source[1],t.points[0],t.points[1]);
   drawBone(c,p.lower,source[1],source[2],t.points[1],t.points[2]);
  }
  for(const e of v.extras.filter(e=>e.layer==='back'))drawExtra(e);
- for(const g of gear.filter(g=>g.g.layer==='back'||g.depth<-.3).sort((a,b)=>a.depth-b.depth))drawGear(g);
+ for(const g of gear.filter(g=>g.slot==='back'))drawGear(g);
+ function armWithGear(a){
+  for(const g of gear.filter(g=>g.arm===a&&g.slot==='under_arm'))drawGear(g);
+  limb(a);
+  for(const g of gear.filter(g=>g.arm===a&&g.slot==='cover_arm'))drawGear(g);
+ }
  for(const l of legChains.filter(l=>l.t.depth<=0).sort((a,b)=>a.t.depth-b.t.depth))limb(l);
- for(const a of armChains.filter(a=>a.t.depth<0))limb(a);
- c.save();c.translate(...add(def.root,bodyMove));c.rotate(bodyAngle);c.translate(-def.root[0],-def.root[1]);c.drawImage(v.body,0,0);c.restore();
+ for(const a of armChains.filter(a=>a.t.depth<0))armWithGear(a);
+ c.save();c.translate(...add(def.root,bodyMove));c.transform(...bodyMatrix,0,0);c.translate(-def.root[0],-def.root[1]);c.drawImage(v.body,0,0);c.restore();
  for(const l of legChains.filter(l=>l.t.depth>0).sort((a,b)=>a.t.depth-b.t.depth))limb(l);
- for(const a of armChains.filter(a=>a.t.depth>=0))limb(a);
- for(const g of gear.filter(g=>g.g.layer!=='back'&&g.depth>=-.3).sort((a,b)=>a.depth-b.depth))drawGear(g);
+ for(const a of armChains.filter(a=>a.t.depth>=0))armWithGear(a);
  for(const e of v.extras.filter(e=>e.layer!=='back'))drawExtra(e);
  if(withRig){c.lineWidth=2;c.strokeStyle='#31d7d5';for(const {t} of [...legChains,...armChains]){c.beginPath();t.points.forEach((p,i)=>i?c.lineTo(...p):c.moveTo(...p));c.stroke();for(const p of t.points){c.beginPath();c.arc(...p,3,0,Math.PI*2);c.fillStyle='#ffe494';c.fill();}}}
  return out;
 }
-const requested=process.argv.slice(2).filter(x=>!x.startsWith('--'));const ids=requested.length?requested:['warrior','scout'];
+const argv=process.argv.slice(2),requested=argv.filter(x=>!x.startsWith('--'));const ids=requested.length?requested:['warrior','scout'];
+const reviewArg=argv.find(x=>x.startsWith('--review=')),dirsArg=argv.find(x=>x.startsWith('--dirs='));
+if(reviewArg){
+ const reviewRoot=path.resolve(ROOT,reviewArg.slice('--review='.length));
+ const directions=dirsArg?dirsArg.slice('--dirs='.length).split(','):DIRS;
+ for(const dir of directions)if(!DIRS.includes(dir))throw Error('Unknown review direction '+dir);
+ for(const id of ids){
+  const char=await loadCharacter(id,{writeParts:false});
+  for(const motion of ['walk','run']){
+   const overview=canvas(192*8,282*directions.length),oc=overview.getContext('2d');
+   oc.fillStyle='#28343d';oc.fillRect(0,0,overview.width,overview.height);
+   for(const [row,dir] of directions.entries()){
+    const strip=canvas(256*8,365),sc=strip.getContext('2d');sc.fillStyle='#28343d';sc.fillRect(0,0,strip.width,strip.height);
+    for(let f=0;f<8;f++){
+     const im=render(char,dir,motion,f);sc.drawImage(im,f*256,20,256,341);
+     sc.font='13px sans-serif';sc.fillStyle='#d3e4e6';sc.fillText(dir+' / '+motion+' / '+String(f+1),f*256+9,16);
+     oc.drawImage(im,f*192,row*282+23,192,256);oc.font='12px sans-serif';oc.fillStyle='#d3e4e6';oc.fillText(dir+' / '+String(f+1),f*192+8,row*282+16);
+    }
+    write(path.join(reviewRoot,id+'-'+dir+'-'+motion+'.png'),strip.toBuffer('image/png'));
+   }
+   write(path.join(reviewRoot,id+'-'+motion+'-all-frames.png'),overview.toBuffer('image/png'));
+   console.log('Reviewed',id,motion,directions.length*8,'frames in',reviewRoot);
+  }
+ }
+ process.exit(0);
+}
 const report=[];
 for(const id of ids){
  const char=await loadCharacter(id);
@@ -256,6 +354,8 @@ for(const id of ids){
  write(path.join(ROOT,'exports',id,'joints-review.png'),debug.toBuffer('image/png'));
 }
 const manifest={schema:'game5-character-motion/1.0',frame_width:W,frame_height:H,frames_per_cycle:8,directions:DIRS,direction_labels:Object.fromEntries(DIRS.map((d,i)=>[d,LABELS[i]])),characters:[{id:'warrior',label:'戦士（仮）'},{id:'scout',label:'獣人スカウト（仮）'}],motions:[{id:'walk',label:'歩行',frame_ms:120},{id:'run',label:'走行',frame_ms:80}],alpha:true,origin:'top-left',feet_anchor:[192,470],sheet_layout:'8 columns of frames × 8 rows of directions',anatomical_equipment:{warrior:{sword:'right hand',shield:'left forearm',pauldron:'right shoulder (equipment-detail annotation)',scabbard:'left hip'}},art_method:'Eight independently generated views; no whole-character horizontal reflection. Symmetric hidden limb textures may be shared between anatomical legs.',rig:'motion/rig.mjs',status:'first playable prototype; visual review pending'};
+manifest.revision=2;
+manifest.status='prototype v2; direction, equipment and run-posture revision visually reviewed';
 write(path.join(ROOT,'exports/manifest.json'),JSON.stringify(manifest,null,2));
 write(path.join(ROOT,'exports/render-report.json'),JSON.stringify({frames:ids.length*128,issues:report},null,2));
 console.log('Visual-boundary warnings:',report.length);

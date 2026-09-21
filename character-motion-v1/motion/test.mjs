@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {DIRECTIONS,makePose,makeLibrary,SOURCE} from './rig.mjs';
+import {DIRECTIONS,makePose,makeLibrary,SOURCE,RUN_LEAN_DEGREES} from './rig.mjs';
 const lib=makeLibrary();
 const close=(a,b,message)=>assert.ok(Math.abs(a-b)<.0001,`${message}: ${a} vs ${b}`);
 for(const m of ['walk','run'])for(const d of DIRECTIONS){
@@ -36,6 +36,30 @@ for(let f=0;f<8;f++){
  assert.ok(r.lean_degrees>w.lean_degrees);
  assert.ok(r.joints.elbow_right.flex>w.joints.elbow_right.flex);
 }
+// Forward running posture is a pelvis-based rotation of the complete upper
+// body. These geometric checks catch isolated head tilt and yaw/sign mistakes.
+for(let f=0;f<8;f++)for(const direction of DIRECTIONS){
+ const p=makePose(direction,'run',f),sidePose=makePose('right','run',f),root=p.joints.root.world;
+ assert.equal(p.lean_degrees,RUN_LEAN_DEGREES);
+ for(const [id,rise] of [['waist',19.5],['thorax',36.5],['neck',55.5],['head',76],['shoulder_right',41],['shoulder_left',41]]){
+  const q=p.joints[id].world,dy=q[1]-root[1],dz=q[2]-root[2];
+  close(Math.hypot(dy,dz),rise,`run ${direction} ${id} upper-body length`);
+  close(Math.atan2(dz,-dy)*180/Math.PI,RUN_LEAN_DEGREES,`run ${direction} ${id} body pitch`);
+ }
+ for(const [id,j] of Object.entries(p.joints))assert.deepEqual(j.world,sidePose.joints[id].world,'yaw changes projection, never the sagittal running posture');
+ const head=p.joints.head;
+ for(const side of ['right','left']){
+  assert.ok(head.world[2]>p.joints['ankle_'+side].world[2],'run head center leads the ankle of either foot');
+  const chain=['shoulder','elbow','wrist'].map(id=>p.joints[id+'_'+side].world);
+  close(Math.hypot(chain[1][1]-chain[0][1],chain[1][2]-chain[0][2]),22,'inclined arm keeps upper-arm length');
+  close(Math.hypot(chain[2][1]-chain[1][1],chain[2][2]-chain[1][2]),17,'inclined arm keeps forearm length');
+  const upperWorldAngle=Math.atan2(-(chain[1][2]-chain[0][2]),chain[1][1]-chain[0][1])*180/Math.PI;
+  close(upperWorldAngle,p.joints['shoulder_'+side].upper_angle+RUN_LEAN_DEGREES,'arm swing follows the tilted chest frame exactly once');
+ }
+ const yaw=p.yaw*Math.PI/180,dz=head.world[2]-root[2],dy=head.world[1]-root[1];
+ close(head.position[0]-p.joints.root.position[0],Math.sin(yaw)*dz,'run head moves toward the screen direction');
+ close(head.position[1]-p.joints.root.position[1],dy+.18*Math.cos(yaw)*dz,'front/back tilt uses the same depth projection');
+}
 const saved=JSON.parse(fs.readFileSync(new URL('./poses.json',import.meta.url),'utf8'));
 assert.deepEqual(saved,lib,'exported poses are current');
-console.log('PASS: 128 poses, exact v13 sagittal regression, anatomical side preservation, fixed leg lengths, periodic cycles, two running flight phases, flex and lean, reproducible JSON.');
+console.log('PASS: 128 poses, exact v13 sagittal regression, anatomical side preservation, fixed leg lengths, periodic cycles, two running flight phases, 24-degree pelvis-based torso/shoulder/arm lean at all eight yaws, head leads ankles, reproducible JSON.');

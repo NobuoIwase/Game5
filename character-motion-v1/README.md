@@ -1,4 +1,6 @@
-# Game5 — 8方向の歩行・走行グラフィック 初稿
+# Game5 — 8方向の歩行・走行グラフィック 修正版 v2
+
+v2では戦士の正面と左斜め前を描き直し、顔と胴体の向きを揃えました。剣の握り位置と保持角度、左前腕に装着する盾の動きと重なりを調整し、走行の前傾を24度へ変更しています。[修正内容と比較画像](revision-v2/README.md)を参照してください。
 
 `player.html` は軽量な選択画面です。戦士・獣人スカウト・汎用モーションの歩行と走行を、キャラクター別・動作別の6ページに分割しました。選んだ1動作だけを読み込み、8方向を同時に確認できます。再生・停止、コマ送り、速度、背景を変更できます。
 
@@ -51,6 +53,7 @@ python tools/export_previews.py
 python tools/build_player.py
 node motion/test.mjs
 node tools/validate_exports.mjs
+python tools/validate_mobile_player.py
 ```
 
 元の引き継ぎZIPは変更していません。`motion/source-v13.json` に元データと出典を保存しています。画像生成を再実行せずにアニメーションを再出力できます。

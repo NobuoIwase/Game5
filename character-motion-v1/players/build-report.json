@@ -1,0 +1,87 @@
+{
+  "schema": "game5-mobile-player/1.0",
+  "original_bundled_bytes": 34550379,
+  "index_bytes": 25590,
+  "preview_frame_size": [
+    192,
+    256
+  ],
+  "pages": [
+    {
+      "id": "warrior-walk",
+      "path": "players/warrior-walk.html",
+      "bytes": 817852,
+      "webp_bytes": 602508,
+      "sheet_size": [
+        1536,
+        2048
+      ],
+      "source_png_sha256": "3c958abe1dc6c561eb04f646f6e019736c10257f79cf9e6feb4e3678eeff8969",
+      "original_source_bytes": 6195487
+    },
+    {
+      "id": "warrior-run",
+      "path": "players/warrior-run.html",
+      "bytes": 795234,
+      "webp_bytes": 585544,
+      "sheet_size": [
+        1536,
+        2048
+      ],
+      "source_png_sha256": "220670d3241e2d98b8f9ea1ce08f8e4e3c50006f1275da3626254d334d89c801",
+      "original_source_bytes": 6076215
+    },
+    {
+      "id": "scout-walk",
+      "path": "players/scout-walk.html",
+      "bytes": 750598,
+      "webp_bytes": 552060,
+      "sheet_size": [
+        1536,
+        2048
+      ],
+      "source_png_sha256": "033cac0b581ba647cb78ec2618f7b80d6fe62a3124c9bba032e0cb6a2dde0f5b",
+      "original_source_bytes": 5989686
+    },
+    {
+      "id": "scout-run",
+      "path": "players/scout-run.html",
+      "bytes": 719484,
+      "webp_bytes": 528726,
+      "sheet_size": [
+        1536,
+        2048
+      ],
+      "source_png_sha256": "6109b5ca043182493ba160307f4ff38d77c35c2a6b6a07c0544d16b316966669",
+      "original_source_bytes": 5679166
+    },
+    {
+      "id": "generic-walk",
+      "path": "players/generic-walk.html",
+      "bytes": 458986,
+      "webp_bytes": 333354,
+      "sheet_size": [
+        1536,
+        2048
+      ],
+      "source_png_sha256": "d19543ee43797aee8086f1eba69387000d056938fe2130e773a295a376184d2d",
+      "original_source_bytes": 945753
+    },
+    {
+      "id": "generic-run",
+      "path": "players/generic-run.html",
+      "bytes": 406376,
+      "webp_bytes": 293898,
+      "sheet_size": [
+        1536,
+        2048
+      ],
+      "source_png_sha256": "668f16bd5b2054d822a355821b1a5c50c9116f8b567164dc50fc81a535c65e8d",
+      "original_source_bytes": 1011508
+    }
+  ],
+  "total_page_bytes": 3948530,
+  "largest_page_bytes": 817852,
+  "format": "One embedded WebP sprite sheet per standalone HTML page; no network dependencies",
+  "original_pngs_unchanged": true
+}

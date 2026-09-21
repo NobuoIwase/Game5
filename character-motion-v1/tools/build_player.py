@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Build a self-contained, file://-safe eight-direction animation viewer.
+"""Build the lightweight split player (or the original bundled player with --full).
 
-Only Python's standard library is required. Run after the PNG sheets and
+Run after the PNG sheets and
 exports/manifest.json have been exported. The generated player embeds its
 artwork and metadata, so it can be copied or opened without a web server.
 """
@@ -123,10 +123,15 @@ start();
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root", nargs="?", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--output", type=Path, help="Output HTML path (default: ROOT/player.html)")
+    parser.add_argument("--full", action="store_true", help="Build the large, all-in-one original player")
+    parser.add_argument("--output", type=Path, help="Custom output path for the original all-in-one player")
     args = parser.parse_args()
     root = args.root.resolve()
-    output = args.output or root / "player.html"
+    if not args.full and args.output is None:
+        from build_mobile_player import build
+        build(root)
+        return
+    output = args.output or root / "player-full.html"
     payload = make_payload(root)
     encoded = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     output.write_text(HTML.replace("__PAYLOAD__", encoded), encoding="utf-8")

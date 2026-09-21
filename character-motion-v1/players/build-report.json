@@ -1,7 +1,7 @@
 {
   "schema": "game5-mobile-player/1.0",
   "original_bundled_bytes": 34550379,
-  "index_bytes": 24790,
+  "index_bytes": 24734,
   "preview_frame_size": [
     192,
     256
@@ -22,14 +22,14 @@
     {
       "id": "warrior-run",
       "path": "players/warrior-run.html",
-      "bytes": 826186,
-      "webp_bytes": 608760,
+      "bytes": 802794,
+      "webp_bytes": 591216,
       "sheet_size": [
         1536,
         2048
       ],
-      "source_png_sha256": "7872456b5890dc3dd298fe2d018ffafe0f9dcfb018008434e6defac8845a59e4",
-      "original_source_bytes": 6578874
+      "source_png_sha256": "8dfac4f312328b3eb0f85c25512007354db1edf4611060ee2d58f5d56b6ccf62",
+      "original_source_bytes": 6450233
     },
     {
       "id": "scout-walk",
@@ -80,8 +80,8 @@
       "original_source_bytes": 975099
     }
   ],
-  "total_page_bytes": 3971370,
-  "largest_page_bytes": 826186,
+  "total_page_bytes": 3947978,
+  "largest_page_bytes": 802794,
   "format": "One embedded WebP sprite sheet per standalone HTML page; no network dependencies",
   "original_pngs_unchanged": true
 }

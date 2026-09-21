@@ -1,0 +1,749 @@
+{
+  "schema": "game5-run-leg-hinge/1",
+  "source": "art/warrior-body-v2.png",
+  "coordinates": [
+    362,
+    543
+  ],
+  "notes": [
+    "Source artwork and original hip/knee/ankle rig coordinates are unchanged.",
+    "hinge is a source texture pivot in the dark stocking just above the raised metal knee-plate outline. Metal stays on the calf transform; the bend band belongs to fabric only.",
+    "Copy-from hidden legs use the exact same source texture hinge and sourcePoints as their visible donor leg; do not add the hidden leg anatomical offset to these source texture coordinates.",
+    "bendBandBottomY is an upper bound for fabric interpolation. The final mesh spreads the cloth bend from hingeY-32 to this upper bound; bendBandTopY records the original narrow-band annotation. Do not blend across the metal plate.",
+    "Front kneePlatePolygon follows the complete raised knee cap, including its low V-shaped rim down to y446. Use only for small rigid overlap in deeply foreshortened front recovery frames, around platePivot."
+  ],
+  "views": {
+    "front": {
+      "right": {
+        "sourceSide": "right",
+        "hinge": [
+          128.588,
+          394
+        ],
+        "hingeY": 394,
+        "metalTopY": 398,
+        "bendBandTopY": 382,
+        "bendBandBottomY": 396,
+        "sourcePoints": [
+          [
+            136,
+            331
+          ],
+          [
+            126,
+            416
+          ],
+          [
+            119,
+            505
+          ]
+        ],
+        "kneePlatePolygon": [
+          [
+            106,
+            397
+          ],
+          [
+            110,
+            399
+          ],
+          [
+            114,
+            404
+          ],
+          [
+            122,
+            407
+          ],
+          [
+            132,
+            408
+          ],
+          [
+            142,
+            407
+          ],
+          [
+            148,
+            405
+          ],
+          [
+            151,
+            407
+          ],
+          [
+            150,
+            414
+          ],
+          [
+            148,
+            420
+          ],
+          [
+            152,
+            424
+          ],
+          [
+            153,
+            427
+          ],
+          [
+            149,
+            432
+          ],
+          [
+            142,
+            436
+          ],
+          [
+            133,
+            441
+          ],
+          [
+            125,
+            445
+          ],
+          [
+            121,
+            446
+          ],
+          [
+            114,
+            442
+          ],
+          [
+            107,
+            437
+          ],
+          [
+            101,
+            431
+          ],
+          [
+            97,
+            427
+          ],
+          [
+            97,
+            424
+          ],
+          [
+            100,
+            420
+          ],
+          [
+            104,
+            416
+          ],
+          [
+            105,
+            409
+          ]
+        ],
+        "platePivot": [
+          126,
+          416
+        ],
+        "hingePixelRGBA": [
+          77,
+          66,
+          70,
+          252
+        ]
+      },
+      "left": {
+        "sourceSide": "left",
+        "hinge": [
+          208.376,
+          394
+        ],
+        "hingeY": 394,
+        "metalTopY": 398,
+        "bendBandTopY": 382,
+        "bendBandBottomY": 396,
+        "sourcePoints": [
+          [
+            198,
+            331
+          ],
+          [
+            212,
+            416
+          ],
+          [
+            222,
+            505
+          ]
+        ],
+        "kneePlatePolygon": [
+          [
+            189,
+            405
+          ],
+          [
+            195,
+            407
+          ],
+          [
+            202,
+            408
+          ],
+          [
+            210,
+            408
+          ],
+          [
+            218,
+            406
+          ],
+          [
+            224,
+            403
+          ],
+          [
+            227,
+            399
+          ],
+          [
+            230,
+            398
+          ],
+          [
+            233,
+            401
+          ],
+          [
+            234,
+            408
+          ],
+          [
+            234,
+            415
+          ],
+          [
+            238,
+            417
+          ],
+          [
+            241,
+            421
+          ],
+          [
+            242,
+            425
+          ],
+          [
+            239,
+            429
+          ],
+          [
+            235,
+            434
+          ],
+          [
+            229,
+            439
+          ],
+          [
+            222,
+            443
+          ],
+          [
+            218,
+            446
+          ],
+          [
+            213,
+            445
+          ],
+          [
+            205,
+            441
+          ],
+          [
+            197,
+            436
+          ],
+          [
+            191,
+            432
+          ],
+          [
+            187,
+            428
+          ],
+          [
+            187,
+            424
+          ],
+          [
+            189,
+            419
+          ],
+          [
+            189,
+            414
+          ]
+        ],
+        "platePivot": [
+          212,
+          416
+        ],
+        "hingePixelRGBA": [
+          75,
+          65,
+          69,
+          252
+        ]
+      }
+    },
+    "down_right": {
+      "right": {
+        "sourceSide": "right",
+        "hinge": [
+          151.929,
+          411
+        ],
+        "hingeY": 411,
+        "metalTopY": 415,
+        "bendBandTopY": 399,
+        "bendBandBottomY": 413,
+        "sourcePoints": [
+          [
+            170,
+            345
+          ],
+          [
+            147,
+            429
+          ],
+          [
+            126,
+            505
+          ]
+        ],
+        "hingePixelRGBA": [
+          80,
+          70,
+          73,
+          252
+        ]
+      },
+      "left": {
+        "sourceSide": "left",
+        "hinge": [
+          225.0,
+          409
+        ],
+        "hingeY": 409,
+        "metalTopY": 413,
+        "bendBandTopY": 397,
+        "bendBandBottomY": 411,
+        "sourcePoints": [
+          [
+            225,
+            345
+          ],
+          [
+            225,
+            428
+          ],
+          [
+            230,
+            504
+          ]
+        ],
+        "hingePixelRGBA": [
+          77,
+          67,
+          69,
+          253
+        ]
+      }
+    },
+    "right": {
+      "right": {
+        "sourceSide": "right",
+        "hinge": [
+          208.278,
+          411
+        ],
+        "hingeY": 411,
+        "metalTopY": 415,
+        "bendBandTopY": 399,
+        "bendBandBottomY": 413,
+        "sourcePoints": [
+          [
+            218,
+            347
+          ],
+          [
+            206,
+            426
+          ],
+          [
+            196,
+            507
+          ]
+        ],
+        "hingePixelRGBA": [
+          81,
+          71,
+          74,
+          253
+        ]
+      },
+      "left": {
+        "sourceSide": "right",
+        "hinge": [
+          208.278,
+          411
+        ],
+        "hingeY": 411,
+        "metalTopY": 415,
+        "bendBandTopY": 399,
+        "bendBandBottomY": 413,
+        "sourcePoints": [
+          [
+            218,
+            347
+          ],
+          [
+            206,
+            426
+          ],
+          [
+            196,
+            507
+          ]
+        ],
+        "hingePixelRGBA": [
+          81,
+          71,
+          74,
+          253
+        ]
+      }
+    },
+    "up_right": {
+      "right": {
+        "sourceSide": "right",
+        "hinge": [
+          233.549,
+          412
+        ],
+        "hingeY": 412,
+        "metalTopY": 416,
+        "bendBandTopY": 400,
+        "bendBandBottomY": 414,
+        "sourcePoints": [
+          [
+            228,
+            347
+          ],
+          [
+            235,
+            429
+          ],
+          [
+            235,
+            504
+          ]
+        ],
+        "hingePixelRGBA": [
+          77,
+          67,
+          70,
+          253
+        ]
+      },
+      "left": {
+        "sourceSide": "left",
+        "hinge": [
+          159.902,
+          412
+        ],
+        "hingeY": 412,
+        "metalTopY": 416,
+        "bendBandTopY": 400,
+        "bendBandBottomY": 414,
+        "sourcePoints": [
+          [
+            171,
+            347
+          ],
+          [
+            157,
+            429
+          ],
+          [
+            128,
+            501
+          ]
+        ],
+        "hingePixelRGBA": [
+          81,
+          70,
+          74,
+          253
+        ]
+      }
+    },
+    "back": {
+      "right": {
+        "sourceSide": "right",
+        "hinge": [
+          234.418,
+          401
+        ],
+        "hingeY": 401,
+        "metalTopY": 405,
+        "bendBandTopY": 389,
+        "bendBandBottomY": 403,
+        "sourcePoints": [
+          [
+            230,
+            334
+          ],
+          [
+            236,
+            425
+          ],
+          [
+            248,
+            500
+          ]
+        ],
+        "hingePixelRGBA": [
+          79,
+          68,
+          71,
+          252
+        ]
+      },
+      "left": {
+        "sourceSide": "left",
+        "hinge": [
+          156.275,
+          401
+        ],
+        "hingeY": 401,
+        "metalTopY": 405,
+        "bendBandTopY": 389,
+        "bendBandBottomY": 403,
+        "sourcePoints": [
+          [
+            171,
+            334
+          ],
+          [
+            151,
+            425
+          ],
+          [
+            141,
+            500
+          ]
+        ],
+        "hingePixelRGBA": [
+          81,
+          70,
+          73,
+          253
+        ]
+      }
+    },
+    "up_left": {
+      "right": {
+        "sourceSide": "right",
+        "hinge": [
+          200.225,
+          398
+        ],
+        "hingeY": 398,
+        "metalTopY": 402,
+        "bendBandTopY": 386,
+        "bendBandBottomY": 400,
+        "sourcePoints": [
+          [
+            190,
+            333
+          ],
+          [
+            204,
+            422
+          ],
+          [
+            219,
+            493
+          ]
+        ],
+        "hingePixelRGBA": [
+          80,
+          70,
+          73,
+          253
+        ]
+      },
+      "left": {
+        "sourceSide": "left",
+        "hinge": [
+          136.457,
+          398
+        ],
+        "hingeY": 398,
+        "metalTopY": 402,
+        "bendBandTopY": 386,
+        "bendBandBottomY": 400,
+        "sourcePoints": [
+          [
+            135,
+            331
+          ],
+          [
+            137,
+            423
+          ],
+          [
+            133,
+            496
+          ]
+        ],
+        "hingePixelRGBA": [
+          81,
+          69,
+          72,
+          253
+        ]
+      }
+    },
+    "left": {
+      "left": {
+        "sourceSide": "left",
+        "hinge": [
+          173.241,
+          401
+        ],
+        "hingeY": 401,
+        "metalTopY": 405,
+        "bendBandTopY": 389,
+        "bendBandBottomY": 403,
+        "sourcePoints": [
+          [
+            170,
+            337
+          ],
+          [
+            174,
+            416
+          ],
+          [
+            185,
+            492
+          ]
+        ],
+        "hingePixelRGBA": [
+          86,
+          75,
+          78,
+          252
+        ]
+      },
+      "right": {
+        "sourceSide": "left",
+        "hinge": [
+          173.241,
+          401
+        ],
+        "hingeY": 401,
+        "metalTopY": 405,
+        "bendBandTopY": 389,
+        "bendBandBottomY": 403,
+        "sourcePoints": [
+          [
+            170,
+            337
+          ],
+          [
+            174,
+            416
+          ],
+          [
+            185,
+            492
+          ]
+        ],
+        "hingePixelRGBA": [
+          86,
+          75,
+          78,
+          252
+        ]
+      }
+    },
+    "down_left": {
+      "right": {
+        "sourceSide": "right",
+        "hinge": [
+          122.571,
+          390
+        ],
+        "hingeY": 390,
+        "metalTopY": 394,
+        "bendBandTopY": 378,
+        "bendBandBottomY": 392,
+        "sourcePoints": [
+          [
+            119,
+            330
+          ],
+          [
+            124,
+            414
+          ],
+          [
+            125,
+            496
+          ]
+        ],
+        "hingePixelRGBA": [
+          74,
+          64,
+          68,
+          252
+        ]
+      },
+      "left": {
+        "sourceSide": "left",
+        "hinge": [
+          182.907,
+          394
+        ],
+        "hingeY": 394,
+        "metalTopY": 398,
+        "bendBandTopY": 382,
+        "bendBandBottomY": 396,
+        "sourcePoints": [
+          [
+            171,
+            330
+          ],
+          [
+            187,
+            416
+          ],
+          [
+            210,
+            506
+          ]
+        ],
+        "hingePixelRGBA": [
+          74,
+          63,
+          66,
+          252
+        ]
+      }
+    }
+  }
+}

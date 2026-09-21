@@ -1,0 +1,123 @@
+{
+  "schema": "game5-run-scabbard-bind/1",
+  "source": "art/warrior-source.png",
+  "coordinates": [
+    362,
+    543
+  ],
+  "equipment": "scabbard",
+  "side": "left",
+  "notes": [
+    "Source anchors are actual opaque throat pixels of the isolated source scabbard, not guessed occluded belt points.",
+    "Bind anchors are opaque leather-belt pixels in the clean limb-free body source. Both anchor alpha values were checked above 250.",
+    "Right is the only direction with an incomplete source sheath: its upper 49px were hidden by the standing arm. Reuse the complete up_right sheath without reflection, cropping, shortening, or synthetic hidden padding.",
+    "Render the complete sourceDirection scabbard around sourceAnchor at bodyPoint(bindAnchor), applying the same torso rotation. The point must remain coincident with the belt for every frame.",
+    "Original warrior-gear.json and source artwork are unchanged. All coordinates are at native source scale."
+  ],
+  "views": {
+    "front": {
+      "sourceDirection": "front",
+      "sourceAnchor": [
+        234,
+        319
+      ],
+      "bindAnchor": [
+        207,
+        292
+      ],
+      "sourceAlpha": 253,
+      "bindAlpha": 253
+    },
+    "down_right": {
+      "sourceDirection": "down_right",
+      "sourceAnchor": [
+        245,
+        315
+      ],
+      "bindAnchor": [
+        230,
+        306
+      ],
+      "sourceAlpha": 253,
+      "bindAlpha": 253
+    },
+    "right": {
+      "sourceDirection": "up_right",
+      "sourceAnchor": [
+        145,
+        326
+      ],
+      "bindAnchor": [
+        211,
+        303
+      ],
+      "sourceAlpha": 253,
+      "bindAlpha": 253
+    },
+    "up_right": {
+      "sourceDirection": "up_right",
+      "sourceAnchor": [
+        145,
+        326
+      ],
+      "bindAnchor": [
+        173,
+        307
+      ],
+      "sourceAlpha": 253,
+      "bindAlpha": 253
+    },
+    "back": {
+      "sourceDirection": "back",
+      "sourceAnchor": [
+        151,
+        317
+      ],
+      "bindAnchor": [
+        169,
+        292
+      ],
+      "sourceAlpha": 253,
+      "bindAlpha": 252
+    },
+    "up_left": {
+      "sourceDirection": "up_left",
+      "sourceAnchor": [
+        122,
+        314
+      ],
+      "bindAnchor": [
+        139,
+        289
+      ],
+      "sourceAlpha": 253,
+      "bindAlpha": 253
+    },
+    "left": {
+      "sourceDirection": "left",
+      "sourceAnchor": [
+        195,
+        323
+      ],
+      "bindAnchor": [
+        157,
+        298
+      ],
+      "sourceAlpha": 253,
+      "bindAlpha": 253
+    },
+    "down_left": {
+      "sourceDirection": "down_left",
+      "sourceAnchor": [
+        214,
+        310
+      ],
+      "bindAnchor": [
+        171,
+        290
+      ],
+      "sourceAlpha": 253,
+      "bindAlpha": 253
+    }
+  }
+}

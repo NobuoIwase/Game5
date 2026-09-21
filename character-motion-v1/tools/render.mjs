@@ -106,7 +106,7 @@ function runChain(part,pose,rest,def,bodyPoint,bodyMove,carryRole=null){
   }
  }
  const elbow=add(start,vectors[0]),end=add(elbow,vectors[1]);
- const depth=(rest.joints[ids[1]].depth+rest.joints[ids[2]].depth)/2;
+ const depth=((part.kind==='leg'?pose:rest).joints[ids[1]].depth+(part.kind==='leg'?pose:rest).joints[ids[2]].depth)/2;
  return {points:[start,elbow,end],source:part.points,depth,ids};
 }
 function localArmVector(pose,from,to){
@@ -136,10 +136,15 @@ function drawPinnedUpperLeg(ctx,part,chain,bodyPoint){
   const blend=clamp(t/.58,0,1),weight=blend*blend*(3-2*blend);
   return add(mul(fixed,1-weight),mul(rigid,weight));
  };
- const triangles=part.upperMesh.map(src=>({src,dst:src.map(deform)})),all=triangles.flatMap(t=>t.dst);
- const x0=Math.floor(Math.min(...all.map(p=>p[0])))-1,y0=Math.floor(Math.min(...all.map(p=>p[1])))-1;
- const width=Math.ceil(Math.max(...all.map(p=>p[0])))-x0+2,height=Math.ceil(Math.max(...all.map(p=>p[1])))-y0+2;
- const surface=canvas(width,height),sc=surface.getContext('2d'),output=sc.createImageData(width,height),data=output.data,input=part.upperPixels,iw=part.upper.width,ih=part.upper.height;
+ const triangles=part.upperMesh.map(src=>({src,dst:src.map(deform)}));
+ drawTexturedTriangles(ctx,part.upper,part.upperPixels,triangles);
+}
+function drawTexturedTriangles(ctx,img,input,triangles,depthSorted=false,overlay=null){
+ const all=triangles.flatMap(t=>t.dst);
+ const pad=overlay?40:1;
+ const x0=Math.floor(Math.min(...all.map(p=>p[0])))-pad,y0=Math.floor(Math.min(...all.map(p=>p[1])))-pad;
+ const width=Math.ceil(Math.max(...all.map(p=>p[0])))-x0+pad+1,height=Math.ceil(Math.max(...all.map(p=>p[1])))-y0+pad+1;
+ const surface=canvas(width,height),sc=surface.getContext('2d'),output=sc.createImageData(width,height),data=output.data,iw=img.width,ih=img.height;
  // One write per destination pixel preserves semitransparent source stockings.
  // Canvas-clipped triangles would repeatedly composite their shared edges.
  for(const {src,dst} of triangles){
@@ -157,14 +162,72 @@ function drawPinnedUpperLeg(ctx,part,chain,bodyPoint){
     const index=(py*iw+px)*4,weight=(xx?fx:1-fx)*(yy?fy:1-fy),alpha=input[index+3]*weight;
     rgba[3]+=alpha;for(let k=0;k<3;k++)rgba[k]+=input[index+k]*alpha;
    }
+   if(depthSorted&&rgba[3]<8)continue;
    const index=(y*width+x)*4;data[index+3]=rgba[3];for(let k=0;k<3;k++)data[index+k]=rgba[3]>0?rgba[k]/rgba[3]:0;
   }
  }
- sc.putImageData(output,0,0);ctx.drawImage(surface,x0,y0);
+ sc.putImageData(output,0,0);
+ if(overlay){sc.save();sc.translate(-x0,-y0);overlay(sc);sc.restore();}
+ ctx.drawImage(surface,x0,y0);
+ return {surface,origin:[x0,y0]};
+}
+// A complete leg is one connected textured surface. Every transverse ring is
+// shared by its two neighbours, including the knee and ankle. Independently
+// rotating two rectangular cutouts creates a gap at their edges even when the
+// nominal joint centres coincide.
+function runLegMesh(part,chain,bodyPoint,pose){
+ const original=part.texturePoints||part.points,[a,knee,d]=original,[u,v,w]=chain.points;
+ // The rigid greave begins above the old knee annotation. Keep the flexion
+ // zone in the dark fabric above its top edge, rather than bending metal.
+ const hingeY=part.runLegDef.hingeY;
+ const b=[a[0]+(knee[0]-a[0])*(hingeY-a[1])/(knee[1]-a[1]),hingeY],source=[a,b,d];
+ const yaw=pose.yaw*Math.PI/180,front=Math.abs(Math.cos(yaw))>.8;
+ const footAngle=(pose.joints['ankle_'+part.side].foot_pitch||0)*Math.PI/180*Math.sin(yaw);
+ const delta=(i)=>Math.atan2(chain.points[i+1][1]-chain.points[i][1],chain.points[i+1][0]-chain.points[i][0])-Math.atan2(source[i+1][1]-source[i][1],source[i+1][0]-source[i][0]);
+ const normals=[rotate([1,0],delta(0)),rotate([1,0],delta(1)),rotate([1,0],footAngle)];
+ // A calf folded into depth must not turn its painted front/back inside out.
+ if(front)for(let i=0;i<2;i++)if(normals[i][0]<0)normals[i]=mul(normals[i],-1);
+ const mixNormal=(n,m,t)=>{const a=Math.atan2(n[1],n[0]),b=Math.atan2(m[1],m[0]),turn=Math.atan2(Math.sin(b-a),Math.cos(b-a));return [Math.cos(a+turn*t),Math.sin(a+turn*t)];};
+ const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
+ const world=chain.ids.map(id=>pose.joints[id].world);
+ const depthAt=(i,t)=>{const q=add(mul(world[i],1-t),mul(world[i+1],t));return Math.cos(yaw)*q[2]-Math.sin(yaw)*q[0];};
+ const at=(x,y)=>{
+  let centre,sourceX,normal,z;
+  if(y<=b[1]){const t=(y-a[1])/(b[1]-a[1]);centre=add(u,mul(sub(v,u),t));sourceX=a[0]+(b[0]-a[0])*t;normal=normals[0];z=depthAt(0,t);}
+  else if(y<=d[1]){const t=(y-b[1])/(d[1]-b[1]);centre=add(v,mul(sub(w,v),t));sourceX=b[0]+(d[0]-b[0])*t;normal=normals[1];z=depthAt(1,t);}
+  else{sourceX=d[0]+(d[0]-b[0])*(y-d[1])/(d[1]-b[1]);centre=add(w,rotate([sourceX-d[0],y-d[1]],footAngle));normal=normals[2];z=depthAt(1,1)+(y-d[1])*.08;}
+  const bandTop=part.runLegDef.hingeY-32,bandBottom=part.runLegDef.bendBandBottomY;
+  if(y>bandTop&&y<bandBottom){
+   const t=(y-bandTop)/(bandBottom-bandTop),p0=add(v,mul(sub(u,v),(b[1]-bandTop)/(b[1]-a[1]))),p2=add(v,mul(sub(w,v),(bandBottom-b[1])/(d[1]-b[1])));
+   centre=add(add(mul(p0,(1-t)*(1-t)),mul(v,2*(1-t)*t)),mul(p2,t*t));
+   normal=mixNormal(normals[0],normals[1],smooth(t));
+  }
+  if(Math.abs(y-d[1])<12)normal=mixNormal(normals[1],normals[2],smooth((y-d[1]+12)/24));
+  // Deeply folded cloth compresses around the knee; retaining its complete
+  // standing width makes an angular plate outside the bent leg silhouette.
+  const kneeCompression=1-.24*Math.exp(-Math.pow((y-b[1])/20,2));
+  let point=add(centre,mul(normal,(x-sourceX)*kneeCompression));
+  const fixed=bodyPoint(add([x,y],sub(part.points[0],a))),pin=smooth((y-a[1])/((b[1]-a[1])*.38));
+  point=add(mul(fixed,1-pin),mul(point,pin));
+  return {point,z};
+ };
+ const [x0,y0,x1,y1]=localBounds(part.runLegRaw),xs=[],ys=[];
+ for(let x=x0;x<x1+1;x+=4)xs.push(x);xs.push(x1+1);
+ for(let y=y0;y<y1+1;y+=(Math.abs(y-b[1])<36?2:5))ys.push(y);
+ ys.push(y1+1,...[a[1],b[1]-32,b[1],part.runLegDef.bendBandBottomY,d[1]-12,d[1],d[1]+12].filter(y=>y>y0&&y<y1));ys.sort((a,b)=>a-b);
+ const triangles=[];
+ for(let j=0;j<ys.length-1;j++)for(let i=0;i<xs.length-1;i++){
+  const ring=[[xs[i],ys[j]],[xs[i+1],ys[j]],[xs[i+1],ys[j+1]],[xs[i],ys[j+1]]];
+  for(const ids of [[0,1,2],[0,2,3]]){const src=ids.map(k=>ring[k]),mapped=src.map(p=>at(...p));triangles.push({src,dst:mapped.map(p=>p.point),z:mapped.reduce((s,p)=>s+p.z,0)/3});}
+ }
+ triangles.sort((a,b)=>a.z-b.z);
+ return triangles;
 }
 function rigLayer(source,part,kind){
  const pts=kind==='leg'?[part.hip,part.knee,part.ankle]:[part.shoulder,part.elbow,part.wrist];
  const raw=cut(source,part.polygon),axis=sub(pts[2],pts[0]);
+ const runLegRaw=kind==='leg'?canvas(source.width,source.height):null;
+ if(runLegRaw)runLegRaw.getContext('2d').drawImage(raw,0,0);
  // Painted armor may extend above the anatomical knee. Keep the entire plate
  // on one bone instead of tearing its rim off when the lower leg folds.
  const splitPoint=part.splitPoint||pts[1],splitOverlap=part.splitOverlap??4;
@@ -175,9 +238,10 @@ function rigLayer(source,part,kind){
   const rimEnd=add(pts[0],mul(sub(pts[1],pts[0]),.10));
   const rim=halfPlane(cutWithBleed(source,part.polygon,3),rimEnd,sub(pts[1],pts[0]),-1,0);
   upper.getContext('2d').drawImage(rim,0,0);
+  runLegRaw.getContext('2d').drawImage(rim,0,0);
  }
  const footCut=kind==='leg'?add(pts[2],mul(sub(pts[1],pts[2]),.13)):null;
- return {...part,kind,raw,upper,lower,foot:footCut?halfPlane(lower,footCut,axis,1,3):null,shin:footCut?halfPlane(lower,footCut,axis,-1,3):null,points:pts,fill:sampleColor(raw,add(pts[0],mul(sub(pts[1],pts[0]),.18))),kneeFill:sampleColor(raw,part.jointFillSample||pts[1]),upperMesh:kind==='leg'?upperLegMesh(upper):null,upperPixels:kind==='leg'?upper.getContext('2d').getImageData(0,0,upper.width,upper.height).data:null};
+ return {...part,kind,raw,runLegRaw,rawPixels:runLegRaw?runLegRaw.getContext('2d').getImageData(0,0,raw.width,raw.height).data:null,upper,lower,foot:footCut?halfPlane(lower,footCut,axis,1,3):null,shin:footCut?halfPlane(lower,footCut,axis,-1,3):null,points:pts,fill:sampleColor(raw,add(pts[0],mul(sub(pts[1],pts[0]),.18))),kneeFill:sampleColor(raw,part.jointFillSample||pts[1]),upperMesh:kind==='leg'?upperLegMesh(upper):null,upperPixels:kind==='leg'?upper.getContext('2d').getImageData(0,0,upper.width,upper.height).data:null};
 }
 function transformChain(part,pose,rest,def,bodyMatrix,bodyMove,bodyScale,carryRole=null){
  const names=part.kind==='leg'?['hip','knee','ankle']:['shoulder','elbow','wrist'];
@@ -209,6 +273,8 @@ async function loadCharacter(id,{writeParts=true}={}){
  const im=await loadImage(path.join(ROOT,reg.source));
  const gearReg=id==='warrior'?JSON.parse(fs.readFileSync(path.join(ROOT,'rigs/warrior-gear.json'),'utf8')):null;
  const runReg=id==='warrior'&&fs.existsSync(path.join(ROOT,'rigs/warrior-run-v3.json'))?JSON.parse(fs.readFileSync(path.join(ROOT,'rigs/warrior-run-v3.json'),'utf8')):null;
+ const runAttachments=id==='warrior'?JSON.parse(fs.readFileSync(path.join(ROOT,'rigs/warrior-run-v4-attachments.json'),'utf8')):null;
+ const runLegs=id==='warrior'?JSON.parse(fs.readFileSync(path.join(ROOT,'rigs/warrior-run-v4-legs.json'),'utf8')):null;
  const gearIm=gearReg?await loadImage(path.join(ROOT,gearReg.source)):null;
  const rearFile=path.join(ROOT,'art/shield-rear-v3.png');
  const rearImage=gearReg&&fs.existsSync(rearFile)?await loadImage(rearFile):null;
@@ -233,6 +299,7 @@ async function loadCharacter(id,{writeParts=true}={}){
    return {...orig,...p,points:[p.hip,p.knee||a,p.ankle||b],texturePoints:orig.points};
   });
   const arms=(def.arms||[]).filter(p=>!p.copyFrom).map(p=>rigLayer(source,p,'arm'));
+  if(runLegs)for(const leg of legs){leg.runLegDef=runLegs.views[dir][leg.side];if(leg.runLegDef.kneePlatePolygon)leg.runKneePlate=cut(source,leg.runLegDef.kneePlatePolygon);}
   const extras=(def.extras||[]).map(p=>({...p,raw:cut(source,p.polygon)}));
   for(const p of [...(def.legs||[]),...(def.arms||[]),...(def.extras||[])])remove(bc,p.polygon);
   for(const poly of def.erasePolygons||[])remove(bc,poly);
@@ -264,6 +331,12 @@ async function loadCharacter(id,{writeParts=true}={}){
   if(gearIm){
    const g=canvas(cw,ch),gc=g.getContext('2d');gc.drawImage(gearIm,(i%4)*gearIm.width/4,Math.floor(i/4)*gearIm.height/2,gearIm.width/4,gearIm.height/2,0,0,cw,ch);
    for(const e of gearReg.views[dir]||[])gear.push({...e,raw:cut(g,e.polygon)});
+   const scabbard=gear.find(g=>g.id==='scabbard'),binding=runAttachments?.views[dir];
+   if(scabbard&&binding){
+    const j=DIRS.indexOf(binding.sourceDirection),original=gearReg.views[binding.sourceDirection].find(g=>g.id==='scabbard');
+    const complete=canvas(cw,ch);complete.getContext('2d').drawImage(gearIm,(j%4)*gearIm.width/4,Math.floor(j/4)*gearIm.height/2,gearIm.width/4,gearIm.height/2,0,0,cw,ch);
+    scabbard.runRaw=cut(complete,original.polygon);scabbard.runAnchor=binding.sourceAnchor;scabbard.runBindAnchor=binding.bindAnchor;
+   }
    if(rearImage&&['back','up_left'].includes(dir)){
     const shield=gear.find(g=>g.id==='shield'),b=localBounds(shield.raw),[sx,sy,ex,ey]=rearBounds;
     shield.runRaw=canvas(cw,ch);
@@ -285,7 +358,7 @@ async function loadCharacter(id,{writeParts=true}={}){
  }
  return result;
 }
-function render(character,dir,motion,frame,withRig=false){
+function render(character,dir,motion,frame,withRig=false,audit=null){
  const v=character.views[dir],{def,bodyScale}=v,pose=LIB.motions[motion][dir][frame],rest=LIB.rest[dir];
  const out=canvas(W,H),c=out.getContext('2d'),scale=character.id==='warrior'?.70:.93;
  const floor=v.bounds[3],ox=W/2-def.root[0]*scale,oy=470-floor*scale;
@@ -320,7 +393,7 @@ function render(character,dir,motion,frame,withRig=false){
  for(const {p,t} of [...legChains,...attachmentArms])t.ids.forEach((id,i)=>targets[id]=t.points[i]);
  const gear=v.gear.map(g=>{
   const arm=attachmentArms.find(a=>a.p.side===g.side);
-  if(!g.attach.startsWith('wrist')||!arm)return {g,arm:null,p:bodyPoint(g.bind_anchor||g.anchor),angle:bodyAngle,slot:'back'};
+  if(!g.attach.startsWith('wrist')||!arm)return {g,arm:null,p:bodyPoint((runV3&&g.runBindAnchor)||g.bind_anchor||g.anchor),angle:runV3?Math.atan2(bodyMatrix[1],bodyMatrix[0]):bodyAngle,slot:'back'};
   const [a,b]=arm.p.points.slice(1),[u,w]=arm.t.points.slice(1),sourceVector=sub(b,a),currentVector=sub(w,u);
   const sourceAngle=Math.atan2(sourceVector[1],sourceVector[0]),currentAngle=Math.atan2(currentVector[1],currentVector[0]);
   if(g.id==='shield'){
@@ -358,13 +431,28 @@ function render(character,dir,motion,frame,withRig=false){
    const mount=o.g.source_mount||o.g.anchor;c.translate(-mount[0],-mount[1]);
   }else{
    c.translate(...o.p);c.rotate(o.angle);
-   const anchor=o.g.id==='sword'?((runV3&&o.g.runSourceGrip)||o.g.source_grip||o.g.anchor):o.g.anchor;c.translate(-anchor[0],-anchor[1]);
+   const anchor=o.g.id==='sword'?((runV3&&o.g.runSourceGrip)||o.g.source_grip||o.g.anchor):((runV3&&o.g.runAnchor)||o.g.anchor);c.translate(-anchor[0],-anchor[1]);
   }
   c.drawImage((runV3&&o.g.runRaw)||o.g.raw,0,0);c.restore();
  }
  function drawExtra(e){const p=bodyPoint(e.pivot),a=bodyAngle+Math.sin(frame*Math.PI/4-.8)*(motion==='run'?.10:.055);c.save();c.translate(...p);c.rotate(a);c.translate(-e.pivot[0],-e.pivot[1]);c.drawImage(e.raw,0,0);c.restore();}
  function limb({p,t}){
   const source=p.texturePoints||p.points;
+  if(runV3&&p.kind==='leg'){
+   const calfProjection=(t.points[2][1]-t.points[1][1])/dist(source[1],source[2]);
+   const plate=p.runKneePlate&&calfProjection<.45?(sc)=>{
+    // The knee cap faces the camera even when the shin folds away behind it.
+    // Preserve its rounded source shape at the shared knee; the calf and foot
+    // retain their actual positions and are never removed or pasted elsewhere.
+    sc.translate(...t.points[1]);sc.scale(.92,.62);sc.translate(-p.runLegDef.platePivot[0],-p.runLegDef.platePivot[1]);sc.drawImage(p.runKneePlate,0,0);
+   }:null;
+   const raster=drawTexturedTriangles(c,p.runLegRaw,p.rawPixels,runLegMesh(p,t,bodyPoint,pose),true,plate);
+   if(audit){
+    const components=alphaComponents(raster.surface);
+    audit.legs.push({direction:dir,frame,side:p.side,components,detachedPixels:components.slice(1).filter(n=>n>12).reduce((a,b)=>a+b,0)});
+   }
+   return;
+  }
   // Small concealed joint patches cover disoccluded cuts during deep flexion.
   if(p.kind==='leg'&&!runV3){
    c.save();c.fillStyle=p.fill;c.strokeStyle=p.fill;c.lineCap='round';
@@ -382,16 +470,7 @@ function render(character,dir,motion,frame,withRig=false){
   }
   if(p.kind==='leg')drawPinnedUpperLeg(c,p,t,bodyPoint);
   else drawBone(c,p.upper,source[0],source[1],t.points[0],t.points[1]);
-  const shortCalf=runV3&&p.kind==='leg'&&Math.abs(Math.cos(pose.yaw*Math.PI/180))>.8&&(t.points[2][1]-t.points[1][1])<dist(source[1],source[2])*.45;
-  // In a head-on view a folded calf points into depth. Show one readable boot
-  // below its knee, not an inverted shin plate underneath a second full toe.
-  if(!shortCalf)drawBone(c,runV3&&p.shin?p.shin:p.lower,source[1],source[2],t.points[1],t.points[2]);
-  if(runV3&&p.foot){
-   const pitch=pose.joints['ankle_'+p.side].foot_pitch||0;
-   const footPoint=shortCalf?[t.points[2][0],Math.max(t.points[2][1],t.points[1][1]+5)]:t.points[2];
-   c.save();c.translate(...footPoint);c.rotate(pitch*Math.PI/180*Math.sin(pose.yaw*Math.PI/180));
-   c.translate(-source[2][0],-source[2][1]);c.drawImage(p.foot,0,0);c.restore();
-  }
+  drawBone(c,p.lower,source[1],source[2],t.points[1],t.points[2]);
  }
  for(const e of v.extras.filter(e=>e.layer==='back'))drawExtra(e);
  for(const g of gear.filter(g=>g.slot==='back'))drawGear(g);
@@ -410,10 +489,32 @@ function render(character,dir,motion,frame,withRig=false){
  for(const l of legChains.filter(l=>l.t.depth>0).sort((a,b)=>a.t.depth-b.t.depth))limb(l);
  for(const a of armChains.filter(a=>a.t.depth>=0))armWithGear(a);
  for(const e of v.extras.filter(e=>e.layer!=='back'))drawExtra(e);
+ if(audit&&runV3){
+  const item=gear.find(o=>o.g.id==='scabbard'),g=item.g;
+  const at=(image,p)=>image.getContext('2d').getImageData(Math.round(p[0]),Math.round(p[1]),1,1).data[3];
+  audit.scabbards.push({direction:dir,frame,sourceAlpha:at(g.runRaw,g.runAnchor),beltAlpha:at(v.runBody,g.runBindAnchor),anchorError:dist(item.p,bodyPoint(g.runBindAnchor))});
+ }
  if(withRig){c.lineWidth=2;c.strokeStyle='#31d7d5';for(const {t} of [...legChains,...armChains]){c.beginPath();t.points.forEach((p,i)=>i?c.lineTo(...p):c.moveTo(...p));c.stroke();for(const p of t.points){c.beginPath();c.arc(...p,3,0,Math.PI*2);c.fillStyle='#ffe494';c.fill();}}}
  return out;
 }
+function alphaComponents(surface){
+ const w=surface.width,h=surface.height,d=surface.getContext('2d').getImageData(0,0,w,h).data,seen=new Uint8Array(w*h),sizes=[];
+ for(let k=0;k<seen.length;k++)if(!seen[k]&&d[k*4+3]>16){
+  const queue=[k];seen[k]=1;
+  for(let n=0;n<queue.length;n++){const j=queue[n],x=j%w,y=(j/w)|0;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const xx=x+dx,yy=y+dy,i=yy*w+xx;if(xx>=0&&xx<w&&yy>=0&&yy<h&&!seen[i]&&d[i*4+3]>16){seen[i]=1;queue.push(i);}}}
+  sizes.push(queue.length);
+ }
+ return sizes.sort((a,b)=>b-a);
+}
 const argv=process.argv.slice(2),requested=argv.filter(x=>!x.startsWith('--'));const ids=requested.length?requested:['warrior','scout'];
+if(argv.includes('--check-run-connections')){
+ const character=await loadCharacter('warrior',{writeParts:false}),audit={legs:[],scabbards:[],limitations:'Checks raster connectivity and belt contact; visual shape still requires review.'};
+ for(const dir of DIRS)for(let f=0;f<8;f++)render(character,dir,'run',f,false,audit);
+ const failures=[...audit.legs.filter(l=>l.detachedPixels>0),...audit.scabbards.filter(s=>s.sourceAlpha<200||s.beltAlpha<200||s.anchorError>1e-6)];
+ audit.pass=failures.length===0;audit.failures=failures;
+ write(path.join(ROOT,'exports/run-connections.json'),JSON.stringify(audit,null,2));
+ console.log(JSON.stringify({pass:audit.pass,legs:audit.legs.length,scabbards:audit.scabbards.length,failures},null,2));process.exit(audit.pass?0:1);
+}
 const reviewArg=argv.find(x=>x.startsWith('--review=')),dirsArg=argv.find(x=>x.startsWith('--dirs='));
 if(reviewArg){
  const reviewRoot=path.resolve(ROOT,reviewArg.slice('--review='.length));
@@ -440,14 +541,14 @@ if(reviewArg){
  }
  process.exit(0);
 }
-const report=[];
+const report=[],connectionAudit={legs:[],scabbards:[],limitations:'Checks raster connectivity and belt contact; visual shape still requires review.'};
 for(const id of ids){
  const char=await loadCharacter(id);
  for(const motion of ['walk','run']){
   const sheet=canvas(W*8,H*8),sc=sheet.getContext('2d'),review=canvas(W*4,H*2),rc=review.getContext('2d');
   rc.fillStyle='#252d39';rc.fillRect(0,0,review.width,review.height);
   for(const [row,dir] of DIRS.entries())for(let f=0;f<8;f++){
-   const im=render(char,dir,motion,f);sc.drawImage(im,f*W,row*H);
+   const im=render(char,dir,motion,f,false,id==='warrior'&&motion==='run'?connectionAudit:null);sc.drawImage(im,f*W,row*H);
    const bounds=localBounds(im);if(bounds[0]<=0||bounds[1]<=0||bounds[2]>=W-1||bounds[3]>=H-1)report.push({id,motion,dir,frame:f,issue:'edge-clipping',bounds});
    write(path.join(ROOT,'exports',id,motion,dir,String(f).padStart(2,'0')+'.png'),im.toBuffer('image/png'));
    if(f===2){rc.drawImage(im,(row%4)*W,Math.floor(row/4)*H);rc.font='17px sans-serif';rc.fillStyle='#b8c8d8';rc.fillText(dir.toUpperCase().replaceAll('_',' '),(row%4)*W+15,Math.floor(row/4)*H+27);}
@@ -461,10 +562,17 @@ for(const id of ids){
  write(path.join(ROOT,'exports',id,'joints-review.png'),debug.toBuffer('image/png'));
 }
 const manifest={schema:'game5-character-motion/1.0',frame_width:W,frame_height:H,frames_per_cycle:8,directions:DIRS,direction_labels:Object.fromEntries(DIRS.map((d,i)=>[d,LABELS[i]])),characters:[{id:'warrior',label:'戦士（仮）'},{id:'scout',label:'獣人スカウト（仮）'}],motions:[{id:'walk',label:'歩行',frame_ms:120},{id:'run',label:'走行',frame_ms:80}],alpha:true,origin:'top-left',feet_anchor:[192,470],sheet_layout:'8 columns of frames × 8 rows of directions',anatomical_equipment:{warrior:{sword:'right hand',shield:'left forearm',pauldron:'right shoulder (equipment-detail annotation)',scabbard:'left hip'}},art_method:'Eight independently generated views; no whole-character horizontal reflection. Symmetric hidden limb textures may be shared between anatomical legs.',rig:'motion/rig.mjs',status:'first playable prototype; visual review pending'};
-manifest.revision=3;
-manifest.status='prototype v3; warrior running rebuilt from supplied single-frame pose reference';
-manifest.character_revisions={warrior:{walk:2,run:3},scout:{walk:2,run:2}};
+manifest.revision=4;
+manifest.status='prototype v4; continuous running legs and calibrated scabbard belt attachments';
+manifest.character_revisions={warrior:{walk:2,run:4},scout:{walk:2,run:2}};
 manifest.run_reference={file:'references/run-pose-reference.jpg',received_format:'JPEG',received_frames:1,interpretation:'Pose reference only; timing was authored as an eight-frame run, not extracted from an animated GIF.'};
 write(path.join(ROOT,'exports/manifest.json'),JSON.stringify(manifest,null,2));
 write(path.join(ROOT,'exports/render-report.json'),JSON.stringify({frames:ids.length*128,issues:report},null,2));
 console.log('Visual-boundary warnings:',report.length);
+if(connectionAudit.legs.length){
+ connectionAudit.failures=[...connectionAudit.legs.filter(l=>l.detachedPixels>0),...connectionAudit.scabbards.filter(s=>s.sourceAlpha<200||s.beltAlpha<200||s.anchorError>1e-6)];
+ connectionAudit.pass=connectionAudit.failures.length===0;
+ write(path.join(ROOT,'exports/run-connections.json'),JSON.stringify(connectionAudit,null,2));
+ console.log('Run connection checks:',connectionAudit.pass?'PASS':'FAIL',connectionAudit.legs.length,'legs,',connectionAudit.scabbards.length,'scabbards');
+ if(!connectionAudit.pass)process.exitCode=1;
+}

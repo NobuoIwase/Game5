@@ -66,12 +66,12 @@
   },
   "art_method": "Eight independently generated views; no whole-character horizontal reflection. Symmetric hidden limb textures may be shared between anatomical legs.",
   "rig": "motion/rig.mjs",
-  "status": "prototype v3; warrior running rebuilt from supplied single-frame pose reference",
-  "revision": 3,
+  "status": "prototype v4; continuous running legs and calibrated scabbard belt attachments",
+  "revision": 4,
   "character_revisions": {
     "warrior": {
       "walk": 2,
-      "run": 3
+      "run": 4
     },
     "scout": {
       "walk": 2,

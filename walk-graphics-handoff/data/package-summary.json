@@ -1,0 +1,17 @@
+{
+  "current_project": "workspace/plain-walk-v13",
+  "latest_user_request_before_packaging": "U22",
+  "handoff_request": "U23",
+  "final_visual_approval_recorded": false,
+  "versions": 19,
+  "generated_original_images": 27,
+  "attachments": 2,
+  "user_messages": 23,
+  "available_assistant_messages": 25,
+  "asset_count": 97,
+  "frame_count": 40,
+  "drawing_operations": 1160,
+  "joint_records": 880,
+  "created_utc": "2026-09-19T23:06:38.104336+00:00",
+  "conversation_coverage": "See conversation/COVERAGE.md; not a full platform chat export."
+}

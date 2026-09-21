@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ルミナ — 歩行試作 05</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;color:#eee7dd;background:#171820}
+*{box-sizing:border-box}body{margin:0;padding:30px 20px 38px}main{max-width:960px;margin:auto}
+header{display:flex;justify-content:space-between;gap:18px;align-items:baseline;flex-wrap:wrap;margin-bottom:24px}h1{font-size:22px;font-weight:550;margin:0;letter-spacing:.06em}header p{font-size:13px;color:#b6b0ba;margin:0}
+.stages{display:grid;grid-template-columns:1fr 1fr;gap:20px}.stage{min-width:0;background:#20212b;border:1px solid #34333f;border-radius:14px;overflow:hidden}.label{padding:17px 20px 0;display:flex;align-items:center;justify-content:space-between}.label h2{font-size:14px;font-weight:500;margin:0}.label span{color:#aaa3af;font-size:11px;letter-spacing:.12em}
+canvas{display:block;width:100%;height:auto;image-rendering:pixelated;aspect-ratio:192/256}
+.controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:24px}button,select{font:inherit;color:inherit;border:1px solid #46414e;background:#292733;padding:10px 16px;border-radius:8px;cursor:pointer;min-height:42px}button:hover{background:#36313f}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #e9c790;outline-offset:3px}button[aria-pressed="true"],button.primary{background:#ead4b0;border-color:#ead4b0;color:#302a28}
+.speed{display:flex;gap:10px;align-items:center;margin-left:auto;font-size:13px;color:#bdb5c4}.speed input{width:130px;accent-color:#e2c18e}.frames{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:7px;margin-top:20px}.frames button{padding:10px 3px;font-size:13px}.frame-caption{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;color:#b8b0be;font-size:12px;margin-top:11px}.note{font-size:13px;line-height:1.8;color:#b8b0be;margin:24px 0 0}.sr{position:absolute;width:1px;height:1px;clip:rect(0,0,0,0);overflow:hidden}
+@media(max-width:580px){body{padding:20px 12px}.stages{gap:10px}.label{padding:12px 12px 0}.label span{display:none}.controls{gap:8px}.speed{margin-left:0;width:100%}.speed input{flex:1}.frames{gap:4px}.frames button{font-size:12px;padding:8px 2px}header p{font-size:12px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<main>
+<header><h1>ルミナ / 歩行試作 05</h1><p>正面・右向き · 4コマ / 1歩 · 8コマ / 1周期</p></header>
+<div class="stages">
+ <section class="stage"><div class="label"><h2>正面</h2><span>FRONT / DOWN</span></div><canvas id="front" width="384" height="512" aria-label="正面の歩行アニメーション"></canvas></section>
+ <section class="stage"><div class="label"><h2>横向き</h2><span>SIDE / RIGHT</span></div><canvas id="side" width="384" height="512" aria-label="右向きの歩行アニメーション"></canvas></section>
+</div>
+<div class="controls">
+ <button id="play" class="primary" type="button">一時停止</button><button id="step" type="button">1コマ進む</button>
+ <button id="parts" type="button" aria-pressed="false">部位を見る</button>
+ <label class="speed">速さ <input id="speed" type="range" min="4" max="12" step="0.1" value="8.3"><output id="speedValue">8.3 fps</output></label>
+</div>
+<div class="frames" id="frames" aria-label="フレーム選択"></div>
+<div class="frame-caption"><span id="phase">01 / 08 · 接地</span><span>補間なし / スペースで再生・停止 / →でコマ送り</span></div>
+<p class="note">頭と胴体の上下動に、腕・脚・髪・翼・裾を連動。肘に軽い曲げを残し、翼と髪の重なり、首元の輪郭を整えました。<br>1コマは192 × 256 px。表示は最近傍で拡大。足元の影とマス目は確認用で、素材PNGには含みません。</p>
+<div class="sr" id="status" aria-live="polite"></div>
+</main>
+<script id="walk-data" type="application/json">__DATA__</script>
+<script>
+const data=JSON.parse(document.getElementById('walk-data').textContent),rig=data.rig;
+const views=['front','side'],images={front:{},side:{}},contexts={};
+let frame=0,playing=!matchMedia('(prefers-reduced-motion: reduce)').matches,split=false,fps=1000/120,last=0;
+const labels=['接地','沈み込み','通過','持ち上がり','接地','沈み込み','通過','持ち上がり'];
+const partLabels={head:'頭・輪',hair:'後ろ髪',torso:'胴',skirt:'スカート',arm_far:'腕①',arm_near:'腕②',leg_far:'脚①',leg_near:'脚②',wing_far:'翼①',wing_near:'翼②',tail_far:'裾①',tail_near:'裾②'};
+const partOrder=['head','hair','torso','skirt','arm_far','arm_near','leg_far','leg_near','wing_far','wing_near','tail_far','tail_near'];
+const playButton=document.getElementById('play'),partsButton=document.getElementById('parts'),phase=document.getElementById('phase');
+function controls(){playButton.textContent=playing?'一時停止':'再生';phase.textContent=`${String(frame+1).padStart(2,'0')} / 08 · ${labels[frame]}`;document.querySelectorAll('#frames button').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===frame)));}
+function draw(view){
+ const ctx=contexts[view];ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,384,512);ctx.imageSmoothingEnabled=false;
+ ctx.fillStyle='#20212b';ctx.fillRect(0,0,384,512);
+ if(split){
+  const cw=96,ch=158;
+  partOrder.forEach((name,i)=>{
+   const x=(i%4)*cw,y=Math.floor(i/4)*ch+15;
+   const deformed=view==='side'?rig.frames[view][frame].find(p=>p.part.startsWith(name+'_walk_')):null;
+   const asset=deformed?deformed.part:name,img=images[view][asset];
+   const box=rig.parts[view][asset].bounds||[0,0,img.width,img.height],bw=box[2]-box[0],bh=box[3]-box[1];
+   const scale=Math.min(78/bw,119/bh,2);
+   const motion=rig.frames[view][frame].find(p=>p.part===name);
+   const rotation=(!deformed&&motion)?motion.angle*Math.PI/180:0;
+   ctx.save();ctx.translate(x+cw/2,y+65);ctx.rotate(rotation);ctx.drawImage(img,box[0],box[1],bw,bh,Math.round(-bw*scale/2),Math.round(-bh*scale/2),Math.round(bw*scale),Math.round(bh*scale));ctx.restore();
+   ctx.font='12px system-ui';ctx.textAlign='center';ctx.fillStyle='#c3b7c8';ctx.fillText(partLabels[name],x+cw/2,y+139);
+  });return;
+ }
+ ctx.scale(2,2);ctx.strokeStyle='#292a36';ctx.lineWidth=.5;
+ for(let x=0;x<=192;x+=24){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,256);ctx.stroke();}
+ for(let y=0;y<=256;y+=24){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(192,y);ctx.stroke();}
+ ctx.fillStyle='#171820';ctx.beginPath();ctx.ellipse(97,242,28,4,0,0,Math.PI*2);ctx.fill();
+ for(const p of rig.frames[view][frame]){
+  ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.angle*Math.PI/180);ctx.scale(p.scale[0],p.scale[1]);ctx.drawImage(images[view][p.part],-p.pivot[0],-p.pivot[1]);ctx.restore();
+ }
+}
+function render(){views.forEach(draw);controls();}
+function setPlaying(value){playing=value;last=performance.now();controls();}
+playButton.onclick=()=>setPlaying(!playing);
+document.getElementById('step').onclick=()=>{setPlaying(false);frame=(frame+1)%8;render();};
+partsButton.onclick=()=>{split=!split;partsButton.setAttribute('aria-pressed',String(split));partsButton.textContent=split?'組み立てを見る':'部位を見る';render();};
+document.getElementById('speed').oninput=e=>{fps=+e.target.value;document.getElementById('speedValue').textContent=fps.toFixed(1)+' fps';last=performance.now();};
+for(let i=0;i<8;i++){const b=document.createElement('button');b.type='button';b.textContent=String(i+1).padStart(2,'0');b.setAttribute('aria-label',`${i+1}コマ目 ${labels[i]}`);b.onclick=()=>{setPlaying(false);frame=i;render();};document.getElementById('frames').append(b);}
+document.addEventListener('keydown',e=>{if(['INPUT','SELECT','BUTTON'].includes(e.target.tagName))return;if(e.code==='Space'){e.preventDefault();setPlaying(!playing);}else if(e.code==='ArrowRight'){e.preventDefault();document.getElementById('step').click();}});
+function tick(now){if(playing&&now-last>=1000/fps){frame=(frame+1)%8;last=now;render();}requestAnimationFrame(tick);}
+Promise.all(views.flatMap(view=>{contexts[view]=document.getElementById(view).getContext('2d');return Object.entries(data.images[view]).map(([name,src])=>new Promise((resolve,reject)=>{const img=new Image();img.onload=resolve;img.onerror=reject;images[view][name]=img;img.src=src;}));})).then(()=>{render();requestAnimationFrame(tick);}).catch(()=>{document.getElementById('status').textContent='画像の読み込みに失敗しました。';});
+</script>
+</body>
+</html>

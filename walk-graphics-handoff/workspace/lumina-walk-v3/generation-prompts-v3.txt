@@ -1,0 +1,14 @@
+Use case: stylized-concept. Asset type: four replacement ARM cutouts for an existing pixel-art angel girl walking rig.
+The supplied sprite atlas is a STYLE, PALETTE and COSTUME reference. Create ONLY four separate whole arms, arranged in an exact 2x2 grid. No heads, torsos, legs, wings, labels, grid lines, cast shadows, glow or other objects.
+Each arm extends from a rounded bare shoulder root at TOP through a small simple ivory upper-arm ruffle/cuff, a slender pale peach forearm, wrist, and SMALL RELAXED HAND at BOTTOM. Proportions and pixel technique must match the reference character. Arms hang almost vertically with a slight natural bend at elbow. Hands are relaxed, fingers together and gently curled, pointing DOWN. No spread fingers, no V shape, no claw, no palm presented to camera, no clenched fists, no grasping anything. Avoid oversized cuffs.
+TOP LEFT: arm for the SCREEN LEFT of a FRONT-facing character; viewed from front, hand rests beside thigh, subtle side of fingers visible. Upper arm approximately vertical, hand just slightly outward to screen left.
+TOP RIGHT: matching SCREEN RIGHT arm for FRONT-facing character. Corresponding naturally mirrored anatomy.
+BOTTOM LEFT: FAR arm for a character facing SCREEN RIGHT in strict SIDE PROFILE. Upper arm vertical, elbow gently bent, wrist beneath shoulder; fingers point DOWN, subtle thumb on FORWARD / SCREEN-RIGHT edge. Palm faces toward the character's body. Slightly shaded warm mauve colors.
+BOTTOM RIGHT: NEAR arm for same RIGHT-facing strict SIDE PROFILE. Fingers point DOWN together, thumb on FORWARD / SCREEN-RIGHT edge; back/edge of relaxed hand visible, NOT a front-facing spread palm. Same elbow bend, lighter skin.
+All four arms upright, shoulder at top, fingertips at bottom. Entire arm visible with margins. Each arm occupies 80% of cell height and only 20-30% of cell width. Strong simple pixel silhouettes readable at 12x48 game-pixel scale. Warm ivory, pale peach, muted mauve only; preserve original pixel style, no smooth painterly rendering.
+Uniform flat solid RGB #00FF00 pure green chroma key background everywhere outside arms. No shading whatsoever on green. Square canvas.
+
+COLOR EDIT
+
+Preserve the four arms exactly. Replace harsh red/burgundy contours with the muted dusty mauve / purple-gray from the original atlas. Skin warm light peach, cuff warm ivory, shadows dusty mauve. Preserve transparent alpha and pixel geometry.
+

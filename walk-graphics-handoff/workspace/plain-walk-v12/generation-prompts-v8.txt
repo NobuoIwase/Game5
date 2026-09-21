@@ -1,0 +1,6 @@
+v8 neck seam correction
+Built-in image_gen. Input: v7 parts/down_right/upper_body.png and parts/up_right/upper_body.png, one edit call each.
+Only the generated neck opening is integrated into the established torso; the torso's remaining pixels and original alpha silhouette are preserved.
+
+Use case: precise-object-edit.
+Edit target: this isolated pale lavender pixel-art mannequin upper torso. Change ONLY the tiny flat dark horizontal rim at the VERY TOP of its neck stump. This torso will attach to a separate neck shaft above, so the top needs to be OPEN-ENDED: replace the dark horizontal cut-edge/rim with the same light lavender neck skin, reaching all the way to the top boundary. No ellipse/cap/collar, no horizontal outline or highlight across that top cut. Side outlines of the neck remain. Preserve EXACT outer silhouette, proportions, pose, orientation, shoulder shapes, body shading, palette, and all other pixels as closely as possible. Do not redraw the whole torso, add a head or change its angle. One centered isolated torso only, transparent alpha background, no text or extra objects. Pixel-art at the same 32-by-34-pixel proportions enlarged without smoothing. The ONLY intended change is removing the neck's top horizontal dark border by continuing its light skin through that opening.

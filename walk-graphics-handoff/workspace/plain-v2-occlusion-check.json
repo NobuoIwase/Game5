@@ -1,0 +1,50 @@
+[
+  {
+    "frame": 0,
+    "hip_joint_far": 7,
+    "knee_joint_far": 11,
+    "thigh_far": 247
+  },
+  {
+    "frame": 1,
+    "hip_joint_far": 14,
+    "knee_joint_far": 2,
+    "thigh_far": 233
+  },
+  {
+    "frame": 2,
+    "hip_joint_far": 5,
+    "knee_joint_far": 4,
+    "thigh_far": 259
+  },
+  {
+    "frame": 3,
+    "hip_joint_far": 0,
+    "knee_joint_far": 11,
+    "thigh_far": 233
+  },
+  {
+    "frame": 4,
+    "hip_joint_far": 0,
+    "knee_joint_far": 5,
+    "thigh_far": 225
+  },
+  {
+    "frame": 5,
+    "hip_joint_far": 6,
+    "knee_joint_far": 6,
+    "thigh_far": 282
+  },
+  {
+    "frame": 6,
+    "hip_joint_far": 8,
+    "knee_joint_far": 1,
+    "thigh_far": 180
+  },
+  {
+    "frame": 7,
+    "hip_joint_far": 7,
+    "knee_joint_far": 15,
+    "thigh_far": 245
+  }
+]

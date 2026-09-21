@@ -1,0 +1,17 @@
+Method: built-in image_gen.imagegen. Reference: source-atlases/front-v1.png.
+Output: source-atlases/front-feet-v3.png.
+The generated 2x2 atlas is cropped by cell, cleaned to the largest opaque component,
+and sampled with nearest-neighbor to the registered foot asset sizes.
+Other artwork is inherited from v2. Neck/shoulder placement, arm motion, foot pose
+selection and layering are implemented in the existing JavaScript joint rig.
+
+Prompt:
+Use case: precise-object-edit. Asset type: tiny pixel-art animation foot replacement atlas for the provided neutral pale blue/lavender mannequin.
+Input image: STYLE AND FOOT SHAPE REFERENCE only. The bottom-right foot in row 3 of the reference is the existing front-facing foot.
+Create ONE new transparent-background atlas with ONLY FOUR isolated foot sprites in an evenly spaced 2 by 2 grid, no labels, no lines, no other body parts. These will be downsampled to about 12 x 15 pixels each. Preserve the mannequin's plain soft pale blue-gray material and restrained dark lavender contour; crisp chunky pixel style, no realism, no shoes, no skin colors, no texture.
+Each sprite is THE SAME foot seen by a camera directly in front of a person walking toward the camera, slightly elevated map view. Include a short ankle stub on top of each foot to attach to the shin. Keep the stub centered and width consistent.
+Top left: planted flat on floor, toes at bottom of image, instep visible, a low rounded toe front edge, matching reference foot.
+Top right: heel contact pose, heel is down and toes lifted TOWARD camera. A modest dark muted lavender underside is exposed as a small oval crescent across the lower front face, with the toes at its upper edge. The ankle still emerges above and BEHIND the foot. Not a full upright footprint.
+Bottom left: late forward swing, same heel-ready foot with toes raised a little more, showing a somewhat larger but still foreshortened sole plane shaded lavender, light upper rim on toes, simple arch hint, no individual tread. Ankle above and behind.
+Bottom right: toe-off / rear push-off viewed from FRONT, toes point down to the floor and heel rises behind the shin, mostly instep visible, narrower and vertically foreshortened silhouette, NO front-facing full sole.
+No detached toes or parts, no extra footprints. Every foot fits inside its own quarter with generous fully transparent margins. All have comparable proportions and size. Feet must look relaxed and rounded and match the input's palette.

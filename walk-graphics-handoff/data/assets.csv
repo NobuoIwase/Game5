@@ -1,0 +1,98 @@
+﻿view,asset,file,width,height,pivot_x,pivot_y,end,length,neck_socket,cervical_socket,shoulder_sockets,attachment,open_neck_edge,sha256
+front,head,workspace/plain-walk-v13/parts/front/head.png,68,65,34,62,null,,null,null,null,,null,26a4f379176a5aea62ac90e07148f81b72259b786f9e45b8018a689ce39ba105
+front,upper_body,workspace/plain-walk-v13/parts/front/upper_body.png,34,34,17.0,32,null,,null,null,null,,null,77d2e2e526ee3858a7d752816735ba38e13a99992616ea9dde903d5b6ab203cf
+front,lower_body,workspace/plain-walk-v13/parts/front/lower_body.png,30,26,15.0,-2,null,,null,null,null,,null,1af3df7a438d9b13b39bfbfe33fab37f74c52e99e4e92213371571eea132562f
+front,neck,workspace/plain-walk-v13/parts/front/neck.png,9,10,4.5,5.0,null,,null,null,null,,null,d3d1c08fa9193b8067762e30edc5133ef968e0affa2738103b7c7a4440921cf9
+front,upper_arm,workspace/plain-walk-v13/parts/front/upper_arm.png,9,28,4.5,3,"[4.5, 25]",22,null,null,null,,null,1ec4e9342aafa7f5260d44b662df85af4dfb48849cccec152366f36b9aa981a9
+front,elbow,workspace/plain-walk-v13/parts/front/elbow.png,6,6,3.0,3.0,null,,null,null,null,,null,9fdd69c480fefeca51d6c5601c6ea1082151d6b69ba635d15ef8861048f80391
+front,forearm,workspace/plain-walk-v13/parts/front/forearm.png,7,23,3.5,3,"[3.5, 20]",17,null,null,null,,null,d317587e7c8267aadceddf2d2bdecea331d49387498967a0e90ef62a3a7a0220
+front,hand,workspace/plain-walk-v13/parts/front/hand.png,8,9,4.0,2,null,,null,null,null,,null,b9c214913573ae41a01a189794d915693cc9ef373435c8821609939f017a6a9f
+front,thigh,workspace/plain-walk-v13/parts/front/thigh.png,14,32,7.0,3,"[7.0, 29]",26,null,null,null,,null,8447c47795c54b345fa968658e950def10515d3c5220872ca32cb1e684c3440a
+front,knee,workspace/plain-walk-v13/parts/front/knee.png,8,8,4.0,4.0,null,,null,null,null,,null,2d57b92223e9d80599806f76327e7afb0e585fe38c0e7d179ae631e3127a3c97
+front,shin,workspace/plain-walk-v13/parts/front/shin.png,10,34,5.0,3,"[5.0, 31]",28,null,null,null,,null,48fb5b9c7f825e5d6b37522fce14fb9c92869ed9c5241e1dc4be2da275d5c961
+front,foot,workspace/plain-walk-v13/parts/front/foot.png,12,15,6.0,2,null,,null,null,null,,null,d1594b8a31a0bf9d56ffb60a06255cc2685d29903005681eeceba884440b5662
+front,shoulder,workspace/plain-walk-v13/parts/front/shoulder.png,7,7,3.5,3.5,null,,null,null,null,,null,c589ef39a302058e92d24a4c98fcefc90d50ff93ca93e81cb48511536286c132
+front,hip,workspace/plain-walk-v13/parts/front/hip.png,8,8,4.0,4.0,null,,null,null,null,,null,9f7c93927f67e308425b4a63c38682330a43047e75e2e24c2f8f16b64d585b34
+front,wrist,workspace/plain-walk-v13/parts/front/wrist.png,5,5,2.5,2.5,null,,null,null,null,,null,4cf843dbf68d0dd1f7f0008334042529b21b748924302c20e2a58ad08f796655
+front,ankle,workspace/plain-walk-v13/parts/front/ankle.png,6,6,3.0,3.0,null,,null,null,null,,null,7a83f95820d8e182ebb7f83ea4e5545ef7c01bec7ef607eae4ee062b942e7f0c
+front,waist,workspace/plain-walk-v13/parts/front/waist.png,18,10,9,5,null,,null,null,null,,null,d34fce1940b7fbeeafeb0c7d9b80b89d3eb9c000d43847dbfffb03cfbdf013e0
+front,foot_heel,workspace/plain-walk-v13/parts/front/foot_heel.png,12,14,6.0,2,null,,null,null,null,,null,b63af18bef1c33ce58db71b861b6d3170ba92b73dae6cbc46eb60f79cc765e5e
+front,foot_swing,workspace/plain-walk-v13/parts/front/foot_swing.png,12,14,6.0,2,null,,null,null,null,,null,5fd3fe3b19ed55bba9e0889c96e9ad0b90727969a5cf89a76c7281b693b896af
+front,foot_toe,workspace/plain-walk-v13/parts/front/foot_toe.png,10,13,5.0,2,null,,null,null,null,,null,a8fe9ce570345f7d0d099035db0d09563ebee7b115a237fa1acb845acbca4d79
+side,head,workspace/plain-walk-v13/parts/side/head.png,60,64,28,61,null,,null,null,null,,null,ecfbf22ebcec35c92dba01fb1dc6208e68a5d74256c5abbc51b43b857859d55d
+side,upper_body,workspace/plain-walk-v13/parts/side/upper_body.png,25,34,12.5,32,null,,"[10, 2]",null,null,,null,98e78dbdf359ffddaff4c1385184fdcd79d9f7bde7cc794cf14f4df766d97372
+side,lower_body,workspace/plain-walk-v13/parts/side/lower_body.png,24,26,12.0,-2,null,,null,null,null,,null,6cb5d96141e44560e689507d0c2bcdba0484072f032b1cbdc2c5dde29426f582
+side,neck,workspace/plain-walk-v13/parts/side/neck.png,8,10,4.0,5.0,null,,null,null,null,,null,a35fc0150f9768ec2ad9f3821ebc546f4d928e3563f4b3e5169380511d3971b8
+side,upper_arm,workspace/plain-walk-v13/parts/side/upper_arm.png,9,28,4.5,3,"[4.5, 25]",22,null,null,null,,null,3a135bf65ca88787edf9ca83c2409dd7ab1c4fb78245fa301e7a0d1106500088
+side,elbow,workspace/plain-walk-v13/parts/side/elbow.png,6,6,3.0,3.0,null,,null,null,null,,null,b0a5e631ff61e373128ec47ecbaaf1c2d96edb732e381c77373e202d65237d65
+side,forearm,workspace/plain-walk-v13/parts/side/forearm.png,7,23,3.5,3,"[3.5, 20]",17,null,null,null,,null,caa0148f04b5f42646be7ecf44756204c1b723f2bfaf6d928f346c2ff481f36a
+side,hand,workspace/plain-walk-v13/parts/side/hand.png,8,9,4.0,2,null,,null,null,null,,null,2c88c5babb0c9a225f5222f875df8eb9c9f43c5502ce28692befe01893bda02f
+side,thigh,workspace/plain-walk-v13/parts/side/thigh.png,14,32,7.0,3,"[7.0, 29]",26,null,null,null,,null,d08f6d4c3ea0aedeee4847bfdc5297c9774275b5ff4ac9e8841b07b2d0457a0c
+side,knee,workspace/plain-walk-v13/parts/side/knee.png,8,8,4.0,4.0,null,,null,null,null,,null,2a03be0d78534066027bdbf2567ee8543a1a322fb1267f6d768c9abdf876aa1c
+side,shin,workspace/plain-walk-v13/parts/side/shin.png,10,34,5.0,3,"[5.0, 31]",28,null,null,null,,null,e33c944c1c608735ae6e69ed10f777c68c32b1a6809f06608c5eaedee0df9c20
+side,foot,workspace/plain-walk-v13/parts/side/foot.png,22,14,7,2,null,,null,null,null,,null,e41f7c89c3644e1fef45453784f0bdc9e7514e964b3c5150e30590e42a9e428d
+side,shoulder,workspace/plain-walk-v13/parts/side/shoulder.png,7,7,3.5,3.5,null,,null,null,null,,null,b493be3d7eb44432fe067adf0339dbc2d4454403132ba4437ddccde89956e70c
+side,hip,workspace/plain-walk-v13/parts/side/hip.png,8,8,4.0,4.0,null,,null,null,null,,null,f2e47bfe9b4b9eedc3349bb6046c5443688df677995711e6a5de17def039d96c
+side,wrist,workspace/plain-walk-v13/parts/side/wrist.png,5,5,2.5,2.5,null,,null,null,null,,null,8d2b53a49b8af6b7deae3c6dcdf79299de9bc50f8c5e3d953a9bf87efa607acd
+side,ankle,workspace/plain-walk-v13/parts/side/ankle.png,6,6,3.0,3.0,null,,null,null,null,,null,07bfbbbcf7a9e261c90cf4937aa73406d140f4a30888e65cc1ba4ae387ee3338
+side,waist,workspace/plain-walk-v13/parts/side/waist.png,18,10,9,5,null,,null,null,null,,null,bf1102dcac82a7d2b671bb94fc7245540a04a2b4444e9b324269a24bdd89559b
+down_right,head,workspace/plain-walk-v13/parts/down_right/head.png,64,65,26,60,null,,null,null,null,skull_base,null,a35f7dc54db68eb6037e408cb7cd63a16c48781074a6cdb284866865ca8d6f10
+down_right,upper_body,workspace/plain-walk-v13/parts/down_right/upper_body.png,32,34,16.0,32,null,,"[16.5, 2]","[16.5, 9]","{""near"": [6, 13], ""far"": [27, 12]}",,"[14, 0, 20, 2]",361f53eeeef8fd0f4bb2956392450eb48e7800ca5daafa8dc036e9e86401cd90
+down_right,lower_body,workspace/plain-walk-v13/parts/down_right/lower_body.png,28,26,14.0,-2,null,,null,null,null,,null,7d8a45740f296588d234a86e3aa2a8b3a1329e9e04e8f1c3ef9fb190cc3a651f
+down_right,neck,workspace/plain-walk-v13/parts/down_right/neck.png,8,10,4.0,5.0,null,,null,null,null,,null,3e54c70df1244e3d97e3509c95e02704e9abff244d5cc75cb151d19eaa80aadf
+down_right,upper_arm,workspace/plain-walk-v13/parts/down_right/upper_arm.png,9,28,4.5,3,"[4.5, 25]",22,null,null,null,,null,9f2e7bca979fe387938ca386fa4ae2fa0e27b3fd5ebdd9fac5c830c727fd4de7
+down_right,elbow,workspace/plain-walk-v13/parts/down_right/elbow.png,6,6,3.0,3.0,null,,null,null,null,,null,de9a07174aa190dba42a7669c522a951b5e39034d6ff13f97de411a96ff07407
+down_right,forearm,workspace/plain-walk-v13/parts/down_right/forearm.png,7,23,3.5,3,"[3.5, 20]",17,null,null,null,,null,301b096c2b394761063ca71c31a747d206621405e6fe14847ea840ccfb52911c
+down_right,hand,workspace/plain-walk-v13/parts/down_right/hand.png,8,9,4.0,2,null,,null,null,null,,null,6f2be366787e0909c2b971c7eb69c5057e63ad34634c522c53d07bd7bdc4f4ea
+down_right,thigh,workspace/plain-walk-v13/parts/down_right/thigh.png,14,32,7.0,3,"[7.0, 29]",26,null,null,null,,null,991b15dcce2f02f589fa90860c346d1543cbb63a79e52aa2f0e665a2bac4196b
+down_right,knee,workspace/plain-walk-v13/parts/down_right/knee.png,8,8,4.0,4.0,null,,null,null,null,,null,998fd0507d444f69703743c40902457725ccfd24a713f1f2fb7c6978eb523c44
+down_right,shin,workspace/plain-walk-v13/parts/down_right/shin.png,10,34,5.0,3,"[5.0, 31]",28,null,null,null,,null,f7acb4f9379a16d9b70b9475ae43058e0e3a87be4801ad6e96a21b2652d0abf0
+down_right,foot,workspace/plain-walk-v13/parts/down_right/foot.png,17,16,5.5,2,null,,null,null,null,,null,b1c6641ef5c38579c9a93efde0c4f0a64db448a06681be9868cb30ae4d17b8d0
+down_right,shoulder,workspace/plain-walk-v13/parts/down_right/shoulder.png,7,7,3.5,3.5,null,,null,null,null,,null,b6d0af27d8346f6099c5742d5c771bcb5216429b576f93cc580cbd92a1838deb
+down_right,hip,workspace/plain-walk-v13/parts/down_right/hip.png,8,8,4.0,4.0,null,,null,null,null,,null,f8e19c71a4d66adee162a11230a8ef86f8d2fcda9d734f2f6734f132e73524e4
+down_right,wrist,workspace/plain-walk-v13/parts/down_right/wrist.png,5,5,2.5,2.5,null,,null,null,null,,null,6f82663104b28511a68af15d709c3cdcb2b7385f06c828215cbb2e04af49893e
+down_right,ankle,workspace/plain-walk-v13/parts/down_right/ankle.png,6,6,3.0,3.0,null,,null,null,null,,null,a05c475f3169e76e6281e4906b4c8a9b445785e3d8b09ac9c2ccee70d8317066
+down_right,foot_heel,workspace/plain-walk-v13/parts/down_right/foot_heel.png,17,15,5.0,2,null,,null,null,null,,null,e924d0230fa58a589ff7a3e78474c105f5742b8bc5ef61d61c11645c0aef8e65
+down_right,foot_swing,workspace/plain-walk-v13/parts/down_right/foot_swing.png,17,16,4.0,2,null,,null,null,null,,null,6995da98c701818be9894894cc7c482b17f1547289128b4782ab217be6f85cbe
+down_right,foot_toe,workspace/plain-walk-v13/parts/down_right/foot_toe.png,15,17,6.5,2,null,,null,null,null,,null,7d95c7c95a586bdd1d10cf102d0986365375f31579f7ad9e5bcd4ff6d6061d4c
+down_right,waist,workspace/plain-walk-v13/parts/down_right/waist.png,18,10,9,5,null,,null,null,null,,null,fb2bf19810c3b67b6acbb7112c0ff239fced1f909ebfc00a058e1fd7e399fbce
+up_right,head,workspace/plain-walk-v13/parts/up_right/head.png,64,65,26,60,null,,null,null,null,skull_base,null,af005f4d4066a3547733796feee1477fd7a39e8781009c3404ed01588179f054
+up_right,upper_body,workspace/plain-walk-v13/parts/up_right/upper_body.png,32,34,16.0,32,null,,"[16.0, 2]","[16.0, 9]","{""near"": [27, 13], ""far"": [5, 11]}",,"[12, 0, 20, 2]",5abdeb607d7a9348749462e6f5f7af99cfbe5078b2cdbed2c34ae765f9910908
+up_right,lower_body,workspace/plain-walk-v13/parts/up_right/lower_body.png,28,26,14.0,-2,null,,null,null,null,,null,2e468f198978e898cead1e07ea07f2922292b583be97583cd7e9e9edb3edd96e
+up_right,neck,workspace/plain-walk-v13/parts/up_right/neck.png,8,10,4.0,5.0,null,,null,null,null,,null,1ef32da2a2ef92fc43a2e349dc24b1488c11c7a23e3779a7334b6f24a88ec573
+up_right,upper_arm,workspace/plain-walk-v13/parts/up_right/upper_arm.png,9,28,4.5,3,"[4.5, 25]",22,null,null,null,,null,4769348de69e461395e8cb1157cc11d3d82516bd24976c54e16c65d14410eab6
+up_right,elbow,workspace/plain-walk-v13/parts/up_right/elbow.png,6,6,3.0,3.0,null,,null,null,null,,null,925c788b80d7c23f857efdd2aef9b0194501da03d9ec997c4f312e677ac438bb
+up_right,forearm,workspace/plain-walk-v13/parts/up_right/forearm.png,7,23,3.5,3,"[3.5, 20]",17,null,null,null,,null,a94b321386673dcf5a3dab796e61a3a2f066a3e9a842e0bbd526e012e5e61dde
+up_right,hand,workspace/plain-walk-v13/parts/up_right/hand.png,8,9,4.0,2,null,,null,null,null,,null,4c6baef7c95646dfd817ff9a86ec836edcba1c574c2994a9b39a679cd7e64e34
+up_right,thigh,workspace/plain-walk-v13/parts/up_right/thigh.png,14,32,7.0,3,"[7.0, 29]",26,null,null,null,,null,05dc39bfb460a1355dca1df6d9aed42598159c718181a3ad1f5dcd567e90b636
+up_right,knee,workspace/plain-walk-v13/parts/up_right/knee.png,8,8,4.0,4.0,null,,null,null,null,,null,a1734e08dcbd2cab07a75dc04d41a37d5c36398e3fbfd7bee480f4e2ba86b946
+up_right,shin,workspace/plain-walk-v13/parts/up_right/shin.png,10,34,5.0,3,"[5.0, 31]",28,null,null,null,,null,ba6a712a43463fbf6394b35fe1d9dbc728ddc8c4cc2b347272c3aaec68dbc33b
+up_right,foot,workspace/plain-walk-v13/parts/up_right/foot.png,18,14,6.5,2,null,,null,null,null,,null,4b02ae63868902947ffb387cd31f19089356462181fc15dc7d7276a2b561c503
+up_right,shoulder,workspace/plain-walk-v13/parts/up_right/shoulder.png,7,7,3.5,3.5,null,,null,null,null,,null,02d0321d7902e6313fde5d02e84f201a13c54f6b8078b16d28421714d08b4424
+up_right,hip,workspace/plain-walk-v13/parts/up_right/hip.png,8,8,4.0,4.0,null,,null,null,null,,null,add180f35100dc1e816f76b75b6e2e4ec4d1bb086592d1af43906c99a9d8bee4
+up_right,wrist,workspace/plain-walk-v13/parts/up_right/wrist.png,5,5,2.5,2.5,null,,null,null,null,,null,5c3bc8efd848a70deefe72e22ab39a5c761f9d40bf262538f57d36d6f13c63bc
+up_right,ankle,workspace/plain-walk-v13/parts/up_right/ankle.png,6,6,3.0,3.0,null,,null,null,null,,null,fc9de58f90178d9e24518b15a7e51dc124f11e2d7c49ed20fb1bd3515856b371
+up_right,foot_heel,workspace/plain-walk-v13/parts/up_right/foot_heel.png,18,15,6.5,2,null,,null,null,null,,null,8f0879e296a50908ea8ebe6d8577e21110af73c3dbb942a76b6dd4673c4b753f
+up_right,foot_swing,workspace/plain-walk-v13/parts/up_right/foot_swing.png,18,15,7.5,2,null,,null,null,null,,null,f2cf6dee9a481f24b702961c814f26451d03376acee96cf4b0a5bb6ec0a2f85b
+up_right,foot_toe,workspace/plain-walk-v13/parts/up_right/foot_toe.png,18,15,10.5,2,null,,null,null,null,,null,34b0e812ac9b4df68811dd7974f07004efe560126721499996783844308549a4
+up_right,waist,workspace/plain-walk-v13/parts/up_right/waist.png,18,10,9,5,null,,null,null,null,,null,460a9bb1685d592cf92f9e0d78a879cab5ddd927f4b749a71261c46310bb5c60
+back,head,workspace/plain-walk-v13/parts/back/head.png,68,65,34,62,null,,null,null,null,,null,92dc53d9739825b1e46f3f7fb8aedcdd75da0bdcedc0f5f6002bdac7fa5e83ab
+back,upper_body,workspace/plain-walk-v13/parts/back/upper_body.png,34,34,17.0,32,null,,"[17.0, 2]",null,null,,null,2614db4a313a09cb042a44bdd21df986589013960ec65e0c61fa192068ea795a
+back,lower_body,workspace/plain-walk-v13/parts/back/lower_body.png,30,26,15.0,-2,null,,null,null,null,,null,f395d84e447c97d6c654d7436e8e41129d2d95a740aa00b0576cfed5766d2594
+back,neck,workspace/plain-walk-v13/parts/back/neck.png,9,10,4.5,5.0,null,,null,null,null,,null,9ae691fcf867104cf0afd1b26dd1a0ab2a06fe68000eb9bea534fcfbf18a37e1
+back,upper_arm,workspace/plain-walk-v13/parts/back/upper_arm.png,9,28,4.5,3,"[4.5, 25]",22,null,null,null,,null,55ec692fda27182f94641f0cc05a20f51d1e29803af1719ccea7eded86506420
+back,elbow,workspace/plain-walk-v13/parts/back/elbow.png,6,6,3.0,3.0,null,,null,null,null,,null,3493ed32919cc45ff84f9183b4204330eda952093d527ac8845e602bd7291463
+back,forearm,workspace/plain-walk-v13/parts/back/forearm.png,7,23,3.5,3,"[3.5, 20]",17,null,null,null,,null,da408f6e7ddbb0fd68ea73c7f10152d932094f8fce1e99e4cbf6165a5f7f48e6
+back,hand,workspace/plain-walk-v13/parts/back/hand.png,8,9,4.0,2,null,,null,null,null,,null,46728cf04fdd6fcccb7d76090772ece53ff0d7d6b300b19a457be829d406d2e4
+back,thigh,workspace/plain-walk-v13/parts/back/thigh.png,14,32,7.0,3,"[7.0, 29]",26,null,null,null,,null,303f6e2262f4ad7c31616ff00c72e69b0318e8000cba6edfad1778faca9f4f6f
+back,knee,workspace/plain-walk-v13/parts/back/knee.png,8,8,4.0,4.0,null,,null,null,null,,null,e855ada82d2512746f85c138217c77e348f758a311420a8f592a9aaa59a552c5
+back,shin,workspace/plain-walk-v13/parts/back/shin.png,10,34,5.0,3,"[5.0, 31]",28,null,null,null,,null,63e61b92f983f4224bc7f74efedb5c3c14b24520a09d9e749097c25ec5804324
+back,foot,workspace/plain-walk-v13/parts/back/foot.png,12,14,6.0,2,null,,null,null,null,,null,a710af98e52094308b4951b323544c8b5d6d3c032fa6a3e666963fa8334afbb0
+back,shoulder,workspace/plain-walk-v13/parts/back/shoulder.png,7,7,3.5,3.5,null,,null,null,null,,null,35ae73527596a5f9f89bf984f5240142886572a669f93dbf7f52890bd58894aa
+back,hip,workspace/plain-walk-v13/parts/back/hip.png,8,8,4.0,4.0,null,,null,null,null,,null,aad2799e14d5f72b01cac564f242a3685ed8e239937cb9734fb01110af983f68
+back,wrist,workspace/plain-walk-v13/parts/back/wrist.png,5,5,2.5,2.5,null,,null,null,null,,null,31710b2d0a78a283ae35ca548527ef51b434d7998623711858b398880b79402d
+back,ankle,workspace/plain-walk-v13/parts/back/ankle.png,6,6,3.0,3.0,null,,null,null,null,,null,f9af1c88723de49de8d525e1424e4161f3ffe45c088158f1b8412c38ae6b3513
+back,foot_heel,workspace/plain-walk-v13/parts/back/foot_heel.png,12,15,6.0,2,null,,null,null,null,,null,38c795ff3ab3caa7d458563958dc994fbc69908ab5b58651ddd2b1266c32872f
+back,foot_swing,workspace/plain-walk-v13/parts/back/foot_swing.png,12,15,6.0,2,null,,null,null,null,,null,caef655ecb9f71a0ffed774966942a04784ba0e469f094450e12c836675ed957
+back,foot_toe,workspace/plain-walk-v13/parts/back/foot_toe.png,12,15,7.0,2,null,,null,null,null,,null,f8b41c9f6693f807831a597f67adb14ddb4645b1d5e8210737e087fa9571c99c
+back,waist,workspace/plain-walk-v13/parts/back/waist.png,18,10,9,5,null,,null,null,null,,null,d31e7c6a5966a597d258eb655cecbda3dd59a51662c870d5d3866913be8de91c

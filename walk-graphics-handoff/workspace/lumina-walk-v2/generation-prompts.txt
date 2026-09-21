@@ -1,0 +1,55 @@
+FRONT ATLAS
+
+Use case: stylized-concept. Asset type: production-ready separated pixel art character parts atlas for a 2D orthographic map walking puppet.
+Reference image: attached ivory-haired angel girl. Preserve her exact character identity, neutral tiny mouth and tall dark rectangular eyes, straight fringe, warm ivory hair with muted dusty mauve deep shadows, gold halo, off-shoulder ivory dress, central gold four-point star on skirt, small white feather wings, long lilac/ivory star-tipped hanging costume tails. Do not add shoes or weapons.
+Generate FRONT VIEW ONLY, facing directly toward viewer. Not a 3/4 view. Clean deliberately blocky pixel art, consistent square pixel size, no blur, no gradients, no antialiasing. Full RGBA truly transparent background, not a baked checkerboard.
+This image is ONLY a detached parts atlas, not an assembled character and not a walk-cycle sprite sheet. Arrange EXACTLY 12 isolated components in a strict 4-column by 3-row grid, read left to right. No grid lines, text, labels, shadows, or extra objects. Each component is centered in its own equal rectangular cell, fully contained with transparent margins and no touching other cells. Each component occupies 65-85% of its cell's available dimension, resized independently to fit (we will scale and position them later). Draw hidden joint overlap extensions to allow articulation.
+ROW 1:
+cell 1: head including face, ears, front bangs and crown hair, plus gold elliptical halo floating above. NO neck, torso, long side locks or back hair.
+cell 2: short torso bodice with neck, bare shoulders, ivory off-shoulder collar and small waist ribbon. NO head, arms, skirt or legs. Complete opaque bodice, so no gaps at shoulder/waist.
+cell 3: complete bell-shaped ivory skirt alone, waist to hem, gold four-point star centered on front, mauve shaded layered folds. NO torso, arms, legs or long rear tails.
+cell 4: long back hair and long side-locks as a SINGLE rear hair mass, from crown to mid-back. Pale ivory outer hair and mauve shaded inner mass. NO face, skin, eyes, halo, clothing. Rear hair may be solid because head overlays it.
+ROW 2:
+cell 1: screen-left entire arm from rounded shoulder joint to small hand, relaxed pointing down, bare warm pale skin with ivory cuff. NO torso.
+cell 2: screen-right entire arm matching left arm, relaxed pointing down.
+cell 3: screen-left leg from upper thigh to bare little foot, mostly straight, pale warm skin with lavender shadow, toe visible at bottom. NO skirt.
+cell 4: screen-right leg matching left leg.
+ROW 3:
+cell 1: screen-left white feather wing, root on right and feather tips pointing out to left, 3-4 clear feather groups, muted lavender shadows.
+cell 2: screen-right wing mirrored in structure, root on left and feathers pointing right.
+cell 3: screen-left long hanging lilac-and-ivory fabric tail, with curved gold star/crescent ornament at its low outer tip. NO body.
+cell 4: screen-right matching fabric tail with gold ornament.
+Keep the original's charming calm expression and large-headed proportions in the head design. This is a cohesive set of game cutout assets; all twelve requested parts are essential. Wide image preferred 1536x1024.
+
+SIDE ATLAS
+
+Use case: stylized-concept. Asset type: separated pixel art game character parts atlas.
+Image 1 is the original character identity reference. Image 2 is our FRONT-VIEW detached parts atlas, provided for colors, style and component organization only.
+Create the corresponding STRICT RIGHT-FACING SIDE PROFILE detached parts atlas. Every face, arm, leg, torso, skirt and head is seen exactly 90 degrees from the front, all face SCREEN RIGHT. No front view, no 3/4 face, no assembled figures. Orthographic camera for a flat 2D map, feet visible. Preserve the same neutral angel girl, ivory hair with dusty mauve shadows, gold halo, ivory dress and star decorations.
+Clean blocky pixel art with square pixel clusters. Same palette and outline softness as reference. Background MUST BE UNIFORM FLAT PURE RGB #00FF00 bright green for chroma key extraction, including holes. No gradients, glow, antialiasing, shadows, lettering, border or grid lines.
+EXACTLY 12 separate components, strict 4 columns by 3 rows, centered within cells with generous green margins. Pieces never touch cell boundaries or each other. Each piece may be independently scaled to occupy its cell; we will scale and assemble later. All joint roots must be complete for overlap.
+ROW 1:
+1. Head, strict right profile, ONE dark rectangular eye visible, tiny nose silhouette facing right, ivory top hair and bangs with gold elliptical halo floating above. No shoulders, neck, or long back hair.
+2. Torso bodice with little neck and off-shoulder ivory collar, strict right profile. No head, arms, legs or skirt.
+3. Bell skirt alone in right profile, from waist to hem. Rounded volume projects forward slightly to right. Layered ivory/mauve dress folds, with a partial gold star visible along front/right edge. No legs or tails.
+4. Long back hair alone in right profile, root at crown, creamy ivory outer hair with dusty mauve shaded underside. Long lower locks bend backward toward screen left, keeping face area to the right clear. No face, eyes, halo, skin, clothes.
+ROW 2:
+1. Far-side complete arm from shoulder to hand, seen in right profile, relaxed mostly vertical with small ivory cuff and pale skin, slightly darker mauve shade.
+2. Near-side complete arm, same profile, relaxed down, lighter pale skin. NO torso.
+3. Far-side straight leg from upper thigh to bare little foot, foot/toes point right, pale warm skin, slightly shaded.
+4. Near-side straight leg and right-pointing bare little foot, same size and character.
+ROW 3:
+1. Far-side small white feather wing in side profile, root on RIGHT, feathers swept backward LEFT, lavender shade.
+2. Near-side small white wing, root on RIGHT, feathers swept backward LEFT, clear ivory feather groups.
+3. Far-side hanging fabric tail with gold crescent/star ornament on lower tip, root above-right, swings backward/down-left.
+4. Near-side ivory/lilac hanging tail with gold crescent/star ornament, root above-right, trails down-left.
+Keep all 12 requested pieces. No weapons or shoes. Wide 1536x1024 preferred.
+
+BACKGROUND EDIT (applied separately to both atlases)
+
+Edit target: the attached 12-piece pixel-art puppet parts atlas. Change ONLY the background. Replace ALL dark blurry/gradient background with one perfectly uniform flat solid RGB #00FF00 pure green chroma key background. Do NOT use transparency; use solid pure green everywhere outside the 12 components, including inside the halo and gold crescent holes and between hair locks. Preserve every component's exact position, shape, scale, pixel colors and detail. No glow, shadows, reflections, checkerboard, gradients, text or grid. Crisp pixel edges. Exactly the same 1536x1024 layout.
+
+SIDE ORIENTATION CORRECTION
+
+Within their existing cells, horizontally mirror bottom-row column 2 (near wing) and bottom-row column 4 (near tail), so both wings and both tails trail to the left. Preserve the other components.
+

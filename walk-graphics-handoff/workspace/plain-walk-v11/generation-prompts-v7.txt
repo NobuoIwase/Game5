@@ -1,0 +1,25 @@
+v7 — diagonal head replacement
+Method: built-in image_gen; transparent outputs. Head extraction, nearest-neighbor sampling, registration, rigging and animation export use the project code.
+
+down_right
+Use case: precise-object-edit.
+Asset type: replacement isolated head sprite for this existing segmented walking mannequin.
+Image 1 is the existing front-diagonal mannequin assembly: match the torso's forward-right direction. Image 2 is the approved FRONT head, Image 3 the approved RIGHT PROFILE head: preserve that same character, pale lavender porcelain palette, dark violet thin pixel outline, simple vertical-dot eyes, smooth bald cranium, soft feminine chibi proportions.
+Draw ONLY ONE new isolated HEAD, turning 45 degrees to the RIGHT from front view, facing toward the viewer and screen-right, halfway between images 2 and 3. The head must read as a coherent three-quarter skull, not a frontal egg with eyes displaced. Show a broader round rear cranium at screen-left, one small near ear on the left side, a narrower far cheek at screen-right, jaw/chin shifted subtly toward screen-right. Keep the head upright (no roll), gaze level, two small upright dark dot eyes on the SAME gently receding eye line: near eye full-width, far eye slightly narrower; the far eye may be only 1 native pixel higher, NOT the drastic height mismatch in image 1. Chin softly rounded, no pointed jaw. No nose or mouth, no hair or decorations. The jaw contour should allow the neck to attach under the rear half of the skull, behind the chin; DO NOT draw the neck.
+Composition: single centered 64x65-pixel-proportioned head, enlarged cleanly on a square transparent canvas, comfortable transparent margin. True alpha background. Match existing pixel clusters and subtle flat lavender shading with a small upper-left shine. No neck stub, no torso, no extra parts, no guide marks, no text. Change the HEAD orientation and anatomy only; the reference body is not to be drawn.
+
+up_right
+Use case: precise-object-edit.
+Asset type: replacement isolated rear three-quarter head sprite for the existing segmented walking mannequin.
+Image 1 is the old head to replace. Image 2 is its current rear-diagonal body assembly; use the TORSO direction as the yaw reference. Image 3 is the approved front head for character proportions and palette.
+Draw ONLY the corrected head, looking AWAY from viewer and toward screen-RIGHT, exactly rear three-quarter (135 degrees from front), halfway between back view and right profile. Upright head with NO sideways tilt. Use the same pale lavender bald porcelain mannequin, small soft ear, thin dark-violet pixel outline, restrained lavender shadows and upper-left shine, round chibi skull, no hair, no mouth, no eyes visible.
+Correct the anatomical silhouette: the broad occipital/back-of-skull mass is on the screen-LEFT; the ONE visible near ear is on the screen-RIGHT side, set slightly inside the silhouette; the far ear is completely hidden. Small visible side-of-head plane beyond the near ear toward screen-right, with soft jaw below, while the skull's nape attachment lies behind and below the ear. No duplicated ear on screen-left. The underside should have a subtle lifted occipital curve so a separately drawn neck can meet it naturally; avoid the low centered dangling egg/chin of image 1. No notch carved into the skull, no protruding neck peg, no attached neck, no torso.
+Composition: one centered isolated head, 64x65-native-pixel proportions enlarged cleanly, comfortably inside square canvas with true transparent alpha. Preserve the existing character design, pixel cluster scale and palette, not photorealistic or smooth 3D. No text, labels, layout or additional parts.
+Final head images are source-atlases/down-head-v7.png and source-atlases/up-head-v7.png.
+
+
+Reference paths used, relative to v6:
+down_right: checks/down_right/0.png; parts/front/head.png; parts/side/head.png.
+up_right: source-atlases/up-head-v5.png; checks/up_right/0.png; parts/front/head.png.
+Final native sizes: 64 x 65 px.
+Final skull mounts: down_right (30, 62); up_right (34, 62).

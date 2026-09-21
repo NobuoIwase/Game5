@@ -1,0 +1,285 @@
+{
+  "canvas": [
+    192,
+    256
+  ],
+  "frame_ms": 120,
+  "frames_per_step": 4,
+  "frames_per_cycle": 8,
+  "ground_y": 242,
+  "body": {
+    "hip_y": 179.5,
+    "waist_y": 160,
+    "shoulder_y": -21.5,
+    "side_shoulder_x": {
+      "far": -2,
+      "near": 0
+    },
+    "spine_side": {
+      "sacrum": [
+        -3.5,
+        -7.5
+      ],
+      "lumbar": [
+        -1.5,
+        -19.5
+      ],
+      "thorax": [
+        -2,
+        -36.5
+      ],
+      "cervical": [
+        0.5,
+        -51.5
+      ],
+      "neck": [
+        2.5,
+        -55.5
+      ]
+    },
+    "pelvis_roll": [
+      0,
+      0.5,
+      0.8,
+      0.5,
+      0,
+      -0.5,
+      -0.8,
+      -0.5
+    ]
+  },
+  "lengths": {
+    "upper_arm": 22,
+    "forearm": 17,
+    "thigh": 26,
+    "shin": 28
+  },
+  "front": {
+    "root_x": 96,
+    "hip_half_width": 8.5,
+    "shoulder_half_width": 12.5,
+    "bob": [
+      0,
+      1.5,
+      0,
+      -1.5
+    ],
+    "sway": [
+      -0.7,
+      -0.7,
+      0,
+      0.7,
+      0.7,
+      0.7,
+      0,
+      -0.7
+    ],
+    "foot_bottom": [
+      241,
+      241,
+      238,
+      236,
+      233,
+      229,
+      233,
+      238
+    ],
+    "arm_clearance": {
+      "elbow": 4,
+      "wrist": 7
+    },
+    "foot_assets": [
+      "foot_heel",
+      "foot",
+      "foot",
+      "foot_toe",
+      "foot_toe",
+      "foot_toe",
+      "foot_heel",
+      "foot_swing"
+    ],
+    "foot_scale": [
+      1,
+      0.98,
+      0.94,
+      0.9,
+      0.9,
+      0.87,
+      0.94,
+      1
+    ]
+  },
+  "side": {
+    "root_x": 104,
+    "bob": [
+      0,
+      0.5,
+      -3,
+      -1.5
+    ],
+    "lean_degrees": 2,
+    "neck_tip_offset": [
+      0.5,
+      -5
+    ],
+    "head_offset": [
+      0.75,
+      -0.5
+    ]
+  },
+  "gait": {
+    "foot_forward": [
+      21,
+      10,
+      -2,
+      -15,
+      -24,
+      -12,
+      9,
+      22
+    ],
+    "foot_angle": [
+      -14,
+      0,
+      0,
+      8,
+      20,
+      22,
+      -6,
+      -12
+    ],
+    "swing_ankle_y": {
+      "5": 220,
+      "6": 220,
+      "7": 227.2
+    }
+  },
+  "arms": {
+    "upper_angle": [
+      16,
+      12,
+      3,
+      -8,
+      -16,
+      -12,
+      -2,
+      10
+    ],
+    "elbow_flex": [
+      16,
+      14,
+      20,
+      30,
+      40,
+      42,
+      32,
+      22
+    ],
+    "wrist_flex": [
+      8,
+      10,
+      14,
+      20,
+      23,
+      21,
+      15,
+      10
+    ]
+  },
+  "parameters": {
+    "arm_swing": 1,
+    "elbow_variation": 1
+  },
+  "views": [
+    "front",
+    "down_right",
+    "side",
+    "up_right",
+    "back"
+  ],
+  "view_labels": {
+    "front": "正面",
+    "down_right": "右斜め下",
+    "side": "右向き",
+    "up_right": "右斜め上",
+    "back": "後ろ向き"
+  },
+  "down_right": {
+    "root_x": 96,
+    "yaw": 45,
+    "ground_center": 237.5,
+    "ground_depth": 0.18,
+    "neck_tip_offset": [
+      0,
+      -9
+    ],
+    "head_offset": [
+      0,
+      0
+    ],
+    "foot_assets": [
+      "foot_heel",
+      "foot",
+      "foot",
+      "foot_toe",
+      "foot_toe",
+      "foot_toe",
+      "foot_swing",
+      "foot_swing"
+    ],
+    "foot_ground_slope": 0.18,
+    "foot_pitch_scale": 0.14
+  },
+  "up_right": {
+    "root_x": 96,
+    "yaw": 135,
+    "ground_center": 237.5,
+    "ground_depth": 0.18,
+    "neck_tip_offset": [
+      -1,
+      -11
+    ],
+    "head_offset": [
+      0,
+      0
+    ],
+    "foot_assets": [
+      "foot_heel",
+      "foot",
+      "foot",
+      "foot_toe",
+      "foot_toe",
+      "foot_swing",
+      "foot",
+      "foot_heel"
+    ],
+    "hand_projection": "forearm",
+    "wrist_flex_scale": 0.55
+  },
+  "back": {
+    "root_x": 96,
+    "yaw": 180,
+    "ground_center": 237.5,
+    "ground_depth": 0.18,
+    "neck_tip_offset": [
+      0,
+      -5
+    ],
+    "head_offset": [
+      0,
+      -0.5
+    ],
+    "foot_assets": [
+      "foot_heel",
+      "foot",
+      "foot",
+      "foot_toe",
+      "foot_toe",
+      "foot_swing",
+      "foot",
+      "foot_heel"
+    ],
+    "hand_projection": "forearm",
+    "wrist_flex_scale": 0.55
+  }
+}

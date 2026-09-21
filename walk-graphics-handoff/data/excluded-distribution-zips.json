@@ -1,0 +1,116 @@
+[
+  {
+    "name": "lumina-walk-v1.zip",
+    "size_bytes": 4896796,
+    "sha256": "09f7187179b599827f989193045d9e3e7b8e9ee8b3b40d8d1bdc3b5a759708f4",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "lumina-walk-v2.zip",
+    "size_bytes": 4941470,
+    "sha256": "8b32fd57f2fd6c334891474bfea8716bd3139f9624b6afe7ac0a46438c2caf9e",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "lumina-walk-v3.zip",
+    "size_bytes": 5186346,
+    "sha256": "d3cc025fd025b7af114638f13ae763db380644152edd15158bf0785bd87e29d0",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "lumina-walk-v4.zip",
+    "size_bytes": 5438754,
+    "sha256": "fd0248e2e9975812908d0f989cb0d52e51adf951f8370d89b00d1b61c76946d9",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "lumina-walk-v5.zip",
+    "size_bytes": 6684281,
+    "sha256": "719164d22c44f18b1ae886c5664a2c4be2e797ac0c77eb41a5c9386250ed3150",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "lumina-walk-v6.zip",
+    "size_bytes": 7340471,
+    "sha256": "6f4e05e0948116d603e053584251bff60cfcfd7441a4030cd9e0659a3674dcb0",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "plain-walk-v1.zip",
+    "size_bytes": 2476380,
+    "sha256": "c6df67dc02e83f01d64b3e38628848a75549169d4d486c7fef89bc1ab053ee1b",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "plain-walk-v10.zip",
+    "size_bytes": 12829911,
+    "sha256": "d3039488da83017ae3271ec5803b0cba16ca7cbcc25d9e7fed957e96596fffa6",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "plain-walk-v11.zip",
+    "size_bytes": 12829366,
+    "sha256": "ef0ea7bbd27e0493f21f2afd49c1d52be7cc9b4641c1af75953f7a2414dd2eac",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "plain-walk-v12.zip",
+    "size_bytes": 12827138,
+    "sha256": "fe282257dc2ab216b171fa3c773403d125e5a92a56c6c60b3d8d657dfc691b37",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "plain-walk-v13.zip",
+    "size_bytes": 12824489,
+    "sha256": "dd3db9ad7a79daebfddb663e36da8b6d0bec3d0dcd73e4eb7219aec6ca96b0a1",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "plain-walk-v2.zip",
+    "size_bytes": 3390279,
+    "sha256": "3f620c6cebe26b48182f9708ff7d3d9a1e5739afb72b541b4fc75a0dd418feb1",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "plain-walk-v3.zip",
+    "size_bytes": 3733138,
+    "sha256": "7fabd99bdd392c5a7876c19f613d9cff405f577679219c0e9126290bfc8b7877",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "plain-walk-v4.zip",
+    "size_bytes": 9223454,
+    "sha256": "4f94fb24a5265f566e84e1093f8f7f0a3eceb9ef50fb4169112e18949357308a",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "plain-walk-v5.zip",
+    "size_bytes": 10321169,
+    "sha256": "90e62473ed2dc16a0349dd42ecbdecf845951c695d3464071137b3e5077070b6",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "plain-walk-v6.zip",
+    "size_bytes": 10693671,
+    "sha256": "fdca1179f34b7edec01a84959962737ab9f87d5b5f702bf49f2a7acf29cde21c",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "plain-walk-v7.zip",
+    "size_bytes": 11489044,
+    "sha256": "91c9eb0cc2ea3652f54aeff8c5d4c7494e8dbccbfe9fa678ad3d1702cd7a36af",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "plain-walk-v8.zip",
+    "size_bytes": 12835607,
+    "sha256": "b77fb92ed880c37e930c73ce99dd2bfd3b8660f6270e62d2695a4c5c03d121bd",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  },
+  {
+    "name": "plain-walk-v9.zip",
+    "size_bytes": 12840059,
+    "sha256": "2152d112908074de3f3d6ed80bd01d128a8ad05ce2b10ad31d18a231e4c9115b",
+    "reason": "旧配布ZIPの重複バイトは含めず、同名の展開済み作業フォルダーを収録。"
+  }
+]

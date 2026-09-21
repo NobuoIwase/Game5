@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import {fileURLToPath} from 'node:url';
+const here=path.dirname(fileURLToPath(import.meta.url));
+const source=process.argv[2] || 'C:/Users/migig/Documents/GitHub/Game5/walk-graphics-handoff/workspace/plain-walk-v13';
+const rig=JSON.parse(fs.readFileSync(path.join(source,'rig.json'),'utf8'));
+const foot=rig.assets.side.foot;
+const support=a=>Math.max(...foot.opaque_corners.map(([x,y])=>Math.sin(a*Math.PI/180)*(x-foot.pivot[0])+Math.cos(a*Math.PI/180)*(y-foot.pivot[1])));
+const data={config:rig.config,foot:{size:foot.size,pivot:foot.pivot,walkSupports:rig.config.gait.foot_angle.map(support)},sideReference:rig.frames.side.map(p=>({body_bob:p.body_bob,joints:Object.fromEntries(Object.entries(p.joints).map(([id,j])=>[id,{position:j.position,contact:j.contact,flex:j.flex}]))})),provenance:{source:'walk-graphics-handoff/workspace/plain-walk-v13',sha256:Object.fromEntries(['rig.js','rig.json','config.json'].map(f=>[f,crypto.createHash('sha256').update(fs.readFileSync(path.join(source,f))).digest('hex')]))}};
+fs.writeFileSync(path.join(here,'source-v13.json'),JSON.stringify(data,null,2)+'\n');
+fs.writeFileSync(path.join(here,'source-v13.mjs'),'// Extracted from the supplied plain-walk-v13. Run extract-source.mjs to reproduce.\nexport default '+JSON.stringify(data)+';\n');
+console.log('Extracted v13 configuration, exact foot support and reference sagittal poses.');

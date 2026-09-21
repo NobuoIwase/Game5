@@ -1,0 +1,28 @@
+Packaging verification for plain-walk-v13
+No source edits or motion changes made for this handoff.
+
+$ node validate.cjs
+PASS: 40 poses × 29 parts, shared knee/elbow timing, projected contact and lift, linked joints and neck attachment.
+Maximum planted-foot geometric error: 0.000000 px.
+
+
+exit_code=0
+
+$ node validate-heads.cjs
+down_right: visible nape 68, 55, 63, 55, 68, 55, 63, 55; skull/body overlap 43, 43, 51, 43, 43, 43, 51, 43 pixels.
+up_right: visible nape 103, 86, 103, 86, 103, 86, 103, 86; skull/body overlap 36, 36, 35, 36, 36, 36, 35, 36 pixels.
+PASS: connected skulls and visible assembled napes in both diagonals.
+
+
+exit_code=0
+
+$ node validate-player.cjs
+PASS: five canvases, play/step, view filter, skeleton, parts selection, arm controls, reset, speed and five-view JSON export.
+
+
+exit_code=0
+
+PASS: all current-project files match workspace originals byte-for-byte.
+PASS: 97 assets, 40 frames, 1160 drawing operations exported.
+PASS: front and side frame PNGs match plain v3 (16 frames).
+Browser layout was not tested in a browser; player checks use Node Canvas.

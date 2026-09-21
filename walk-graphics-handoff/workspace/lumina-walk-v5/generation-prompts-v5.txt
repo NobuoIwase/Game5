@@ -1,0 +1,9 @@
+Use case: precise-object-edit. Edit the attached 4-column by 3-row right-profile pixel-art component atlas. Preserve the exact 1536x1024 canvas, all component positions, scale, style, palette, and flat pure-green background.
+Change ONLY these two components:
+1. TOP ROW COLUMN 2, torso/bodice: refine ONLY the little skin neck stump at its top. Make its front/right contour a simple smooth subtly concave neck line. Remove any protruding point, Adam's-apple bump, dark throat mark or notch. Keep neckline/collar and all clothing identical.
+2. TOP ROW COLUMN 4, rear hair: REMOVE the long foremost hanging lock along the RIGHT edge, which currently hangs below the imaginary jaw and fills the front-of-neck space. This is a BACK HAIR asset: its long locks should trail behind the neck to SCREEN LEFT, leaving the forward/right lower portion EMPTY GREEN. Preserve the crown and upper hair cap and every back/left-swept lock. Do not move or enlarge the remaining hair to fill the removed area.
+All other ten pieces must remain identical. No new figure, anatomy, objects or labels. Keep the same green background, including in the removed lock's space. Keep crisp square pixels and muted mauve outlines. These are surgical corrections to existing game assets.
+
+Background cleanup pass: the image-generation tool replaced the background with flat RGB #00FF00, preserving the layout and character components.
+
+Only the rear-hair component and the upper eight native pixels of the torso neck are used from this edited atlas. Extraction uses the original component bounds and scale. All clothing below that neck region and the other original components are retained.

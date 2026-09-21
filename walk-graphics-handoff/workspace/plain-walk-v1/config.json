@@ -1,0 +1,14 @@
+{
+  "canvas": [192,256],
+  "frame_ms": 120,
+  "frames_per_step": 4,
+  "frames_per_cycle": 8,
+  "ground_y": 242,
+  "body": {"hip_y":181,"waist_y":153,"neck_offset":[0,-42],"shoulder_y":-29,"side_shoulder_x":{"far":-8,"near":-6}},
+  "lengths": {"upper_arm":23,"forearm":18,"thigh":26,"shin":28},
+  "front": {"root_x":96,"hip_half_width":9,"shoulder_half_width":15,"bob":[0,2,0,-2],"sway":[-1,-1,0,1,1,1,0,-1],"foot_bottom":[241,241,238,236,233,229,233,238]},
+  "side": {"root_x":104,"bob":[0,2,-3,-2],"lean_degrees":6},
+  "gait": {"foot_forward":[22,12,-1,-14,-23,-12,9,23],"foot_angle":[-14,0,0,18,32,24,-6,-12],"swing_ankle_y":{"5":218,"6":219,"7":227}},
+  "arms": {"upper_angle":[18,15,6,-7,-18,-14,-5,9],"elbow_flex":[12,10,16,26,38,44,32,20],"wrist_flex":[8,10,14,20,24,22,16,10]},
+  "parameters": {"arm_swing":1,"elbow_variation":1}
+}

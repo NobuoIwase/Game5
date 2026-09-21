@@ -1,0 +1,278 @@
+<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>歩行グラフィック 引き継ぎ説明書</title><style>body{font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;background:#f4f5f7;color:#202734;line-height:1.85;margin:0}main{max-width:1080px;margin:auto;padding:32px 26px 80px}h1,h2,h3{line-height:1.4}h1{font-size:30px}h2{margin-top:38px}a{color:#185f8d}code,pre{font-family:ui-monospace,monospace;font-size:.92em}code{background:#edf0f4;padding:2px 4px}pre{background:#17232e;color:#eaf1f5;padding:18px;overflow:auto}pre code{background:transparent;padding:0}table{border-collapse:collapse;background:white;width:100%;font-size:14px}th,td{text-align:left;border:1px solid #d8dfe5;padding:9px;vertical-align:top}th{background:#e8eef2}.scroll{overflow:auto}.card{background:white;border:1px solid #dce2e7;border-radius:12px;padding:20px;margin:18px 0}.note{border-left:4px solid #bb8244;padding:12px 18px;background:#fff8ed}.tag{font-size:13px;color:#536472}img{max-width:100%;height:auto;image-rendering:pixelated}section{border-top:1px solid #cad4dd;margin-top:50px;padding-top:10px}li{margin:6px 0}nav a{display:inline-block;margin-right:18px}</style><main><a href="START_HERE.html">入口へ戻る</a><nav><a href="#00_START_HERE">歩行グラフィック制作・統括引き継ぎ</a><a href="#HANDOFF_PROMPT">次の担当へ渡すコンテキスト</a><a href="#01_GOAL_AND_DECISIONS">作るものと判断の基準</a><a href="#02_ASSEMBLY">組み合わせる位置とデータの読み方</a><a href="#03_ANIMATION_AND_QA">歩行と見た目の確認</a><a href="#04_HISTORY">修正の経緯と戻してはいけない点</a><a href="#05_REPRODUCTION">開く・修正する・再出力する</a><a href="#06_ART_SOURCES">原画像・部位生成・履歴</a><a href="#COVERAGE">会話記録の収録範囲</a></nav><section id="00_START_HERE"><h1>歩行グラフィック制作・統括引き継ぎ</h1>
+<p>まず <code>START_HERE.html</code> を開いてください。現行プレイヤー、GIF、説明書、履歴へ進めます。</p>
+<h2>今どこまでできているか</h2>
+<p>現在の再開元は <strong><code>workspace/plain-walk-v13/</code></strong> です。プレーンな素体の5方向・8コマ歩行を、分割パーツと共通の関節計算で組み立てています。最後の変更は、斜め2方向の頭をv12からさらに2 px背中側へ戻す調整です。今回の梱包で歩行や配置を変更していません。</p>
+<p>v13は最新指示を反映した版です。その後、ユーザーが最終的な見た目を承認した発言はありません。「完成・承認済み」とは扱わず、この状態から次の指示を受けてください。</p>
+<div class="scroll"><table>
+<tr><th>読みたいもの</th><th>場所</th></tr>
+<tr><td>今の動き</td><td><code>workspace/plain-walk-v13/plain-walk-player.html</code></td></tr>
+<tr><td>斜めの最新プレビュー</td><td><code>workspace/plain-walk-v13/plain-diagonal-walk.gif</code></td></tr>
+<tr><td>次の担当へ貼る説明</td><td><code>HANDOFF_PROMPT.md</code></td></tr>
+<tr><td>作るもの・ユーザーが重視すること</td><td><code>docs/01_GOAL_AND_DECISIONS.md</code></td></tr>
+<tr><td>部品の接続・座標・描画順</td><td><code>docs/02_ASSEMBLY.md</code>、<code>data/</code></td></tr>
+<tr><td>歩行と見た目の確認項目</td><td><code>docs/03_ANIMATION_AND_QA.md</code></td></tr>
+<tr><td>失敗を含む修正の経緯</td><td><code>docs/04_HISTORY.md</code></td></tr>
+<tr><td>再出力・作業手順</td><td><code>docs/05_REPRODUCTION.md</code></td></tr>
+<tr><td>元絵・部位生成の参照先</td><td><code>docs/06_ART_SOURCES.md</code></td></tr>
+<tr><td>会話の原文と収録範囲</td><td><code>conversation/</code></td></tr>
+<tr><td>初期ルミナの最終試作</td><td><code>workspace/lumina-walk-v6/</code></td></tr>
+<tr><td>各版の素材・コード・検証画像</td><td><code>workspace/lumina-walk-v1</code>〜<code>v6</code>、<code>workspace/plain-walk-v1</code>〜<code>v13</code></td></tr>
+<tr><td>パッケージ全体のファイル照合</td><td><code>MANIFEST.json</code>、<code>scripts/verify_package.py</code></td></tr>
+</table></div>
+<h2>最初に意識すること</h2>
+<p>斜めの頭の高さを正面・横・後ろへ揃えないこと。首と頭を、各方向の胸郭・後頭部とのつながりで判断してください。以前の「首パーツの画素を必ず露出させる」考え方は、頭を持ち上げる原因になりました。胴体側にも首が描かれています。</p>
+<p>「もう少し」「あと2px」は、直前の変更をさらに背中側へ続ける指示でした。現行では両斜め方向とも画面左がその調整方向です。最新の数値からの差分を扱い、過去版の前寄りの頭へ戻さないでください。</p>
+<p>会話記録は確認できる制作発言の保存です。初期の応答全文や全ツールログを含む正式なチャットエクスポートではありません。詳細は <code>conversation/COVERAGE.md</code> に記載しています。</p></section><section id="HANDOFF_PROMPT"><h1>次の担当へ渡すコンテキスト</h1>
+<p>このZIPの歩行グラフィック制作を引き継いでください。現在の基準は <code>workspace/plain-walk-v13/</code> です。まず <code>plain-walk-player.html</code> と斜め歩行GIF、<code>docs/01_GOAL_AND_DECISIONS.md</code>、<code>docs/02_ASSEMBLY.md</code> を確認してください。</p>
+<p>元は添付の天使キャラクター「ルミナ」の歩行制作でした。正面・横向きの修正を重ねた後、ユーザーの指示で頭・胴体・骨盤・上腕・前腕・手・上腿・下腿・足・各関節を分けたプレーンな素体へ一般化しました。現在は正面、右斜め下、右、右斜め上、後ろの5方向です。1歩4コマ、左右合わせて8コマ、120 ms/コマ、補間なし。その場歩きで、マップ移動処理は含みません。</p>
+<p>見た目を重視してください。撫で肩、短めの胴・骨盤、腕と胴体の余裕、細く緩い曲線の腕、股関節からの脚運び、前脚を伸ばしてから踵を着く動き、肘と手首の時間差、足裏・踵・蹴り出しの変化が重要です。骨格計算が通るだけでは十分ではありません。</p>
+<p>特に斜めの首と頭で修正が続きました。斜めの頭の高さは他方向に揃えません。胴体に描かれた首へさらに棒を継ぎ足して頭を浮かせないでください。首の起点は肩の間、頭の支点は頭蓋底です。首の線・突起・消失と、顔の向き・耳・顎・後頭部の関係も見てください。</p>
+<p>v9で頭が前へ出すぎたため、ユーザーに従って段階的に背中側へ戻しました。最終v13の <code>neck_tip_offset</code> は down_right = <code>[-2,-9]</code>、up_right = <code>[-3,-11]</code>、両方 <code>head_offset=[0,0]</code>、頭のpivotは <code>[26,60]</code> です。最後の指示は「あともう2px」で、両方をv12から画面左へ2 px動かしました。高さ・胴体・腕・脚は維持しました。v13をユーザー承認済みと断言しないでください。</p>
+<p>少量の位置調整では現在の設定から差分を加えます。さらに背中側へ2 pxなら、それぞれの <code>neck_tip_offset[0]</code> から2を引きます。Yを変えず、首の接続と頭を一緒に動かします。画像の描き直しは位置調整とは別の作業です。</p>
+<p><code>config.json</code> は動きと位置、<code>assets.json</code> は部品寸法・pivot・接続口、<code>rig.js</code> は骨格・重なり・描画、<code>rig.json</code> は全40コマの計算済み配置です。描画ではopsを配列順に奥から手前へ置き、pivotを引き、scale→rotate→translateします。ops.positionは計算済み画面座標で、parentの移動を二重に加えません。</p>
+<p>正面と横向きは以前「だいぶ良くなった」と評価された流れを保っています。新しい方向の修正で他方向を一括変更しないでください。元ルミナの衣装・翼・髪の素材は別の履歴に残っていますが、最新の素体の肘・脚の動きを昔の試作へ巻き戻さないでください。</p>
+<p>会話原文、失敗例、全版の作業ファイル、配置CSV、生成元画像を同梱しています。記録にない初期応答や完全なツールログが存在するように補完しないでください。次のユーザー指示がこの引き継ぎ文より優先です。</p></section><section id="01_GOAL_AND_DECISIONS"><h1>作るものと判断の基準</h1>
+<h2>制作物</h2>
+<p>平面マップを歩くキャラクターの歩行グラフィックです。部位ごとに素材を用意し、支点・関節・重なりを連動させて動かすことが目的です。静止絵を単に上下させるものではありません。</p>
+<p>最初は白い髪、輪、翼、白い衣装を持つルミナでした。その後、歩行を他のキャラクターにも使えるようにプレーンな素体へ一般化する指示がありました。現行はこの素体の制作段階です。ルミナの初期素材は失わないよう履歴に収録しています。</p>
+<p>最初の発言は「四種類」と書かれていますが、列挙は5方向です。後続で斜め下・斜め上・後ろの追加が明示されたため、現行は5方向です。「上」は見上げる顔ではなく、マップ上方へ進む後ろ向きです。</p>
+<div class="scroll"><table>
+<tr><th>キー</th><th>見た目・進行方向</th><th>シート行</th></tr>
+<tr><td>front</td><td>正面、マップ下</td><td>1</td></tr>
+<tr><td>down_right</td><td>手前へ向いた右斜め下</td><td>2</td></tr>
+<tr><td>side</td><td>右向き</td><td>3</td></tr>
+<tr><td>up_right</td><td>奥へ向いた右斜め上</td><td>4</td></tr>
+<tr><td>back</td><td>後ろ向き、マップ上</td><td>5</td></tr>
+</table></div>
+<p>各方向192×256 px、透過RGBA。1歩4コマ、左右合わせて8コマ、120 ms/コマ、1周期960 msです。ヌルヌルしすぎない動きが希望なので、フレーム補間を追加しません。頭・上半身は歩行に連動して上下します。</p>
+<h2>維持する見え方</h2>
+<ul>
+<li>肩は張らせず、首元から肩先へ自然に下がる形。正面の腕の横移動で肩幅が増えたように見せない。</li>
+<li>胴体を長くしすぎず、骨盤の正面を尻の二つの膨らみのように描かない。少し低めの等身。</li>
+<li>腕は直線の棒にしない。上腕・肘・前腕・手首・手を連動し、肘を固定したロボットのような振りを避ける。</li>
+<li>正面の腕を体へ押し付けない。肩の幅を広げて解決するのでなく、肘・手首と胴体の間に余裕を作る。</li>
+<li>手首と指は伸びきらせず、進行方向・前腕の角度に沿う。親指・肘の向きを誤反転しない。</li>
+<li>脚は股関節から動かす。膝を前へ運び、前に出した下腿を伸ばしてから踵が着く。足を地面と平行のまま固定しない。</li>
+<li>膝関節と太腿・下腿は前後関係で隠れ方を変える。関節の丸を常に最前面へ貼ると、膝が逆向きに見える。</li>
+<li>正面でも足裏の見え方を変える。踵着地、足裏支持、踵上げ、つま先の蹴り出しを区別する。</li>
+<li>分割した部位の切り口がトゲ・二重線・喉元の突起にならないようにする。</li>
+</ul>
+<h2>頭・首で最優先にすること</h2>
+<p>ユーザーは繰り返し、斜めでは無理に正面・横・後ろと高さを合わせなくてよいと伝えています。比較の水平線や同じ数値を優先しないでください。</p>
+<p>首の見え方は、首素材だけでなく、胴体に描かれた首、頭の輪郭、重なり、方向による短縮の合成結果です。独立した首素材を何画素見せるかだけで頭の高さを決めると、棒の上に頭が載る形へ戻ります。</p>
+<p>位置を直す前に、顔の輪郭・目・耳・顎・後頭部が胴体の向きと合っているかを確認します。v7でこの絵も変更しました。v8では首の切り口の横線を修正しました。v9以降は配置調整です。</p>
+<p>v9で頭が前へ出すぎたため、v10〜v13で背中側へ戻しています。直近の「もう少し」はこの同じ操作の継続でした。原寸pxで指定されており、2倍表示の画面のpxではありません。</p>
+<h2>範囲と未確定事項</h2>
+<p>現行の素材はその場歩きです。実ゲームのマップ座標、移動速度との同期、衝突判定はゲーム側の作業です。左向き3方向の専用素材、最新素体への衣装・髪・翼の再適用は、この最新版で完成した機能ではありません。</p>
+<p>v13への明示的な最終承認はありません。直前まで小さな位置調整を重ね、今回の引き継ぎ依頼に至っています。旧READMEやアシスタントの「確認済み」という言葉は、その時点の検証内容であり、ユーザーの見た目の承認と同じではありません。</p></section><section id="02_ASSEMBLY"><h1>組み合わせる位置とデータの読み方</h1>
+<p>正本は <code>workspace/plain-walk-v13/</code> です。以下のパスはパッケージ直下からの相対パスです。</p>
+<h2>正確な値の所在</h2>
+<div class="scroll"><table>
+<tr><th>データ</th><th>内容</th></tr>
+<tr><td><code>workspace/plain-walk-v13/assets.json</code></td><td>全97素材の画像パス、寸法、pivot、端点、接続口</td></tr>
+<tr><td><code>workspace/plain-walk-v13/config.json</code></td><td>体格、方向別配置、歩行周期、腕・脚・足の設定</td></tr>
+<tr><td><code>workspace/plain-walk-v13/rig.json</code></td><td>全5方向×8コマの関節座標と29個ずつの描画配置</td></tr>
+<tr><td><code>data/assets.csv</code></td><td>素材の寸法・支点を表形式にしたもの</td></tr>
+<tr><td><code>data/frame-placements.csv</code></td><td>1160個の描画操作。並び順、座標、角度、倍率、画像内支点</td></tr>
+<tr><td><code>data/joints.csv</code></td><td>全コマの関節位置・親・補足情報</td></tr>
+<tr><td><code>data/diagonal-placement-history.csv</code></td><td>斜めの頭と首の数値の履歴</td></tr>
+</table></div>
+<p>CSVはUTF-8 BOM付きです。正確な浮動小数値はJSONが正本です。表の丸め値をJSONへ戻して精度を落とさないでください。</p>
+<h2>座標と描画</h2>
+<p>画面左上が原点、Xは右が正、Yは下が正。角度は度、画面上で正が時計回りです。ローカル画素 <code>p</code>、画像内支点 <code>pivot</code> に対し、画面位置は次です。</p>
+<p><code>world = position + Rotate(angle) × Scale(scale_x, scale_y) × (p - pivot)</code></p>
+<p><code>rig.json</code> の各 <code>ops</code> を配列順に奥から手前へ描きます。<code>position</code> は計算済み画面座標です。<code>parent</code> は接続関係を示す情報であり、描画時に親の移動をもう一度加算しません。負のscale_xは左右反転です。</p>
+<p>画像はNearest Neighborで扱います。拡大表示の倍率を座標に混ぜないでください。PNGは192×256、通常の確認表示は2倍です。</p>
+<h2>部位と連動</h2>
+<p>1方向17基本部位、正面と追加3方向に足差分3枚ずつ、合計97素材です。左右の腕・脚へ素材を使い回すため、1コマは29描画操作です。</p>
+<div class="scroll"><table>
+<tr><th>系統</th><th>接続</th></tr>
+<tr><td>中心</td><td>root → sacrum → lumbar → thorax → cervical → neck → head</td></tr>
+<tr><td>腕</td><td>shoulder → elbow → wrist → hand</td></tr>
+<tr><td>脚</td><td>hip → knee → ankle（足はankleへ配置）</td></tr>
+<tr><td>腰</td><td>lumbar → waist、腰の位置へ胸郭・骨盤を配置</td></tr>
+</table></div>
+<p>上腕・前腕・上腿・下腿は <code>pivot</code> から <code>end</code> までを隣接する関節間へ伸縮・回転させます。基本長は上腕22、前腕17、上腿26、下腿28 pxです。斜め・正面では画面への投影による短縮もscale_yへ入ります。</p>
+<p><code>far</code> / <code>near</code> は部品の識別名です。正面では画面左／右、横では奥／手前、斜めではニュートラル姿勢の奥／手前の列に由来します。歩行中の実際の重なりはdepthで変わります。名前だけで全コマの前後を固定しないでください。</p>
+<h2>現行の斜め頭・首：v13</h2>
+<div class="scroll"><table>
+<tr><th>項目</th><th>down_right</th><th>up_right</th></tr>
+<tr><td>頭画像サイズ</td><td>64×65</td><td>64×65</td></tr>
+<tr><td>頭pivot</td><td>(26, 60)</td><td>(26, 60)</td></tr>
+<tr><td>胸郭pivot</td><td>(16, 32)</td><td>(16, 32)</td></tr>
+<tr><td>首の絵の開口 <code>neck_socket</code></td><td>(16.5, 2)</td><td>(16, 2)</td></tr>
+<tr><td>頸部の起点 <code>cervical_socket</code></td><td>(16.5, 9)</td><td>(16, 9)</td></tr>
+<tr><td><code>neck_tip_offset</code></td><td><strong>(-2, -9)</strong></td><td><strong>(-3, -11)</strong></td></tr>
+<tr><td><code>head_offset</code></td><td>(0, 0)</td><td>(0, 0)</td></tr>
+<tr><td>手前肩socket</td><td>(6, 13)</td><td>(27, 13)</td></tr>
+<tr><td>奥肩socket</td><td>(27, 12)</td><td>(5, 11)</td></tr>
+</table></div>
+<p><code>neck_socket</code> と <code>cervical_socket</code> を混同しないこと。前者は絵の切り口、後者が現行の斜めの骨格の起点です。上へ首を継ぎ足さず、肩の間から支えます。</p>
+<ol>
+<li>胸郭の画像内 <code>cervical_socket</code> を、胸郭のpivot・回転・位置で画面へ変換する。</li>
+<li><code>neck = cervical + neck_tip_offset</code>。このoffsetは現行実装では画面座標の差分です。</li>
+<li><code>head = neck + head_offset</code>。</li>
+<li>頭の画像を <code>head</code> へpivot基準で配置する。</li>
+</ol>
+<p>首の下端の描画基準は <code>cervical + (0, 3.5)</code>。上端との中間に首素材を置き、長さへ合わせて回転・伸縮します。下端は胸郭、上端は頭に重なります。実装は <code>rig.js</code> の <code>makeTurnedPose</code> が正本です。</p>
+<p>先頭コマの検算値（小数6桁に丸め）：</p>
+<div class="scroll"><table>
+<tr><th>向き</th><th>cervical画面座標</th><th>neck＝head画面座標</th><th>頭画像の左上（回転0）</th></tr>
+<tr><td>down_right</td><td>(96.572517, 137.019346)</td><td>(94.572517, 128.019346)</td><td>(68.572517, 68.019346)</td></tr>
+<tr><td>up_right</td><td>(96.072669, 137.007006)</td><td>(93.072669, 126.007006)</td><td>(67.072669, 66.007006)</td></tr>
+</table></div>
+<p>これは歩行の1コマ目の値で、全コマ共通の絶対座標ではありません。上下動と左右の微動は親座標へ連動します。斜め2方向の頭の高さはこの配置で別々です。</p>
+<h2>背中側へさらに動かすとき</h2>
+<p>今の斜め2方向は右を向いているので、今回の調整での背中側は画面左です。原寸で2 pxなら、対象方向の <code>neck_tip_offset[0]</code> から2を引きます。首の上端と頭が同時に移動します。高さを保つ場合、Y、頭pivot、<code>head_offset</code> は変えません。</p>
+<p>画像のpivotを変える修正と、首上端の座標を変える修正を重ねると二重に移動します。どちらを変えたかを明記し、全8コマの差分で確認します。</p>
+<h2>肩・脚・足・描画順</h2>
+<p>斜めの肩は胸郭画像の <code>shoulder_sockets</code> へ登録しています。絵と骨格がずれないよう、肩の補正量を肘・手首にも同じだけ加えます。</p>
+<p>脚は股関節が起点です。横向きの脚軌道を元に方向へ投影し、奥行きで骨盤・太腿・膝・下腿の順序を変えます。足画像の <code>opaque_corners</code> は接地計算用です。足を差し替える場合、見かけの矩形の底ではなく、不透明画素の輪郭と足首pivotを更新します。</p>
+<p>正面・横向きの基準地面はy=242。追加3方向は <code>ground_center=237.5</code> とdepthに基づく高さを使用し、斜め下は地面の傾きも考慮します。</p>
+<p>頭は現行では最後、首は胸郭の前に描かれて胸郭が下端を覆います。腕・脚の順序は位相で変わるため、全コマ共通の固定一覧を手で再現せず、各コマのops順を使ってください。</p></section><section id="03_ANIMATION_AND_QA"><h1>歩行と見た目の確認</h1>
+<h2>動きの設計</h2>
+<p>1周期8コマで左右の脚は4コマずれます。正面のfar/nearと横・斜めのfar/nearは対応の定義が違うため、脚の位相は <code>rig.json</code> の各hipの <code>phase</code> で確認してください。</p>
+<p>横向きの股関節から足首へ2節の脚を解き、斜めの3方向はその膝の曲げ・足の浮き・腕のタイミングを引き継いで投影します。着地時に膝が大きく曲がったままにならず、前へ伸びた下腿の先の踵が着きます。</p>
+<div class="scroll"><table>
+<tr><th>設定</th><th>8コマの値</th></tr>
+<tr><td>足の前後移動</td><td>21, 10, -2, -15, -24, -12, 9, 22</td></tr>
+<tr><td>足首の角度</td><td>-14, 0, 0, 8, 20, 22, -6, -12 度</td></tr>
+<tr><td>上腕の角度</td><td>16, 12, 3, -8, -16, -12, -2, 10 度</td></tr>
+<tr><td>肘の曲げ</td><td>16, 14, 20, 30, 40, 42, 32, 22 度</td></tr>
+<tr><td>手首の曲げ</td><td>8, 10, 14, 20, 23, 21, 15, 10 度</td></tr>
+</table></div>
+<p>肘は上腕の振りより少し遅れて最大まで曲がります。固定肘へ戻すと、ユーザーが指摘したぎこちなさが再発します。後ろ・斜め後ろの手は前腕方向のベクトルを投影し、手首の曲げを0.55倍に抑えています。</p>
+<p>正面の頭・上半身の上下動は <code>[0,1.5,0,-1.5]</code>、横・斜め・後ろは <code>[0,0.5,-3,-1.5]</code> を4コマごとに繰り返します。左右の微動もあります。フレーム間を勝手に滑らかに補間しません。</p>
+<h2>確認の順番</h2>
+<ol>
+<li>通常サイズのGIFで、全体の体重移動・前傾・腕の振りを見る。</li>
+<li>斜め2方向だけを並べ、頭が胸郭に対して前へ出すぎていないかを見る。他方向の頭頂線に合わせない。</li>
+<li>一時停止して全8コマを見る。踵着地、通過、蹴り出し、遊脚で脚や足の輪郭が破綻しないか確認する。</li>
+<li>首・肩・肘・膝・手首・足首を拡大する。隙間、切り口の線、トゲ、裏向きの関節を確認する。</li>
+<li>関節表示をオンにし、骨盤から胸郭・頸部までのつながりと股関節の起点を見る。骨格線を消した最終表示にも戻る。</li>
+<li>変更対象以外の方向と、変更していない部位の動きが維持されているか比べる。</li>
+</ol>
+<p>特に、腕と胴体の間の余裕、肩幅、正面骨盤の形、足裏の切り替え、斜めのつま先と進行方向の一致を見てください。数値検証が通っても、目や耳の向き・シルエットは別途確認が必要です。</p>
+<h2>検証スクリプト</h2>
+<p><code>validate.cjs</code> は関節の接続、脚長、着地、膝と肘のタイミング、足の投影、肩の登録位置を確認します。<code>validate-heads.cjs</code> は胸郭側の首も含む最終的な首元と頭の重なりを確認します。<code>validate-player.cjs</code> はNodeのCanvas実装で操作を確認します。</p>
+<p>以前の首検証は独立した首素材の見える画素数を要求しており、頭を高くしてしまう原因になりました。現在の検証はその条件を変更しています。検証を満たすために見た目を元の不自然な配置へ戻さないでください。</p>
+<p>ブラウザー実機でのページレイアウト検証は実施済みとはしていません。旧版のREADMEの評価も当時のものです。パッケージの検証結果は <code>data/validation-report.txt</code> に残します。</p>
+<h2>変更時に残す記録</h2>
+<p>変更した方向、原寸の移動量、変更前後の数値、変えたファイル、通常表示と拡大表示、8コマの確認結果を残します。「あと2px」の指示に対し、頭の高さや肩幅まで同時に変えないでください。</p></section><section id="04_HISTORY"><h1>修正の経緯と戻してはいけない点</h1>
+<p>U番号は <code>conversation/user-messages.json</code> の発言に対応します。初期版の対応は残っているREADME・コードとユーザー発言から整理したもので、完全な時刻付き操作ログではありません。</p>
+<div class="scroll"><table>
+<tr><th>版</th><th>主な要求・変更</th><th>対応する発言</th></tr>
+<tr><td>lumina v1</td><td>元キャラクターから正面・横の分割歩行。1歩4コマ</td><td>U01–02</td></tr>
+<tr><td>lumina v2</td><td>正面の肩幅・脚間隔、横の首の浮き、脚の切り口のトゲ</td><td>U03</td></tr>
+<tr><td>lumina v3</td><td>腕を前後へ振る、背筋の反り、足首の接地変化、指の向き</td><td>U04</td></tr>
+<tr><td>lumina v4</td><td>横の肘の向き、頭の位置、膝を運んで下腿を伸ばして踵着地</td><td>U05</td></tr>
+<tr><td>lumina v5</td><td>腕に曲げを残す、翼を髪の手前へ、喉元の形</td><td>U06</td></tr>
+<tr><td>lumina v6</td><td>首上端の角、手首と指先の緩み</td><td>U07</td></tr>
+<tr><td>plain v1</td><td>部位と関節を細分化してプレーンな素体へ。肘の変化を導入</td><td>U08</td></tr>
+<tr><td>plain v2</td><td>撫で肩、短い胴・骨盤、女性的な曲線、股関節起点、少し低い等身</td><td>U09</td></tr>
+<tr><td>plain v3</td><td>腕を胴へ押し付けない、横の肩を少し戻す、首接続、正面足裏差分</td><td>U10–11</td></tr>
+<tr><td>plain v4</td><td>「だいぶ良くなった」を受け、斜め下・斜め上・後ろを追加</td><td>U12</td></tr>
+<tr><td>plain v5</td><td>斜め首・後ろ手・斜め後ろ肩・斜め下の足向き</td><td>U13</td></tr>
+<tr><td>plain v6</td><td>頭の支点を変えて斜めの頭を下げる。後に首の隠れを指摘される</td><td>U14</td></tr>
+<tr><td>plain v7</td><td>頭の向き・輪郭・目・耳を描き直す。首を見せようとして位置問題が続く</td><td>U15</td></tr>
+<tr><td>plain v8</td><td>首の切り口に露出した濃い横線を、胸郭上端2行の内側で修正</td><td>U16</td></tr>
+<tr><td>plain v9</td><td>頸部の起点を肩の間へ移し、斜めの頭を下・前へ。前へ出しすぎた</td><td>U17–18</td></tr>
+<tr><td>plain v10</td><td>頭を背中側へ：斜め下2 px、斜め後ろ4 px</td><td>U19</td></tr>
+<tr><td>plain v11</td><td>追加で斜め下1 px、斜め後ろ2 px</td><td>U20</td></tr>
+<tr><td>plain v12</td><td>追加で両方1 px</td><td>U21</td></tr>
+<tr><td>plain v13</td><td>追加で両方2 px。現行の再開元</td><td>U22</td></tr>
+<tr><td>統括ZIP</td><td>会話・目的・配置・引き継ぎの考え方・作業データを梱包</td><td>U23</td></tr>
+</table></div>
+<h2>v9以降の数値</h2>
+<p>この期間は頭の高さを保ち、<code>neck_tip_offset[0]</code> を減らして首上端と頭を画面左へ移しています。</p>
+<div class="scroll"><table>
+<tr><th>版</th><th>down_right offset</th><th>up_right offset</th><th>v9からの累積の背中側移動</th></tr>
+<tr><td>v9</td><td>(4, -9)</td><td>(6, -11)</td><td>0 / 0 px</td></tr>
+<tr><td>v10</td><td>(2, -9)</td><td>(2, -11)</td><td>2 / 4 px</td></tr>
+<tr><td>v11</td><td>(1, -9)</td><td>(0, -11)</td><td>3 / 6 px</td></tr>
+<tr><td>v12</td><td>(0, -9)</td><td>(-1, -11)</td><td>4 / 7 px</td></tr>
+<tr><td>v13</td><td><strong>(-2, -9)</strong></td><td><strong>(-3, -11)</strong></td><td><strong>6 / 9 px</strong></td></tr>
+</table></div>
+<p>頭pivotは両方(26,60)、head_offsetは両方(0,0)、cervical_socketはdown_right(16.5,9)、up_right(16,9)で維持しています。全版の実データから抜き出した表は <code>data/diagonal-placement-history.csv</code> です。</p>
+<h2>失敗の原因を引き継ぐ</h2>
+<h3>首・頭</h3>
+<p>首の支点だけを動かしていた段階では、顔がほぼ正面なのに目だけ右へ寄った絵や、斜め後ろの耳・後頭部の向きの問題が残りました。絵と配置を区別して確認します。</p>
+<p>頭を下げるだけでは首が完全に隠れることがあり、反対に首を見せるために持ち上げると細い棒の上へ頭が載りました。胸郭にも首が描かれているため、独立した首素材を継ぎ足す前提を外し、肩の間から頭蓋底への接続へ変更しました。</p>
+<p>v9の前方移動はユーザーから「前につんのめりすぎ」と指摘されました。現在はその後の背中側への調整をすべて反映しています。v9の配置を正解として復元しないでください。</p>
+<h3>線・突起</h3>
+<p>首の切り口の濃い輪郭、髪の束、足の分割の重複など、いくつかの別の原因がありました。一律に頭や足をずらすのでなく、どの画像・描画順の画素かを特定して直します。v8の首の線の修正は現行素材へ残っています。</p>
+<h3>腕・脚</h3>
+<p>腕を内側へ寄せすぎると胴へ押し付けたように見えます。肘の固定、手首や指の伸びきり、足首の水平固定もぎこちなさの原因でした。直線的なパーツを曲げるだけでなく、シルエットと位相差を確認します。</p>
+<p>前脚は膝を前へ運んだ後、下腿を前へ伸ばして踵を着けます。膝が曲がったまま、下腿が後ろへ残る形へ戻さないでください。正面の骨盤・膝の見え方には重なり順も影響します。</p>
+<h3>確認の不足</h3>
+<p>過去には骨格の整合や首の画素の存在を確認していても、ユーザーが見て違和感のある結果が残りました。検証スクリプトの成功を、自然な見え方の証明やユーザーの承認として扱わないでください。</p></section><section id="05_REPRODUCTION"><h1>開く・修正する・再出力する</h1>
+<h2>閲覧</h2>
+<p>ZIPを展開し、<code>START_HERE.html</code> または <code>workspace/plain-walk-v13/plain-walk-player.html</code> を開きます。現行プレイヤーの画像・コード・設定は埋め込み済みで、サーバーや通信は必要ありません。GIFでも確認できます。</p>
+<p>プレイヤーでは5方向、斜め2方向を含む方向別表示、停止・コマ送り、関節表示、部品一覧、腕振り・肘・速度の調整、配置JSON保存を扱えます。OSの動きを抑える設定により停止状態で開く場合があります。</p>
+<h2>再出力の環境</h2>
+<p>Python 3、Pillow、NumPy、Node.js、<code>@napi-rs/canvas</code> が必要です。現行 <code>package.json</code> はcanvas 0.1.100を指定しています。依存ライブラリーや実行環境自体はZIPへ複製していません。</p>
+<pre><code>cd workspace/plain-walk-v13
+python -m pip install -r requirements.txt
+npm install</code></pre>
+<p>必要なら作業用にフォルダーを複製してから変更します。この統括ZIPの元データを上書きせず比較元として残せます。</p>
+<h2>位置・動きだけを変えた場合</h2>
+<p><code>config.json</code> または <code>rig.js</code> を変更し、次を実行します。</p>
+<pre><code>node validate.cjs
+node validate-heads.cjs
+node render.cjs
+python assemble.py
+node validate-player.cjs</code></pre>
+<p>renderは40コマ、計算済みrig、埋め込みHTMLを書き直します。assembleはGIF、APNG、シート、パーツ一覧を書き直します。<code>config.json</code> だけを変えても、既に書き出されたHTMLやGIFへ自動では反映されません。</p>
+<h2>素材を元画像から再生成する場合</h2>
+<pre><code>python rebuild.py</code></pre>
+<p>これは <code>extract_parts.py</code> で元アトラスから部位PNGとassets.jsonを作り直し、検証・描画・組み立てを行います。画像生成サービスへの呼び出しは不要です。必要な元絵は同梱済みです。</p>
+<p>部位PNGやassets.jsonだけを直接編集すると、次のrebuildで上書きされます。恒久的な変更は、元絵とextract_parts.pyにも反映してください。斜めの頭pivotとcervical_socket、v8の首の開口の修正もextract_parts.pyに記録されています。</p>
+<h2>比較画像の更新</h2>
+<p>元のrebuildは <code>head-neck-comparison.png</code>、<code>head-turnaround.png</code>、<code>diagonal-8frames-check.png</code> の3枚を自動更新しません。これらは各版の確認時に作った画像です。このZIPには更新用の補助スクリプトを追加しました。</p>
+<p>パッケージ直下で実行する例：</p>
+<pre><code>python scripts/refresh_reviews.py --current workspace/plain-walk-v13 --previous workspace/plain-walk-v12</code></pre>
+<p>新しい版を作ったら、引数を新しい版と比較元の版へ置き換えます。通常のPNG/GIFの書き出し後に実行してください。</p>
+<h2>引き継ぎでの確認</h2>
+<p><code>scripts/verify_package.py</code> は、梱包時のSHA-256とサイズでファイルを照合します。ZIPの展開直後に実行できます。ファイルを編集した後に不一致となるのは通常の結果です。</p>
+<pre><code>python scripts/verify_package.py</code></pre>
+<p>旧版やルートの検証スクリプトは当時の作業状態も含めて保存しています。古い絶対パスや環境依存の参照が残るものがあります。通常の継続作業には現行plain-walk-v13のコードを使い、旧版は比較・原因確認のために参照してください。</p></section><section id="06_ART_SOURCES"><h1>原画像・部位生成・履歴</h1>
+<h2>参照画像</h2>
+<ul>
+<li><code>workspace/upload/ルミナ(9).png</code>：最初のキャラクター参照。白い髪、輪、翼、白い衣装の天使。</li>
+<li><code>workspace/upload/IMG_528818a8-1da3-4813-9037-d6f7938671c2.gif</code>：ユーザーが脚の伸びと歩行の参考に添付したGIF。左向きの歩行です。進行方向は現行の右向きと反対なので、手・肘・膝の向きをそのまま混同しないでください。</li>
+</ul>
+<p>どちらも元バイトを収録しています。過去の会話には読込エラー表記がありますが、今回の梱包では実ファイルが存在します。</p>
+<h2>現行素材の由来</h2>
+<p>生成された原画像27枚は <code>workspace/generated_images/</code> に残っています。ファイル名は生成時のものです。各版の <code>source-atlases/</code> には再生成用に名前を付けたコピーがあり、<code>generation-prompts*.txt</code> に指示が残っています。</p>
+<p>同一SHA-256で照合できる生成画像・添付画像との対応を <code>data/source-atlas-provenance.csv</code> に記載します。ハッシュ一致がないものは由来不明と断定せず、加工済みまたは別の元データの可能性として扱います。</p>
+<div class="scroll"><table>
+<tr><th>現行の部位</th><th>主な元絵・処理</th></tr>
+<tr><td>正面・横の頭</td><td>front-v1.png / side-v1.png</td></tr>
+<tr><td>正面・横の一般部位</td><td>front.png / side.png（v2で肩・胴・骨盤などを修正）</td></tr>
+<tr><td>正面の足差分</td><td>front-feet-v3.png</td></tr>
+<tr><td>追加3方向の基本部位</td><td>down_right.png / up_right.png / back.png</td></tr>
+<tr><td>斜め下の胸郭・首・足差分</td><td>down-corrections-v5.png</td></tr>
+<tr><td>斜め後ろの胸郭・首・手</td><td>up-corrections-v5.png</td></tr>
+<tr><td>現行の斜め頭</td><td>down-head-v7.png / up-head-v7.png</td></tr>
+<tr><td>胸郭の首開口の横線修正</td><td>down-neck-open-v8.png / up-neck-open-v8.png の上端の明るい部分だけを組み込む</td></tr>
+<tr><td>腰の接続部品</td><td>各方向のhip素材を18×10へNearest Neighborでリサイズ</td></tr>
+</table></div>
+<p>v8の修正は胸郭全体の差し替えではありません。既存胸郭の最上部2行の内側、斜め下6×2 px・斜め後ろ8×2 pxだけを生成素材から置き換え、元の透過輪郭と他の画素を保持しています。v9以降は位置の変更で、部位絵を新しく生成していません。</p>
+<p>切り出しはアルファ210以上を不透明とし、最大の8近傍連結成分を残して外周の不要画素を取り除きます。その後、決めた部位サイズへNearest Neighborで縮小します。アトラスの列・行の境界や上書き順は <code>extract_parts.py</code> にあります。</p>
+<h2>ルミナへ戻す場合の注意</h2>
+<p>最新素体へ衣装・髪・翼を載せる作業は、現行版で完了していません。旧ルミナの見た目は <code>workspace/lumina-walk-v6/</code> を参照できますが、肘を含む最新の一般化した動きをそのまま持つとは限りません。</p>
+<p>元のユーザー要望として、翼が髪の後ろへ隠れすぎないこと、手と指を伸ばしきらないこと、首の切り口・髪の束が喉元の突起に見えないことを引き継ぎます。頭・髪・輪・翼の前後関係は、方向と体の動きに合わせて決めます。</p>
+<p>画像を描き直す場合も、元の歩行タイミングや各関節の位置まで一度に変更しない方が、見た目の差分を判断しやすくなります。生成プロンプト、使った参照画像、採用した画像、切り出し方法とpivotを記録してください。</p></section><section id="COVERAGE"><h1>会話記録の収録範囲</h1>
+<p>このフォルダーは、制作に関して現在の会話コンテキストから確認できる発言を保存したものです。ChatGPTの正式な「会話全体エクスポート」ではありません。</p>
+<ul>
+<li>ユーザーの制作発言：最初のキャラクター指定から今回の統括ZIP依頼まで、確認できる23件を原文で収録。途中で同文が繰り返された要求も別の発言として残しています。</li>
+<li>アシスタント：原文が確認できるv7以降の進捗コメント・最終回答を収録。v7冒頭のコメント1件は、コンテキスト要約に残る引用として区別しています。</li>
+<li>初期のアシスタント発言全文、全ツール呼び出し・全ツール応答、正確な発言時刻・メッセージIDは取得できません。推測した応答や時刻を原文として補っていません。</li>
+<li>初期の進行は <code>../docs/04_HISTORY.md</code> と各版のREADME・素材・ソースコードで補完しています。これは履歴の整理で、発言の逐語録ではありません。</li>
+<li>元のキャラクターPNGと歩行参考GIFは <code>../workspace/upload/</code> に収録。過去の読込エラー文はJSONの別欄に記録しました。梱包時には両方とも実ファイルを確認しています。</li>
+<li>生成画像は <code>../workspace/generated_images/</code>、その生成指示は各版の <code>generation-prompts*.txt</code> に収録。全ツールの逐語ログを再現するものではありません。</li>
+<li>元の配布ZIPは重複を避けて収録せず、各版の展開済み作業フォルダーを保存しています。過去のZIPそのもののバイト列を保存したものではありません。</li>
+<li>ログ中の <code>sandbox:</code> リンクは当時の表記です。実ファイルはこのZIPの <code>workspace/</code> 以下の同名パスを参照してください。</li>
+<li>この統括ZIP自体の作成完了後の発言は、作成前の収録時点には存在しないため含みません。</li>
+</ul>
+<p>当時のアシスタントが「確認した」「修正した」と述べた箇所にも、その後ユーザーが問題を指摘したものがあります。古い成功評価を最終的な承認と扱わず、最新の指示と現物を見てください。</p></section></main></html>

@@ -1,0 +1,12 @@
+{
+  "name": "game5-character-motion",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Eight-direction asymmetric character walk and run assets",
+  "scripts": {
+    "motion": "node motion/export.mjs",
+    "render": "node tools/render.mjs",
+    "test": "node motion/test.mjs && node tools/validate_exports.mjs"
+  },
+  "dependencies": {"@napi-rs/canvas": "0.1.100"}
+}

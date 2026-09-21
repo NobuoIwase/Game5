@@ -1,0 +1,70 @@
+{
+  "schema": "game5-character-motion/1.0",
+  "frame_width": 384,
+  "frame_height": 512,
+  "frames_per_cycle": 8,
+  "directions": [
+    "front",
+    "down_right",
+    "right",
+    "up_right",
+    "back",
+    "up_left",
+    "left",
+    "down_left"
+  ],
+  "direction_labels": {
+    "front": "正面",
+    "down_right": "右斜め前",
+    "right": "右",
+    "up_right": "右斜め後ろ",
+    "back": "後ろ",
+    "up_left": "左斜め後ろ",
+    "left": "左",
+    "down_left": "左斜め前"
+  },
+  "characters": [
+    {
+      "id": "warrior",
+      "label": "戦士（仮）"
+    },
+    {
+      "id": "scout",
+      "label": "獣人スカウト（仮）"
+    },
+    {
+      "id": "generic",
+      "label": "汎用モーション"
+    }
+  ],
+  "motions": [
+    {
+      "id": "walk",
+      "label": "歩行",
+      "frame_ms": 120
+    },
+    {
+      "id": "run",
+      "label": "走行",
+      "frame_ms": 80
+    }
+  ],
+  "alpha": true,
+  "origin": "top-left",
+  "feet_anchor": [
+    192,
+    470
+  ],
+  "sheet_layout": "8 columns of frames × 8 rows of directions",
+  "anatomical_equipment": {
+    "warrior": {
+      "sword": "right hand",
+      "shield": "left forearm",
+      "pauldron": "right shoulder (equipment-detail annotation)",
+      "scabbard": "left hip"
+    }
+  },
+  "art_method": "Eight independently generated views; no whole-character horizontal reflection. Symmetric hidden limb textures may be shared between anatomical legs.",
+  "rig": "motion/rig.mjs",
+  "status": "first playable prototype; visual review pending"
+}

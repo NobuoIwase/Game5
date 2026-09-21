@@ -1,0 +1,30 @@
+FRONT ATLAS
+
+Use case: stylized-concept.
+Asset type: a production pixel-art component atlas for a generic chibi walking mannequin.
+Reference image: the previous dressed angel sprite is ONLY a guide to chibi proportions and restrained pixel rendering. Create a PLAIN neutral mannequin base with no hair, halo, wings, skirt, ribbons, cuffs or jewelry. A smooth matte pale blue-gray full-body toy shell / featureless unitard, softly shaded ivory-gray highlights, muted slate-violet silhouette edges; flat simplified chest and pelvis with no anatomical detail. The art should feel soft and simple, not mechanical armor. Head has only two tiny dark eyes (one for side profile), no mouth or hairstyle.
+Exactly 4 columns by 4 rows, 1024x1024 canvas, each of sixteen isolated components centered inside its own 256x256 cell with generous transparent gutters. No pieces may touch cell edges. Uniform style and pixel size, crisp pixel art, genuinely transparent alpha background. No labels or drawn grid.
+Read the cell list from LEFT TO RIGHT and TOP TO BOTTOM:
+Row 1: head ONLY, no neck; upper torso/chest ONLY, neck excluded; lower torso/pelvis ONLY, legs excluded; short neck connector.
+Row 2: upper arm shoulder-to-elbow segment; small elbow-joint connector; forearm elbow-to-wrist segment; small relaxed hand with gently curled fingers.
+Row 3: upper leg thigh hip-to-knee; small knee-joint connector; lower leg shin knee-to-ankle; foot ONLY, ankle connection near rear of foot.
+Row 4: shoulder-joint connector; hip-joint connector; wrist-joint connector; ankle-joint connector.
+The limb segments are straight vertical at rest, rounded softly at their connection ends so they can rotate and overlap. Joint connectors are simple small round patches in the SAME material and palette, subtle border, no metallic holes or hinge screws. Only ONE of each limb asset, not paired limbs. The pelvis has a compact smooth bottom with no projecting legs. Each hand is softly curved and partially open, never straight pointed fingers. All pieces belong to the same toy and have consistent lighting. Do not draw any complete figure in any cell.
+VIEW: every cell is FRONT VIEW, as a character walking toward the viewer on a flat game map. The head is a wide oval without hair, the chest is symmetric with modest shoulder width and a narrow waist, the pelvis is a simple symmetric form. The single foot is a compact front-view foot with its rounded toes at the bottom. Keep all joints axis-aligned and centered. The hand has its thumb on screen right.
+
+SIDE ATLAS
+
+Use case: stylized-concept.
+Asset type: a production pixel-art component atlas for a generic chibi walking mannequin.
+Reference image: the previous dressed angel sprite is ONLY a guide to chibi proportions and restrained pixel rendering. Create a PLAIN neutral mannequin base with no hair, halo, wings, skirt, ribbons, cuffs or jewelry. A smooth matte pale blue-gray full-body toy shell / featureless unitard, softly shaded ivory-gray highlights, muted slate-violet silhouette edges; flat simplified chest and pelvis with no anatomical detail. The art should feel soft and simple, not mechanical armor. Head has only two tiny dark eyes (one for side profile), no mouth or hairstyle.
+Exactly 4 columns by 4 rows, 1024x1024 canvas, each of sixteen isolated components centered inside its own 256x256 cell with generous transparent gutters. No pieces may touch cell edges. Uniform style and pixel size, crisp pixel art, genuinely transparent alpha background. No labels or drawn grid.
+Read the cell list from LEFT TO RIGHT and TOP TO BOTTOM:
+Row 1: head ONLY, no neck; upper torso/chest ONLY, neck excluded; lower torso/pelvis ONLY, legs excluded; short neck connector.
+Row 2: upper arm shoulder-to-elbow segment; small elbow-joint connector; forearm elbow-to-wrist segment; small relaxed hand with gently curled fingers.
+Row 3: upper leg thigh hip-to-knee; small knee-joint connector; lower leg shin knee-to-ankle; foot ONLY, ankle connection near rear of foot.
+Row 4: shoulder-joint connector; hip-joint connector; wrist-joint connector; ankle-joint connector.
+The limb segments are straight vertical at rest, rounded softly at their connection ends so they can rotate and overlap. Joint connectors are simple small round patches in the SAME material and palette, subtle border, no metallic holes or hinge screws. Only ONE of each limb asset, not paired limbs. The pelvis has a compact smooth bottom with no projecting legs. Each hand is softly curved and partially open, never straight pointed fingers. All pieces belong to the same toy and have consistent lighting. Do not draw any complete figure in any cell.
+VIEW: every cell is a true RIGHT-FACING SIDE PROFILE as a character walking screen right on a flat game map. The head has one eye near the right edge and a barely indicated nose, smooth simple chin, no ear detail. Chest and pelvis have a neutral upright profile, no arched back, no exaggerated chest. The single FOOT is horizontal pointing RIGHT with an ankle socket near its LEFT rear upper end. The relaxed hand has its thumb on SCREEN RIGHT. Make the rear/left and front/right silhouettes easy to tell while keeping a simple plain mannequin.
+Additional reference: the first image is the corresponding FRONT component atlas. Match its exact pale blue-gray material and simple mannequin design; turn each matching component to a strict RIGHT profile. The second image is only the old walk/proportion reference.
+
+Method: built-in image generation. Final source PNGs are front.png and side.png. The proportion reference is proportion-reference-v6.png. Component registration, joint chains, kinematics and frame rendering are defined by extract_parts.py, config.json, assets.json and rig.js.

@@ -1,0 +1,3048 @@
+{
+  "canvas": [
+    192,
+    256
+  ],
+  "fps": 8.333333333333334,
+  "frames_per_step": 4,
+  "frames_per_cycle": 8,
+  "directions": [
+    "front",
+    "side"
+  ],
+  "ground_y": 242,
+  "parts": {
+    "front": {
+      "head": {
+        "file": "parts/front/head.png",
+        "size": [
+          88,
+          103
+        ]
+      },
+      "torso": {
+        "file": "parts/front/torso.png",
+        "size": [
+          48,
+          45
+        ]
+      },
+      "skirt": {
+        "file": "parts/front/skirt.png",
+        "size": [
+          102,
+          73
+        ]
+      },
+      "hair": {
+        "file": "parts/front/hair.png",
+        "size": [
+          101,
+          118
+        ]
+      },
+      "arm_far": {
+        "file": "parts/front/arm_far.png",
+        "size": [
+          28,
+          49
+        ]
+      },
+      "arm_near": {
+        "file": "parts/front/arm_near.png",
+        "size": [
+          28,
+          49
+        ]
+      },
+      "leg_far": {
+        "file": "parts/front/leg_far.png",
+        "size": [
+          18,
+          58
+        ]
+      },
+      "leg_near": {
+        "file": "parts/front/leg_near.png",
+        "size": [
+          18,
+          58
+        ]
+      },
+      "wing_far": {
+        "file": "parts/front/wing_far.png",
+        "size": [
+          56,
+          43
+        ]
+      },
+      "wing_near": {
+        "file": "parts/front/wing_near.png",
+        "size": [
+          56,
+          43
+        ]
+      },
+      "tail_far": {
+        "file": "parts/front/tail_far.png",
+        "size": [
+          52,
+          54
+        ]
+      },
+      "tail_near": {
+        "file": "parts/front/tail_near.png",
+        "size": [
+          52,
+          54
+        ]
+      }
+    },
+    "side": {
+      "head": {
+        "file": "parts/side/head.png",
+        "size": [
+          78,
+          103
+        ]
+      },
+      "torso": {
+        "file": "parts/side/torso.png",
+        "size": [
+          33,
+          45
+        ]
+      },
+      "skirt": {
+        "file": "parts/side/skirt.png",
+        "size": [
+          76,
+          72
+        ]
+      },
+      "hair": {
+        "file": "parts/side/hair.png",
+        "size": [
+          76,
+          120
+        ]
+      },
+      "arm_far": {
+        "file": "parts/side/arm_far.png",
+        "size": [
+          20,
+          49
+        ]
+      },
+      "arm_near": {
+        "file": "parts/side/arm_near.png",
+        "size": [
+          20,
+          49
+        ]
+      },
+      "leg_far": {
+        "file": "parts/side/leg_far.png",
+        "size": [
+          24,
+          59
+        ]
+      },
+      "leg_near": {
+        "file": "parts/side/leg_near.png",
+        "size": [
+          24,
+          59
+        ]
+      },
+      "wing_far": {
+        "file": "parts/side/wing_far.png",
+        "size": [
+          45,
+          39
+        ]
+      },
+      "wing_near": {
+        "file": "parts/side/wing_near.png",
+        "size": [
+          48,
+          41
+        ]
+      },
+      "tail_far": {
+        "file": "parts/side/tail_far.png",
+        "size": [
+          44,
+          56
+        ]
+      },
+      "tail_near": {
+        "file": "parts/side/tail_near.png",
+        "size": [
+          48,
+          58
+        ]
+      },
+      "leg_far_walk_00": {
+        "file": "parts/side/leg_far_walk_00.png",
+        "size": [
+          96,
+          80
+        ]
+      },
+      "leg_near_walk_00": {
+        "file": "parts/side/leg_near_walk_00.png",
+        "size": [
+          96,
+          80
+        ]
+      },
+      "leg_far_walk_01": {
+        "file": "parts/side/leg_far_walk_01.png",
+        "size": [
+          96,
+          80
+        ]
+      },
+      "leg_near_walk_01": {
+        "file": "parts/side/leg_near_walk_01.png",
+        "size": [
+          96,
+          80
+        ]
+      },
+      "leg_far_walk_02": {
+        "file": "parts/side/leg_far_walk_02.png",
+        "size": [
+          96,
+          80
+        ]
+      },
+      "leg_near_walk_02": {
+        "file": "parts/side/leg_near_walk_02.png",
+        "size": [
+          96,
+          80
+        ]
+      },
+      "leg_far_walk_03": {
+        "file": "parts/side/leg_far_walk_03.png",
+        "size": [
+          96,
+          80
+        ]
+      },
+      "leg_near_walk_03": {
+        "file": "parts/side/leg_near_walk_03.png",
+        "size": [
+          96,
+          80
+        ]
+      },
+      "leg_far_walk_04": {
+        "file": "parts/side/leg_far_walk_04.png",
+        "size": [
+          96,
+          80
+        ]
+      },
+      "leg_near_walk_04": {
+        "file": "parts/side/leg_near_walk_04.png",
+        "size": [
+          96,
+          80
+        ]
+      },
+      "leg_far_walk_05": {
+        "file": "parts/side/leg_far_walk_05.png",
+        "size": [
+          96,
+          80
+        ]
+      },
+      "leg_near_walk_05": {
+        "file": "parts/side/leg_near_walk_05.png",
+        "size": [
+          96,
+          80
+        ]
+      },
+      "leg_far_walk_06": {
+        "file": "parts/side/leg_far_walk_06.png",
+        "size": [
+          96,
+          80
+        ]
+      },
+      "leg_near_walk_06": {
+        "file": "parts/side/leg_near_walk_06.png",
+        "size": [
+          96,
+          80
+        ]
+      },
+      "leg_far_walk_07": {
+        "file": "parts/side/leg_far_walk_07.png",
+        "size": [
+          96,
+          80
+        ]
+      },
+      "leg_near_walk_07": {
+        "file": "parts/side/leg_near_walk_07.png",
+        "size": [
+          96,
+          80
+        ]
+      }
+    }
+  },
+  "frames": {
+    "front": [
+      [
+        {
+          "part": "wing_far",
+          "x": 75,
+          "y": 126,
+          "pivot": [
+            52,
+            29
+          ],
+          "angle": 1.1,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "wing_near",
+          "x": 117,
+          "y": 126,
+          "pivot": [
+            4,
+            29
+          ],
+          "angle": 1.1,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "hair",
+          "x": 95,
+          "y": 41,
+          "pivot": [
+            50,
+            0
+          ],
+          "angle": -0.6,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_far",
+          "x": 77,
+          "y": 183,
+          "pivot": [
+            46,
+            3
+          ],
+          "angle": -1.5,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_near",
+          "x": 115,
+          "y": 183,
+          "pivot": [
+            6,
+            3
+          ],
+          "angle": -1.5,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_far",
+          "x": 87,
+          "y": 182,
+          "pivot": [
+            9,
+            0
+          ],
+          "angle": -0.8,
+          "scale": [
+            1,
+            1.0172
+          ]
+        },
+        {
+          "part": "leg_near",
+          "x": 105,
+          "y": 182,
+          "pivot": [
+            9,
+            0
+          ],
+          "angle": -0.8,
+          "scale": [
+            1,
+            0.8793
+          ]
+        },
+        {
+          "part": "skirt",
+          "x": 95.7,
+          "y": 143.0,
+          "pivot": [
+            51,
+            0
+          ],
+          "angle": -0.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_far",
+          "x": 81.103,
+          "y": 125.11,
+          "pivot": [
+            23,
+            3
+          ],
+          "angle": -15.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_near",
+          "x": 109.102,
+          "y": 124.89,
+          "pivot": [
+            5,
+            3
+          ],
+          "angle": 8.55,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "torso",
+          "x": 95,
+          "y": 112,
+          "pivot": [
+            24,
+            0
+          ],
+          "angle": -0.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "head",
+          "x": 95,
+          "y": 20,
+          "pivot": [
+            44,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        }
+      ],
+      [
+        {
+          "part": "wing_far",
+          "x": 75,
+          "y": 128,
+          "pivot": [
+            52,
+            29
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "wing_near",
+          "x": 117,
+          "y": 128,
+          "pivot": [
+            4,
+            29
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "hair",
+          "x": 95,
+          "y": 43,
+          "pivot": [
+            50,
+            0
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_far",
+          "x": 77,
+          "y": 185,
+          "pivot": [
+            46,
+            3
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_near",
+          "x": 115,
+          "y": 185,
+          "pivot": [
+            6,
+            3
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_far",
+          "x": 87,
+          "y": 184,
+          "pivot": [
+            9,
+            0
+          ],
+          "angle": -0.8,
+          "scale": [
+            1,
+            0.9828
+          ]
+        },
+        {
+          "part": "leg_near",
+          "x": 105,
+          "y": 184,
+          "pivot": [
+            9,
+            0
+          ],
+          "angle": -0.8,
+          "scale": [
+            1,
+            0.7759
+          ]
+        },
+        {
+          "part": "skirt",
+          "x": 95.7,
+          "y": 144.2,
+          "pivot": [
+            51,
+            0
+          ],
+          "angle": -0.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_far",
+          "x": 81.103,
+          "y": 127.11,
+          "pivot": [
+            23,
+            3
+          ],
+          "angle": -14.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_near",
+          "x": 109.102,
+          "y": 126.89,
+          "pivot": [
+            5,
+            3
+          ],
+          "angle": 9.55,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "torso",
+          "x": 95,
+          "y": 114,
+          "pivot": [
+            24,
+            0
+          ],
+          "angle": -0.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "head",
+          "x": 95,
+          "y": 22,
+          "pivot": [
+            44,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        }
+      ],
+      [
+        {
+          "part": "wing_far",
+          "x": 75,
+          "y": 126,
+          "pivot": [
+            52,
+            29
+          ],
+          "angle": -1.1,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "wing_near",
+          "x": 117,
+          "y": 126,
+          "pivot": [
+            4,
+            29
+          ],
+          "angle": -1.1,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "hair",
+          "x": 96,
+          "y": 41,
+          "pivot": [
+            50,
+            0
+          ],
+          "angle": 0.6,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_far",
+          "x": 77,
+          "y": 183,
+          "pivot": [
+            46,
+            3
+          ],
+          "angle": 1.5,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_near",
+          "x": 115,
+          "y": 183,
+          "pivot": [
+            6,
+            3
+          ],
+          "angle": 1.5,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_far",
+          "x": 87,
+          "y": 182,
+          "pivot": [
+            9,
+            0
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            0.9655
+          ]
+        },
+        {
+          "part": "leg_near",
+          "x": 105,
+          "y": 182,
+          "pivot": [
+            9,
+            0
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            0.8793
+          ]
+        },
+        {
+          "part": "skirt",
+          "x": 96.0,
+          "y": 143.0,
+          "pivot": [
+            51,
+            0
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_far",
+          "x": 82.0,
+          "y": 125.0,
+          "pivot": [
+            23,
+            3
+          ],
+          "angle": -12.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_near",
+          "x": 110.0,
+          "y": 125.0,
+          "pivot": [
+            5,
+            3
+          ],
+          "angle": 12.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "torso",
+          "x": 96,
+          "y": 112,
+          "pivot": [
+            24,
+            0
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "head",
+          "x": 96,
+          "y": 20,
+          "pivot": [
+            44,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        }
+      ],
+      [
+        {
+          "part": "wing_far",
+          "x": 75,
+          "y": 124,
+          "pivot": [
+            52,
+            29
+          ],
+          "angle": -2.2,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "wing_near",
+          "x": 117,
+          "y": 124,
+          "pivot": [
+            4,
+            29
+          ],
+          "angle": -2.2,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "hair",
+          "x": 97,
+          "y": 39,
+          "pivot": [
+            50,
+            0
+          ],
+          "angle": 1.2,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_far",
+          "x": 77,
+          "y": 181,
+          "pivot": [
+            46,
+            3
+          ],
+          "angle": 3.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_near",
+          "x": 115,
+          "y": 181,
+          "pivot": [
+            6,
+            3
+          ],
+          "angle": 3.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_far",
+          "x": 87,
+          "y": 180,
+          "pivot": [
+            9,
+            0
+          ],
+          "angle": 0.8,
+          "scale": [
+            1,
+            0.9655
+          ]
+        },
+        {
+          "part": "leg_near",
+          "x": 105,
+          "y": 180,
+          "pivot": [
+            9,
+            0
+          ],
+          "angle": 0.8,
+          "scale": [
+            1,
+            1.0
+          ]
+        },
+        {
+          "part": "skirt",
+          "x": 96.3,
+          "y": 141.8,
+          "pivot": [
+            51,
+            0
+          ],
+          "angle": 0.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_far",
+          "x": 82.898,
+          "y": 122.89,
+          "pivot": [
+            23,
+            3
+          ],
+          "angle": -9.55,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_near",
+          "x": 110.897,
+          "y": 123.11,
+          "pivot": [
+            5,
+            3
+          ],
+          "angle": 14.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "torso",
+          "x": 97,
+          "y": 110,
+          "pivot": [
+            24,
+            0
+          ],
+          "angle": 0.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "head",
+          "x": 97,
+          "y": 18,
+          "pivot": [
+            44,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        }
+      ],
+      [
+        {
+          "part": "wing_far",
+          "x": 75,
+          "y": 126,
+          "pivot": [
+            52,
+            29
+          ],
+          "angle": -1.1,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "wing_near",
+          "x": 117,
+          "y": 126,
+          "pivot": [
+            4,
+            29
+          ],
+          "angle": -1.1,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "hair",
+          "x": 97,
+          "y": 41,
+          "pivot": [
+            50,
+            0
+          ],
+          "angle": 0.6,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_far",
+          "x": 77,
+          "y": 183,
+          "pivot": [
+            46,
+            3
+          ],
+          "angle": 1.5,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_near",
+          "x": 115,
+          "y": 183,
+          "pivot": [
+            6,
+            3
+          ],
+          "angle": 1.5,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_far",
+          "x": 87,
+          "y": 182,
+          "pivot": [
+            9,
+            0
+          ],
+          "angle": 0.8,
+          "scale": [
+            1,
+            0.8793
+          ]
+        },
+        {
+          "part": "leg_near",
+          "x": 105,
+          "y": 182,
+          "pivot": [
+            9,
+            0
+          ],
+          "angle": 0.8,
+          "scale": [
+            1,
+            1.0172
+          ]
+        },
+        {
+          "part": "skirt",
+          "x": 96.3,
+          "y": 143.0,
+          "pivot": [
+            51,
+            0
+          ],
+          "angle": 0.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_far",
+          "x": 82.898,
+          "y": 124.89,
+          "pivot": [
+            23,
+            3
+          ],
+          "angle": -8.55,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_near",
+          "x": 110.897,
+          "y": 125.11,
+          "pivot": [
+            5,
+            3
+          ],
+          "angle": 15.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "torso",
+          "x": 97,
+          "y": 112,
+          "pivot": [
+            24,
+            0
+          ],
+          "angle": 0.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "head",
+          "x": 97,
+          "y": 20,
+          "pivot": [
+            44,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        }
+      ],
+      [
+        {
+          "part": "wing_far",
+          "x": 75,
+          "y": 128,
+          "pivot": [
+            52,
+            29
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "wing_near",
+          "x": 117,
+          "y": 128,
+          "pivot": [
+            4,
+            29
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "hair",
+          "x": 97,
+          "y": 43,
+          "pivot": [
+            50,
+            0
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_far",
+          "x": 77,
+          "y": 185,
+          "pivot": [
+            46,
+            3
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_near",
+          "x": 115,
+          "y": 185,
+          "pivot": [
+            6,
+            3
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_far",
+          "x": 87,
+          "y": 184,
+          "pivot": [
+            9,
+            0
+          ],
+          "angle": 0.8,
+          "scale": [
+            1,
+            0.7759
+          ]
+        },
+        {
+          "part": "leg_near",
+          "x": 105,
+          "y": 184,
+          "pivot": [
+            9,
+            0
+          ],
+          "angle": 0.8,
+          "scale": [
+            1,
+            0.9828
+          ]
+        },
+        {
+          "part": "skirt",
+          "x": 96.3,
+          "y": 144.2,
+          "pivot": [
+            51,
+            0
+          ],
+          "angle": 0.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_far",
+          "x": 82.898,
+          "y": 126.89,
+          "pivot": [
+            23,
+            3
+          ],
+          "angle": -9.55,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_near",
+          "x": 110.897,
+          "y": 127.11,
+          "pivot": [
+            5,
+            3
+          ],
+          "angle": 14.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "torso",
+          "x": 97,
+          "y": 114,
+          "pivot": [
+            24,
+            0
+          ],
+          "angle": 0.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "head",
+          "x": 97,
+          "y": 22,
+          "pivot": [
+            44,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        }
+      ],
+      [
+        {
+          "part": "wing_far",
+          "x": 75,
+          "y": 126,
+          "pivot": [
+            52,
+            29
+          ],
+          "angle": 1.1,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "wing_near",
+          "x": 117,
+          "y": 126,
+          "pivot": [
+            4,
+            29
+          ],
+          "angle": 1.1,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "hair",
+          "x": 96,
+          "y": 41,
+          "pivot": [
+            50,
+            0
+          ],
+          "angle": -0.6,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_far",
+          "x": 77,
+          "y": 183,
+          "pivot": [
+            46,
+            3
+          ],
+          "angle": -1.5,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_near",
+          "x": 115,
+          "y": 183,
+          "pivot": [
+            6,
+            3
+          ],
+          "angle": -1.5,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_far",
+          "x": 87,
+          "y": 182,
+          "pivot": [
+            9,
+            0
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            0.8793
+          ]
+        },
+        {
+          "part": "leg_near",
+          "x": 105,
+          "y": 182,
+          "pivot": [
+            9,
+            0
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            0.9655
+          ]
+        },
+        {
+          "part": "skirt",
+          "x": 96.0,
+          "y": 143.0,
+          "pivot": [
+            51,
+            0
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_far",
+          "x": 82.0,
+          "y": 125.0,
+          "pivot": [
+            23,
+            3
+          ],
+          "angle": -12.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_near",
+          "x": 110.0,
+          "y": 125.0,
+          "pivot": [
+            5,
+            3
+          ],
+          "angle": 12.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "torso",
+          "x": 96,
+          "y": 112,
+          "pivot": [
+            24,
+            0
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "head",
+          "x": 96,
+          "y": 20,
+          "pivot": [
+            44,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        }
+      ],
+      [
+        {
+          "part": "wing_far",
+          "x": 75,
+          "y": 124,
+          "pivot": [
+            52,
+            29
+          ],
+          "angle": 2.2,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "wing_near",
+          "x": 117,
+          "y": 124,
+          "pivot": [
+            4,
+            29
+          ],
+          "angle": 2.2,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "hair",
+          "x": 95,
+          "y": 39,
+          "pivot": [
+            50,
+            0
+          ],
+          "angle": -1.2,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_far",
+          "x": 77,
+          "y": 181,
+          "pivot": [
+            46,
+            3
+          ],
+          "angle": -3.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_near",
+          "x": 115,
+          "y": 181,
+          "pivot": [
+            6,
+            3
+          ],
+          "angle": -3.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_far",
+          "x": 87,
+          "y": 180,
+          "pivot": [
+            9,
+            0
+          ],
+          "angle": -0.8,
+          "scale": [
+            1,
+            1.0
+          ]
+        },
+        {
+          "part": "leg_near",
+          "x": 105,
+          "y": 180,
+          "pivot": [
+            9,
+            0
+          ],
+          "angle": -0.8,
+          "scale": [
+            1,
+            0.9655
+          ]
+        },
+        {
+          "part": "skirt",
+          "x": 95.7,
+          "y": 141.8,
+          "pivot": [
+            51,
+            0
+          ],
+          "angle": -0.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_far",
+          "x": 81.103,
+          "y": 123.11,
+          "pivot": [
+            23,
+            3
+          ],
+          "angle": -14.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_near",
+          "x": 109.102,
+          "y": 122.89,
+          "pivot": [
+            5,
+            3
+          ],
+          "angle": 9.55,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "torso",
+          "x": 95,
+          "y": 110,
+          "pivot": [
+            24,
+            0
+          ],
+          "angle": -0.45,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "head",
+          "x": 95,
+          "y": 18,
+          "pivot": [
+            44,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        }
+      ]
+    ],
+    "side": [
+      [
+        {
+          "part": "wing_far",
+          "x": 98,
+          "y": 127,
+          "pivot": [
+            42,
+            27
+          ],
+          "angle": -1,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_far",
+          "x": 107,
+          "y": 181,
+          "pivot": [
+            40,
+            3
+          ],
+          "angle": -1.7,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_far_walk_00",
+          "x": 107,
+          "y": 181,
+          "pivot": [
+            48.0,
+            3.0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_far",
+          "x": 112,
+          "y": 123,
+          "pivot": [
+            8,
+            3
+          ],
+          "angle": 12.6,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "hair",
+          "x": 91,
+          "y": 48,
+          "pivot": [
+            42,
+            0
+          ],
+          "angle": -0.8,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_near",
+          "x": 108,
+          "y": 183,
+          "pivot": [
+            44,
+            3
+          ],
+          "angle": -1.7,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_near_walk_00",
+          "x": 107,
+          "y": 181,
+          "pivot": [
+            48.0,
+            3.0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "skirt",
+          "x": 110,
+          "y": 144.0,
+          "pivot": [
+            40,
+            0
+          ],
+          "angle": -0.5,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "torso",
+          "x": 109,
+          "y": 109,
+          "pivot": [
+            17,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "wing_near",
+          "x": 96,
+          "y": 125,
+          "pivot": [
+            44,
+            27
+          ],
+          "angle": -1.2,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_near",
+          "x": 113,
+          "y": 123,
+          "pivot": [
+            7,
+            3
+          ],
+          "angle": -12.6,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "head",
+          "x": 96,
+          "y": 27,
+          "pivot": [
+            40,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        }
+      ],
+      [
+        {
+          "part": "wing_far",
+          "x": 98,
+          "y": 129,
+          "pivot": [
+            42,
+            27
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_far",
+          "x": 107,
+          "y": 183,
+          "pivot": [
+            40,
+            3
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_far_walk_01",
+          "x": 107,
+          "y": 183,
+          "pivot": [
+            48.0,
+            3.0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_far",
+          "x": 112,
+          "y": 125,
+          "pivot": [
+            8,
+            3
+          ],
+          "angle": 8.4,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "hair",
+          "x": 91,
+          "y": 50,
+          "pivot": [
+            42,
+            0
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_near",
+          "x": 108,
+          "y": 185,
+          "pivot": [
+            44,
+            3
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_near_walk_01",
+          "x": 107,
+          "y": 183,
+          "pivot": [
+            48.0,
+            3.0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "skirt",
+          "x": 110,
+          "y": 145.3,
+          "pivot": [
+            40,
+            0
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "torso",
+          "x": 109,
+          "y": 111,
+          "pivot": [
+            17,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "wing_near",
+          "x": 96,
+          "y": 127,
+          "pivot": [
+            44,
+            27
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_near",
+          "x": 113,
+          "y": 125,
+          "pivot": [
+            7,
+            3
+          ],
+          "angle": -8.4,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "head",
+          "x": 96,
+          "y": 29,
+          "pivot": [
+            40,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        }
+      ],
+      [
+        {
+          "part": "wing_far",
+          "x": 98,
+          "y": 127,
+          "pivot": [
+            42,
+            27
+          ],
+          "angle": 1,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_far",
+          "x": 107,
+          "y": 181,
+          "pivot": [
+            40,
+            3
+          ],
+          "angle": 1.7,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_far_walk_02",
+          "x": 107,
+          "y": 181,
+          "pivot": [
+            48.0,
+            3.0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_far",
+          "x": 112,
+          "y": 123,
+          "pivot": [
+            8,
+            3
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "hair",
+          "x": 91,
+          "y": 48,
+          "pivot": [
+            42,
+            0
+          ],
+          "angle": 0.8,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_near",
+          "x": 108,
+          "y": 183,
+          "pivot": [
+            44,
+            3
+          ],
+          "angle": 1.7,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_near_walk_02",
+          "x": 107,
+          "y": 181,
+          "pivot": [
+            48.0,
+            3.0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "skirt",
+          "x": 110,
+          "y": 144.0,
+          "pivot": [
+            40,
+            0
+          ],
+          "angle": 0.5,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "torso",
+          "x": 109,
+          "y": 109,
+          "pivot": [
+            17,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "wing_near",
+          "x": 96,
+          "y": 125,
+          "pivot": [
+            44,
+            27
+          ],
+          "angle": 1.2,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_near",
+          "x": 113,
+          "y": 123,
+          "pivot": [
+            7,
+            3
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "head",
+          "x": 96,
+          "y": 27,
+          "pivot": [
+            40,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        }
+      ],
+      [
+        {
+          "part": "wing_far",
+          "x": 98,
+          "y": 125,
+          "pivot": [
+            42,
+            27
+          ],
+          "angle": 2,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_far",
+          "x": 107,
+          "y": 179,
+          "pivot": [
+            40,
+            3
+          ],
+          "angle": 3.4,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_far_walk_03",
+          "x": 107,
+          "y": 179,
+          "pivot": [
+            48.0,
+            3.0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_far",
+          "x": 112,
+          "y": 121,
+          "pivot": [
+            8,
+            3
+          ],
+          "angle": -9.1,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "hair",
+          "x": 91,
+          "y": 46,
+          "pivot": [
+            42,
+            0
+          ],
+          "angle": 1.6,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_near",
+          "x": 108,
+          "y": 181,
+          "pivot": [
+            44,
+            3
+          ],
+          "angle": 3.4,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_near_walk_03",
+          "x": 107,
+          "y": 179,
+          "pivot": [
+            48.0,
+            3.0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "skirt",
+          "x": 110,
+          "y": 142.7,
+          "pivot": [
+            40,
+            0
+          ],
+          "angle": 1.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "torso",
+          "x": 109,
+          "y": 107,
+          "pivot": [
+            17,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "wing_near",
+          "x": 96,
+          "y": 123,
+          "pivot": [
+            44,
+            27
+          ],
+          "angle": 2.4,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_near",
+          "x": 113,
+          "y": 121,
+          "pivot": [
+            7,
+            3
+          ],
+          "angle": 9.1,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "head",
+          "x": 96,
+          "y": 25,
+          "pivot": [
+            40,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        }
+      ],
+      [
+        {
+          "part": "wing_far",
+          "x": 98,
+          "y": 127,
+          "pivot": [
+            42,
+            27
+          ],
+          "angle": 1,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_far",
+          "x": 107,
+          "y": 181,
+          "pivot": [
+            40,
+            3
+          ],
+          "angle": 1.7,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_far_walk_04",
+          "x": 107,
+          "y": 181,
+          "pivot": [
+            48.0,
+            3.0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_far",
+          "x": 112,
+          "y": 123,
+          "pivot": [
+            8,
+            3
+          ],
+          "angle": -12.6,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "hair",
+          "x": 91,
+          "y": 48,
+          "pivot": [
+            42,
+            0
+          ],
+          "angle": 0.8,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_near",
+          "x": 108,
+          "y": 183,
+          "pivot": [
+            44,
+            3
+          ],
+          "angle": 1.7,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_near_walk_04",
+          "x": 107,
+          "y": 181,
+          "pivot": [
+            48.0,
+            3.0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "skirt",
+          "x": 110,
+          "y": 144.0,
+          "pivot": [
+            40,
+            0
+          ],
+          "angle": 0.5,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "torso",
+          "x": 109,
+          "y": 109,
+          "pivot": [
+            17,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "wing_near",
+          "x": 96,
+          "y": 125,
+          "pivot": [
+            44,
+            27
+          ],
+          "angle": 1.2,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_near",
+          "x": 113,
+          "y": 123,
+          "pivot": [
+            7,
+            3
+          ],
+          "angle": 12.6,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "head",
+          "x": 96,
+          "y": 27,
+          "pivot": [
+            40,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        }
+      ],
+      [
+        {
+          "part": "wing_far",
+          "x": 98,
+          "y": 129,
+          "pivot": [
+            42,
+            27
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_far",
+          "x": 107,
+          "y": 183,
+          "pivot": [
+            40,
+            3
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_far_walk_05",
+          "x": 107,
+          "y": 183,
+          "pivot": [
+            48.0,
+            3.0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_far",
+          "x": 112,
+          "y": 125,
+          "pivot": [
+            8,
+            3
+          ],
+          "angle": -7.7,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "hair",
+          "x": 91,
+          "y": 50,
+          "pivot": [
+            42,
+            0
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_near",
+          "x": 108,
+          "y": 185,
+          "pivot": [
+            44,
+            3
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_near_walk_05",
+          "x": 107,
+          "y": 183,
+          "pivot": [
+            48.0,
+            3.0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "skirt",
+          "x": 110,
+          "y": 145.3,
+          "pivot": [
+            40,
+            0
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "torso",
+          "x": 109,
+          "y": 111,
+          "pivot": [
+            17,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "wing_near",
+          "x": 96,
+          "y": 127,
+          "pivot": [
+            44,
+            27
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_near",
+          "x": 113,
+          "y": 125,
+          "pivot": [
+            7,
+            3
+          ],
+          "angle": 7.7,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "head",
+          "x": 96,
+          "y": 29,
+          "pivot": [
+            40,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        }
+      ],
+      [
+        {
+          "part": "wing_far",
+          "x": 98,
+          "y": 127,
+          "pivot": [
+            42,
+            27
+          ],
+          "angle": -1,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_far",
+          "x": 107,
+          "y": 181,
+          "pivot": [
+            40,
+            3
+          ],
+          "angle": -1.7,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_far_walk_06",
+          "x": 107,
+          "y": 181,
+          "pivot": [
+            48.0,
+            3.0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_far",
+          "x": 112,
+          "y": 123,
+          "pivot": [
+            8,
+            3
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "hair",
+          "x": 91,
+          "y": 48,
+          "pivot": [
+            42,
+            0
+          ],
+          "angle": -0.8,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_near",
+          "x": 108,
+          "y": 183,
+          "pivot": [
+            44,
+            3
+          ],
+          "angle": -1.7,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_near_walk_06",
+          "x": 107,
+          "y": 181,
+          "pivot": [
+            48.0,
+            3.0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "skirt",
+          "x": 110,
+          "y": 144.0,
+          "pivot": [
+            40,
+            0
+          ],
+          "angle": -0.5,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "torso",
+          "x": 109,
+          "y": 109,
+          "pivot": [
+            17,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "wing_near",
+          "x": 96,
+          "y": 125,
+          "pivot": [
+            44,
+            27
+          ],
+          "angle": -1.2,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_near",
+          "x": 113,
+          "y": 123,
+          "pivot": [
+            7,
+            3
+          ],
+          "angle": 0.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "head",
+          "x": 96,
+          "y": 27,
+          "pivot": [
+            40,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        }
+      ],
+      [
+        {
+          "part": "wing_far",
+          "x": 98,
+          "y": 125,
+          "pivot": [
+            42,
+            27
+          ],
+          "angle": -2,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_far",
+          "x": 107,
+          "y": 179,
+          "pivot": [
+            40,
+            3
+          ],
+          "angle": -3.4,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_far_walk_07",
+          "x": 107,
+          "y": 179,
+          "pivot": [
+            48.0,
+            3.0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_far",
+          "x": 112,
+          "y": 121,
+          "pivot": [
+            8,
+            3
+          ],
+          "angle": 8.4,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "hair",
+          "x": 91,
+          "y": 46,
+          "pivot": [
+            42,
+            0
+          ],
+          "angle": -1.6,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "tail_near",
+          "x": 108,
+          "y": 181,
+          "pivot": [
+            44,
+            3
+          ],
+          "angle": -3.4,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "leg_near_walk_07",
+          "x": 107,
+          "y": 179,
+          "pivot": [
+            48.0,
+            3.0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "skirt",
+          "x": 110,
+          "y": 142.7,
+          "pivot": [
+            40,
+            0
+          ],
+          "angle": -1.0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "torso",
+          "x": 109,
+          "y": 107,
+          "pivot": [
+            17,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "wing_near",
+          "x": 96,
+          "y": 123,
+          "pivot": [
+            44,
+            27
+          ],
+          "angle": -2.4,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "arm_near",
+          "x": 113,
+          "y": 121,
+          "pivot": [
+            7,
+            3
+          ],
+          "angle": -8.4,
+          "scale": [
+            1,
+            1
+          ]
+        },
+        {
+          "part": "head",
+          "x": 96,
+          "y": 25,
+          "pivot": [
+            40,
+            0
+          ],
+          "angle": 0,
+          "scale": [
+            1,
+            1
+          ]
+        }
+      ]
+    ]
+  },
+  "hierarchy": {
+    "root": [
+      "pelvis"
+    ],
+    "pelvis": [
+      "legs",
+      "skirt",
+      "torso",
+      "tails"
+    ],
+    "torso": [
+      "head",
+      "arms",
+      "wings"
+    ],
+    "head": [
+      "hair",
+      "halo_in_head"
+    ]
+  },
+  "revision": 2,
+  "leg_deformation": "continuous mesh from a whole leg; pre-rasterized per pose"
+}

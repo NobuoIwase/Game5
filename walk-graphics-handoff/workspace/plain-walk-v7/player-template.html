@@ -1,0 +1,57 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>歩行素体 07 — 5方向</title>
+<style>
+:root{color-scheme:dark;--bg:#15181f;--panel:#20232d;--line:#3b404f;--ink:#e9e9ef;--muted:#afb5c3;--accent:#90dfcf}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 system-ui,sans-serif}main{max-width:1280px;margin:auto;padding:26px 24px 44px}header{display:flex;justify-content:space-between;align-items:start;gap:20px}h1{font-size:24px;margin:0}header p{margin:5px 0;color:var(--muted)}.tag{font-size:12px;white-space:nowrap;border:1px solid var(--line);padding:5px 10px;border-radius:20px}.toolbar,.tuning{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:20px 0}button,select{font:inherit;color:var(--ink);background:#292e3a;border:1px solid #474f61;border-radius:7px;padding:7px 12px;cursor:pointer}button:hover{border-color:var(--accent)}button[aria-pressed="true"]{border-color:var(--accent);background:#24463f}#play{background:var(--accent);color:#132923;border-color:var(--accent)}label{display:flex;gap:8px;align-items:center}input{accent-color:var(--accent)}.views{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.views.single{grid-template-columns:minmax(0,500px);justify-content:center}.view{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}.caption{padding:10px 14px;display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line)}.caption span{font-size:12px;color:var(--muted)}.sprite{display:block;width:min(100%,384px);height:auto;image-rendering:pixelated;margin:auto}.angles{padding:7px 14px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}#frames{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0 5px}#frames button{min-width:42px}#phase{font-size:13px;color:var(--muted)}.tuning{padding:16px;background:var(--panel);border-radius:10px;justify-content:space-between}.tuning label{flex-wrap:wrap;font-size:13px}.tuning output{width:46px;text-align:right;font-variant-numeric:tabular-nums}.note{color:var(--muted);font-size:13px}#partsCanvas{display:block;width:min(100%,720px);height:auto;image-rendering:pixelated;background:var(--panel);border-radius:10px;margin-top:12px}h2{font-size:18px;margin:24px 0 12px}.hidden{display:none!important}a{color:var(--accent)}@media(max-width:850px){.views{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:540px){main{padding:18px 10px}header{display:block}.tag{display:inline-block;margin-top:8px}.views{gap:8px}.caption{display:block;padding:8px}.caption span{display:block}.angles{padding:8px;font-size:10px}.toolbar{gap:7px}button,select{padding:7px 9px}.tuning{display:block}.tuning label{margin:8px 0}}
+</style></head><body><main>
+<header><div><h1>歩行素体 07</h1><p>正面・右斜め下・右向き・右斜め上・後ろ向き</p></div><span class="tag">1歩4コマ · 1周期8コマ</span></header>
+<div class="toolbar"><button id="play" aria-pressed="false">再生</button><button id="step">1コマ進む</button><button id="joints" aria-pressed="false">関節を表示</button><button id="parts" aria-pressed="false">分割パーツ</button><button id="save">現在の関節データを保存</button><label>表示 <select id="direction"><option value="all">全5方向</option><option value="new">追加3方向</option><option value="front">正面</option><option value="down_right">右斜め下</option><option value="side">右向き</option><option value="up_right">右斜め上</option><option value="back">後ろ向き</option></select></label></div>
+<div id="views" class="views">
+<section id="card_front" class="view"><div class="caption"><strong>正面</strong><span>手前へ歩く</span></div><canvas id="front" class="sprite" width="384" height="512" aria-label="正面歩行"></canvas><div id="angles_front" class="angles"></div></section>
+<section id="card_down_right" class="view"><div class="caption"><strong>右斜め下</strong><span>手前・右へ歩く</span></div><canvas id="down_right" class="sprite" width="384" height="512" aria-label="右斜め下の歩行"></canvas><div id="angles_down_right" class="angles"></div></section>
+<section id="card_side" class="view"><div class="caption"><strong>右向き</strong><span>右へ歩く</span></div><canvas id="side" class="sprite" width="384" height="512" aria-label="右向き歩行"></canvas><div id="angles_side" class="angles"></div></section>
+<section id="card_up_right" class="view"><div class="caption"><strong>右斜め上</strong><span>奥・右へ歩く</span></div><canvas id="up_right" class="sprite" width="384" height="512" aria-label="右斜め上の歩行"></canvas><div id="angles_up_right" class="angles"></div></section>
+<section id="card_back" class="view"><div class="caption"><strong>後ろ向き</strong><span>奥へ歩く</span></div><canvas id="back" class="sprite" width="384" height="512" aria-label="後ろ向き歩行"></canvas><div id="angles_back" class="angles"></div></section>
+</div>
+<div id="frames" aria-label="フレーム選択"></div><div id="phase"></div>
+<div class="tuning"><label>速度 <input id="speed" type="range" min="4" max="12" step="0.1" value="8.3"><output id="speedValue">8.3 fps</output></label><label>腕振り <input id="swing" type="range" min="0" max="130" value="100"><output id="swingValue">100%</output></label><label>肘の曲げの変化 <input id="bend" type="range" min="0" max="140" value="100"><output id="bendValue">100%</output></label><button id="reset">標準に戻す</button></div>
+<p class="note">頭と胴は歩行に合わせて上下します。上腕・肘・前腕・手首を連動させ、向きと脚の前後に合わせて重なりを変えています。足裏は着地や蹴り出しに合わせて見え方が変わります。</p>
+<section id="partsPanel" class="hidden"><h2>分割パーツ</h2><label>方向 <select id="partDirection"><option value="front">正面</option><option value="down_right" selected>右斜め下</option><option value="side">右向き</option><option value="up_right">右斜め上</option><option value="back">後ろ向き</option></select></label><p class="note">各方向17部位。正面と斜め・後ろ向きには足の差分があり、現在のコマで使う差分を緑の枠で示します。</p><canvas id="partsCanvas" width="720" height="540" aria-label="選択した方向の分割素材"></canvas></section>
+<p class="note">透過素材は各192 × 256 px。影とマス目は確認用です。コマ間の補間は行いません。</p>
+<script id="walk-data" type="application/json">__DATA__</script><script>__RIG_CODE__</script>
+<script>
+'use strict';
+const DATA=JSON.parse(document.getElementById('walk-data').textContent),RIG=PlainWalkRig,VIEWS=DATA.config.views;
+const el=id=>document.getElementById(id),images=Object.fromEntries(VIEWS.map(v=>[v,{}])),params={...DATA.config.parameters};
+let frame=0,playing=false,showJoints=false,showParts=false,last=0,frameMS=DATA.config.frame_ms,ready=false;
+const phaseNames=['接地①','沈み込み①','通過①','蹴り出し①','接地②','沈み込み②','通過②','蹴り出し②'];
+for(let f=0;f<8;f++){const b=document.createElement('button');b.textContent=String(f+1).padStart(2,'0');b.onclick=()=>{frame=f;playing=false;syncPlay();render();};el('frames').append(b);}
+function syncPlay(){el('play').textContent=playing?'一時停止':'再生';el('play').setAttribute('aria-pressed',String(playing));}
+function partsCanvas(view,pose){
+ const canvas=el('partsCanvas'),ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);ctx.imageSmoothingEnabled=false;
+ Object.entries(DATA.assets[view]).forEach(([name,a],i)=>{
+  const x=(i%6)*120+60,y=Math.floor(i/6)*135+53,t=pose.ops.find(o=>o.asset===name&&o.id.endsWith('near'))||pose.ops.find(o=>o.asset===name);
+  if(name.startsWith('foot')&&t){ctx.strokeStyle='#90dfcf';ctx.lineWidth=1;ctx.strokeRect(x-55,y-46,110,124);}
+  const s=Math.min(2.5,78/a.size[0],82/a.size[1]);ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.rotate((t?.angle||0)*Math.PI/180);if(t)ctx.scale(Math.abs(t.scale[0]),t.scale[1]);ctx.drawImage(images[view][name],-a.size[0]/2,-a.size[1]/2);ctx.restore();
+  ctx.textAlign='center';ctx.fillStyle='#e9e9ef';ctx.font='13px system-ui,sans-serif';ctx.fillText(RIG.labels[name],x,y+48);ctx.fillStyle='#969ead';ctx.font='10px monospace';ctx.fillText(name,x,y+63);
+ });
+}
+function render(){
+ if(!ready)return;
+ const poses={};for(const view of VIEWS){const pose=RIG.makePose(view,frame,DATA.config,DATA.assets,params);poses[view]=pose;RIG.drawStage(el(view).getContext('2d'),pose,images,DATA.assets,{joints:showJoints});el('angles_'+view).textContent='肘の曲がり　'+pose.arms.far.elbow_flex.toFixed(0)+'° / '+pose.arms.near.elbow_flex.toFixed(0)+'°';}
+ if(showParts){const view=el('partDirection').value||'down_right';partsCanvas(view,poses[view]);}
+ Array.from(el('frames').children).forEach((b,i)=>b.setAttribute('aria-pressed',String(i===frame)));el('phase').textContent=String(frame+1).padStart(2,'0')+' / 08 · '+phaseNames[frame];
+}
+function filterViews(){const value=el('direction').value;for(const view of VIEWS){const visible=value==='all'||(value==='new'&&!['front','side'].includes(view))||value===view;el('card_'+view).classList.toggle('hidden',!visible);}el('views').classList.toggle('single',VIEWS.includes(value));}
+el('direction').onchange=filterViews;el('partDirection').onchange=render;
+el('play').onclick=()=>{playing=!playing;last=performance.now();syncPlay();};
+el('step').onclick=()=>{playing=false;syncPlay();frame=(frame+1)%8;render();};
+el('joints').onclick=()=>{showJoints=!showJoints;el('joints').setAttribute('aria-pressed',String(showJoints));render();};
+el('parts').onclick=()=>{showParts=!showParts;el('parts').setAttribute('aria-pressed',String(showParts));el('partsPanel').classList.toggle('hidden',!showParts);render();};
+el('speed').oninput=e=>{frameMS=1000/Number(e.target.value);el('speedValue').textContent=Number(e.target.value).toFixed(1)+' fps';};
+el('swing').oninput=e=>{params.arm_swing=Number(e.target.value)/100;el('swingValue').textContent=e.target.value+'%';render();};
+el('bend').oninput=e=>{params.elbow_variation=Number(e.target.value)/100;el('bendValue').textContent=e.target.value+'%';render();};
+el('reset').onclick=()=>{Object.assign(params,DATA.config.parameters);frameMS=DATA.config.frame_ms;el('speed').value='8.3';el('swing').value=el('bend').value='100';el('speedValue').textContent='8.3 fps';el('swingValue').textContent=el('bendValue').textContent='100%';render();};
+el('save').onclick=()=>{const data={frame,parameters:params,...Object.fromEntries(VIEWS.map(view=>[view,RIG.makePose(view,frame,DATA.config,DATA.assets,params)]))};const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='walk-pose-'+String(frame+1).padStart(2,'0')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+Promise.all(Object.entries(DATA.images).flatMap(([v,items])=>Object.entries(items).map(([n,src])=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{images[v][n]=im;resolve();};im.onerror=reject;im.src=src;})))).then(()=>{ready=true;playing=!matchMedia('(prefers-reduced-motion: reduce)').matches;syncPlay();filterViews();render();requestAnimationFrame(tick);}).catch(()=>{el('phase').textContent='画像を読み込めませんでした。ファイルを開き直してください。';});
+function tick(now){if(playing&&now-last>=frameMS){frame=(frame+Math.max(1,Math.floor((now-last)/frameMS)))%8;last=now;render();}requestAnimationFrame(tick);}
+</script></main></body></html>

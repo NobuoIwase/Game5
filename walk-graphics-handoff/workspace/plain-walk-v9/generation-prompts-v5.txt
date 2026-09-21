@@ -1,0 +1,29 @@
+Method: built-in image_gen.imagegen.
+Reference atlases: source-atlases/down_right.png and source-atlases/up_right.png.
+Outputs integrated: down-corrections-v5.png, up-corrections-v5.png and up-head-v5.png.
+The head inside up-corrections-v5.png is replaced by up-head-v5.png during extraction.
+Atlas cropping/registration uses extract_parts.py; rig.js supplies joint motion, projection, overlap and contact.
+
+=== down_corrections ===
+Use case: precise-object-edit. Input is style and identity reference for a segmented pale blue-gray mannequin in THREE-QUARTER FRONT facing down and right on a map.
+Produce a NEW correction atlas of EXACTLY TWO COLUMNS and THREE equally spaced ROWS. Transparent background, no labels or grid. Same flat chunky pixel art, thin lavender contour, restrained 3-tone shading, slender soft mannequin, no clothing or skin color.
+Row1 left: upper torso ONLY, waist to neck socket, at exactly 45-degree FRONT-RIGHT view. Sloping shoulders, no attached shoulder balls or upper arms. Short torso, gently tapering waist. Neck root must rise slightly toward screen right, as a continuation of the spine, not an upright front-facing cylinder. Neck opening is narrow and smoothly merges into trapezius. No exaggerated breast bulges.
+Row1 right: separate small neck connector for this FRONT-RIGHT view; a short softly tapered form, rear edge on screen-left, front edge on screen-right, no protruding collar or Adam's apple, no circular top lip.
+Row2 left: PLANTED foot seen from 45-degree FRONT-RIGHT, with short ankle stub above back of heel. Foot points toward LOWER RIGHT, showing BOTH a broad rounded TOE FRONT and the narrow outer side; this is NOT a pure side-view shoe. Camera slightly above, the top of the instep visible, heel at upper-left, forefoot at lower-right, grounded natural plane.
+Row2 right: same foot at HEEL CONTACT, toes lifted just enough to expose a small muted lavender sole under the rounded front, same direction and ankle position.
+Row3 left: same foot during LATE FORWARD SWING, toes raised, modest sole visible, same 45-degree direction.
+Row3 right: same foot at TOE OFF, heel raised and toes pointing toward lower-right ground; top/instep visible, not full sole toward camera.
+All four feet must unmistakably be three-quarter FRONT view with toe front plane, not left/right profile cutouts. Comparable foot size and ankle width; fingers/toes very simply grouped. Each item fits in its own equal cell with ample margins.
+
+=== up_corrections ===
+Use case: precise-object-edit. Input is style and identity reference for a segmented pale blue-gray mannequin. Create a new transparent CORRECTION ATLAS with EXACTLY TWO COLUMNS and TWO equally spaced ROWS, four separated parts only. No labels or grid.
+View for ALL parts is three-quarter REAR, the character looking AWAY and to SCREEN RIGHT, a 135-degree turn from frontal (northeast map direction). Preserve simple pale gray-blue material and lavender chunky pixel outline.
+Top left: smooth upper torso ONLY, waist to neck root. Natural sloping shoulders without protruding shoulder balls or round arm stumps, no attached arms. Clear three-quarter BACK view: narrow far shoulder on screen-left, near shoulder on screen-right slopes gently down from nape, subtle shoulder-blade shading, no breasts. Spine rises through the nape slightly toward screen-right; short neck base whose REAR surface is visible, with no collar or cylindrical rim. Compact torso same proportions as reference.
+Top right: a separate small tapered neck connector, showing REAR-RIGHT 3/4 neck, not a front throat. Simple soft shadow on nape, no Adam's apple, no top lip.
+Bottom left: head ONLY, same oversized oval mannequin, looking away and toward right. Absolutely upright head with zero sideways roll: ear bases at almost same height, vertical skull axis, horizontal base of skull. Broad rear cranium, near tiny ear mostly on left silhouette, far ear partly hidden. No face dots, nose, mouth or eyes. No neck stump or chin bump attached. The current reference head is tilted; correct that lean without changing to a frontal face. Keep broad smooth oval rather than pointed pear shape. Upper-left highlight.
+Bottom right: relaxed HAND ONLY seen from rear-side 3/4, attached wrist stub at top center. Fingers softly curled together, thumb subtly on screen RIGHT (forward direction), no splayed or ramrod-straight fingers. Long axis from wrist to knuckles nearly vertical, no sideways wrist kink.
+Consistent crisp low-resolution pixel art with few colors, intended for tiny segmented walking sprites. Parts isolated in cells, transparent margins.
+
+=== up head, isolated correction ===
+Precise edit. From this atlas return ONLY the head in the bottom-left cell, as one isolated sprite on transparent background. KEEP THE HEAD'S UPRIGHT ORIENTATION and level ears, color, three-quarter rear-right view, pixel style and skull volume. Change only its BOTTOM EDGE: DELETE the small rectangular neck/chin nub that sticks out underneath the skull. Replace that protrusion with transparent background so the skull ends in a continuous broad rounded oval curve, not a point and not a flat projecting peg. Do not attach any neck, collar or throat. No eyes or facial dots. The head looks away and to screen right; do not tilt or roll it. Match the existing sprite style and lavender outline exactly.
+

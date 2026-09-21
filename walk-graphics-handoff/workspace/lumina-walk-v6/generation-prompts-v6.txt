@@ -1,0 +1,13 @@
+NECK EDIT
+
+Use case: precise-object-edit.
+Asset type: existing right-facing pixel-art torso component for a walking sprite.
+Input image is the EDIT TARGET, a torso PNG enlarged on a 768 by 768 transparent canvas. Preserve exact position, scale, 12-pixel square pixel grid, palette, transparency, and every clothing pixel.
+Change ONLY the exposed skin neck silhouette at the very top. The current rectangular neck peg has a protruding upper-right corner; after assembly that corner looks like an Adam's apple. Remove that upper-right lip by narrowing the TOP of the neck on the RIGHT by about two of the existing large pixel blocks, leaving its left edge and height in place. Run the right contour smoothly and continuously down and slightly right into the existing shoulder/chest slope. It must be monotonically widening downward with NO outward bump followed by an inward step, no peg shoulder, no notch, no concave sharp angle, no dark line across the throat. Use a slim softly tapered neck, with the top-right corner tucked behind the head when assembled. The lower chest and all clothing remain identical. Preserve the original flat pixel-art texture, no blur or painterly rendering.
+Output the same 768x768 composition with real alpha transparency; no background, no checkerboard drawn into the pixels, no new head or character, no labels.
+
+HAND EDIT (successful pass)
+
+Use case: precise-object-edit. Edit this existing pixel-art game animation asset atlas. Keep its 2x2 layout, transparent background and all the existing sleeve and arm artwork exactly unchanged. Change only the small hands in the two bottom cells: show a relaxed walking pose with gently curved finger joints and a rounded, partially open hand silhouette. Shorten the extended fingers by roughly 20 percent by bending them, without changing the wrist positions or arm lengths. Both side-view thumbs remain on the right side. Retain the exact palette, scale, pixel size and placement; the two top cells stay unchanged. Output a transparent PNG asset atlas.
+
+Integration: generated artwork was sampled on the original pixel grid. Only torso rows 0–12 and side-arm rows 39–48 replace the prior artwork. Wrist articulation is a continuous mesh bend of 12–16 degrees toward a relaxed downward hand position. Source positions, body clothes, elbow poses, head and gait are retained.

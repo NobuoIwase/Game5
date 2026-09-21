@@ -9,11 +9,22 @@ export const DIRECTIONS=['front','down_right','right','up_right','back','up_left
 export const YAW=Object.fromEntries(DIRECTIONS.map((d,i)=>[d,i*45]));
 export const CANVAS=[192,256];
 export const FRAME_MS={walk:120,run:80};
-export const RUN_LEAN_DEGREES=24;
+export const RUN_LEAN_DEGREES=13;
 const C=SOURCE.config,rad=x=>x*Math.PI/180,round=x=>+x.toFixed(5)||0;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const mod=(x,n)=>(x%n+n)%n;
-const RUN={forward:[28,9,-19,-30,-22,-12,12,30],lift:[0,0,0,8,22,30,22,10],pitch:[-16,0,12,26,34,10,-10,-18],bob:[1,3,-1,-7],upper:[38,16,-16,-38,-38,-16,16,38],flex:[78,68,68,80,96,110,106,88]};
+// One leg: touch down, absorb, push, recover, heel up, pass, extend, flight.
+// The other leg is four samples ahead. Keep a narrow, neutral track rather
+// than introducing sex-specific hip sway or knees crossing the centerline.
+const RUN={
+ forward:[24,3,-23,-26,-21,-3,17,27],
+ ankleY:[230,230,227,212,201,202,214,223],
+ pitch:[-12,0,18,32,36,18,-8,-15],
+ bob:[0,3,-2,-6],
+ upper:[30,18,-3,-24,-30,-18,3,24],
+ flex:[74,78,86,94,98,94,86,78],
+ phase:['touchdown','compression','push-off','recovery','heel-up','passing','extension','flight']
+};
 
 function ik(hip,target,l1,l2){
  let [dx,dy]=[target[0]-hip[0],target[1]-hip[1]],d=Math.hypot(dx,dy);
@@ -30,14 +41,14 @@ function create(direction,motion,frame,neutral=false){
  const f=mod(Math.floor(frame),8),run=motion==='run',yaw=YAW[direction],s=Math.sin(rad(yaw)),c=Math.cos(rad(yaw));
  const bob=neutral?0:(run?RUN.bob[f%4]:C.side.bob[f%4]);
  const hipY=neutral?C.body.hip_y:(run?184:C.body.hip_y)+bob;
- const sway=neutral?0:C.front.sway[f]*(run?1.25:1);
+ const sway=neutral?0:C.front.sway[f]*(run?.5:1);
  const lean=neutral?0:(run?RUN_LEAN_DEGREES:C.side.lean_degrees);
  const joints={};
  const leanZ=y=>Math.tan(rad(lean))*Math.max(0,hipY-y);
  const sinLean=Math.sin(rad(lean)),cosLean=Math.cos(rad(lean));
- // Running inclines the whole upper body about the pelvis in sagittal space.
- // Preserve spine lengths, then project that one pose at every yaw. Walking
- // deliberately keeps the original v13 registration and arm coordinates.
+ // Rotate the trunk about the pelvis, then keep the neck-to-head segment
+ // upright. The head therefore follows the chest without looking downward.
+ // Walking deliberately keeps the original v13 registration and coordinates.
  const torsoPoint=rise=>run&&!neutral?[hipY-rise*cosLean,rise*sinLean]:[hipY-rise,leanZ(hipY-rise)];
  const armVector=(y,z)=>run&&!neutral?[y*cosLean+z*sinLean,z*cosLean-y*sinLean]:[y,z];
  function joint(id,parent,l,y,z,meta={}){
@@ -46,7 +57,8 @@ function create(direction,motion,frame,neutral=false){
  }
  joint('root',null,0,hipY,0);
  for(const [id,parent,rise] of [['waist','root',19.5],['thorax','waist',36.5],['neck','thorax',55.5],['head','neck',76]]){
-  const [y,z]=torsoPoint(rise);joint(id,parent,0,y,z);
+  const [y,z]=torsoPoint(run&&!neutral&&id==='head'?55.5:rise);
+  joint(id,parent,0,y-(run&&!neutral&&id==='head'?20.5:0),z,run&&!neutral&&id==='head'?{pitch_degrees:0}:{});
  }
  for(const [side,sign,offset] of [['right',-1,0],['left',1,4]]){
   const k=(f+offset)%8,l=sign*C.front.hip_half_width;
@@ -54,10 +66,10 @@ function create(direction,motion,frame,neutral=false){
   if(neutral){
    chain=ik([0,hipY],[0,hipY+52.5],C.lengths.thigh,C.lengths.shin);pitch=0;contact=true;lift=0;
   }else if(run){
-   pitch=RUN.pitch[k];contact=k<3;lift=RUN.lift[k];
+   pitch=RUN.pitch[k];contact=k<3;lift=contact?0:230-RUN.ankleY[k];
    // Running contacts have a short stance. Frames 3 and 7 have no grounded foot.
    // The complete leg is solved from the ankle target, preserving limb lengths.
-   chain=ik([0,hipY],[RUN.forward[k],230-lift],C.lengths.thigh,C.lengths.shin);
+   chain=ik([0,hipY],[RUN.forward[k],RUN.ankleY[k]],C.lengths.thigh,C.lengths.shin);
   }else{
    // This is the original v13 sagittal two-bone leg solution, including the
    // actual opaque pixel foot support rather than a guessed ankle baseline.
@@ -69,20 +81,24 @@ function create(direction,motion,frame,neutral=false){
   const flex=flexAngle(chain.hip,chain.knee,chain.ankle);
   joint('hip_'+side,'root',l,chain.hip[1],chain.hip[0],{phase:k});
   joint('knee_'+side,'hip_'+side,l,chain.knee[1],chain.knee[0],{flex:round(flex)});
-  joint('ankle_'+side,'knee_'+side,l,chain.ankle[1],chain.ankle[0],{contact,phase:k,foot_pitch:pitch,lift:round(lift)});
-  joint('toe_'+side,'ankle_'+side,l,chain.ankle[1]+8,chain.ankle[0]+11,{contact,foot_pitch:pitch});
+  joint('ankle_'+side,'knee_'+side,l,chain.ankle[1],chain.ankle[0],{contact,phase:k,foot_pitch:pitch,lift:round(lift),...(run&&!neutral?{phase_name:RUN.phase[k]}:{})});
+  const toeY=run&&!neutral?8*Math.cos(rad(pitch))+11*Math.sin(rad(pitch)):8;
+  const toeZ=run&&!neutral?11*Math.cos(rad(pitch))-8*Math.sin(rad(pitch)):11;
+  joint('toe_'+side,'ankle_'+side,l,chain.ankle[1]+toeY,chain.ankle[0]+toeZ,{contact,foot_pitch:pitch});
   const [sy,sz]=torsoPoint(41),upper=neutral?0:(run?RUN.upper[k]:C.arms.upper_angle[k]),flexArm=neutral?12:(run?RUN.flex[k]:C.arms.elbow_flex[k]);
   const lower=upper-flexArm,ez=-Math.sin(rad(upper))*C.lengths.upper_arm,ey=Math.cos(rad(upper))*C.lengths.upper_arm;
   const wz=ez-Math.sin(rad(lower))*C.lengths.forearm,wy=ey+Math.cos(rad(lower))*C.lengths.forearm;
-  const [elbowY,elbowZ]=armVector(ey,ez),[wristY,wristZ]=armVector(wy,wz),[handY,handZ]=armVector(wy+5,wz);
-  const sl=sign*C.front.shoulder_half_width,el=sign*(C.front.shoulder_half_width+C.front.arm_clearance.elbow),wl=sign*(C.front.shoulder_half_width+C.front.arm_clearance.wrist);
+  const handOffset=run&&!neutral?[5*Math.cos(rad(lower)),-5*Math.sin(rad(lower))]:[5,0];
+  const [elbowY,elbowZ]=armVector(ey,ez),[wristY,wristZ]=armVector(wy,wz),[handY,handZ]=armVector(wy+handOffset[0],wz+handOffset[1]);
+  const clearance=run&&!neutral?{elbow:2.5,wrist:3.5}:C.front.arm_clearance;
+  const sl=sign*C.front.shoulder_half_width,el=sign*(C.front.shoulder_half_width+clearance.elbow),wl=sign*(C.front.shoulder_half_width+clearance.wrist);
   joint('shoulder_'+side,'thorax',sl,sy,sz,{upper_angle:upper});
   joint('elbow_'+side,'shoulder_'+side,el,sy+elbowY,sz+elbowZ,{flex:flexArm});
   joint('wrist_'+side,'elbow_'+side,wl,sy+wristY,sz+wristZ);
   joint('hand_'+side,'wrist_'+side,wl,sy+handY,sz+handZ);
  }
  const contacts=['right','left'].filter(side=>joints['ankle_'+side].contact);
- return {direction,yaw,motion:neutral?'rest':motion,frame:neutral?null:f,frame_ms:FRAME_MS[motion],body_bob:bob,lean_degrees:lean,contact_sides:contacts,flight:contacts.length===0,joints};
+ return {direction,yaw,motion:neutral?'rest':motion,frame:neutral?null:f,frame_ms:FRAME_MS[motion],body_bob:bob,lean_degrees:lean,...(run&&!neutral?{head_pitch_degrees:0}:{}),contact_sides:contacts,flight:contacts.length===0,joints};
 }
 export function restPose(direction){return create(direction,'walk',0,true);}
 export function makePose(direction,motion='walk',frame=0){

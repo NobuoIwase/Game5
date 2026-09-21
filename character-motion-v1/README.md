@@ -1,4 +1,6 @@
-# Game5 — 8方向の歩行・走行グラフィック 修正版 v2
+# Game5 — 8方向の歩行・走行グラフィック 走行修正版 v3
+
+v3では、提供された走行姿勢の静止画像を参考に、戦士と汎用素体の走行を組み直しました。頭を独立させ、肘を曲げた装備の構え、蹴り上げと接地、正面の靴の短縮表現を調整しています。[走行v3のGIF・参考・変更内容](revision-v3/README.md)。戦士の歩行とスカウトの既存画像は維持しています。
 
 v2では戦士の正面と左斜め前を描き直し、顔と胴体の向きを揃えました。剣の握り位置と保持角度、左前腕に装着する盾の動きと重なりを調整し、走行の前傾を24度へ変更しています。[修正内容と比較画像](revision-v2/README.md)を参照してください。
 
@@ -48,9 +50,10 @@ npm install
 python -m pip install -r requirements.txt
 node motion/export.mjs
 python generic/render.py
-node tools/render.mjs
+node tools/render.mjs warrior
 python tools/export_previews.py
 python tools/build_player.py
+python tools/build_run_v3_review.py
 node motion/test.mjs
 node tools/validate_exports.mjs
 python tools/validate_mobile_player.py

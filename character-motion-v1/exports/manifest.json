@@ -66,6 +66,22 @@
   },
   "art_method": "Eight independently generated views; no whole-character horizontal reflection. Symmetric hidden limb textures may be shared between anatomical legs.",
   "rig": "motion/rig.mjs",
-  "status": "prototype v2; direction, equipment and run-posture revision visually reviewed",
-  "revision": 2
+  "status": "prototype v3; warrior running rebuilt from supplied single-frame pose reference",
+  "revision": 3,
+  "character_revisions": {
+    "warrior": {
+      "walk": 2,
+      "run": 3
+    },
+    "scout": {
+      "walk": 2,
+      "run": 2
+    }
+  },
+  "run_reference": {
+    "file": "references/run-pose-reference.jpg",
+    "received_format": "JPEG",
+    "received_frames": 1,
+    "interpretation": "Pose reference only; timing was authored as an eight-frame run, not extracted from an animated GIF."
+  }
 }

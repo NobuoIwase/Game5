@@ -225,7 +225,8 @@ function runLegMesh(part,chain,bodyPoint,pose){
 }
 function rigLayer(source,part,kind){
  const pts=kind==='leg'?[part.hip,part.knee,part.ankle]:[part.shoulder,part.elbow,part.wrist];
- const raw=cut(source,part.polygon),axis=sub(pts[2],pts[0]);
+ const texturePolygon=part.texturePolygon||part.polygon;
+ const raw=cut(source,texturePolygon),axis=sub(pts[2],pts[0]);
  const runLegRaw=kind==='leg'?canvas(source.width,source.height):null;
  if(runLegRaw)runLegRaw.getContext('2d').drawImage(raw,0,0);
  // Painted armor may extend above the anatomical knee. Keep the entire plate
@@ -236,7 +237,7 @@ function rigLayer(source,part,kind){
   // Base-body removal erodes the polygon by two pixels. Restore a three-pixel
   // native overlap only at the pinned upper rim, not along hands or boots.
   const rimEnd=add(pts[0],mul(sub(pts[1],pts[0]),.10));
-  const rim=halfPlane(cutWithBleed(source,part.polygon,3),rimEnd,sub(pts[1],pts[0]),-1,0);
+  const rim=halfPlane(cutWithBleed(source,texturePolygon,3),rimEnd,sub(pts[1],pts[0]),-1,0);
   upper.getContext('2d').drawImage(rim,0,0);
   runLegRaw.getContext('2d').drawImage(rim,0,0);
  }
@@ -275,13 +276,14 @@ async function loadCharacter(id,{writeParts=true}={}){
  const runReg=id==='warrior'&&fs.existsSync(path.join(ROOT,'rigs/warrior-run-v3.json'))?JSON.parse(fs.readFileSync(path.join(ROOT,'rigs/warrior-run-v3.json'),'utf8')):null;
  const runAttachments=id==='warrior'?JSON.parse(fs.readFileSync(path.join(ROOT,'rigs/warrior-run-v4-attachments.json'),'utf8')):null;
  const runLegs=id==='warrior'?JSON.parse(fs.readFileSync(path.join(ROOT,'rigs/warrior-run-v4-legs.json'),'utf8')):null;
+ const legMasks=id==='warrior'?JSON.parse(fs.readFileSync(path.join(ROOT,'rigs/warrior-run-v5-legs.json'),'utf8')):null;
  const gearIm=gearReg?await loadImage(path.join(ROOT,gearReg.source)):null;
  const rearFile=path.join(ROOT,'art/shield-rear-v3.png');
  const rearImage=gearReg&&fs.existsSync(rearFile)?await loadImage(rearFile):null;
  let rearBounds=null;
  if(rearImage){const surface=canvas(rearImage.width,rearImage.height);surface.getContext('2d').drawImage(rearImage,0,0);rearBounds=localBounds(surface);}
  const [cw,ch]=reg.coordinates;
- const result={id,reg,views:{}};
+ const result={id,reg,views:{},sourceMaskChecks:[]};
  for(const [i,dir] of DIRS.entries()){
   const source=canvas(cw,ch),s=source.getContext('2d');
   s.drawImage(im,(i%4)*im.width/4,Math.floor(i/4)*im.height/2,im.width/4,im.height/2,0,0,cw,ch);
@@ -290,7 +292,10 @@ async function loadCharacter(id,{writeParts=true}={}){
   for(let n=3;n<pix.data.length;n+=4)if(pix.data[n]<9)pix.data[n]=0;
   s.putImageData(pix,0,0);
   const def=reg.views[dir],body=canvas(cw,ch),bc=body.getContext('2d');bc.drawImage(source,0,0);
-  const originals=(def.legs||[]).filter(p=>!p.copyFrom).map(p=>rigLayer(source,p,'leg'));
+  // The body removal mask covers both standing legs. A narrower texture mask
+  // isolates one complete foreground leg before sharing it with the far leg.
+  // Otherwise the original far toe gets duplicated together with the near one.
+  const originals=(def.legs||[]).filter(p=>!p.copyFrom).map(p=>rigLayer(source,{...p,texturePolygon:legMasks?.views[dir]?.[p.side]?.sourcePoly},'leg'));
   const legs=(def.legs||[]).map(p=>{
    if(!p.copyFrom)return originals.find(o=>o.side===p.side);
    const orig=originals.find(o=>o.side===p.copyFrom);
@@ -298,6 +303,14 @@ async function loadCharacter(id,{writeParts=true}={}){
    const a=add(p.hip,sub(orig.points[1],orig.points[0])),b=add(a,sub(orig.points[2],orig.points[1]));
    return {...orig,...p,points:[p.hip,p.knee||a,p.ankle||b],texturePoints:orig.points};
   });
+  for(const leg of legs){
+   const mask=legMasks?.views[dir]?.[leg.side];if(!mask)continue;
+   for(const name of ['primaryToeSample','secondaryToeSample','secondaryShinSample']){
+    const point=mask[name],alpha=img=>img.getContext('2d').getImageData(...point,1,1).data[3];
+    const sourceAlpha=alpha(source),partAlpha=alpha(leg.raw),runPartAlpha=alpha(leg.runLegRaw),keep=name==='primaryToeSample';
+    result.sourceMaskChecks.push({direction:dir,side:leg.side,name,point,sourceAlpha,partAlpha,runPartAlpha,pass:sourceAlpha>180&&(keep?partAlpha>180&&runPartAlpha>180:partAlpha===0&&runPartAlpha===0)});
+   }
+  }
   const arms=(def.arms||[]).filter(p=>!p.copyFrom).map(p=>rigLayer(source,p,'arm'));
   if(runLegs)for(const leg of legs){leg.runLegDef=runLegs.views[dir][leg.side];if(leg.runLegDef.kneePlatePolygon)leg.runKneePlate=cut(source,leg.runLegDef.kneePlatePolygon);}
   const extras=(def.extras||[]).map(p=>({...p,raw:cut(source,p.polygon)}));
@@ -355,6 +368,11 @@ async function loadCharacter(id,{writeParts=true}={}){
    for(const p of [...originals,...arms])write(path.join(ROOT,'parts',id,dir,p.kind+'_'+p.side+'.png'),p.raw.toBuffer('image/png'));
    for(const p of [...extras,...gear])write(path.join(ROOT,'parts',id,dir,p.id+'.png'),p.raw.toBuffer('image/png'));
   }
+ }
+ if(result.sourceMaskChecks.length){
+  const report={pass:result.sourceMaskChecks.every(c=>c.pass),checks:result.sourceMaskChecks,limitations:'Annotated source samples guard known far-leg contamination. Counting limbs in final frames also requires visual review.'};
+  if(writeParts)write(path.join(ROOT,'exports/leg-source-validation.json'),JSON.stringify(report,null,2));
+  if(!report.pass)throw Error('Single-leg texture mask validation failed: '+JSON.stringify(report.checks.filter(c=>!c.pass)));
  }
  return result;
 }
@@ -562,9 +580,9 @@ for(const id of ids){
  write(path.join(ROOT,'exports',id,'joints-review.png'),debug.toBuffer('image/png'));
 }
 const manifest={schema:'game5-character-motion/1.0',frame_width:W,frame_height:H,frames_per_cycle:8,directions:DIRS,direction_labels:Object.fromEntries(DIRS.map((d,i)=>[d,LABELS[i]])),characters:[{id:'warrior',label:'戦士（仮）'},{id:'scout',label:'獣人スカウト（仮）'}],motions:[{id:'walk',label:'歩行',frame_ms:120},{id:'run',label:'走行',frame_ms:80}],alpha:true,origin:'top-left',feet_anchor:[192,470],sheet_layout:'8 columns of frames × 8 rows of directions',anatomical_equipment:{warrior:{sword:'right hand',shield:'left forearm',pauldron:'right shoulder (equipment-detail annotation)',scabbard:'left hip'}},art_method:'Eight independently generated views; no whole-character horizontal reflection. Symmetric hidden limb textures may be shared between anatomical legs.',rig:'motion/rig.mjs',status:'first playable prototype; visual review pending'};
-manifest.revision=4;
-manifest.status='prototype v4; continuous running legs and calibrated scabbard belt attachments';
-manifest.character_revisions={warrior:{walk:2,run:4},scout:{walk:2,run:2}};
+manifest.revision=5;
+manifest.status='prototype v5; profile leg textures exclude the standing artwork far shin and toe';
+manifest.character_revisions={warrior:{walk:5,run:5},scout:{walk:2,run:2}};
 manifest.run_reference={file:'references/run-pose-reference.jpg',received_format:'JPEG',received_frames:1,interpretation:'Pose reference only; timing was authored as an eight-frame run, not extracted from an animated GIF.'};
 write(path.join(ROOT,'exports/manifest.json'),JSON.stringify(manifest,null,2));
 write(path.join(ROOT,'exports/render-report.json'),JSON.stringify({frames:ids.length*128,issues:report},null,2));

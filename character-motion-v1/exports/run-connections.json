@@ -297,7 +297,7 @@
       "frame": 0,
       "side": "left",
       "components": [
-        12797
+        12424
       ],
       "detachedPixels": 0
     },
@@ -306,7 +306,7 @@
       "frame": 0,
       "side": "right",
       "components": [
-        13756
+        12839
       ],
       "detachedPixels": 0
     },
@@ -315,7 +315,7 @@
       "frame": 1,
       "side": "left",
       "components": [
-        10888
+        10452
       ],
       "detachedPixels": 0
     },
@@ -324,7 +324,7 @@
       "frame": 1,
       "side": "right",
       "components": [
-        13597
+        13016
       ],
       "detachedPixels": 0
     },
@@ -333,7 +333,7 @@
       "frame": 2,
       "side": "left",
       "components": [
-        12890
+        12244
       ],
       "detachedPixels": 0
     },
@@ -342,7 +342,7 @@
       "frame": 2,
       "side": "right",
       "components": [
-        13898
+        13289
       ],
       "detachedPixels": 0
     },
@@ -351,7 +351,7 @@
       "frame": 3,
       "side": "left",
       "components": [
-        13791
+        12842
       ],
       "detachedPixels": 0
     },
@@ -360,7 +360,7 @@
       "frame": 3,
       "side": "right",
       "components": [
-        13778
+        13259
       ],
       "detachedPixels": 0
     },
@@ -369,7 +369,7 @@
       "frame": 4,
       "side": "left",
       "components": [
-        13798
+        12881
       ],
       "detachedPixels": 0
     },
@@ -378,7 +378,7 @@
       "frame": 4,
       "side": "right",
       "components": [
-        12727
+        12354
       ],
       "detachedPixels": 0
     },
@@ -387,7 +387,7 @@
       "frame": 5,
       "side": "left",
       "components": [
-        13634
+        13053
       ],
       "detachedPixels": 0
     },
@@ -396,7 +396,7 @@
       "frame": 5,
       "side": "right",
       "components": [
-        10859
+        10423
       ],
       "detachedPixels": 0
     },
@@ -405,7 +405,7 @@
       "frame": 6,
       "side": "left",
       "components": [
-        13971
+        13362
       ],
       "detachedPixels": 0
     },
@@ -414,7 +414,7 @@
       "frame": 6,
       "side": "right",
       "components": [
-        12890
+        12244
       ],
       "detachedPixels": 0
     },
@@ -423,7 +423,7 @@
       "frame": 7,
       "side": "left",
       "components": [
-        13851
+        13332
       ],
       "detachedPixels": 0
     },
@@ -432,7 +432,7 @@
       "frame": 7,
       "side": "right",
       "components": [
-        13753
+        12804
       ],
       "detachedPixels": 0
     },
@@ -873,7 +873,7 @@
       "frame": 0,
       "side": "right",
       "components": [
-        10540
+        10104
       ],
       "detachedPixels": 0
     },
@@ -882,7 +882,7 @@
       "frame": 0,
       "side": "left",
       "components": [
-        9589
+        9474
       ],
       "detachedPixels": 0
     },
@@ -891,7 +891,7 @@
       "frame": 1,
       "side": "right",
       "components": [
-        10218
+        9961
       ],
       "detachedPixels": 0
     },
@@ -900,7 +900,7 @@
       "frame": 1,
       "side": "left",
       "components": [
-        8262
+        8130
       ],
       "detachedPixels": 0
     },
@@ -909,7 +909,7 @@
       "frame": 2,
       "side": "right",
       "components": [
-        10944
+        10686
       ],
       "detachedPixels": 0
     },
@@ -918,7 +918,7 @@
       "frame": 2,
       "side": "left",
       "components": [
-        9454
+        9177
       ],
       "detachedPixels": 0
     },
@@ -927,7 +927,7 @@
       "frame": 3,
       "side": "right",
       "components": [
-        10558
+        10365
       ],
       "detachedPixels": 0
     },
@@ -936,7 +936,7 @@
       "frame": 3,
       "side": "left",
       "components": [
-        10544
+        10095
       ],
       "detachedPixels": 0
     },
@@ -945,7 +945,7 @@
       "frame": 4,
       "side": "right",
       "components": [
-        9608
+        9493
       ],
       "detachedPixels": 0
     },
@@ -954,7 +954,7 @@
       "frame": 4,
       "side": "left",
       "components": [
-        10529
+        10093
       ],
       "detachedPixels": 0
     },
@@ -963,7 +963,7 @@
       "frame": 5,
       "side": "right",
       "components": [
-        8270
+        8138
       ],
       "detachedPixels": 0
     },
@@ -972,7 +972,7 @@
       "frame": 5,
       "side": "left",
       "components": [
-        10203
+        9946
       ],
       "detachedPixels": 0
     },
@@ -981,7 +981,7 @@
       "frame": 6,
       "side": "right",
       "components": [
-        9432
+        9155
       ],
       "detachedPixels": 0
     },
@@ -990,7 +990,7 @@
       "frame": 6,
       "side": "left",
       "components": [
-        10914
+        10656
       ],
       "detachedPixels": 0
     },
@@ -999,7 +999,7 @@
       "frame": 7,
       "side": "right",
       "components": [
-        10553
+        10104
       ],
       "detachedPixels": 0
     },
@@ -1008,7 +1008,7 @@
       "frame": 7,
       "side": "left",
       "components": [
-        10537
+        10344
       ],
       "detachedPixels": 0
     },

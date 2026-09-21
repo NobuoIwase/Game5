@@ -10,26 +10,26 @@
     {
       "id": "warrior-walk",
       "path": "players/warrior-walk.html",
-      "bytes": 795516,
-      "webp_bytes": 585756,
+      "bytes": 795580,
+      "webp_bytes": 585802,
       "sheet_size": [
         1536,
         2048
       ],
-      "source_png_sha256": "f3a261d25de9a0ff10b0f614bb629e4ae60a83c41ba0d7c0124edaea48347495",
-      "original_source_bytes": 6022565
+      "source_png_sha256": "45b696bd2f29a2bea28ad0462cb91390a91feaf1ae288e44625aefdff274ac9c",
+      "original_source_bytes": 5996676
     },
     {
       "id": "warrior-run",
       "path": "players/warrior-run.html",
-      "bytes": 802794,
-      "webp_bytes": 591216,
+      "bytes": 802618,
+      "webp_bytes": 591082,
       "sheet_size": [
         1536,
         2048
       ],
-      "source_png_sha256": "8dfac4f312328b3eb0f85c25512007354db1edf4611060ee2d58f5d56b6ccf62",
-      "original_source_bytes": 6450233
+      "source_png_sha256": "0c41fb95c6f86c7ee4a941a08a090c152fcd571b9e872339b8d530eaebe9b03a",
+      "original_source_bytes": 6430781
     },
     {
       "id": "scout-walk",
@@ -80,8 +80,8 @@
       "original_source_bytes": 975099
     }
   ],
-  "total_page_bytes": 3947978,
-  "largest_page_bytes": 802794,
+  "total_page_bytes": 3947866,
+  "largest_page_bytes": 802618,
   "format": "One embedded WebP sprite sheet per standalone HTML page; no network dependencies",
   "original_pngs_unchanged": true
 }

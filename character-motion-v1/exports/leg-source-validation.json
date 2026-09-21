@@ -1,0 +1,162 @@
+{
+  "pass": true,
+  "checks": [
+    {
+      "direction": "right",
+      "side": "right",
+      "name": "primaryToeSample",
+      "point": [
+        230,
+        527
+      ],
+      "sourceAlpha": 251,
+      "partAlpha": 251,
+      "runPartAlpha": 251,
+      "pass": true
+    },
+    {
+      "direction": "right",
+      "side": "right",
+      "name": "secondaryToeSample",
+      "point": [
+        235,
+        513
+      ],
+      "sourceAlpha": 250,
+      "partAlpha": 0,
+      "runPartAlpha": 0,
+      "pass": true
+    },
+    {
+      "direction": "right",
+      "side": "right",
+      "name": "secondaryShinSample",
+      "point": [
+        213,
+        481
+      ],
+      "sourceAlpha": 253,
+      "partAlpha": 0,
+      "runPartAlpha": 0,
+      "pass": true
+    },
+    {
+      "direction": "right",
+      "side": "left",
+      "name": "primaryToeSample",
+      "point": [
+        230,
+        527
+      ],
+      "sourceAlpha": 251,
+      "partAlpha": 251,
+      "runPartAlpha": 251,
+      "pass": true
+    },
+    {
+      "direction": "right",
+      "side": "left",
+      "name": "secondaryToeSample",
+      "point": [
+        235,
+        513
+      ],
+      "sourceAlpha": 250,
+      "partAlpha": 0,
+      "runPartAlpha": 0,
+      "pass": true
+    },
+    {
+      "direction": "right",
+      "side": "left",
+      "name": "secondaryShinSample",
+      "point": [
+        213,
+        481
+      ],
+      "sourceAlpha": 253,
+      "partAlpha": 0,
+      "runPartAlpha": 0,
+      "pass": true
+    },
+    {
+      "direction": "left",
+      "side": "left",
+      "name": "primaryToeSample",
+      "point": [
+        151,
+        518
+      ],
+      "sourceAlpha": 252,
+      "partAlpha": 252,
+      "runPartAlpha": 252,
+      "pass": true
+    },
+    {
+      "direction": "left",
+      "side": "left",
+      "name": "secondaryToeSample",
+      "point": [
+        148,
+        500
+      ],
+      "sourceAlpha": 251,
+      "partAlpha": 0,
+      "runPartAlpha": 0,
+      "pass": true
+    },
+    {
+      "direction": "left",
+      "side": "left",
+      "name": "secondaryShinSample",
+      "point": [
+        169,
+        483
+      ],
+      "sourceAlpha": 231,
+      "partAlpha": 0,
+      "runPartAlpha": 0,
+      "pass": true
+    },
+    {
+      "direction": "left",
+      "side": "right",
+      "name": "primaryToeSample",
+      "point": [
+        151,
+        518
+      ],
+      "sourceAlpha": 252,
+      "partAlpha": 252,
+      "runPartAlpha": 252,
+      "pass": true
+    },
+    {
+      "direction": "left",
+      "side": "right",
+      "name": "secondaryToeSample",
+      "point": [
+        148,
+        500
+      ],
+      "sourceAlpha": 251,
+      "partAlpha": 0,
+      "runPartAlpha": 0,
+      "pass": true
+    },
+    {
+      "direction": "left",
+      "side": "right",
+      "name": "secondaryShinSample",
+      "point": [
+        169,
+        483
+      ],
+      "sourceAlpha": 231,
+      "partAlpha": 0,
+      "runPartAlpha": 0,
+      "pass": true
+    }
+  ],
+  "limitations": "Annotated source samples guard known far-leg contamination. Counting limbs in final frames also requires visual review."
+}

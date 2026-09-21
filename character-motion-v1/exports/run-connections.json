@@ -1,6 +1,8 @@
 {
   "legs": [
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "front",
       "frame": 0,
       "side": "left",
@@ -10,6 +12,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "front",
       "frame": 0,
       "side": "right",
@@ -19,6 +23,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "front",
       "frame": 1,
       "side": "right",
@@ -28,6 +34,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "front",
       "frame": 1,
       "side": "left",
@@ -38,6 +46,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "front",
       "frame": 2,
       "side": "right",
@@ -47,6 +57,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "front",
       "frame": 2,
       "side": "left",
@@ -56,6 +68,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "front",
       "frame": 3,
       "side": "right",
@@ -65,6 +79,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "front",
       "frame": 3,
       "side": "left",
@@ -74,6 +90,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "front",
       "frame": 4,
       "side": "right",
@@ -83,6 +101,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "front",
       "frame": 4,
       "side": "left",
@@ -92,6 +112,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "front",
       "frame": 5,
       "side": "left",
@@ -101,6 +123,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "front",
       "frame": 5,
       "side": "right",
@@ -110,6 +134,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "front",
       "frame": 6,
       "side": "left",
@@ -119,6 +145,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "front",
       "frame": 6,
       "side": "right",
@@ -128,6 +156,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "front",
       "frame": 7,
       "side": "left",
@@ -137,6 +167,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "front",
       "frame": 7,
       "side": "right",
@@ -146,15 +178,19 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_right",
       "frame": 0,
       "side": "left",
       "components": [
-        7781
+        7372
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_right",
       "frame": 0,
       "side": "right",
@@ -165,25 +201,31 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_right",
       "frame": 1,
       "side": "left",
       "components": [
-        6845
+        6436
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_right",
       "frame": 1,
       "side": "right",
       "components": [
-        10700,
+        10517,
         1
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_right",
       "frame": 2,
       "side": "right",
@@ -193,24 +235,30 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_right",
       "frame": 2,
       "side": "left",
       "components": [
-        8639
+        8393
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_right",
       "frame": 3,
       "side": "right",
       "components": [
-        10304
+        10107
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_right",
       "frame": 3,
       "side": "left",
@@ -220,15 +268,19 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_right",
       "frame": 4,
       "side": "right",
       "components": [
-        9596
+        9152
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_right",
       "frame": 4,
       "side": "left",
@@ -238,24 +290,30 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_right",
       "frame": 5,
       "side": "left",
       "components": [
-        9176
+        9006
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_right",
       "frame": 5,
       "side": "right",
       "components": [
-        7979
+        7524
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_right",
       "frame": 6,
       "side": "left",
@@ -265,24 +323,30 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_right",
       "frame": 6,
       "side": "right",
       "components": [
-        9804
+        9550
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_right",
       "frame": 7,
       "side": "left",
       "components": [
-        8699
+        8515
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_right",
       "frame": 7,
       "side": "right",
@@ -293,150 +357,184 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "right",
       "frame": 0,
       "side": "left",
       "components": [
-        12424
+        11096
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "right",
       "frame": 0,
       "side": "right",
       "components": [
-        12839
+        12304
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "right",
       "frame": 1,
       "side": "left",
       "components": [
-        10452
+        9010
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "right",
       "frame": 1,
       "side": "right",
       "components": [
-        13016
+        12119
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "right",
       "frame": 2,
       "side": "left",
       "components": [
-        12244
+        11181
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "right",
       "frame": 2,
       "side": "right",
       "components": [
-        13289
+        12743
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "right",
       "frame": 3,
       "side": "left",
       "components": [
-        12842
+        12317
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "right",
       "frame": 3,
       "side": "right",
       "components": [
-        13259
+        12362
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "right",
       "frame": 4,
       "side": "left",
       "components": [
-        12881
+        12342
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "right",
       "frame": 4,
       "side": "right",
       "components": [
-        12354
+        11030
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "right",
       "frame": 5,
       "side": "left",
       "components": [
-        13053
+        12157
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "right",
       "frame": 5,
       "side": "right",
       "components": [
-        10423
+        8980
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "right",
       "frame": 6,
       "side": "left",
       "components": [
-        13362
+        12817
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "right",
       "frame": 6,
       "side": "right",
       "components": [
-        12244
+        11175
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "right",
       "frame": 7,
       "side": "left",
       "components": [
-        13332
+        12432
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "right",
       "frame": 7,
       "side": "right",
       "components": [
-        12804
+        12280
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_right",
       "frame": 0,
       "side": "right",
@@ -446,42 +544,52 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_right",
       "frame": 0,
       "side": "left",
       "components": [
-        8367
+        7992
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_right",
       "frame": 1,
       "side": "left",
       "components": [
-        7046
+        6678
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_right",
       "frame": 1,
       "side": "right",
       "components": [
-        9663
+        9538
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_right",
       "frame": 2,
       "side": "left",
       "components": [
-        8407
+        8204
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_right",
       "frame": 2,
       "side": "right",
@@ -491,6 +599,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_right",
       "frame": 3,
       "side": "left",
@@ -500,15 +610,19 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_right",
       "frame": 3,
       "side": "right",
       "components": [
-        9667
+        9506
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_right",
       "frame": 4,
       "side": "left",
@@ -518,42 +632,52 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_right",
       "frame": 4,
       "side": "right",
       "components": [
-        8533
+        8203
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_right",
       "frame": 5,
       "side": "left",
       "components": [
-        9061
+        8918
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_right",
       "frame": 5,
       "side": "right",
       "components": [
-        7178
+        6878
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_right",
       "frame": 6,
       "side": "right",
       "components": [
-        9002
+        8835
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_right",
       "frame": 6,
       "side": "left",
@@ -563,6 +687,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_right",
       "frame": 7,
       "side": "right",
@@ -572,15 +698,19 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_right",
       "frame": 7,
       "side": "left",
       "components": [
-        9211
+        9025
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "back",
       "frame": 0,
       "side": "right",
@@ -590,6 +720,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "back",
       "frame": 0,
       "side": "left",
@@ -599,6 +731,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "back",
       "frame": 1,
       "side": "left",
@@ -608,6 +742,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "back",
       "frame": 1,
       "side": "right",
@@ -617,6 +753,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "back",
       "frame": 2,
       "side": "left",
@@ -626,6 +764,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "back",
       "frame": 2,
       "side": "right",
@@ -635,6 +775,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "back",
       "frame": 3,
       "side": "left",
@@ -644,6 +786,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "back",
       "frame": 3,
       "side": "right",
@@ -653,6 +797,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "back",
       "frame": 4,
       "side": "left",
@@ -662,6 +808,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "back",
       "frame": 4,
       "side": "right",
@@ -671,6 +819,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "back",
       "frame": 5,
       "side": "right",
@@ -680,6 +830,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "back",
       "frame": 5,
       "side": "left",
@@ -689,6 +841,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "back",
       "frame": 6,
       "side": "right",
@@ -698,6 +852,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "back",
       "frame": 6,
       "side": "left",
@@ -707,6 +863,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "back",
       "frame": 7,
       "side": "right",
@@ -716,6 +874,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "back",
       "frame": 7,
       "side": "left",
@@ -725,6 +885,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_left",
       "frame": 0,
       "side": "right",
@@ -734,42 +896,52 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_left",
       "frame": 0,
       "side": "left",
       "components": [
-        8396
+        7894
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_left",
       "frame": 1,
       "side": "right",
       "components": [
-        9599
+        9436
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_left",
       "frame": 1,
       "side": "left",
       "components": [
-        7472
+        7026
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_left",
       "frame": 2,
       "side": "left",
       "components": [
-        9053
+        8783
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_left",
       "frame": 2,
       "side": "right",
@@ -779,6 +951,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_left",
       "frame": 3,
       "side": "left",
@@ -788,15 +962,19 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_left",
       "frame": 3,
       "side": "right",
       "components": [
-        9854
+        9649
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_left",
       "frame": 4,
       "side": "left",
@@ -806,42 +984,52 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_left",
       "frame": 4,
       "side": "right",
       "components": [
-        8754
+        8292
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_left",
       "frame": 5,
       "side": "right",
       "components": [
-        7281
+        6856
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_left",
       "frame": 5,
       "side": "left",
       "components": [
-        9552
+        9389
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_left",
       "frame": 6,
       "side": "right",
       "components": [
-        8749
+        8511
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_left",
       "frame": 6,
       "side": "left",
@@ -851,6 +1039,8 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_left",
       "frame": 7,
       "side": "right",
@@ -860,168 +1050,206 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "up_left",
       "frame": 7,
       "side": "left",
       "components": [
-        9649
+        9437
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "left",
       "frame": 0,
       "side": "right",
       "components": [
-        10104
+        11746
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "left",
       "frame": 0,
       "side": "left",
       "components": [
-        9474
+        10381
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "left",
       "frame": 1,
       "side": "right",
       "components": [
-        9961
+        11509
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "left",
       "frame": 1,
       "side": "left",
       "components": [
-        8130
+        8361
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "left",
       "frame": 2,
       "side": "right",
       "components": [
-        10686
+        12170
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "left",
       "frame": 2,
       "side": "left",
       "components": [
-        9177
+        10492
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "left",
       "frame": 3,
       "side": "right",
       "components": [
-        10365
+        11734
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "left",
       "frame": 3,
       "side": "left",
       "components": [
-        10095
+        11707
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "left",
       "frame": 4,
       "side": "right",
       "components": [
-        9493
+        10442
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "left",
       "frame": 4,
       "side": "left",
       "components": [
-        10093
+        11709
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "left",
       "frame": 5,
       "side": "right",
       "components": [
-        8138
+        8395
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "left",
       "frame": 5,
       "side": "left",
       "components": [
-        9946
+        11465
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "left",
       "frame": 6,
       "side": "right",
       "components": [
-        9155
+        10505
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "left",
       "frame": 6,
       "side": "left",
       "components": [
-        10656
+        12102
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "left",
       "frame": 7,
       "side": "right",
       "components": [
-        10104
+        11748
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "left",
       "frame": 7,
       "side": "left",
       "components": [
-        10344
+        11667
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_left",
       "frame": 0,
       "side": "left",
       "components": [
-        8945
+        8602
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_left",
       "frame": 0,
       "side": "right",
@@ -1031,24 +1259,30 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_left",
       "frame": 1,
       "side": "right",
       "components": [
-        9639
+        9484
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_left",
       "frame": 1,
       "side": "left",
       "components": [
-        7147
+        6788
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_left",
       "frame": 2,
       "side": "right",
@@ -1058,24 +1292,30 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_left",
       "frame": 2,
       "side": "left",
       "components": [
-        9329
+        9121
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_left",
       "frame": 3,
       "side": "right",
       "components": [
-        9122
+        8963
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_left",
       "frame": 3,
       "side": "left",
@@ -1086,15 +1326,19 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_left",
       "frame": 4,
       "side": "right",
       "components": [
-        8268
+        7923
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_left",
       "frame": 4,
       "side": "left",
@@ -1104,24 +1348,30 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_left",
       "frame": 5,
       "side": "right",
       "components": [
-        6892
+        6548
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_left",
       "frame": 5,
       "side": "left",
       "components": [
-        10158
+        9985
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_left",
       "frame": 6,
       "side": "left",
@@ -1131,24 +1381,30 @@
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_left",
       "frame": 6,
       "side": "right",
       "components": [
-        8984
+        8772
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_left",
       "frame": 7,
       "side": "left",
       "components": [
-        9659
+        9484
       ],
       "detachedPixels": 0
     },
     {
+      "character": "warrior",
+      "motion": "run",
       "direction": "down_left",
       "frame": 7,
       "side": "right",
@@ -1499,56 +1755,56 @@
       "direction": "left",
       "frame": 0,
       "sourceAlpha": 253,
-      "beltAlpha": 253,
+      "beltAlpha": 255,
       "anchorError": 0
     },
     {
       "direction": "left",
       "frame": 1,
       "sourceAlpha": 253,
-      "beltAlpha": 253,
+      "beltAlpha": 255,
       "anchorError": 0
     },
     {
       "direction": "left",
       "frame": 2,
       "sourceAlpha": 253,
-      "beltAlpha": 253,
+      "beltAlpha": 255,
       "anchorError": 0
     },
     {
       "direction": "left",
       "frame": 3,
       "sourceAlpha": 253,
-      "beltAlpha": 253,
+      "beltAlpha": 255,
       "anchorError": 0
     },
     {
       "direction": "left",
       "frame": 4,
       "sourceAlpha": 253,
-      "beltAlpha": 253,
+      "beltAlpha": 255,
       "anchorError": 0
     },
     {
       "direction": "left",
       "frame": 5,
       "sourceAlpha": 253,
-      "beltAlpha": 253,
+      "beltAlpha": 255,
       "anchorError": 0
     },
     {
       "direction": "left",
       "frame": 6,
       "sourceAlpha": 253,
-      "beltAlpha": 253,
+      "beltAlpha": 255,
       "anchorError": 0
     },
     {
       "direction": "left",
       "frame": 7,
       "sourceAlpha": 253,
-      "beltAlpha": 253,
+      "beltAlpha": 255,
       "anchorError": 0
     },
     {

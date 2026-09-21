@@ -12,7 +12,7 @@
 </head>
 <body>
 <main class="page">
-  <header class="header"><div><p class="eyebrow">GAME5 / CHARACTER MOTION LIBRARY</p><h1>モーション一覧</h1><p class="subtitle">キャラクターと動作を選んで、8方向の動きを確認。<br>ひとつずつ開ける、軽量プレビューです。</p></div><span class="edition">試作 v5</span></header>
+  <header class="header"><div><p class="eyebrow">GAME5 / CHARACTER MOTION LIBRARY</p><h1>モーション一覧</h1><p class="subtitle">キャラクターと動作を選んで、8方向の動きを確認。<br>ひとつずつ開ける、軽量プレビューです。</p></div><span class="edition" id="edition">試作</span></header>
   <div class="section-label"><strong>歩行・走行プレビュー</strong><span>各8方向 × 8コマ</span></div>
   <p class="status" id="status" role="status">一覧を読み込み中…</p>
   <section class="grid" id="catalog" aria-label="キャラクター別の確認ページ"></section>
@@ -23,6 +23,7 @@
 <script>
 "use strict";
 const catalog=JSON.parse(document.getElementById("catalog-data").textContent);
+document.getElementById("edition").textContent="試作 v"+catalog.revision;
 const grid=document.getElementById("catalog");
 function sizeLabel(bytes){const n=Number(bytes);return Number.isFinite(n)&&n>0?"約 "+Math.ceil(n/1024).toLocaleString("ja-JP")+" KB":""}
 for(const page of catalog.pages){const card=document.createElement("a");card.className="card";card.href=page.href;const label=(page.label||page.id)+"・"+(page.motion_label||page.motion_id);card.setAttribute("aria-label",label+"の8方向プレビューを開く");const art=document.createElement("div");art.className="art";const tag=document.createElement("span");tag.className="tag";tag.textContent=page.motion_label||page.motion_id;const image=document.createElement("img");image.alt="";image.src=page.thumbnail;image.decoding="async";image.width=192;image.height=256;art.append(image,tag);const info=document.createElement("div");info.className="info";const titleRow=document.createElement("div");titleRow.className="title-row";const title=document.createElement("h2");title.className="name";title.textContent=label;const arrow=document.createElement("span");arrow.className="arrow";arrow.textContent="↗";arrow.setAttribute("aria-hidden","true");titleRow.append(title,arrow);const meta=document.createElement("div");meta.className="meta";const views=document.createElement("span");views.textContent="8方向 / 8コマ";const size=document.createElement("span");size.textContent=sizeLabel(page.bytes);meta.append(views,size);info.append(titleRow,meta);card.append(art,info);grid.append(card)}

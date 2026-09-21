@@ -1,0 +1,16 @@
+Use case: identity-preserve. Asset: clean transparent 8-direction RPG SD character atlas.
+Image 1 is the CURRENT WITCH DESIGN to preserve; Image 2 is the required PROPORTION / GAME DRAWING STYLE to match; Image 3 is original costume detail authority.
+Correct the current witch atlas with TWO specific corrections: genuinely super-deformed game proportions, and exact rotation direction arrangement.
+KEEP the same adult female witch identity and all costume/equipment: pale-lavender long wavy hair, calm violet eyes, black broad pointed hat with magenta band/bow, white/black bodice, purple throat bow, long charcoal coat behind legs, two mechanical bronze arms, brown boots, tall purple-orb bronze staff always held by HER RIGHT hand. Hat bow belongs on HER LEFT side. Keep fine smooth artwork. Transparency is real alpha.
+PROPORTIONS: Make the face and head substantially larger, torso and legs shorter like Image 2. From actual top of skull (under hat) to soles she is ONLY 2.7 head-heights tall. The face is a clear large readable SD face, not the tiny face of a 5-head-tall fashion drawing. Adult female body proportions expressed in SD, not a child.
+EXACT GRID 4 columns,2 rows. Use these SCREEN directions; DO NOT interpret 'right' as showing the right side of a person:
+cell (row1,col1): face square toward viewer, level symmetrical front.
+cell (row1,col2): face nose and chest turn 45 degrees TOWARD THE RIGHT EDGE OF THE IMAGE; both eyes visible; rightward three-quarter FRONT.
+cell (row1,col3): face nose points HORIZONTALLY TO THE RIGHT EDGE OF THE IMAGE; exact right-facing profile.
+cell (row1,col4): BACK view turned 45 degrees toward RIGHT EDGE, only a thin rightward cheek visible; pony/lavender back hair covers back.
+cell (row2,col1): exact BACK, no face or eyes.
+cell (row2,col2): BACK view turned 45 degrees toward LEFT EDGE, only a thin leftward cheek visible.
+cell (row2,col3): nose points HORIZONTALLY TO THE LEFT EDGE; exact left-facing profile.
+cell (row2,col4): nose and chest turned 45 degrees TOWARD LEFT EDGE; both eyes visible, leftward three-quarter FRONT.
+Every direction independently drawn, never mirror the staff or bow to the wrong anatomical side. Do not repeat a front-left pose in the right-facing cells.
+Neutral standing with upright torso. Exactly TWO knees and TWO boots in every view. In profiles, stagger far leg slightly back and ensure the two boot silhouettes are clearly separated. Coat panels behind legs, legs cuttable and distinct. Staff outside legs, no shaft crossing either boot. Same body scale/baseline in all 8 square cells, whole hat/staff/feet contained with transparent padding. No labels, text, background, shadows, extra figures, or borders.

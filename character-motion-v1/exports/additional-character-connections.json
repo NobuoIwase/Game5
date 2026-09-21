@@ -1,0 +1,5655 @@
+{
+  "legs": [
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        4791
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        5591
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        4405
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        5471
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        5525
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        5072
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        5081
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        5732
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        4634
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        5747
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        4257
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        5627
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        5694
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        4919
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        5237
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        5592
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        5634
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        6720
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        5432
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        6728
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        5739
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        6710
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        6504
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        6191
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        6313
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        6196
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        6081
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        6293
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        6125
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        6528
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        5844
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        6711
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        4510
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        4709
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        4059
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        4438
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3944
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        4619
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        4725
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        4527
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        4707
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        4520
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        4419
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        4083
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        4601
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3971
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        4511
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        4725
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        3618
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        2582
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        2282
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3667
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        2393
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        3901
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        2515
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        3886
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        2532
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        3842
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        2544
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        3414
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        2687
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3410
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        3593
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        2639
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        3257
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        3391
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3497
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        2868
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3124
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        3733
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        3167
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        3647
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        3183
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        3446
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3424
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        2933
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3256
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        3664
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        3224
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        3578
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        2331,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        3323
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        2349,
+        3
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        3082
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        2481,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3153
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        3075
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        2453,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        3106
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        2385,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        2149,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3206
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        2189,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        3357
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        2313,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        3378
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        4008
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        3931
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3799
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        3526
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        3954
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3509
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        3929
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        4009
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        3933
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        4015
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        3525
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3797
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3491
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        3970
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        4004
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        3931
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        5619
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        5665
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        5605
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        5459
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        5631
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        5786
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        5446
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        6147
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        5267
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        6148
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        5164
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        6042
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        5375
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        6101
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        5826
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        5665
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        2427
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        5377
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        4776
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        2506
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        4484
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        4322
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        3506
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        5497
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        2299
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        5529
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        4932
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        2404
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        4637
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        4201
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        3659
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        5338
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        4587
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        6680
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        4209
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        6428
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        6290
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        5456
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        6186
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        6063
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        5762
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        6065
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        5641
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        5235
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        5580
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        6253
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        5220
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        6646
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        3285
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        4379
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        3370
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3905
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        4060
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        4415
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        4420
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        4137
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        4369
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        3305
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3852
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        3388
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        4399
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        4065
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        4113
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        4431
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        3408
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        1970
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        2062
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3381
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        2515
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        3753
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        2416
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        3379
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        2423
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        2828
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        2377
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        2859
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3351
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        2529
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        3381
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        2208
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        3157
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        1184,
+        1
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        1843
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3189
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3012
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        3293
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        2970
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        2488
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        3090
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        1339
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        2004
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3113
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3222
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        3206
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        3065
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        2442
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        2227,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        3015
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        2165,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        2911
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3143
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        2342,
+        1
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        2983
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        2104,
+        1
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        3029
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        2066
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        2021
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3132
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        2196,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        3278
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        2216,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        3033
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        3739
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        3406
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3456
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        3397
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        3870
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3617
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        3636
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        3799
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        3411
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        3763
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        3388
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3482
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3621
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        3869
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        3786
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        3632
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        4855
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        5563
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        5279
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        4390
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        5234
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        5523
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        5087
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        6047
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        4754
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        6063
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        4123
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        5667
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        5574
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        5062
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        5301
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        5551
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        3786
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        4502
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        3529
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        4400
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        4470
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3935
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        4144
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        4483
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        3806
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        4501
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        3556
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        4398
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        4464
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3935
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        4125
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        4495
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        5269
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        6503
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        5119
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        6405
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        5290
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        6483
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        6233
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        5637
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        6031
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        5660
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        5580
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        5810
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        5633
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        6011
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        5441
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        6486
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        6221
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        6016
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        5761
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        5870
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        5486
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        6150
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        6000
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        6182
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        6015
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        6212
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        5879
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        5759
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        6147
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        5475
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        6173
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        6003
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        4624
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        4843
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        4307
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        4606
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        4179
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        4921
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        4600
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        4893
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        4624
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        4847
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        4600
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        4313
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        4927
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        4174
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        4603
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        4888
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        4521
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        4767
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        4659
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        4118
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3894
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        5163
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        4275
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        5092
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        4319
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        4973
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        4432
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        4295
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        4125
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        4919
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        4466
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        4871
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        6002
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        6181
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        6092
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        5789
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        6323
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        5800
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        5983
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        6252
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        6003
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        6181
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        5791
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        6073
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        5801
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        6318
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        5988
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        6250
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        5573
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        5747
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        5471
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        5406
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        5695
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        5181
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        5732
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        5544
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        5745
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        5562
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        5403
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        5468
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        5179
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        5684
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        5550
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        5724
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        4182
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        3813
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3666
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        3896
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        3757
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3990
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        3548
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        4511
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        3379
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        4536
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        3097
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        4403
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3333
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        4527
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        4334
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        3809
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "front",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        1972
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "front",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        4274
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "front",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3868
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "front",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        1953
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "front",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        3714
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "front",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3231
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "front",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        2991
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "front",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        4246
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "front",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        1970
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "front",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        4268
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "front",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3863
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "front",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        1930
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "front",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        3698
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "front",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3207
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "front",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        2980
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "front",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        4248
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        4738
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        6287
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        3982
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        5910
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        5950
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        4896
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        5666
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        5478
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        5357
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        5499
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        5228
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        4622
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        5220
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        5637
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        5008
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        6287
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        5392
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        5607
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        3707
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        5354
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        4648
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        6099
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        5607
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        5917
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        5615
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        5386
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        5357
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        3713
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        6091
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        4646
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        5916
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        5623
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        4306
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        3440
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        2485
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        4164
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3484
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        4764
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        4265
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        4291
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        4309
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        3445
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        4163
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        2492
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3477
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        4758
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        4277
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        4297
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "back",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        4131
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "back",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        2795
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "back",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        2047
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "back",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        4181
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "back",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        2794
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "back",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        4822
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "back",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        3812
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "back",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        4130
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "back",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        3913
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "back",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        2849
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "back",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        2151
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "back",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3971
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "back",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3027
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "back",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        4632
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "back",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        4007
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "back",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        4010
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        5835
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        4999
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        5802
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        4363
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        5397
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        6143
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        5791
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        5702
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        5840
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        5014
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        4356
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        5814
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        5402
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        6132
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        5798
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        5705
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        5259
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        4936
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        5089
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        3616
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        5678
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        4462
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        5546
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        5268
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        4934
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        5258
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        3617
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        5079
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        4464
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        5678
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        5268
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        5547
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        3367
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        3628
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3234
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        2326
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        3328
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3341
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        2957
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        4249
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        2398
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        4250
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        1872
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3884
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        4103
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        2825
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        3830
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "sister",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        3636
+      ],
+      "detachedPixels": 0
+    }
+  ],
+  "scabbards": [],
+  "limitations": "Checks each deformed leg separately; visual limb ownership and shape require separate review.",
+  "failures": [],
+  "pass": true
+}

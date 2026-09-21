@@ -1,0 +1,197 @@
+{
+  "size": [
+    2048,
+    1024
+  ],
+  "cell": [
+    512,
+    512
+  ],
+  "no_reflection": true,
+  "views": [
+    {
+      "direction": "front",
+      "source": "art/sister-atlas-generated.png",
+      "index": 0,
+      "source_cell_box": [
+        0,
+        0,
+        444,
+        444
+      ],
+      "trim_box": [
+        149,
+        7,
+        439,
+        443
+      ],
+      "scale": 1.0871559633027523,
+      "target_offset": [
+        98,
+        20
+      ],
+      "source_kind": "base"
+    },
+    {
+      "direction": "down_right",
+      "source": "art/sister-two-directions-generated.png",
+      "index": 0,
+      "source_cell_box": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "trim_box": [
+        135,
+        35,
+        743,
+        987
+      ],
+      "scale": 0.49789915966386555,
+      "target_offset": [
+        104,
+        20
+      ],
+      "source_kind": "patch"
+    },
+    {
+      "direction": "right",
+      "source": "art/sister-atlas-generated.png",
+      "index": 6,
+      "source_cell_box": [
+        887,
+        444,
+        1330,
+        887
+      ],
+      "trim_box": [
+        67,
+        8,
+        336,
+        429
+      ],
+      "scale": 1.1258907363420427,
+      "target_offset": [
+        104,
+        20
+      ],
+      "source_kind": "base"
+    },
+    {
+      "direction": "up_right",
+      "source": "art/sister-atlas-generated.png",
+      "index": 3,
+      "source_cell_box": [
+        1330,
+        0,
+        1774,
+        444
+      ],
+      "trim_box": [
+        56,
+        8,
+        348,
+        443
+      ],
+      "scale": 1.089655172413793,
+      "target_offset": [
+        97,
+        20
+      ],
+      "source_kind": "base"
+    },
+    {
+      "direction": "back",
+      "source": "art/sister-atlas-generated.png",
+      "index": 4,
+      "source_cell_box": [
+        0,
+        444,
+        444,
+        887
+      ],
+      "trim_box": [
+        142,
+        0,
+        435,
+        429
+      ],
+      "scale": 1.1048951048951048,
+      "target_offset": [
+        94,
+        20
+      ],
+      "source_kind": "base"
+    },
+    {
+      "direction": "up_left",
+      "source": "art/sister-two-directions-generated.png",
+      "index": 1,
+      "source_cell_box": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "trim_box": [
+        69,
+        39,
+        644,
+        985
+      ],
+      "scale": 0.5010570824524313,
+      "target_offset": [
+        112,
+        20
+      ],
+      "source_kind": "patch"
+    },
+    {
+      "direction": "left",
+      "source": "art/sister-atlas-generated.png",
+      "index": 2,
+      "source_cell_box": [
+        887,
+        0,
+        1330,
+        444
+      ],
+      "trim_box": [
+        117,
+        6,
+        399,
+        443
+      ],
+      "scale": 1.0846681922196797,
+      "target_offset": [
+        103,
+        20
+      ],
+      "source_kind": "base"
+    },
+    {
+      "direction": "down_left",
+      "source": "art/sister-atlas-generated.png",
+      "index": 7,
+      "source_cell_box": [
+        1330,
+        444,
+        1774,
+        887
+      ],
+      "trim_box": [
+        36,
+        1,
+        352,
+        430
+      ],
+      "scale": 1.1048951048951048,
+      "target_offset": [
+        81,
+        20
+      ],
+      "source_kind": "base"
+    }
+  ]
+}

@@ -21,8 +21,14 @@ def payload(path, element_id):
 
 catalog = payload(ROOT / "player.html", "catalog-data")
 report = json.loads((ROOT / "players/build-report.json").read_text(encoding="utf-8"))
-expected = {f"{c}-{m}" for c in ["warrior", "scout", "generic"] for m in ["walk", "run"]}
-assert len(catalog["pages"]) == 6
+manifest = json.loads((ROOT / "exports/manifest.json").read_text(encoding="utf-8"))
+characters = [c["id"] for c in manifest["characters"]]
+motions = [m["id"] for m in manifest["motions"]]
+assert set(characters) == {"warrior", "scout", "witch", "sister", "generic"}
+assert len(characters) == 5 and motions == ["walk", "run"]
+expected = {f"{c}-{m}" for c in characters for m in motions}
+assert len(catalog["pages"]) == len(expected)
+assert catalog["revision"] == manifest["revision"] == 6
 assert (ROOT / "player.html").stat().st_size <= 80_000
 assert {f'{p["id"]}-{p["motion_id"]}' for p in catalog["pages"]} == expected
 checked_tiles = 0
@@ -30,6 +36,12 @@ for entry in catalog["pages"]:
     path = ROOT / entry["href"]
     assert path.is_file()
     data = payload(path, "payload")
+    assert data["characters"] == manifest["characters"] and data["motions"] == manifest["motions"]
+    assert data["revision"] == manifest["revision"]
+    for character in data["characters"]:
+        assert (path.parent / f'{character["id"]}-{data["motion"]["id"]}-v{data["revision"]}.html').is_file()
+    for motion in data["motions"]:
+        assert (path.parent / f'{data["character"]["id"]}-{motion["id"]}-v{data["revision"]}.html').is_file()
     key = f'{data["character"]["id"]}-{data["motion"]["id"]}'
     assert key == f'{entry["id"]}-{entry["motion_id"]}'
     assert path.stat().st_size == entry["bytes"] <= 1_000_000
@@ -48,6 +60,7 @@ for entry in catalog["pages"]:
         assert len(frames) == 8, f"Repeated frames: {key}/{row}"
     original = ROOT / "exports" / data["character"]["id"] / (data["motion"]["id"] + ".png")
     record = next(r for r in report["pages"] if r["id"] == key)
+    assert path.read_bytes() == (ROOT / record["canonical_path"]).read_bytes(), f"Stale canonical page: {key}"
     assert hashlib.sha256(original.read_bytes()).hexdigest() == record["source_png_sha256"]
 assert report["index_bytes"] == (ROOT / "player.html").stat().st_size
-print(f"PASS: 6 standalone pages, {checked_tiles} nonempty distinct frames, valid links, source hashes, no external dependencies, all size budgets met.")
+print(f"PASS: {len(expected)} standalone pages, {checked_tiles} nonempty distinct frames, valid character/motion links, source hashes, no external dependencies, all size budgets met.")

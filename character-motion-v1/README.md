@@ -1,16 +1,18 @@
-# Game5 — 8方向の歩行・走行グラフィック 修正版 v5
+# Game5 — 8方向の歩行・走行グラフィック v6
+
+v6では、戦士の横向きの脚を専用の原画として描き直し、切り抜き跡が残った靴の輪郭と装甲の線を整えました。左側面の隠れた脇腹・腰も補い、膝を深く曲げた際の脚の形を調整しています。新しく魔女とエルフのシスターを追加しました。[今回の素材と確認プレイヤー](revision-v6/README.md)。
 
 v5では、横向きの1本の脚の切り出しに混ざっていた奥のすね・つま先を除き、歩行・走行で足先が重複する問題を修正しました。[修正内容・確認プレイヤー](revision-v5/README.md)。
 
 v4では戦士の走行の膝・足首の分離、鞘の浮きを修正しました。脚を一続きに変形し、鞘を全方向の腰ベルトへ校正しています。[修正前後・GIF・変更内容](revision-v4/README.md)。前版の関節の問題を「継ぎ目の硬さ」とした評価は不適切でした。
 
-v3では、提供された走行姿勢の静止画像を参考に、戦士と汎用素体の走行を組み直しました。頭を独立させ、肘を曲げた装備の構え、蹴り上げと接地、正面の靴の短縮表現を調整しています。[走行v3のGIF・参考・変更内容](revision-v3/README.md)。戦士の歩行とスカウトの既存画像は維持しています。
+v3では、提供された走行姿勢の静止画像を参考に、戦士と汎用素体の走行を組み直しました。頭を独立させ、肘を曲げた装備の構え、蹴り上げと接地、正面の靴の短縮表現を調整しました。[走行v3のGIF・参考・変更内容](revision-v3/README.md)。v3の変更時点では戦士の歩行とスカウトの既存画像を維持しました。
 
 v2では戦士の正面と左斜め前を描き直し、顔と胴体の向きを揃えました。剣の握り位置と保持角度、左前腕に装着する盾の動きと重なりを調整し、走行の前傾を24度へ変更しています。[修正内容と比較画像](revision-v2/README.md)を参照してください。
 
-`player.html` は軽量な選択画面です。戦士・獣人スカウト・汎用モーションの歩行と走行を、キャラクター別・動作別の6ページに分割しました。選んだ1動作だけを読み込み、8方向を同時に確認できます。再生・停止、コマ送り、速度、背景を変更できます。
+`player.html` は軽量な選択画面です。戦士・獣人スカウト・魔女・エルフのシスター・汎用モーションの歩行と走行を、キャラクター別・動作別の10ページに分割しています。選んだ1動作だけを読み込み、8方向を同時に確認できます。再生・停止、コマ送り、速度、背景を変更できます。
 
-スマホ用の各ページは `players/warrior-walk.html`、`warrior-run.html`、`scout-walk.html`、`scout-run.html`、`generic-walk.html`、`generic-run.html` です。それぞれ画像を内蔵した単独HTMLなので、1ファイルだけでも再生できます。キャラクター間の移動や一覧を使う場合は、`player.html` と `players/` の配置を保ってください。
+スマホ用の各ページは `players/<character>-walk-v6.html` と `players/<character>-run-v6.html` です。`<character>` は `warrior`、`scout`、`witch`、`sister`、`generic`。末尾に `-v6` がないファイルも同じ内容の別名として保存します。一覧とページ間リンクは旧版との取り違えを避けるため `-v6` 付きへ移動します。それぞれ画像を内蔵した単独HTMLなので、1ファイルだけでも再生できます。キャラクター間の移動や一覧を使う場合は、`player.html` と `players/` の配置を保ってください。[プレイヤーの仕様と転送方法](docs/player-notes.md)。
 
 表示専用の画像を192×256 px／コマのWebPに変換し、1ページ1枚だけ読み込みます。ゲーム用のPNGは元の384×512 pxのままです。各ページの容量は `players/build-report.json` に記録しています。以前の全キャラクター一体版は約34.6 MBでした。
 
@@ -20,18 +22,23 @@ PCのファイルパスや `127.0.0.1` / `localhost` は、スマホからPCへ�
 
 - `exports/warrior/walk.png` / `run.png`：戦士の透過シート。
 - `exports/scout/walk.png` / `run.png`：獣人スカウトの透過シート。
-- `exports/<character>/<motion>/<direction>/00.png`〜`07.png`：個別コマ。
-- `exports/<character>/<motion>-preview.gif`：8方向を並べた動きの確認用。
-- `generic/`：汎用の素体・関節モーション。元サイズ192×256 px。
+- `exports/witch/walk.png` / `run.png`：魔女の透過シート。
+- `exports/sister/walk.png` / `run.png`：エルフのシスターの透過シート。
+- `exports/<character>/<motion>/<direction>/00.png`〜`07.png`：上記4キャラクターの個別コマ。
+- `exports/<character>/<motion>-preview.gif`：上記4キャラクターの8方向を並べた動きの確認用。
+- `generic/frames/<motion>/<direction>/00.png`〜`07.png`：汎用素体の個別コマ。元サイズ192×256 px。
+- `exports/generic/walk.png` / `run.png`：汎用素体を384×512 px／コマへ拡大した互換シート。
 - `exports/manifest.json`：セル寸法、方向順、フレーム時間、装備の左右など。
 
 キャラクター1コマは **384×512 px、透過RGBA**。シートは横8コマ×縦8方向（3072×4096 px）です。方向の行順は **正面／右斜め前／右／右斜め後ろ／後ろ／左斜め後ろ／左／左斜め前**。歩行は120 ms、走行は80 ms／コマです。ゲーム内の表示サイズは縮小して調整できます。
 
-名前・性格設定は確定設定として使用していません。識別子は `warrior` と `scout` です。
+名前・性格設定は確定設定として使用していません。キャラクターの識別子は `warrior`、`scout`、`witch`、`sister` です。
+
+シスターは設定画から衣装を変更し、不透明な白金色のハイネック・チュニック、長袖、白いレギンスを着用しています。髪飾りの左右にも原画との差があります。[衣装と参照画との差異](art/sister-notes.md)を参照してください。
 
 ## 参照と左右非対称
 
-ユーザー提供の2枚の設定画を `references/` に保存しています。新しい設定画の意匠を優先して、内蔵画像生成で8方向の原画をそれぞれ描きました。プロンプトは `art/` に保存しています。
+ユーザー提供の4枚の設定画を `references/` に保存しています。新しい設定画の意匠を優先して、内蔵画像生成で8方向の原画をそれぞれ描きました。プロンプトは `art/` に保存しています。
 
 戦士は本人基準で **剣＝右手、盾＝左腕、肩当て＝右肩、鞘＝左腰** に固定しています。肩当ては設定画の立ち絵と「右のみ」の注記に不一致があるため、今回は注記を採用した仮決定です。左方向の全身画像を右方向から左右反転する処理はありません。装備を方向別の原画から分離して、本人基準の関節に取り付けています。
 
@@ -54,16 +61,16 @@ npm install
 python -m pip install -r requirements.txt
 node motion/export.mjs
 python generic/render.py
-node tools/render.mjs warrior
+node tools/render.mjs warrior witch sister
 python tools/export_previews.py
 python tools/build_player.py
-python tools/build_run_v3_review.py
+python tools/build_v6_review.py
 node motion/test.mjs
 node tools/validate_exports.mjs
 python tools/validate_mobile_player.py
 ```
 
-元の引き継ぎZIPは変更していません。`motion/source-v13.json` に元データと出典を保存しています。画像生成を再実行せずにアニメーションを再出力できます。
+元の引き継ぎZIPは変更していません。`motion/source-v13.json` に元データと出典を保存しています。画像生成を再実行せずにアニメーションを再出力できます。上記の手順では、スカウトの既存の書き出し画像をそのまま使用します。
 
 スマホ用プレイヤーだけの更新は `python tools/build_player.py` で実行できます。元の大型一体版が必要な場合は `python tools/build_player.py --full` で `player-full.html` を別途出力します。
 

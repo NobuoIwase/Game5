@@ -1,0 +1,6 @@
+Use case: style-transfer
+Image 1 is the edit target: TWO adult elf cleric standing views. Image 2 is the size/proportion/style reference.
+Keep exactly the two view directions from image 1: left figure front three-quarter facing RIGHT; right figure rear three-quarter facing LEFT. Preserve the anatomical right-hand staff placement, hair braid, closed eyes, full modest opaque white gold tunic, opaque white leggings, gloves, boots, and gold embroidered blue-green cloth. Change only these production details:
+1. Remove the entire dark/gray/gold background and all glows. The output must be actual transparent PNG alpha, with no background color, no gradients, no shadows, no backdrop, no checkerboard drawn in.
+2. Convert the proportions of the two figures to match the small SD adults in image 2 exactly: each TOTAL height equals 2.8 times HEAD height, with a large head and short limbs. Make the torso and legs shorter; keep the adult character identity and mature face, not a child. Both figures have the same exact proportions as each other and image 2. Do not retain the tall 4-head proportions of image 1.
+3. Same crisp finely drawn line art and detailed gold embroidery as image 2. Standing neutral pose, two separate complete legs and exactly two boots per figure. Complete staff visible with margins. No text or additional figures.

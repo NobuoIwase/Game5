@@ -1,0 +1,14 @@
+{
+  "source": "art/warrior-left-torso-v6-source.png",
+  "resize_canvas": [
+    362,
+    543
+  ],
+  "native_crop": [
+    118,
+    196,
+    228,
+    348
+  ],
+  "purpose": "underlay only; preserve original head/hair/arms/legs"
+}

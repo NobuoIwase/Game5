@@ -1,0 +1,34 @@
+[
+  {
+    "direction": "right",
+    "sourceHalfBounds": [
+      93,
+      236,
+      527,
+      1223
+    ],
+    "nativeBounds": [
+      159,
+      319,
+      258,
+      538
+    ],
+    "source": "art/warrior-profile-v6-complete-source.png"
+  },
+  {
+    "direction": "left",
+    "sourceHalfBounds": [
+      109,
+      0,
+      522,
+      1223
+    ],
+    "nativeBounds": [
+      135,
+      261,
+      224,
+      528
+    ],
+    "source": "art/warrior-profile-v6-open-source.png"
+  }
+]

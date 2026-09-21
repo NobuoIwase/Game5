@@ -1,0 +1,117 @@
+{
+  "source": "art/witch-source.png",
+  "sourceSize": [
+    1448,
+    1086
+  ],
+  "cellSize": [
+    362,
+    543
+  ],
+  "nativeFrames": 128,
+  "bodyResidualSamples": [
+    {
+      "direction": "front",
+      "point": [
+        224,
+        490
+      ],
+      "sourceAlpha": 57,
+      "bodyAlpha": 0,
+      "pass": true
+    },
+    {
+      "direction": "down_right",
+      "point": [
+        255,
+        485
+      ],
+      "sourceAlpha": 86,
+      "bodyAlpha": 0,
+      "pass": true
+    },
+    {
+      "direction": "right",
+      "point": [
+        168,
+        518
+      ],
+      "sourceAlpha": 195,
+      "bodyAlpha": 0,
+      "pass": true
+    },
+    {
+      "direction": "up_right",
+      "point": [
+        151,
+        518
+      ],
+      "sourceAlpha": 223,
+      "bodyAlpha": 0,
+      "pass": true
+    },
+    {
+      "direction": "back",
+      "point": [
+        168,
+        505
+      ],
+      "sourceAlpha": 255,
+      "bodyAlpha": 0,
+      "pass": true
+    },
+    {
+      "direction": "up_left",
+      "point": [
+        243,
+        510
+      ],
+      "sourceAlpha": 252,
+      "bodyAlpha": 0,
+      "pass": true
+    },
+    {
+      "direction": "left",
+      "point": [
+        122,
+        521
+      ],
+      "sourceAlpha": 167,
+      "bodyAlpha": 0,
+      "pass": true
+    },
+    {
+      "direction": "down_left",
+      "point": [
+        183,
+        505
+      ],
+      "sourceAlpha": 245,
+      "bodyAlpha": 0,
+      "pass": true
+    }
+  ],
+  "downLeftFootOwnership": [
+    {
+      "name": "mainToe",
+      "point": [
+        213,
+        508
+      ],
+      "sourceAlpha": 252,
+      "textureAlpha": 252,
+      "pass": true
+    },
+    {
+      "name": "otherFootSliver",
+      "point": [
+        184,
+        505
+      ],
+      "sourceAlpha": 244,
+      "textureAlpha": 0,
+      "pass": true
+    }
+  ],
+  "pass": true
+}

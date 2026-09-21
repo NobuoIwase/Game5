@@ -1,0 +1,61 @@
+{
+  "schema": "game5-generated-single-leg-texture/1",
+  "coordinates": [
+    362,
+    543
+  ],
+  "notes": [
+    "Independently redrawn profile textures. One connected leg and one boot per texture.",
+    "Original anatomy polygons still erase both stationary legs from the body.",
+    "Artwork is cropped/resized into native coordinates; no painting or horizontal reflection."
+  ],
+  "views": {
+    "right": {
+      "textureSource": "art/warrior-right-leg-v6.png",
+      "opaquePoints": [
+        [
+          187,
+          481
+        ],
+        [
+          215,
+          527
+        ]
+      ],
+      "transparentPoints": [
+        [
+          235,
+          491
+        ],
+        [
+          252,
+          522
+        ]
+      ]
+    },
+    "left": {
+      "textureSource": "art/warrior-left-leg-v6.png",
+      "opaquePoints": [
+        [
+          200,
+          475
+        ],
+        [
+          163,
+          518
+        ]
+      ],
+      "transparentPoints": [
+        [
+          146,
+          488
+        ],
+        [
+          133,
+          495
+        ]
+      ],
+      "openHipTop": 317
+    }
+  }
+}

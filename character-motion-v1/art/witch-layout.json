@@ -1,0 +1,194 @@
+[
+  {
+    "direction": "front",
+    "source": "art/witch-generated-base.png",
+    "sourceWindow": [
+      0,
+      0,
+      378,
+      566
+    ],
+    "alphaBoundsInWindow": [
+      17,
+      49,
+      372,
+      557
+    ],
+    "packedSize": [
+      328,
+      470
+    ],
+    "packedOffset": [
+      17,
+      56
+    ]
+  },
+  {
+    "direction": "down_right",
+    "source": "art/witch-generated-two-views.png",
+    "sourceWindow": [
+      0,
+      0,
+      752,
+      1086
+    ],
+    "alphaBoundsInWindow": [
+      50,
+      96,
+      752,
+      1044
+    ],
+    "packedSize": [
+      348,
+      470
+    ],
+    "packedOffset": [
+      7,
+      56
+    ]
+  },
+  {
+    "direction": "right",
+    "source": "art/witch-generated-base.png",
+    "sourceWindow": [
+      728,
+      566,
+      1083,
+      1086
+    ],
+    "alphaBoundsInWindow": [
+      13,
+      2,
+      328,
+      491
+    ],
+    "packedSize": [
+      303,
+      470
+    ],
+    "packedOffset": [
+      29,
+      56
+    ]
+  },
+  {
+    "direction": "up_right",
+    "source": "art/witch-generated-base.png",
+    "sourceWindow": [
+      1088,
+      0,
+      1448,
+      566
+    ],
+    "alphaBoundsInWindow": [
+      8,
+      54,
+      344,
+      560
+    ],
+    "packedSize": [
+      312,
+      470
+    ],
+    "packedOffset": [
+      25,
+      56
+    ]
+  },
+  {
+    "direction": "back",
+    "source": "art/witch-generated-base.png",
+    "sourceWindow": [
+      0,
+      566,
+      375,
+      1086
+    ],
+    "alphaBoundsInWindow": [
+      15,
+      3,
+      359,
+      492
+    ],
+    "packedSize": [
+      331,
+      470
+    ],
+    "packedOffset": [
+      15,
+      56
+    ]
+  },
+  {
+    "direction": "up_left",
+    "source": "art/witch-generated-two-views.png",
+    "sourceWindow": [
+      752,
+      0,
+      1448,
+      1086
+    ],
+    "alphaBoundsInWindow": [
+      0,
+      94,
+      671,
+      1044
+    ],
+    "packedSize": [
+      332,
+      470
+    ],
+    "packedOffset": [
+      15,
+      56
+    ]
+  },
+  {
+    "direction": "left",
+    "source": "art/witch-generated-base.png",
+    "sourceWindow": [
+      732,
+      0,
+      1088,
+      566
+    ],
+    "alphaBoundsInWindow": [
+      5,
+      53,
+      352,
+      559
+    ],
+    "packedSize": [
+      322,
+      470
+    ],
+    "packedOffset": [
+      20,
+      56
+    ]
+  },
+  {
+    "direction": "down_left",
+    "source": "art/witch-generated-base.png",
+    "sourceWindow": [
+      1083,
+      566,
+      1448,
+      1086
+    ],
+    "alphaBoundsInWindow": [
+      8,
+      0,
+      359,
+      494
+    ],
+    "packedSize": [
+      334,
+      470
+    ],
+    "packedOffset": [
+      14,
+      56
+    ]
+  }
+]

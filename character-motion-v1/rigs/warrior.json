@@ -2744,7 +2744,8 @@
             ]
           ]
         }
-      ]
+      ],
+      "bodyUnderlaySource": "art/warrior-left-torso-v6.png"
     },
     "down_left": {
       "root": [

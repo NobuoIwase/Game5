@@ -1,0 +1,100 @@
+{
+  "pass": true,
+  "checks": [
+    {
+      "direction": "right",
+      "source": "art/warrior-right-leg-v6.png",
+      "components": [
+        12578
+      ],
+      "detachedPixels": 0,
+      "samples": [
+        {
+          "point": [
+            187,
+            481
+          ],
+          "alpha": 253,
+          "expected": "opaquePoints",
+          "pass": true
+        },
+        {
+          "point": [
+            215,
+            527
+          ],
+          "alpha": 253,
+          "expected": "opaquePoints",
+          "pass": true
+        },
+        {
+          "point": [
+            235,
+            491
+          ],
+          "alpha": 0,
+          "expected": "transparentPoints",
+          "pass": true
+        },
+        {
+          "point": [
+            252,
+            522
+          ],
+          "alpha": 0,
+          "expected": "transparentPoints",
+          "pass": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "direction": "left",
+      "source": "art/warrior-left-leg-v6.png",
+      "components": [
+        12071
+      ],
+      "detachedPixels": 0,
+      "samples": [
+        {
+          "point": [
+            200,
+            475
+          ],
+          "alpha": 253,
+          "expected": "opaquePoints",
+          "pass": true
+        },
+        {
+          "point": [
+            163,
+            518
+          ],
+          "alpha": 253,
+          "expected": "opaquePoints",
+          "pass": true
+        },
+        {
+          "point": [
+            146,
+            488
+          ],
+          "alpha": 0,
+          "expected": "transparentPoints",
+          "pass": true
+        },
+        {
+          "point": [
+            133,
+            495
+          ],
+          "alpha": 0,
+          "expected": "transparentPoints",
+          "pass": true
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "limitations": "Checks native coordinates, single-component leg silhouettes and annotated source samples; visual review is still required."
+}

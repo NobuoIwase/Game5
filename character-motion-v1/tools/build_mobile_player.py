@@ -1,4 +1,4 @@
-"""Build six small, self-contained animation pages and a thumbnail index."""
+"""Build a small standalone page per manifest character/motion and a thumbnail index."""
 from __future__ import annotations
 
 import argparse
@@ -42,6 +42,9 @@ def build(root: Path) -> dict:
     output_dir = root / "players"
     output_dir.mkdir(exist_ok=True)
     pages, records = [], []
+    character_ids = [c["id"] for c in manifest["characters"]]
+    if len(set(character_ids)) != len(character_ids):
+        raise ValueError("Character ids must be unique")
     for character in manifest["characters"]:
         for motion in manifest["motions"]:
             char_id, motion_id = character["id"], motion["id"]
@@ -53,36 +56,48 @@ def build(root: Path) -> dict:
                     (FRAME_SIZE[0] * 8, FRAME_SIZE[1] * 8),
                     Image.Resampling.NEAREST if char_id == "generic" else Image.Resampling.LANCZOS,
                 )
-            encoded_sheet, webp_bytes = data_url(sheet, lossless=char_id == "generic")
             payload = {
                 "character": character, "motion": motion,
+                "characters": manifest["characters"], "motions": manifest["motions"],
+                "revision": manifest.get("revision", 1),
                 "frame_width": FRAME_SIZE[0], "frame_height": FRAME_SIZE[1],
                 "frames_per_cycle": 8, "directions": DIRECTIONS,
-                "directionLabels": LABELS, "sheet": encoded_sheet,
+                "directionLabels": LABELS,
             }
             page_id = f"{char_id}-{motion_id}"
             page_path = output_dir / f"{page_id}.html"
-            page = player_template.replace("__PAYLOAD_JSON__", encode_json(payload))
-            page_bytes = len(page.encode("utf-8"))
+            # Keep native PNG exports intact. Use the highest WebP quality
+            # that fits the established one-megabyte mobile download budget.
+            for quality in ([82] if char_id == "generic" else [86, 82, 78, 74, 70, 66]):
+                encoded_sheet, webp_bytes = data_url(sheet, quality=quality, lossless=char_id == "generic")
+                payload["sheet"] = encoded_sheet
+                page = player_template.replace("__PAYLOAD_JSON__", encode_json(payload))
+                page_bytes = len(page.encode("utf-8"))
+                if page_bytes <= MAX_PAGE_BYTES:
+                    break
             if page_bytes > MAX_PAGE_BYTES:
                 raise ValueError(f"Mobile page exceeds 1 MB budget: {page_id}: {page_bytes}")
             page_path.write_text(page, encoding="utf-8", newline="\n")
+            versioned_path = output_dir / f'{page_id}-v{payload["revision"]}.html'
+            versioned_path.write_text(page, encoding="utf-8", newline="\n")
             thumbnail = sheet.crop((0, 0, *FRAME_SIZE)).resize((72, 96), Image.Resampling.LANCZOS)
             thumbnail_url, _ = data_url(thumbnail, quality=68)
             entry = {
                 "id": char_id, "label": character["label"],
                 "motion_id": motion_id, "motion_label": motion["label"],
-                "href": f"players/{page_id}.html", "bytes": page_bytes,
+                "href": f"players/{versioned_path.name}", "bytes": page_bytes,
                 "thumbnail": thumbnail_url,
             }
             pages.append(entry)
             records.append({
                 "id": page_id, "path": entry["href"], "bytes": page_bytes,
+                "canonical_path": f"players/{page_path.name}",
                 "webp_bytes": webp_bytes, "sheet_size": list(sheet.size),
+                "webp_quality": quality, "webp_lossless": char_id == "generic",
                 "source_png_sha256": hashlib.sha256(source_path.read_bytes()).hexdigest(),
                 "original_source_bytes": source_path.stat().st_size,
             })
-    catalog = {"pages": pages, "original_bytes": ORIGINAL_BUNDLED_BYTES}
+    catalog = {"pages": pages, "revision": manifest.get("revision", 1), "original_bytes": ORIGINAL_BUNDLED_BYTES}
     index = index_template.replace("__CATALOG_JSON__", encode_json(catalog))
     index_bytes = len(index.encode("utf-8"))
     if index_bytes > MAX_INDEX_BYTES:

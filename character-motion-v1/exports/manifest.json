@@ -33,6 +33,14 @@
       "label": "獣人スカウト（仮）"
     },
     {
+      "id": "witch",
+      "label": "魔女（仮）"
+    },
+    {
+      "id": "sister",
+      "label": "シスター（仮）"
+    },
+    {
       "id": "generic",
       "label": "汎用モーション"
     }
@@ -62,20 +70,34 @@
       "shield": "left forearm",
       "pauldron": "right shoulder (equipment-detail annotation)",
       "scabbard": "left hip"
+    },
+    "witch": {
+      "staff": "right hand; retained with the original torso and grip"
+    },
+    "sister": {
+      "staff": "right hand; retained with the original torso and grip"
     }
   },
   "art_method": "Eight independently generated views; no whole-character horizontal reflection. Symmetric hidden limb textures may be shared between anatomical legs.",
   "rig": "motion/rig.mjs",
-  "status": "prototype v5; profile leg textures exclude the standing artwork far shin and toe",
-  "revision": 5,
+  "status": "prototype v6; polished warrior and two additional characters with connected leg surfaces",
+  "revision": 6,
   "character_revisions": {
     "warrior": {
-      "walk": 5,
-      "run": 5
+      "walk": 6,
+      "run": 6
     },
     "scout": {
       "walk": 2,
       "run": 2
+    },
+    "witch": {
+      "walk": 6,
+      "run": 6
+    },
+    "sister": {
+      "walk": 6,
+      "run": 6
     }
   },
   "run_reference": {

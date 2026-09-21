@@ -1,0 +1,2839 @@
+{
+  "character": "witch",
+  "legs": [
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        4791
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        5591
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        4405
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        5471
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        5525
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        5072
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        5081
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        5732
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        4634
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        5747
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        4257
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        5627
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        5694
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        4919
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        5237
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "front",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        5592
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        5634
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        6720
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        5432
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        6728
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        5739
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        6710
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        6504
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        6191
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        6313
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        6196
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        6081
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        6293
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        6125
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        6528
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        5844
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        6711
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        4510
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        4709
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        4059
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        4438
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3944
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        4619
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        4725
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        4527
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        4707
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        4520
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        4419
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        4083
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        4601
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3971
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        4511
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        4725
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        3618
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        2582
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        2282
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3667
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        2393
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        3901
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        2515
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        3886
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        2532
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        3842
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        2544
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        3414
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        2687
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3410
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        3593
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        2639
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        3257
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        3391
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3497
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        2868
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3124
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        3733
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        3167
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        3647
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        3183
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        3446
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3424
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        2933
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3256
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        3664
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        3224
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "back",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        3578
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        2331,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        3323
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        2349,
+        3
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        3082
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        2481,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3153
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        3075
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        2453,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        3106
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        2385,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        2149,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3206
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        2189,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        3357
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        2313,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "up_left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        3378
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        4008
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        3931
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3799
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        3526
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        3954
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3509
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        3929
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        4009
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        3933
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        4015
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        3525
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3797
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3491
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        3970
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        4004
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        3931
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        5619
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        5665
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        5605
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        5459
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        5631
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        5786
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        5446
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        6147
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        5267
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        6148
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        5164
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        6042
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        5375
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        6101
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        5826
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "walk",
+      "direction": "down_left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        5665
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        2427
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        5377
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        4776
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        2506
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        4484
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        4322
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        3506
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        5497
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        2299
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        5529
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        4932
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        2404
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        4637
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        4201
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        3659
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "front",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        5338
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        4587
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        6680
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        4209
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        6428
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        6290
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        5456
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        6186
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        6063
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        5762
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        6065
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        5641
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        5235
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        5580
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        6253
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        5220
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        6646
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        3285
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        4379
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        3370
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3905
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        4060
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        4415
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        4420
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        4137
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        4369
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        3305
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3852
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        3388
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        4399
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        4065
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        4113
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        4431
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        3408
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        1970
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        2062
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3381
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        2515
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        3753
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        2416
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        3379
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        2423
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        2828
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        2377
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        2859
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3351
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        2529
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        3381
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_right",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        2208
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        3157
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        1184,
+        1
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        1843
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3189
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3012
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        3293
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        2970
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        2488
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        3090
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        1339
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        2004
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3113
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3222
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        3206
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        3065
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "back",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        2442
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        2227,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        3015
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        2165,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        2911
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3143
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        2342,
+        1
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        2983
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        2104,
+        1
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        3029
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        2066
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        2021
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3132
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        2196,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        3278
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        2216,
+        2
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "up_left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        3033
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        3739
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        3406
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        3456
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        3397
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        3870
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        3617
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        3636
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        3799
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        3411
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        3763
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        3388
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        3482
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        3621
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        3869
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        3786
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        3632
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 0,
+      "side": "left",
+      "components": [
+        4855
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 0,
+      "side": "right",
+      "components": [
+        5563
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 1,
+      "side": "right",
+      "components": [
+        5279
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 1,
+      "side": "left",
+      "components": [
+        4390
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 2,
+      "side": "right",
+      "components": [
+        5234
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 2,
+      "side": "left",
+      "components": [
+        5523
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 3,
+      "side": "right",
+      "components": [
+        5087
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 3,
+      "side": "left",
+      "components": [
+        6047
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 4,
+      "side": "right",
+      "components": [
+        4754
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 4,
+      "side": "left",
+      "components": [
+        6063
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 5,
+      "side": "right",
+      "components": [
+        4123
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 5,
+      "side": "left",
+      "components": [
+        5667
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 6,
+      "side": "left",
+      "components": [
+        5574
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 6,
+      "side": "right",
+      "components": [
+        5062
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 7,
+      "side": "left",
+      "components": [
+        5301
+      ],
+      "detachedPixels": 0
+    },
+    {
+      "character": "witch",
+      "motion": "run",
+      "direction": "down_left",
+      "frame": 7,
+      "side": "right",
+      "components": [
+        5551
+      ],
+      "detachedPixels": 0
+    }
+  ],
+  "pass": true,
+  "failures": [],
+  "limitations": "Checks each deformed leg texture separately. Intended occlusion by hair or garments is applied later; visual shape and limb ownership still require review."
+}

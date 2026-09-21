@@ -1,0 +1,10 @@
+Use case: precise-object-edit
+Edit target: image 1, the transparent 4-by-2 atlas of the elf cleric. Image 2 is the original character design reference.
+Keep the art style, proportions, clean drawing, design, colors and same 4x2 transparent grid. Correct FOUR direction mistakes by REDRAWING, not by horizontal reflection. Preserve the staff in her anatomical RIGHT hand, the back braid and gold cross. ALL eight head/torso/boot directions must agree.
+Cell numbering left to right: top row 1 2 3 4; bottom row 5 6 7 8.
+Cells 1, 4, 5 and 8 remain unchanged.
+REDRAW cell 2: front three-quarter view whose NOSE and TOES point toward the RIGHT EDGE of the image (east / →). We see the front of her chest and her right side. Her gaze direction is toward the lower-right of a game screen, not left.
+REDRAW cell 3: exact RIGHT-FACING SIDE PROFILE. The nose physically protrudes toward the RIGHT EDGE of the image (→). Face and chest on the RIGHT, long hair on the LEFT. Staff held in anatomical right hand. Do not draw a left-facing profile.
+REDRAW cell 6: back three-quarter view moving toward the LEFT EDGE and away. Back of hair dominates, the small visible face/ear is on the LEFT side, nose protrudes LEFT. Staff remains on her anatomical right, now the farther hand; no reflection of cell 4.
+REDRAW cell 7: exact LEFT-FACING SIDE PROFILE. The nose physically protrudes toward the LEFT EDGE of the image (←). Face and chest on the LEFT, long hair on the RIGHT. Staff held in anatomical right hand, the far arm, independently drawn. Do not draw a right-facing profile.
+True transparent PNG background. Exactly two legs and two boots in every cell, sufficient transparent margins, no labels, arrows, diagrams or additional images. Keep all the existing tiny gold embroidery and costume detail.

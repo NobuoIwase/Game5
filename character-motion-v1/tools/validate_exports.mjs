@@ -18,6 +18,7 @@ const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const OUT=path.join(ROOT,'exports'),W=384,H=512,N=8;
 const DIRS=['front','down_right','right','up_right','back','up_left','left','down_left'];
 const PAIRS=[['right','left'],['down_right','down_left'],['up_right','up_left']];
+const CHARACTER_IDS=['warrior','scout','witch','sister'];
 const report={schema:'game5-export-validation/1.0',validated_at:new Date().toISOString(),pass:false,checks:0,issues:[],characters:{},source_views:{},gear:{},limitations:['Pixel checks establish complete, distinct frames and no exact reflected direction pairs. They do not judge drawing quality, joint seams, foot sliding, or equipment design fidelity. Visual review remains necessary.']};
 const check=(ok,code,detail)=>{report.checks++;if(!ok)report.issues.push({code,...detail});return !!ok;};
 const read=p=>JSON.parse(fs.readFileSync(path.join(ROOT,p),'utf8'));
@@ -125,17 +126,36 @@ function equipment(){
   }
  }
 }
+function additionalRigs(){
+ for(const id of ['witch','sister']){
+  const reg=read('rigs/'+id+'.json');
+  check(fs.existsSync(path.join(ROOT,reg.source)),'new_character_source',{character:id,source:reg.source});
+  for(const direction of DIRS){
+   const view=reg.views?.[direction],legs=view?.legs||[];
+   check(!!view&&Array.isArray(view.root)&&view.root.length===2,'new_character_view',{character:id,direction});
+   check(legs.length===2&&new Set(legs.map(p=>p.side)).size===2&&legs.every(p=>['left','right'].includes(p.side)),'new_character_anatomical_legs',{character:id,direction,sides:legs.map(p=>p.side)});
+   for(const leg of legs){
+    check(leg.copyFrom||['hip','knee','ankle'].every(j=>Array.isArray(leg[j])&&leg[j].length===2&&leg[j].every(Number.isFinite)),'new_character_leg_joints',{character:id,direction,side:leg.side});
+    const donor=leg.copyFrom?legs.find(p=>p.side===leg.copyFrom&&!p.copyFrom):null;
+    check(Array.isArray(leg.polygon)&&(leg.polygon.length>=3||(leg.polygon.length===0&&donor?.polygon?.length>=3)),'new_character_leg_mask',{character:id,direction,side:leg.side});
+   }
+  }
+ }
+}
 try{
  const manifest=read('exports/manifest.json');
  check(JSON.stringify(manifest.directions)===JSON.stringify(DIRS),'manifest_direction_order',{actual:manifest.directions,expected:DIRS});
  check(manifest.frame_width===W&&manifest.frame_height===H&&manifest.frames_per_cycle===N,'manifest_dimensions',{actual:[manifest.frame_width,manifest.frame_height,manifest.frames_per_cycle],expected:[W,H,N]});
  check(manifest.alpha===true,'manifest_alpha',{actual:manifest.alpha});
  for(const [id,ms] of [['walk',120],['run',80]])check(manifest.motions?.find(m=>m.id===id)?.frame_ms===ms,'motion_timing',{motion:id,expected:ms});
- check(['warrior','scout'].every(id=>manifest.characters?.some(c=>c.id===id)),'manifest_characters',{actual:manifest.characters});
- for(const id of ['warrior','scout'])await character(id);
+ check(CHARACTER_IDS.every(id=>manifest.characters?.filter(c=>c.id===id).length===1),'manifest_characters',{actual:manifest.characters,expected:CHARACTER_IDS});
+ check(manifest.revision===6,'manifest_revision',{actual:manifest.revision,expected:6});
+ for(const id of CHARACTER_IDS)await character(id);
  equipment();
+ additionalRigs();
  await sourceViews('rigs/warrior.json');
  await sourceViews('rigs/warrior-gear.json');
+ for(const id of ['witch','sister'])await sourceViews('rigs/'+id+'.json');
 }catch(error){report.issues.push({code:'validation_exception',message:error.message,stack:error.stack});}
 report.pass=report.issues.length===0;
 report.total_frames=Object.values(report.characters).reduce((n,c)=>n+c.frames,0);

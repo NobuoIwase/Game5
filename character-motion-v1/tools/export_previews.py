@@ -6,7 +6,9 @@ from PIL import Image, ImageDraw
 ROOT=Path(__file__).resolve().parent.parent
 DIRECTIONS=['front','down_right','right','up_right','back','up_left','left','down_left']
 BG=(37,45,57,255)
-for character in ['warrior','scout']:
+manifest_path=ROOT/'exports'/'manifest.json'
+manifest=json.loads(manifest_path.read_text(encoding='utf-8'))
+for character in [c['id'] for c in manifest['characters'] if c['id'] != 'generic']:
     for motion,ms in [('walk',120),('run',80)]:
         sheet=Image.open(ROOT/'exports'/character/f'{motion}.png').convert('RGBA')
         frames=[]
@@ -28,8 +30,6 @@ generic_dir.mkdir(exist_ok=True)
 for motion in ['walk','run']:
     src=Image.open(ROOT/'generic'/f'generic-{motion}-8dir-8frames.png').convert('RGBA')
     src.resize((3072,4096),Image.Resampling.NEAREST).save(generic_dir/f'{motion}.png')
-manifest_path=ROOT/'exports'/'manifest.json'
-manifest=json.loads(manifest_path.read_text(encoding='utf-8'))
 if not any(c['id']=='generic' for c in manifest['characters']):
     manifest['characters'].append({'id':'generic','label':'汎用モーション'})
 manifest_path.write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')

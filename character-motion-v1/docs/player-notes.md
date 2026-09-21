@@ -1,12 +1,16 @@
 # スマホ向け分割プレイヤー
 
-`python tools/build_player.py` はPillowを使い、軽量な一覧 `player.html` と、`players/` 内の6つの単独HTMLを作成します。
+`python tools/build_player.py` はPillowを使い、軽量な一覧 `player.html` と、4キャラクター＋汎用素体の歩行・走行、計10ページを `players/` 内に作成します。キャラクター名はすべて仮の識別名です。
 
 | キャラクター | 歩行 | 走行 |
 | --- | --- | --- |
-| 戦士 | `warrior-walk.html` | `warrior-run.html` |
-| 獣人スカウト | `scout-walk.html` | `scout-run.html` |
-| 汎用モーション | `generic-walk.html` | `generic-run.html` |
+| 戦士 | [歩行](../players/warrior-walk-v6.html) | [走行](../players/warrior-run-v6.html) |
+| 獣人スカウト | [歩行](../players/scout-walk-v6.html) | [走行](../players/scout-run-v6.html) |
+| 魔女 | [歩行](../players/witch-walk-v6.html) | [走行](../players/witch-run-v6.html) |
+| エルフのシスター | [歩行](../players/sister-walk-v6.html) | [走行](../players/sister-run-v6.html) |
+| 汎用モーション | [歩行](../players/generic-walk-v6.html) | [走行](../players/generic-run-v6.html) |
+
+一覧とページ間リンクは `-v6.html` 付きのファイルへ移動します。末尾の `-v6` を省いたファイルも同じ内容の別名として保存します。内容の異なるモーションページは10種類です。
 
 各ページはそのキャラクター・動作の8方向×8コマだけを内蔵します。外部の画像・スクリプト・フォントや通信は不要で、単体ファイルだけでも再生できます。画面のキャラクター・動作切り替えは別ページへのリンクです。
 
@@ -14,9 +18,9 @@
 
 - 入口は小さなサムネイルのみ。アニメーションのシートは読み込みません。
 - プレビュー画像を384×512 pxから192×256 px／コマへ縮小し、WebPへ変換。
-- 6枚の大きなPNGを一括で展開せず、選択した1枚だけを展開。
+- 選んだキャラクター・動作のWebPシート1枚だけを展開。
 - 画面外にある方向のCanvas再描画を抑え、タブが非表示の間はアニメーションを停止。
-- 一覧80 KB以内、各ページ1 MB以内をビルド時に検査。
+- 一覧80,000バイト以内、各ページ1,000,000バイト以内をビルド時に検査。各ページは容量内に収まる画質で出力。
 
 ゲーム用のPNGシート・個別コマ、モーションデータは変更しません。プレビューは表示専用です。実測容量、元PNGのハッシュは `players/build-report.json` に保存します。
 

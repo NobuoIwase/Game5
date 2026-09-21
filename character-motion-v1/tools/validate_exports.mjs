@@ -149,7 +149,8 @@ try{
  check(manifest.alpha===true,'manifest_alpha',{actual:manifest.alpha});
  for(const [id,ms] of [['walk',120],['run',80]])check(manifest.motions?.find(m=>m.id===id)?.frame_ms===ms,'motion_timing',{motion:id,expected:ms});
  check(CHARACTER_IDS.every(id=>manifest.characters?.filter(c=>c.id===id).length===1),'manifest_characters',{actual:manifest.characters,expected:CHARACTER_IDS});
- check(manifest.revision===6,'manifest_revision',{actual:manifest.revision,expected:6});
+ check(manifest.revision===7,'manifest_revision',{actual:manifest.revision,expected:7});
+ for(const [id,revision] of Object.entries({warrior:6,scout:2,witch:6,sister:7}))for(const motion of ['walk','run'])check(manifest.character_revisions?.[id]?.[motion]===revision,'character_motion_revision',{character:id,motion,actual:manifest.character_revisions?.[id]?.[motion],expected:revision});
  for(const id of CHARACTER_IDS)await character(id);
  equipment();
  additionalRigs();

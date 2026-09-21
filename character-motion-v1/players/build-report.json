@@ -1,7 +1,7 @@
 {
   "schema": "game5-mobile-player/1.0",
   "original_bundled_bytes": 34550379,
-  "index_bytes": 39907,
+  "index_bytes": 40267,
   "preview_frame_size": [
     192,
     256
@@ -9,7 +9,7 @@
   "pages": [
     {
       "id": "warrior-walk",
-      "path": "players/warrior-walk-v6.html",
+      "path": "players/warrior-walk-v7.html",
       "bytes": 858006,
       "canonical_path": "players/warrior-walk.html",
       "webp_bytes": 632322,
@@ -20,11 +20,12 @@
       "webp_quality": 86,
       "webp_lossless": false,
       "source_png_sha256": "4e5bea82af7e68477d95ddcfa066f372fd2f2e04d59d48c89d01f1b83a43e3f6",
+      "reused_preview": true,
       "original_source_bytes": 5918658
     },
     {
       "id": "warrior-run",
-      "path": "players/warrior-run-v6.html",
+      "path": "players/warrior-run-v7.html",
       "bytes": 864132,
       "canonical_path": "players/warrior-run.html",
       "webp_bytes": 636918,
@@ -35,11 +36,12 @@
       "webp_quality": 86,
       "webp_lossless": false,
       "source_png_sha256": "cb1c3ff46d527bc60e0059777f527f125e359147eb37b34eb65d2df3e97ed838",
+      "reused_preview": true,
       "original_source_bytes": 6438208
     },
     {
       "id": "scout-walk",
-      "path": "players/scout-walk-v6.html",
+      "path": "players/scout-walk-v7.html",
       "bytes": 817928,
       "canonical_path": "players/scout-walk.html",
       "webp_bytes": 602254,
@@ -50,11 +52,12 @@
       "webp_quality": 86,
       "webp_lossless": false,
       "source_png_sha256": "e330348538d029db555f637684006dd8ccb2a53205948502148187e5fc94325e",
+      "reused_preview": true,
       "original_source_bytes": 5999217
     },
     {
       "id": "scout-run",
-      "path": "players/scout-run-v6.html",
+      "path": "players/scout-run-v7.html",
       "bytes": 760414,
       "canonical_path": "players/scout-run.html",
       "webp_bytes": 559122,
@@ -65,11 +68,12 @@
       "webp_quality": 86,
       "webp_lossless": false,
       "source_png_sha256": "2e94256b8f3935d153f472dcf812f2b402bb0a92c79892f93b8bc7d73211f501",
+      "reused_preview": true,
       "original_source_bytes": 5468425
     },
     {
       "id": "witch-walk",
-      "path": "players/witch-walk-v6.html",
+      "path": "players/witch-walk-v7.html",
       "bytes": 970516,
       "canonical_path": "players/witch-walk.html",
       "webp_bytes": 716704,
@@ -80,11 +84,12 @@
       "webp_quality": 86,
       "webp_lossless": false,
       "source_png_sha256": "88952ea37e58b86ebe7a96e26118c0d062df28efc88b9f2a8f85850241c4ba83",
+      "reused_preview": true,
       "original_source_bytes": 8243028
     },
     {
       "id": "witch-run",
-      "path": "players/witch-run-v6.html",
+      "path": "players/witch-run-v7.html",
       "bytes": 960126,
       "canonical_path": "players/witch-run.html",
       "webp_bytes": 708914,
@@ -95,41 +100,44 @@
       "webp_quality": 86,
       "webp_lossless": false,
       "source_png_sha256": "a893cb600eb02c001c114b87eebcefa6f7e8ff12183b21cee6e5c0b4756e3e5b",
+      "reused_preview": true,
       "original_source_bytes": 8157355
     },
     {
       "id": "sister-walk",
-      "path": "players/sister-walk-v6.html",
-      "bytes": 910179,
+      "path": "players/sister-walk-v7.html",
+      "bytes": 891459,
       "canonical_path": "players/sister-walk.html",
-      "webp_bytes": 671448,
+      "webp_bytes": 657408,
       "sheet_size": [
         1536,
         2048
       ],
       "webp_quality": 86,
       "webp_lossless": false,
-      "source_png_sha256": "2c50cc6c3469679a0b164d1bcce586c7f1eb5900db0a367c7142fedf29a96314",
-      "original_source_bytes": 7778871
+      "source_png_sha256": "ac70397e3120c8252a35ef674476e90db287868d65f90e999c4547b3c0637490",
+      "reused_preview": false,
+      "original_source_bytes": 7397743
     },
     {
       "id": "sister-run",
-      "path": "players/sister-run-v6.html",
-      "bytes": 903065,
+      "path": "players/sister-run-v7.html",
+      "bytes": 886329,
       "canonical_path": "players/sister-run.html",
-      "webp_bytes": 666112,
+      "webp_bytes": 653562,
       "sheet_size": [
         1536,
         2048
       ],
       "webp_quality": 86,
       "webp_lossless": false,
-      "source_png_sha256": "7d9a0bfe85b509efa09d3597351f857f78675d87724595c17c78558d20e51de1",
-      "original_source_bytes": 7745830
+      "source_png_sha256": "a91230a78cb20a1fe4855b6729fbdf92475626bca8e6c7c566762ab483b5c43b",
+      "reused_preview": false,
+      "original_source_bytes": 7357240
     },
     {
       "id": "generic-walk",
-      "path": "players/generic-walk-v6.html",
+      "path": "players/generic-walk-v7.html",
       "bytes": 459388,
       "canonical_path": "players/generic-walk.html",
       "webp_bytes": 333354,
@@ -140,11 +148,12 @@
       "webp_quality": 82,
       "webp_lossless": true,
       "source_png_sha256": "d19543ee43797aee8086f1eba69387000d056938fe2130e773a295a376184d2d",
+      "reused_preview": true,
       "original_source_bytes": 945753
     },
     {
       "id": "generic-run",
-      "path": "players/generic-run-v6.html",
+      "path": "players/generic-run-v7.html",
       "bytes": 440722,
       "canonical_path": "players/generic-run.html",
       "webp_bytes": 319356,
@@ -155,10 +164,11 @@
       "webp_quality": 82,
       "webp_lossless": true,
       "source_png_sha256": "f32fe3399cb7df557d585e7853ea9e654074af4c726ca7a6094e467e77434480",
+      "reused_preview": true,
       "original_source_bytes": 975099
     }
   ],
-  "total_page_bytes": 7944476,
+  "total_page_bytes": 7909020,
   "largest_page_bytes": 970516,
   "format": "One embedded WebP sprite sheet per standalone HTML page; no network dependencies",
   "original_pngs_unchanged": true

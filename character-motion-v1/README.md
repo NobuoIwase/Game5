@@ -1,6 +1,8 @@
-# Game5 — 8方向の歩行・走行グラフィック v6
+# Game5 — 8方向の歩行・走行グラフィック v7
 
-v6では、戦士の横向きの脚を専用の原画として描き直し、切り抜き跡が残った靴の輪郭と装甲の線を整えました。左側面の隠れた脇腹・腰も補い、膝を深く曲げた際の脚の形を調整しています。新しく魔女とエルフのシスターを追加しました。[今回の素材と確認プレイヤー](revision-v6/README.md)。
+v7では、シスターの衣装を設定画に近づけ、長手袋、細い前垂れ、高い脚ぐり、肌の見える上腿、膝上ストッキングへ戻しました。不透明な白い生地を使用し、髪留めの左右などに原画との差異が残ります。[今回の素材・比較画像・確認プレイヤー](revision-v7/README.md)。戦士・獣人スカウト・魔女・汎用素体のゲーム用PNGはv6から維持しています。
+
+v6では、戦士の横向きの脚を専用の原画として描き直し、切り抜き跡が残った靴の輪郭と装甲の線を整えました。左側面の隠れた脇腹・腰も補い、膝を深く曲げた際の脚の形を調整しました。魔女とエルフのシスターを追加した版です。[v6の素材と確認プレイヤー](revision-v6/README.md)。
 
 v5では、横向きの1本の脚の切り出しに混ざっていた奥のすね・つま先を除き、歩行・走行で足先が重複する問題を修正しました。[修正内容・確認プレイヤー](revision-v5/README.md)。
 
@@ -12,7 +14,7 @@ v2では戦士の正面と左斜め前を描き直し、顔と胴体の向きを
 
 `player.html` は軽量な選択画面です。戦士・獣人スカウト・魔女・エルフのシスター・汎用モーションの歩行と走行を、キャラクター別・動作別の10ページに分割しています。選んだ1動作だけを読み込み、8方向を同時に確認できます。再生・停止、コマ送り、速度、背景を変更できます。
 
-スマホ用の各ページは `players/<character>-walk-v6.html` と `players/<character>-run-v6.html` です。`<character>` は `warrior`、`scout`、`witch`、`sister`、`generic`。末尾に `-v6` がないファイルも同じ内容の別名として保存します。一覧とページ間リンクは旧版との取り違えを避けるため `-v6` 付きへ移動します。それぞれ画像を内蔵した単独HTMLなので、1ファイルだけでも再生できます。キャラクター間の移動や一覧を使う場合は、`player.html` と `players/` の配置を保ってください。[プレイヤーの仕様と転送方法](docs/player-notes.md)。
+スマホ用の各ページは `players/<character>-walk-v7.html` と `players/<character>-run-v7.html` です。`<character>` は `warrior`、`scout`、`witch`、`sister`、`generic`。末尾に `-v7` がないファイルも同じ内容の別名として保存します。一覧とページ間リンクは旧版との取り違えを避けるため `-v7` 付きへ移動します。`-v6.html` は履歴として残しています。それぞれ画像を内蔵した単独HTMLなので、1ファイルだけでも再生できます。キャラクター間の移動や一覧を使う場合は、`player.html` と `players/` の配置を保ってください。[プレイヤーの仕様と転送方法](docs/player-notes.md)。
 
 表示専用の画像を192×256 px／コマのWebPに変換し、1ページ1枚だけ読み込みます。ゲーム用のPNGは元の384×512 pxのままです。各ページの容量は `players/build-report.json` に記録しています。以前の全キャラクター一体版は約34.6 MBでした。
 
@@ -34,7 +36,7 @@ PCのファイルパスや `127.0.0.1` / `localhost` は、スマホからPCへ�
 
 名前・性格設定は確定設定として使用していません。キャラクターの識別子は `warrior`、`scout`、`witch`、`sister` です。
 
-シスターは設定画から衣装を変更し、不透明な白金色のハイネック・チュニック、長袖、白いレギンスを着用しています。髪飾りの左右にも原画との差があります。[衣装と参照画との差異](art/sister-notes.md)を参照してください。
+シスターはv7で設定画寄りの衣装へ変更しました。白い生地は不透明です。金の髪留めは元資料の図と左右注記に解釈の差があり、今回も全方向の左右表現が完全に統一されてはいません。[v7の衣装・参照画との差異](art/sister-v7-notes.md)と、[旧v6衣装の記録](art/sister-notes.md)を分けて保存しています。
 
 ## 参照と左右非対称
 
@@ -54,23 +56,22 @@ PCのファイルパスや `127.0.0.1` / `localhost` は、スマホからPCへ�
 
 ## 再出力
 
-Node.js、`@napi-rs/canvas`、Python 3、Pillowが必要です。
+Node.js、`@napi-rs/canvas`、Python 3、Pillowが必要です。以下は既存の出力を保ちながら、v7で変更したシスターと確認資料を更新する手順です。
 
 ```powershell
 npm install
 python -m pip install -r requirements.txt
-node motion/export.mjs
-python generic/render.py
-node tools/render.mjs warrior witch sister
-python tools/export_previews.py
+node tools/render.mjs sister
+python tools/export_previews.py sister
 python tools/build_player.py
-python tools/build_v6_review.py
+python tools/build_v7_review.py
 node motion/test.mjs
 node tools/validate_exports.mjs
 python tools/validate_mobile_player.py
+python tools/validate_v7_preservation.py
 ```
 
-元の引き継ぎZIPは変更していません。`motion/source-v13.json` に元データと出典を保存しています。画像生成を再実行せずにアニメーションを再出力できます。上記の手順では、スカウトの既存の書き出し画像をそのまま使用します。
+元の引き継ぎZIPは変更していません。`motion/source-v13.json` に元データと出典を保存しています。画像生成を再実行せずにアニメーションを再出力できます。上記の手順では、戦士・スカウト・魔女・汎用素体の既存の書き出し画像をそのまま使用します。v7の前後比較には `revision-v7/before-v6/` に保存した4枚の旧シスター画像を使います。
 
 スマホ用プレイヤーだけの更新は `python tools/build_player.py` で実行できます。元の大型一体版が必要な場合は `python tools/build_player.py --full` で `player-full.html` を別途出力します。
 

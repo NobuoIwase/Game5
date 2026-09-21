@@ -80,8 +80,8 @@
   },
   "art_method": "Eight independently generated views; no whole-character horizontal reflection. Symmetric hidden limb textures may be shared between anatomical legs.",
   "rig": "motion/rig.mjs",
-  "status": "prototype v6; polished warrior and two additional characters with connected leg surfaces",
-  "revision": 6,
+  "status": "prototype v7; sister costume restored toward the original design with opaque cloth",
+  "revision": 7,
   "character_revisions": {
     "warrior": {
       "walk": 6,
@@ -96,8 +96,8 @@
       "run": 6
     },
     "sister": {
-      "walk": 6,
-      "run": 6
+      "walk": 7,
+      "run": 7
     }
   },
   "run_reference": {

@@ -684,9 +684,9 @@ for(const id of ids){
  write(path.join(ROOT,'exports',id,'joints-review.png'),debug.toBuffer('image/png'));
 }
 const manifest={schema:'game5-character-motion/1.0',frame_width:W,frame_height:H,frames_per_cycle:8,directions:DIRS,direction_labels:Object.fromEntries(DIRS.map((d,i)=>[d,LABELS[i]])),characters:CHARACTERS,motions:[{id:'walk',label:'歩行',frame_ms:120},{id:'run',label:'走行',frame_ms:80}],alpha:true,origin:'top-left',feet_anchor:[192,470],sheet_layout:'8 columns of frames × 8 rows of directions',anatomical_equipment:{warrior:{sword:'right hand',shield:'left forearm',pauldron:'right shoulder (equipment-detail annotation)',scabbard:'left hip'},witch:{staff:'right hand; retained with the original torso and grip'},sister:{staff:'right hand; retained with the original torso and grip'}},art_method:'Eight independently generated views; no whole-character horizontal reflection. Symmetric hidden limb textures may be shared between anatomical legs.',rig:'motion/rig.mjs',status:'first playable prototype; visual review pending'};
-manifest.revision=6;
-manifest.status='prototype v6; polished warrior and two additional characters with connected leg surfaces';
-manifest.character_revisions={warrior:{walk:6,run:6},scout:{walk:2,run:2},witch:{walk:6,run:6},sister:{walk:6,run:6}};
+manifest.revision=7;
+manifest.status='prototype v7; sister costume restored toward the original design with opaque cloth';
+manifest.character_revisions={warrior:{walk:6,run:6},scout:{walk:2,run:2},witch:{walk:6,run:6},sister:{walk:7,run:7}};
 manifest.run_reference={file:'references/run-pose-reference.jpg',received_format:'JPEG',received_frames:1,interpretation:'Pose reference only; timing was authored as an eight-frame run, not extracted from an animated GIF.'};
 write(path.join(ROOT,'exports/manifest.json'),JSON.stringify(manifest,null,2));
 write(path.join(ROOT,'exports/render-report.json'),JSON.stringify({frames:ids.length*selectedMotions.length*64,issues:report},null,2));

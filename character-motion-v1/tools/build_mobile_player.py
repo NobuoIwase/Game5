@@ -5,6 +5,7 @@ import argparse
 import base64
 import hashlib
 import json
+import re
 from io import BytesIO
 from pathlib import Path
 
@@ -29,6 +30,34 @@ def data_url(image: Image.Image, *, quality: int = 82, lossless: bool = False) -
     return "data:image/webp;base64," + base64.b64encode(encoded).decode("ascii"), len(encoded)
 
 
+def previous_preview(page_path: Path, record: dict, source_hash: str, size: tuple,
+                     quality: int, lossless: bool) -> tuple[str, int] | None:
+    """Reuse only an unchanged PNG's highest-quality, already-built preview."""
+    if (record.get("source_png_sha256") != source_hash
+            or record.get("sheet_size") != list(size)
+            or record.get("webp_quality") != quality
+            or record.get("webp_lossless") != lossless):
+        return None
+    try:
+        html = page_path.read_text(encoding="utf-8")
+        if len(html.encode("utf-8")) != record["bytes"]:
+            return None
+        match = re.search(r'<script type="application/json" id="payload">(.*?)</script>', html, re.S)
+        data = json.loads(match.group(1)) if match else {}
+        if (data.get("frame_width"), data.get("frame_height")) != FRAME_SIZE or data.get("directions") != DIRECTIONS:
+            return None
+        encoded = data["sheet"]
+        if not encoded.startswith("data:image/webp;base64,"):
+            return None
+        raw = base64.b64decode(encoded.split(",", 1)[1], validate=True)
+        with Image.open(BytesIO(raw)) as preview:
+            if preview.format != "WEBP" or preview.size != size or len(raw) != record["webp_bytes"]:
+                return None
+        return encoded, len(raw)
+    except (OSError, ValueError, KeyError, TypeError):
+        return None
+
+
 def build(root: Path) -> dict:
     root = root.resolve()
     manifest = json.loads((root / "exports/manifest.json").read_text(encoding="utf-8-sig"))
@@ -41,6 +70,11 @@ def build(root: Path) -> dict:
         raise ValueError("Each template must contain exactly one payload marker")
     output_dir = root / "players"
     output_dir.mkdir(exist_ok=True)
+    try:
+        previous = json.loads((output_dir / "build-report.json").read_text(encoding="utf-8"))
+        previous_records = {page["id"]: page for page in previous["pages"]}
+    except (OSError, ValueError, KeyError, TypeError):
+        previous_records = {}
     pages, records = [], []
     character_ids = [c["id"] for c in manifest["characters"]]
     if len(set(character_ids)) != len(character_ids):
@@ -49,6 +83,7 @@ def build(root: Path) -> dict:
         for motion in manifest["motions"]:
             char_id, motion_id = character["id"], motion["id"]
             source_path = root / "exports" / char_id / f"{motion_id}.png"
+            source_hash = hashlib.sha256(source_path.read_bytes()).hexdigest()
             with Image.open(source_path) as source:
                 if source.size != expected_source_size:
                     raise ValueError(f"Unexpected sheet dimensions: {source_path}")
@@ -66,15 +101,28 @@ def build(root: Path) -> dict:
             }
             page_id = f"{char_id}-{motion_id}"
             page_path = output_dir / f"{page_id}.html"
-            # Keep native PNG exports intact. Use the highest WebP quality
-            # that fits the established one-megabyte mobile download budget.
-            for quality in ([82] if char_id == "generic" else [86, 82, 78, 74, 70, 66]):
-                encoded_sheet, webp_bytes = data_url(sheet, quality=quality, lossless=char_id == "generic")
+            qualities = [82] if char_id == "generic" else [86, 82, 78, 74, 70, 66]
+            quality = qualities[0]
+            cached = previous_preview(page_path, previous_records.get(page_id, {}),
+                                      source_hash, sheet.size, quality, char_id == "generic")
+            reused_preview = False
+            page_bytes = MAX_PAGE_BYTES + 1
+            if cached:
+                encoded_sheet, webp_bytes = cached
                 payload["sheet"] = encoded_sheet
                 page = player_template.replace("__PAYLOAD_JSON__", encode_json(payload))
                 page_bytes = len(page.encode("utf-8"))
-                if page_bytes <= MAX_PAGE_BYTES:
-                    break
+                reused_preview = page_bytes <= MAX_PAGE_BYTES
+            # Keep native PNG exports intact. Use the highest WebP quality
+            # that fits the established one-megabyte mobile download budget.
+            if not reused_preview:
+                for quality in qualities:
+                    encoded_sheet, webp_bytes = data_url(sheet, quality=quality, lossless=char_id == "generic")
+                    payload["sheet"] = encoded_sheet
+                    page = player_template.replace("__PAYLOAD_JSON__", encode_json(payload))
+                    page_bytes = len(page.encode("utf-8"))
+                    if page_bytes <= MAX_PAGE_BYTES:
+                        break
             if page_bytes > MAX_PAGE_BYTES:
                 raise ValueError(f"Mobile page exceeds 1 MB budget: {page_id}: {page_bytes}")
             page_path.write_text(page, encoding="utf-8", newline="\n")
@@ -94,7 +142,7 @@ def build(root: Path) -> dict:
                 "canonical_path": f"players/{page_path.name}",
                 "webp_bytes": webp_bytes, "sheet_size": list(sheet.size),
                 "webp_quality": quality, "webp_lossless": char_id == "generic",
-                "source_png_sha256": hashlib.sha256(source_path.read_bytes()).hexdigest(),
+                "source_png_sha256": source_hash, "reused_preview": reused_preview,
                 "original_source_bytes": source_path.stat().st_size,
             })
     catalog = {"pages": pages, "revision": manifest.get("revision", 1), "original_bytes": ORIGINAL_BUNDLED_BYTES}

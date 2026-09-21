@@ -1,0 +1,22 @@
+{
+  "source": "art/sister-source-v7.png",
+  "sha256": "b42bea0224a2dc3db82cca201e3266759c6214591376e98a74254563f6cba220",
+  "review": "Independent visual source inspection against references/sister-reference.jpg and v6 source",
+  "restored": [
+    "bare shoulders",
+    "long white gloves",
+    "high-cut sides",
+    "visible bare upper thighs",
+    "white over-knee stockings",
+    "narrow front panel",
+    "gold and blue-green cloth trim"
+  ],
+  "alpha": "Inspected actual compositing over light and dark. Hidden RGB red/yellow at near-zero alpha is not an opaque fringe. Most character pixels alpha253, visually near opaque.",
+  "differences": [
+    "Opaque white fabric intentional; not an exact recreation.",
+    "Staff head is a solid ornate diamond/cross rather than thin open cross-ring of original.",
+    "Front/left/down_left hairpin appears on character left; down_right shows it on character right. Same as v6. Original reference text says right but front drawing appears viewer-right.",
+    "Right profile near arm hangs freely and staff appears far-hand-held, ambiguous against front right-hand hold. Same as v6, not introduced by v7 edit."
+  ],
+  "direction_consistency": "Front/back and intermediate directions are ordered correctly. Profile faces remain slightly 3/4 styled rather than strict 90-degree projections. Costume consistent in all visible sides; rear upper costume obscured by long hair."
+}

@@ -28,13 +28,14 @@ assert set(characters) == {"warrior", "scout", "witch", "sister", "generic"}
 assert len(characters) == 5 and motions == ["walk", "run"]
 expected = {f"{c}-{m}" for c in characters for m in motions}
 assert len(catalog["pages"]) == len(expected)
-assert catalog["revision"] == manifest["revision"] == 6
+assert catalog["revision"] == manifest["revision"] == 7
 assert (ROOT / "player.html").stat().st_size <= 80_000
 assert {f'{p["id"]}-{p["motion_id"]}' for p in catalog["pages"]} == expected
 checked_tiles = 0
 for entry in catalog["pages"]:
     path = ROOT / entry["href"]
     assert path.is_file()
+    assert path.name == f'{entry["id"]}-{entry["motion_id"]}-v7.html'
     data = payload(path, "payload")
     assert data["characters"] == manifest["characters"] and data["motions"] == manifest["motions"]
     assert data["revision"] == manifest["revision"]
@@ -63,4 +64,10 @@ for entry in catalog["pages"]:
     assert path.read_bytes() == (ROOT / record["canonical_path"]).read_bytes(), f"Stale canonical page: {key}"
     assert hashlib.sha256(original.read_bytes()).hexdigest() == record["source_png_sha256"]
 assert report["index_bytes"] == (ROOT / "player.html").stat().st_size
-print(f"PASS: {len(expected)} standalone pages, {checked_tiles} nonempty distinct frames, valid character/motion links, source hashes, no external dependencies, all size budgets met.")
+for key in sorted(expected):
+    historical_path = ROOT / "players" / f"{key}-v6.html"
+    assert historical_path.is_file(), f"Missing preserved v6 page: {key}"
+    historical = payload(historical_path, "payload")
+    assert historical["revision"] == 6, f"Overwritten v6 page: {key}"
+    assert f'{historical["character"]["id"]}-{historical["motion"]["id"]}' == key
+print(f"PASS: {len(expected)} v7 standalone pages, {checked_tiles} nonempty distinct frames, valid character/motion links, source hashes, no external dependencies, all size budgets met; {len(expected)} v6 pages preserved.")

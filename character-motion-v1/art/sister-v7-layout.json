@@ -1,0 +1,35 @@
+{
+  "source": "art/sister-costume-v7-generated.png",
+  "source_size": [
+    1774,
+    887
+  ],
+  "output": "art/sister-source-v7.png",
+  "size": [
+    2048,
+    1024
+  ],
+  "cell": [
+    512,
+    512
+  ],
+  "grid": [
+    4,
+    2
+  ],
+  "directions": [
+    "front",
+    "down_right",
+    "right",
+    "up_right",
+    "back",
+    "up_left",
+    "left",
+    "down_left"
+  ],
+  "operation": "full-atlas Lanczos resize, preserving generated alpha; no reflection or repainting",
+  "edit_target": "art/sister-source.png",
+  "design_reference": "references/sister-reference.jpg",
+  "prompt": "art/sister-costume-v7-prompt.txt",
+  "mode": "built-in image_gen"
+}

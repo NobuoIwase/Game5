@@ -4,13 +4,15 @@
 
 | キャラクター | 歩行 | 走行 |
 | --- | --- | --- |
-| 戦士 | [歩行](../players/warrior-walk-v6.html) | [走行](../players/warrior-run-v6.html) |
-| 獣人スカウト | [歩行](../players/scout-walk-v6.html) | [走行](../players/scout-run-v6.html) |
-| 魔女 | [歩行](../players/witch-walk-v6.html) | [走行](../players/witch-run-v6.html) |
-| エルフのシスター | [歩行](../players/sister-walk-v6.html) | [走行](../players/sister-run-v6.html) |
-| 汎用モーション | [歩行](../players/generic-walk-v6.html) | [走行](../players/generic-run-v6.html) |
+| 戦士 | [歩行](../players/warrior-walk-v7.html) | [走行](../players/warrior-run-v7.html) |
+| 獣人スカウト | [歩行](../players/scout-walk-v7.html) | [走行](../players/scout-run-v7.html) |
+| 魔女 | [歩行](../players/witch-walk-v7.html) | [走行](../players/witch-run-v7.html) |
+| エルフのシスター | [歩行](../players/sister-walk-v7.html) | [走行](../players/sister-run-v7.html) |
+| 汎用モーション | [歩行](../players/generic-walk-v7.html) | [走行](../players/generic-run-v7.html) |
 
-一覧とページ間リンクは `-v6.html` 付きのファイルへ移動します。末尾の `-v6` を省いたファイルも同じ内容の別名として保存します。内容の異なるモーションページは10種類です。
+一覧とページ間リンクは `-v7.html` 付きのファイルへ移動します。末尾の `-v7` を省いたファイルも同じ内容の別名として保存します。最新版のモーションページは10種類です。v7で絵が変更されたのはシスターで、他の3キャラクターと汎用素体は従来のPNGを使っています。
+
+`-v6.html` の10ページは旧衣装を確認できる履歴として保存します。旧版内のキャラクター・動作リンクはv6同士へ移動し、「モーション一覧」は最新版の `player.html` へ戻ります。[v6の確認ページ一覧](../revision-v6/README.md)。
 
 各ページはそのキャラクター・動作の8方向×8コマだけを内蔵します。外部の画像・スクリプト・フォントや通信は不要で、単体ファイルだけでも再生できます。画面のキャラクター・動作切り替えは別ページへのリンクです。
 

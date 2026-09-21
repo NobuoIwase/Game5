@@ -1,0 +1,26 @@
+{
+  "status": "visually accepted for release candidate",
+  "scope": "All 64 walk and 64 run native frames, viewed as light-background enlarged lower-body contact sheets. Source full figure and alpha also inspected separately.",
+  "resolved": [
+    "Isolated right and up_right dark floor remnants",
+    "Long down_right old-leg/boot remnant",
+    "left fixed thin outline fragment",
+    "back neighboring-boot outline",
+    "right/down_right stepped cloth notches from broad body erase",
+    "Animated teal or front-panel contamination"
+  ],
+  "not_observed": [
+    "third foot",
+    "leg disconnection",
+    "large fixed white upper-leg corners",
+    "large curled clothing fragment",
+    "new source costume mismatch"
+  ],
+  "limitations": [
+    "Strongly flexed knees still deform with some rounded or pinched outlines; this is not a hand-redrawn cycle.",
+    "Source hairpin side varies with direction and right-profile staff handedness remains visually ambiguous, both inherited from v6.",
+    "White fabric is intentionally opaque; staff head differs from supplied reference."
+  ],
+  "hash_file": "independent-candidate-hashes.json",
+  "original_hash_file": "hashes.json"
+}

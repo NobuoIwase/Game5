@@ -1,5 +1,7 @@
 # シスター（仮）8方向素材
 
+この文書はv6の別衣装の記録。現行の衣装修正は [v7の制作記録](sister-v7-notes.md)を参照。
+
 完成原画は [sister-source.png](sister-source.png)（2048 × 1024、512 × 512 の4列2行、透過PNG）です。`front, down_right, right, up_right, back, up_left, left, down_left` の順で、完成キャラクターの左右反転は行っていません。各生成結果から採用したセルと拡縮・配置は [sister-source-layout.json](sister-source-layout.json)、再配置手順は [assemble_sister_atlas.py](../tools/assemble_sister_atlas.py) に記録しています。
 
 画像生成は内蔵 `image_gen` を使用しました。最終原画の元は [8方向の生成原画](sister-atlas-generated.png) と [右前・左後ろの生成原画](sister-two-directions-generated.png)。最終生成指示は [衣装を覆う修正指示](sister-covered-costume-prompt.txt) と [2方向の頭身・透過調整指示](sister-two-directions-final-prompt.txt) です。2方向を生成した途中の原画 `sister-two-directions-tall-generated.png` と指示 `sister-two-directions-prompt.txt` も保存しています。

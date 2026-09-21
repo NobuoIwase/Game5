@@ -1,8 +1,8 @@
 {
   "schema": "game5-export-validation/1.0",
-  "validated_at": "2026-09-21T16:59:52.498Z",
+  "validated_at": "2026-09-21T18:24:03.756Z",
   "pass": true,
-  "checks": 3749,
+  "checks": 3757,
   "issues": [],
   "characters": {
     "warrior": {
@@ -9013,14 +9013,14 @@
             3072,
             4096
           ],
-          "sha256": "2c50cc6c3469679a0b164d1bcce586c7f1eb5900db0a367c7142fedf29a96314"
+          "sha256": "ac70397e3120c8252a35ef674476e90db287868d65f90e999c4547b3c0637490"
         },
         "run": {
           "dimensions": [
             3072,
             4096
           ],
-          "sha256": "7d9a0bfe85b509efa09d3597351f857f78675d87724595c17c78558d20e51de1"
+          "sha256": "a91230a78cb20a1fe4855b6729fbdf92475626bca8e6c7c566762ab483b5c43b"
         }
       },
       "cycles": {
@@ -9028,19 +9028,19 @@
           "frames": [
             {
               "frame": 0,
-              "sha256_pixels": "13418fb472cf36a45b542e5f313afd3aba905af2b7e3ee3e0429c02263e2bee7",
+              "sha256_pixels": "f758cffcbc9b426a04553769935708cee4cf07269f65301cef104c90e54aa95a",
               "bounds": [
                 73,
-                125,
-                303,
-                471
+                122,
+                304,
+                470
               ],
-              "visible_pixels": 53082,
-              "transparent_pixels": 142934,
+              "visible_pixels": 54026,
+              "transparent_pixels": 141989,
               "edge_pixels": 0,
-              "minimum_margin": 40,
+              "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 53082,
+                "relevant_pixels": 54026,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9048,19 +9048,19 @@
             },
             {
               "frame": 1,
-              "sha256_pixels": "1aa31982d5bf67b67315bdc68b36242f0aed6d9b3851959d6648d0ddf6ba3233",
+              "sha256_pixels": "cecd37093da0ba14923da7b564b95f23cb6d9d4914db560d12877162d4c88636",
               "bounds": [
                 73,
-                127,
-                303,
-                474
+                124,
+                304,
+                470
               ],
-              "visible_pixels": 52885,
-              "transparent_pixels": 143144,
+              "visible_pixels": 53826,
+              "transparent_pixels": 142231,
               "edge_pixels": 0,
-              "minimum_margin": 37,
+              "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 52885,
+                "relevant_pixels": 53826,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9068,19 +9068,19 @@
             },
             {
               "frame": 2,
-              "sha256_pixels": "2e493cd5ef36d31c0656b1bba9ce199dafc41246872da5a7ac1bcbf82395272b",
+              "sha256_pixels": "d9f44764e69b0c9d3b3ac191ae89bd8debc5905ce2b7362a3f75020a78a60c2c",
               "bounds": [
                 74,
-                125,
-                304,
-                472
+                122,
+                305,
+                470
               ],
-              "visible_pixels": 53136,
-              "transparent_pixels": 142895,
+              "visible_pixels": 54121,
+              "transparent_pixels": 141901,
               "edge_pixels": 0,
-              "minimum_margin": 39,
+              "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 53136,
+                "relevant_pixels": 54121,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9088,19 +9088,19 @@
             },
             {
               "frame": 3,
-              "sha256_pixels": "bc90d40d20180d4e2f4fff0485dffc8cb1249f670068bf9104081d72a94ad5ec",
+              "sha256_pixels": "f6a27800335c00920736c924fa7cec2902624bd788eed0768579a4d2a4715248",
               "bounds": [
                 75,
-                134,
-                305,
-                480
+                130,
+                306,
+                478
               ],
-              "visible_pixels": 53261,
-              "transparent_pixels": 142756,
+              "visible_pixels": 54193,
+              "transparent_pixels": 141821,
               "edge_pixels": 0,
-              "minimum_margin": 31,
+              "minimum_margin": 33,
               "sheet_match": {
-                "relevant_pixels": 53261,
+                "relevant_pixels": 54193,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9108,19 +9108,19 @@
             },
             {
               "frame": 4,
-              "sha256_pixels": "a87d22e2d84ee4ae0e0ca126d8055a8bcaa603a5ba52acf6ae103b086b606a37",
+              "sha256_pixels": "1c59e6feb8ec7adb7bfcfc847a7522f471e89cbfd84c57558d6d758e46b9756d",
               "bounds": [
                 75,
-                124,
-                305,
-                471
+                122,
+                306,
+                470
               ],
-              "visible_pixels": 53095,
-              "transparent_pixels": 142949,
+              "visible_pixels": 54019,
+              "transparent_pixels": 142011,
               "edge_pixels": 0,
-              "minimum_margin": 40,
+              "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 53095,
+                "relevant_pixels": 54019,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9128,19 +9128,19 @@
             },
             {
               "frame": 5,
-              "sha256_pixels": "67faef933be98fbfbc5a5bc23ca9dae90cd3259064e4f1108747b25f5d67c471",
+              "sha256_pixels": "eb21cebc343dfbbbf4a9ceaf2ada6761ef96dc7f8c320b4d454fcb5073bdcda8",
               "bounds": [
                 75,
-                126,
-                305,
-                473
+                124,
+                306,
+                470
               ],
-              "visible_pixels": 52890,
-              "transparent_pixels": 143131,
+              "visible_pixels": 53833,
+              "transparent_pixels": 142217,
               "edge_pixels": 0,
-              "minimum_margin": 38,
+              "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 52890,
+                "relevant_pixels": 53833,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9148,19 +9148,19 @@
             },
             {
               "frame": 6,
-              "sha256_pixels": "2fdf42c2caa00c5ca1c93671cce6994f3cd40733b3cfaba344b84ad8516b60ee",
+              "sha256_pixels": "ea39509a1aa3e5928824bd5d22ba236682921194fc4eeed65f3aeab5f4e597e0",
               "bounds": [
                 74,
-                125,
-                304,
-                471
+                122,
+                305,
+                470
               ],
-              "visible_pixels": 53117,
-              "transparent_pixels": 142922,
+              "visible_pixels": 54103,
+              "transparent_pixels": 141904,
               "edge_pixels": 0,
-              "minimum_margin": 40,
+              "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 53117,
+                "relevant_pixels": 54103,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9168,19 +9168,19 @@
             },
             {
               "frame": 7,
-              "sha256_pixels": "e253f71dee31c1072641100d3a0fd3d9af92af1b535dacc27ac9f57de3002f76",
+              "sha256_pixels": "cfdac5ec4604f256dee340066c1b35c721bceda43e1b1b929005c04399d8b55d",
               "bounds": [
                 73,
-                133,
-                303,
-                479
+                130,
+                304,
+                478
               ],
-              "visible_pixels": 53273,
-              "transparent_pixels": 142751,
+              "visible_pixels": 54185,
+              "transparent_pixels": 141815,
               "edge_pixels": 0,
-              "minimum_margin": 32,
+              "minimum_margin": 33,
               "sheet_match": {
-                "relevant_pixels": 53273,
+                "relevant_pixels": 54185,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9193,19 +9193,19 @@
           "frames": [
             {
               "frame": 0,
-              "sha256_pixels": "98538300ac9e5c062e480486a050c33372ca4706aa5492e324bbd2c325b02294",
+              "sha256_pixels": "205588481c5e11ec9848e2df948c9a2a6732573c0c2f5d11f4ce85e5775d3951",
               "bounds": [
-                51,
-                119,
-                274,
-                466
+                52,
+                121,
+                276,
+                467
               ],
-              "visible_pixels": 49589,
-              "transparent_pixels": 146671,
+              "visible_pixels": 49542,
+              "transparent_pixels": 146500,
               "edge_pixels": 0,
-              "minimum_margin": 45,
+              "minimum_margin": 44,
               "sheet_match": {
-                "relevant_pixels": 49589,
+                "relevant_pixels": 49542,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9213,19 +9213,19 @@
             },
             {
               "frame": 1,
-              "sha256_pixels": "c613a04e56ec77e4dee0252b3c10c83d024f460519734769571baba847ae305b",
+              "sha256_pixels": "3a6181a36fd746520dba9f8aa8a8ac05de406cff067dc27f095b37b65adb723c",
               "bounds": [
-                51,
-                123,
-                274,
+                52,
+                124,
+                276,
                 470
               ],
-              "visible_pixels": 49318,
-              "transparent_pixels": 146964,
+              "visible_pixels": 48814,
+              "transparent_pixels": 147246,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 49318,
+                "relevant_pixels": 48814,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9233,19 +9233,19 @@
             },
             {
               "frame": 2,
-              "sha256_pixels": "b54a2650aa98906fc0bdde4226c1a32aa30b0db9129af4f45e0b516bf7b801c1",
+              "sha256_pixels": "685c30c42c97f9ad5886cce91f8bfdf31035313d7ad199910cf02dffc851e886",
               "bounds": [
                 52,
-                120,
-                275,
+                121,
+                277,
                 470
               ],
-              "visible_pixels": 49793,
-              "transparent_pixels": 146449,
+              "visible_pixels": 49866,
+              "transparent_pixels": 146175,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 49793,
+                "relevant_pixels": 49866,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9253,19 +9253,19 @@
             },
             {
               "frame": 3,
-              "sha256_pixels": "cef4c768afc43fb2876e133197cda4a36261c8657f5429b8da07cee132b78629",
+              "sha256_pixels": "562b6ea07237225f86f5047a76635d37720e5d2100bc720263a1fb531ccca634",
               "bounds": [
                 53,
-                127,
-                275,
-                474
+                128,
+                278,
+                473
               ],
-              "visible_pixels": 50021,
-              "transparent_pixels": 146186,
+              "visible_pixels": 49891,
+              "transparent_pixels": 146172,
               "edge_pixels": 0,
-              "minimum_margin": 37,
+              "minimum_margin": 38,
               "sheet_match": {
-                "relevant_pixels": 50021,
+                "relevant_pixels": 49891,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9273,19 +9273,19 @@
             },
             {
               "frame": 4,
-              "sha256_pixels": "6b07fc47505b7ae6cac3cc1b8863624868fdd7f13af64396d76ba04f95ee8e5c",
+              "sha256_pixels": "67bf926d0f001652e9fd8c0c739f6f9b0b8ad90ae53d2d816640afe04d18d391",
               "bounds": [
                 53,
-                122,
-                275,
-                470
+                123,
+                278,
+                468
               ],
-              "visible_pixels": 49855,
-              "transparent_pixels": 146378,
+              "visible_pixels": 49476,
+              "transparent_pixels": 146621,
               "edge_pixels": 0,
-              "minimum_margin": 41,
+              "minimum_margin": 43,
               "sheet_match": {
-                "relevant_pixels": 49855,
+                "relevant_pixels": 49476,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9293,19 +9293,19 @@
             },
             {
               "frame": 5,
-              "sha256_pixels": "0b6ddd3ba8361f266f427a79f5c359d79aa43a535468be8ba0c958b2957f5533",
+              "sha256_pixels": "0786cbc56e360d440562c40c3c32d7f41cd7a5834838b0c704492e95909e7110",
               "bounds": [
                 53,
                 127,
-                275,
-                474
+                278,
+                472
               ],
-              "visible_pixels": 49747,
-              "transparent_pixels": 146468,
+              "visible_pixels": 49667,
+              "transparent_pixels": 146418,
               "edge_pixels": 0,
-              "minimum_margin": 37,
+              "minimum_margin": 39,
               "sheet_match": {
-                "relevant_pixels": 49747,
+                "relevant_pixels": 49667,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9313,19 +9313,19 @@
             },
             {
               "frame": 6,
-              "sha256_pixels": "a593ab12970062d3762afc23d6421b95cd5c12e91feca3cfd3aa7b7648d04f86",
+              "sha256_pixels": "487c23611d51f443d6a1a538969bcb60582eb55f073275f31c95388c3a697d2b",
               "bounds": [
                 52,
                 124,
-                275,
-                471
+                277,
+                470
               ],
-              "visible_pixels": 49712,
-              "transparent_pixels": 146571,
+              "visible_pixels": 49157,
+              "transparent_pixels": 146890,
               "edge_pixels": 0,
-              "minimum_margin": 40,
+              "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 49712,
+                "relevant_pixels": 49157,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9333,19 +9333,19 @@
             },
             {
               "frame": 7,
-              "sha256_pixels": "68aa1fede60232073219eb5cfb2ac69934c28a638cc4831fd294824cf366b276",
+              "sha256_pixels": "44389e4983e24cbd746366285beebfb707fee7ea947c9d65af08366724c88b44",
               "bounds": [
-                51,
-                129,
-                274,
-                477
+                52,
+                130,
+                276,
+                475
               ],
-              "visible_pixels": 49324,
-              "transparent_pixels": 146940,
+              "visible_pixels": 49163,
+              "transparent_pixels": 146882,
               "edge_pixels": 0,
-              "minimum_margin": 34,
+              "minimum_margin": 36,
               "sheet_match": {
-                "relevant_pixels": 49324,
+                "relevant_pixels": 49163,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9358,19 +9358,19 @@
           "frames": [
             {
               "frame": 0,
-              "sha256_pixels": "080df726a087c81e46c8093d42ed5ddf58973df0d9d68ebde51d85f05c2b95e2",
+              "sha256_pixels": "14c915f122f1638c39ed41057c6b10fd2253a5b4a1151f85edda326530b345f8",
               "bounds": [
-                74,
+                75,
                 124,
                 301,
-                466
+                463
               ],
-              "visible_pixels": 46059,
-              "transparent_pixels": 150023,
+              "visible_pixels": 45929,
+              "transparent_pixels": 150087,
               "edge_pixels": 0,
-              "minimum_margin": 45,
+              "minimum_margin": 48,
               "sheet_match": {
-                "relevant_pixels": 46059,
+                "relevant_pixels": 45929,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9378,19 +9378,19 @@
             },
             {
               "frame": 1,
-              "sha256_pixels": "ca22757496a0d7aafe66965cc7a11a43f4b2825d2fa17f641efd78a65af146a9",
+              "sha256_pixels": "599119a884018a51046200f731fbcb9ebc71ae6c09f6c8901e94c79a06fd61fa",
               "bounds": [
-                74,
+                75,
                 128,
                 301,
                 470
               ],
-              "visible_pixels": 46489,
-              "transparent_pixels": 149588,
+              "visible_pixels": 46619,
+              "transparent_pixels": 149387,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 46489,
+                "relevant_pixels": 46619,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9398,19 +9398,19 @@
             },
             {
               "frame": 2,
-              "sha256_pixels": "7716a4178f8795d268dec514fafaf4bdb1bad214741ba10f742841616ec80f77",
+              "sha256_pixels": "f896253115ee523510084b029c23e02835117102680f26a6e9166970c245d08a",
               "bounds": [
                 75,
-                122,
+                123,
                 301,
                 470
               ],
-              "visible_pixels": 46193,
-              "transparent_pixels": 149855,
+              "visible_pixels": 46608,
+              "transparent_pixels": 149367,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 46193,
+                "relevant_pixels": 46608,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9418,19 +9418,19 @@
             },
             {
               "frame": 3,
-              "sha256_pixels": "baba591c0ac7f04d023ed7f0d054da8ab4bb3aac67d56667739bd5e34b02f35d",
+              "sha256_pixels": "f7c7b06e89e1abc0e0e2d9b79fd9ce22d0e42eac1b44927eaeddd06bf9b887f2",
               "bounds": [
-                74,
-                123,
+                75,
+                124,
                 301,
                 469
               ],
-              "visible_pixels": 46981,
-              "transparent_pixels": 149079,
+              "visible_pixels": 46928,
+              "transparent_pixels": 149068,
               "edge_pixels": 0,
               "minimum_margin": 42,
               "sheet_match": {
-                "relevant_pixels": 46981,
+                "relevant_pixels": 46928,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9438,19 +9438,19 @@
             },
             {
               "frame": 4,
-              "sha256_pixels": "6f6ddd39930df105b90872cc5c91e25a70da3015d0e287d9653287e7b1adbcf4",
+              "sha256_pixels": "525f79ff958354071ddea8e35e973f940638ebc0aa31aed3c9f0a4c6ee7c27de",
               "bounds": [
-                74,
-                124,
+                75,
+                126,
                 301,
-                467
+                468
               ],
-              "visible_pixels": 46476,
-              "transparent_pixels": 149588,
+              "visible_pixels": 46333,
+              "transparent_pixels": 149688,
               "edge_pixels": 0,
-              "minimum_margin": 44,
+              "minimum_margin": 43,
               "sheet_match": {
-                "relevant_pixels": 46476,
+                "relevant_pixels": 46333,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9458,19 +9458,19 @@
             },
             {
               "frame": 5,
-              "sha256_pixels": "817add3d6dcb0b36f1034d559b73d9ade8d41056b887517b47a76002e10d9623",
+              "sha256_pixels": "3b4fa32defec2a12ff1424135e37c5063436b814536518e28495e601b277a3a7",
               "bounds": [
-                74,
-                130,
+                75,
+                131,
                 301,
-                471
+                470
               ],
-              "visible_pixels": 46202,
-              "transparent_pixels": 149856,
+              "visible_pixels": 46408,
+              "transparent_pixels": 149602,
               "edge_pixels": 0,
-              "minimum_margin": 40,
+              "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 46202,
+                "relevant_pixels": 46408,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9478,19 +9478,19 @@
             },
             {
               "frame": 6,
-              "sha256_pixels": "1e8035385eea36f6f821a235a58ec3d34d2dfdce6e0ec45dd49d05c008908162",
+              "sha256_pixels": "50edb44881b0d05e8bac2d6c3b7a8848a7e213575ba5cd644a12ac3c60ea6ea2",
               "bounds": [
-                74,
-                124,
+                75,
+                125,
                 301,
                 470
               ],
-              "visible_pixels": 46614,
-              "transparent_pixels": 149410,
+              "visible_pixels": 46903,
+              "transparent_pixels": 149092,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 46614,
+                "relevant_pixels": 46903,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9498,19 +9498,19 @@
             },
             {
               "frame": 7,
-              "sha256_pixels": "bc864d8f07039bf7b85a67354db0640cfeed7a2e6be74ac4150b2c85e34bf139",
+              "sha256_pixels": "e8b840cf5c7b476cfc9c02f1fd7fc31f7c912c65df3282a80ba9dd6cddbbd4d7",
               "bounds": [
-                74,
-                126,
+                75,
+                127,
                 301,
                 469
               ],
-              "visible_pixels": 46666,
-              "transparent_pixels": 149399,
+              "visible_pixels": 46584,
+              "transparent_pixels": 149423,
               "edge_pixels": 0,
               "minimum_margin": 42,
               "sheet_match": {
-                "relevant_pixels": 46666,
+                "relevant_pixels": 46584,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9523,19 +9523,19 @@
           "frames": [
             {
               "frame": 0,
-              "sha256_pixels": "51752692f601224987f8e34d61752f66e5a1071b65d9e4dc8bc77ee7feced537",
+              "sha256_pixels": "03882213ce96dc1c9b1fcbf117d7c77d3ee35a687936dcc74644983b48d3ab8c",
               "bounds": [
-                87,
+                86,
                 121,
-                323,
-                470
+                321,
+                468
               ],
-              "visible_pixels": 51228,
-              "transparent_pixels": 144866,
+              "visible_pixels": 51498,
+              "transparent_pixels": 144577,
               "edge_pixels": 0,
-              "minimum_margin": 41,
+              "minimum_margin": 43,
               "sheet_match": {
-                "relevant_pixels": 51228,
+                "relevant_pixels": 51498,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9543,19 +9543,19 @@
             },
             {
               "frame": 1,
-              "sha256_pixels": "8f4b090872af32c62ec6ca9ba19d5ba78223845ce4093c56060af3c8cc5dd68f",
+              "sha256_pixels": "734ed39a1d670131a2bd6aeebe924f08ab38e2614450474b473bb9a66f4792a5",
               "bounds": [
-                87,
+                86,
                 129,
-                323,
-                479
+                321,
+                475
               ],
-              "visible_pixels": 51455,
-              "transparent_pixels": 144667,
+              "visible_pixels": 51938,
+              "transparent_pixels": 144110,
               "edge_pixels": 0,
-              "minimum_margin": 32,
+              "minimum_margin": 36,
               "sheet_match": {
-                "relevant_pixels": 51455,
+                "relevant_pixels": 51938,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9563,19 +9563,19 @@
             },
             {
               "frame": 2,
-              "sha256_pixels": "f8b71e5025a2533e136ccf6a05c01bd638a11a33d39d8121d47a7684272313e3",
+              "sha256_pixels": "961bd475fadde4f49a94be74921a3a3bafd6ce154dc6de8dc062900fed74602b",
               "bounds": [
-                87,
-                121,
-                322,
-                471
+                85,
+                122,
+                321,
+                470
               ],
-              "visible_pixels": 51009,
-              "transparent_pixels": 145101,
+              "visible_pixels": 51389,
+              "transparent_pixels": 144679,
               "edge_pixels": 0,
-              "minimum_margin": 40,
+              "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 51009,
+                "relevant_pixels": 51389,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9583,19 +9583,19 @@
             },
             {
               "frame": 3,
-              "sha256_pixels": "1ad94b17fd2769f73a972db5cd4a888b918995756bcb681d8974e9e9ae54a968",
+              "sha256_pixels": "ad30c4fc79afae7b86f19128d537e1ba57de68754f09fcb7c4eeb771de93b19f",
               "bounds": [
-                86,
-                121,
-                322,
-                471
+                84,
+                122,
+                320,
+                469
               ],
-              "visible_pixels": 51063,
-              "transparent_pixels": 145001,
+              "visible_pixels": 51475,
+              "transparent_pixels": 144550,
               "edge_pixels": 0,
-              "minimum_margin": 40,
+              "minimum_margin": 42,
               "sheet_match": {
-                "relevant_pixels": 51063,
+                "relevant_pixels": 51475,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9603,19 +9603,19 @@
             },
             {
               "frame": 4,
-              "sha256_pixels": "ee59fce4882421d38ce20dc15b4e4e2cecab4fc4dffaaa6c11b88a120f4082d0",
+              "sha256_pixels": "e8117e50a3bf1e305a58fdd5c252ccd1ed04624e6dae431466929e5c2b61f9c2",
               "bounds": [
-                86,
-                121,
-                322,
-                471
+                84,
+                122,
+                320,
+                468
               ],
-              "visible_pixels": 51217,
-              "transparent_pixels": 144815,
+              "visible_pixels": 51743,
+              "transparent_pixels": 144276,
               "edge_pixels": 0,
-              "minimum_margin": 40,
+              "minimum_margin": 43,
               "sheet_match": {
-                "relevant_pixels": 51217,
+                "relevant_pixels": 51743,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9623,19 +9623,19 @@
             },
             {
               "frame": 5,
-              "sha256_pixels": "8a9cd6faba5253dd85dd010fc6668be717e0d85690785cd031071288af439119",
+              "sha256_pixels": "58f2eaa0b9c8859743d75f55cb81d018033cb0497ddd3e641d477e9612a0207c",
               "bounds": [
-                86,
-                128,
-                322,
-                478
+                84,
+                129,
+                320,
+                475
               ],
-              "visible_pixels": 50815,
-              "transparent_pixels": 145282,
+              "visible_pixels": 51178,
+              "transparent_pixels": 144854,
               "edge_pixels": 0,
-              "minimum_margin": 33,
+              "minimum_margin": 36,
               "sheet_match": {
-                "relevant_pixels": 50815,
+                "relevant_pixels": 51178,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9643,19 +9643,19 @@
             },
             {
               "frame": 6,
-              "sha256_pixels": "da9ab6b212ba44b402db3af7422a7e1cbdbaaf61f05cdb3e001b55703e715887",
+              "sha256_pixels": "c94a77eaf1c858fb7ae8c5704d5dfc89907bfe88d4309e6add2e75691702e0ed",
               "bounds": [
-                87,
-                120,
-                322,
+                85,
+                121,
+                321,
                 470
               ],
-              "visible_pixels": 51291,
-              "transparent_pixels": 144843,
+              "visible_pixels": 51745,
+              "transparent_pixels": 144333,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 51291,
+                "relevant_pixels": 51745,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9663,19 +9663,19 @@
             },
             {
               "frame": 7,
-              "sha256_pixels": "e5ee24169d11d37c7450369bba03c8d2f40bd82a7013c46bad200e4ae8993ba2",
+              "sha256_pixels": "1be79fc0b0642a009aa67ff84d684ab69e1737a10cc3441521dd276ea1a12a7b",
               "bounds": [
-                87,
-                120,
-                323,
-                470
+                86,
+                121,
+                321,
+                469
               ],
-              "visible_pixels": 51347,
-              "transparent_pixels": 144748,
+              "visible_pixels": 51687,
+              "transparent_pixels": 144401,
               "edge_pixels": 0,
-              "minimum_margin": 41,
+              "minimum_margin": 42,
               "sheet_match": {
-                "relevant_pixels": 51347,
+                "relevant_pixels": 51687,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9688,19 +9688,19 @@
           "frames": [
             {
               "frame": 0,
-              "sha256_pixels": "91b7c2c6eae10089e40ac5a85213ed9f827e6da4c1ebc7b6e341dc4a59ebd68c",
+              "sha256_pixels": "6403d6edcf6ca7c52da59b81827db19bb8cf027ab24e33f9872bfe5f921c1889",
               "bounds": [
-                80,
-                126,
-                317,
+                78,
+                128,
+                314,
                 470
               ],
-              "visible_pixels": 52913,
-              "transparent_pixels": 143069,
+              "visible_pixels": 52917,
+              "transparent_pixels": 143112,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 52913,
+                "relevant_pixels": 52917,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9708,19 +9708,19 @@
             },
             {
               "frame": 1,
-              "sha256_pixels": "a0c64fd413a5ddfd9e9021db21fac8e70ffba6de9c42bb595f44bd40d9a6809b",
+              "sha256_pixels": "04bbb7732b9ee63e1be63df2403bcd5ca590b5a208dc530a46fec07b7c451479",
               "bounds": [
-                80,
-                131,
-                317,
-                472
+                78,
+                133,
+                314,
+                471
               ],
-              "visible_pixels": 52664,
-              "transparent_pixels": 143320,
+              "visible_pixels": 52617,
+              "transparent_pixels": 143423,
               "edge_pixels": 0,
-              "minimum_margin": 39,
+              "minimum_margin": 40,
               "sheet_match": {
-                "relevant_pixels": 52664,
+                "relevant_pixels": 52617,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9728,19 +9728,19 @@
             },
             {
               "frame": 2,
-              "sha256_pixels": "ee8f8630d1a4a4e5fb6c87e3e6960ea6bcfa6535746d85d327b6baa8e89ca384",
+              "sha256_pixels": "033f9a3acef8eef3dcdf4a18507499b88549df2eaad9d17f1cd3db07d70942cb",
               "bounds": [
-                79,
-                121,
-                316,
+                77,
+                124,
+                313,
                 470
               ],
-              "visible_pixels": 52859,
-              "transparent_pixels": 143109,
+              "visible_pixels": 52769,
+              "transparent_pixels": 143242,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 52859,
+                "relevant_pixels": 52769,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9748,19 +9748,19 @@
             },
             {
               "frame": 3,
-              "sha256_pixels": "5be5891b4f69032fb2677da8e458da974493e7a972ca2bc20d914f25c3965674",
+              "sha256_pixels": "fd567300c363d400198f9d4c4680ab1ae10a5e4143d18d83bb55d323a212a6b2",
               "bounds": [
-                78,
-                122,
-                315,
+                76,
+                125,
+                312,
                 470
               ],
-              "visible_pixels": 53007,
-              "transparent_pixels": 142951,
+              "visible_pixels": 52954,
+              "transparent_pixels": 143058,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 53007,
+                "relevant_pixels": 52954,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9768,19 +9768,19 @@
             },
             {
               "frame": 4,
-              "sha256_pixels": "6e6777e9005aea85e778016ebf6f7936699c61447de6b446e313057a7122f1d6",
+              "sha256_pixels": "74e507aae038717db53bf79c127c37d3a7cff63fcf1a17ebb80cbb0c449c66e2",
               "bounds": [
-                78,
-                126,
-                315,
+                76,
+                128,
+                312,
                 470
               ],
-              "visible_pixels": 52961,
-              "transparent_pixels": 143006,
+              "visible_pixels": 52916,
+              "transparent_pixels": 143103,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 52961,
+                "relevant_pixels": 52916,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9788,19 +9788,19 @@
             },
             {
               "frame": 5,
-              "sha256_pixels": "a6d2f880d905661f78e447b790fd9fd88bc17c71f842cc2348074c34cde467c0",
+              "sha256_pixels": "b2246b280e5ef1d67155d2d77ec6437673165184f6a517529922349d145668fb",
               "bounds": [
-                78,
-                131,
-                315,
-                472
+                76,
+                133,
+                312,
+                471
               ],
-              "visible_pixels": 52663,
-              "transparent_pixels": 143310,
+              "visible_pixels": 52625,
+              "transparent_pixels": 143413,
               "edge_pixels": 0,
-              "minimum_margin": 39,
+              "minimum_margin": 40,
               "sheet_match": {
-                "relevant_pixels": 52663,
+                "relevant_pixels": 52625,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9808,19 +9808,19 @@
             },
             {
               "frame": 6,
-              "sha256_pixels": "fe1d2b4bb0677388315b2c8354a5fb924f91f48d3bd04d1fa7b98d97e43d39d3",
+              "sha256_pixels": "a1ef5baea7b70b1a945b28d433647822c8ffd45d1c532b66da490e9139f25710",
               "bounds": [
-                79,
-                121,
-                316,
+                77,
+                124,
+                313,
                 470
               ],
-              "visible_pixels": 52811,
-              "transparent_pixels": 143167,
+              "visible_pixels": 52794,
+              "transparent_pixels": 143210,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 52811,
+                "relevant_pixels": 52794,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9828,19 +9828,19 @@
             },
             {
               "frame": 7,
-              "sha256_pixels": "9d572f4198f53f6dd37bec30dba7312e37e0e30e2717f5bf69c5f9eb6a8f9f90",
+              "sha256_pixels": "cf342d2e0a7af93300f5b9000e959845e6b022b43f098463fdc8ac1fcbf12a71",
               "bounds": [
-                80,
-                122,
-                317,
+                78,
+                125,
+                314,
                 470
               ],
-              "visible_pixels": 52966,
-              "transparent_pixels": 143005,
+              "visible_pixels": 52961,
+              "transparent_pixels": 143085,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 52966,
+                "relevant_pixels": 52961,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9853,19 +9853,19 @@
           "frames": [
             {
               "frame": 0,
-              "sha256_pixels": "4b6db44b0ea8fabe7f1606a7b730e908b83cac6a36e9e6c7111f56ac6d8177ea",
+              "sha256_pixels": "275d8539f7abb4c163840b2cef9c4e03ee6d9881b98197e4d9314a02c7299f6a",
               "bounds": [
-                89,
-                118,
-                299,
+                88,
+                122,
+                298,
                 466
               ],
-              "visible_pixels": 49982,
-              "transparent_pixels": 146309,
+              "visible_pixels": 49148,
+              "transparent_pixels": 146883,
               "edge_pixels": 0,
               "minimum_margin": 45,
               "sheet_match": {
-                "relevant_pixels": 49982,
+                "relevant_pixels": 49148,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9873,19 +9873,19 @@
             },
             {
               "frame": 1,
-              "sha256_pixels": "506f25dc4891ab2fbee0c27abc51101297703ad4423dad7f5cab3296cf2edb1f",
+              "sha256_pixels": "a9eff96389fd16830d5946aa228a491e07eb6f0ab49bfba2f1562ad597cfc57b",
               "bounds": [
-                89,
-                126,
-                299,
+                88,
+                130,
+                298,
                 470
               ],
-              "visible_pixels": 49661,
-              "transparent_pixels": 146631,
+              "visible_pixels": 48609,
+              "transparent_pixels": 147426,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 49661,
+                "relevant_pixels": 48609,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9893,19 +9893,19 @@
             },
             {
               "frame": 2,
-              "sha256_pixels": "c6ded0c9127c9d2a0be3de646ba727dff8f1ae41813c1127a7d106d8a897e5a8",
+              "sha256_pixels": "604b1d081773dc94759bad0ce3ba66b757f1568acb2ac2ce186f862b81e2bafe",
               "bounds": [
-                88,
-                119,
-                298,
+                87,
+                123,
+                297,
                 470
               ],
-              "visible_pixels": 50938,
-              "transparent_pixels": 145316,
+              "visible_pixels": 49955,
+              "transparent_pixels": 146091,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 50938,
+                "relevant_pixels": 49955,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9913,19 +9913,19 @@
             },
             {
               "frame": 3,
-              "sha256_pixels": "127cc724b20b5ba29664358ca8fc820c3ad9f668175d7df82d62217042db71f6",
+              "sha256_pixels": "7a4547486d9960d9c78147193a979475b3d28867055412d24b02d0b435a76dec",
               "bounds": [
-                87,
-                118,
-                297,
-                467
+                86,
+                122,
+                296,
+                468
               ],
-              "visible_pixels": 51073,
-              "transparent_pixels": 145153,
+              "visible_pixels": 50051,
+              "transparent_pixels": 145977,
               "edge_pixels": 0,
-              "minimum_margin": 44,
+              "minimum_margin": 43,
               "sheet_match": {
-                "relevant_pixels": 51073,
+                "relevant_pixels": 50051,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9933,19 +9933,19 @@
             },
             {
               "frame": 4,
-              "sha256_pixels": "6f8581254999cb053b9edf4c4a0d1c7b2e641f09846af165e81325accf4ed6f9",
+              "sha256_pixels": "2463626d38e373093086ca2b48420dd1c271140878a2f0e99ae64b500b710e5c",
               "bounds": [
-                87,
-                118,
-                297,
+                86,
+                122,
+                296,
                 466
               ],
-              "visible_pixels": 50969,
-              "transparent_pixels": 145297,
+              "visible_pixels": 49900,
+              "transparent_pixels": 146117,
               "edge_pixels": 0,
               "minimum_margin": 45,
               "sheet_match": {
-                "relevant_pixels": 50969,
+                "relevant_pixels": 49900,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9953,19 +9953,19 @@
             },
             {
               "frame": 5,
-              "sha256_pixels": "43b142e3c11f951f1c19474e332532855a19ffd6e450b16fb974cab6167bec4c",
+              "sha256_pixels": "45cdd5685c726fd49f1c2c5e031f9f804c7c76685f275b877989745b564555fb",
               "bounds": [
-                87,
-                127,
-                297,
+                86,
+                130,
+                296,
                 470
               ],
-              "visible_pixels": 50931,
-              "transparent_pixels": 145294,
+              "visible_pixels": 49943,
+              "transparent_pixels": 146074,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 50931,
+                "relevant_pixels": 49943,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9973,19 +9973,19 @@
             },
             {
               "frame": 6,
-              "sha256_pixels": "659620527d1b7663f1f059f6d70c5065c38bdad6118eeb87ee9117b44802453e",
+              "sha256_pixels": "ac5ac48ee54653772d6c7d6e5122b31c8fcd02fc660ae41b86976485861efbbd",
               "bounds": [
-                88,
-                119,
-                298,
+                87,
+                123,
+                297,
                 470
               ],
-              "visible_pixels": 50045,
-              "transparent_pixels": 146228,
+              "visible_pixels": 49048,
+              "transparent_pixels": 147002,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 50045,
+                "relevant_pixels": 49048,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -9993,19 +9993,19 @@
             },
             {
               "frame": 7,
-              "sha256_pixels": "0552fc514749f7e76540acaf4ea1d5f9846fe830e0d81e7b17d20f6a203393cf",
+              "sha256_pixels": "2ff95168e1212364a0c68bf03c8452479ee454bd20a8585bb7eb6f005abe485c",
               "bounds": [
-                89,
-                118,
-                299,
-                467
+                88,
+                122,
+                298,
+                468
               ],
-              "visible_pixels": 49822,
-              "transparent_pixels": 146440,
+              "visible_pixels": 48929,
+              "transparent_pixels": 147055,
               "edge_pixels": 0,
-              "minimum_margin": 44,
+              "minimum_margin": 43,
               "sheet_match": {
-                "relevant_pixels": 49822,
+                "relevant_pixels": 48929,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10018,19 +10018,19 @@
           "frames": [
             {
               "frame": 0,
-              "sha256_pixels": "7663132c3e83386026f1cbdc4155183ec93da78c095bcba368591730a807271b",
+              "sha256_pixels": "fa5c1e750953e66ccae78dcb718ed6d33235182f4faaef2735eba328a67352fe",
               "bounds": [
                 89,
-                122,
-                318,
+                127,
+                322,
                 471
               ],
-              "visible_pixels": 47533,
-              "transparent_pixels": 148513,
+              "visible_pixels": 48043,
+              "transparent_pixels": 148042,
               "edge_pixels": 0,
               "minimum_margin": 40,
               "sheet_match": {
-                "relevant_pixels": 47533,
+                "relevant_pixels": 48043,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10038,19 +10038,19 @@
             },
             {
               "frame": 1,
-              "sha256_pixels": "fb7fbf85c969b875ed90b1064bdc6000cc262b770141f730881a6f1a0b9d1241",
+              "sha256_pixels": "81c13877c0902bdfa8f9ca7959fa0b004f8287c906f1d5f127081c50334e409d",
               "bounds": [
                 89,
-                128,
-                318,
-                477
+                133,
+                323,
+                476
               ],
-              "visible_pixels": 47194,
-              "transparent_pixels": 148862,
+              "visible_pixels": 47836,
+              "transparent_pixels": 148286,
               "edge_pixels": 0,
-              "minimum_margin": 34,
+              "minimum_margin": 35,
               "sheet_match": {
-                "relevant_pixels": 47194,
+                "relevant_pixels": 47836,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10058,19 +10058,19 @@
             },
             {
               "frame": 2,
-              "sha256_pixels": "28ea8f3c32f84e2f6a3cdbded21ebb28a460bc7a73ec9ecd8082485396e65dd1",
+              "sha256_pixels": "469dace2467cba6e5bde5b9673889ded91124a44e7935bfca596b4a3426920b5",
               "bounds": [
                 89,
-                123,
-                318,
-                472
+                128,
+                322,
+                471
               ],
-              "visible_pixels": 47398,
-              "transparent_pixels": 148626,
+              "visible_pixels": 47942,
+              "transparent_pixels": 148157,
               "edge_pixels": 0,
-              "minimum_margin": 39,
+              "minimum_margin": 40,
               "sheet_match": {
-                "relevant_pixels": 47398,
+                "relevant_pixels": 47942,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10078,19 +10078,19 @@
             },
             {
               "frame": 3,
-              "sha256_pixels": "eb5ab6e455bfa0e93c4768e2ed4063dd61e19651e4566244cfd6d69331a20fd2",
+              "sha256_pixels": "cad1c6219d01ead6a50f051c52afb52c4736c2b42e23e7d5bb4f844382847462",
               "bounds": [
                 89,
-                124,
-                318,
-                473
+                129,
+                322,
+                472
               ],
-              "visible_pixels": 47718,
-              "transparent_pixels": 148306,
+              "visible_pixels": 48101,
+              "transparent_pixels": 147980,
               "edge_pixels": 0,
-              "minimum_margin": 38,
+              "minimum_margin": 39,
               "sheet_match": {
-                "relevant_pixels": 47718,
+                "relevant_pixels": 48101,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10098,19 +10098,19 @@
             },
             {
               "frame": 4,
-              "sha256_pixels": "9d7d405d5768340cd6ea4e2c90cc132ae2ee02b448124d69f1f3f36158bd6757",
+              "sha256_pixels": "125da6e897f1ffd9ca91aeda7955670ce19d0d57f28c6bcfa4389bb953da2b9f",
               "bounds": [
                 89,
-                122,
-                318,
+                126,
+                322,
                 470
               ],
-              "visible_pixels": 47276,
-              "transparent_pixels": 148773,
+              "visible_pixels": 47769,
+              "transparent_pixels": 148328,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 47276,
+                "relevant_pixels": 47769,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10118,19 +10118,19 @@
             },
             {
               "frame": 5,
-              "sha256_pixels": "2ce57d3f3779520f7a8d108618fe449cb7d63c7cad7c62ef79903838665b2e90",
+              "sha256_pixels": "8065a1d98e95495432005479ffb60010b0b1fcdd9e73b5c089cfe7b7de20713a",
               "bounds": [
                 89,
-                126,
-                318,
-                475
+                131,
+                322,
+                474
               ],
-              "visible_pixels": 47388,
-              "transparent_pixels": 148653,
+              "visible_pixels": 47994,
+              "transparent_pixels": 148116,
               "edge_pixels": 0,
-              "minimum_margin": 36,
+              "minimum_margin": 37,
               "sheet_match": {
-                "relevant_pixels": 47388,
+                "relevant_pixels": 47994,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10138,19 +10138,19 @@
             },
             {
               "frame": 6,
-              "sha256_pixels": "6dafcc41a2afa5c6e1e219c280d1fa28c8a47efb047ffa5b5465a63d654fec8f",
+              "sha256_pixels": "4663afb607bd1e5a5c58ec173c250e28b1866ff1f5aa192b16ace9b8d293c1eb",
               "bounds": [
                 89,
-                121,
-                318,
+                125,
+                322,
                 470
               ],
-              "visible_pixels": 47094,
-              "transparent_pixels": 148921,
+              "visible_pixels": 47686,
+              "transparent_pixels": 148447,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 47094,
+                "relevant_pixels": 47686,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10158,19 +10158,19 @@
             },
             {
               "frame": 7,
-              "sha256_pixels": "c6a0f3991859cb040ca13153eed89f4cf2e7d18d22a7aef7a41db72abb10fdea",
+              "sha256_pixels": "580e65abc682d7533426c48c4f3aac95f537224d786169175be128cdfa62e419",
               "bounds": [
                 89,
-                122,
-                318,
+                126,
+                322,
                 470
               ],
-              "visible_pixels": 47780,
-              "transparent_pixels": 148261,
+              "visible_pixels": 48203,
+              "transparent_pixels": 147890,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 47780,
+                "relevant_pixels": 48203,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10183,19 +10183,19 @@
           "frames": [
             {
               "frame": 0,
-              "sha256_pixels": "35770793f122861ea75676d3f4632a67f2e4dea3f769f504342886bb65e980c4",
+              "sha256_pixels": "8be8b68f394743f80ce9b0ce2c33e4f9abb511775a2cbc97e5797bd0934a5320",
               "bounds": [
-                60,
-                121,
+                61,
+                125,
                 319,
-                468
+                467
               ],
-              "visible_pixels": 54271,
-              "transparent_pixels": 141711,
+              "visible_pixels": 54125,
+              "transparent_pixels": 141884,
               "edge_pixels": 0,
-              "minimum_margin": 43,
+              "minimum_margin": 44,
               "sheet_match": {
-                "relevant_pixels": 54271,
+                "relevant_pixels": 54125,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10203,19 +10203,19 @@
             },
             {
               "frame": 1,
-              "sha256_pixels": "d00cf9326c68b8bce46db29c255d0e6df85015a43694aa634b8299c5b18b8171",
+              "sha256_pixels": "8043d2f56d80939e79ff00cdc23b3f372881dbb5878a4590ca83d0ab36431e9a",
               "bounds": [
-                60,
-                124,
+                61,
+                129,
                 319,
                 472
               ],
-              "visible_pixels": 54285,
-              "transparent_pixels": 141697,
+              "visible_pixels": 54251,
+              "transparent_pixels": 141778,
               "edge_pixels": 0,
               "minimum_margin": 39,
               "sheet_match": {
-                "relevant_pixels": 54285,
+                "relevant_pixels": 54251,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10223,19 +10223,19 @@
             },
             {
               "frame": 2,
-              "sha256_pixels": "aeb65fede8c94c2cae1938a6d7a2146acb9ffc3882d6db2080bd337da6950679",
+              "sha256_pixels": "ffd741d8794cd492f93f115ff1e6a363783e87010c73455d5f63ec8fb42d05cc",
               "bounds": [
-                60,
-                123,
+                62,
+                127,
                 320,
                 470
               ],
-              "visible_pixels": 53995,
-              "transparent_pixels": 141998,
+              "visible_pixels": 54039,
+              "transparent_pixels": 141933,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 53995,
+                "relevant_pixels": 54039,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10243,19 +10243,19 @@
             },
             {
               "frame": 3,
-              "sha256_pixels": "fef2da0f58224209f3f805a2a6014e1e3522decf7976d4a994682411d2fd9bca",
+              "sha256_pixels": "b0a91bc5d08402374b498d09022e352c199be951f4841976929d09f741dc5977",
               "bounds": [
-                61,
-                129,
-                320,
+                63,
+                133,
+                321,
                 476
               ],
-              "visible_pixels": 53661,
-              "transparent_pixels": 142315,
+              "visible_pixels": 53722,
+              "transparent_pixels": 142337,
               "edge_pixels": 0,
               "minimum_margin": 35,
               "sheet_match": {
-                "relevant_pixels": 53661,
+                "relevant_pixels": 53722,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10263,19 +10263,19 @@
             },
             {
               "frame": 4,
-              "sha256_pixels": "a5632a4ad840363fbf94dd371ab13334145b15bc29721ddd22c0d08a449dd972",
+              "sha256_pixels": "da6c31859ddfbabdc64dcb2fef38c5e21c830c3f46c2683e7a78847c020e1d11",
               "bounds": [
-                61,
-                122,
-                320,
-                469
+                63,
+                125,
+                321,
+                468
               ],
-              "visible_pixels": 53740,
-              "transparent_pixels": 142216,
+              "visible_pixels": 53880,
+              "transparent_pixels": 142184,
               "edge_pixels": 0,
-              "minimum_margin": 42,
+              "minimum_margin": 43,
               "sheet_match": {
-                "relevant_pixels": 53740,
+                "relevant_pixels": 53880,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10283,19 +10283,19 @@
             },
             {
               "frame": 5,
-              "sha256_pixels": "080a70b6fc95982abb255a445cdb24bcf3f7fb26f9873b83c58db03c1964315a",
+              "sha256_pixels": "922cec38f50f847dba9e013d70913b32b46bf7e08231203383749e5b95025c70",
               "bounds": [
-                61,
-                127,
-                320,
-                473
+                63,
+                129,
+                321,
+                472
               ],
-              "visible_pixels": 53882,
-              "transparent_pixels": 142077,
+              "visible_pixels": 53855,
+              "transparent_pixels": 142163,
               "edge_pixels": 0,
-              "minimum_margin": 38,
+              "minimum_margin": 39,
               "sheet_match": {
-                "relevant_pixels": 53882,
+                "relevant_pixels": 53855,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10303,19 +10303,19 @@
             },
             {
               "frame": 6,
-              "sha256_pixels": "3a5841d9898c3a03d3f7496b052639bc1a7e78c3341e440583dafeecaf6d2624",
+              "sha256_pixels": "5be501a5b8fcb455c310fc414733a21c3ffe8c7334b6740eb75ee6679a01aa17",
               "bounds": [
-                60,
-                124,
+                62,
+                126,
                 320,
-                471
+                470
               ],
-              "visible_pixels": 54349,
-              "transparent_pixels": 141632,
+              "visible_pixels": 54466,
+              "transparent_pixels": 141554,
               "edge_pixels": 0,
-              "minimum_margin": 40,
+              "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 54349,
+                "relevant_pixels": 54466,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10323,19 +10323,19 @@
             },
             {
               "frame": 7,
-              "sha256_pixels": "f8a4aa52b713ede5fedd1ecc9432479d7c2c63aa87a364291025244f143b2381",
+              "sha256_pixels": "6e2ac6283d80477822bfff3ff4d4a534f36848597997494c10dc5a3a6944f1c5",
               "bounds": [
-                60,
-                129,
+                61,
+                132,
                 319,
-                476
+                474
               ],
-              "visible_pixels": 54498,
-              "transparent_pixels": 141450,
+              "visible_pixels": 54473,
+              "transparent_pixels": 141532,
               "edge_pixels": 0,
-              "minimum_margin": 35,
+              "minimum_margin": 37,
               "sheet_match": {
-                "relevant_pixels": 54498,
+                "relevant_pixels": 54473,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10348,19 +10348,19 @@
           "frames": [
             {
               "frame": 0,
-              "sha256_pixels": "1e4a3603ea1927fb3e127607d9b7ed69abd055ffcc5ac0990961e85f8b43f12f",
+              "sha256_pixels": "cc5d1e320192929fc5e0c82defa5b05b1f796206416cca084a29e3cbbffeae0b",
               "bounds": [
                 73,
-                129,
-                303,
-                476
+                126,
+                305,
+                472
               ],
-              "visible_pixels": 51913,
-              "transparent_pixels": 144160,
+              "visible_pixels": 52999,
+              "transparent_pixels": 143103,
               "edge_pixels": 0,
-              "minimum_margin": 35,
+              "minimum_margin": 39,
               "sheet_match": {
-                "relevant_pixels": 51913,
+                "relevant_pixels": 52999,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10368,19 +10368,19 @@
             },
             {
               "frame": 1,
-              "sha256_pixels": "65ee380efebb8d3b845dec210ae1d0b199f7ba9ab18c4d3acd6fd7b4a9f4e79b",
+              "sha256_pixels": "9147bc2d26bd7068589d2157175e645752368349c653063b6115cee5fa9ed9b7",
               "bounds": [
                 73,
-                139,
-                303,
-                486
+                136,
+                305,
+                482
               ],
-              "visible_pixels": 51677,
-              "transparent_pixels": 144391,
+              "visible_pixels": 52793,
+              "transparent_pixels": 143259,
               "edge_pixels": 0,
-              "minimum_margin": 25,
+              "minimum_margin": 29,
               "sheet_match": {
-                "relevant_pixels": 51677,
+                "relevant_pixels": 52793,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10388,19 +10388,19 @@
             },
             {
               "frame": 2,
-              "sha256_pixels": "5ea569cc8358bd8c83c9b744de88deef274cc2a8454b3a8032dbfd9b9ac50d08",
+              "sha256_pixels": "087cdee2cf359f57194dbffcb12c127cfd1d69228a6a1c750721e49a0c46c0f3",
               "bounds": [
                 74,
-                143,
-                304,
-                490
+                140,
+                305,
+                486
               ],
-              "visible_pixels": 52344,
-              "transparent_pixels": 143739,
+              "visible_pixels": 53394,
+              "transparent_pixels": 142634,
               "edge_pixels": 0,
-              "minimum_margin": 21,
+              "minimum_margin": 25,
               "sheet_match": {
-                "relevant_pixels": 52344,
+                "relevant_pixels": 53394,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10408,19 +10408,19 @@
             },
             {
               "frame": 3,
-              "sha256_pixels": "eed987a5c701848882652f8b8da989428555ff6dc9abfb8f85d08260eb79cd7c",
+              "sha256_pixels": "115f9a2abbd5cd25138ae2aba425ae1cfa79ea92b109b8d104a7df3190e667b5",
               "bounds": [
                 74,
                 119,
-                305,
+                306,
                 465
               ],
-              "visible_pixels": 52469,
-              "transparent_pixels": 143602,
+              "visible_pixels": 53487,
+              "transparent_pixels": 142601,
               "edge_pixels": 0,
               "minimum_margin": 46,
               "sheet_match": {
-                "relevant_pixels": 52469,
+                "relevant_pixels": 53487,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10428,19 +10428,19 @@
             },
             {
               "frame": 4,
-              "sha256_pixels": "d459e6ddbb5a262c215234829f056a317ec22eba01a0fa18dd42b22f12a9b2a9",
+              "sha256_pixels": "9d1545a8cc7a5ad62c1f56d77599f1453e0236763b706cebb77d0494e6707f05",
               "bounds": [
                 74,
-                128,
-                305,
-                475
+                126,
+                306,
+                472
               ],
-              "visible_pixels": 51909,
-              "transparent_pixels": 144178,
+              "visible_pixels": 52932,
+              "transparent_pixels": 143182,
               "edge_pixels": 0,
-              "minimum_margin": 36,
+              "minimum_margin": 39,
               "sheet_match": {
-                "relevant_pixels": 51909,
+                "relevant_pixels": 52932,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10448,19 +10448,19 @@
             },
             {
               "frame": 5,
-              "sha256_pixels": "8eaf61276946851456913c5d6f0bfe5d0a19c1341ff859538161f626c2f07fa9",
+              "sha256_pixels": "dee5ae43d44e1b13d8e3256a8d5199db5746c0e471dd010d5f5fdfb7405fb5c0",
               "bounds": [
                 74,
-                138,
-                305,
-                485
+                136,
+                306,
+                482
               ],
-              "visible_pixels": 51665,
-              "transparent_pixels": 144434,
+              "visible_pixels": 52728,
+              "transparent_pixels": 143346,
               "edge_pixels": 0,
-              "minimum_margin": 26,
+              "minimum_margin": 29,
               "sheet_match": {
-                "relevant_pixels": 51665,
+                "relevant_pixels": 52728,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10468,19 +10468,19 @@
             },
             {
               "frame": 6,
-              "sha256_pixels": "ab360755955ff1db06dbc8d7391d05024289bc952c32f7350268a576bbbf2d6d",
+              "sha256_pixels": "a7f280f64d6084dbbfc912c7ae07bc65d9f08097554f2673c4b8215356f16a0f",
               "bounds": [
                 74,
-                142,
-                304,
-                489
+                140,
+                305,
+                486
               ],
-              "visible_pixels": 52298,
-              "transparent_pixels": 143749,
+              "visible_pixels": 53336,
+              "transparent_pixels": 142685,
               "edge_pixels": 0,
-              "minimum_margin": 22,
+              "minimum_margin": 25,
               "sheet_match": {
-                "relevant_pixels": 52298,
+                "relevant_pixels": 53336,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10488,19 +10488,19 @@
             },
             {
               "frame": 7,
-              "sha256_pixels": "16442f5ad5db3fcfa56c61cee8c467c1394e14ac5dda397f2e16597ee3a216b8",
+              "sha256_pixels": "3921e1de457be14756e056d9cb754a10a7f7bea0690dba7b6d7f257f6bff2113",
               "bounds": [
                 73,
                 119,
-                303,
+                305,
                 465
               ],
-              "visible_pixels": 52461,
-              "transparent_pixels": 143626,
+              "visible_pixels": 53510,
+              "transparent_pixels": 142574,
               "edge_pixels": 0,
               "minimum_margin": 46,
               "sheet_match": {
-                "relevant_pixels": 52461,
+                "relevant_pixels": 53510,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10513,19 +10513,19 @@
           "frames": [
             {
               "frame": 0,
-              "sha256_pixels": "6b50b82fe10755d78ec9d69c266fda97723ec90dfa9f94c720c5731647c7e593",
+              "sha256_pixels": "94d64f5ab1f47dc968cb9a7741920c47b73b3a075f5ae412085a42f5c5c47051",
               "bounds": [
                 56,
-                118,
-                276,
-                472
+                120,
+                277,
+                467
               ],
-              "visible_pixels": 48707,
-              "transparent_pixels": 147583,
+              "visible_pixels": 48530,
+              "transparent_pixels": 147600,
               "edge_pixels": 0,
-              "minimum_margin": 39,
+              "minimum_margin": 44,
               "sheet_match": {
-                "relevant_pixels": 48707,
+                "relevant_pixels": 48530,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10533,19 +10533,19 @@
             },
             {
               "frame": 1,
-              "sha256_pixels": "3a478c0424c4c9fb182605c0f923bb7ead1b935ae3bc19d6398c296df814c9f4",
+              "sha256_pixels": "7c16897635cba8cf22394392e753c044854ca3a6f25107d824d2e436b8f262e7",
               "bounds": [
                 56,
-                131,
-                276,
-                485
+                132,
+                277,
+                473
               ],
-              "visible_pixels": 48284,
-              "transparent_pixels": 147984,
+              "visible_pixels": 48166,
+              "transparent_pixels": 147910,
               "edge_pixels": 0,
-              "minimum_margin": 26,
+              "minimum_margin": 38,
               "sheet_match": {
-                "relevant_pixels": 48284,
+                "relevant_pixels": 48166,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10553,19 +10553,19 @@
             },
             {
               "frame": 2,
-              "sha256_pixels": "0c1469cc188b6d41865305ee6e90dde1bcb5e84c570910a00e9f2fccc6bd0c64",
+              "sha256_pixels": "3912c979f8770ecf1fbabcc678f831b5dcaa2dd988eb5feab9f06511cb00246f",
               "bounds": [
                 57,
-                130,
-                276,
-                484
+                131,
+                278,
+                473
               ],
-              "visible_pixels": 48456,
-              "transparent_pixels": 147751,
+              "visible_pixels": 48064,
+              "transparent_pixels": 148025,
               "edge_pixels": 0,
-              "minimum_margin": 27,
+              "minimum_margin": 38,
               "sheet_match": {
-                "relevant_pixels": 48456,
+                "relevant_pixels": 48064,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10573,19 +10573,19 @@
             },
             {
               "frame": 3,
-              "sha256_pixels": "5841b95efc552a1724039e95540089e3b7f23bb598e964aff86e9833a3c3aed9",
+              "sha256_pixels": "623232e4b09c3aff9f88594fc4a986f84f3403a61c0b655db13a7d73bcd3965f",
               "bounds": [
                 57,
-                108,
-                277,
-                461
+                109,
+                278,
+                455
               ],
-              "visible_pixels": 48811,
-              "transparent_pixels": 147454,
+              "visible_pixels": 48059,
+              "transparent_pixels": 148053,
               "edge_pixels": 0,
-              "minimum_margin": 50,
+              "minimum_margin": 56,
               "sheet_match": {
-                "relevant_pixels": 48811,
+                "relevant_pixels": 48059,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10593,19 +10593,19 @@
             },
             {
               "frame": 4,
-              "sha256_pixels": "e132af2c2a58f5fce21b161c35392e05daf83ac0843d607b58082e64484100f0",
+              "sha256_pixels": "11440c2023b377cad7b14f4f3b77c13e0d6bcc96da07c0462a86dd62e521bfe2",
               "bounds": [
                 57,
-                117,
-                277,
-                471
+                118,
+                278,
+                466
               ],
-              "visible_pixels": 48240,
-              "transparent_pixels": 148052,
+              "visible_pixels": 47396,
+              "transparent_pixels": 148729,
               "edge_pixels": 0,
-              "minimum_margin": 40,
+              "minimum_margin": 45,
               "sheet_match": {
-                "relevant_pixels": 48240,
+                "relevant_pixels": 47396,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10613,19 +10613,19 @@
             },
             {
               "frame": 5,
-              "sha256_pixels": "5bfe3ec62178f4b0ec7073946e6ff291006bc47b3f439174a971227265da50ef",
+              "sha256_pixels": "131be9b1447a9c9b794c1c735c8d63f51f0dd6770180a6697ffc574374a3c692",
               "bounds": [
                 57,
-                129,
-                277,
-                483
+                130,
+                278,
+                471
               ],
-              "visible_pixels": 48179,
-              "transparent_pixels": 148094,
+              "visible_pixels": 48083,
+              "transparent_pixels": 148044,
               "edge_pixels": 0,
-              "minimum_margin": 28,
+              "minimum_margin": 40,
               "sheet_match": {
-                "relevant_pixels": 48179,
+                "relevant_pixels": 48083,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10633,19 +10633,19 @@
             },
             {
               "frame": 6,
-              "sha256_pixels": "76524df82a943d01ddf75425845a36c37e75042893531cafd27037964333aff0",
+              "sha256_pixels": "8ec6837f04cc2d965bcf63f27f70b735b6f0fbbb33cde864ec630fdcbaa1b4ab",
               "bounds": [
                 57,
                 127,
-                276,
-                481
+                278,
+                469
               ],
-              "visible_pixels": 48339,
-              "transparent_pixels": 147937,
+              "visible_pixels": 48380,
+              "transparent_pixels": 147719,
               "edge_pixels": 0,
-              "minimum_margin": 30,
+              "minimum_margin": 42,
               "sheet_match": {
-                "relevant_pixels": 48339,
+                "relevant_pixels": 48380,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10653,19 +10653,19 @@
             },
             {
               "frame": 7,
-              "sha256_pixels": "07a7a89c18764dfc341013ddc7806a01bcd5d694644e1f14422b1533e880d0aa",
+              "sha256_pixels": "4ebb14949c82ee9cdcedac96e6e5b17db81cb476f08717ba995f5cd4bfa9db24",
               "bounds": [
                 56,
-                108,
-                276,
-                462
+                109,
+                277,
+                454
               ],
-              "visible_pixels": 49226,
-              "transparent_pixels": 147035,
+              "visible_pixels": 49183,
+              "transparent_pixels": 146881,
               "edge_pixels": 0,
-              "minimum_margin": 49,
+              "minimum_margin": 56,
               "sheet_match": {
-                "relevant_pixels": 49226,
+                "relevant_pixels": 49183,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10678,19 +10678,19 @@
           "frames": [
             {
               "frame": 0,
-              "sha256_pixels": "5e582b2a60cf9ca15bf67e3b28e0911a228ab6fb100f74c08ae99c70b52b7fae",
+              "sha256_pixels": "bdccc906f8df8d98130f58998c4e930933d34d160d5044745e646ac6243d8f52",
               "bounds": [
                 80,
                 135,
                 332,
-                480
+                476
               ],
-              "visible_pixels": 44822,
-              "transparent_pixels": 151224,
+              "visible_pixels": 44630,
+              "transparent_pixels": 151395,
               "edge_pixels": 0,
-              "minimum_margin": 31,
+              "minimum_margin": 35,
               "sheet_match": {
-                "relevant_pixels": 44822,
+                "relevant_pixels": 44630,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10698,19 +10698,19 @@
             },
             {
               "frame": 1,
-              "sha256_pixels": "2a3f58be254459157142c1b0555e1109805675e265ed28977d7415eaaccee778",
+              "sha256_pixels": "1c67727d1b49d037644583dfd4be9fde109614473ff8ea37a1c1211a159a52e8",
               "bounds": [
-                79,
+                80,
                 144,
-                333,
-                489
+                332,
+                485
               ],
-              "visible_pixels": 44800,
-              "transparent_pixels": 151274,
+              "visible_pixels": 45191,
+              "transparent_pixels": 150856,
               "edge_pixels": 0,
-              "minimum_margin": 22,
+              "minimum_margin": 26,
               "sheet_match": {
-                "relevant_pixels": 44800,
+                "relevant_pixels": 45191,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10718,19 +10718,19 @@
             },
             {
               "frame": 2,
-              "sha256_pixels": "1646ec6d97d9026c435e0c2dce6d7031203398e2eab9a6d31f3e17d6103db599",
+              "sha256_pixels": "c51cb59a1ce4a561cea8414ffd81478fb9a67927af0415bb2fdc591a806d5df8",
               "bounds": [
-                79,
+                80,
                 132,
-                333,
-                477
+                332,
+                474
               ],
-              "visible_pixels": 45616,
-              "transparent_pixels": 150422,
+              "visible_pixels": 45739,
+              "transparent_pixels": 150270,
               "edge_pixels": 0,
-              "minimum_margin": 34,
+              "minimum_margin": 37,
               "sheet_match": {
-                "relevant_pixels": 45616,
+                "relevant_pixels": 45739,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10738,19 +10738,19 @@
             },
             {
               "frame": 3,
-              "sha256_pixels": "88d55725da916638f5baa85870f336bc9751334c3840dc3fc5cb87e43f7498f2",
+              "sha256_pixels": "ce137f9e9730d258859462dd9a40489762b62e8e5b0000aadb9c66083dc2fb6e",
               "bounds": [
-                79,
+                80,
                 124,
-                333,
-                469
+                332,
+                465
               ],
-              "visible_pixels": 45474,
-              "transparent_pixels": 150600,
+              "visible_pixels": 45327,
+              "transparent_pixels": 150663,
               "edge_pixels": 0,
-              "minimum_margin": 42,
+              "minimum_margin": 46,
               "sheet_match": {
-                "relevant_pixels": 45474,
+                "relevant_pixels": 45327,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10758,19 +10758,19 @@
             },
             {
               "frame": 4,
-              "sha256_pixels": "e9b47bc8e28348f4c15e33053a2a88d8e553f82fcd23f8729980f30aa711da49",
+              "sha256_pixels": "35feeb74aba432d78635069e683509403bea95717eb6f8e39ee5beedc6126070",
               "bounds": [
-                79,
-                139,
-                333,
-                483
+                80,
+                138,
+                332,
+                479
               ],
-              "visible_pixels": 44927,
-              "transparent_pixels": 151123,
+              "visible_pixels": 44777,
+              "transparent_pixels": 151258,
               "edge_pixels": 0,
-              "minimum_margin": 28,
+              "minimum_margin": 32,
               "sheet_match": {
-                "relevant_pixels": 44927,
+                "relevant_pixels": 44777,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10778,19 +10778,19 @@
             },
             {
               "frame": 5,
-              "sha256_pixels": "34e8b9981d16bffebe0153cda16c53096639028c7e9f35240a8c9be0493b5319",
+              "sha256_pixels": "966ca815b4951420b3a8e05206d1e8cee813ea4a7c4df9b5fd559ad32d8c47aa",
               "bounds": [
                 80,
                 147,
                 332,
-                492
+                488
               ],
-              "visible_pixels": 44835,
-              "transparent_pixels": 151201,
+              "visible_pixels": 45283,
+              "transparent_pixels": 150737,
               "edge_pixels": 0,
-              "minimum_margin": 19,
+              "minimum_margin": 23,
               "sheet_match": {
-                "relevant_pixels": 44835,
+                "relevant_pixels": 45283,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10798,19 +10798,19 @@
             },
             {
               "frame": 6,
-              "sha256_pixels": "8e4f225ee423efeb6b5c0a6259d16c9cd1881530f47e124a46661c67ad1f9da6",
+              "sha256_pixels": "ed942b2752ed60bab1a071f1b9a2361c3771e9fa23b90d284916cb2e90d079bd",
               "bounds": [
                 80,
-                135,
+                136,
                 332,
-                480
+                477
               ],
-              "visible_pixels": 45370,
-              "transparent_pixels": 150655,
+              "visible_pixels": 45225,
+              "transparent_pixels": 150762,
               "edge_pixels": 0,
-              "minimum_margin": 31,
+              "minimum_margin": 34,
               "sheet_match": {
-                "relevant_pixels": 45370,
+                "relevant_pixels": 45225,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10818,19 +10818,19 @@
             },
             {
               "frame": 7,
-              "sha256_pixels": "bf478bccc0abf7303c6c94c65483627630a3e91fd8311e8e08144b4deb19fc80",
+              "sha256_pixels": "04671e28384389154aac5a11846292bac7bcbd7a7d039112765a0c349edd1e72",
               "bounds": [
-                79,
+                80,
                 124,
-                333,
-                469
+                332,
+                465
               ],
-              "visible_pixels": 45376,
-              "transparent_pixels": 150682,
+              "visible_pixels": 45131,
+              "transparent_pixels": 150870,
               "edge_pixels": 0,
-              "minimum_margin": 42,
+              "minimum_margin": 46,
               "sheet_match": {
-                "relevant_pixels": 45376,
+                "relevant_pixels": 45131,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10843,19 +10843,19 @@
           "frames": [
             {
               "frame": 0,
-              "sha256_pixels": "342ae2cda72a89b1cdf0c3c540f8d5b98b9aac1772c433f563befaec21ae25dc",
+              "sha256_pixels": "f1288ed8aca0d84ac1aa239871ccac3f49df8fda34d61672aa1388712c577ce0",
               "bounds": [
-                87,
-                137,
-                345,
-                493
+                89,
+                138,
+                343,
+                490
               ],
-              "visible_pixels": 49307,
-              "transparent_pixels": 146808,
+              "visible_pixels": 49726,
+              "transparent_pixels": 146351,
               "edge_pixels": 0,
-              "minimum_margin": 18,
+              "minimum_margin": 21,
               "sheet_match": {
-                "relevant_pixels": 49307,
+                "relevant_pixels": 49726,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10863,19 +10863,19 @@
             },
             {
               "frame": 1,
-              "sha256_pixels": "b699df9ee224ba052a394fb801ceaa3eac7f768e47f45e708f938adb2abf6692",
+              "sha256_pixels": "cabe6672f6827edafe9b0ef6c7931c913af58540f33851de8311ce48e0fb4bd9",
               "bounds": [
-                87,
-                139,
-                345,
-                495
+                89,
+                140,
+                343,
+                491
               ],
-              "visible_pixels": 49657,
-              "transparent_pixels": 146441,
+              "visible_pixels": 50475,
+              "transparent_pixels": 145587,
               "edge_pixels": 0,
-              "minimum_margin": 16,
+              "minimum_margin": 20,
               "sheet_match": {
-                "relevant_pixels": 49657,
+                "relevant_pixels": 50475,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10883,19 +10883,19 @@
             },
             {
               "frame": 2,
-              "sha256_pixels": "6f488fab8e141b98ceb469e4f7258a87209b148b8cf1eacf9349e3c0fe813ac0",
+              "sha256_pixels": "e89c2cd93a805b36a846e90b87824e913a3c07de2f7845005d973b88b9516785",
               "bounds": [
-                87,
-                125,
-                345,
-                481
+                89,
+                126,
+                342,
+                478
               ],
-              "visible_pixels": 50269,
-              "transparent_pixels": 145827,
+              "visible_pixels": 50780,
+              "transparent_pixels": 145258,
               "edge_pixels": 0,
-              "minimum_margin": 30,
+              "minimum_margin": 33,
               "sheet_match": {
-                "relevant_pixels": 50269,
+                "relevant_pixels": 50780,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10903,19 +10903,19 @@
             },
             {
               "frame": 3,
-              "sha256_pixels": "334249c0c9d231bd089f227672fd63c04eeb087a21d6daca28ea67f1cea1df41",
+              "sha256_pixels": "e7ce4388a5c1636e68756c74ef8d8fab7f6f8e03634878a8f4e0e28f7b1f5974",
               "bounds": [
-                86,
-                121,
-                344,
-                477
+                88,
+                122,
+                342,
+                474
               ],
-              "visible_pixels": 50509,
-              "transparent_pixels": 145583,
+              "visible_pixels": 51107,
+              "transparent_pixels": 144957,
               "edge_pixels": 0,
-              "minimum_margin": 34,
+              "minimum_margin": 37,
               "sheet_match": {
-                "relevant_pixels": 50509,
+                "relevant_pixels": 51107,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10923,19 +10923,19 @@
             },
             {
               "frame": 4,
-              "sha256_pixels": "3d94497b1d158f5c255db739d4ed8ec0de9aaa46efa51de2f0a36b8d5d64e90c",
+              "sha256_pixels": "f03a792ed253a93e069201557b51e1a66e99a495e06598266f4e706d823ff2a5",
               "bounds": [
-                86,
+                89,
                 140,
-                344,
-                495
+                342,
+                492
               ],
-              "visible_pixels": 50049,
-              "transparent_pixels": 146037,
+              "visible_pixels": 50734,
+              "transparent_pixels": 145335,
               "edge_pixels": 0,
-              "minimum_margin": 16,
+              "minimum_margin": 19,
               "sheet_match": {
-                "relevant_pixels": 50049,
+                "relevant_pixels": 50734,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10943,19 +10943,19 @@
             },
             {
               "frame": 5,
-              "sha256_pixels": "051d2f08f413adb467db6e49b9ef0d7ad5f11bc34cfdea694c4072d1f77e228d",
+              "sha256_pixels": "3882dd151e9752d97d117b753b87ea52cc81f0df938d375b2046a5de95e1fde7",
               "bounds": [
-                87,
+                88,
                 142,
-                344,
-                498
+                342,
+                494
               ],
-              "visible_pixels": 50053,
-              "transparent_pixels": 146033,
+              "visible_pixels": 50625,
+              "transparent_pixels": 145458,
               "edge_pixels": 0,
-              "minimum_margin": 13,
+              "minimum_margin": 17,
               "sheet_match": {
-                "relevant_pixels": 50053,
+                "relevant_pixels": 50625,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10963,19 +10963,19 @@
             },
             {
               "frame": 6,
-              "sha256_pixels": "1cc1afcf7ed833caf70c01bdcb2b813906d1c0d64f9b3297f438c4b7e28a0f4f",
+              "sha256_pixels": "bb56663a57c41a0813dedc3fd68675a8d9a73dd6572f5eb2aa647e1ee2c7be8a",
               "bounds": [
-                87,
-                128,
-                345,
-                484
+                89,
+                129,
+                342,
+                481
               ],
-              "visible_pixels": 50146,
-              "transparent_pixels": 145964,
+              "visible_pixels": 50506,
+              "transparent_pixels": 145521,
               "edge_pixels": 0,
-              "minimum_margin": 27,
+              "minimum_margin": 30,
               "sheet_match": {
-                "relevant_pixels": 50146,
+                "relevant_pixels": 50506,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -10983,19 +10983,19 @@
             },
             {
               "frame": 7,
-              "sha256_pixels": "39197e94f363947226a46e0defc60970efaf55f93ad90beac2026d78ff20641f",
+              "sha256_pixels": "0be6a0f6870a5a9dc85c1b572a71c5a9c9c863dca7746cc23625f218ad3c1a92",
               "bounds": [
-                87,
-                121,
-                345,
-                477
+                89,
+                122,
+                343,
+                474
               ],
-              "visible_pixels": 49918,
-              "transparent_pixels": 146191,
+              "visible_pixels": 50198,
+              "transparent_pixels": 145859,
               "edge_pixels": 0,
-              "minimum_margin": 34,
+              "minimum_margin": 37,
               "sheet_match": {
-                "relevant_pixels": 49918,
+                "relevant_pixels": 50198,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11008,19 +11008,19 @@
           "frames": [
             {
               "frame": 0,
-              "sha256_pixels": "dc54c54400bfee16713506e35919f4948d4ba85f00844abd81f41baf9ca38843",
+              "sha256_pixels": "4bbbf2fef7d539a38b8e5b15cfd43dfd8491005cc0f5f9e135a06343a27431dd",
               "bounds": [
-                80,
-                141,
-                316,
-                482
+                78,
+                143,
+                314,
+                481
               ],
-              "visible_pixels": 51658,
-              "transparent_pixels": 144315,
+              "visible_pixels": 51608,
+              "transparent_pixels": 144438,
               "edge_pixels": 0,
-              "minimum_margin": 29,
+              "minimum_margin": 30,
               "sheet_match": {
-                "relevant_pixels": 51658,
+                "relevant_pixels": 51608,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11028,19 +11028,19 @@
             },
             {
               "frame": 1,
-              "sha256_pixels": "82229e81d26c860eb3a5c55868cef260adf83f50e47b925371bd0bd812c7f540",
+              "sha256_pixels": "99debcd8647b484b1568ff074c6ea0b98bab97c8a056b7e304cde6f474ed6e22",
               "bounds": [
-                80,
-                140,
-                316,
-                481
+                78,
+                142,
+                314,
+                480
               ],
-              "visible_pixels": 51357,
-              "transparent_pixels": 144640,
+              "visible_pixels": 51310,
+              "transparent_pixels": 144736,
               "edge_pixels": 0,
-              "minimum_margin": 30,
+              "minimum_margin": 31,
               "sheet_match": {
-                "relevant_pixels": 51357,
+                "relevant_pixels": 51310,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11048,19 +11048,19 @@
             },
             {
               "frame": 2,
-              "sha256_pixels": "9de7bec83acd5301ee57037533bdaff532d41651655c569cb94fdd4e4d3d8d2a",
+              "sha256_pixels": "d3adf5a03f9b01fbc8d03295653e79c86b34b2be23d5654fd4e4f9c9bb734e66",
               "bounds": [
-                79,
-                128,
-                316,
+                77,
+                130,
+                313,
                 470
               ],
-              "visible_pixels": 52115,
-              "transparent_pixels": 143857,
+              "visible_pixels": 52082,
+              "transparent_pixels": 143927,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 52115,
+                "relevant_pixels": 52082,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11068,19 +11068,19 @@
             },
             {
               "frame": 3,
-              "sha256_pixels": "bb240db8414a0dfb6aef369ab14edb5b8af7bdfc4a02068fefcabf56e0bac506",
+              "sha256_pixels": "20ab673d6e561e14b73537a83202139fbccb644abc5a962af86f09bd4a8cfd33",
               "bounds": [
-                78,
-                118,
-                315,
+                77,
+                121,
+                312,
                 459
               ],
-              "visible_pixels": 52279,
-              "transparent_pixels": 143677,
+              "visible_pixels": 52267,
+              "transparent_pixels": 143773,
               "edge_pixels": 0,
               "minimum_margin": 52,
               "sheet_match": {
-                "relevant_pixels": 52279,
+                "relevant_pixels": 52267,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11088,19 +11088,19 @@
             },
             {
               "frame": 4,
-              "sha256_pixels": "2bb06dc5c02263e1ce6926dad0ef2dcf379cb49129fb1cb190726ba48273a82c",
+              "sha256_pixels": "6632ac1e758994e2548241fb4a6d608451531827d20a5bd677c0dcf807e67f93",
               "bounds": [
-                78,
-                141,
-                315,
-                482
+                77,
+                143,
+                312,
+                481
               ],
-              "visible_pixels": 51613,
-              "transparent_pixels": 144380,
+              "visible_pixels": 51659,
+              "transparent_pixels": 144391,
               "edge_pixels": 0,
-              "minimum_margin": 29,
+              "minimum_margin": 30,
               "sheet_match": {
-                "relevant_pixels": 51613,
+                "relevant_pixels": 51659,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11108,19 +11108,19 @@
             },
             {
               "frame": 5,
-              "sha256_pixels": "572ce01b8c69301bbf4778906c20c4f9c2897cd28ab5e673dffb106b73de0c48",
+              "sha256_pixels": "fb56ceb8ec72fe1934a6e95bfa1dbb6bb7daff728e1ed1bd6fcca3eaa508cba6",
               "bounds": [
-                78,
-                140,
-                315,
-                481
+                77,
+                142,
+                312,
+                480
               ],
-              "visible_pixels": 51278,
-              "transparent_pixels": 144702,
+              "visible_pixels": 51368,
+              "transparent_pixels": 144677,
               "edge_pixels": 0,
-              "minimum_margin": 30,
+              "minimum_margin": 31,
               "sheet_match": {
-                "relevant_pixels": 51278,
+                "relevant_pixels": 51368,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11128,19 +11128,19 @@
             },
             {
               "frame": 6,
-              "sha256_pixels": "643cff567ca3c9a69dac266df1ecaa91cfc34cc1307c2e68dcd42becc5639dce",
+              "sha256_pixels": "9d01929579b490278b811a5ab32b9ff50e10f6913632b0744c9b3423c7c588a1",
               "bounds": [
-                79,
-                128,
-                316,
+                77,
+                130,
+                313,
                 470
               ],
-              "visible_pixels": 52062,
-              "transparent_pixels": 143924,
+              "visible_pixels": 52132,
+              "transparent_pixels": 143883,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 52062,
+                "relevant_pixels": 52132,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11148,19 +11148,19 @@
             },
             {
               "frame": 7,
-              "sha256_pixels": "d64257aee21fa7abfff3eadb55ee938e5b6487a5f32c1208ddf3c330fd77695d",
+              "sha256_pixels": "27d62050ac128fcea0bce9e38e5a53ae04a15c252484666b51d61a531a43c874",
               "bounds": [
-                80,
-                118,
-                316,
+                78,
+                121,
+                314,
                 459
               ],
-              "visible_pixels": 52262,
-              "transparent_pixels": 143693,
+              "visible_pixels": 52238,
+              "transparent_pixels": 143795,
               "edge_pixels": 0,
               "minimum_margin": 52,
               "sheet_match": {
-                "relevant_pixels": 52262,
+                "relevant_pixels": 52238,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11173,19 +11173,19 @@
           "frames": [
             {
               "frame": 0,
-              "sha256_pixels": "a5dbc14b19cdbda7a51b681c4018999a4c65d91c41d58c0bf0cb11795998f3cd",
+              "sha256_pixels": "e227b02f83ee9033737d5d121e7f10dc7d7cfe6cc62324ae1c38ca6e1223f5a3",
               "bounds": [
                 84,
-                133,
-                294,
+                136,
+                293,
                 469
               ],
-              "visible_pixels": 49340,
-              "transparent_pixels": 146909,
+              "visible_pixels": 48309,
+              "transparent_pixels": 147739,
               "edge_pixels": 0,
               "minimum_margin": 42,
               "sheet_match": {
-                "relevant_pixels": 49340,
+                "relevant_pixels": 48309,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11193,19 +11193,19 @@
             },
             {
               "frame": 1,
-              "sha256_pixels": "e55b5c1cfeaeb7de1724020595ff0de6db79f88ea5168d2cf1c0cb6e07c80951",
+              "sha256_pixels": "8f3c18ccdb19c5a7c99936ca5535a4133f9eb60d296a480886638cdbebf5fbca",
               "bounds": [
-                84,
-                136,
-                294,
+                83,
+                139,
+                293,
                 470
               ],
-              "visible_pixels": 48916,
-              "transparent_pixels": 147365,
+              "visible_pixels": 48130,
+              "transparent_pixels": 147924,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 48916,
+                "relevant_pixels": 48130,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11213,19 +11213,19 @@
             },
             {
               "frame": 2,
-              "sha256_pixels": "85da2e1de42eae8b8f7f9524dde95ed010d0f132589f5260a2c4476051416326",
+              "sha256_pixels": "4aca265832bb870dee878b0f6a7911e3935c575d3fe844f78015970bd69995b2",
               "bounds": [
-                84,
-                121,
-                294,
-                466
+                83,
+                125,
+                293,
+                467
               ],
-              "visible_pixels": 49420,
-              "transparent_pixels": 146852,
+              "visible_pixels": 48408,
+              "transparent_pixels": 147637,
               "edge_pixels": 0,
-              "minimum_margin": 45,
+              "minimum_margin": 44,
               "sheet_match": {
-                "relevant_pixels": 49420,
+                "relevant_pixels": 48408,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11233,19 +11233,19 @@
             },
             {
               "frame": 3,
-              "sha256_pixels": "bb37ca8d0889521c7f44d1f9b13a53715e6a6bd4e9be90b856b2b8459920fb22",
+              "sha256_pixels": "aec2fcd3f26163bbca79b744976ba16bc6281a6b7122d68668bd5bae52d74aea",
               "bounds": [
                 83,
-                117,
-                293,
-                454
+                120,
+                292,
+                455
               ],
-              "visible_pixels": 49600,
-              "transparent_pixels": 146681,
+              "visible_pixels": 48510,
+              "transparent_pixels": 147562,
               "edge_pixels": 0,
-              "minimum_margin": 57,
+              "minimum_margin": 56,
               "sheet_match": {
-                "relevant_pixels": 49600,
+                "relevant_pixels": 48510,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11253,19 +11253,19 @@
             },
             {
               "frame": 4,
-              "sha256_pixels": "f700d23f5fe4bc61409b4ddbb7dbbedaa29bdc3e37dc81cfa1f8e5facd45d8f1",
+              "sha256_pixels": "65c9d37317a742ac6837fb7f80299e3735e3211a854610ff242a248750287146",
               "bounds": [
                 83,
-                129,
-                293,
+                133,
+                292,
                 469
               ],
-              "visible_pixels": 48827,
-              "transparent_pixels": 147502,
+              "visible_pixels": 47702,
+              "transparent_pixels": 148365,
               "edge_pixels": 0,
               "minimum_margin": 42,
               "sheet_match": {
-                "relevant_pixels": 48827,
+                "relevant_pixels": 47702,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11273,19 +11273,19 @@
             },
             {
               "frame": 5,
-              "sha256_pixels": "d3a89bb252b55f36620d01a93970f401006eec74b762c030dc9d2ea38b2b36c6",
+              "sha256_pixels": "781edbff5d33d21b13a9ccf047d66ec982963c04abbb1079f992c3ce56cbc0ae",
               "bounds": [
                 83,
-                132,
-                293,
+                135,
+                292,
                 470
               ],
-              "visible_pixels": 49259,
-              "transparent_pixels": 147044,
+              "visible_pixels": 48337,
+              "transparent_pixels": 147740,
               "edge_pixels": 0,
               "minimum_margin": 41,
               "sheet_match": {
-                "relevant_pixels": 49259,
+                "relevant_pixels": 48337,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11293,19 +11293,19 @@
             },
             {
               "frame": 6,
-              "sha256_pixels": "e7f0b42cb907ce84157f7e15772a48f510d764d04aec74553ab3fef98fe071c8",
+              "sha256_pixels": "091b82741bdc2b14fe5e8d2c84fa2187592bcf5c0c07b9c51513bfa92cc3d26e",
               "bounds": [
-                84,
-                118,
-                294,
-                466
+                82,
+                122,
+                293,
+                467
               ],
-              "visible_pixels": 49056,
-              "transparent_pixels": 147219,
+              "visible_pixels": 48142,
+              "transparent_pixels": 147865,
               "edge_pixels": 0,
-              "minimum_margin": 45,
+              "minimum_margin": 44,
               "sheet_match": {
-                "relevant_pixels": 49056,
+                "relevant_pixels": 48142,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11313,19 +11313,19 @@
             },
             {
               "frame": 7,
-              "sha256_pixels": "07fa30e99a9b661143d92859b5555159da87be386c2bcaea76e2f1ead2e8aa26",
+              "sha256_pixels": "f3bc25cee18a940f617a3478fd62411315393ca722541564b756fd55763018c4",
               "bounds": [
                 84,
-                117,
-                294,
-                452
+                120,
+                293,
+                453
               ],
-              "visible_pixels": 49704,
-              "transparent_pixels": 146563,
+              "visible_pixels": 48881,
+              "transparent_pixels": 147148,
               "edge_pixels": 0,
-              "minimum_margin": 59,
+              "minimum_margin": 58,
               "sheet_match": {
-                "relevant_pixels": 49704,
+                "relevant_pixels": 48881,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11338,19 +11338,19 @@
           "frames": [
             {
               "frame": 0,
-              "sha256_pixels": "21b5363e0604466b1acdfd6420ab7f3e852ba3ab0c4ab315f5d0c4ebb4495661",
+              "sha256_pixels": "bc6556aa55a401ac441f3cf4ebacef51e80bcb918310dea6b2fe75c6ace3937c",
               "bounds": [
-                58,
-                133,
-                312,
+                59,
+                137,
+                316,
                 486
               ],
-              "visible_pixels": 46273,
-              "transparent_pixels": 149764,
+              "visible_pixels": 46688,
+              "transparent_pixels": 149433,
               "edge_pixels": 0,
               "minimum_margin": 25,
               "sheet_match": {
-                "relevant_pixels": 46273,
+                "relevant_pixels": 46688,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11358,19 +11358,19 @@
             },
             {
               "frame": 1,
-              "sha256_pixels": "13980192c7a47f93eb5e8dd99361ecc3d88eb8398e17f608d54cd2b3abcda895",
+              "sha256_pixels": "ac34951798425faedc5d7769e4e45f9f16c56d1dd5dbb830c07e7a3ca0b32f32",
               "bounds": [
-                58,
-                141,
-                312,
-                495
+                59,
+                145,
+                316,
+                494
               ],
-              "visible_pixels": 45887,
-              "transparent_pixels": 150125,
+              "visible_pixels": 46450,
+              "transparent_pixels": 149686,
               "edge_pixels": 0,
-              "minimum_margin": 16,
+              "minimum_margin": 17,
               "sheet_match": {
-                "relevant_pixels": 45887,
+                "relevant_pixels": 46450,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11378,19 +11378,19 @@
             },
             {
               "frame": 2,
-              "sha256_pixels": "3e929710a962e92b2f68dae22fd106950fb1ebac87f1bbb98ae2723a8d619b79",
+              "sha256_pixels": "dcdce718c058cddbeafb358bdb163ac2b905b3f1d63e0e91187b54f2867f9145",
               "bounds": [
-                58,
-                130,
-                312,
+                59,
+                135,
+                316,
                 483
               ],
-              "visible_pixels": 46945,
-              "transparent_pixels": 149044,
+              "visible_pixels": 47392,
+              "transparent_pixels": 148683,
               "edge_pixels": 0,
               "minimum_margin": 28,
               "sheet_match": {
-                "relevant_pixels": 46945,
+                "relevant_pixels": 47392,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11398,19 +11398,19 @@
             },
             {
               "frame": 3,
-              "sha256_pixels": "bdf0bbf5d25ea1ef0877f000521958fbc68bce4cf721cea316ed67354cb285d9",
+              "sha256_pixels": "f8a9b3776cef50cf05dad37c97986c9e5b1579f52174553ba6791b5304c184aa",
               "bounds": [
-                58,
-                121,
-                312,
+                59,
+                125,
+                316,
                 474
               ],
-              "visible_pixels": 46974,
-              "transparent_pixels": 149030,
+              "visible_pixels": 47159,
+              "transparent_pixels": 148911,
               "edge_pixels": 0,
               "minimum_margin": 37,
               "sheet_match": {
-                "relevant_pixels": 46974,
+                "relevant_pixels": 47159,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11418,19 +11418,19 @@
             },
             {
               "frame": 4,
-              "sha256_pixels": "ae09d889a0a3fcd93b50fd8c1a54a7e58026ca3ec50c3fbe8a810dcc2d2eee8e",
+              "sha256_pixels": "c988e171d1cbc6b192253e78c1a1f6c429b9de159c47dfc3c362fdcb315bae02",
               "bounds": [
-                58,
-                130,
-                312,
+                59,
+                134,
+                316,
                 483
               ],
-              "visible_pixels": 46291,
-              "transparent_pixels": 149716,
+              "visible_pixels": 46634,
+              "transparent_pixels": 149474,
               "edge_pixels": 0,
               "minimum_margin": 28,
               "sheet_match": {
-                "relevant_pixels": 46291,
+                "relevant_pixels": 46634,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11438,19 +11438,19 @@
             },
             {
               "frame": 5,
-              "sha256_pixels": "44a7c99ec752a5b025c2b51febf09ca9441273c74d162c4394c6ce83e59c86a0",
+              "sha256_pixels": "7076d5499499cfae408bffd42c1fc852c5d1ae75fbd1c51650f00e1231059e1c",
               "bounds": [
-                58,
-                138,
-                312,
-                492
+                59,
+                142,
+                316,
+                491
               ],
-              "visible_pixels": 45832,
-              "transparent_pixels": 150189,
+              "visible_pixels": 46438,
+              "transparent_pixels": 149695,
               "edge_pixels": 0,
-              "minimum_margin": 19,
+              "minimum_margin": 20,
               "sheet_match": {
-                "relevant_pixels": 45832,
+                "relevant_pixels": 46438,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11458,19 +11458,19 @@
             },
             {
               "frame": 6,
-              "sha256_pixels": "d30abbf045817847856c10a99133c3e7dc0ab38d51f0af97e0aeedd908b90d02",
+              "sha256_pixels": "da4cb4a6578722efd27ddf4d1aa5f56264e4c09bc1ef9f7f83a730e534da678f",
               "bounds": [
-                58,
-                127,
-                312,
+                59,
+                132,
+                316,
                 480
               ],
-              "visible_pixels": 46950,
-              "transparent_pixels": 149041,
+              "visible_pixels": 47383,
+              "transparent_pixels": 148701,
               "edge_pixels": 0,
               "minimum_margin": 31,
               "sheet_match": {
-                "relevant_pixels": 46950,
+                "relevant_pixels": 47383,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11478,19 +11478,19 @@
             },
             {
               "frame": 7,
-              "sha256_pixels": "0ede98d0078289d194b807aa0f151956a20d2fe1a1cedfc0e3950c73d09f7709",
+              "sha256_pixels": "66f8e525ba29b825a77094be56f77ec393a62ddf263053596aa2584feb7ea2cc",
               "bounds": [
-                58,
-                121,
-                312,
+                59,
+                125,
+                316,
                 474
               ],
-              "visible_pixels": 46911,
-              "transparent_pixels": 149090,
+              "visible_pixels": 47203,
+              "transparent_pixels": 148876,
               "edge_pixels": 0,
               "minimum_margin": 37,
               "sheet_match": {
-                "relevant_pixels": 46911,
+                "relevant_pixels": 47203,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11503,19 +11503,19 @@
           "frames": [
             {
               "frame": 0,
-              "sha256_pixels": "0929a9ed61291238f835df97e9ea8e11ddbe57d958322e4c6799e1f880024713",
+              "sha256_pixels": "5d5958f8bb2381874ca9180143d38662c6aed6d85dafd691286d6a3dbd1a7637",
               "bounds": [
-                37,
-                125,
+                39,
+                129,
                 314,
-                479
+                478
               ],
-              "visible_pixels": 53073,
-              "transparent_pixels": 142962,
+              "visible_pixels": 53020,
+              "transparent_pixels": 143043,
               "edge_pixels": 0,
-              "minimum_margin": 32,
+              "minimum_margin": 33,
               "sheet_match": {
-                "relevant_pixels": 53073,
+                "relevant_pixels": 53020,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11523,19 +11523,19 @@
             },
             {
               "frame": 1,
-              "sha256_pixels": "2210085485d2c1036450df1243e9da35cbc07e0effd3801f6e5c62ad0860a09d",
+              "sha256_pixels": "76750452a754139a09826306f8ba8764b1df75c9981ed737c008390bc96c94ef",
               "bounds": [
-                37,
-                136,
+                39,
+                140,
                 314,
-                490
+                489
               ],
-              "visible_pixels": 52942,
-              "transparent_pixels": 143052,
+              "visible_pixels": 53230,
+              "transparent_pixels": 142806,
               "edge_pixels": 0,
-              "minimum_margin": 21,
+              "minimum_margin": 22,
               "sheet_match": {
-                "relevant_pixels": 52942,
+                "relevant_pixels": 53230,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11543,19 +11543,19 @@
             },
             {
               "frame": 2,
-              "sha256_pixels": "0d09d346695ee6b93c6a79e6ceef449d894b108642697b48985c5d1533775ae8",
+              "sha256_pixels": "04858c97ba113949b5e55b5eb845e361985d37ddac9e986d6823b4d33a53e8b6",
               "bounds": [
-                37,
-                136,
-                314,
+                39,
+                140,
+                315,
                 490
               ],
-              "visible_pixels": 52870,
-              "transparent_pixels": 143106,
+              "visible_pixels": 53088,
+              "transparent_pixels": 142937,
               "edge_pixels": 0,
               "minimum_margin": 21,
               "sheet_match": {
-                "relevant_pixels": 52870,
+                "relevant_pixels": 53088,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11563,19 +11563,19 @@
             },
             {
               "frame": 3,
-              "sha256_pixels": "09049876c6dcc49701c299b217fb31177fd7034a4e24e19648047fa7f1d92f0e",
+              "sha256_pixels": "0fd9e78c691aa7bd6685f777e6cce0196deac4d3a8bbf978fed134a19d568440",
               "bounds": [
-                38,
-                122,
+                40,
+                124,
                 315,
-                476
+                474
               ],
-              "visible_pixels": 53599,
-              "transparent_pixels": 142349,
+              "visible_pixels": 53787,
+              "transparent_pixels": 142231,
               "edge_pixels": 0,
-              "minimum_margin": 35,
+              "minimum_margin": 37,
               "sheet_match": {
-                "relevant_pixels": 53599,
+                "relevant_pixels": 53787,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11583,19 +11583,19 @@
             },
             {
               "frame": 4,
-              "sha256_pixels": "15c166388f94cf3f8a5737f25c3f651cbb8ef6baea4a9881f99faea587009167",
+              "sha256_pixels": "e85c307104830f3226692aa3f5ed31f362cd49c3a206d4bb2ddd7249dcdf3d91",
               "bounds": [
-                38,
-                131,
+                40,
+                134,
                 315,
-                485
+                483
               ],
-              "visible_pixels": 53292,
-              "transparent_pixels": 142694,
+              "visible_pixels": 53444,
+              "transparent_pixels": 142608,
               "edge_pixels": 0,
-              "minimum_margin": 26,
+              "minimum_margin": 28,
               "sheet_match": {
-                "relevant_pixels": 53292,
+                "relevant_pixels": 53444,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11603,19 +11603,19 @@
             },
             {
               "frame": 5,
-              "sha256_pixels": "60f10868f7524c7cb919f7fe11bb5b3cf159d7adaf9999b9c3d757193112ef68",
+              "sha256_pixels": "871dfe651c203a0014b62ac153a372a9c89f7637753ce4c6123835cbd1a07c64",
               "bounds": [
-                38,
-                142,
+                40,
+                144,
                 315,
-                496
+                493
               ],
-              "visible_pixels": 53172,
-              "transparent_pixels": 142810,
+              "visible_pixels": 53230,
+              "transparent_pixels": 142795,
               "edge_pixels": 0,
-              "minimum_margin": 15,
+              "minimum_margin": 18,
               "sheet_match": {
-                "relevant_pixels": 53172,
+                "relevant_pixels": 53230,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11623,19 +11623,19 @@
             },
             {
               "frame": 6,
-              "sha256_pixels": "455f432e9968c7f5bcf1e2201964ada0b3b6edec568114e2ead2b5376a121850",
+              "sha256_pixels": "898a2b92371e0a9552c10178e6cb27d28acb08172f6bf3f3279357cc6e848786",
               "bounds": [
-                37,
-                140,
-                314,
-                494
+                39,
+                142,
+                315,
+                491
               ],
-              "visible_pixels": 53248,
-              "transparent_pixels": 142718,
+              "visible_pixels": 53320,
+              "transparent_pixels": 142715,
               "edge_pixels": 0,
-              "minimum_margin": 17,
+              "minimum_margin": 20,
               "sheet_match": {
-                "relevant_pixels": 53248,
+                "relevant_pixels": 53320,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -11643,19 +11643,19 @@
             },
             {
               "frame": 7,
-              "sha256_pixels": "467af3c0face213efcdb369010020ae64a63ee56a3f20fffa3c28b9a54403fc3",
+              "sha256_pixels": "230de9fbbb5934b1c270fe3de53839e4490f813b8f9699e6ff5fd45cbe811ca3",
               "bounds": [
-                37,
-                122,
+                39,
+                124,
                 314,
-                476
+                474
               ],
-              "visible_pixels": 53369,
-              "transparent_pixels": 142633,
+              "visible_pixels": 53253,
+              "transparent_pixels": 142815,
               "edge_pixels": 0,
-              "minimum_margin": 35,
+              "minimum_margin": 37,
               "sheet_match": {
-                "relevant_pixels": 53369,
+                "relevant_pixels": 53253,
                 "changed_pixels": 0,
                 "changed_fraction": 0,
                 "max_channel_difference": 0
@@ -12003,7 +12003,7 @@
           "pixel_exact_reflection": false
         }
       ],
-      "minimum_margin": 13
+      "minimum_margin": 17
     }
   },
   "source_views": {
@@ -12401,7 +12401,7 @@
       "compared_pairs": 28
     },
     "rigs/sister.json": {
-      "file": "art/sister-source.png",
+      "file": "art/sister-source-v7.png",
       "cell_dimensions": [
         512,
         512
@@ -12409,123 +12409,123 @@
       "views": [
         {
           "direction": "front",
-          "hash": "12fbb194026fd7e3d207a10d1582f429dbdf41a9ba04db5f65b8d470c6857007",
-          "flippedHash": "cf5f51286b90e271e9bc9925ee5abc51e64f18de835827307a001706ee77e00e",
+          "hash": "cf223d0f8732ecdac8e703a54c9104a64f65809c4ebe0b3131d97a428d7c5a0f",
+          "flippedHash": "ffdaf78eb307a499ac8671b06201d6618c4c29657f87404842cb59a1f9392254",
           "bounds": [
-            100,
-            23,
-            410,
-            493
+            96,
+            17,
+            417,
+            500
           ],
-          "visible_pixels": 97870,
-          "transparent_pixels": 154523,
+          "visible_pixels": 104038,
+          "transparent_pixels": 148039,
           "edge_pixels": 0,
-          "minimum_margin": 18
+          "minimum_margin": 11
         },
         {
           "direction": "down_right",
-          "hash": "78e8746cb453b2716917992f2fbd9e0feaa0b6ff5202372f7577668be47f3be8",
-          "flippedHash": "32bf19dac46202555859d76aea5278c613e1ff48c5965db746a2657465759a16",
+          "hash": "6fa5087b5f16845b3f7c0b9531ef14f517d2ef2436f99027deffc7e5412b3cb3",
+          "flippedHash": "78c7260203477ffb723d9cec08c172b1652f91baf560695d365a93caff2a3d43",
           "bounds": [
-            105,
-            21,
-            405,
-            492
+            101,
+            19,
+            412,
+            501
           ],
-          "visible_pixels": 92631,
-          "transparent_pixels": 166238,
+          "visible_pixels": 96759,
+          "transparent_pixels": 155507,
           "edge_pixels": 0,
-          "minimum_margin": 19
+          "minimum_margin": 10
         },
         {
           "direction": "right",
-          "hash": "ba63f03bf9dfb5e064e941faac10ce587dc443dad904202531a8af5e90363519",
-          "flippedHash": "d83ac2d3fa26705a5c4cb50372d2a4f45d8b9ab4f40e497bb807a2b826a92250",
+          "hash": "6a16811fbb745c73c4f9ecfbf080402f85dcc2bd516d017abed57aaac45e0db0",
+          "flippedHash": "55e03dc09567d0f204f8338424cd0ebed3c2275eecda52ea255a048d71545209",
           "bounds": [
-            104,
-            22,
-            404,
-            491
+            102,
+            20,
+            408,
+            499
           ],
-          "visible_pixels": 83436,
-          "transparent_pixels": 169341,
+          "visible_pixels": 87884,
+          "transparent_pixels": 163355,
           "edge_pixels": 0,
-          "minimum_margin": 20
+          "minimum_margin": 12
         },
         {
           "direction": "up_right",
-          "hash": "b5488e8fdba263e858eeda3bc275c5d7af60cd02ef19f83f36430d1891988b0e",
-          "flippedHash": "7bfbc001802ed4eb17b550177962264a92db7721296640e0fbbf4d1c88e66e44",
+          "hash": "17da0b6523e87a3f1a5602a1b5e159f9af8f342cf9ceb21de3c33703c25571f1",
+          "flippedHash": "2549d4ee373f10e0f9e5d0e92b2e97ec97a65ea58daddf70e14d6e2e8199735f",
           "bounds": [
-            99,
-            22,
-            412,
-            493
+            93,
+            20,
+            414,
+            499
           ],
-          "visible_pixels": 92953,
-          "transparent_pixels": 159668,
+          "visible_pixels": 98616,
+          "transparent_pixels": 153482,
           "edge_pixels": 0,
-          "minimum_margin": 18
+          "minimum_margin": 12
         },
         {
           "direction": "back",
-          "hash": "0d8d58943b2e4cc6a42249a86fa344310ea4d2756e80c46a02a0f45c89214237",
-          "flippedHash": "26b00f15eb294b10636745dc4a5433a13d5db1ed0bd3137c6f0461ef2f718af0",
+          "hash": "c05d9b9839b2476e34e3cc26895518289e4600046d648fc1377e880e53546a37",
+          "flippedHash": "0fbe6d28b64dc80c0b6d9a763f563591e426f8ae6206347089e3cc4e728ea4e0",
           "bounds": [
-            94,
-            20,
+            90,
+            21,
             415,
-            491
+            501
           ],
-          "visible_pixels": 97146,
-          "transparent_pixels": 154647,
+          "visible_pixels": 102266,
+          "transparent_pixels": 147852,
           "edge_pixels": 0,
-          "minimum_margin": 20
+          "minimum_margin": 10
         },
         {
           "direction": "up_left",
-          "hash": "799a38b152e5c5f6721218dbe4df52aaa8953a10fee31430ef7275d8dbf88bea",
-          "flippedHash": "15765b565c6854955c4f367cf6a671286ffe331c9338ffc9d4c2d29ba2fc7037",
+          "hash": "333ab086a51ea4e0f025e67480cd64d22629c7fe1bac2403257ea6c0ae896fc3",
+          "flippedHash": "5d49c82cab8c53e3b5a4a25233636f7035ba90f18abf67f7cc829dda0c3763d4",
           "bounds": [
-            113,
-            21,
-            398,
-            492
+            109,
+            19,
+            401,
+            496
           ],
-          "visible_pixels": 90052,
-          "transparent_pixels": 168746,
+          "visible_pixels": 93242,
+          "transparent_pixels": 158502,
           "edge_pixels": 0,
-          "minimum_margin": 19
+          "minimum_margin": 15
         },
         {
           "direction": "left",
-          "hash": "bb3e3ff7e5ba972dfeb1833722a300ed2adac36686fd2532c698b1abfa4e0f62",
-          "flippedHash": "b51d6cde3f2e7113ad40f55a0b6db29cd13b18fc2d006616900197c3640961f5",
+          "hash": "f3d12861cf11d931e9ec84301b5875c3a2018c2f776c9f61b97dc58aa439ac48",
+          "flippedHash": "616e0ea08da33977715c1f29931a237ec04d058c79dd80c4f80d3f36db248e10",
           "bounds": [
-            105,
-            22,
-            406,
-            491
+            102,
+            20,
+            417,
+            494
           ],
-          "visible_pixels": 85958,
-          "transparent_pixels": 167013,
+          "visible_pixels": 91155,
+          "transparent_pixels": 161700,
           "edge_pixels": 0,
-          "minimum_margin": 20
+          "minimum_margin": 17
         },
         {
           "direction": "down_left",
-          "hash": "54022998c2b3cb5d7b93dd34afb2c5570ad6ee8ef1c7dfa7728ca35f466c837a",
-          "flippedHash": "bd4f29129750d648c9c0247c90fc89389627b698cdd58f86988063f5e705f235",
+          "hash": "6cc7831a052e1d87d1e0cf022538c48f4074df621bc2cd2673da1222c2d343b8",
+          "flippedHash": "cf294a68cefafa20ce64f5c9b7595b60cb7a0b9c06bee0ca5ec6465b837d762d",
           "bounds": [
-            83,
+            80,
             20,
-            427,
-            491
+            432,
+            496
           ],
-          "visible_pixels": 100422,
-          "transparent_pixels": 150956,
+          "visible_pixels": 105329,
+          "transparent_pixels": 146232,
           "edge_pixels": 0,
-          "minimum_margin": 20
+          "minimum_margin": 15
         }
       ],
       "unique_cells": 8,

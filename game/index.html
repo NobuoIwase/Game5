@@ -1,74 +1,72 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Game5 Top-down Prototype</title>
-  <link rel="stylesheet" href="./style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Game5 — リアルタイム・コマンドRPG戦闘試作</title>
+<link rel="stylesheet" href="./battle.css">
 </head>
 <body>
-  <main class="app-shell">
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">GAME5 / PLAYABLE PROTOTYPE</p>
-        <h1>森の結晶</h1>
-      </div>
-      <div class="hud" aria-live="polite">
-        <span id="characterLabel">戦士</span>
-        <span id="motionLabel">待機</span>
-        <span id="crystalLabel">結晶 0 / 3</span>
-      </div>
-    </header>
-
-    <section class="game-wrap" aria-label="ゲーム画面">
-      <canvas id="gameCanvas" width="1280" height="720">
-        このブラウザはCanvasに対応していません。
-      </canvas>
-
-      <div id="loadingCard" class="panel loading-card">
-        <strong>キャラクター素材を読み込み中…</strong>
-        <span>Game5 の既存PNGシートをそのまま使用します。</span>
-      </div>
-
-      <div id="messageCard" class="panel message-card">
-        <strong id="messageTitle">3つの結晶を集める</strong>
-        <span id="messageBody">森を歩き、すべて集めたら北東の祭壇へ。</span>
-      </div>
-
-      <div id="completeCard" class="panel complete-card hidden">
-        <p class="eyebrow">CLEAR</p>
-        <h2>試作ゴール到達</h2>
-        <p>移動・走行・8方向アニメーション・衝突・収集・ゴールまで動作しました。</p>
-        <button id="restartButton" type="button">もう一度</button>
-      </div>
-    </section>
-
-    <section class="controls-panel">
-      <div>
-        <p class="control-title">操作</p>
-        <p>WASD / 矢印：移動　Shift：走る　R：やり直し</p>
-      </div>
-      <div class="character-switcher" aria-label="キャラクター切替">
-        <button type="button" data-character="warrior" class="active">1 戦士</button>
-        <button type="button" data-character="scout">2 獣人</button>
-        <button type="button" data-character="witch">3 魔女</button>
-        <button type="button" data-character="sister">4 シスター</button>
-      </div>
-    </section>
-
-    <div class="touch-controls" aria-label="タッチ操作">
-      <div class="dpad">
-        <button type="button" class="up" data-key="ArrowUp" aria-label="上">▲</button>
-        <button type="button" class="left" data-key="ArrowLeft" aria-label="左">◀</button>
-        <button type="button" class="down" data-key="ArrowDown" aria-label="下">▼</button>
-        <button type="button" class="right" data-key="ArrowRight" aria-label="右">▶</button>
-      </div>
-      <button type="button" class="run-button" data-key="ShiftLeft">RUN</button>
+<div class="app">
+  <header class="top">
+    <div class="brand"><small>GAME5 / REAL-TIME COMMAND RPG</small><h1>灰冠の試練</h1></div>
+    <div class="enemyHud">
+      <div class="enemyLine"><span id="enemyName">灰冠の呪術騎士</span><span id="enemyState">様子をうかがっている</span></div>
+      <div class="bar"><i id="enemyHp"></i></div>
     </div>
-  </main>
+  </header>
 
-  <script src="./config.js" defer></script>
-  <script src="./render.js" defer></script>
-  <script src="./game.js" defer></script>
+  <section class="arena">
+    <canvas id="cv" width="960" height="540"></canvas>
+    <div class="log" id="log"></div>
+    <div class="overlay" id="startOverlay">
+      <div class="card">
+        <div class="kicker">BATTLE PROTOTYPE 0.2</div>
+        <h2>接触ではなく「技」で戦う。</h2>
+        <p>敵味方ともに射程・詠唱・予兆・クールダウンを持ちます。敵はあなたの大技を見て回避や防御を行い、拘束・毒・沈黙・魔法も使います。</p>
+        <div class="rules">
+          <div><b>移動</b><br>WASD / 矢印<br>1〜4で操作キャラ切替</div>
+          <div><b>技</b><br>Q / E / R / F<br>下の技ボタンも使用可能</div>
+          <div><b>重要</b><br>敵に触れてもダメージなし。<br>赤い予兆だけが危険。</div>
+          <div><b>勝利条件</b><br>灰冠の呪術騎士を倒す。<br>詠唱は一部の技で中断可能。</div>
+        </div>
+        <button class="primary" id="startBtn">戦闘開始</button>
+      </div>
+    </div>
+    <div class="overlay hidden" id="endOverlay">
+      <div class="card">
+        <div class="kicker" id="endKicker">VICTORY</div>
+        <h2 id="endTitle">灰冠を打ち破った</h2>
+        <p id="endText">リアルタイム技選択・敵の予兆攻撃・状態異常・割り込みまでの戦闘縦切り試作です。</p>
+        <button class="primary" id="restartBtn">もう一度戦う</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="party" id="party"></section>
+  <section class="command">
+    <div class="commandInfo"><strong id="activeName">戦士アルド</strong><p id="activeHint">前衛。近距離で敵の詠唱を止め、防御で味方を守る。</p></div>
+    <button class="skill" data-slot="0"><span class="key">Q</span><b></b><small></small><i class="cdmask"></i><span class="cdtxt"></span></button>
+    <button class="skill" data-slot="1"><span class="key">E</span><b></b><small></small><i class="cdmask"></i><span class="cdtxt"></span></button>
+    <button class="skill" data-slot="2"><span class="key">R</span><b></b><small></small><i class="cdmask"></i><span class="cdtxt"></span></button>
+    <button class="skill" data-slot="3"><span class="key">F</span><b></b><small></small><i class="cdmask"></i><span class="cdtxt"></span></button>
+  </section>
+  <div class="legend">移動中でも技を選択可能。<span class="warn">赤い予兆範囲から離れる</span>／敵の詠唱中に「盾撃」「雷槍」で割り込み。</div>
+</div>
+
+<div class="touch">
+  <div class="dpad">
+    <button class="up" data-key="ArrowUp">▲</button>
+    <button class="left" data-key="ArrowLeft">◀</button>
+    <button class="down" data-key="ArrowDown">▼</button>
+    <button class="right" data-key="ArrowRight">▶</button>
+  </div>
+</div>
+
+<script src="./battle-core.js"></script>
+<script src="./battle-player.js"></script>
+<script src="./battle-enemy.js"></script>
+<script src="./battle-render.js"></script>
+<script src="./battle-ui.js"></script>
 </body>
 </html>

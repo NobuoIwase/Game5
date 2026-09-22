@@ -1,1 +1,36 @@
-*{box-sizing:border-box}body{margin:0;background:#0b100d;color:#eef4ef;font:14px system-ui,sans-serif}.app{max-width:1120px;margin:auto;padding:12px}.top,.row,.directorTop{display:flex;gap:10px;justify-content:space-between;align-items:center}.enemy{min-width:48%;background:#131b17;padding:9px;border-radius:10px}.bar,.meter{height:9px;background:#030605;border-radius:9px;overflow:hidden}.bar i,.meter i{display:block;height:100%}#enemyHp{background:#d45a57}#hpFill{background:#65b16d}#mpFill{background:#5797cc}#spFill{background:#d89d52}#directorEn{background:#bd6ea5}.arena{position:relative;margin-top:8px}canvas{width:100%;height:auto;background:#142019;border:1px solid #ffffff22;border-radius:12px}.overlay{position:absolute;inset:0;display:grid;place-items:center;background:#07100bd9}.hidden{display:none}.card,.panel,.director{background:#121a16;border:1px solid #ffffff18;border-radius:12px;padding:12px}.card{max-width:560px;margin:12px}.dashboard{display:grid;grid-template-columns:1.3fr 1fr;gap:8px;margin-top:8px}.resource{display:grid;grid-template-columns:28px 1fr 78px;gap:7px;align-items:center;margin:5px 0;font-size:11px}.thought{padding:8px;background:#ffffff08;border-left:3px solid #d7c98b;margin-top:8px}.muted,small{color:#95a69b}.skills,.tools{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}.skill,.tools button{padding:8px;background:#19231d;border:1px solid #ffffff16;border-radius:8px;color:inherit}.skill small{display:block}.lock{opacity:.4}.director{margin-top:8px}.tools{grid-template-columns:repeat(3,1fr)}button{cursor:pointer}.tools .on,#autoBtn{outline:1px solid #d89ac5}.primary{padding:10px 14px;width:100%}@media(max-width:700px){.dashboard{grid-template-columns:1fr}.top{display:block}.enemy{margin-top:8px}.tools{grid-template-columns:1fr}}
+*{box-sizing:border-box}
+:root{color-scheme:dark}
+body{margin:0;background:#0b100d;color:#eef4ef;font:14px system-ui,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+.app{max-width:1160px;margin:auto;padding:12px}
+.top,.row,.directorTop,.systemTitle{display:flex;gap:10px;justify-content:space-between;align-items:center}
+h1,h2,p{margin-top:6px}.top h1{margin-bottom:4px}
+.enemy{min-width:48%;background:#131b17;padding:10px;border-radius:11px;border:1px solid #ffffff16}
+.bar,.meter{height:9px;background:#030605;border-radius:9px;overflow:hidden}
+.bar i,.meter i{display:block;height:100%;transition:width .12s linear}
+#enemyHp{background:#d45a57}#hpFill{background:#65b16d}#mpFill{background:#5797cc}#spFill{background:#d89d52}
+#directorEn{background:#bd6ea5}
+#nuteraFill{background:#d58aea}#lumaneFill{background:#b983db}#hypnosisFill{background:#7f8fe2}#sailFill{background:#d7a36f}
+.arena{position:relative;margin-top:8px}
+canvas{display:block;width:100%;height:auto;background:#142019;border:1px solid #ffffff22;border-radius:12px}
+.overlay{position:absolute;inset:0;display:grid;place-items:center;background:#07100bd9;border-radius:12px}
+.hidden{display:none}
+.card,.panel,.director{background:#121a16;border:1px solid #ffffff18;border-radius:12px;padding:12px}
+.card{max-width:610px;margin:12px}
+.primary{padding:10px 14px;width:100%;background:#263a2d;border:1px solid #9fc0a5;border-radius:8px}
+.dashboard{display:grid;grid-template-columns:1.35fr 1fr;gap:8px;margin-top:8px}
+.resource{display:grid;grid-template-columns:64px 1fr 110px;gap:7px;align-items:center;margin:5px 0;font-size:12px}
+.systemBlock{margin:10px 0;padding:9px;background:#1b1320;border:1px solid #dfb6ed28;border-radius:10px}
+.systemTitle{margin-bottom:5px}
+.resource.special{grid-template-columns:72px 1fr 180px}
+.stateLine{font-size:12px;color:#d9c7df;margin-top:5px}
+.thought{padding:8px;background:#ffffff08;border-left:3px solid #d7c98b;margin-top:8px}
+.muted,small{color:#95a69b}
+.skills,.tools{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:7px}
+.skill,.tools button{padding:8px;background:#19231d;border:1px solid #ffffff16;border-radius:8px;color:inherit;text-align:left}
+.skill small{display:block}.lock{opacity:.4}
+.director{margin-top:8px}.tools{grid-template-columns:repeat(4,1fr)}
+.tools .on,#autoBtn{outline:1px solid #d89ac5}
+.logPanel{margin-top:10px;padding-top:9px;border-top:1px solid #ffffff16}
+#log{font-size:12px;line-height:1.5;max-height:155px;overflow:auto;color:#cbd8cf}
+@media(max-width:760px){.dashboard{grid-template-columns:1fr}.top{display:block}.enemy{margin-top:8px}.tools{grid-template-columns:repeat(2,1fr)}.resource.special{grid-template-columns:64px 1fr 118px}}

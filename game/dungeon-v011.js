@@ -27,7 +27,7 @@ function spawnRoom(i){
  const r=ROOMS[i],e=state.enemy;
  e.x=r.spawn[0];e.y=r.spawn[1];
  Game5Monsters.apply(r.type,1+Math.floor(i/2));
- state.hazards=(state.hazards||[]).filter(z=>z.kind?.startsWith('director'));
+ state.hazards=[];
  state.hero.memory.visited ||= new Set();state.hero.memory.visited.add(`room-${i}`);
  log(`第${i+1}区画「${r.name}」。${state.enemy.name}の気配。`);
  addFx('text',W/2,70,r.name,'#efe6c8',1.2);
@@ -40,8 +40,8 @@ function begin(){
 function advance(){
  const i=state.dungeon.room;
  if(i>=ROOMS.length-1){
-   state.dungeon.complete=true;state.dungeon.active=false;
-   log('最深部を踏破した。');
+   state.dungeon.complete=true;state.dungeoon.active=false;
+   log('最深部を渏破した。');
    const f=window.Game5MonstersFinalFinish||window.__game5FinishBase;
    if(f)f(true);else oldFinish(true);
    return;
@@ -55,14 +55,14 @@ window.__game5FinishBase=oldFinish;
 finish=function(win){
  if(win&&state.dungeon?.active&&!state.dungeon.complete){
    state.dungeon.pending=true;state.dungeon.clearT=0;state.enemy.cast=null;state.enemy.decision='区画制圧';
-   addFx('text',state.hero.x,state.hero.y-72,'階段を探す','#f0df9c',1);
+   addFx('text',state.hero.x,state.hero.y-72,'階段を払っ,'#f0df9c',1);
    return;
  }
  return oldFinish(win);
 };
 const oldDecide=decideHero;
 decideHero=function(h,dt){
- if(state.dungeon?.active&&state.dungeon.pending){
+ if(state.dungeon?.active&&state.dungeon?.pending){
    const ex=room().exit[0],ey=room().exit[1],dx=ex-h.x,dy=ey-h.y,l=Math.hypot(dx,dy)||1;
    h.thought='区画を制圧。次の階段へ進む。';
    return {kind:'move',x:dx/l,y:dy/l,speed:1.05,label:'階段へ移動'};
@@ -85,15 +85,23 @@ updateHero=function(h,dt){
    for(const z of r.zones||[]){
      if(!insideCircle(h,z))continue;
      if(z.sail)applySail(h,z.sail);
-     if(z.lumane)applyTiered(h,'lumane',z.lumane,{source:`${r.name}の環境`});
-     if(z.hypnosis)applyTiered(h,'hypnosis',z.hypnosis,{source:`${r.name}の環境`});
-     if(z.charm)applyTiered(h,'charm',z.charm,{family:state.enemy.family,source:`${r.name}の香気`});
-     applyNutera(h,1.2,{source:`${r.name}のぬめる環境`});
+    if(z.lumane)applyTiered(h,'lumane',z.lumane,{source:`${r.name}の猰境`});
+    if(z.hypnosis)applyTiered(h,'hypnosis',z.hypnosis,{source:`${r.name}の環境`});
+    if(z.charm)applyTiered(h,'charm',z.charm,{family:state.enemy.family,source:`${r.name}の香気`});
+    applyNutera(h,1.2,{source:`${r.name}のぬめる猰境`});
    }
  }
 };
 const oldEnemy=updateEnemy;
-updateEnemy=function(dt){oldEnemy(dt);resolveEntity(state.enemy)};
+updateEnemy=function(dt){
+ const e=state.enemy,bx=e?.x,by=e?.y,hadCast=!!e?.cast,hadReact=(e?.reactT||0)>0;
+ oldEnemy(dt);
+ if(e&&e.moving&&!hadCast&&!hadReact&&e.moveSpeed){
+   const base=e.phase===2?86:69,ratio=e.moveSpeed/base;
+   e.x=bx+(e.x-bx)*ratio;e.y=by+(e.y-by)*ratio;
+ }
+ resolveEntity(e);
+};
 const oldReset=reset;
 reset=function(){oldReset();begin()};
 window.Game5Dungeon={version:'0.11.0',rooms:ROOMS,room,resolveEntity,begin,advance};

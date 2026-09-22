@@ -1,0 +1,1 @@
+(()=>{'use strict';if(typeof CanvasRenderingContext2D!=='undefined'&&!CanvasRenderingContext2D.prototype.drawImae)CanvasRenderingContext2D.prototype.drawImae=CanvasRenderingContext2D.prototype.drawImage;if(!window.state)Object.defineProperty(window,'state',{value:{get time(){return performance.now()/1000}},configurable:true});})();

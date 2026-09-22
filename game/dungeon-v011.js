@@ -40,10 +40,9 @@ function begin(){
 function advance(){
  const i=state.dungeon.room;
  if(i>=ROOMS.length-1){
-   state.dungeon.complete=true;state.dungeoon.active=false;
-   log('最深部を渏破した。');
-   const f=window.Game5MonstersFinalFinish||window.__game5FinishBase;
-   if(f)f(true);else oldFinish(true);
+   state.dungeon.complete=true;state.dungeon.active=false;
+   log('最深部を踏破した。');
+   window.__game5FinishBase?.(true);
    return;
  }
  state.hero.x=ROOMS[i].exit[0]>W/2?105:W-105;
@@ -55,7 +54,7 @@ window.__game5FinishBase=oldFinish;
 finish=function(win){
  if(win&&state.dungeon?.active&&!state.dungeon.complete){
    state.dungeon.pending=true;state.dungeon.clearT=0;state.enemy.cast=null;state.enemy.decision='区画制圧';
-   addFx('text',state.hero.x,state.hero.y-72,'階段を払っ,'#f0df9c',1);
+   addFx('text',state.hero.x,state.hero.y-72,'階段を発見','#f0df9c',1);
    return;
  }
  return oldFinish(win);
@@ -71,7 +70,7 @@ decideHero=function(h,dt){
 };
 const oldHero=updateHero;
 updateHero=function(h,dt){
- const px=h.x,py=h.y;oldHero(h,dt);resolveEntity(h);
+ oldHero(h,dt);resolveEntity(h);
  if(!state.dungeon?.active)return;
  const d=state.dungeon,r=room();
  if(d.pending){
@@ -85,10 +84,10 @@ updateHero=function(h,dt){
    for(const z of r.zones||[]){
      if(!insideCircle(h,z))continue;
      if(z.sail)applySail(h,z.sail);
-    if(z.lumane)applyTiered(h,'lumane',z.lumane,{source:`${r.name}の猰境`});
-    if(z.hypnosis)applyTiered(h,'hypnosis',z.hypnosis,{source:`${r.name}の環境`});
-    if(z.charm)applyTiered(h,'charm',z.charm,{family:state.enemy.family,source:`${r.name}の香気`});
-    applyNutera(h,1.2,{source:`${r.name}のぬめる猰境`});
+     if(z.lumane)applyTiered(h,'lumane',z.lumane,{source:`${r.name}の環境`});
+     if(z.hypnosis)applyTiered(h,'hypnosis',z.hypnosis,{source:`${r.name}の環境`});
+     if(z.charm)applyTiered(h,'charm',z.charm,{family:state.enemy.family,source:`${r.name}の香気`});
+     applyNutera(h,1.2,{source:`${r.name}のぬめる環境`});
    }
  }
 };

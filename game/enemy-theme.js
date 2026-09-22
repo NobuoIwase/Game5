@@ -23,4 +23,9 @@ reset=function(){
   state.hero.memory.enemyId='gray_crown_gel';
   log('灰冠の粘魔は、粘液と吸着でヌテラを高めようとしている。');
 };
+window.addEventListener('load',()=>{
+  const s=document.createElement('script');
+  s.src='./graphics-polish-v081.js';
+  document.body.appendChild(s);
+});
 })();

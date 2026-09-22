@@ -1,14 +1,16 @@
-function renderUI(){
- const e=state.enemy;$('enemyHp').style.width=`${100*e.hp/e.maxHp}%`;$('enemyState').textContent=e.decision;
- $('party').innerHTML=state.heroes.map((h,i)=>`<button class="heroCard ${i===state.active?'active':''} ${h.dead?'dead':''}" data-i="${i}"><div class="heroTop"><span>${i+1}. ${h.name}</span><span class="role">${h.role}</span></div><div class="meter hp"><i style="width:${100*h.hp/h.maxHp}%"></i></div><div class="meter mp"><i style="width:${100*h.mp/h.maxMp}%"></i></div><div class="statusLine">${statusText(h)}　HP ${Math.ceil(h.hp)}/${h.maxHp}　MP ${Math.floor(h.mp)}</div></button>`).join('');
- document.querySelectorAll('.heroCard').forEach(b=>b.onclick=()=>selectHero(+b.dataset.i));
- const h=activeHero();$('activeName').textContent=h.name;$('activeHint').textContent=h.hint;
- document.querySelectorAll('.skill').forEach((b,i)=>{const sk=h.skills[i];b.querySelector('b').textContent=sk.name;b.querySelector('small').textContent=`MP ${sk.cost} / ${sk.desc}`;const cd=h.cd[i];b.disabled=!canUse(h,sk,i);b.classList.toggle('cooling',cd>0);b.querySelector('.cdtxt').textContent=cd>0?cd.toFixed(1):'';});
+function renderUI(){const h=state.hero,e=state.enemy,d=state.director;
+ $('enemyHp').style.width=100*e.hp/e.maxHp+'%';$('enemyHpText').textContent=`HP ${Math.ceil(e.hp)} / ${e.maxHp}`;$('enemyState').textContent=e.decision;$('enemyCast').textContent=e.cast?`${e.cast.sk.name} ${e.cast.t.toFixed(1)}s`:'予兆なし';
+ $('heroName').textContent=`${h.name} Lv${h.level}`;$('heroStatus').textContent=statusText(h);
+ for(const [k,v,m] of [['hp',h.hp,h.maxHp],['mp',h.mp,h.maxMp],['sp',h.sp,h.maxSp]]){$(k+'Fill').style.width=100*v/m+'%';$(k+'Text').textContent=`${Math.ceil(v)} / ${m}`}
+ $('stats').textContent=`ATK ${h.atk} DEF ${h.def} AGI ${h.agi} FOCUS ${h.focus}`;$('thought').textContent=h.thought;$('perception').textContent=h.perception;
+ $('knowledge').textContent='敵知識：'+Object.entries(h.knowledge).filter(x=>x[1]>.15).map(([k,v])=>`${ENEMY_LABELS[k]} ${v<1?'観察中':v<2?'既知':'習熟'}`).join(' / ')||'敵知識：ほぼ未知';
+ $('skills').innerHTML=h.skills.map((s,i)=>`<div class="skill ${h.level<s.unlock?'lock':''}"><b>${s.name}</b><small>${h.level<s.unlock?'Lv'+s.unlock:h.cd[i]>0?h.cd[i].toFixed(1)+'s':'MP '+s.cost} / ${s.desc}</small></div>`).join('');
+ $('directorEn').style.width=d.en+'%';$('directorEnText').textContent=`EN ${Math.floor(d.en)} / 100`;$('autoBtn').textContent='AUTO指揮：'+(d.auto?'ON':'OFF');
+ document.querySelectorAll('[data-tool]').forEach(b=>b.classList.toggle('on',b.dataset.tool===d.selected));
 }
-document.querySelectorAll('.skill').forEach((b,i)=>b.addEventListener('click',()=>useSkill(i)));
-$('startBtn').onclick=()=>{state.started=true;$('startOverlay').classList.add('hidden');log('戦闘開始。赤い予兆から離れろ！');};
-$('restartBtn').onclick=()=>reset();
-addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();keys.add(e.code);if(/^Digit[1-4]$/.test(e.code))selectHero(+e.code.slice(-1)-1);const map={KeyQ:0,KeyE:1,KeyR:2,KeyF:3};if(map[e.code]!=null&&!e.repeat)useSkill(map[e.code]);},{passive:false});
-addEventListener('keyup',e=>keys.delete(e.code));addEventListener('blur',()=>keys.clear());
-document.querySelectorAll('[data-key]').forEach(b=>{const down=e=>{e.preventDefault();touchKeys.add(b.dataset.key);b.classList.add('pressed');try{b.setPointerCapture(e.pointerId)}catch{}};const up=e=>{e.preventDefault();touchKeys.delete(b.dataset.key);b.classList.remove('pressed');};b.addEventListener('pointerdown',down);['pointerup','pointercancel','lostpointercapture'].forEach(n=>b.addEventListener(n,up));});
-let last=performance.now();function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;update(dt);draw();requestAnimationFrame(frame);}reset();requestAnimationFrame(frame);
+$('startBtn').onclick=()=>{state.started=true;$('startOverlay').classList.add('hidden')};$('restartBtn').onclick=reset;$('autoBtn').onclick=()=>{state.director.auto=!state.director.auto;renderUI()};
+document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>{state.director.selected=b.dataset.tool;renderUI()});
+function P(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}}
+cv.addEventListener('pointermove',e=>Object.assign(state.director.cursor,P(e),{inside:true}));cv.addEventListener('pointerleave',()=>state.director.cursor.inside=false);cv.addEventListener('pointerdown',e=>{const p=P(e);placeDirectorTool(state.director.selected,p.x,p.y);renderUI()});
+addEventListener('keydown',e=>{if(e.code==='Digit1')state.director.selected='snare';if(e.code==='Digit2')state.director.selected='fog';if(e.code==='Digit3')state.director.selected='lure';if(e.code==='KeyA')state.director.auto=!state.director.auto;renderUI()});
+let last=performance.now();function frame(n){const dt=Math.min(.05,(n-last)/1000);last=n;update(dt);draw();requestAnimationFrame(frame)}reset();requestAnimationFrame(frame);

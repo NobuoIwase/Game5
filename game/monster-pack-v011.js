@@ -33,7 +33,7 @@ resolveEnemy=function(c){
  const h=state.hero,e=state.enemy,k=c?.key,x=fx(k),hp0=h?.hp,sp0=h?.sp;
  oldResolve(c);
  if(!h||!e||!k||h.dead)return;
- const hit=(hp0!==h.hp)||(sp0!==h.sp)||h.dodgeCastId!==c.id;
+ const hit=(hp0!==h.hp)||(sp0!==h.sp);
  if(!hit)return;
  const src=`${e.name}・${ENEMY_LABELS[k]||k}`;
  if(x.nutera)applyNutera(h,x.nutera,{source:src});

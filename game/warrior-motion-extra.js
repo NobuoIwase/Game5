@@ -1,8 +1,9 @@
 (()=>{'use strict';
 const B='../character-motion-v1/',D=['front','down_right','right','up_right','back','up_left','left','down_left'],S={r:null,i:new Map},sg=d=>D.indexOf(d)<4?-1:1,C=v=>Math.max(0,Math.min(1,v)),R=d=>d*Math.PI/180,Q=t=>{t=C(t);return t*t*(3-2*t)},P=t=>Math.sin(C(t)*Math.PI);
-const I=u=>{let x=new Image;x.ok=0;x.onload=()=>x.ok=1;x.src=u;return x},imgs=d=>{if(S.i.has(d))return S.i.get(d);let o={};for(let p of['body','arm_right','arm_left','leg_right','leg_left','sword','shield','scabbard'])o[p]=I(`${B}parts/warrior/${d}/${p}.png`);S.i.set(d,o);return o};fetch(B+'rigs/warrior.json').then(r=>r.json()).then(r=>S.r=r);
-function rot(c,p,a){c.translate(p[0],p[1]);c.rotate(R(a));c.translate(-p[0],-p[1])}function limb(c,i,p,a){if(!i?.ok||!p)return;c.save();rot(c,p,a||0);c.drawImage(i,0,0);c.restore()}
-function pose(h,a){let s=sg(h.dir||'front'),t=state.time||performance.now()/1000,p=a.p||0,e=P(p),q=Q(p),n=a.n;
+const I=u=>{let x=new Image;x.ok=0;x.onload=()=>x.ok=1;x.src=u;return x},imgs=d=>{if(S.i.has(d))return S.i.get(d);let o={};for(const p of ['body','arm_right','arm_left','leg_right','leg_left','sword','shield','scabbard'])o[p]=I(`${B}parts/warrior/${d}/${p}.png`);S.i.set(d,o);return o};fetch(B+'rigs/warrior.json').then(r=>r.json()).then(r=>S.r=r);
+function rot(c,p,a){c.translate(p[0],p[1]);c.rotate(R(a));c.translate(-p[0],-p[1])}
+function limb(c,i,p,a){if(!i?.ok||!p)return;c.save();rot(c,p,a||0);c.drawImage(i,0,0);c.restore()}
+function pose(h,a){let s=sg(h.dir||'front'),t=window.state?.time||performance.now()/1000,p=a.p||0,e=P(p),q=Q(p),n=a.n;
 if(n==='bash'){let z=Q(C(p<=a.hit?p/a.hit:1-(p-a.hit)/(1-a.hit)));return[-s*5*z,s*58*z,-s*14*z,-s*5*z,s*4*z,7*z,-2*z]}
 if(n==='guard')return[s*2,s*66,-s*18,-s*2,s*2,0,1];
 if(n==='dodge')return[-s*11*e,s*22*e,-s*30*e,s*11*Math.sin(p*Math.PI*2),-s*8*Math.sin(p*Math.PI*2),(s<0?1:-1)*8*e,-5*e];

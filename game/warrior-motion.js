@@ -25,8 +25,8 @@ Promise.all([fetch(`${BASE}rigs/warrior.json`).then(r=>r.json()),fetch(`${BASE}r
 const K=[
 [0,0,0,0,0,0,0],[.12,-1,-12,-6,-2,-1,0],[.28,-3,-38,-22,-10,-3,1],[.42,-4,-31,-34,-18,-3,1],
 [.55,2,10,-15,7,2,0],[.66,7,67,15,25,6,-1],[.77,9,84,28,36,7,0],[.9,4,38,10,15,3,1],[1,0,0,0,0,0,0]];
-function pose(p,dir,heavy=false){
- const hit=.55,q=p<=hit?p/hit*.66:.66+(p-hit)/(1-hit)*.34;let i=0;while(i<K.length-2&&q>K[i+1][0])i++;
+function pose(p,dir,heavy=false,hit=.55){
+ hit=Math.max(.15,Math.min(.85,hit));const q=p<=hit?p/hit*.66:.66+(p-hit)/(1-hit)*.34;let i=0;while(i<K.length-2&&q>K[i+1][0])i++;
  const a=K[i],b=K[i+1],u=(q-a[0])/(b[0]-a[0]||1),s=['front','down_right','right','up_right'].includes(dir)?-1:1,m=heavy?1.18:1;
  const V=j=>lerp(a[j],b[j],u)*m;return{kind:heavy?'heavy':'slash',body:V(1)*s*.42,sh:V(2)*s,el:V(3)*s,wr:V(4)*s,x:V(5)*(s<0?1:-1),y:V(6)};
 }
@@ -54,10 +54,11 @@ function draw(c,d,p,sc){
  }
  c.restore();return true;
 }
-function action(h){if(h.estella?.active)return['estella',0];if((h.status?.bind||0)>0)return['bind',0];const a=h._warriorMotion;return a&&a.elapsed<a.total?[a.name,cl(a.elapsed/a.total)]:null}
-function drawGame(c,h){const a=action(h);if(!a)return false;const p=a[0]==='estella'?est(h):a[0]==='bind'?bind():pose(a[1],h.dir,a[0]==='heavy');return draw(c,h.dir,p,{x:h.x,y:h.y,scale:112/543})}
+function action(h){if(h.estella?.active)return['estella',0,.55];if((h.status?.bind||0)>0)return['bind',0,.55];const a=h._warriorMotion;return a&&a.elapsed<a.total?[a.name,cl(a.elapsed/a.total),cl((a.hitAt??a.total*.55)/a.total)]:null}
+function drawGame(c,h){const a=action(h);if(!a)return false;const p=a[0]==='estella'?est(h):a[0]==='bind'?bind():pose(a[1],h.dir,a[0]==='heavy',a[2]);return draw(c,h.dir,p,{x:h.x,y:h.y,scale:112/543})}
 function qa(){let max=0,last=null,peak=0,pi=0;for(let i=0;i<=240;i++){const p=pose(i/240,'right'),v=[p.sh,p.el,p.wr];if(last){const d=Math.max(...v.map((x,j)=>Math.abs(x-last[j])));max=Math.max(max,d);const sp=v.reduce((s,x,j)=>s+Math.abs(x-last[j]),0);if(sp>peak){peak=sp;pi=i}}last=v}return{maxJointDelta:+max.toFixed(3),peakProgress:+(pi/240).toFixed(3),smooth:max<3,impactClose:Math.abs(pi/240-.55)<.18}}
-if(typeof g.startHeroSkill==='function'){const b=g.startHeroSkill;g.startHeroSkill=function(slot,reason=''){const h=g.activeHero?.(),sk=h?.skills?.[slot],ok=b(slot,reason);if(ok&&h?.id==='warrior'&&sk&&A.has(sk.kind))h._warriorMotion={name:sk.kind==='heavy'?'heavy':'slash',elapsed:0,total:sk.cast+(sk.kind==='heavy'?.34:.2)};return ok}}
-if(typeof g.updateHero==='function'){const b=g.updateHero;g.updateHero=function(h,dt){b(h,dt);if(h?._warriorMotion){h._warriorMotion.elapsed+=dt;if(h._warriorMotion.elapsed>=h._warriorMotion.total)h._warriorMotion=null}}}
-g.WarriorMotion={drawGame,drawLab:(c,d,n,p,o={})=>draw(c,d,n==='estella'?est({estella:{t:(1-p)*2.6,total:2.6}}):n==='bind'?bind():pose(p,d,n==='heavy'),{rootX:o.rootX??181,rootY:o.rootY??314,scale:o.scale||1}),qa,ready:()=>!!S.rig,error:()=>S.err};
+if(typeof g.startHeroSkill==='function'){const b=g.startHeroSkill;g.startHeroSkill=function(slot,reason=''){const h=g.activeHero?.(),sk=h?.skills?.[slot],ok=b(slot,reason);if(ok&&h?.id==='warrior'&&sk&&A.has(sk.kind))h._warriorMotion={name:sk.kind==='heavy'?'heavy':'slash',elapsed:0,total:sk.cast+(sk.kind==='heavy'?.34:.2),hitAt:sk.cast};return ok}}
+if(typeof g.updateHero==='function'){const b=g.updateHero;g.updateHero=function(a,dt){b(h,dt);if(h?._warriorMotion){h._warriorMotion.elapsed+=dt;if(h._warriorMotion.elapsed>=h._warriorMotion.total)h._warriorMotion=null}}}
+if(g.state)g.state.version='0.6.0';
+g.WarriorMotion={drawGame,drawLab:(c,d,n,p,o={})=>draw(c,d,n==='estella'?est({estella:{t:(1-p)*2.6,total:2.6}}):n==='bind'?bind():pose(p,d,n==='heavy',o.hitP??.55),{rootX:o.rootX??181,rootY:o.rootY??314,scale:o.scale||1}),qa,ready:()=>!!S.rig,error:()=>S.err};
 })(window);

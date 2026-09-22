@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Game5 Warrior Motion Lab v0.5.0</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,sans-serif;background:#111820;color:#edf3f7}
+*{box-sizing:border-box}body{margin:0}main{max-width:1120px;margin:auto;padding:16px}
+h1{font-size:22px;margin:0 0 6px}.muted{color:#9eb0be;font-size:13px}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin:14px 0;padding:12px;background:#18232c;border:1px solid #2d3c47;border-radius:12px}
+label{display:grid;gap:4px;font-size:12px;color:#b9c8d2}select,button,input{font:inherit;color:inherit;background:#10171d;border:1px solid #41525e;border-radius:8px;padding:9px 10px}
+button{cursor:pointer}.views{display:grid;grid-template-columns:1fr 1fr;gap:12px}.card{background:#18232c;border:1px solid #2d3c47;border-radius:12px;padding:12px;min-width:0}
+.canvasWrap{display:grid;place-items:center;min-height:300px;background:#111820;border-radius:9px;overflow:hidden}
+canvas{max-width:100%;height:auto;image-rendering:auto}.cutout{display:none}.cutout.on{display:grid}.sheet.off{display:none}
+.meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:12px;color:#b5c3cc}
+.note{margin-top:12px;padding:10px 12px;border-left:3px solid #9f82d7;background:#1b1724;font-size:13px;line-height:1.55}
+.qa{margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.qa div{background:#151e25;border:1px solid #283742;border-radius:9px;padding:9px;font-size:12px}
+@media(max-width:720px){.views{grid-template-columns:1fr}.qa{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<h1>戦士モーション検査室 <small>v0.5.0</small></h1>
+<div class="muted">歩行/走行は汎用骨格との同位相比較。斬撃・拘束・エステラは既存の戦士切り抜き素材を関節支点で動かす前面プロトタイプです。</div>
+
+<div class="controls">
+<label>モーション
+<select id="motion">
+<option value="walk">歩行 / WALK</option>
+<option value="run">走行 / RUN</option>
+<option value="slash">通常斬り / CUTOUT PROTOTYPE</option>
+<option value="bind">拘束 / CUTOUT PROTOTYPE</option>
+<option value="estella">エステラ / CUTOUT PROTOTYPE</option>
+</select></label>
+<label>方向
+<select id="direction">
+<option value="0">front</option><option value="1">down_right</option><option value="2">right</option><option value="3">up_right</option>
+<option value="4">back</option><option value="5">up_left</option><option value="6">left</option><option value="7">down_left</option>
+</select></label>
+<label>再生速度
+<select id="speed"><option value=".5">0.5x</option><option value="1" selected>1x</option><option value="1.5">1.5x</option><option value="2">2x</option></select></label>
+<button id="play" type="button">停止</button>
+<button id="prev" type="button">◀ 1コマ</button>
+<button id="next" type="button">1コマ ▶</button>
+<label style="display:flex;align-items:center;gap:8px"><input id="joints" type="checkbox"> 支璹表示</label>
+</div>
+
+<div class="views sheet" id="sheetViews">
+<section class="card">
+<strong>戦士</strong>
+<div class="canvasWrap"><canvas id="warrior" width="384" height="512"></canvas></div>
+<div class="meta"><span id="warriorMeta"></span><span>384×512 / 8 frames</span></div>
+</section>
+<section class="card">
+<strong>汎用素体</strong>
+<div class="canvasWrap"><canvas id="generic" width="192" height="256"></canvas></div>
+<div class="meta"><span id="genericMeta"></span><span>192×256 / 8 frames</span></div>
+</section>
+</div>
+
+<div class="views cutout" id="cutoutViews">
+<section class="card">
+<strong>戦士・前面カットアウト</strong>
+<div class="canvasWrap"><canvas id="cutout" width="362" height="543"></canvas></div>
+<div class="meta"><span id="cutoutMeta"></span><span>shoulder / elbow / wrist 基準</span></div>
+</section>
+<section class="card">
+<strong>このプロトタイプで見る点</strong>
+<div class="qa">
+<div><b>肩</b><br>腕を大きく振った時に肩口が裂けたり棒状に見えないか。</div>
+<div><b>武器</b><br>剣の柄が手から離れず、斬撃の加速と減速が読めるか。</div>
+<div><b>体重</b><br>腕だけでなく胴・脚にも予備動作と反動が伝わっているか。</div>
+</div>
+<div class="note" id="prototypeNote"></div>
+</section>
+</div>
+
+<div class="note">
+<strong>判定基準:</strong> 歩行は股関節始動・踵接地・蹴り出し・肘/手首の遅れを維持。走行は接地→圧縮→蹴り出し→回収→空中局面を確認。
+斜め方向の頭を無理に同じ高さへ揃えない。攻撃プロトタイプで肩一軸の硬さが目立つ場合は、本番素材を上腕/前腕/手へ追加分割する。
+</div>
+</main>
+
+<script>
+(()=>{
+const DIRS=['front','down_right','right','up_right','back','up_left','left','down_left'];
+const motionSel=document.querySelector('#motion'), dirSel=document.querySelector('#direction'), speedSel=document.querySelector('#speed');
+const playBtn=document.querySelector('#play'), prevBtn=document.querySelector('#prev'), nextBtn=document.querySelector('#next'), jointBox=document.querySelector('#joints');
+const wcv=document.querySelector('#warrior'), gcv=document.querySelector('#generic'), ccv=document.querySelector('#cutout');
+const wctx=wcv.getContext('2d'), gctx=gcv.getContext('2d'), cctx=ccv.getContext('2d');
+const sheetViews=document.querySelector('#sheetViews'), cutoutViews=document.querySelector('#cutoutViews');
+const wMeta=document.querySelector('#warriorMeta'), gMeta=document.querySelector('#genericMeta'), cMeta=document.querySelector('#cutoutMeta');
+const prototypeNote=document.querySelector('#prototypeNote');
+const img=u=>{const i=new Image();i.src=u;return i};
+const sheets={
+  warrior:{walk:img('exports/warrior/walk.png'),run:img('exports/warrior/run.png')},
+  generic:{walk:img('generic/generic-walk-8dir-8frames.png'),run:img('generic/generic-run-8dir-8frames.png')}
+};
+const parts={};
+['scabbard','leg_left','leg_right','arm_left','body','arm_right','shield','sword'].forEach(k=>parts[k]=img(`parts/warrior/front/${k}.png`));
+const ROOT=[169,312], SHOULDER_R=[118,219], SHOULDER_L=[218,222], HIP_R=[136,331], HIP_L=[198,331];
+const timing={walk:120,run:80,slash:72,bind:105,estella:58};
+let frame=0,playing=!matchMedia('(prefers-reduced-motion: reduce)').matches,last=performance.now(),acc=0;
+
+const poses={
+ slash:[
+  {b:0,ar:0,al:0,lr:0,ll:0,x:0,y:0},
+  {b:-2,ar:-14,al:3,lr:0,ll:0,x:-1,y:0},
+  {b:-5,ar:-38,al:6,lr:-2,ll:2,x:-2,y:1},
+  {b:-7,ar:-58,al:7,lr:-4,ll:4,x:-3,y:2},
+  {b:4,ar:22,al:-4,lr:4,ll:-5,x:4,y:-1},
+  {b:7,ar:58,al:-7,lr:5,ll:-6,x:6,y:0},
+  {b:3,ar:28,al:-3,lr:2,ll:-2,x:3,y:1},
+  {b:0,ar:0,al:0,lr:0,ll:0,x:0,y:0}
+ ],
+ bind:[
+  {b:0,ar:42,al:-42,lr:-2,ll:2,x:0,y:0},
+  {b:-1,ar:62,al:-64,lr:-4,ll:4,x:-1,y:0},
+  {b:1,ar:82,al:-84,lr:-6,ll:6,x:1,y:1},
+  {b:-1,ar:94,al:-96,lr:-7,ll:7,x:-1,y:2},
+  {b:1,ar:88,al:-90,lr:-5,ll:5,x:1,y:1},
+  {b:-1,ar:96,al:-98,lr:-7,ll:7,x:-1,y:2},
+  {b:1,ar:90,al:-92,lr:-6,ll:6,x:1,y:1},
+  {b:0,ar:86,al:-88,lr:-5,ll:5,x:0,y:1}
+ ],
+ estella:[
+  {b:0,ar:4,al:-4,lr:0,ll:0,x:0,y:0},
+  {b:-2,ar:13,al:-11,lr:-4,ll:5,x:-2,y:2},
+  {b:2,ar:-8,al:12,lr:5,ll:-4,x:2,y:-2},
+  {b:-3,ar:16,al:-14,lr:-6,ll:5,x:-2,y:3},
+  {b:3,ar:-12,al:15,lr:5,ll:-6,x:2,y:-2},
+  {b:-2,ar:14,al:-10,lr:-5,ll:4,x:-1,y:2},
+  {b:2,ar:-7,al:10,lr:4,ll:-4,x:1,y:-1},
+  {b:0,ar:5,al:-5,lr:-2,ll:2,x:0,y:1}
+ ]
+};
+function rad(d){return d*Math.PI/180}
+function ready(i){return i.complete&&i.naturalWidth}
+function drawSheet(){
+  const m=motionSel.value, d=Number(dirSel.value);
+  const wi=sheets.warrior[m], gi=sheets.generic[m];
+  wctx.clearRect(0,0,384,512);gctx.clearRect(0,0,192,256);
+  if(ready(wi))wctx.drawImage(wi,frame*384,d*512,384,512,0,0,384,512);
+  if(ready(gi))gctx.drawImage(gi,frame*192,d*256,192,256,0,0,192,256);
+  wMeta.textContent=`${DIRS[d]} / frame ${frame+1} / ${m}`;
+  gMeta.textContent=`${DIRS[d]} / frame ${frame+1} / ${m}`;
+}
+function withPivot(ctx,pivot,angle,fn){
+  ctx.save();ctx.translate(pivot[0],pivot[1]);ctx.rotate(rad(angle));ctx.translate(-pivot[0],-pivot[1]);fn();ctx.restore();
+}
+function part(k){if(ready(parts[k]))cctx.drawImage(parts[k],0,0,362,543)}
+function drawCutout(){
+  const m=motionSel.value,p=poses[m][frame];
+  cctx.clearRect(0,0,362,543);
+  cctx.save();
+  cctx.translate(ROOT[0]+p.x,ROOT[1]+p.y);cctx.rotate(rad(p.b));cctx.translate(-ROOT[0],-ROOT[1]);
+  part('scabbard');
+  withPivot(cctx,HIP_L,p.ll,()=>part('leg_left'));
+  withPivot(cctx,HIP_R,p.lr,()=>part('leg_right'));
+  withPivot(cctx,SHOULDER_L,p.al,()=>{part('arm_left');part('shield')});
+  part('body');
+  withPivot(cctx,SHOULDER_R,p.ar,()=>{part('arm_right');if(m!=='bind')part('sword')});
+  cctx.restore();
+  if(jointBox.checked){
+    cctx.fillStyle='#ff4d7a';
+    [ROOT,SHOULDER_R,SHOULDER_L,HIP_R,HIP_L].forEach(([x,y])=>{cctx.beginPath();cctx.arc(x,y,5,0,Math.PI*2);cctx.fill()});
+  }
+  cMeta.textContent=`front / frame ${frame+1} / ${m}`;
+  prototypeNote.textContent=m==='slash'
+    ?'斬撃は既存の右腕・剣PNGを肩支点で動かす初期検査。肩一軸に見える場合は上腕・前腕・手の3分割へ進む。'
+    :m==='bind'
+      ?'拘束は両肩を別々に引き上げ、脚も外へ引く検査。最終版では敵の拘束種類ごとに支点・拘束点を変える。'
+      :'エステラは短周期の非対称な収縮を検査。最終版では発生→痙攣ループ→脱力復帰を別クリップに分ける。';
+}
+function render(){
+  const m=motionSel.value, sheet=m==='walk'||m==='run';
+  sheetViews.classList.toggle('off',!sheet);
+  cutoutViews.classList.toggle('on',!sheet);
+  dirSel.disabled=!sheet;
+  if(!sheet)dirSel.value='0';
+  if(sheet)drawSheet();else drawCutout();
+}
+function setFrame(n){frame=(n+8)%8;acc=0;render()}
+function loop(now){
+  const dt=now-last;last=now;
+  if(playing){
+    acc+=dt*Number(speedSel.value);
+    const ms=timing[motionSel.value];
+    while(acc>=ms){acc-=ms;frame=(frame+1)%8}
+    render();
+  }
+  requestAnimationFrame(loop);
+}
+motionSel.addEventListener('change',()=>setFrame(0));
+dirSel.addEventListener('change',render);
+speedSel.addEventListener('change',()=>acc=0);
+jointBox.addEventListener('change',render);
+playBtn.addEventListener('click',()=>{playing=!playing;playBtn.textContent=playing?'停止':'再生'});
+prevBtn.addEventListener('click',()=>{playing=false;playBtn.textContent='再生';setFrame(frame-1)});
+nextBtn.addEventListener('click',()=>{playing=false;playBtn.textContent='再生';setFrame(frame+1)});
+render();requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

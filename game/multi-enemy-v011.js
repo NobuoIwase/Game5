@@ -1,13 +1,7 @@
 (()=>{
 'use strict';
 const SUPPORTS=[
- [],
- ['slug'],
- ['leech'],
- ['moth'],
- ['slug','leech'],
- ['orb'],
- ['worm','moth']
+ [],['slug'],['leech'],['moth'],['slug','leech'],['orb'],['worm','moth']
 ];
 function installSkills(type){
  const d=window.Game5MonsterSkills?.defs?.[type]||window.Game5MonsterSkills?.defs?.gel;
@@ -25,10 +19,10 @@ startEnemySkill=function(key,target){
  return ok;
 };
 function make(type,x,y,level){
- const primary=state.enemy;
- const e={...primary,cast:null};
+ const primaryEnemy=state.enemy;
+ const e={...primaryEnemy,cast:null};
  state.enemy=e;Game5Monsters.apply(type,level);e.x=x;e.y=y;
- state.enemy=primary;return e;
+ state.enemy=primaryEnemy;return e;
 }
 function alive(){return (state.enemies||[]).filter(e=>e&&e.hp>0)}
 function primary(h=state.hero){
@@ -51,7 +45,7 @@ function setup(){
  const main=state.enemy,defs=SUPPORTS[i]||[],r=Game5Dungeon.room(),level=1+Math.floor(i/2);
  const pts=[[r.spawn[0]-105,r.spawn[1]+95],[r.spawn[0]+75,r.spawn[1]-105],[r.spawn[0]-150,r.spawn[1]-95]];
  state.enemies=[main];
- defs.forEach((t,j)=>state.enemies.push(make(t,clamp(pts[i][0],70,W-70),clamp(pts[j][1],70,H-70),level)));
+ defs.forEach((t,j)=>state.enemies.push(make(t,clamp(pts[j][0],70,W-70),clamp(pts[j][1],70,H-70),level)));
  primary();
  log(`敵編成 ${state.enemies.map(e=>e.name).join(' / ')}`);
 }

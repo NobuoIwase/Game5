@@ -1,79 +1,178 @@
 const ENEMY_SKILLS={
- cleave:{name:'大薙ぎ',cast:.78,kind:'cone',range:160,damage:26},
- charge:{name:'灰槍突進',cast:1.0,kind:'line',range:390,width:58,damage:32},
- bind:{name:'影縛り',cast:1.08,kind:'circle',range:430,r:92,damage:12,status:{bind:2.2}},
- fog:{name:'蝕毒の霧',cast:1.25,kind:'circle',range:450,r:108,damage:7,hazard:true},
- bolt:{name:'黒雷',cast:1.35,kind:'line',range:460,width:72,damage:28,status:{silence:2.4},lock:true}
+  cleave:{name:'大薙ぎ',cast:.82,kind:'cone',range:155,step:44,stepSpeed:175,damage:25,spDamage:10},
+  charge:{name:'灰槍突進',cast:1.0,kind:'line',range:385,width:58,damage:31,spDamage:18,travel:235},
+  bind:{name:'影縛り',cast:1.08,kind:'circle',range:420,r:88,damage:10,spDamage:15,status:{bind:2.15}},
+  fog:{name:'蝕毒の霧',cast:1.22,kind:'circle',range:440,r:104,damage:6,spDamage:5,hazard:true},
+  bolt:{name:'黒雷',cast:1.32,kind:'line',range:455,width:70,damage:27,spDamage:8,status:{silence:2.3},lock:true}
 };
 function startEnemySkill(key,target){
- const e=state.enemy,sk=ENEMY_SKILLS[key],ang=Math.atan2(target.y-e.y,target.x-e.x);
- e.cast={key,sk,t:sk.cast,total:sk.cast,target:{x:target.x,y:target.y},ang,start:{x:e.x,y:e.y},lock:!!sk.lock};
- e.decision=`${sk.name} を詠唱`;log(`敵：${sk.name}`);
+  const e=state.enemy,sk=ENEMY_SKILLS[key],d=dist(e,target);
+  if(d>sk.range+(sk.step||0)+target.r+10){e.actCd=.36;e.decision='射程へ入る';return false;}
+  const ang=Math.atan2(target.y-e.y,target.x-e.x),id=++state.castSeq;
+  e.cast={
+    id,key,sk,t:sk.cast,total:sk.cast,target:{x:target.x,y:target.y},ang,
+    start:{x:e.x,y:e.y},lock:!!sk.lock,stepLeft:sk.step||0,threatenedAtStart:heroThreatenedByCast(target,{sk,target:{x:target.x,y:target.y},ang,start:{x:e.x,y:e.y}})
+  };
+  e.decision=`${sk.name} を構える`;e.noise=1;
+  log(`敵：${sk.name}`);
+  return true;
 }
 function chooseEnemyAction(){
- const e=state.enemy,t=chooseTarget();if(!t)return;const d=dist(e,t);let key;
- if(d<150)key=Math.random()<.58?'cleave':'bind';
- else if(d<300){const r=Math.random();key=r<.28?'charge':r<.55?'bind':r<.78?'fog':'bolt';}
- else {const r=Math.random();key=r<.32?'charge':r<.58?'fog':r<.82?'bind':'bolt';}
- startEnemySkill(key,t);
+  const e=state.enemy,t=chooseTarget();if(!t)return;
+  const d=dist(e,t);let key;
+  if(d<145)key=Math.random()<.62?'cleave':'bind';
+  else if(d<285){const r=Math.random();key=r<.28?'charge':r<.53?'bind':r<.76?'fog':'bolt';}
+  else {const r=Math.random();key=r<.34?'charge':r<.58?'fog':r<.80?'bind':'bolt';}
+  startEnemySkill(key,t);
+}
+function updateEnemyCast(e,dt){
+  const cast=e.cast;if(!cast)return;
+  const sk=cast.sk,h=state.hero;
+  if(cast.key==='cleave'&&cast.stepLeft>0&&e.root<=0){
+    const dx=h.x-e.x,dy=h.y-e.y,l=Math.hypot(dx,dy)||1;
+    const need=Math.max(0,l-(sk.range+h.r-8));
+    const step=Math.min(cast.stepLeft,sk.stepSpeed*dt,need);
+    if(step>0){
+      e.x=clamp(e.x+dx/l*step,58,W-58);e.y=clamp(e.y+dy/l*step,58,H-58);
+      cast.stepLeft-=step;cast.start.x=e.x;cast.start.y=e.y;cast.ang=Math.atan2(h.y-e.y,h.x-e.x);
+      e.moving=true;
+    }
+  }
+  cast.t-=dt;
+  if(cast.t<=0)resolveEnemy(cast);
 }
 function resolveEnemy(cast){
- const e=state.enemy;if(e.cast!==cast)return;e.cast=null;const sk=cast.sk;
- for(const h of aliveHeroes()){
+  const e=state.enemy;if(e.cast!==cast)return;e.cast=null;const sk=cast.sk,h=state.hero;
   let hit=false;
-  if(sk.kind==='circle')hit=Math.hypot(h.x-cast.target.x,h.y-cast.target.y)<=sk.r+h.r;
-  else if(sk.kind==='line'){const x2=cast.start.x+Math.cos(cast.ang)*sk.range,y2=cast.start.y+Math.sin(cast.ang)*sk.range;hit=pointSegDist(h.x,h.y,cast.start.x,cast.start.y,x2,y2)<=sk.width/2+h.r;}
-  else if(sk.kind==='cone')hit=inCone(h.x,h.y,cast.start.x,cast.start.y,cast.ang,sk.range+h.r,.66);
-  if(hit)hurtHero(h,sk.damage,sk.status);
- }
- if(cast.key==='charge'){e.x=clamp(cast.start.x+Math.cos(cast.ang)*235,70,W-70);e.y=clamp(cast.start.y+Math.sin(cast.ang)*235,70,H-70);}
- if(sk.hazard)state.hazards.push({kind:'enemyFog',x:cast.target.x,y:cast.target.y,r:sk.r,t:5.5,tick:0});
- e.actCd=e.phase===2?rnd(.65,1.05):rnd(.95,1.45);e.decision='次の一手を測る';
-}
-function selectHero(i){if(i<0||i>=state.heroes.length||state.heroes[i].dead)return;state.active=i;renderUI();}
-function dirFrom(dx,dy){const sx=Math.sign(dx),sy=Math.sign(dy);if(sy>0)return sx>0?'down_right':sx<0?'down_left':'front';if(sy<0)return sx>0?'up_right':sx<0?'up_left':'back';return sx>0?'right':sx<0?'left':'front';}
-function moveVector(){let x=0,y=0;const a=k=>keys.has(k)||touchKeys.has(k);if(a('ArrowLeft')||a('KeyA'))x--;if(a('ArrowRight')||a('KeyD'))x++;if(a('ArrowUp')||a('KeyW'))y--;if(a('ArrowDown')||a('KeyS'))y++;if(x&&y){x*=Math.SQRT1_2;y*=Math.SQRT1_2;}return{x,y};}
-function updateStatuses(h,dt){
- for(const k of Object.keys(h.status))h.status[k]=Math.max(0,h.status[k]-dt);
- if(h.status.poison>0){h.poisonTick-=dt;if(h.poisonTick<=0){h.poisonTick=1;hurtHero(h,5);}}
- h.mp=Math.min(h.maxMp,h.mp+dt*1.7);h.flash=Math.max(0,h.flash-dt);
- for(let i=0;i<4;i++)h.cd[i]=Math.max(0,h.cd[i]-dt);
-}
-function updateHero(h,dt,index){
- updateStatuses(h,dt);if(h.dead)return;
- if(h.cast){h.cast.t-=dt;if(h.cast.t<=0)resolveHero(h,h.cast);}
- h.autoT-=dt;
- if(index!==state.active){
-  const lead=activeHero();const offsets=[[-78,-56],[78,-54],[-78,58],[78,58]],of=offsets[index]||[0,70];
-  const tx=lead.x+of[0],ty=lead.y+of[1],dx=tx-h.x,dy=ty-h.y,l=Math.hypot(dx,dy);
-  if(l>10&&h.status.bind<=0&&h.status.stun<=0){const sp=Math.min(h.speed*.72,l*4);h.x+=dx/l*sp*dt;h.y+=dy/l*sp*dt;h.dir=dirFrom(dx,dy);h.moving=true;}else h.moving=false;
-  if(h.autoT<=0&&dist(h,state.enemy)<260){h.autoT=rnd(1.4,2.0);hurtEnemy(index===0?8:index===1?9:index===2?10:7,{source:'援護'});}
- }else{
-  const v=moveVector(),blocked=h.status.bind>0||h.status.stun>0;h.moving=!!(v.x||v.y)&&!blocked;
-  if(h.moving){const slow=h.status.slow>0?.55:1,castSlow=h.cast?.sk?.kind==='meteor'?.3:.78,sp=h.speed*slow*(h.cast?castSlow:1);h.x=clamp(h.x+v.x*sp*dt,42,W-42);h.y=clamp(h.y+v.y*sp*dt,48,H-48);h.dir=dirFrom(v.x,v.y);}
- }
- if(h.moving){h.anim+=dt*(h===activeHero()?8:6);h.frame=Math.floor(h.anim)%8;}else h.frame=0;
+  if(!h.dead){
+    if(sk.kind==='circle')hit=Math.hypot(h.x-cast.target.x,h.y-cast.target.y)<=sk.r+h.r;
+    else if(sk.kind==='line'){
+      const x2=cast.start.x+Math.cos(cast.ang)*sk.range,y2=cast.start.y+Math.sin(cast.ang)*sk.range;
+      hit=pointSegDist(h.x,h.y,cast.start.x,cast.start.y,x2,y2)<=sk.width/2+h.r;
+    }else if(sk.kind==='cone'){
+      hit=inCone(h.x,h.y,cast.start.x,cast.start.y,cast.ang,sk.range+h.r,.66);
+    }
+    if(hit){
+      hurtHero(h,sk.damage,sk.status,{spDamage:sk.spDamage,label:sk.name,sourceKey:cast.key,castId:cast.id});
+    }else if(h.dodgeCastId===cast.id){
+      learnEnemy(cast.key,.24);
+      addFx('text',h.x,h.y-60,'回避','#bfe8ff');
+    }else if(enemyVisibleToHero(h)){
+      learnEnemy(cast.key,.10);
+    }
+  }
+  if(cast.key==='charge'){
+    e.x=clamp(cast.start.x+Math.cos(cast.ang)*sk.travel,65,W-65);
+    e.y=clamp(cast.start.y+Math.sin(cast.ang)*sk.travel,65,H-65);
+  }
+  if(sk.hazard)state.hazards.push({kind:'enemyFog',x:cast.target.x,y:cast.target.y,r:sk.r,t:5.2,tick:.2});
+  e.actCd=e.phase===2?rnd(.72,1.08):rnd(1.02,1.48);e.decision='次の一手を測る';e.noise=.24;
 }
 function updateEnemy(dt){
- const e=state.enemy;e.flash=Math.max(0,e.flash-dt);e.stun=Math.max(0,e.stun-dt);e.root=Math.max(0,e.root-dt);e.slow=Math.max(0,e.slow-dt);e.guard=Math.max(0,e.guard-dt);
- if(e.poison>0){e.poison=Math.max(0,e.poison-dt);e.poisonTick-=dt;if(e.poisonTick<=0){e.poisonTick=1;hurtEnemy(6);}}
- if(e.hp<=e.maxHp*.48)e.phase=2;
- if(e.cast){e.cast.t-=dt;if(e.cast.t<=0)resolveEnemy(e.cast);return;}
- if(e.stun>0){e.decision='気絶';return;}
- if(e.reactT>0&&e.root<=0){e.reactT-=dt;const sp=115*(e.slow>0?.55:1);e.x=clamp(e.x+e.reactX*sp*dt,60,W-60);e.y=clamp(e.y+e.reactY*sp*dt,60,H-60);return;}
- e.actCd-=dt;if(e.actCd<=0){chooseEnemyAction();return;}
- const t=activeHero().dead?aliveHeroes()[0]:activeHero();if(!t)return;const d=dist(e,t);
- if(d>210&&e.root<=0){const dx=t.x-e.x,dy=t.y-e.y,l=Math.hypot(dx,dy)||1,sp=(e.phase===2?83:68)*(e.slow>0?.55:1);e.x+=dx/l*sp*dt;e.y+=dy/l*sp*dt;e.decision='間合いを詰める';}
+  const e=state.enemy,h=state.hero;
+  e.flash=Math.max(0,e.flash-dt);e.stun=Math.max(0,e.stun-dt);e.root=Math.max(0,e.root-dt);e.slow=Math.max(0,e.slow-dt);e.guard=Math.max(0,e.guard-dt);
+  e.noise=Math.max(.12,e.noise-dt*1.4);e.moving=false;
+  if(e.poison>0){
+    e.poison=Math.max(0,e.poison-dt);e.poisonTick-=dt;
+    if(e.poisonTick<=0){e.poisonTick=1;hurtEnemy(6,{xp:false});}
+  }
+  if(e.hp<=e.maxHp*.48)e.phase=2;
+  if(e.cast){updateEnemyCast(e,dt);return;}
+  if(e.stun>0){e.decision='気絶';return;}
+  if(e.reactT>0&&e.root<=0){
+    e.reactT-=dt;const sp=116*(e.slow>0?.55:1);
+    e.x=clamp(e.x+e.reactX*sp*dt,58,W-58);e.y=clamp(e.y+e.reactY*sp*dt,58,H-58);
+    e.moving=true;e.noise=.4;return;
+  }
+  e.actCd-=dt;
+  if(e.actCd<=0){chooseEnemyAction();return;}
+  if(!h||h.dead)return;
+  const d=dist(e,h);
+  if(d>205&&e.root<=0){
+    const dx=h.x-e.x,dy=h.y-e.y,l=Math.hypot(dx,dy)||1;
+    const sp=(e.phase===2?86:69)*(e.slow>0?.55:1);
+    e.x+=dx/l*sp*dt;e.y+=dy/l*sp*dt;e.decision='間合いを詰める';e.moving=true;e.noise=.33;
+  }else if(d<92&&e.root<=0&&e.actCd>.45){
+    const dx=e.x-h.x,dy=e.y-h.y,l=Math.hypot(dx,dy)||1;
+    e.x+=dx/l*42*dt;e.y+=dy/l*42*dt;e.decision='近すぎる間合いを外す';e.moving=true;e.noise=.27;
+  }
+}
+function placeDirectorTool(kind,x,y,auto=false){
+  const d=state.director,t=DIRECTOR_TOOLS[kind];
+  if(!t||!state.started||state.over)return false;
+  if(d.cd[kind]>0||d.en<t.cost)return false;
+  x=clamp(x,48,W-48);y=clamp(y,48,H-48);
+  d.en-=t.cost;d.cd[kind]=t.cd;
+  if(kind==='snare')state.hazards.push({kind:'directorSnare',x,y,r:t.r,t:12,arm:.55,triggered:false});
+  if(kind==='fog')state.hazards.push({kind:'directorFog',x,y,r:t.r,t:5.4,tick:.2});
+  if(kind==='lure'){
+    state.hazards.push({kind:'directorLure',x,y,r:t.r,t:3.2,pulse:0});
+    state.sound={x,y,t:3.2,strength:1};
+  }
+  addFx('pulse',x,y,'','#d78db8',.6);
+  log(`${auto?'AUTO指揮':'プレイヤー'}：${t.name}を配置`);
+  return true;
+}
+function updateDirector(dt){
+  const d=state.director;
+  d.en=Math.min(d.maxEn,d.en+dt*8.0);
+  for(const k of Object.keys(d.cd))d.cd[k]=Math.max(0,d.cd[k]-dt);
+  if(state.sound){state.sound.t-=dt;if(state.sound.t<=0)state.sound=null;}
+  if(!d.auto||!state.started||state.over)return;
+  d.autoT-=dt;if(d.autoT>0)return;
+  d.autoT=rnd(3.7,5.4);
+  const h=state.hero;if(!h||h.dead)return;
+  const choices=['snare','fog','lure'].filter(k=>d.cd[k]<=0&&d.en>=DIRECTOR_TOOLS[k].cost);
+  if(!choices.length)return;
+  const kind=choices[(Math.random()*choices.length)|0];
+  const lead=kind==='snare'?58:kind==='fog'?28:120;
+  const x=h.x+Math.cos(h.facing)*lead+rnd(-35,35),y=h.y+Math.sin(h.facing)*lead+rnd(-35,35);
+  placeDirectorTool(kind,x,y,true);
 }
 function updateHazards(dt){
- for(const z of state.hazards){z.t-=dt;z.tick-=dt;if(z.tick<=0){z.tick=.65;if(z.kind==='enemyFog'){for(const h of aliveHeroes())if(Math.hypot(h.x-z.x,h.y-z.y)<z.r+h.r){hurtHero(h,3,{poison:3.2,slow:1.2});}}else if(z.kind==='playerPoison'&&Math.hypot(state.enemy.x-z.x,state.enemy.y-z.y)<z.r+state.enemy.r){hurtEnemy(7,{poison:2.4});}}}
- state.hazards=state.hazards.filter(z=>z.t>0);
- if(state.sanctuary){state.sanctuary.t-=dt;state.sanctuary.tick-=dt;if(state.sanctuary.tick<=0){state.sanctuary.tick=.7;for(const h of aliveHeroes())if(Math.hypot(h.x-state.sanctuary.x,h.y-state.sanctuary.y)<state.sanctuary.r)healHero(h,4);}if(state.sanctuary.t<=0)state.sanctuary=null;}
+  const h=state.hero;
+  for(const z of state.hazards){
+    z.t-=dt;
+    if(z.arm!=null)z.arm-=dt;
+    if(z.tick!=null)z.tick-=dt;
+    if(z.kind==='enemyFog'&&z.tick<=0){
+      z.tick=.64;
+      if(!h.dead&&Math.hypot(h.x-z.x,h.y-z.y)<z.r+h.r)hurtHero(h,3,{poison:3.0,slow:1.1},{spDamage:2,label:'蝕毒の霧'});
+    }else if(z.kind==='directorFog'&&z.tick<=0){
+      z.tick=.58;
+      if(!h.dead&&Math.hypot(h.x-z.x,h.y-z.y)<z.r+h.r)hurtHero(h,2,{poison:2.4,slow:.8},{spDamage:2.5,label:'瘴気壺'});
+    }else if(z.kind==='directorSnare'&&!z.triggered&&z.arm<=0&&!h.dead&&Math.hypot(h.x-z.x,h.y-z.y)<z.r+h.r){
+      z.triggered=true;z.t=.55;
+      h.status.bind=Math.max(h.status.bind,1.65);drainSp(h,21,'影杭');
+      addFx('ring',h.x,h.y,'','#e5a2d0',.8);log('影杭が足を取った。');
+    }else if(z.kind==='directorLure'&&!h.dead){
+      z.pulse-=dt;
+      if(z.pulse<=0){z.pulse=.45;state.sound={x:z.x,y:z.y,t:.6,strength:1};}
+      if(!enemyVisibleToHero(h)&&Math.hypot(h.x-z.x,h.y-z.y)<h.hearingRange){
+        h.memory.lastHeard={x:z.x+rnd(-18,18),y:z.y+rnd(-18,18),t:state.time};
+      }
+    }
+  }
+  state.hazards=state.hazards.filter(z=>z.t>0);
 }
 function update(dt){
- if(!state.started||state.over)return;state.time+=dt;state.heroes.forEach((h,i)=>updateHero(h,dt,i));updateEnemy(dt);updateHazards(dt);
- for(const f of state.effects)f.t-=dt;state.effects=state.effects.filter(f=>f.t>0);
- if(!aliveHeroes().length)finish(false);renderUI();
+  if(!state.started||state.over)return;
+  state.time+=dt;
+  updateDirector(dt);updateHero(state.hero,dt);updateEnemy(dt);updateHazards(dt);
+  for(const f of state.effects)f.t-=dt;
+  state.effects=state.effects.filter(f=>f.t>0);
+  if(state.hero.dead)finish(false);
+  renderUI();
 }
-function finish(win){if(state.over)return;state.over=true;$('endKicker').textContent=win?'VICTORY':'DEFEAT';$('endTitle').textContent=win?'灰冠を打ち破った':'パーティは力尽きた';$('endText').textContent=win?'敵の攻撃範囲を見て避け、拘束・魔法・割り込みを使い分ける戦闘の縦切りが完成しました。':'敵の予兆から離れ、拘束中は別の仲間へ切り替え、浄化や防御を使って立て直してください。';$('endOverlay').classList.remove('hidden');}
-
+function finish(win){
+  if(state.over)return;state.over=true;
+  const h=state.hero;
+  $('endKicker').textContent=win?'VICTORY':'DEFEAT';
+  $('endTitle').textContent=win?'灰冠を打ち破った':h.defeatReason==='SP'?'抵抗する力を失った':'戦士は力尽きた';
+  $('endText').textContent=win
+    ?`Lv${h.level}。間合い・踏み込み・予兆回避・学習を自律AIだけで処理しました。`
+    :h.defeatReason==='SP'
+      ?'HPが残っていてもSPが0になると敗北します。拘束や一部の攻撃はスタミナを直接削ります。'
+      :'攻撃範囲と状態異常に押し切られました。敵側のAUTO指揮を切ると罠配置だけ手動で試せます。';
+  $('endOverlay').classList.remove('hidden');
+}

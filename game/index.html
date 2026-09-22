@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Game5 Top-down Prototype</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">GAME5 / PLAYABLE PROTOTYPE</p>
+        <h1>森の結晶</h1>
+      </div>
+      <div class="hud" aria-live="polite">
+        <span id="characterLabel">戦士</span>
+        <span id="motionLabel">待機</span>
+        <span id="crystalLabel">結晶 0 / 3</span>
+      </div>
+    </header>
+
+    <section class="game-wrap" aria-label="ゲーム画面">
+      <canvas id="gameCanvas" width="1280" height="720">
+        このブラウザはCanvasに対応していません。
+      </canvas>
+
+      <div id="loadingCard" class="panel loading-card">
+        <strong>キャラクター素材を読み込み中…</strong>
+        <span>Game5 の既存PNGシートをそのまま使用します。</span>
+      </div>
+
+      <div id="messageCard" class="panel message-card">
+        <strong id="messageTitle">3つの結晶を集める</strong>
+        <span id="messageBody">森を歩き、すべて集めたら北東の祭壇へ。</span>
+      </div>
+
+      <div id="completeCard" class="panel complete-card hidden">
+        <p class="eyebrow">CLEAR</p>
+        <h2>試作ゴール到達</h2>
+        <p>移動・走行・8方向アニメーション・衝突・収集・ゴールまで動作しました。</p>
+        <button id="restartButton" type="button">もう一度</button>
+      </div>
+    </section>
+
+    <section class="controls-panel">
+      <div>
+        <p class="control-title">操作</p>
+        <p>WASD / 矢印：移動　Shift：走る　R：やり直し</p>
+      </div>
+      <div class="character-switcher" aria-label="キャラクター切替">
+        <button type="button" data-character="warrior" class="active">1 戦士</button>
+        <button type="button" data-character="scout">2 獣人</button>
+        <button type="button" data-character="witch">3 魔女</button>
+        <button type="button" data-character="sister">4 シスター</button>
+      </div>
+    </section>
+
+    <div class="touch-controls" aria-label="タッチ操作">
+      <div class="dpad">
+        <button type="button" class="up" data-key="ArrowUp" aria-label="上">▲</button>
+        <button type="button" class="left" data-key="ArrowLeft" aria-label="左">◀</button>
+        <button type="button" class="down" data-key="ArrowDown" aria-label="下">▼</button>
+        <button type="button" class="right" data-key="ArrowRight" aria-label="右">▶</button>
+      </div>
+      <button type="button" class="run-button" data-key="ShiftLeft">RUN</button>
+    </div>
+  </main>
+
+  <script src="./config.js" defer></script>
+  <script src="./render.js" defer></script>
+  <script src="./game.js" defer></script>
+</body>
+</html>

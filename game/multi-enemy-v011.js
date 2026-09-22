@@ -38,6 +38,15 @@ function primary(h=state.hero){
  }
  return b;
 }
+function separate(list){
+ for(let i=0;i<list.length;i++)for(let j=i+1;j<list.length;j++){
+   const a=list[i],b=list[j],dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||.001,min=(a.r||24)+(b.r||24)+8;
+   if(d>=min)continue;
+   const push=(min-d)*.5,nx=dx/d,ny=dy/d;
+   a.x-=nx*push;a.y-=ny*push;b.x+=nx*push;b.y+=ny*push;
+   Game5Dungeon?.resolveEntity?.(a);Game5Dungeon?.resolveEntity?.(b);
+ }
+}
 function setup(){
  if(!state.dungeon?.active)return;
  const i=state.dungeon.room;if(state._multiRoom===i&&state.enemies?.length)return;
@@ -65,13 +74,18 @@ const baseEnemy=updateEnemy;
 updateEnemy=function(dt){
  setup();
  const list=alive();
- if(!list.length){state.enemies=[];dungeonFinish(true);return}
+ if(!list.length){
+   state.enemies=[];
+   if(!state.dungeon?.pending)dungeonFinish(true);
+   return;
+ }
  for(const e of list){
    state.enemy=e;installSkills(e.type);baseEnemy(dt);
  }
+ separate(alive());
  primary();
 };
 const baseReset=reset;
 reset=function(){baseReset();state._multiRoom=-1;setup()};
-window.Game5MultiEnemy={version:'0.11.0',supports:SUPPORTS,alive,primary,setup};
+window.Game5MultiEnemy={version:'0.11.0',supports:SUPPORTS,alive,primary,setup,separate};
 })();

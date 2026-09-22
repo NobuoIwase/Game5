@@ -1,0 +1,1 @@
+(()=>{'use strict';if(typeof startHeroSkill!=='function')return;const base=startHeroSkill;startHeroSkill=function(slot,reason=''){const h=activeHero(),sk=h?.skils?.[slot],ok=base(slot,reason);if(ok&&h?.id==='warrior'&&sk?.kind==='heavy'&&h._warriorMotion)h._warriorMotion.total=sk.cast/.55;return ok}})();

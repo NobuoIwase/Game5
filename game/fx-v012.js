@@ -216,7 +216,7 @@ function crown(e){
 }
 function underActors(){
  // enemy objects are reused between floors and copied for supports: key the tint to the species
- for(const e of alive())if(e._lookType!==e.type){e._lookType=e.type;e.visualFilter=LOOK[e.type]||''}
+ for(const e of alive())if(e._lookType!==e.type){e._lookType=e.type;e.visualFilter=LOOK[e.type]||window.Game5SpeciesLook?.[e.type]||''}
  shadows();
  for(const e of alive())if(e!==state.enemy)telegraph(e);
  if(state.enemy?.hp>0)telegraph(state.enemy);
@@ -337,7 +337,7 @@ function overlays(){
  const h=state.hero,t=state.time;
  // Estella / low stamina: pulse the screen edge so the state is readable at a glance
  const edge=(col,a)=>{const g=ctx.createRadialGradient(W/2,H/2,H*.35,W/2,H/2,W*.62);g.addColorStop(0,col+'00');g.addColorStop(1,col);ctx.save();ctx.globalAlpha=a;ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.restore()};
- if(h.estella?.active)edge('#e7a6ff',.35+.2*Math.sin(t*10));
+ if(h.estella?.active){if(!window.Game5NuteraFX)edge('#e7a6ff',.35+.2*Math.sin(t*10))}
  else if(!h.dead&&h.sp<h.maxSp*.25)edge('#ff7a3d',.18+.12*Math.sin(t*8));
  if(clearT>0){
   const a=Math.min(1,clearT*2)*Math.min(1,(1.6-clearT)*6);

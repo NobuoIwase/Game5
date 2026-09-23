@@ -79,6 +79,15 @@ function bake(i){
  if(!ok(im)||!ok(wallTop))return null;
  const R=rng(i*7907+131),raw=document.createElement('canvas');raw.width=W;raw.height=H;const g=raw.getContext('2d');
  g.fillStyle=th.grout;g.fillRect(0,0,W,H);
+ const req=window.Game5Assets?.requested?.floorImg?.[i];
+ if(req){
+  // commissioned floor: tile it as delivered (random cells of the sheet), then walls go on top
+  if(!ok(req))return null;
+  const cols=Math.max(1,Math.round(req.naturalWidth/64)),rows=Math.max(1,Math.round(req.naturalHeight/64));
+  for(let y=0;y<H;y+=64)for(let x=0;x<W;x+=64){const n=(R()*cols*rows)|0;g.drawImage(req,(n%cols)*64,((n/cols)|0)*64,64,64,x,y,64,64)}
+  const out=document.createElement('canvas');out.width=W;out.height=H;const o=out.getContext('2d');o.drawImage(raw,0,0);
+  window.Game5Terrain?.paintWalls?.(o,th,raw);return out;
+ }
  const list=patches(key),gap=2.5;
  for(let y=60;y<H;){
   const h=40+R()*12;let x=-R()*70;
@@ -96,7 +105,6 @@ function bake(i){
  return out;
 }
 function get(i){
- if(window.Game5Assets?.requested?.floor?.[i])return null;
  if(!baked.has(i)){const c=bake(i);if(!c)return null;baked.set(i,c)}
  return baked.get(i);
 }

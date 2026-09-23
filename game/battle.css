@@ -66,3 +66,13 @@ kbd{background:#223027;border:1px solid #ffffff22;border-bottom-width:2px;border
 .histHead{display:flex;justify-content:space-between;margin-bottom:4px}.histHead span{color:#95a69b}
 .histRow{display:grid;grid-template-columns:1fr 44px 48px 96px;gap:6px;color:#b9c4bb;padding:1px 0}
 .histRow.win span:first-child{color:#ffe9a0;font-weight:700}
+/* v0.16.0 Nutera / Estella panel */
+#nuteraFill{background:linear-gradient(90deg,#ff9ad6,#e0479e)}
+#lumaneFill{background:linear-gradient(90deg,#e7a8ff,#b35ce0)}
+#sailFill{background:linear-gradient(90deg,#ffd3a0,#f09a5e)}
+.systemBlock{transition:box-shadow .3s,border-color .3s}
+.systemBlock .systemTitle b{color:#ffb3de}
+.systemBlock.hot{border-color:#ff7fc866;animation:beat var(--beat,.8s) ease-in-out infinite}
+.systemBlock.estella{border-color:#ff7fc8;box-shadow:0 0 18px #ff4fae66,inset 0 0 22px #ff4fae33;animation:beat .35s ease-in-out infinite}
+.systemBlock.estella #estellaText{color:#fff;background:#e0479e;border-radius:6px;padding:1px 7px;font-weight:700}
+@keyframes beat{0%,100%{box-shadow:0 0 0 #ff4fae00}40%{box-shadow:0 0 16px #ff4fae55}}

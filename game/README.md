@@ -1,4 +1,10 @@
-# Game5 battle pilot — v0.15.0
+# Game5 battle pilot — v0.16.0
+
+## v0.16.0
+- `nutera-fx-v016.js` — ヌテラ・エステラのハート演出（`fx-v012.js` の直後に読み込む）
+- `species-v016.js` — `assets/requested/manifest.json` の `species` から新モンスターを追加
+
+## v0.15.0
 
 ## v0.15.0
 - `terrain-v015.js` — 階層ごとの地形生成（広間／迷路／同心円／洞窟／闘技場）、通行保証、配置、探索の暗がり、壁の焼き込み、噴出口・水路。`dungeon-v011.js` の直後に読み込む（最初の reset より前）

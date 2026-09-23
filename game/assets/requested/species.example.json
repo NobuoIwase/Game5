@@ -1,0 +1,28 @@
+[
+  {
+    "type": "mirror",
+    "name": "鏡面スライム",
+    "family": "mirror",
+    "familyName": "鏡面種",
+    "hp": 240, "r": 26, "speed": 84,
+    "look": { "sprite": 1, "hue": 150, "filter": "hue-rotate(150deg) saturate(.6) brightness(1.35)" },
+    "image": "monsters/mirror.png",
+    "role": { "pref": 110, "dart": 70, "label": "動きを真似て滑り寄る" },
+    "weights": ["charge", "charge", "bind", "cleave", "fog"],
+    "skills": {
+      "cleave": { "name": "鏡肌なで", "cast": 0.62, "range": 120, "step": 30 },
+      "charge": { "name": "写し身滑走", "cast": 0.78, "range": 320, "width": 64, "travel": 200 },
+      "bind":   { "name": "鏡膜包み", "cast": 0.9, "range": 260, "r": 70, "status": { "bind": 1.4 } },
+      "fog":    { "name": "銀の粘霧", "cast": 1.0, "range": 360, "r": 96 },
+      "bolt":   { "name": "反射光", "cast": 1.05, "range": 400, "width": 70 }
+    },
+    "nutera": {
+      "cleave": { "nutera": 7 },
+      "charge": { "nutera": 10, "sail": 3 },
+      "bind":   { "nutera": 15, "charm": 10 },
+      "fog":    { "sail": 6, "lumane": 8 },
+      "bolt":   { "hypnosis": 18, "charm": 8 }
+    },
+    "floors": [2, 5]
+  }
+]

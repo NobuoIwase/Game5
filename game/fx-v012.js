@@ -27,7 +27,7 @@ function layout(){
  const R=rng(i*7919+13),blocked=(x,y,pad)=>(r.walls||[]).some(w=>x>w.x-pad&&x<w.x+w.w+pad&&y>w.y-pad&&y<w.y+w.h+pad);
  const torches=[];for(let k=0;k<3;k++){const x=150+k*300+R()*120;torches.push({x,y:44})}
  let crystal=null;for(let k=0;k<30&&!crystal;k++){const side=R()<.5,x=side?(R()<.5?70+R()*60:W-130+R()*60):110+R()*740,y=side?120+R()*320:100+R()*20;if(!blocked(x,y,50)&&Math.hypot(x-r.exit[0],y-r.exit[1])>140&&!(r.zones||[]).some(z=>Math.hypot(x-z.x,y-z.y)<z.r+30))crystal={x,y}}
- const rubble=[];for(let k=0;k<4;k++){const x=80+R()*800,y=110+R()*380;if(!blocked(x,y,30))rubble.push({x,y,s:34+R()*22,a:R()*TAU})}
+ const rubble=[];for(let k=0;k<2;k++){const x=80+R()*800,y=110+R()*380;if(!blocked(x,y,30))rubble.push({x,y,s:34+R()*22,a:R()*TAU})}
  const entry=r.exit[0]>W/2?{x:18,y:state.hero?.y??270}:{x:W-18,y:state.hero?.y??270};
  const L={torches,crystal,rubble,entry,wet:(r.zones||[]).some(z=>WET[z.kind])};
  layouts.set(i,L);return L;
@@ -37,13 +37,14 @@ function layout(){
 function floor(){
  ctx.fillStyle='#060a08';ctx.fillRect(0,0,W,H);
  if(!ok(TILES))return false;
- const i=roomIdx(),L=layout();
- for(let y=56,ty=0;y<H;y+=64,ty++)for(let x=-16,tx=0;x<W;x+=64,tx++){
+ const i=roomIdx(),L=layout(),baked=window.Game5Floor?.get?.(i);
+ if(baked)ctx.drawImage(baked,0,0);
+ else for(let y=56,ty=0;y<H;y+=64,ty++)for(let x=-16,tx=0;x<W;x+=64,tx++){
   const v=hash(tx,ty,i+1),n=v<(L?.wet?.2:.08)?2:v<.3?1:0;
   if(window.Game5Assets?.floorTile?.(i,v,x,y))continue;
   T(n,x,y,64,64,.92);
  }
- for(let x=-16;x<W;x+=64)T(3,x,0,64,72);
+ if(!baked)for(let x=-16;x<W;x+=64)T(3,x,0,64,72);
  // side walls and bottom lip so the playfield reads as a room
  const g=ctx.createLinearGradient(0,0,26,0);g.addColorStop(0,'#030504');g.addColorStop(1,'#03050400');ctx.fillStyle=g;ctx.fillRect(0,0,26,H);
  const g2=ctx.createLinearGradient(W,0,W-26,0);g2.addColorStop(0,'#030504');g2.addColorStop(1,'#03050400');ctx.fillStyle=g2;ctx.fillRect(W-26,0,26,H);
@@ -56,7 +57,7 @@ function zones(){
  for(const z of r.zones||[]){
   const d=ZONE[z.kind]||{c:'#86bcb6'},t=state.time;
   ctx.save();ctx.beginPath();ctx.arc(z.x,z.y,z.r,0,TAU);ctx.clip();
-  if(d.tile!=null){for(let y=z.y-z.r;y<z.y+z.r;y+=48)for(let x=z.x-z.r;x<z.x+z.r;x+=48)T(d.tile,x,y,48,48,.55)}
+  const mire=window.Game5Assets?.tile?.mire;if(d.tile!=null&&mire?.complete&&mire.naturalWidth){ctx.globalAlpha=.5;ctx.drawImage(mire,z.x-z.r,z.y-z.r,z.r*2,z.r*2);ctx.globalAlpha=1}
   const g=ctx.createRadialGradient(z.x,z.y,4,z.x,z.y,z.r);g.addColorStop(0,d.c+'88');g.addColorStop(.75,d.c+'44');g.addColorStop(1,d.c+'00');
   ctx.fillStyle=g;ctx.fillRect(z.x-z.r,z.y-z.r,z.r*2,z.r*2);
   if(d.fx!=null){F(d.fx,z.x+Math.sin(t*.5)*10,z.y+Math.cos(t*.4)*8,z.r*1.9,.28);if(z.kind==='ring'||z.kind==='dream')F(d.fx,z.x,z.y,z.r*1.2*(1+.05*Math.sin(t*2)),.18)}
@@ -71,16 +72,16 @@ function walls(){
   ctx.save();ctx.fillStyle='#0008';ctx.fillRect(w.x+6,w.y+w.h,w.w,14);ctx.fillRect(w.x+w.w,w.y+10,8,w.h);ctx.restore();
   ctx.save();ctx.beginPath();ctx.rect(w.x,w.y,w.w,w.h);ctx.clip();
   // raised stone block: masonry texture, darker body, lit top face and rim
-  if(ok(TILES)){for(let y=w.y;y<w.y+w.h;y+=32)for(let x=w.x;x<w.x+w.w;x+=32)if(!window.Game5Assets?.floorTile?.(roomIdx(),hash(x,y,7)*.9+.08,x,y,32))T(hash(x,y,7)<.25?1:0,x,y,32,32)}
-  ctx.fillStyle='rgba(12,17,14,.3)';ctx.fillRect(w.x,w.y,w.w,w.h);
+  if(window.Game5Floor?.wall?.(roomIdx(),w)){}
+  else if(ok(TILES)){for(let y=w.y;y<w.y+w.h;y+=32)for(let x=w.x;x<w.x+w.w;x+=32)if(!window.Game5Assets?.floorTile?.(roomIdx(),hash(x,y,7)*.9+.08,x,y,32))T(hash(x,y,7)<.25?1:0,x,y,32,32)}
   const g=ctx.createLinearGradient(0,w.y,0,w.y+w.h);g.addColorStop(0,'rgba(255,255,255,.1)');g.addColorStop(.25,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.4)');ctx.fillStyle=g;ctx.fillRect(w.x,w.y,w.w,w.h);
   ctx.restore();
-  ctx.save();ctx.fillStyle='rgba(210,220,205,.38)';ctx.fillRect(w.x,w.y,w.w,5);ctx.fillStyle='rgba(210,220,205,.14)';ctx.fillRect(w.x,w.y+5,4,w.h-5);ctx.strokeStyle='#050806';ctx.lineWidth=2;ctx.strokeRect(w.x+1,w.y+1,w.w-2,w.h-2);ctx.restore();
+  ctx.save();ctx.fillStyle='rgba(220,226,240,.2)';ctx.fillRect(w.x,w.y,w.w,2);ctx.strokeStyle='rgba(0,0,0,.45)';ctx.lineWidth=1;ctx.strokeRect(w.x+.5,w.y+.5,w.w-1,w.h-1);ctx.restore();
  }
 }
 function decor(){
  const L=layout(),r=room();if(!L||!r)return;
- for(const b of L.rubble)T(12,b.x-b.s/2,b.y-b.s/2,b.s,b.s,.75);
+ for(const b of L.rubble)T(12,b.x-b.s/2,b.y-b.s/2,b.s*.8,b.s*.8,.45);
  for(const t of L.torches)T(6,t.x-22,t.y-30,44,52);
  if(L.crystal)T(7,L.crystal.x-30,L.crystal.y-40,60,64);
  T(5,L.entry.x-(L.entry.x<W/2?8:52),L.entry.y-48,60,78,.55);
@@ -114,7 +115,7 @@ const lc=document.createElement('canvas');lc.width=W;lc.height=H;const l=lc.getC
 function hole(x,y,r,s=1){const g=l.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(0,0,0,${s})`);g.addColorStop(1,'rgba(0,0,0,0)');l.fillStyle=g;l.fillRect(x-r,y-r,r*2,r*2)}
 G.drawLighting=function(){
  const L=layout(),h=state.hero,t=state.time,r=room();
- l.globalCompositeOperation='source-over';l.clearRect(0,0,W,H);l.fillStyle='rgba(2,5,9,.6)';l.fillRect(0,0,W,H);
+ l.globalCompositeOperation='source-over';l.clearRect(0,0,W,H);l.fillStyle='rgba(2,5,9,.5)';l.fillRect(0,0,W,H);
  l.globalCompositeOperation='destination-out';
  hole(h.x,h.y-20,200);
  for(const e of alive())hole(e.x,e.y,70,.5);

@@ -61,3 +61,8 @@ canvas{display:block;width:100%;height:auto;background:#142019;border:1px solid 
 .card ul{margin:8px 0 12px;padding-left:18px;color:#cbd8cf;font-size:13px;line-height:1.6;text-align:left}
 kbd{background:#223027;border:1px solid #ffffff22;border-bottom-width:2px;border-radius:4px;padding:0 5px;font-size:11px}
 @media(max-width:760px){.controls .keys{display:none}.stats{grid-template-columns:repeat(2,1fr)}}
+/* v0.14.0 run history */
+.history{margin:4px 0 12px;padding:8px 10px;background:#0c130f;border:1px solid #ffffff14;border-radius:8px;font-size:12px;text-align:left}
+.histHead{display:flex;justify-content:space-between;margin-bottom:4px}.histHead span{color:#95a69b}
+.histRow{display:grid;grid-template-columns:1fr 44px 48px 96px;gap:6px;color:#b9c4bb;padding:1px 0}
+.histRow.win span:first-child{color:#ffe9a0;font-weight:700}

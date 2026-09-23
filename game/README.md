@@ -1,4 +1,10 @@
-# Game5 battle pilot — v0.13.0
+# Game5 battle pilot — v0.14.0
+
+## v0.14.0
+- `floor-v014.js` — 区画ごとの床の焼き上げ（石の表面の自動抽出、段違い石畳、基調色への寄せ、低コントラスト化）と内壁
+- `polish-v014.js` — 吹き出し、撃破アニメ、探索履歴
+
+## v0.13.0
 
 ## v0.13.0
 - `assets-v013.js` — Game4 由来の VFX・床アトラス、区画別の床テーマ、`assets/requested/` の差し替え読み込み

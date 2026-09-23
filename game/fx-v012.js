@@ -40,6 +40,7 @@ function floor(){
  const i=roomIdx(),L=layout();
  for(let y=56,ty=0;y<H;y+=64,ty++)for(let x=-16,tx=0;x<W;x+=64,tx++){
   const v=hash(tx,ty,i+1),n=v<(L?.wet?.2:.08)?2:v<.3?1:0;
+  if(window.Game5Assets?.floorTile?.(i,v,x,y))continue;
   T(n,x,y,64,64,.92);
  }
  for(let x=-16;x<W;x+=64)T(3,x,0,64,72);
@@ -70,7 +71,7 @@ function walls(){
   ctx.save();ctx.fillStyle='#0008';ctx.fillRect(w.x+6,w.y+w.h,w.w,14);ctx.fillRect(w.x+w.w,w.y+10,8,w.h);ctx.restore();
   ctx.save();ctx.beginPath();ctx.rect(w.x,w.y,w.w,w.h);ctx.clip();
   // raised stone block: masonry texture, darker body, lit top face and rim
-  if(ok(TILES)){for(let y=w.y;y<w.y+w.h;y+=32)for(let x=w.x;x<w.x+w.w;x+=32)T(hash(x,y,7)<.25?1:0,x,y,32,32)}
+  if(ok(TILES)){for(let y=w.y;y<w.y+w.h;y+=32)for(let x=w.x;x<w.x+w.w;x+=32)if(!window.Game5Assets?.floorTile?.(roomIdx(),hash(x,y,7)*.9+.08,x,y,32))T(hash(x,y,7)<.25?1:0,x,y,32,32)}
   ctx.fillStyle='rgba(12,17,14,.3)';ctx.fillRect(w.x,w.y,w.w,w.h);
   const g=ctx.createLinearGradient(0,w.y,0,w.y+w.h);g.addColorStop(0,'rgba(255,255,255,.1)');g.addColorStop(.25,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.4)');ctx.fillStyle=g;ctx.fillRect(w.x,w.y,w.w,w.h);
   ctx.restore();

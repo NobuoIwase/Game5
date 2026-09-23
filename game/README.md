@@ -1,4 +1,11 @@
-# Game5 battle pilot — v0.12.0
+# Game5 battle pilot — v0.13.0
+
+## v0.13.0
+- `assets-v013.js` — Game4 由来の VFX・床アトラス、区画別の床テーマ、`assets/requested/` の差し替え読み込み
+- `content-v013.js` — 旋風斬・清めの構え、宝箱と偽りの宝箱、粘沼・催眠の塔・増援召喚、変異個体、AUTO指揮の新ツール運用
+- `ASSET_REQUESTS.md` — ChatGPT への画像依頼書
+
+## v0.12.0
 
 ## v0.12.0
 詳細はリポジトリ直下の `README.md` を参照。

@@ -13,7 +13,9 @@ function drawEnemy(e=state.enemy){
  ctx.globalAlpha=e.stun>0?.72:1;
  ctx.shadowBlur=e.phase===2?24:15;
  ctx.shadowColor=e.type==='orb'||e.type==='moth'?'#c995ff':'#74d6bb';
- ctx.drawImage(atlas,(idx%4)*s,Math.floor(idx/4)*s,s,s,-size/2,-size*.6,size,size);
+ const custom=window.Game5Assets?.monster?.(e);
+ if(custom){ctx.filter='none';ctx.drawImage(custom,-size/2,-size*.6,size,size*custom.naturalHeight/custom.naturalWidth)}
+ else ctx.drawImage(atlas,(idx%4)*s,Math.floor(idx/4)*s,s,s,-size/2,-size*.6,size,size);
  ctx.restore();
  if(e.cast?.key==='bind'||(state.hero.status?.bind||0)>0){
   ctx.save();ctx.globalAlpha=.28;ctx.strokeStyle=e.type==='worm'?'#d6c5ff':'#c8a7f0';ctx.lineWidth=8;ctx.lineCap='round';

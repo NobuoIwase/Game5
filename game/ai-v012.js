@@ -120,7 +120,7 @@ function ready(h,th){
 function danger(p,list,h){
  let s=0;
  for(const th of list)if(castHits(th.c,p,h.r+6))s+=90/(Math.max(0,th.t)+.25);
- for(const z of state.hazards||[])if(/Fog/.test(z.kind)&&Math.hypot(p.x-z.x,p.y-z.y)<z.r+h.r)s+=28;
+ for(const z of state.hazards||[])if(/Fog|Pool/.test(z.kind)&&Math.hypot(p.x-z.x,p.y-z.y)<z.r+h.r)s+=28;
  for(const z of zones())if(Math.hypot(p.x-z.x,p.y-z.y)<z.r)s+=6;
  return s;
 }
@@ -218,7 +218,7 @@ function refine(h){
  // do not wander into lingering fields unless she is already standing in one
  const ahead=p=>({x:h.x+p.x*34,y:h.y+p.y*34});
  const casts=allCasts();
- const bad=p=>{const q=ahead(p);for(const th of casts)if(castHits(th.c,q,h.r+6))return true;for(const z of state.hazards||[])if(z.noticed&&!z.triggered&&Math.hypot(q.x-z.x,q.y-z.y)<z.r+h.r+4)return true;for(const z of state.hazards||[])if(/Fog/.test(z.kind)&&Math.hypot(q.x-z.x,q.y-z.y)<z.r+h.r)return true;for(const z of zones())if(Math.hypot(q.x-z.x,q.y-z.y)<z.r*.8)return true;return false};
+ const bad=p=>{const q=ahead(p);for(const th of casts)if(castHits(th.c,q,h.r+6))return true;for(const z of state.hazards||[])if(z.noticed&&!z.triggered&&Math.hypot(q.x-z.x,q.y-z.y)<z.r+h.r+4)return true;for(const z of state.hazards||[])if(/Fog|Pool/.test(z.kind)&&Math.hypot(q.x-z.x,q.y-z.y)<z.r+h.r)return true;for(const z of zones())if(Math.hypot(q.x-z.x,q.y-z.y)<z.r*.8)return true;return false};
  const inside=danger(h,[],h)>0,d=norm(it.x,it.y);
  if(!inside&&bad(d)){
   const base=Math.atan2(d.y,d.x);

@@ -68,7 +68,7 @@ function dodgeVectorForCast(h,cast){
 }
 function hazardEscape(h){
   for(const z of state.hazards){
-    if(!['enemyFog','directorFog'].includes(z.kind))continue;
+    if(!['enemyFog','directorFog','directorPool'].includes(z.kind))continue;
     const d=Math.hypot(h.x-z.x,h.y-z.y);
     if(d<z.r+h.r+12){
       const l=d||1;return{x:(h.x-z.x)/l,y:(h.y-z.y)/l,label:'瘴気から離れる'};

@@ -3,7 +3,7 @@
 /* v0.12.0 UI: pause / speed / AUTO intensity controls, enemy roster, director tool
    cost and cooldown, placement preview on the canvas, colour-coded log, run statistics
    on the result screen. */
-const VERSION='0.12.0';
+const VERSION='0.13.0';
 state.version=VERSION;document.title=`Game5 v${VERSION}`;
 const alive=()=>window.Game5MultiEnemy?.alive?.()||(state.enemy?.hp>0?[state.enemy]:[]);
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
@@ -15,7 +15,7 @@ const INT=window.Game5Balance?.intensity||{};
 bar.innerHTML=`<div class="grp"><button data-act="pause">一時停止</button></div>
 <span class="lbl">速度</span><div class="grp">${[1,2,4].map(n=>`<button data-speed="${n}">×${n}</button>`).join('')}</div>
 <span class="lbl">AUTO指揮の強さ</span><div class="grp">${Object.entries(INT).map(([k,v])=>`<button data-int="${k}">${v.label}</button>`).join('')}</div>
-<span class="keys"><kbd>Space</kbd> 一時停止 <kbd>F</kbd> 速度 <kbd>1</kbd>-<kbd>4</kbd> 罠 <kbd>A</kbd> AUTO</span>`;
+<span class="keys"><kbd>Space</kbd> 一時停止 <kbd>F</kbd> 速度 <kbd>1</kbd>-<kbd>8</kbd> 罠 <kbd>A</kbd> AUTO</span>`;
 function syncControls(){
  bar.querySelector('[data-act=pause]').textContent=view.paused?'再開':'一時停止';
  bar.querySelector('[data-act=pause]').classList.toggle('on',view.paused);
@@ -58,7 +58,7 @@ function drawRoster(){
 
 /* ---------- director tools ---------- */
 const btns=[...document.querySelectorAll('[data-tool]')];
-const HINT={snare:'踏むと拘束・SP減',fog:'ヌテラとセイルが上昇',lure:'音で注意を逸らす',ringbeam:'輪紋を刻む直線'};
+const HINT={snare:'踏むと拘束・SP減',fog:'ヌテラとセイルが上昇',lure:'音で注意を逸らす',ringbeam:'輪紋を刻む直線',pool:'足が鈍りSPが削れる',tower:'催眠の電波を放つ',mimic:'開けると拘束',summon:'魔物を1体呼ぶ'};
 for(const b of btns){const t=DIRECTOR_TOOLS[b.dataset.tool];if(!t)continue;b.insertAdjacentHTML('beforeend',`<small>EN ${t.cost} / ${HINT[b.dataset.tool]||''}</small><i class="cd"></i>`)}
 function drawTools(){
  const d=state.director;

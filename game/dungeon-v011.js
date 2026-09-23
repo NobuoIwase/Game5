@@ -11,6 +11,27 @@ const ROOMS=[
 ];
 function room(){return ROOMS[state.dungeon?.room||0]}
 function insideCircle(a,z){return Math.hypot(a.x-z.x,a.y-z.y)<=z.r+(a.r||0)}
+function blockedAt(a,x,y){
+ const r=a?.r||20;
+ if(x<48||x>W-48||y<48||y>H-48)return true;
+ for(const w of room()?.walls||[]){
+   if(x>w.x-r&&x<w.x+w.w+r&&y>w.y-r&&y<w.y+w.h+r)return true;
+ }
+ return false;
+}
+function steer(a,intent){
+ if(!intent||intent.kind!=='move')return intent;
+ const l=Math.hypot(intent.x,intent.y)||1,ux=intent.x/l,uy=intent.y/l,probe=42;
+ if(!blockedAt(a,a.x+ux*probe,a.y+uy*probe))return intent;
+ const base=Math.atan2(uy,ux),flip=(Math.floor(state.time*2)%2)*2-1;
+ for(const da of [Math.PI/4,-Math.PI/4,Math.PI/2,-Math.PI/2,3*Math.PI/4,-3*Math.PI/4]){
+   const ang=base+da*flip,x=Math.cos(ang),y=Math.sin(ang);
+   if(!blockedAt(a,a.x+x*probe,a.y+y*probe)){
+     return {...intent,x,y,label:`${intent.label||'移動'}・迂回`};
+   }
+ }
+ return {...intent,x:-ux,y:-uy,label:`${intent.label||'移動'}・退避`};
+}
 function resolveEntity(a){
  if(!a)return;
  a.x=clamp(a.x,48,W-48);a.y=clamp(a.y,48,H-48);
@@ -61,12 +82,15 @@ finish=function(win){
 };
 const oldDecide=decideHero;
 decideHero=function(h,dt){
+ let intent;
  if(state.dungeon?.active&&state.dungeon?.pending){
    const ex=room().exit[0],ey=room().exit[1],dx=ex-h.x,dy=ey-h.y,l=Math.hypot(dx,dy)||1;
    h.thought='区画を制圧。次の階段へ進む。';
-   return {kind:'move',x:dx/l,y:dy/l,speed:1.05,label:'階段へ移動'};
+   intent={kind:'move',x:dx/l,y:dy/l,speed:1.05,label:'階段へ移動'};
+ }else{
+   intent=oldDecide(h,dt);
  }
- return oldDecide(h,dt);
+ return steer(h,intent);
 };
 const oldHero=updateHero;
 updateHero=function(h,dt){
@@ -103,5 +127,5 @@ updateEnemy=function(dt){
 };
 const oldReset=reset;
 reset=function(){oldReset();begin()};
-window.Game5Dungeon={version:'0.11.0',rooms:ROOMS,room,resolveEntity,begin,advance};
+window.Game5Dungeon={version:'0.11.0',rooms:ROOMS,room,resolveEntity,blockedAt,steer,begin,advance};
 })();

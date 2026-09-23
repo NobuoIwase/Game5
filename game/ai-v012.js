@@ -16,6 +16,7 @@ const zones=()=>D()?.room?.()?.zones||[];
 /* ---------- geometry ---------- */
 function inRect(x,y,w,pad=0){return x>w.x-pad&&x<w.x+w.w+pad&&y>w.y-pad&&y<w.y+w.h+pad}
 function wallBetween(a,b){
+ const tb=window.Game5Terrain?.between?.(a,b);if(tb!=null)return tb;
  const l=Math.hypot(b.x-a.x,b.y-a.y),n=Math.ceil(l/10);
  for(const w of walls())for(let i=1;i<n;i++){const t=i/n;if(inRect(a.x+(b.x-a.x)*t,a.y+(b.y-a.y)*t,w))return true}
  return false;
@@ -366,5 +367,5 @@ resolveEnemy=function(cast){
 };
 
 window.Game5EnemyAI={version:'0.12.0',roles:ROLE,move,groupPace:GROUP_PACE};
-window.Game5AI={version:'0.12.0',dash:DASH,threats,bestDodge,pathDir,astar,wallBetween,castHits,sees};
+window.Game5AI={version:'0.12.0',clearGrid:()=>{grid=null;gridKey=''},dash:DASH,threats,bestDodge,pathDir,astar,wallBetween,castHits,sees};
 })();

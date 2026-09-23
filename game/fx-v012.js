@@ -24,6 +24,8 @@ const layouts=new Map();
 function layout(){
  const i=roomIdx(),r=room();if(!r)return null;
  if(layouts.has(i))return layouts.get(i);
+ const tf=window.Game5Terrain?.current?.();
+ if(tf){const L={torches:tf.torches.map(([x,y])=>({x,y:y-4})),crystal:tf.crystal?{x:tf.crystal[0],y:tf.crystal[1]}:null,rubble:tf.rubble.map(([x,y])=>({x,y,s:40})),entry:{x:tf.entry[0],y:tf.entry[1]+20},wet:(r.zones||[]).some(z=>WET[z.kind]),terrain:true};layouts.set(i,L);return L}
  const R=rng(i*7919+13),blocked=(x,y,pad)=>(r.walls||[]).some(w=>x>w.x-pad&&x<w.x+w.w+pad&&y>w.y-pad&&y<w.y+w.h+pad);
  const torches=[];for(let k=0;k<3;k++){const x=150+k*300+R()*120;torches.push({x,y:44})}
  let crystal=null;for(let k=0;k<30&&!crystal;k++){const side=R()<.5,x=side?(R()<.5?70+R()*60:W-130+R()*60):110+R()*740,y=side?120+R()*320:100+R()*20;if(!blocked(x,y,50)&&Math.hypot(x-r.exit[0],y-r.exit[1])>140&&!(r.zones||[]).some(z=>Math.hypot(x-z.x,y-z.y)<z.r+30))crystal={x,y}}
@@ -67,7 +69,7 @@ function zones(){
  }
 }
 function walls(){
- const r=room();if(!r)return;
+ const r=room();if(!r||window.Game5Terrain?.active?.())return;
  for(const w of r.walls||[]){
   ctx.save();ctx.fillStyle='#0008';ctx.fillRect(w.x+6,w.y+w.h,w.w,14);ctx.fillRect(w.x+w.w,w.y+10,8,w.h);ctx.restore();
   ctx.save();ctx.beginPath();ctx.rect(w.x,w.y,w.w,w.h);ctx.clip();
@@ -84,7 +86,8 @@ function decor(){
  for(const b of L.rubble)T(12,b.x-b.s/2,b.y-b.s/2,b.s*.8,b.s*.8,.45);
  for(const t of L.torches)T(6,t.x-22,t.y-30,44,52);
  if(L.crystal)T(7,L.crystal.x-30,L.crystal.y-40,60,64);
- T(5,L.entry.x-(L.entry.x<W/2?8:52),L.entry.y-48,60,78,.55);
+ if(!L.terrain)T(5,L.entry.x-(L.entry.x<W/2?8:52),L.entry.y-48,60,78,.55);
+ else{ctx.save();ctx.globalAlpha=.5;ctx.strokeStyle='#d9c87c';ctx.setLineDash([4,5]);ctx.beginPath();ctx.ellipse(L.entry.x,L.entry.y,22,10,0,0,TAU);ctx.stroke();ctx.restore()}
  // stairs: sealed until the encounter is cleared
  const [ex,ey]=r.exit,open=!!state.dungeon?.pending,t=state.time;
  ctx.save();
@@ -116,6 +119,7 @@ function hole(x,y,r,s=1){const g=l.createRadialGradient(x,y,0,x,y,r);g.addColorS
 G.drawLighting=function(){
  const L=layout(),h=state.hero,t=state.time,r=room();
  l.globalCompositeOperation='source-over';l.clearRect(0,0,W,H);l.fillStyle='rgba(2,5,9,.5)';l.fillRect(0,0,W,H);
+ window.Game5Terrain?.fog?.(l);
  l.globalCompositeOperation='destination-out';
  hole(h.x,h.y-20,200);
  for(const e of alive())hole(e.x,e.y,70,.5);
@@ -349,9 +353,10 @@ function overlays(){
   ctx.fillStyle='#f5eedb';ctx.font='800 34px system-ui,sans-serif';ctx.fillText(r?.name||'',W/2,H/2+2);
   const names=[...new Set(alive().map(e=>e.name))].join('・');
   ctx.fillStyle='#b9c4bb';ctx.font='500 13px system-ui,sans-serif';ctx.fillText(names?`気配：${names}`:'',W/2,H/2+36);
+  if(r?.layout){ctx.fillStyle='#8fa396';ctx.fillText(`地形：${r.layout}`,W/2,H/2+56)}
   ctx.restore();
  }
 }
 
-window.Game5FX={version:'0.12.0',perception,underActors,effects,telegraph,burst,shake:v=>shake=Math.max(shake,v)};
+window.Game5FX={version:'0.12.0',clearLayouts:()=>layouts.clear(),perception,underActors,effects,telegraph,burst,shake:v=>shake=Math.max(shake,v)};
 })();

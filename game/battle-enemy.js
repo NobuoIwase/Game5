@@ -62,8 +62,10 @@ function resolveEnemy(cast){
     }
   }
   if(cast.key==='charge'){
-    e.x=clamp(cast.start.x+Math.cos(cast.ang)*sk.travel,65,W-65);
-    e.y=clamp(cast.start.y+Math.sin(cast.ang)*sk.travel,65,H-65);
+    // slide along the charge line and stop in front of the first wall
+    const blocked=window.Game5Dungeon?.blockedAt;let tx=cast.start.x,ty=cast.start.y;
+    for(let d=8;d<=sk.travel;d+=8){const nx=clamp(cast.start.x+Math.cos(cast.ang)*d,65,W-65),ny=clamp(cast.start.y+Math.sin(cast.ang)*d,65,H-65);if(blocked?.(e,nx,ny))break;tx=nx;ty=ny}
+    e.x=tx;e.y=ty;
   }
   if(sk.hazard)state.hazards.push({kind:'enemyFog',x:cast.target.x,y:cast.target.y,r:sk.r,t:5.2,tick:.2});
   e.actCd=e.phase===2?rnd(.72,1.08):rnd(1.02,1.48);e.decision='次の一手を測る';e.noise=.24;

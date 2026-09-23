@@ -51,10 +51,10 @@ function runOnce(seed){
   const ctx=makeContext(seed),api=load(ctx),s=api.state;
   s.director.auto=AUTO;s.started=true;
   const ia=args.find(a=>a.startsWith('--intensity='));if(ia)s.director.intensity=ia.slice(12);
-  const dt=1/60,maxT=900;let t=0,roomT=[],lastRoom=0,roomStart=0,drawErr=null;
+  const dt=1/60,maxT=+(process.env.SIM_MAXT||900);let t=0,roomT=[],lastRoom=0,roomStart=0,drawErr=null;
   const hpAtRoom=[],spAtRoom=[],estAtRoom=[];
   while(t<maxT&&!s.over){
-    ctx.__t=t;api.update(dt);
+    ctx.__t=t;if(process.env.SIM_DEBUG&&Math.round(t*60)%300===0)console.error('t',t.toFixed(0),'room',s.dungeon?.room,'pending',s.dungeon?.pending,'hero',Math.round(s.hero.x),Math.round(s.hero.y),s.hero.thought);api.update(dt);
     if(!drawErr&&Math.round(t*60)%30===0){try{api.draw()}catch(e){drawErr=e.message}}
     t+=dt;
     const r=s.dungeon?.room||0;
@@ -79,6 +79,7 @@ for(let j=0;j<JOBS&&j*per<RUNS;j++){
   parts.push(new Promise(ok=>{const c=spawn(process.execPath,[__filename,String(n),`--seed=${base+j*per}`,'--child',...a]);let out='';c.stdout.on('data',d=>out+=d);c.stderr.on('data',()=>{});c.on('close',()=>ok(JSON.parse(out||'[]')))}));
 }
 const res=(await Promise.all(parts)).flat();
+if(process.env.SIM_DUMP)require('fs').writeFileSync(process.env.SIM_DUMP,JSON.stringify(res.map((r,i)=>({i,room:r.room,reason:r.reason,pending:r.pending,hero:r.hero,time:r.time}))));
 summarize(res);
 })();
 function summarize(res){

@@ -88,6 +88,7 @@ function bake(i){
  decals(g,R,th);
  const out=document.createElement('canvas');out.width=W;out.height=H;const o=out.getContext('2d');
  o.filter=`contrast(${th.contrast}) saturate(${th.sat}) brightness(${th.bright})`;o.drawImage(raw,0,0);o.filter='none';
+ if(window.Game5Terrain?.paintWalls?.(o,th,raw))return out;
  // back wall: the original wall-top row, tinted into the room's palette
  for(let x=-16;x<W;x+=64)o.drawImage(wallTop,3*64,0,64,64,x,0,64,72);
  o.globalAlpha=.35;o.fillStyle=th.base;o.fillRect(0,0,W,72);o.globalAlpha=1;
@@ -111,5 +112,5 @@ function wall(i,w){
  ctx.fillStyle='rgba(0,0,0,.35)';ctx.fillRect(w.x,w.y+cap-1,w.w,1.5);
  return true;
 }
-window.Game5Floor={version:'0.14.0',get,wall,themeOf,themes:THEME,bake};
+window.Game5Floor={version:'0.14.0',clear:()=>baked.clear(),get,wall,themeOf,themes:THEME,bake};
 })();

@@ -1,6 +1,9 @@
-
-(() => {
+(()=>{
 'use strict';
+if(window.state)state.version='0.11.0';
+document.title='Game5 v0.11.0';
+const ver=document.querySelector('.top small');if(ver)ver.textContent='GAME5 v0.11.0';
+
 const old=renderUI;
 renderUI=function(){
   old();

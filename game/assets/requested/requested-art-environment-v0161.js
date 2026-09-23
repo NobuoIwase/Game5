@@ -27,17 +27,19 @@ const icons={
 };
 const vfx={
  spore_puff:mk(256,256,[ [128,128,58],[82,116,28],[174,105,31],[105,72,20],[157,169,25] ].map(v=>cir(v[0],v[1],v[2],'#b8d77d',.28,'#eaffb8',2)).join('')),
- silk_wrap:mk(256,256,[0,1,2,3].map((ii)=>`<ellipse cx="128" cy="128" rx="${42+ii*16}" ry="${70-ii*8}" fill="none" stroke="#eadfff" stroke-width="5" opacity="${.75-ii*.1}" transform="rotate(${ii*42} 128 128)"/>`).join('')),
+ silk_wrap:mk(256,256,[0,1,2,3].map((ii)=>`<ellipse cx="128" cy="128" rx="${42+i*16}" ry="${70-i*8}" fill="none" stroke="#eadfff" stroke-width="5" opacity="${.75-i*.1}" transform="rotate(${i*42} 128 128)"/>`).join('')),
  hypno_ring:mk(256,256,[84,62,40].map((r,i)=>`<circle cx="128" cy="128" r="${r}" fill="none" stroke="${i%2?'#d39cff':'#8f66c9'}" stroke-width="8" opacity="${.65+i*.12}"/>`).join('')),
  nectar_drop:mk(256,256,`<path d="M128 43 C166 89 182 124 128 203 C74 124 90 89 128 43Z" fill="#ef9bc8" opacity=".72" stroke="#ffd6ea" stroke-width="4"/>`+cir(128,150,32,'#ffd1ea',.3))
 };
 const nutera={
  hearts:mk(256,64,[32,88,144,200].map((x,i)=>`<path d="M${x} 50 C${x-34} 28 ${x-22} 9 ${x} 22 C${x+22} 9 ${x+34} 28 ${x} 50Z" fill="${['#f291c1','#e875b6','#f7b8d9','#d39cff'][i]}" stroke="#ffe4f3" stroke-width="2"/>`).join('')),
- heart_burst:mk(256,256,`<circle cx="128" cy="128" r="76" fill="#f08bbd" opacity=".18"/><path d="M128 180 C53 129 83 72 128 108 C173 72 203 129 128 180Z" fill="#ff9dcc" stroke="#ffe1f0" stroke-width="5"/>`+[0,1,2,3,4,5].map((i)=>`<circle cx="${128+Math.cos(ii*Math.PI/3)*94}" cy="${128+Math.sin"ii*Math.PI/3)*94}" r="9" fill="#ffc1e0"/>`).join('')),
+ heart_burst:mk(256,256,`<circle cx="128" cy="128" r="76" fill="#f08bbd" opacity=".18"/><path d="M128 180 C53 129 83 72 128 108 C173 72 203 129 128 180Z" fill="#ff9dcc" stroke="#ffe1f0" stroke-width="5"/>`+[0,1,2,3,4,5].map(i=>`<circle cx="${128+Math.cos(i*Math.PI/3)*94}" cy="${128+Math.sin(i*Math.PI/3)*94}" r="9" fill="#ffc1e0"/>`).join('')),
  estella_logo:mk(512,128,`<rect width="512" height="128" fill="none"/><text x="256" y="79" text-anchor="middle" font-family="serif" font-size="64" font-weight="700" fill="#f29ac7" stroke="#fff0f7" stroke-width="2">ESTELLA</text><path d="M95 72 C70 55 80 35 95 47 C110 35 120 55 95 72Z" fill="#ffb0d6"/><path d="M418 72 C393 55 403 35 418 47 C433 35 443 55 418 72Z" fill="#ffb0d6"/>`),
  sigil:mk(256,256,`<circle cx="128" cy="128" r="93" fill="none" stroke="#d68cff" stroke-width="5"/><circle cx="128" cy="128" r="67" fill="none" stroke="#f3b3dd" stroke-width="3"/><path d="M128 180 C63 136 88 86 128 116 C168 86 193 136 128 180Z" fill="none" stroke="#ffd5eb" stroke-width="5"/>`),
  gauge_heart:mk(128,64,`<path d="M31 51 C-3 26 11 6 31 22 C51 6 65 26 31 51Z" fill="none" stroke="#f2a0c9" stroke-width="4"/><path d="M96 51 C62 26 76 6 96 22 C116 6 130 26 96 51Z" fill="#f08fbe" stroke="#ffe0ee" stroke-width="4"/>`)
 };
+
+
 
 Object.assign(D,{props,icons,vfx,nutera});
 })();

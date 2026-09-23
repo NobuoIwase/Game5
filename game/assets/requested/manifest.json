@@ -7,7 +7,7 @@
     "scripts": [
       "requested-art-base-v0161.js",
       "requested-art-creatures-v0161.js",
-      "requested-art-environment-v0161.js",
+      "requested-art-environment2-v0161.js",
       "requested-art-runtime-v0161.js"
     ],
     "dialogues": "dialogues.json",

@@ -1,83 +1,76 @@
-# Game5 Graphics Specification — v0.8.0
+# Game5 Graphics Specification — v0.11.0
+
+Date: 2026-09-23  
+Model: GPT-5.6 Sol
 
 ## 方針
 
-Game5の画面を単色Canvas中心の仮表示から、トップダウン・ダンジョンRPGとして読める画面へ移行するための基盤です。
+トップダウン・ダンジョンRPGとして、ゲーム状態が画面から読めることを最優先する。
 
-敵側は「痛み」を視覚テーマにしません。ヌテラの設定に合わせ、ぬめり、摩擦、吸着、包み込み、柔らかな巻き付き、ガス、催眠、魅了、輪紋・魔力干渉を中心にします。
+敵は牙・刃・棘などの痛そうな表現をヌテラの中心にしない。ぬめり、吸着、包み込み、柔らかな巻き付き、ガス/胞子、催眠/魅了を視覚化する。
 
 ## アトラス
 
-全アトラスは64pxセルです。
+### `assets/dungeon.png`
+64pxセル。石床、壁、階段、扉、光源、結晶、沼、ガス噴出口、輪紋床、霧、瓦礫を使用する。
 
-### `assets/dungeon.png` — 4列
+### `assets/enemies.png`
+64pxセル。軟体/浮遊系スプライトを種族ごとに index、hue、scale、bobbing で差別化する。
 
-| index | asset |
-| ---: | --- |
-| 0 | clean stone floor |
-| 1 | cracked stone floor |
-| 2 | moss stone floor |
-| 3 | straight wall |
-| 4 | stairs down |
-| 5 | wooden door |
-| 6 | torch sconce |
-| 7 | blue crystal |
-| 8 | green swamp |
-| 9 | gas vent |
-| 10 | ring sigil |
-| 11 | fog patch |
-| 12 | rubble |
+### `assets/fx.png`
+霧、発光、影、輪紋、紫の歪み、環境光に使用する。
 
-### `assets/enemies.png` — 4列
+## v0.11.0 描画層
 
-| index | asset |
-| ---: | --- |
-| 0 | blue slime / 粘魔 phase 1 |
-| 1 | violet slime / 粘魔 phase 2 |
-| 2 | blue wisp |
-| 3 | hypnotic moth |
+1. ダンジョン床・壁・区画チップ
+2. 環境ゾーン / 罠下層
+3. 全敵の攻撃予兆
+4. 戦士アリア
+5. 全敵スプライト
+6. 実際に拘束した敵からの拘束リボン
+7. 罠 / FX 上層
+8. 大気・霧
+9. ライティング / ビネット
 
-### `assets/fx.png` — 3列
+`battle-render.js` が描画順を統括し、`Game5Graphics` に各層を委譲する。
 
-| index | effect |
-| ---: | --- |
-| 0 | warm glow |
-| 1 | crystal glow |
-| 2 | poison / slime haze |
-| 3 | fog |
-| 4 | soft shadow |
-| 5 | darkness patch |
-| 6 | ring pulse |
-| 7 | purple distortion |
-| 8 | floor ambient light |
+## 種族差
 
-## レンダリング順
+- 灰冠の粘魔 — 大きめの軟体、phase 2で存在感を増す
+- 艶沼ナメクジ — 低速・低重心・湿潤系
+- 吸着羽虫 — 小型・高速・浮遊
+- 絹輪ワーム — 長い拘束を示す柔らかいリボン
+- ルマネ胞子球 — 小型浮遊、胞子/発光
+- 粘花 — 低速大型、環境と一体化する待ち伏せ
+- 夢鱗蛾 — 浮遊、催眠/鱗粉系FX
 
-`graphics-enhance.js` は戦闘ロジックを変えずに描画を合成します。
+## 複数敵
 
-1. ベース背景
-2. ダンジョン床 / 壁 / 環境チップ
-3. 既存の戦闘予兆・ヒロイン
-4. 既存罠
-5. 新罠FX
-6. 敵スプライト
-7. 霧 / エステラ歪み
-8. 暗所ライティング
-9. 発光加算
+`graphics-multi-v011.js` が全生存敵を描画する。
+
+- 主対象以外にも個別HP
+- 支援敵の詠唱にも予兆
+- 拘束リボンは拘束を成立させた敵だけ
+- 敵同士の重なりはロジック側で押し分ける
+- 主対象は視界、距離、詠唱、phase 2を加味して自動切替
 
 ## ライティング
 
-- 全画面に暗色レイヤー
-- ヒロイン周囲を最も明るく抜く
-- 燭台・結晶を固定光源として扱う
-- 敵phase 2は弱い自己発光
-- FXは `lighter` 合成
-- ライティングCanvasは毎フレーム新規生成せず再利用
+- ヒロイン周囲を最も明るくする
+- 固定光源/結晶を補助光として使う
+- 周辺を暗くして視界外の不確実さを表現
+- 霧・胞子・夢鱗は光の上に薄く重ねる
+- ライティング用オフスクリーンCanvasは再利用する
 
-## 次の拡張
+## 実装ファイル
 
-- 装飾マップチップを探索マップ・衝突判定へ接続
-- Game4由来の軟体系、付着系、ガス系、眼魔系をGame5仕様で追加
-- 敵の呼吸、伸縮、吸着、変形アニメーション
-- ヒロインへの環境光・敵光源による色味変化
-- 部屋単位の光源配置と視界遮蔹
+- `battle-render.js`
+- `graphics-enhance.js`
+- `graphics-dungeon-v011.js`
+- `graphics-multi-v011.js`
+- `ui-dungeon-v011.js`
+- `ui-multi-v011.js`
+
+## 次に増やす場合
+
+新敵は既存4セルを無理に使い回すのではなく、専用アトラスを追加して `visualIndex / hue / scale` の代わりに専用フレームを指定できるようにする。新しい拘束表現も「誰が拘束したか」を保持して描画する。

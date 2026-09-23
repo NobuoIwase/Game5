@@ -92,7 +92,6 @@ Game5 を1画面の戦闘試験から、アリアが自律探索・自律戦闘�
 - `assets/fx.png` — 霧、輪紋、発光、歪み、影
 - `graphics-dungeon-v011.js` — 区画、壁、環境ゾーン、種族見た目差
 - `graphics-multi-v011.js` — 全敵、支援敵予兆、個別HP
-- `bind-visual-v011.js` — 実際に拘束した敵と拘束リボンを同期
 
 描画順は、ダンジョン → 環境/罠下層 → 攻撃予兆 → 戦士 → 全敵 → 拘束 → FX → 大気 → ライティング。
 
@@ -104,6 +103,5 @@ Game5 を1画面の戦闘試験から、アリアが自律探索・自律戦闘�
 - `multi-enemy-v011.js`
 - `graphics-dungeon-v011.js`
 - `graphics-multi-v011.js`
-- `bind-visual-v011.js`
 - `ui-dungeon-v011.js`
 - `ui-multi-v011.js`

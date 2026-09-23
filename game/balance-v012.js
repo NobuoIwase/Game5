@@ -3,7 +3,7 @@
 /* v0.12.0 balance table. Every tuned number lives here so it can be adjusted in one place.
    Verified with `node tools/sim.js 60` (AUTO director ON) and `--no-auto`. */
 const B={
- hero:{spRegen:6.6,bindDrain:7.2},
+ hero:{spRegen:6.6,bindDrain:7.2,atkScale:.3},   // atkScale: share of ATK growth that reaches skill damage
  estella:{estellaDuration:2.3,estellaSpLoss:24,estellaMpLoss:8,naturalDecay:8,naturalDelay:1.0,sailAmpAt100:.6},
  // arriving on a new floor = a short rest on the stairs
  stairs:{hp:.22,sp:.45,nutera:30,sail:20},

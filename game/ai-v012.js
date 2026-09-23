@@ -280,7 +280,8 @@ resolveHero=function(h,cast){
   if(o===primary||o.hp<=0)continue;
   if(!inCone(o.x,o.y,h.x,h.y,ang,sk.range+o.r,sk.kind==='heavy'?.8:.64)||wallBetween(h,o))continue;
   const keep=state.enemy;state.enemy=o;
-  hurtEnemy(sk.damage*(sk.kind==='heavy'?.7:.55),{source:sk.name,stun:sk.kind==='heavy'?.18:0,interrupt:sk.kind==='heavy'});
+  const atk=1+(h.atk-HERO_CFG.atk)/HERO_CFG.atk*(h.atkScale??0);
+  hurtEnemy(sk.damage*atk*(sk.kind==='heavy'?.7:.55),{source:sk.name,stun:sk.kind==='heavy'?.18:0,interrupt:sk.kind==='heavy'});
   state.enemy=keep;
  }
  if(primary&&hitBefore>primary.hp)primary.hitReact=.14;

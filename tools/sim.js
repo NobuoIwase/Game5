@@ -16,7 +16,7 @@ function mulberry(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1
 function makeContext(seed){
   const noop=()=>{};
   const ctx2d=new Proxy({},{get:(t,k)=>k in t?t[k]:(k==='measureText'?()=>({width:10}):k.startsWith('create')?()=>({addColorStop:noop}):k==='getImageData'?()=>({data:new Uint8ClampedArray(4)}):noop),set:(t,k,v)=>(t[k]=v,true)});
-  const el=()=>{const e={style:{},classList:{add:noop,remove:noop,toggle:noop,contains:()=>false},dataset:{},textContent:'',innerHTML:'',title:'',appendChild:noop,addEventListener:noop,setAttribute:noop,querySelector:()=>el(),querySelectorAll:()=>[],getContext:()=>ctx2d,getBoundingClientRect:()=>({left:0,top:0,width:960,height:540}),width:960,height:540,insertAdjacentHTML:noop,remove:noop,children:[]};return e};
+  const el=()=>{const e={style:{},classList:{add:noop,remove:noop,toggle:noop,contains:()=>false},dataset:{},textContent:'',innerHTML:'',title:'',appendChild:noop,addEventListener:noop,setAttribute:noop,querySelector:()=>el(),querySelectorAll:()=>[],getContext:()=>ctx2d,getBoundingClientRect:()=>({left:0,top:0,width:960,height:540}),width:960,height:540,insertAdjacentHTML:noop,remove:noop,after:noop,closest:()=>null,children:[]};return e};
   const els=new Map();
   const document={getElementById:id=>{if(!els.has(id))els.set(id,el());return els.get(id)},querySelector:()=>el(),querySelectorAll:()=>[],createElement:()=>el(),body:el(),head:el(),title:'',write:noop,addEventListener:noop,documentElement:el()};
   class Img{constructor(){this.complete=false;this.naturalWidth=0}set src(v){this._s=v}get src(){return this._s}}

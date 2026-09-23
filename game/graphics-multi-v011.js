@@ -22,7 +22,7 @@ if (typeof resolveEnemy === 'function') {
 
 function telegraph(e) {
   const c = e?.cast;
-  if (!c || e === state.enemy) return;
+  if (!c || e === state.enemy || window.Game5FX) return;
   const sk = c.sk;
   ctx.save();
   const p = 1 - Math.max(0, c.t) / Math.max(.01, c.total);

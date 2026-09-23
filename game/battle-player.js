@@ -130,7 +130,8 @@ function updateHeroCast(h,dt){
 }
 function resolveHero(h,cast){
   if(h.cast!==cast)return;h.cast=null;
-  const sk=cast.sk,e=state.enemy,d=dist(h,e),ang=Math.atan2(e.y-h.y,e.x-h.x);
+  const base=cast.sk,e=state.enemy,d=dist(h,e),ang=Math.atan2(e.y-h.y,e.x-h.x);
+  const sk=base.damage?{...base,damage:Math.round(base.damage*(1+(h.atk-HERO_CFG.atk)/HERO_CFG.atk*(h.atkScale??0)))}:base;
   h.facing=ang;h.dir=dirFrom(e.x-h.x,e.y-h.y);
   switch(sk.kind){
     case'melee':

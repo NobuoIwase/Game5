@@ -9,7 +9,7 @@ function drawEnemy(e=state.enemy){
  const size=112*scale,bob=Math.sin(state.time*(e.type==='leech'||e.type==='moth'?7:4))*4;
  ctx.save();
  ctx.translate(e.x,e.y+bob);
- ctx.filter=`hue-rotate(${e.visualHue||0}deg) saturate(${e.type==='gel'?1.1:1.25})`;
+ ctx.filter=e.visualFilter||`hue-rotate(${e.visualHue||0}deg) saturate(${e.type==='gel'?1.1:1.25})`;
  ctx.globalAlpha=e.stun>0?.72:1;
  ctx.shadowBlur=e.phase===2?24:15;
  ctx.shadowColor=e.type==='orb'||e.type==='moth'?'#c995ff':'#74d6bb';

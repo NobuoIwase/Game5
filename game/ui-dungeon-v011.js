@@ -14,7 +14,7 @@ renderUI=function(){
  if(hs&&h?.attachments?.length)hs.textContent=`${hs.textContent} / 吸着×${h.attachments.length}`;
  const k=document.querySelector('#knowledge');
  if(k&&e&&h?.knowledge){
-   const avg=Object.values(h.knowledge).reduce((a,b)=>a+b,0)/5;
+   const avg=Object.values(h.knowledge).reduce((a,b)=>a+b,0)/5/3;
    k.textContent=`${k.textContent}　種族学習: ${e.name} ${Math.round(avg*100)}%`;
  }
 };

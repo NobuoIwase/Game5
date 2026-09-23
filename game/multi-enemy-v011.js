@@ -6,6 +6,7 @@ const SUPPORTS=[
 function installSkills(type){
  const d=window.Game5MonsterSkills?.defs?.[type]||window.Game5MonsterSkills?.defs?.gel;
  if(!d)return;
+ for(const const i of []){}
  for(const k of Object.keys(d)){
    const [name,patch]=d[k];ENEMY_LABELS[k]=name;Object.assign(ENEMY_SKILLS[k],patch,{name});
  }
@@ -25,17 +26,25 @@ function make(type,x,y,level){
  state.enemy=primaryEnemy;return e;
 }
 function alive(){return (state.enemies||[]).filter(e=>e&&e.hp>0)}
+function focusKnowledge(e,h=state.hero){
+ if(!e|{!h)return;
+ h.memory.enemyId=e.type;
+ h.knowledgeBySpecies ||= {};
+ h.knowledgeBySpecies[e.type] ||= {cleave:0,charge:0,bind:0,fog:0,bolt:0};
+ h.knowledge=h.knowledgeBySpecies[e.type];
+}
+function threatScore(e,h){
+ const d=h?dist(h,e):0;
+ const castBonus=e.cast?-150:0;
+ const visible=h&&inCone(e.x,e.y,h.x,h.y,h.facing,h.visionRange+h.r,h.visionHalf)?-45:0;
+ const phaseBonus=e.phase===2?-20:0;
+ return d+castBonus+visible+phaseBonus;
+}
 function primary(h=state.hero){
  const a=alive();if(!a.length)return state.enemy;
- let b=a[0],bd=h?dist(h,b):0;
- for(const e of a.slice(1)){const d=h?dist(h,e):0;if(d<bd){b=e;bd=d}}
- state.enemy=b;installSkills(b.type);
- if(h){
-   h.memory.enemyId=b.type;
-   h.knowledgeBySpecies ||= {};
-   h.knowledgeBySpecies[b.type] ||= {cleave:0,charge:0,bind:0,fog:0,bolt:0};
-   h.knowledge=h.knowledgeBySpecies[b.type];
- }
+ let b=a[0],bs=threatScore(b,h);
+ for(const e of a.slice(1)){const s=threatScore(e,h);if(s<bs){b=e;bs=s}}
+ state.enemy=b;installSkills(b.type);focusKnowledge(b,h);
  return b;
 }
 function separate(list){
@@ -80,12 +89,12 @@ updateEnemy=function(dt){
    return;
  }
  for(const e of list){
-   state.enemy=e;installSkills(e.type);baseEnemy(dt);
+   state.enemy=e;installSkills(e.type);focusKnowledge(e);baseEnemy(dt);
  }
  separate(alive());
  primary();
 };
 const baseReset=reset;
 reset=function(){baseReset();state._multiRoom=-1;setup()};
-window.Game5MultiEnemy={version:'0.11.0',supports:SUPPORTS,alive,primary,setup,separate};
+window.Game5MultiEnemy={version:'0.11.0',supports:SUPPORTS,alive,primary,setup,separate,focusKnowledge};
 })();

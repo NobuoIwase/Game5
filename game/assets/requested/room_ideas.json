@@ -1,0 +1,37 @@
+[
+  {
+    "name": "石の前室",
+    "theme": "moss_stone",
+    "thought": "石の隙間が多い……足場は悪くない。"
+  },
+  {
+    "name": "湿った回廊",
+    "theme": "wet_blue",
+    "thought": "床が滑る。走りすぎない方がいい。"
+  },
+  {
+    "name": "絹輪の間",
+    "theme": "silk",
+    "thought": "糸の線……通れる隙間を覚えよう。"
+  },
+  {
+    "name": "胞子庭",
+    "theme": "spore",
+    "thought": "胞子が浮いてる。吸い込みすぎないように。"
+  },
+  {
+    "name": "粘花苑",
+    "theme": "nectar",
+    "thought": "花蜜の跡……踏むなら短く。"
+  },
+  {
+    "name": "夢鱗回廊",
+    "theme": "dream",
+    "thought": "光り方が妙だ。目を合わせ続けない。"
+  },
+  {
+    "name": "灰冠の深室",
+    "theme": "rune",
+    "thought": "最深部……輪紋が濃い。戻り道も忘れない。"
+  }
+]

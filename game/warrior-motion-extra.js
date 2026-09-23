@@ -1,6 +1,6 @@
 (()=>{'use strict';
-const B='../character-motion-v1/',D=['front','down_right','right','up_right','back','up_left','left','down_left'],S={r:null,i:new Map},sg=d=>D.indexOf(d)<4?-1:1,C=v=>Math.max(0,Math.min(1,v)),R=d=>d*Math.PI/180,Q=t=>{t=C(t);return t*t*(3-2*t)},P=t=>Math.sin(C(t)*Math.PI);
-const I=u=>{let x=new Image;x.ok=0;x.onload=()=>x.ok=1;x.src=u;return x},imgs=d=>{if(S.i.has(d))return S.i.get(d);let o={};for(const p of ['body','arm_right','arm_left','leg_right','leg_left','sword','shield','scabbard'])o[p]=I(`${B}parts/warrior/${d}/${p}.png`);S.i.set(d,o);return o};fetch(B+'rigs/warrior.json').then(r=>r.json()).then(r=>S.r=r);
+const MISSING={right:['arm_left','leg_left'],left:['arm_right','leg_right']},B='../character-motion-v1/',D=['front','down_right','right','up_right','back','up_left','left','down_left'],S={r:null,i:new Map},sg=d=>D.indexOf(d)<4?-1:1,C=v=>Math.max(0,Math.min(1,v)),R=d=>d*Math.PI/180,Q=t=>{t=C(t);return t*t*(3-2*t)},P=t=>Math.sin(C(t)*Math.PI);
+const I=u=>{let x=new Image;x.ok=0;x.onload=()=>x.ok=1;x.src=u;return x},imgs=d=>{if(S.i.has(d))return S.i.get(d);let o={};for(const p of ['body','arm_right','arm_left','leg_right','leg_left','sword','shield','scabbard'])o[p]=MISSING[d]?.includes(p)?{ok:0}:I(`${B}parts/warrior/${d}/${p}.png`);S.i.set(d,o);return o};fetch(B+'rigs/warrior.json').then(r=>r.json()).then(r=>S.r=r);
 function rot(c,p,a){c.translate(p[0],p[1]);c.rotate(R(a));c.translate(-p[0],-p[1])}
 function limb(c,i,p,a){if(!i?.ok||!p)return;c.save();rot(c,p,a||0);c.drawImage(i,0,0);c.restore()}
 function pose(h,a){let s=sg(h.dir||'front'),t=window.state?.time||performance.now()/1000,p=a.p||0,e=P(p),q=Q(p),n=a.n;

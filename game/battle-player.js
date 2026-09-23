@@ -20,7 +20,7 @@ function senseEnemy(h){
       const error=32+Math.min(74,sd*.12);
       const p={x:state.sound.x+rnd(-error,error),y:state.sound.y+rnd(-error,error),t:state.time};
       h.memory.lastHeard=p;
-      h.perception=`茴覚：不明な音 / ${Math.round(sd)}px・ぼんやり`;
+      h.perception=`聴覚：不明な音 / ${Math.round(sd)}px・ぼんやり`;
       return {kind:'hearing',x:p.x,y:p.y,d:sd,source:'sound'};
     }
   }
@@ -226,10 +226,10 @@ function decideHero(h){
 function updateStatuses(h,dt){
   for(const k of Object.keys(h.status))h.status[k]=Math.max(0,h.status[k]-dt);
   if(h.status.poison>0){
-    h.poisonTick-=dt;if(h.poisonTick<=0){h.poisonTick=1;hurtHero(h,4,null,{spDamage:1});}
+    h.poisonTick-=dt;if(h.poisonTick<=0){h.poisonTick=1;hurtHero(h,h.poisonDmg??4,null,{spDamage:1});}
   }
-  if(h.status.bind>0)drainSp(h,9.2*dt);
-  else if(h.status.stun<=0)h.sp=Math.min(h.maxSp,h.sp+dt*(h.cast?2.0:5.8));
+  if(h.status.bind>0)drainSp(h,(h.bindDrain??9.2)*dt);
+  else if(h.status.stun<=0)h.sp=Math.min(h.maxSp,h.sp+dt*(h.cast?2.0:(h.spRegen??5.8)));
   h.mp=Math.min(h.maxMp,h.mp+dt*1.55);h.flash=Math.max(0,h.flash-dt);
   for(let i=0;i<h.cd.length;i++)h.cd[i]=Math.max(0,h.cd[i]-dt);
 }

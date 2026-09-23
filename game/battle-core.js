@@ -117,11 +117,13 @@ function statusText(h){
   return a.join('・')||'正常';
 }
 function skillUnlocked(h,sk){return h.level>=sk.unlock;}
-function xpForLevel(level){return [0,0,64,178,338][level]??Infinity;}
+const XP_TABLE=[0,0,64,178,338];
+function maxHeroLevel(){return XP_TABLE.length-1;}
+function xpForLevel(level){return XP_TABLE[level]??Infinity;}
 function gainHeroXp(n){
-  const h=state.hero;if(!h||h.dead||h.level>=4)return;
+  const h=state.hero;if(!h||h.dead||h.level>=maxHeroLevel())return;
   h.xp+=n;
-  while(h.level<4&&h.xp>=xpForLevel(h.level+1)){
+  while(h.level<maxHeroLevel()&&h.xp>=xpForLevel(h.level+1)){
     h.level++;
     h.maxHp+=12;h.maxMp+=4;h.maxSp+=6;h.atk+=4;h.def+=3;h.agi+=2;h.focus+=2;
     h.hp=Math.min(h.maxHp,h.hp+28);h.mp=Math.min(h.maxMp,h.mp+10);h.sp=Math.min(h.maxSp,h.sp+22);

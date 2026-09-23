@@ -82,15 +82,15 @@ finish=function(win){
 };
 const oldDecide=decideHero;
 decideHero=function(h,dt){
- let intent;
  if(state.dungeon?.active&&state.dungeon?.pending){
    const ex=room().exit[0],ey=room().exit[1],dx=ex-h.x,dy=ey-h.y,l=Math.hypot(dx,dy)||1;
    h.thought='区画を制圧。次の階段へ進む。';
-   intent={kind:'move',x:dx/l,y:dy/l,speed:1.05,label:'階段へ移動'};
+   h.intent={kind:'move',x:dx/l,y:dy/l,speed:1.05,label:'階段へ移動'};
  }else{
-   intent=oldDecide(h,dt);
+   oldDecide(h,dt);
  }
- return steer(h,intent);
+ h.intent=steer(h,h.intent);
+ return h.intent;
 };
 const oldHero=updateHero;
 updateHero=function(h,dt){
@@ -118,8 +118,9 @@ updateHero=function(h,dt){
 const oldEnemy=updateEnemy;
 updateEnemy=function(dt){
  const e=state.enemy,bx=e?.x,by=e?.y,hadCast=!!e?.cast,hadReact=(e?.reactT||0)>0;
+ if(e)e._aiMoved=false;
  oldEnemy(dt);
- if(e&&e.moving&&!hadCast&&!hadReact&&e.moveSpeed){
+ if(e&&e.moving&&!hadCast&&!hadReact&&e.moveSpeed&&!e._aiMoved){
    const base=e.phase===2?86:69,ratio=e.moveSpeed/base;
    e.x=bx+(e.x-bx)*ratio;e.y=by+(e.y-by)*ratio;
  }

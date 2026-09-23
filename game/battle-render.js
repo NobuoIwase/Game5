@@ -27,10 +27,13 @@ function draw(){
   const h=state.hero,e=state.enemy;
   window.Game5Graphics?.drawHazardsUnder?.();
 
-  ctx.save();ctx.globalAlpha=.055;C(h.x,h.y,h.hearingRange,null,'#b9d8e8');
-  ctx.globalAlpha=.10;drawSector(h.x,h.y,h.visionRange,h.facing,h.visionHalf,'#e6efb8');ctx.restore();
+  const fx=window.Game5FX;
+  if(fx)fx.perception(h);
+  else{ctx.save();ctx.globalAlpha=.055;C(h.x,h.y,h.hearingRange,null,'#b9d8e8');
+  ctx.globalAlpha=.10;drawSector(h.x,h.y,h.visionRange,h.facing,h.visionHalf,'#e6efb8');ctx.restore();}
 
-  if(e.cast){
+  if(fx)fx.underActors();
+  else if(e.cast){
     const q=e.cast,s=q.sk,a=.14+.28*(1-Math.max(0,q.t)/Math.max(.01,q.total));
     ctx.save();ctx.globalAlpha=a;ctx.fillStyle='#ff5e62';ctx.strokeStyle='#ffb07c';ctx.lineWidth=3;
     if(s.kind==='circle')C(q.target.x,q.target.y,s.r,'#e84a4555','#ff826f');
@@ -53,15 +56,16 @@ function draw(){
     if(im?.complete&&im.naturalWidth)ctx.drawImage(im,q.frame*384,(DIR_ROWS[h.dir]||0)*512,384,512,h.x-42,h.y-90,84,112);
     else C(h.x,h.y,18,h.color,'#fff')
   }
-  ctx.beginPath();ctx.moveTo(h.x,h.y);ctx.lineTo(h.x+Math.cos(h.facing)*32,h.y+Math.sin(h.facing)*32);ctx.strokeStyle='#fff8';ctx.stroke();
+  if(!fx){ctx.beginPath();ctx.moveTo(h.x,h.y);ctx.lineTo(h.x+Math.cos(h.facing)*32,h.y+Math.sin(h.facing)*32);ctx.strokeStyle='#fff8';ctx.stroke();}
 
   const enemyArt=window.Game5Graphics?.drawEnemy?.(e)===true;
   if(!enemyArt){ctx.save();ctx.shadowBlur=18;ctx.shadowColor=e.flash>0?'#fff':'#9a685c';C(e.x,e.y,32,e.flash>0?'#eee':'#34323b','#ad7b83');ctx.restore()}
-  ctx.fillStyle='#511';ctx.fillRect(e.x-55,e.y+40,110,7);ctx.fillStyle='#d45a57';ctx.fillRect(e.x-55,e.y+40,110*e.hp/e.maxHp,7);
+  if(!window.Game5MultiEnemy){ctx.fillStyle='#511';ctx.fillRect(e.x-55,e.y+40,110,7);ctx.fillStyle='#d45a57';ctx.fillRect(e.x-55,e.y+40,110*e.hp/e.maxHp,7);}
 
   window.Game5Graphics?.drawHazardsOver?.();
 
-  for(const f of state.effects){
+  if(fx)fx.effects();
+  else for(const f of state.effects){
     const a=clamp(f.t/f.max,0,1);ctx.globalAlpha=a;
     if(f.kind==='text'){ctx.fillStyle=f.color;ctx.fillText(f.text,f.x,f.y-20*(1-a))}
     else C(f.x,f.y,2+28*(1-a),null,f.color)

@@ -53,6 +53,7 @@ function drawNuteraOverlay() {
   const h = state.hero;
   if (!h) return;
   const w = 84, x = h.x - w / 2, y = h.y + 48;
+  if (!window.Game5NuteraFX) {
   ctx.fillStyle = '#241329cc';
   ctx.fillRect(x, y, w, 7);
   ctx.fillStyle = '#d991ed';
@@ -74,6 +75,7 @@ function drawNuteraOverlay() {
     ctx.strokeStyle = '#cf8cffbb';
     ctx.lineWidth = 2;
     ctx.stroke();
+  }
   }
   for (const z of state.hazards) {
     if (z.kind !== 'directorRingBeam' || z.fired) continue;

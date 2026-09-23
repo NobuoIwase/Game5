@@ -62,8 +62,10 @@ function resolveEnemy(cast){
     }
   }
   if(cast.key==='charge'){
-    e.x=clamp(cast.start.x+Math.cos(cast.ang)*sk.travel,65,W-65);
-    e.y=clamp(cast.start.y+Math.sin(cast.ang)*sk.travel,65,H-65);
+    // slide along the charge line and stop in front of the first wall
+    const blocked=window.Game5Dungeon?.blockedAt;let tx=cast.start.x,ty=cast.start.y;
+    for(let d=8;d<=sk.travel;d+=8){const nx=clamp(cast.start.x+Math.cos(cast.ang)*d,65,W-65),ny=clamp(cast.start.y+Math.sin(cast.ang)*d,65,H-65);if(blocked?.(e,nx,ny))break;tx=nx;ty=ny}
+    e.x=tx;e.y=ty;
   }
   if(sk.hazard)state.hazards.push({kind:'enemyFog',x:cast.target.x,y:cast.target.y,r:sk.r,t:5.2,tick:.2});
   e.actCd=e.phase===2?rnd(.72,1.08):rnd(1.02,1.48);e.decision='次の一手を測る';e.noise=.24;
@@ -87,6 +89,7 @@ function updateEnemy(dt){
   e.actCd-=dt;
   if(e.actCd<=0){chooseEnemyAction();return;}
   if(!h||h.dead)return;
+  if(e.root<=0&&window.Game5EnemyAI?.move?.(e,h,dt))return;
   const d=dist(e,h);
   if(d>205&&e.root<=0){
     const dx=h.x-e.x,dy=h.y-e.y,l=Math.hypot(dx,dy)||1;
@@ -129,21 +132,22 @@ function updateDirector(dt){
   const x=h.x+Math.cos(h.facing)*lead+rnd(-35,35),y=h.y+Math.sin(h.facing)*lead+rnd(-35,35);
   placeDirectorTool(kind,x,y,true);
 }
+const FOG_TICK={enemy:{hp:3,poison:3.0,slow:1.1,sp:2},director:{hp:2,poison:2.4,slow:.8,sp:2.5}};
 function updateHazards(dt){
-  const h=state.hero;
+  const h=state.hero,fe=FOG_TICK.enemy,fd=FOG_TICK.director;
   for(const z of state.hazards){
     z.t-=dt;
     if(z.arm!=null)z.arm-=dt;
     if(z.tick!=null)z.tick-=dt;
     if(z.kind==='enemyFog'&&z.tick<=0){
       z.tick=.64;
-      if(!h.dead&&Math.hypot(h.x-z.x,h.y-z.y)<z.r+h.r)hurtHero(h,3,{poison:3.0,slow:1.1},{spDamage:2,label:'蝕毒の霧'});
+      if(!h.dead&&Math.hypot(h.x-z.x,h.y-z.y)<z.r+h.r)hurtHero(h,fe.hp,{poison:fe.poison,slow:fe.slow},{spDamage:fe.sp,label:'蝕毒の霧'});
     }else if(z.kind==='directorFog'&&z.tick<=0){
       z.tick=.58;
-      if(!h.dead&&Math.hypot(h.x-z.x,h.y-z.y)<z.r+h.r)hurtHero(h,2,{poison:2.4,slow:.8},{spDamage:2.5,label:'瘴気壺'});
+      if(!h.dead&&Math.hypot(h.x-z.x,h.y-z.y)<z.r+h.r)hurtHero(h,fd.hp,{poison:fd.poison,slow:fd.slow},{spDamage:fd.sp,label:'瘴気壺'});
     }else if(z.kind==='directorSnare'&&!z.triggered&&z.arm<=0&&!h.dead&&Math.hypot(h.x-z.x,h.y-z.y)<z.r+h.r){
       z.triggered=true;z.t=.55;
-      h.status.bind=Math.max(h.status.bind,1.65);drainSp(h,21,'影杭');
+      const st=DIRECTOR_TOOLS.snare;h.status.bind=Math.max(h.status.bind,st.bind??1.65);drainSp(h,st.sp??21,'影杭');
       addFx('ring',h.x,h.y,'','#e5a2d0',.8);log('影杭が足を取った。');
     }else if(z.kind==='directorLure'&&!h.dead){
       z.pulse-=dt;
@@ -162,7 +166,8 @@ function update(dt){
   for(const f of state.effects)f.t-=dt;
   state.effects=state.effects.filter(f=>f.t>0);
   if(state.hero.dead)finish(false);
-  renderUI();
+  state.uiT=(state.uiT||0)-dt;
+  if(state.uiT<=0){state.uiT=.1;renderUI();}
 }
 function finish(win){
   if(state.over)return;state.over=true;

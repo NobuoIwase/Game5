@@ -34,3 +34,45 @@ canvas{display:block;width:100%;height:auto;background:#142019;border:1px solid 
 .logPanel{margin-top:10px;padding-top:9px;border-top:1px solid #ffffff16}
 #log{font-size:12px;line-height:1.5;max-height:155px;overflow:auto;color:#cbd8cf}
 @media(max-width:760px){.dashboard{grid-template-columns:1fr}.top{display:block}.enemy{margin-top:8px}.tools{grid-template-columns:repeat(2,1fr)}.resource.special{grid-template-columns:64px 1fr 118px}}
+/* v0.12.0 UI */
+.controls{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
+.controls .grp{display:flex;gap:2px;background:#101713;border:1px solid #ffffff16;border-radius:9px;padding:2px}
+.controls button{background:transparent;border:0;border-radius:7px;padding:5px 10px;font-size:12px;color:#cbd8cf}
+.controls button.on{background:#2a3d31;color:#fff}
+.controls .lbl{font-size:11px;color:#95a69b;padding:0 4px 0 6px}
+.controls .keys{margin-left:auto;font-size:11px;color:#7f8f85}
+.roster{display:grid;gap:4px;margin-top:7px}
+.roster .foe{display:grid;grid-template-columns:minmax(90px,auto) 1fr auto;gap:8px;align-items:center;font-size:12px}
+.roster .foe.main b{color:#ffd9e2}
+.roster .foe .bar{height:6px}
+.roster .foe i{background:#b85a73}
+.roster .foe span{color:#95a69b;font-size:11px;white-space:nowrap}
+.roster .foe span.cast{color:#ffb4a0}
+.tools button{position:relative;overflow:hidden}
+.tools button small{display:block;font-size:10px;color:#a898a4;margin-top:2px}
+.tools button.dim{opacity:.45}
+.tools button .cd{position:absolute;left:0;bottom:0;height:3px;background:#d89ac5;width:0}
+#log div{padding:1px 0}
+.lg-enemy{color:#ffb3a7}.lg-hero{color:#d7e6da}.lg-level{color:#fff1a8;font-weight:700}.lg-estella{color:#f0b8ff;font-weight:700}
+.lg-room{color:#bfe3c6;font-weight:700}.lg-dir{color:#e0a8cf}.lg-learn{color:#a8d8ff}.lg-sys{color:#95a69b}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0}
+.stats div{background:#0c130f;border:1px solid #ffffff14;border-radius:8px;padding:7px 8px;text-align:left}
+.stats small{display:block;font-size:10px}.stats b{font-size:17px}
+.card ul{margin:8px 0 12px;padding-left:18px;color:#cbd8cf;font-size:13px;line-height:1.6;text-align:left}
+kbd{background:#223027;border:1px solid #ffffff22;border-bottom-width:2px;border-radius:4px;padding:0 5px;font-size:11px}
+@media(max-width:760px){.controls .keys{display:none}.stats{grid-template-columns:repeat(2,1fr)}}
+/* v0.14.0 run history */
+.history{margin:4px 0 12px;padding:8px 10px;background:#0c130f;border:1px solid #ffffff14;border-radius:8px;font-size:12px;text-align:left}
+.histHead{display:flex;justify-content:space-between;margin-bottom:4px}.histHead span{color:#95a69b}
+.histRow{display:grid;grid-template-columns:1fr 44px 48px 96px;gap:6px;color:#b9c4bb;padding:1px 0}
+.histRow.win span:first-child{color:#ffe9a0;font-weight:700}
+/* v0.16.0 Nutera / Estella panel */
+#nuteraFill{background:linear-gradient(90deg,#ff9ad6,#e0479e)}
+#lumaneFill{background:linear-gradient(90deg,#e7a8ff,#b35ce0)}
+#sailFill{background:linear-gradient(90deg,#ffd3a0,#f09a5e)}
+.systemBlock{transition:box-shadow .3s,border-color .3s}
+.systemBlock .systemTitle b{color:#ffb3de}
+.systemBlock.hot{border-color:#ff7fc866;animation:beat var(--beat,.8s) ease-in-out infinite}
+.systemBlock.estella{border-color:#ff7fc8;box-shadow:0 0 18px #ff4fae66,inset 0 0 22px #ff4fae33;animation:beat .35s ease-in-out infinite}
+.systemBlock.estella #estellaText{color:#fff;background:#e0479e;border-radius:6px;padding:1px 7px;font-weight:700}
+@keyframes beat{0%,100%{box-shadow:0 0 0 #ff4fae00}40%{box-shadow:0 0 16px #ff4fae55}}

@@ -40,9 +40,9 @@ const HERO_CFG={
   visionRange:335,visionHalf:.92,hearingRange:430,
   skills:[
     {name:'斬撃',cost:0,cd:.72,cast:.24,range:78,step:46,stepSpeed:230,kind:'melee',damage:22,unlock:1,desc:'射程78 + 踏込46 / 扇'},
-    {name:'盾撃',cost:4,cd:4.2,cast:.32,range:68,step:42,stepSpeed:220,kind:'bash',damage:16,unlock:2,desc:'Lv2 / 中断・気絶'},
+    {name:'盾撃',cost:4,cd:4.2,cast:.32,range:68,step:42,stepSpeed:220,kind:'bash',damage:16,unlock:2,desc:'中断・気絶'},
     {name:'堅守',cost:3,cd:7.5,cast:.12,range:0,step:0,kind:'guard',unlock:1,desc:'3秒 被害55%減'},
-    {name:'破城斬り',cost:9,cd:8.8,cast:.78,range:102,step:58,stepSpeed:245,kind:'heavy',damage:54,unlock:3,desc:'Lv3 / 大踏込・中断'}
+    {name:'破城斬り',cost:9,cd:8.8,cast:.78,range:102,step:58,stepSpeed:245,kind:'heavy',damage:54,unlock:3,desc:'大踏込・中断'}
   ]
 };
 
@@ -117,11 +117,13 @@ function statusText(h){
   return a.join('・')||'正常';
 }
 function skillUnlocked(h,sk){return h.level>=sk.unlock;}
-function xpForLevel(level){return [0,0,64,178,338][level]??Infinity;}
+const XP_TABLE=[0,0,64,178,338];
+function maxHeroLevel(){return XP_TABLE.length-1;}
+function xpForLevel(level){return XP_TABLE[level]??Infinity;}
 function gainHeroXp(n){
-  const h=state.hero;if(!h||h.dead||h.level>=4)return;
+  const h=state.hero;if(!h||h.dead||h.level>=maxHeroLevel())return;
   h.xp+=n;
-  while(h.level<4&&h.xp>=xpForLevel(h.level+1)){
+  while(h.level<maxHeroLevel()&&h.xp>=xpForLevel(h.level+1)){
     h.level++;
     h.maxHp+=12;h.maxMp+=4;h.maxSp+=6;h.atk+=4;h.def+=3;h.agi+=2;h.focus+=2;
     h.hp=Math.min(h.maxHp,h.hp+28);h.mp=Math.min(h.maxMp,h.mp+10);h.sp=Math.min(h.maxSp,h.sp+22);

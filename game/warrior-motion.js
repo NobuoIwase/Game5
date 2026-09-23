@@ -1,6 +1,7 @@
 (function(g){
 'use strict';
 const BASE='../character-motion-v1/',DIRS=['front','down_right','right','up_right','back','up_left','left','down_left'];
+const MISSING={right:['arm_left','leg_left'],left:['arm_right','leg_right']};
 const S={rig:null,gear:null,err:'',imgs:new Map(),seg:new Map()};
 const A=new Set(['melee','heavy']);
 const rad=d=>d*Math.PI/180,cl=v=>Math.max(0,Math.min(1,v)),lerp=(a,b,t)=>a+(b-a)*t;
@@ -20,7 +21,7 @@ function segments(v){
  const r={a,upper:half(a.polygon,E,n1,9,true),fore,hand:half(a.polygon,W,n2,-9,false)};S.seg.set(key,r);return r;
 }
 function im(src){const x=new Image();x.ok=false;x.onload=()=>x.ok=true;x.src=src;return x}
-function imgs(d){if(S.imgs.has(d))return S.imgs.get(d);const o={};for(const p of ['body','arm_right','arm_left','leg_right','leg_left','sword','shield','scabbard'])o[p]=im(`${BASE}parts/warrior/${d}/${p}.png`);S.imgs.set(d,o);return o}
+function imgs(d){if(S.imgs.has(d))return S.imgs.get(d);const o={};for(const p of ['body','arm_right','arm_left','leg_right','leg_left','sword','shield','scabbard'])o[p]=MISSING[d]?.includes(p)?{ok:false}:im(`${BASE}parts/warrior/${d}/${p}.png`);S.imgs.set(d,o);return o}
 Promise.all([fetch(`${BASE}rigs/warrior.json`).then(r=>r.json()),fetch(`${BASE}rigs/warrior-gear.json`).then(r=>r.json())]).then(([r,x])=>{S.rig=r;S.gear=x;for(const d of DIRS)if(r.views[d])r.views[d].__dir=d}).catch(e=>S.err=String(e));
 const K=[
 [0,0,0,0,0,0,0],[.12,-1,-12,-6,-2,-1,0],[.28,-3,-38,-22,-10,-3,1],[.42,-4,-31,-34,-18,-3,1],
@@ -41,7 +42,7 @@ function gear(d,id){return(S.gear?.views?.[d]||[]).find(x=>x.id===id)}
 function shield(c,d,v,o,a){const x=v.arms.find(z=>z.side==='left');if(!x)return;const slot=gear(d,'shield')?.slot||'cover_arm';if(slot==='back'&&o.shield.ok)c.drawImage(o.shield,0,0);limb(c,o.arm_left,x.shoulder,a);if(slot==='cover_arm'&&o.shield.ok)c.drawImage(o.shield,0,0)}
 function near(d,side){return side===(['front','down_right','right','up_right'].includes(d)?'right':'left')}
 function draw(c,d,p,sc){
- const v=S.rig?.views?.[d];if(!v)return false;const o=imgs(d);if(!o.body.ok)return false,scale=sc.scale||112/543;
+ const v=S.rig?.views?.[d];if(!v)return false;const o=imgs(d);if(!o.body.ok)return false;const scale=sc.scale||112/543;
  const rx=sc.rootX??sc.x,ry=sc.rootY??((sc.y||0)-26),left=rx-v.root[0]*scale+p.x*scale,top=ry-v.root[1]*scale+p.y*scale;
  c.save();c.translate(left,top);c.scale(scale,scale);if(o.scabbard.ok)c.drawImage(o.scabbard,0,0);
  for(const L of v.legs){const a=p.kind==='estella'?(L.side==='right'?p.lr:p.ll):p.kind==='bind'?(L.side==='right'?p.lr:p.ll):0;limb(c,o['leg_'+L.side],L.hip,a||0)}

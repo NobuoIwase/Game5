@@ -3,7 +3,7 @@ function renderUI(){const h=state.hero,e=state.enemy,d=state.director;
  $('heroName').textContent=`${h.name} Lv${h.level}`;$('heroStatus').textContent=statusText(h);
  for(const [k,v,m] of [['hp',h.hp,h.maxHp],['mp',h.mp,h.maxMp],['sp',h.sp,h.maxSp]]){$(k+'Fill').style.width=100*v/m+'%';$(k+'Text').textContent=`${Math.ceil(v)} / ${m}`}
  $('stats').textContent=`ATK ${h.atk} DEF ${h.def} AGI ${h.agi} FOCUS ${h.focus}`;$('thought').textContent=h.thought;$('perception').textContent=h.perception;
- $('knowledge').textContent='敵知識：'+Object.entries(h.knowledge).filter(x=>x[1]>.15).map(([k,v])=>`${ENEMY_LABELS[k]} ${v<1?'観察中':v<2?'既知':'習熟'}`).join(' / ')||'敵知識：ほぼ未知';
+ $('knowledge').textContent='敵知識：'+(Object.entries(h.knowledge).filter(x=>x[1]>.15).map(([k,v])=>`${ENEMY_LABELS[k]} ${v<1?'観察中':v<2?'既知':'習熟'}`).join(' / ')||'ほぼ未知');
  $('skills').innerHTML=h.skills.map((s,i)=>`<div class="skill ${h.level<s.unlock?'lock':''}"><b>${s.name}</b><small>${h.level<s.unlock?'Lv'+s.unlock:h.cd[i]>0?h.cd[i].toFixed(1)+'s':'MP '+s.cost} / ${s.desc}</small></div>`).join('');
  $('directorEn').style.width=d.en+'%';$('directorEnText').textContent=`EN ${Math.floor(d.en)} / 100`;$('autoBtn').textContent='AUTO指揮：'+(d.auto?'ON':'OFF');
  document.querySelectorAll('[data-tool]').forEach(b=>b.classList.toggle('on',b.dataset.tool===d.selected));

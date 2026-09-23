@@ -13,6 +13,7 @@ function room(){return ROOMS[state.dungeon?.room||0]}
 function insideCircle(a,z){return Math.hypot(a.x-z.x,a.y-z.y)<=z.r+(a.r||0)}
 function blockedAt(a,x,y){
  const r=a?.r||20;
+ const tb=window.Game5Terrain?.blocked?.(x,y,r);if(tb!=null)return tb;
  if(x<48||x>W-48||y<48||y>H-48)return true;
  for(const w of room()?.walls||[]){
    if(x>w.x-r&&x<w.x+w.w+r&&y>w.y-r&&y<w.y+w.h+r)return true;
@@ -34,6 +35,7 @@ function steer(a,intent){
 }
 function resolveEntity(a){
  if(!a)return;
+ if(window.Game5Terrain?.resolve?.(a))return;
  a.x=clamp(a.x,48,W-48);a.y=clamp(a.y,48,H-48);
  for(const w of room()?.walls||[]){
    const r=a.r||20,hit=a.x>w.x-r&&a.x<w.x+w.w+r&&a.y>w.y-r&&a.y<w.y+w.h+r;
@@ -55,7 +57,8 @@ function spawnRoom(i){
 }
 function begin(){
  state.dungeon={active:true,room:0,pending:false,clearT:0,zoneTick:.2,complete:false};
- state.hero.x=130;state.hero.y=270;
+ window.Game5Terrain?.generate?.(ROOMS);
+ state.hero.x=ROOMS[0].entry?.[0]??130;state.hero.y=ROOMS[0].entry?.[1]??270;
  spawnRoom(0);
 }
 function advance(){
@@ -66,8 +69,8 @@ function advance(){
    window.__game5FinishBase?.(true);
    return;
  }
- state.hero.x=ROOMS[i].exit[0]>W/2?105:W-105;
- state.hero.y=ROOMS[i].exit[1];
+ state.hero.x=ROOMS[i+1].entry?.[0]??(ROOMS[i].exit[0]>W/2?105:W-105);
+ state.hero.y=ROOMS[i+1].entry?.[1]??ROOMS[i].exit[1];
  spawnRoom(i+1);
 }
 const oldFinish=finish;
@@ -82,15 +85,15 @@ finish=function(win){
 };
 const oldDecide=decideHero;
 decideHero=function(h,dt){
- let intent;
  if(state.dungeon?.active&&state.dungeon?.pending){
    const ex=room().exit[0],ey=room().exit[1],dx=ex-h.x,dy=ey-h.y,l=Math.hypot(dx,dy)||1;
    h.thought='区画を制圧。次の階段へ進む。';
-   intent={kind:'move',x:dx/l,y:dy/l,speed:1.05,label:'階段へ移動'};
+   h.intent={kind:'move',x:dx/l,y:dy/l,speed:1.05,label:'階段へ移動'};
  }else{
-   intent=oldDecide(h,dt);
+   oldDecide(h,dt);
  }
- return steer(h,intent);
+ h.intent=steer(h,h.intent);
+ return h.intent;
 };
 const oldHero=updateHero;
 updateHero=function(h,dt){
@@ -118,8 +121,9 @@ updateHero=function(h,dt){
 const oldEnemy=updateEnemy;
 updateEnemy=function(dt){
  const e=state.enemy,bx=e?.x,by=e?.y,hadCast=!!e?.cast,hadReact=(e?.reactT||0)>0;
+ if(e)e._aiMoved=false;
  oldEnemy(dt);
- if(e&&e.moving&&!hadCast&&!hadReact&&e.moveSpeed){
+ if(e&&e.moving&&!hadCast&&!hadReact&&e.moveSpeed&&!e._aiMoved){
    const base=e.phase===2?86:69,ratio=e.moveSpeed/base;
    e.x=bx+(e.x-bx)*ratio;e.y=by+(e.y-by)*ratio;
  }

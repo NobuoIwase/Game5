@@ -284,6 +284,8 @@ resolveEnemy = function (cast) {
   const hit = h && !h.dead && nuteraCastHitsHero(cast, h);
   _resolveEnemyNuteraBase(cast);
   if (!hit || !h || h.dead) return;
+  // species with their own profile (monster-pack-v011) supply their own Nutera numbers
+  if (window.Game5Monsters?.profiles?.[state.enemy?.type]) return;
   switch (cast.key) {
     case 'cleave':
       applyNutera(h, h.status.bind > 0 ? 12 : 5, { source: '大薙ぎの呪圧' });

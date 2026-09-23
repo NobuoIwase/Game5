@@ -1,4 +1,16 @@
 {
   "monsters": {},
-  "floors": {}
+  "floors": {},
+  "species": "species.json",
+  "assetPack": {
+    "version": "0.16.1",
+    "scripts": [
+      "requested-art-base-v0161.js",
+      "requested-art-creatures-v0161.js",
+      "requested-art-environment-v0161.js",
+      "requested-art-runtime-v0161.js"
+    ],
+    "dialogues": "dialogues.json",
+    "roomIdeas": "room_ideas.json"
+  }
 }

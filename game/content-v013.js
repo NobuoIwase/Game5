@@ -285,8 +285,15 @@ update=function(dt){
 };
 
 /* ================= drawing ================= */
+function propFrame(im,frame,frames,x,y,w,h){if(!im?.complete||!im.naturalWidth)return false;const sw=im.naturalWidth/frames;ctx.drawImage(im,sw*frame,0,sw,im.naturalHeight,x-w/2,y-h/2,w,h);return true}
 function drawChest(c){
- const t=state.time,bob=c.fake?Math.sin(t*3+c.x)*1.2:0;
+ const t=state.time,bob=c.fake?Math.sin(t*3+c.x)*1.2:0,PR=window.Game5Props;
+ if(PR){
+  ctx.save();ctx.fillStyle='#0006';ctx.beginPath();ctx.ellipse(c.x,c.y+12,20,6,0,0,TAU);ctx.fill();
+  ctx.globalCompositeOperation='lighter';ctx.globalAlpha=.18+.1*Math.sin(t*3);ctx.fillStyle='#ffe28a';ctx.beginPath();ctx.arc(c.x,c.y-4,24,0,TAU);ctx.fill();ctx.restore();
+  // a mimic is drawn as an ordinary chest: the player placed it, the heroine must not be told
+  if(propFrame(PR.chest,0,2,c.x,c.y-2+bob,54,34))return;
+ }
  ctx.save();ctx.translate(c.x,c.y+bob);
  ctx.fillStyle='#0006';ctx.beginPath();ctx.ellipse(0,12,18,6,0,0,TAU);ctx.fill();
  ctx.fillStyle='#6b4424';ctx.fillRect(-16,-8,32,20);ctx.fillStyle='#8a5a30';ctx.fillRect(-16,-16,32,10);
@@ -295,7 +302,13 @@ function drawChest(c){
  ctx.restore();
 }
 function drawTower(tw){
- const t=state.time,p=1-tw.pulse/C.tools.tower.pulse;
+ const t=state.time,p=1-tw.pulse/C.tools.tower.pulse,PR=window.Game5Props;
+ if(PR?.tower?.complete&&PR.tower.naturalWidth){
+  ctx.save();ctx.fillStyle='#0007';ctx.beginPath();ctx.ellipse(tw.x,tw.y+10,20,7,0,0,TAU);ctx.fill();ctx.restore();
+  propFrame(PR.tower,Math.min(2,Math.floor(p*3)),3,tw.x,tw.y-26,46,70);
+  ctx.save();ctx.fillStyle='#000a';ctx.fillRect(tw.x-18,tw.y+16,36,4);ctx.fillStyle='#b9a8ff';ctx.fillRect(tw.x-18,tw.y+16,36*tw.hp/tw.maxHp,4);ctx.restore();
+  return;
+ }
  ctx.save();ctx.translate(tw.x,tw.y);
  ctx.fillStyle='#0007';ctx.beginPath();ctx.ellipse(0,10,20,7,0,0,TAU);ctx.fill();
  ctx.fillStyle='#2b2238';ctx.beginPath();ctx.moveTo(-13,10);ctx.lineTo(-7,-46);ctx.lineTo(7,-46);ctx.lineTo(13,10);ctx.closePath();ctx.fill();

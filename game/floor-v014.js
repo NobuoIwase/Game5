@@ -67,6 +67,12 @@ function decals(g,R,th){
   let x=R()*W,y=70+R()*(H-80);g.save();g.globalAlpha=.22;g.strokeStyle='#15171f';g.lineWidth=1;g.beginPath();g.moveTo(x,y);
   for(let s=0;s<5;s++){x+=(R()-.5)*30;y+=(R()-.5)*30;g.lineTo(x,y)}g.stroke();g.restore();
  }
+ const fx=th.fx||'#ffffff';
+ if(th.decal==='silk')for(let k=0;k<16;k++){const x=R()*W,y=70+R()*(H-80),l=40+R()*90,a=R()*Math.PI;g.save();g.globalAlpha=.12+R()*.1;g.strokeStyle=fx;g.lineWidth=1;g.beginPath();g.moveTo(x,y);g.quadraticCurveTo(x+Math.cos(a)*l*.5,y+Math.sin(a)*l*.5+10,x+Math.cos(a)*l,y+Math.sin(a)*l);g.stroke();g.restore()}
+ if(th.decal==='spore')for(let k=0;k<60;k++){g.save();g.globalAlpha=.1+R()*.14;g.fillStyle=fx;g.beginPath();g.arc(R()*W,70+R()*(H-80),1.5+R()*3.5,0,Math.PI*2);g.fill();g.restore()}
+ if(th.decal==='spore')for(let k=0;k<8;k++)blob(R()*W,70+R()*(H-80),20+R()*30,'rgba(150,180,80,A)',.12);
+ if(th.decal==='nectar')for(let k=0;k<26;k++){const x=R()*W,y=70+R()*(H-80),r=4+R()*5,a=R()*Math.PI;g.save();g.globalAlpha=.14+R()*.12;g.fillStyle=fx;g.translate(x,y);g.rotate(a);g.beginPath();g.ellipse(0,0,r,r*.45,0,0,Math.PI*2);g.fill();g.restore()}
+ if(th.decal==='dream')for(let k=0;k<40;k++){const x=R()*W,y=70+R()*(H-80);g.save();g.globalAlpha=.1+R()*.15;g.strokeStyle=fx;g.lineWidth=1;g.beginPath();g.moveTo(x,y);g.lineTo(x+6+R()*10,y-6-R()*10);g.stroke();g.restore()}
  if(th.decal==='rune')for(let k=0;k<2;k++){
   const x=160+R()*(W-320),y=140+R()*(H-240),r=34+R()*20;
   g.save();g.globalAlpha=.1;g.strokeStyle='#c8d0ff';g.lineWidth=1.5;g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.stroke();g.beginPath();g.arc(x,y,r*.62,0,Math.PI*2);g.stroke();
@@ -75,7 +81,7 @@ function decals(g,R,th){
 }
 const baked=new Map(),wallTop=load('./assets/dungeon.png');
 function bake(i){
- const key=themeOf(i),th=THEME[key],im=SRC[key];
+ const key=themeOf(i),th={...THEME[key],...(window.Game5RoomLook?.[i]||{})},im=SRC[key];
  if(!ok(im)||!ok(wallTop))return null;
  const R=rng(i*7907+131),raw=document.createElement('canvas');raw.width=W;raw.height=H;const g=raw.getContext('2d');
  g.fillStyle=th.grout;g.fillRect(0,0,W,H);

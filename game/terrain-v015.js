@@ -328,7 +328,7 @@ function paintWalls(o,th,raw){
  o.drawImage(fc,0,0);
  // top face: dark rock (built floors show large masonry courses)
  const edge=tinted(m,'rgba(0,0,0,.7)');for(const [dx,dy] of [[-2,0],[2,0],[0,-2]])o.drawImage(edge,dx,dy);
- const top=rock(R,ROCK[key]||'#2c3040',!cave),tg=top.getContext('2d');tg.fillStyle='rgba(0,0,0,.22)';tg.fillRect(0,0,W,H);tg.globalCompositeOperation='destination-in';tg.drawImage(m,0,0);
+ const top=rock(R,th.rock||ROCK[key]||'#2c3040',!cave),tg=top.getContext('2d');tg.fillStyle='rgba(0,0,0,.22)';tg.fillRect(0,0,W,H);tg.globalCompositeOperation='destination-in';tg.drawImage(m,0,0);
  o.drawImage(top,0,0);
  // lit rim along the upper edges, a darker lip along the lower edges
  const rim=tinted(m,'rgba(220,228,245,.7)'),rg=rim.getContext('2d');rg.globalCompositeOperation='destination-out';rg.drawImage(m,0,3);
@@ -353,7 +353,7 @@ function stepVents(dt){
  const f=cur(),h=state.hero;if(!f?.vents?.length||!h)return;
  for(const v of f.vents){
   v.t-=dt;if(v.t>0)continue;v.t=3.8+Math.random()*1.5;v.puff=1;
-  window.Game5Assets?.spawn?.('curse_cloud',v.x,v.y-12,110,1.1,{grow:.6,add:false,alpha:.55});
+  window.Game5Assets?.spawn?.(window.Game5Assets?.vfx?.spore_puff?'spore_puff':'curse_cloud',v.x,v.y-14,100,1.1,{grow:.7,add:false,alpha:.6});
   if(!h.dead&&Math.hypot(h.x-v.x,h.y-v.y)<80){applyTiered(h,'lumane',6,{source:'胞子の噴出'});applySail(h,3);addFx('text',h.x,h.y-60,'胞子','#c8f09a',.8)}
  }
 }

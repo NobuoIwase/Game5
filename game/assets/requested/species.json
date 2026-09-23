@@ -175,7 +175,7 @@
     "name": "泡吹き貝",
     "family": "foam",
     "familyName": "泡殻種",
-    "hp": 300,
+    "hp": 240,
     "r": 30,
     "speed": 42,
     "look": {
@@ -189,10 +189,10 @@
     },
     "weights": [
       "fog",
-      "fog",
       "bolt",
       "bind",
-      "cleave"
+      "cleave",
+      "bolt"
     ],
     "skills": {
       "cleave": {

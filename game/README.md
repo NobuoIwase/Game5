@@ -1,4 +1,9 @@
-# Game5 battle pilot — v0.16.0
+# Game5 battle pilot — v0.17.0
+
+## v0.17.0
+- `pack-v017.js` — ChatGPT アセットパック（`assets/requested/`）の組み込み。魔物の絵、床の配色と模様、宝箱・塔、アイコン、台詞
+
+## v0.16.0
 
 ## v0.16.0
 - `nutera-fx-v016.js` — ヌテラ・エステラのハート演出（`fx-v012.js` の直後に読み込む）

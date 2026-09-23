@@ -76,3 +76,7 @@ kbd{background:#223027;border:1px solid #ffffff22;border-bottom-width:2px;border
 .systemBlock.estella{border-color:#ff7fc8;box-shadow:0 0 18px #ff4fae66,inset 0 0 22px #ff4fae33;animation:beat .35s ease-in-out infinite}
 .systemBlock.estella #estellaText{color:#fff;background:#e0479e;border-radius:6px;padding:1px 7px;font-weight:700}
 @keyframes beat{0%,100%{box-shadow:0 0 0 #ff4fae00}40%{box-shadow:0 0 16px #ff4fae55}}
+/* v0.17.0 director tool icons from the asset pack */
+.tools button.hasIcon{padding-right:46px}
+.tools button .ticon{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:30px;height:30px;opacity:.85;pointer-events:none}
+.tools button.dim .ticon{opacity:.4}

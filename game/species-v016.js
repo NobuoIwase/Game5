@@ -5,7 +5,7 @@
    read from assets/requested/manifest.json -> "species" (an array, or a path to a JSON file
    holding the array). Each entry becomes a full monster: stats, five skills, Nutera effects,
    AI spacing role, optional picture, and the floors it joins as a support. */
-const KEYS=['cleave','charge','bind','fog','bolt'];
+const KEYS=['cleave','charge','bind','fog','bolt'],installed=new Set();
 function install(sp){
  const M=window.Game5Monsters,S=window.Game5MonsterSkills,AI=window.Game5EnemyAI;
  if(!M||!S||!sp?.type||M.profiles[sp.type]&&!sp.override)return false;
@@ -20,7 +20,14 @@ function install(sp){
  if(AI?.roles)AI.roles[sp.type]={pref:120,label:'間合いを詰める',...(sp.role||{})};
  if(sp.image){const i=new Image();i.src=`./assets/requested/${sp.image}`;(window.Game5Assets?.requested?.monsters||{})[sp.type]=i}
  if(look.filter)(window.Game5SpeciesLook||={})[sp.type]=look.filter;
- for(const f of sp.floors||[]){const list=window.Game5MultiEnemy?.supports?.[f];if(list&&!list.includes(sp.type))list.push(sp.type)}
+ // by default a new species takes over an existing support slot so the encounter size (and the
+ // tuned difficulty curve) stays the same; "mode":"add" makes the floor one monster larger
+ for(const f of sp.floors||[]){
+  const list=window.Game5MultiEnemy?.supports?.[f];if(!list||list.includes(sp.type))continue;
+  const slot=[...list.keys()].reverse().find(k=>!installed.has(list[k]));
+  if(sp.mode==='add'||slot==null)list.push(sp.type);else list[slot]=sp.type;
+ }
+ installed.add(sp.type);
  return true;
 }
 const loaded=[];

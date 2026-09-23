@@ -1,0 +1,344 @@
+[
+  {
+    "type": "mirror_slime",
+    "name": "鏡面スライム",
+    "family": "mirror",
+    "familyName": "鏡粘種",
+    "hp": 220,
+    "r": 25,
+    "speed": 86,
+    "look": {
+      "sprite": 0,
+      "filter": "none"
+    },
+    "role": {
+      "pref": 135,
+      "dart": 118,
+      "label": "アリアの直前の進路をなぞる"
+    },
+    "weights": [
+      "charge",
+      "cleave",
+      "charge",
+      "bind",
+      "bolt"
+    ],
+    "skills": {
+      "cleave": {
+        "name": "反射なぞり",
+        "cast": 0.62,
+        "range": 128,
+        "step": 30
+      },
+      "charge": {
+        "name": "鏡走り",
+        "cast": 0.76,
+        "range": 305,
+        "width": 70,
+        "travel": 176
+      },
+      "bind": {
+        "name": "映り込みの膜",
+        "cast": 0.94,
+        "range": 275,
+        "r": 72,
+        "status": {
+          "bind": 1.05
+        }
+      },
+      "fog": {
+        "name": "曇り鏡",
+        "cast": 1.02,
+        "range": 360,
+        "r": 100
+      },
+      "bolt": {
+        "name": "反照波",
+        "cast": 1.08,
+        "range": 400,
+        "width": 72
+      }
+    },
+    "nutera": {
+      "cleave": {
+        "nutera": 8,
+        "sail": 3
+      },
+      "charge": {
+        "nutera": 12
+      },
+      "bind": {
+        "nutera": 16,
+        "lumane": 9
+      },
+      "fog": {
+        "sail": 6,
+        "hypnosis": 8
+      },
+      "bolt": {
+        "hypnosis": 12,
+        "lumane": 8
+      }
+    },
+    "floors": [
+      5
+    ]
+  },
+  {
+    "type": "silk_spider",
+    "name": "糸繰り蜘蛛",
+    "family": "silk",
+    "familyName": "柔糸種",
+    "hp": 245,
+    "r": 24,
+    "speed": 72,
+    "look": {
+      "sprite": 1,
+      "filter": "none"
+    },
+    "role": {
+      "pref": 190,
+      "ranged": true,
+      "ambush": 170,
+      "label": "部屋の角から柔らかな糸路を張る"
+    },
+    "weights": [
+      "bind",
+      "fog",
+      "bind",
+      "bolt",
+      "cleave"
+    ],
+    "skills": {
+      "cleave": {
+        "name": "糸払い",
+        "cast": 0.66,
+        "range": 120,
+        "step": 18
+      },
+      "charge": {
+        "name": "糸たぐり",
+        "cast": 0.82,
+        "range": 270,
+        "width": 58,
+        "travel": 120
+      },
+      "bind": {
+        "name": "ふわ糸輪",
+        "cast": 0.9,
+        "range": 320,
+        "r": 86,
+        "status": {
+          "bind": 1.55
+        }
+      },
+      "fog": {
+        "name": "糸霞",
+        "cast": 1.02,
+        "range": 395,
+        "r": 110
+      },
+      "bolt": {
+        "name": "絹すべり線",
+        "cast": 1.12,
+        "range": 430,
+        "width": 70
+      }
+    },
+    "nutera": {
+      "cleave": {
+        "nutera": 6
+      },
+      "charge": {
+        "nutera": 8,
+        "sail": 3
+      },
+      "bind": {
+        "nutera": 14,
+        "lumane": 13
+      },
+      "fog": {
+        "sail": 5,
+        "lumane": 9
+      },
+      "bolt": {
+        "nutera": 7,
+        "lumane": 8
+      }
+    },
+    "floors": [
+      2
+    ]
+  },
+  {
+    "type": "bubble_shell",
+    "name": "泡吹き貝",
+    "family": "foam",
+    "familyName": "泡殻種",
+    "hp": 300,
+    "r": 30,
+    "speed": 42,
+    "look": {
+      "sprite": 2,
+      "filter": "none"
+    },
+    "role": {
+      "pref": 240,
+      "ranged": true,
+      "label": "その場に留まり泡で視界を曇らせる"
+    },
+    "weights": [
+      "fog",
+      "fog",
+      "bolt",
+      "bind",
+      "cleave"
+    ],
+    "skills": {
+      "cleave": {
+        "name": "泡はじけ",
+        "cast": 0.72,
+        "range": 140,
+        "step": 0
+      },
+      "charge": {
+        "name": "泡押し",
+        "cast": 0.92,
+        "range": 255,
+        "width": 86,
+        "travel": 110
+      },
+      "bind": {
+        "name": "泡膜包み",
+        "cast": 1.0,
+        "range": 290,
+        "r": 82,
+        "status": {
+          "bind": 0.9
+        }
+      },
+      "fog": {
+        "name": "もこ泡霧",
+        "cast": 0.98,
+        "range": 430,
+        "r": 120
+      },
+      "bolt": {
+        "name": "泡の筋",
+        "cast": 1.1,
+        "range": 450,
+        "width": 90
+      }
+    },
+    "nutera": {
+      "cleave": {
+        "nutera": 5,
+        "sail": 4
+      },
+      "charge": {
+        "nutera": 8,
+        "sail": 4
+      },
+      "bind": {
+        "nutera": 12,
+        "sail": 6
+      },
+      "fog": {
+        "sail": 9,
+        "lumane": 8,
+        "hypnosis": 7
+      },
+      "bolt": {
+        "nutera": 6,
+        "sail": 5
+      }
+    },
+    "floors": [
+      1
+    ]
+  },
+  {
+    "type": "crown_attendant",
+    "name": "灰冠の従者",
+    "family": "gray_crown",
+    "familyName": "灰冠種",
+    "hp": 195,
+    "r": 22,
+    "speed": 76,
+    "look": {
+      "sprite": 0,
+      "filter": "none"
+    },
+    "role": {
+      "pref": 120,
+      "dart": 105,
+      "label": "深室で灰冠の粘魔を守る"
+    },
+    "weights": [
+      "bind",
+      "cleave",
+      "charge",
+      "fog",
+      "bolt"
+    ],
+    "skills": {
+      "cleave": {
+        "name": "粘膜の押し返し",
+        "cast": 0.58,
+        "range": 112,
+        "step": 24
+      },
+      "charge": {
+        "name": "従者すべり",
+        "cast": 0.72,
+        "range": 275,
+        "width": 64,
+        "travel": 155
+      },
+      "bind": {
+        "name": "灰粘包み",
+        "cast": 0.88,
+        "range": 255,
+        "r": 70,
+        "status": {
+          "bind": 1.25
+        }
+      },
+      "fog": {
+        "name": "灰ぬめり霧",
+        "cast": 1.02,
+        "range": 350,
+        "r": 96
+      },
+      "bolt": {
+        "name": "冠の共鳴線",
+        "cast": 1.12,
+        "range": 390,
+        "width": 68
+      }
+    },
+    "nutera": {
+      "cleave": {
+        "nutera": 8
+      },
+      "charge": {
+        "nutera": 10
+      },
+      "bind": {
+        "nutera": 15,
+        "lumane": 10
+      },
+      "fog": {
+        "sail": 6,
+        "lumane": 8
+      },
+      "bolt": {
+        "nutera": 7,
+        "hypnosis": 9
+      }
+    },
+    "floors": [
+      6
+    ]
+  }
+]

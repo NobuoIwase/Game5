@@ -7,10 +7,10 @@
     "scripts": [
       "requested-art-base-v0161.js",
       "requested-art-creatures-v0161.js",
-      "requested-art-environment2-v0161.js",
-      "requested-art-runtime-v0161.js"
+      "requested-art-environment2-v0161.js"
     ],
     "dialogues": "dialogues.json",
-    "roomIdeas": "room_ideas.json"
+    "roomIdeas": "room_ideas.json",
+    "integration": "../../pack-v017.js"
   }
 }

@@ -23,7 +23,7 @@ function makeContext(seed){
   const Math2=Object.create(Math);
   if(seed!=null){const r=mulberry(seed);Math2.random=r}
   const g={console,document,Image:Img,Math:Math2,performance:{now:()=>g.__t*1000},requestAnimationFrame:noop,setTimeout:(f)=>{f();return 0},clearTimeout:noop,setInterval:()=>0,
-    fetch:()=>new Promise(noop),addEventListener:noop,removeEventListener:noop,CanvasRenderingContext2D:function(){},localStorage:{getItem:()=>null,setItem:noop},
+    fetch:u=>{const f=path.join(GAME,String(u).replace(/^\.\//,'').split('?')[0]);const ok=fs.existsSync(f);return Promise.resolve({ok,json:()=>Promise.resolve(JSON.parse(fs.readFileSync(f,'utf8')))})},addEventListener:noop,removeEventListener:noop,CanvasRenderingContext2D:function(){},localStorage:{getItem:()=>null,setItem:noop},
     navigator:{},location:{search:''},__balanceOverride:OVERRIDE,innerWidth:1200,innerHeight:800,matchMedia:()=>({matches:false,addEventListener:noop}),__t:0};
   g.window=g;g.globalThis=g;g.self=g;
   return vm.createContext(g);
@@ -47,8 +47,9 @@ function load(ctx){
   vm.runInContext(src,ctx,{filename:'game-bundle.js'});
   return ctx.__api;
 }
-function runOnce(seed){
+async function runOnce(seed){
   const ctx=makeContext(seed),api=load(ctx),s=api.state;
+  for(let k=0;k<6;k++)await new Promise(r=>setImmediate(r));   // let manifest/species fetches settle
   s.director.auto=AUTO;s.started=true;
   const ia=args.find(a=>a.startsWith('--intensity='));if(ia)s.director.intensity=ia.slice(12);
   const dt=1/60,maxT=+(process.env.SIM_MAXT||900);let t=0,roomT=[],lastRoom=0,roomStart=0,drawErr=null;
@@ -68,8 +69,7 @@ function runOnce(seed){
 const base=seedArg?+seedArg.split('=')[1]:1;
 const jobsArg=args.find(a=>a.startsWith('--jobs=')),JOBS=jobsArg?+jobsArg.slice(7):Math.min(8,require('os').cpus().length);
 if(args.includes('--child')){
-  const res=[];for(let i=0;i<RUNS;i++)res.push(runOnce(base+i));
-  process.stdout.write(JSON.stringify(res));return;
+  (async()=>{const res=[];for(let i=0;i<RUNS;i++)res.push(await runOnce(base+i));process.stdout.write(JSON.stringify(res))})();return;
 }
 const {execFileSync,spawn}=require('child_process');
 (async()=>{

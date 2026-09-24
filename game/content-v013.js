@@ -89,7 +89,7 @@ function freeSpot(minHero=150){
  return null;
 }
 function roomStart(){
- state.chests=[];state.towers=[];
+ state.chests=[];state.towers=[];state.openedChests=[];
  if(Math.random()<C.chest.chance){const p=freeSpot();if(p)state.chests.push({...p,fake:false,item:roll()})}
  const i=state.dungeon?.room??0;
  if(i>=C.elite.fromRoom&&Math.random()<C.elite.chance){
@@ -102,6 +102,8 @@ function roomStart(){
 }
 function openChest(h,c){
  c.taken=true;
+ // keep the opened chest (or the revealed mimic) on screen for a moment
+ (state.openedChests||=[]).push({x:c.x,y:c.y,fake:c.fake,t:1.4});
  if(c.fake){
   hurtHero(h,2,{bind:1.6},{spDamage:12,label:'偽りの宝箱'});
   applyNutera(h,20,{source:'偽りの宝箱'});
@@ -185,6 +187,7 @@ updateHazards=function(dt){
  }
  state.towers=(state.towers||[]).filter(t=>t.t>0&&t.hp>0);
  for(const c of state.chests||[])if(c.fake&&c.t!=null)c.t-=dt;
+ for(const o of state.openedChests||[])o.t-=dt;state.openedChests=(state.openedChests||[]).filter(o=>o.t>0);
  state.chests=(state.chests||[]).filter(c=>!c.taken&&(c.t==null||c.t>0));
 };
 
@@ -285,14 +288,15 @@ update=function(dt){
 };
 
 /* ================= drawing ================= */
-function propFrame(im,frame,frames,x,y,w,h){if(!im?.complete||!im.naturalWidth)return false;const sw=im.naturalWidth/frames;ctx.drawImage(im,sw*frame,0,sw,im.naturalHeight,x-w/2,y-h/2,w,h);return true}
+// frame fitted inside the w x h box without stretching, bottom-aligned (sheets come in different proportions)
+function propFrame(im,frame,frames,x,y,w,h){if(!im?.complete||!im.naturalWidth)return false;const sw=im.naturalWidth/frames,sh=im.naturalHeight,k=Math.min(w/sw,h/sh),dw=sw*k,dh=sh*k;ctx.drawImage(im,sw*frame,0,sw,sh,x-dw/2,y+h/2-dh,dw,dh);return true}
 function drawChest(c){
  const t=state.time,bob=c.fake?Math.sin(t*3+c.x)*1.2:0,PR=window.Game5Props;
  if(PR){
   ctx.save();ctx.fillStyle='#0006';ctx.beginPath();ctx.ellipse(c.x,c.y+12,20,6,0,0,TAU);ctx.fill();
   ctx.globalCompositeOperation='lighter';ctx.globalAlpha=.18+.1*Math.sin(t*3);ctx.fillStyle='#ffe28a';ctx.beginPath();ctx.arc(c.x,c.y-4,24,0,TAU);ctx.fill();ctx.restore();
   // a mimic is drawn as an ordinary chest: the player placed it, the heroine must not be told
-  if(propFrame(PR.chest,0,2,c.x,c.y-2+bob,54,34))return;
+  if(propFrame(PR.chest,0,2,c.x,c.y-6+bob,58,44))return;
  }
  ctx.save();ctx.translate(c.x,c.y+bob);
  ctx.fillStyle='#0006';ctx.beginPath();ctx.ellipse(0,12,18,6,0,0,TAU);ctx.fill();
@@ -340,6 +344,7 @@ if(G){
   }
   under?.();
   for(const c of state.chests||[])drawChest(c);
+  for(const o of state.openedChests||[]){const PR=window.Game5Props,im=o.fake?PR?.mimic:PR?.chest;ctx.save();ctx.globalAlpha=Math.min(1,o.t/.4);if(!propFrame(im,1,2,o.x,o.y-(o.fake?10:6),o.fake?70:60,o.fake?54:46)){ctx.restore();continue}ctx.restore()}
   for(const t of state.towers||[])drawTower(t);
  };
 }

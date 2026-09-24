@@ -13,6 +13,17 @@ startEnemySkill=function(key,target){
 function make(type,x,y,level){
  const p=state.enemy,e={...p,cast:null};state.enemy=e;Game5Monsters.apply(type,level);e.x=x;e.y=y;state.enemy=p;return e
 }
+/* per-floor pools (species with "mode":"pool"): each support slot has a chance to be taken by a
+   pool species, so runs vary without making a floor larger; one species appears once per floor */
+const POOLS=[];
+function roll(i){
+ const base=SUPPORTS[i]||[],pool=(POOLS[i]||[]).slice(),out=[];
+ for(const t of base){
+  const k=pool.length&&Math.random()<(window.Game5Balance?.poolChance??.5)?(Math.random()*pool.length)|0:-1;
+  out.push(k>=0?pool.splice(k,1)[0]:t);
+ }
+ return out;
+}
 function alive(){return(state.enemies||[]).filter(e=>e&&e.hp>0)}
 function focusKnowledge(e,h=state.hero){
  if(!e||!h)return;h.memory.enemyId=e.type;h.knowledgeBySpecies||={};h.knowledgeBySpecies[e.type]||={cleave:0,charge:0,bind:0,fog:0,bolt:0};h.knowledge=h.knowledgeBySpecies[e.type]
@@ -34,7 +45,7 @@ function separate(list){
 }
 function setup(){
  if(!state.dungeon?.active)return;const i=state.dungeon.room;if(state._multiRoom===i)return;state._multiRoom=i;   /* once per floor: clearing it must not respawn the supports */
- const main=state.enemy,defs=SUPPORTS[i]||[],r=Game5Dungeon.room(),lv=1+Math.floor(i/2),pts=r.spawnPts?.length?[...r.spawnPts,r.spawnPts[0]]:[[r.spawn[0]-105,r.spawn[1]+95],[r.spawn[0]+75,r.spawn[1]-105],[r.spawn[0]-150,r.spawn[1]-95]];
+ const main=state.enemy,defs=roll(i),r=Game5Dungeon.room(),lv=1+Math.floor(i/2),pts=r.spawnPts?.length?[...r.spawnPts,r.spawnPts[0]]:[[r.spawn[0]-105,r.spawn[1]+95],[r.spawn[0]+75,r.spawn[1]-105],[r.spawn[0]-150,r.spawn[1]-95]];
  state.enemies=[main];defs.forEach((t,j)=>state.enemies.push(make(t,clamp(pts[j][0],70,W-70),clamp(pts[j][1],70,H-70),lv)));
  primary();log(`敵編成 ${state.enemies.map(e=>e.name).join(' / ')}`)
 }
@@ -54,5 +65,5 @@ updateEnemy=function(dt){
 };
 const baseReset=reset;
 reset=function(){baseReset();state._multiRoom=-1;setup()};
-window.Game5MultiEnemy={version:'0.11.0',supports:SUPPORTS,alive,primary,setup,separate,focusKnowledge};
+window.Game5MultiEnemy={version:'0.11.0',supports:SUPPORTS,pools:POOLS,roll,alive,primary,setup,separate,focusKnowledge};
 })();

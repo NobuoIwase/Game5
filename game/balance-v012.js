@@ -22,6 +22,7 @@ const B={
  bindImmune:1.6,                // seconds after breaking free in which a new bind cannot take hold
  // support monsters per floor: difficulty now rises 1,2,2,2,2,3,3 instead of spiking on floor 5
  supports:[[],['slug'],['leech'],['moth'],['leech'],['orb','slug'],['worm','moth']],
+ poolChance:.5,                  // chance that a support slot is taken by a pool species (species.json "mode":"pool")
  enemySpMul:.8,                 // SP damage of monster attacks
  // mucus/spore clouds are about Nutera, not pain: most of the old v0.3 poison is gone
  fog:{enemy:{hp:1,poison:1.2,slow:1.0,sp:1.2},director:{hp:1,poison:1.6,slow:.8,sp:1.8}},

@@ -7,7 +7,8 @@
 
 > **2026-09-25 更新（ユーザーの判断による変更）**
 > - 描き手は **NovelAI（V5 Full）** にする。ChatGPT は見本の図をなぞった平たい絵になった。手順は下の「3a. NovelAI での手順」
-> - **モンスターの方向性**: ピンク〜肉色の半透明の体、うっすら透ける血管、濡れたツヤ、糸を引く粘液。「かわいく」は外した（牙・トゲ・血・傷はなし）。形・目・特徴は見本カードどおり。見本カードの体色には戻さない
+> - **モンスターの方向性**: 濡れたツヤ・うっすら透ける血管・糸を引く粘液といった**肉々しい質感は全種共通**。「かわいく」は外した（牙・トゲ・血・傷はなし）
+> - **色（2026-09-26 更新）**: 全部ピンクだと見分けにくいので、**ピンク〜肉色は「肉々しい種」「肌や粘膜に直接触れる種」だけ**（艶沼ナメクジ・吸着羽虫・灰冠の粘魔・灰冠の従者）。ほかは質感だけ肉々しく、色は下の「5. 作るもの」の指定色（見本カードも同じ色に更新済み）
 > - 小物・UI・アイコンの配色は見本カードどおり（読みやすさ優先）
 > - 唯一許される加工: **アルファ 2 以下の画素を 0 にする**（NovelAI の透過が外周に見えないノイズを残すため）。検品スクリプトも、アルファ 2 以下は透明として扱う
 > - 大きいまま（1024px など）置いてよい。ゲーム用の軽い版は、クラウドの Claude Code が `tools/build_final_web.js` で作る
@@ -113,7 +114,54 @@ ChatGPT が描いた画像のサイズが 1024×1024 などでも、**そのま�
 ・柔らかく丸い、少しかわいい雰囲気にしてください。牙・刃・トゲ・血など怖い表現はなし
 ```
 
-## 5. 作るものの一覧（上から順に）
+## 5. 作るもの（2026-09-26 版。これが最新。下の旧一覧より優先）
+
+NovelAI で、**全モンスターを同じ画質・同じ画風にそろえる**。見本カード（`game/asset-refs/png/card_<見本名>.png`）と下絵（`game/asset-refs/png/<見本名>.png`）は、この色に合わせて描き直してある。
+
+### 色の決め方
+- ピンク〜肉色にしてよいのは、表の「色」欄がピンク系の4種だけ
+- ほかは、住んでいる区画の床の色と被らない色にしてある（例: 緑の床の胞子球はからし色、薔薇色の床の粘花は象牙色＋深紅、薄紫の床の蜘蛛は炭色）
+- 質感（濡れたツヤ、半透明、うっすら透ける血管、糸を引く粘液）は全種で使ってよい。粘液の色も体の色に合わせる（ピンクの粘液はピンクの種だけ）
+
+### プロンプトの差し替え
+「3a」の共通プロンプトのうち、色に関わる語（`flesh-pink`、`pink goo`、`warm pink inner glow` など）は、ピンク系の4種以外では**表の「色のタグ」に置き換える**。
+
+### A. モンスター（`final/monsters/<名前>.png`）
+
+| 名前 | 見本名 | 区画 | 色 | 色のタグ（例） | 作業 |
+| --- | --- | --- | --- | --- | --- |
+| slug 艶沼ナメクジ | monster_slug | 1 | ピンク〜桃紫 | translucent flesh-pink body, pink goo | 描き直し（旧 ChatGPT 版） |
+| leech 吸着羽虫 | monster_leech | 2 | ピンク〜肉色 | （現状のまま） | 済（作らない） |
+| bubble_shell 泡吹き貝 | monster_bubble_shell | 2 | 真珠色の殻＋珊瑚色の体 | pearly cream spiral shell, coral-orange soft body, clear bubbles | 描き直し（色変更） |
+| water_wraith 水妖 | monster_water_wraith | 2 | 明るい水色＋白い泡の縁 | translucent bright aqua water body, white foam rim | **新規** |
+| wisp 漂い霊 | monster_wisp | 2・6 | 青白い半透明 | translucent pale cyan-white membrane body, cold glow | **新規** |
+| worm 絹輪ワーム | monster_worm | 3 | 象牙〜淡い肌色 | ivory-beige segmented body, white silk threads | 描き直し（旧 ChatGPT 版） |
+| silk_spider 糸繰り蜘蛛 | monster_silk_spider | 3 | 炭色＋白い糸 | charcoal-gray fuzzy body, white silk | 描き直し（色変更） |
+| creeping_hand 這い寄る手 | monster_creeping_hand | 3・5 | 青白い肌 | pale bluish-gray skin, short rounded nails | **新規** |
+| orb ルマネ胞子球 | monster_orb | 4 | からし色 | mustard-yellow fleshy spore ball, amber glow | 描き直し（旧 ChatGPT 版） |
+| lure_cap 誘い茸 | monster_lure_cap | 4・5 | 青緑に光る傘＋紫の襞 | glowing turquoise mushroom cap, wet violet gills | **新規** |
+| stone_sentinel 石の番兵 | monster_stone_sentinel | 4・7 | 灰色の石＋ひびの奥の桃色の肉 | gray stone golem, glowing pink flesh inside the cracks, moss | **新規** |
+| flower 粘花 | monster_flower | 5 | 象牙色の花弁、縁と奥が深紅 | thick ivory petals with deep crimson edges, amber nectar | 描き直し（旧 ChatGPT 版） |
+| moth 夢鱗蛾 | monster_moth | 6 | 琥珀色 | amber-brown furry moth, cream eye spots | 描き直し（色変更） |
+| mirror_slime 鏡面スライム | monster_mirror_slime | 6 | 銀＋水色の反射 | chrome-silver mirror slime, pale cyan reflections | 描き直し（色変更） |
+| gazer 凝視の眼 | monster_gazer | 6・7 | 白目＋紫の瞳、ワイン色の膜の羽 | huge white eyeball, violet iris, wine-red membrane wings | **新規** |
+| crown_attendant 灰冠の従者 | monster_crown_attendant | 7 | ピンク〜肉色＋灰色の冠 | （現状のまま） | 済（作らない） |
+| gel 灰冠の粘魔（ボス） | monster_gel | 7 | 肉色の半透明＋灰色の石の冠、紫の核 | translucent flesh-pink giant slime, gray stone crown, violet core | 描き直し（旧 ChatGPT 版） |
+
+新規の6種は Game4 の魔物（ゴースト、這い寄る手、覗き目玉／催眠ゲイザー、媚茸、水妖、石の番兵）をもとにした。ゲームのデータは入れてあり、今は見本の絵で出ている。
+
+### B. 小物（`final/props/`）
+| 名前 | 見本名 | 作業 |
+| --- | --- | --- |
+| chest 宝箱（閉／開の2コマ） | prop_chest | 描き直し（旧 ChatGPT 版）。**2コマは別々に1枚ずつ描いて** `chest_closed.png` と `chest_open.png` で置く（並べる作業はクラウド側でやる） |
+| mimic 偽りの宝箱（閉／正体） | prop_mimic | 同上。`mimic_closed.png` と `mimic_open.png` |
+| stairs 下り階段（封印／開放） | prop_stairs | 同上。`stairs_sealed.png` と `stairs_open.png` |
+
+### C. 任意（余裕があれば）
+- `nutera/heart_deep.png`（濃いピンク #d62c8c。今はゲーム側で代用中）
+- 床 `floors/room1.png`〜`room7.png`（今の ChatGPT 版は質感の元として使えている。描き直すなら、真上から見た石畳、低コントラスト、64px の繰り返し模様にする）
+
+## 5（旧）. 作るものの一覧（2026-09-24 版。済んだもの）
 
 見本名は `game/asset-refs/png/card_<見本名>.png` の `<見本名>` の部分。置き場所はいずれも `game/assets/requested/final/` の下です。
 

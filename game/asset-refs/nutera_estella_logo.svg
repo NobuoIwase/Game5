@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340">
+<defs><pattern id="chk" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="16" height="16" fill="#2b2f36"/><rect width="8" height="8" fill="#343942"/><rect x="8" y="8" width="8" height="8" fill="#343942"/></pattern><linearGradient id="eL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0f8"/><stop offset="1" stop-color="#ff6fc0"/></linearGradient><style>
+text{font-family:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;fill:#e8e4dc}
+.t{font-size:19px;font-weight:700} .i{font-size:12px;fill:#a9b0a8} .s{font-size:11.5px;fill:#cfd4cc} .n{font-size:11.5px;fill:#cfd4cc} .h{font-size:11px;fill:#8d968c;letter-spacing:.08em}
+</style></defs>
+<rect width="640" height="340" rx="14" fill="#171b1f"/>
+<text x="20" y="24" class="h">GAME5 ASSET REFERENCE</text>
+<rect x="20" y="36" width="280" height="280" rx="8" fill="url(#chk)"/>
+<clipPath id="art"><rect width="512" height="128"/></clipPath><g transform="translate(20 141) scale(0.5)"><g clip-path="url(#art)"><text x="256" y="84" text-anchor="middle" font-family="Georgia,serif" font-size="76" font-weight="700" fill="url(#eL)" stroke="#5a0f3c" stroke-width="4" paint-order="stroke">ESTELLA</text><circle cx="34" cy="62" r="14" fill="#ff9ad3" /><circle cx="478" cy="62" r="14" fill="#ff9ad3" /></g></g>
+<rect x="20.5" y="36.5" width="279" height="279" rx="8" fill="none" stroke="#ffffff22"/>
+<text x="322" y="58" class="t">ESTELLA ロゴ</text>
+<text x="322" y="78" class="i">nutera/estella_logo.png</text>
+<text x="322" y="96" class="i">512×128 透過PNG</text>
+<text x="322" y="112" class="h">PALETTE</text>
+<rect x="322" y="120" width="18" height="18" rx="3" fill="#fff0f8" stroke="#ffffff30"/><text x="346" y="133" class="s">#fff0f8  文字の上</text><rect x="322" y="142" width="18" height="18" rx="3" fill="#ff6fc0" stroke="#ffffff30"/><text x="346" y="155" class="s">#ff6fc0  文字の下</text><rect x="322" y="164" width="18" height="18" rx="3" fill="#5a0f3c" stroke="#ffffff30"/><text x="346" y="177" class="s">#5a0f3c  縁取り</text><rect x="322" y="186" width="18" height="18" rx="3" fill="#ff9ad3" stroke="#ffffff30"/><text x="346" y="199" class="s">#ff9ad3  飾りのハート</text><rect x="322" y="208" width="18" height="18" rx="3" fill="#ff4fae" stroke="#ffffff30"/><text x="346" y="221" class="s">#ff4fae  発光</text><text x="322" y="254" class="n">・エステラ発動の瞬間に画面に出す飾り文字</text><text x="322" y="271" class="n">・白→桃のグラデーション＋濃い縁取り</text><text x="322" y="288" class="n">・両端に小さなハート、周りに光の粒</text><text x="322" y="305" class="n">・セリフ体寄りの上品な形</text>
+</svg>

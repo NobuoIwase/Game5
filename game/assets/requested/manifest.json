@@ -3,7 +3,7 @@
   "floors": {},
   "species": "species.json",
   "assetPack": {
-    "version": "0.18.0",
+    "version": "0.18.1",
     "generated": {
       "monsters": "generated/monsters_v018.png",
       "floors": "generated/floors_v018.png",

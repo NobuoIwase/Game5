@@ -118,11 +118,14 @@ function roundRect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,
 G.drawDungeonBase=function(){floor();zones();walls();decor();roomLabel();return true};
 
 /* ---------- lighting ---------- */
-const lc=document.createElement('canvas');lc.width=SW;lc.height=SH;const l=lc.getContext('2d');
+/* v0.31: the light map is built at half resolution and laid over the scene with a plain alpha
+   blend (it is near-black with alpha, so this looks the same as the old full-size multiply and
+   costs a fraction of it - the multiply pass was about a third of the frame) */
+const LS=.5,lc=document.createElement('canvas');lc.width=SW*LS;lc.height=SH*LS;const l=lc.getContext('2d');
 function hole(x,y,r,s=1){const g=l.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(0,0,0,${s})`);g.addColorStop(1,'rgba(0,0,0,0)');l.fillStyle=g;l.fillRect(x-r,y-r,r*2,r*2)}
 G.drawLighting=function(){
  const L=layout(),h=state.hero,t=state.time,r=room();
- l.setTransform(1,0,0,1,0,0);l.globalCompositeOperation='source-over';l.clearRect(0,0,SW,SH);l.fillStyle='rgba(2,5,9,.5)';l.fillRect(0,0,SW,SH);l.setTransform(1,0,0,1,-CAM.x,-CAM.y);
+ l.setTransform(1,0,0,1,0,0);l.globalCompositeOperation='source-over';l.clearRect(0,0,lc.width,lc.height);l.fillStyle='rgba(2,5,9,.5)';l.fillRect(0,0,lc.width,lc.height);l.setTransform(LS,0,0,LS,-CAM.x*LS,-CAM.y*LS);
  window.Game5Terrain?.fog?.(l);
  l.globalCompositeOperation='destination-out';
  hole(h.x,h.y-20,200);
@@ -130,7 +133,7 @@ G.drawLighting=function(){
  for(const tc of L?.torches||[])hole(tc.x,tc.y+30,150+6*Math.sin(t*9+tc.x),.85);
  if(L?.crystal)hole(L.crystal.x,L.crystal.y,140,.8);
  if(r&&state.dungeon?.pending)hole(r.exit[0],r.exit[1],150);
- ctx.save();ctx.globalCompositeOperation='multiply';ctx.drawImage(lc,CAM.x,CAM.y);ctx.restore();
+ ctx.save();if(window.__lightMul)ctx.globalCompositeOperation='multiply';ctx.drawImage(lc,CAM.x,CAM.y,SW,SH);ctx.restore();
  ctx.save();ctx.globalCompositeOperation='lighter';
  for(const tc of L?.torches||[])F(0,tc.x,tc.y+6,120+8*Math.sin(t*11+tc.x),.16);
  if(L?.crystal)F(1,L.crystal.x,L.crystal.y-10,130,.14);

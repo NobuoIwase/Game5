@@ -5,7 +5,12 @@
     "monsters/leech.png",
     "monsters/worm.png",
     "monsters/orb.png",
-    "monsters/flower.png"
+    "monsters/flower.png",
+    "monsters/mirror_slime.png",
+    "monsters/bubble_shell.png",
+    "monsters/silk_spider.png",
+    "monsters/moth.png",
+    "monsters/crown_attendant.png"
   ],
   "floors": [
     "floors/room1.png",

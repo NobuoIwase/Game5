@@ -4,23 +4,23 @@
   "monsters/gel": {
    "file": "monsters/gel.webp",
    "size": [
-    248,
-    248
+    320,
+    264
    ],
    "source": [
-    256,
-    256
+    1024,
+    1024
    ]
   },
   "monsters/slug": {
    "file": "monsters/slug.webp",
    "size": [
-    216,
-    244
+    320,
+    211
    ],
    "source": [
-    256,
-    256
+    1024,
+    1024
    ]
   },
   "monsters/leech": {
@@ -37,41 +37,41 @@
   "monsters/worm": {
    "file": "monsters/worm.webp",
    "size": [
-    216,
-    248
+    320,
+    159
    ],
    "source": [
-    256,
-    256
+    1024,
+    1024
    ]
   },
   "monsters/orb": {
    "file": "monsters/orb.webp",
    "size": [
-    240,
-    240
+    282,
+    320
    ],
    "source": [
-    256,
-    256
+    1024,
+    1024
    ]
   },
   "monsters/flower": {
    "file": "monsters/flower.webp",
    "size": [
-    236,
-    248
+    282,
+    320
    ],
    "source": [
-    256,
-    256
+    1024,
+    1024
    ]
   },
   "monsters/mirror_slime": {
    "file": "monsters/mirror_slime.webp",
    "size": [
     320,
-    181
+    191
    ],
    "source": [
     1024,
@@ -81,8 +81,8 @@
   "monsters/bubble_shell": {
    "file": "monsters/bubble_shell.webp",
    "size": [
-    320,
-    288
+    317,
+    320
    ],
    "source": [
     1024,
@@ -93,7 +93,7 @@
    "file": "monsters/silk_spider.webp",
    "size": [
     320,
-    291
+    253
    ],
    "source": [
     1024,
@@ -104,7 +104,7 @@
    "file": "monsters/moth.webp",
    "size": [
     320,
-    232
+    202
    ],
    "source": [
     1024,
@@ -116,6 +116,72 @@
    "size": [
     320,
     247
+   ],
+   "source": [
+    1024,
+    1024
+   ]
+  },
+  "monsters/water_wraith": {
+   "file": "monsters/water_wraith.webp",
+   "size": [
+    295,
+    320
+   ],
+   "source": [
+    1024,
+    1024
+   ]
+  },
+  "monsters/wisp": {
+   "file": "monsters/wisp.webp",
+   "size": [
+    162,
+    320
+   ],
+   "source": [
+    1024,
+    1024
+   ]
+  },
+  "monsters/creeping_hand": {
+   "file": "monsters/creeping_hand.webp",
+   "size": [
+    286,
+    320
+   ],
+   "source": [
+    1024,
+    1024
+   ]
+  },
+  "monsters/lure_cap": {
+   "file": "monsters/lure_cap.webp",
+   "size": [
+    298,
+    320
+   ],
+   "source": [
+    1024,
+    1024
+   ]
+  },
+  "monsters/stone_sentinel": {
+   "file": "monsters/stone_sentinel.webp",
+   "size": [
+    320,
+    211
+   ],
+   "source": [
+    1024,
+    1024
+   ]
+  },
+  "monsters/gazer": {
+   "file": "monsters/gazer.webp",
+   "size": [
+    320,
+    242
    ],
    "source": [
     1024,
@@ -171,6 +237,72 @@
    "size": [
     384,
     343
+   ],
+   "source": [
+    1024,
+    1024
+   ]
+  },
+  "props/chest_closed": {
+   "file": "props/chest_closed.webp",
+   "size": [
+    384,
+    245
+   ],
+   "source": [
+    1024,
+    1024
+   ]
+  },
+  "props/chest_open": {
+   "file": "props/chest_open.webp",
+   "size": [
+    384,
+    348
+   ],
+   "source": [
+    1024,
+    1024
+   ]
+  },
+  "props/mimic_closed": {
+   "file": "props/mimic_closed.webp",
+   "size": [
+    384,
+    239
+   ],
+   "source": [
+    1024,
+    1024
+   ]
+  },
+  "props/mimic_open": {
+   "file": "props/mimic_open.webp",
+   "size": [
+    384,
+    300
+   ],
+   "source": [
+    1024,
+    1024
+   ]
+  },
+  "props/stairs_sealed": {
+   "file": "props/stairs_sealed.webp",
+   "size": [
+    384,
+    340
+   ],
+   "source": [
+    1024,
+    1024
+   ]
+  },
+  "props/stairs_open": {
+   "file": "props/stairs_open.webp",
+   "size": [
+    384,
+    357
    ],
    "source": [
     1024,

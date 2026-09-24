@@ -107,3 +107,22 @@ props と UI は、ゲームで見分けたり読み取ったりしやすいよ�
 
 - `index.json` の monsters に water_wraith / wisp / creeping_hand / lure_cap / stone_sentinel / gazer を追加。
 - leech と crown_attendant は、ガイドどおり作っていない。
+
+### B. 小物（6枚。検品はすべて PASS）
+2コマは別々に1枚ずつ描いた。見本（`asset-refs/png/prop_*.png`）は1枚に2コマが並んでいるので、左右を切り出して余白を付けた作業用の下絵を i2i に使った（強度 0.68）。
+
+| ファイル | 内容 | 備考 |
+| --- | --- | --- |
+| props/chest_closed.png | 閉じた木の宝箱。丸い蓋、金色の金具と錠前 | |
+| props/chest_open.png | 開いた宝箱。中から金色の光があふれる | 1回目は中の光が見えなかったため描き直し |
+| props/mimic_closed.png | 閉じた宝箱。継ぎ目から薄紫の粘液がにじむ | 1回目は丸いパンのような形だったため、`chest_closed.png` を下絵にして描き直し（強度 0.45）。本物と同じ見た目だが、木目の描き方は少し違う |
+| props/mimic_open.png | 蓋が開き、薄紫の粘液の腕が3本伸びる。牙・歯なし | 斜め前から見た構図 |
+| props/stairs_sealed.png | 真上から見た四角い石の下り階段。鎖が X に交差し、中央に青銅の封印の紋章 | |
+| props/stairs_open.png | 同じ階段で鎖なし。奥から金色の光 | 1回目は真上から見ていなかったため、`stairs_sealed.png` を下絵にして描き直し（強度 0.6）。石の枠の色は封印版より明るい |
+
+- `index.json` の props に6枚を追加した。旧 ChatGPT 版の `chest.png` / `mimic.png` / `stairs.png`（2コマ横並び）は、消さずに残してある。
+- 2コマの位置と大きさは、完全にはそろっていない（別々に描いたため）。並べるときに合わせてほしい。
+
+### C. 任意
+- **nutera/heart_deep.png: 今回も飛ばした**。指定色で塗った下絵を強度 0.38 で使ったが、明るい赤紫になり、`heart_pink.png` より明るくなった（計4回失敗）。ゲーム側の代用のままにしてほしい。
+- **床 room1〜7: 作っていない**。NovelAI では、64px で継ぎ目なく繰り返す模様を確実に作れないため。

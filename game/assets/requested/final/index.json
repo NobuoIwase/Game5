@@ -32,7 +32,13 @@
     "props/mimic.png",
     "props/stairs.png",
     "props/tower.png",
-    "props/pool.png"
+    "props/pool.png",
+    "props/chest_closed.png",
+    "props/chest_open.png",
+    "props/mimic_closed.png",
+    "props/mimic_open.png",
+    "props/stairs_sealed.png",
+    "props/stairs_open.png"
   ],
   "nutera": [
     "nutera/heart_pink.png",

@@ -24,11 +24,12 @@ const C={
  ambush:{r:165,freeze:[.45,.7]},
  punish:{r:270,base:.2,perLevel:.04,max:.5},
  relocate:{cost:30,every:[10,15],min:320,max:680},
- dodgeSp:.006,fatiguePerPx:.0022,fatigueDecay:.07,restDecay:.22,
+ dodgeSp:.004,fatiguePerPx:.0022,fatigueDecay:.07,restDecay:.22,
  retreatAt:.85,retreatSp:.22,restUntil:.35,
  trip:{from:.6,chance:.5,stun:.55},
  spotFreeze:[.3,.55],
- nuteraLegs:{from:.6,slow:.45}
+ nuteraLegs:{from:.6,slow:.45},
+ calmRegen:1,calmHp:1.2   // extra SP regen (x base) and HP/s once she has been out of a fight for 4s
 };
 const ST=['bubble_shell','flower','lure_cap'];     // stay put when idle
 const AI=()=>window.Game5AI,DG=()=>window.Game5Dungeon,T=()=>window.Game5Terrain;
@@ -45,6 +46,8 @@ function notice(e,how){
  }
 }
 function senseTick(e,h){
+ const room=state.dungeon?.room;
+ if(e._floorTag!==room){e._floorTag=room;e.aware=false;e.ambush=false;e._seenByHero=false;e.homeX=e.x;e.homeY=e.y;e.idleGoal=null;e.lostT=0}
  if(e.grappling){e.aware=true;return}
  const d=dist(e,h);
  if(h.estella?.active&&d<520)return notice(e,'estella');
@@ -64,14 +67,31 @@ function sense(dt){
  const list=alive();
  for(const e of list)senseTick(e,h);
  // a monster that has found her calls the others nearby
- for(const e of list)if(e.aware&&state.time-(e.awareAt||0)>1)for(const o of list)if(!o.aware&&!o.ambush&&dist(e,o)<260)notice(o,'call');
+ for(const e of list)if(e.aware&&state.time-(e.awareAt||0)>2)for(const o of list)if(!o.aware&&!o.ambush&&dist(e,o)<200)notice(o,'call');
 }
 /* hit by her: always aware */
 const baseHurtE=hurtEnemy;
 hurtEnemy=function(dmg,opts={}){const e=state.enemy;if(e&&!e.aware)notice(e,'hit');return baseHurtE(dmg,opts)};
 
+/* after a while on a floor the unaware ones start drifting toward her scent: slow, noisy,
+   so she hears them coming and the floor cannot stall with a monster wandering where she
+   has already been */
+function hunting(){
+ const h=state.hero,f=T()?.current?.();if(!h||!f)return false;
+ if((h._floorT||0)>45)return true;
+ let ex=0,fl=0;for(let k=0;k<f.explored.length;k+=3)if(f.grid[k]!==1){fl++;if(f.explored[k])ex++}
+ return fl&&ex/fl>.75;
+}
+function hunt(e,h,dt){
+ if(!e._huntPath||state.time>e._huntT){e._huntPath=AI()?.pathDir?.(e,h);e._huntT=state.time+.5}
+ const p=e._huntPath;if(!p)return false;
+ const it=DG()?.steer?.(e,{kind:'move',x:p.x,y:p.y})||p,il=Math.hypot(it.x,it.y)||1,sp=(e.moveSpeed||69)*.5;
+ e.x+=it.x/il*sp*dt;e.y+=it.y/il*sp*dt;e.moving=true;e._aiMoved=true;e.noise=Math.max(e.noise||0,.35);e.decision='気配を辿る';
+ return true;
+}
 function idle(e,h,dt){
  e.homeX??=e.x;e.homeY??=e.y;
+ if(!e.ambush&&!ST.includes(e.type)&&e._hunting&&hunt(e,h,dt))return true;
  if(ST.includes(e.type)||e.ambush){e.moving=false;e._aiMoved=true;e.decision=e.ambush?'暗がりで待つ':'じっとしている';return true}
  if(!e.idleGoal||state.time>e.idleUntil||Math.hypot(e.idleGoal.x-e.x,e.idleGoal.y-e.y)<14){
   const a=Math.random()*TAU,r=Math.random()*C.wander.r,goal={x:e.homeX+Math.cos(a)*r,y:e.homeY+Math.sin(a)*r};
@@ -94,6 +114,8 @@ const baseChoose=chooseEnemyAction;
 chooseEnemyAction=function(){
  const e=state.enemy,h=state.hero;
  if(e&&!e.aware&&!e.grappling){e.actCd=.35;return}
+ // while one of them holds her, the others mostly watch (they close in, but rarely strike)
+ if(e&&!e.grappling&&h?.grapple&&Math.random()<.75){e.actCd=rnd(.6,1.1);e.decision='捕まった獲物を眺める';return}
  if(e&&e._punish&&h&&!h.dead){
   e._punish=null;const d=dist(e,h),p=e._punishAt||h;
   for(const k of ['bind','cleave','charge']){const s=ENEMY_SKILLS[k];if(!s)continue;
@@ -151,21 +173,30 @@ updateDirector=function(dt){baseDirector(dt);relocate(dt)};
 
 /* =================== heroine =================== */
 /* explore toward the nearest unexplored floor instead of toward monsters she cannot know about */
-function frontier(h){
+function frontier(h,far){
  const f=T()?.current?.();if(!f)return null;const {CS,GW,GH}=T();
  const start=(Math.floor(h.y/CS))*GW+Math.floor(h.x/CS),seen=new Uint8Array(GW*GH),q=[start],found=[];seen[start]=1;
- for(let k=0;k<q.length&&found.length<24;k++){
+ const want=far?400:24;
+ for(let k=0;k<q.length&&found.length<want;k++){
   const c=q[k],x=c%GW,y=(c/GW)|0;
-  if(!f.explored[c]&&k>0)found.push(c);
+  if(!f.explored[c]&&k>0&&!(h._badCells?.has(c)))found.push(c);
   for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy,n=ny*GW+nx;if(nx<0||ny<0||nx>=GW||ny>=GH||seen[n]||f.grid[n]===1||f.cl[n]<1.4)continue;seen[n]=1;q.push(n)}
  }
  if(!found.length)return null;
- const c=found[(Math.random()*Math.min(6,found.length))|0];
- return{x:(c%GW)*CS+CS/2,y:((c/GW)|0)*CS+CS/2};
+ // nearest pocket, but among the close ones prefer the one ahead of her; when stuck, a far one
+ let best=null,bs=-1e9;const fa=h.facing||0;
+ for(let i=0;i<found.length;i++){const c=found[i],x=(c%GW)*CS+CS/2,y=((c/GW)|0)*CS+CS/2,d=Math.hypot(x-h.x,y-h.y);
+  const ahead=((x-h.x)*Math.cos(fa)+(y-h.y)*Math.sin(fa))/(d||1);
+  const s=far?d*.02+ahead:-i*.08+ahead*1.2;if(s>bs){bs=s;best={x,y,c}}}
+ return best;
 }
 function explore(h){
+ const f=T()?.current?.();
+ // a goal is done once its cell has been seen, not only when she stands on it
+ if(h.exploreGoal&&f&&f.explored[h.exploreGoal.c])h.exploreGoal=null;
  if(!h.exploreGoal||dist(h,h.exploreGoal)<36||state.time>h.exploreUntil){
-  h.exploreGoal=frontier(h);h.exploreUntil=state.time+7;
+  if(h.exploreGoal&&state.time>h.exploreUntil)(h._badCells||=new Set()).add(h.exploreGoal.c);
+  h.exploreGoal=frontier(h,h._stuck);h.exploreUntil=state.time+14;h._stuck=false;
   if(!h.exploreGoal)return false;
  }
  const p=AI()?.pathDir?.(h,h.exploreGoal);if(!p)return false;
@@ -202,7 +233,9 @@ decideHero=function(h,dt){
    else h.retreat=null;
   }
  }
- if(it?.label==='探索'||!it&&!threat){if(explore(h))return h.intent}
+ const e=state.enemy,sensed=h.memory?.lastSenseAt!=null&&state.time-h.memory.lastSenseAt<2.5;
+ const blind=!alive().some(o=>o.aware&&AI()?.sees?.(h,o));
+ if(it?.label==='探索'||!it&&!threat||(/迂回/.test(it?.label||'')&&!sensed&&blind)){if(explore(h))return h.intent}
  return it;
 };
 const baseHero=updateHero;
@@ -230,6 +263,18 @@ updateHero=function(h,dt){
  // a new floor: every monster starts unaware at its post
  const room=state.dungeon?.room;
  if(room!==h._floorSeen){h._floorSeen=room;h.exploreGoal=null;h.retreat=null;for(const e of alive()){e.aware=false;e.ambush=false;e._seenByHero=false;e.homeX=e.x;e.homeY=e.y;e.idleGoal=null}}
+ // stuck: hardly any progress for a while with nobody after her -> go somewhere far
+ h._track||=[];if(!h._trackT||state.time-h._trackT>2){h._trackT=state.time;h._track.push({x:h.x,y:h.y});if(h._track.length>7)h._track.shift()}
+ if(h._track.length>=7&&!state.dungeon?.pending&&!alive().some(o=>o.aware&&dist(o,h)<320)){
+  const a=h._track[0];let far=0;for(const p of h._track)far=Math.max(far,Math.hypot(p.x-a.x,p.y-a.y));
+  if(far<150){h._stuck=true;h.exploreGoal=null;h._track=[];h.searchGoal=null}
+ }
+ // between fights (nobody aware of her close by, not held) she gets her breath back faster
+ const calm=!h.grapple&&!h.dead&&!h.estella?.active&&!alive().some(o=>o.aware&&dist(o,h)<420);
+ h._calmT=calm?(h._calmT||0)+dt:0;
+ if(h._calmT>4){h.sp=Math.min(h.maxSp,h.sp+dt*(h.spRegen??6)*C.calmRegen);h.hp=Math.min(h.maxHp,h.hp+dt*C.calmHp)}
+ h._floorT=(h._floorRoomT===state.dungeon?.room)?(h._floorT||0)+dt:0;h._floorRoomT=state.dungeon?.room;
+ if(Math.random()<dt*2){const on=hunting();for(const e of alive())e._hunting=on}
  punish(h);
  sense(dt);
 };

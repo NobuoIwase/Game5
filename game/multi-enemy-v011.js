@@ -46,7 +46,7 @@ function separate(list){
 function setup(){
  if(!state.dungeon?.active)return;const i=state.dungeon.room;if(state._multiRoom===i)return;state._multiRoom=i;   /* once per floor: clearing it must not respawn the supports */
  const main=state.enemy,defs=roll(i),r=Game5Dungeon.room(),lv=1+Math.floor(i/2),pts=r.spawnPts?.length?[...r.spawnPts,r.spawnPts[0]]:[[r.spawn[0]-105,r.spawn[1]+95],[r.spawn[0]+75,r.spawn[1]-105],[r.spawn[0]-150,r.spawn[1]-95]];
- state.enemies=[main];defs.forEach((t,j)=>state.enemies.push(make(t,clamp(pts[j][0],70,W-70),clamp(pts[j][1],70,H-70),lv)));
+ state.enemies=[main];defs.forEach((t,j)=>{const q=pts[j%pts.length],o=j>=pts.length?40:0;state.enemies.push(make(t,clamp(q[0]+o,70,W-70),clamp(q[1]+o,70,H-70),lv))});
  primary();log(`敵編成 ${state.enemies.map(e=>e.name).join(' / ')}`)
 }
 const dungeonFinish=finish;

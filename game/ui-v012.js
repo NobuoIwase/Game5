@@ -3,7 +3,7 @@
 /* v0.12.0 UI: pause / speed / AUTO intensity controls, enemy roster, director tool
    cost and cooldown, placement preview on the canvas, colour-coded log, run statistics
    on the result screen. */
-const VERSION='0.26.0';
+const VERSION='0.27.0';
 state.version=VERSION;document.title=`Game5 v${VERSION}`;
 const alive=()=>window.Game5MultiEnemy?.alive?.()||(state.enemy?.hp>0?[state.enemy]:[]);
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));

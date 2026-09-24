@@ -201,7 +201,7 @@ function chestTarget(h){
  const cleared=!!state.dungeon?.pending;let best=null;
  for(const c of state.chests||[]){
   const d=Math.hypot(h.x-c.x,h.y-c.y);
-  if(!c.seen&&(d<h.visionRange&&inCone(c.x,c.y,h.x,h.y,h.facing,h.visionRange,h.visionHalf)&&!AI()?.wallBetween?.(h,c)||cleared))c.seen=true;
+  if(!c.seen&&d<h.visionRange&&inCone(c.x,c.y,h.x,h.y,h.facing,h.visionRange,h.visionHalf)&&!AI()?.wallBetween?.(h,c))c.seen=true;   // v0.27: no longer revealed by clearing the floor
   if(!c.seen)continue;
   if(!cleared&&(d>280||alive().some(e=>dist(e,h)<200)))continue;
   if(!best||d<best.d)best={c,d};

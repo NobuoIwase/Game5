@@ -179,7 +179,8 @@ function place(room,T,R,def){
  const pick=(minD,maxD,minCl,avoid=[],sep=0)=>{const c=[];for(let i=0;i<GW*GH;i++){if(g[i]===1||dist[i]<minD*far||dist[i]>maxD*far||cl[i]<minCl)continue;const [x,y]=center(i);if(avoid.some(p=>Math.hypot(p[0]-x,p[1]-y)<sep))continue;c.push(i)}return c.length?center(c[(R()*c.length)|0]):null};
  const e=center(entry),exit=pick(.8,1,1.9)||pick(.5,1,1.4);
  const spawn=pick(.45,.85,2.4,[exit],150)||pick(.35,1,1.9,[exit],90)||exit;
- const spawnPts=[];for(let k=0;k<3;k++){const p=pick(.3,1,1.9,[e,exit,spawn,...spawnPts],110);if(p)spawnPts.push([p[0]-spawn[0],p[1]-spawn[1]])}
+ // v0.27: six posts spread over the floor (monsters start apart and are met one area at a time)
+ const spawnPts=[];for(let k=0;k<6;k++){const p=pick(.25,1,1.9,[e,exit,spawn,...spawnPts.map(([dx,dy])=>[spawn[0]+dx,spawn[1]+dy])],260)||pick(.2,1,1.6,[e,spawn],120);if(p)spawnPts.push([p[0]-spawn[0],p[1]-spawn[1]])}
  room.entry=e;room.exit=exit;room.spawn=spawn;room.spawnPts=spawnPts.map(([dx,dy])=>[spawn[0]+dx,spawn[1]+dy]);
  // environmental fields keep their kind and strength, but sit in the open middle of the map
  const zones=[];

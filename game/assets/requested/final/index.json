@@ -24,6 +24,25 @@
   "props": [
     "props/chest.png",
     "props/mimic.png",
-    "props/stairs.png"
+    "props/stairs.png",
+    "props/tower.png",
+    "props/pool.png"
+  ],
+  "nutera": [
+    "nutera/heart_pink.png",
+    "nutera/heart_pale.png",
+    "nutera/heart_violet.png",
+    "nutera/sigil.png",
+    "nutera/estella_logo.png"
+  ],
+  "icons": [
+    "icons/snare.png",
+    "icons/fog.png",
+    "icons/lure.png",
+    "icons/ringbeam.png",
+    "icons/pool.png",
+    "icons/tower.png",
+    "icons/mimic.png",
+    "icons/summon.png"
   ]
 }

@@ -62,3 +62,22 @@ Claude Code / `final/REVIEW.md` の検収結果に従い、ChatGPT は画像ア�
 - 飛ばしたもの・緑背景で置いたものはなし。
 - 採用済みの gel / slug / orb / flower（ChatGPT 製）とは描き手が違う。並べて違和感がないかは、ゲーム内で確認してほしい。
 - 同じ日に ChatGPT がリポジトリへ直接、同じ5体の描き直しを push していた（5b0eef8〜7c909e4）。検品すると5枚とも FAIL（4枚は 47〜63 色のパレット PNG、silk_spider はファイル破損）。ユーザーの判断で、こちらの版を採用して上書きした（上の「REVIEW 不採用5体の描き直し反映」の画像は、もう使っていない）。
+
+### 未納品だった props / Nutera / アイコン（同日・NovelAI・検品はすべて PASS）
+props と UI は、ゲームで見分けたり読み取ったりしやすいよう、**見本カードの配色を残した**。そのうえで、濡れたツヤや血管のような生々しさを少しだけ足した。
+
+| ファイル | 内容・作り方 |
+| --- | --- |
+| props/tower.png | 832×1216。湿った黒い石の尖塔（円すい形に近い）。中ほどに血管の走った紫の眼、周りに淡い紫の光。台座なし。i2i 強度 0.62 |
+| props/pool.png | 真上から見た緑の粘液溜まり。泡とツヤあり。外側の薄い膜は見本ほど透けていない |
+| nutera/heart_pink.png | 明るいピンクのハート。左上に白いツヤ、上から下へのグラデーション |
+| nutera/heart_pale.png | 淡いピンクのハート。下の方が水色がかる（#ffa8d8 より青寄り） |
+| nutera/heart_violet.png | 紫のハート。#a45cff より濃くて鮮やか |
+| nutera/sigil.png | 三重の円、外周に12本の刻み、中央にハート。線だけで光る薄紫〜ピンク |
+| nutera/estella_logo.png | 1536×640。「ESTELLA」（つづり確認済み）。白→ピンクのグラデーション、濃い赤紫の縁取り、両端にハート |
+| icons/snare, fog, lure, ringbeam, pool, tower, mimic, summon | 8種。太い輪郭の単純な形。lure / tower / mimic / summon は、`icons_director.png` から切り出して余白を付けた下絵を i2i に使った（下絵は作業用で、納品物ではない） |
+
+- ハートは、指定の色で塗った単純なハートの下絵（作業用）を i2i に使った。NovelAI は色コードどおりに塗らないため、色は少しずれている。ゲーム側で色合わせ（tint）が必要かもしれない。
+- **飛ばしたもの: nutera/heart_deep.png（#d62c8c）**。3回とも色が合わなかった（ワイン色 → 明るい赤紫 → コーラルピンク。3回目は左端に背景の線も残った）。
+- 緑背景で置いたものはなし。
+- `index.json` に props の tower / pool を追加し、`nutera` と `icons` の配列を新しく作った。

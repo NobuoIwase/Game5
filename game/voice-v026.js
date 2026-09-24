@@ -86,6 +86,11 @@ const P={
   strain:['み、見ないで……っ、み、見ないでって……','……っ、見せもの、じゃ、ない……っ','こ、こっち、見る、な……っ'],
   yield:['み、見られて……っ、……や、やだ、声……っ','……ふ、ふひ……み、見ないで……い、今、ぜったい、変な顔……っ'],
   crave:['……み、見ないで……ぁ、……み、見……っ♡']},
+ lumaneReach:{calm:['て、手……ひ、引っ込め、なきゃ……'],strain:['……っ、な、なんで、あ、足が、そっちに……','て、手……ひ、引っ込め、なきゃ……'],
+  yield:['……ち、近づいたら、だめ……な、のに……っ、か、身体が……','……ふ、ふひ……ち、ちょっと、だけ……ち、ちが、なにが、ちょっとだけ……っ'],crave:['……ぁ……♡ ……て、手、が……か、勝手に……っ']},
+ lumaneWave:['……は、離れ、なきゃ……な、のに……あ、あれ……？','……な、なんで、ここに、いたいって……ち、ちが……'],
+ spin:['か、囲まれ……っ、ぜ、全部、あっち、行って……っ！','ふ、振り払う……っ、ふひ……！'],
+ cleanse:['……す、すぅ……は、払い、落とす……へ、平気……','い、いったん、落ち着く……ふひ……'],
  tranceIn:['……は、い……','……わ、かり……ました……','……は……い……ふ、ふひ……'],
  tranceOut:['……え？ ……な、なに……？ い、今、わたし、なにか、言った……？','……あ、あれ……？ た、立ったまま、寝てた……？ ふ、ふひ……','……な、何も、なかった……よ、よね……？'],
  hypnoEcho:['……あ、あれ……？ い、今、なにか……','……ぼ、ぼーっと、してた……？ し、してない……','え、……な、なんの、話……？'],
@@ -98,7 +103,8 @@ const MAP=[
  [/全力|一気に間合い/,'heavy'],[/で仕掛ける|届かない|当てられる|斬/,'attack'],[/息が上が|離れよう|呼吸を整え|息を整え/,'rest'],
  [/偽物じゃないか|確かめてから/,'mimicWary'],[/宝箱じゃない|偽物/,'mimic'],[/宝箱/,'chest'],[/助かる/,'item'],[/塔/,'tower'],
  [/区画を制圧|階段へ/,'clear'],[/何か来る|え、/,'surprise'],[/慌てない|見えてる/,'watch'],[/怖い|遅れた/,'fear'],
- [/ヌテラが危険域/,'nuteraDanger'],[/催眠の残響/,'hypnoEcho'],[/エステラ/,'estella'],[/ヌテラがまだ残って/,'afterglow'],[/ほどけない|ほどかないと/,'struggle'],[/相手の出方/,'watch'],
+ [/ヌテラを求める衝動|手を伸ばしてしまう/,'lumaneReach'],[/離れる判断が鈍る|ルマネの波が強い/,'lumaneWave'],[/まとめて払う/,'spin'],[/払い落とす/,'cleanse'],[/踏み込める/,'heavy'],
+ [/ヌテラが危険域/,'nuteraDanger'],[/薙ぎ払う|詠唱ごと/,'interrupt'],[/催眠の残響/,'hypnoEcho'],[/エステラ/,'estella'],[/ヌテラがまだ残って/,'afterglow'],[/ほどけない|ほどかないと/,'struggle'],[/相手の出方/,'watch'],
  [/足元/,'hazard'],[/近すぎる|横へ回る|間合い/,'position'],[/静かすぎる|奥を確かめる|音|足音|確かめる|さっき見えた/,'search']
 ];
 const RANK={calm:0,strain:1,yield:2,crave:3};
@@ -112,7 +118,7 @@ function pick(key,b){
  const l=bag.pop();lastLine.set(id,l);return l;
 }
 /* v0.27: lines about her body are not cut off by lines about the room */
-const STRONG=new Set(['watched','tranceIn','tranceOut','edge','edgePull','edgeCatch','edgeRegrab','edgeEnd','estellaStart','estellaEnd','grab','grabAgain','grabKnown','free']),WEAK=new Set(['spot','ambush','trip','retreat','explore','search','watch']);
+const STRONG=new Set(['watched','tranceIn','tranceOut','edge','edgePull','edgeCatch','edgeRegrab','edgeEnd','estellaStart','estellaEnd','grab','grabAgain','grabKnown','free','special','specialKnown','report','toCrave']),WEAK=new Set(['spot','ambush','trip','retreat','explore','search','watch']);
 function say(h,key,o={}){
  if(!o.force&&state.time<(h._voiceHold||0))return false;
  if(WEAK.has(key)&&STRONG.has(h._voiceKey)&&state.time<(h._voiceHold||0))return false;
@@ -139,7 +145,7 @@ updateHero=function(h,dt){
  h._saidDead=false;
  // floor entry
  const room=state.dungeon?.room;
- if(room!=null&&h._voiceRoom!==room){h._voiceRoom=room;const l=P.floor[room];if(l&&!ev){h.thought=h._voiceShown=l;h._voiceHold=state.time+3.2;return}}
+ if(room!=null&&h._voiceRoom!==room){h._voiceRoom=room;const l=P.floor[room];if(l&&!ev){h.thought=h._voiceShown=l;h._voiceHold=state.time+3.2;h._voiceKey='floor';return}}
  // Estella
  const est=!!h.estella?.active;
  if(est&&!h._vEst)say(h,'estellaStart',{force:true,hold:2.2});
@@ -158,8 +164,9 @@ updateHero=function(h,dt){
   else if(ev==='edgePull')say(h,'edgePull',{force:true,hold:1.4});
   else if(ev==='edgeCatch')say(h,'edgeCatch',{force:true,hold:2.2});
   else if(ev==='edgeEnd')say(h,'edgeEnd',{force:true,hold:2.6});
-  else if(['trip','ambush','spot'].includes(ev))say(h,ev,{force:true,hold:2});
-  else if(ev==='retreat')say(h,'retreat',{force:true,hold:2.6});
+  else if(ev==='spot'){if(state.time-(h._vSpotT||-99)>4){h._vSpotT=state.time;say(h,'spot',{force:true,hold:2})}}
+  else if(['trip','ambush'].includes(ev))say(h,ev,{force:true,hold:2});
+  else if(ev==='retreat'){if(state.time-(h._vRetreatT||-99)>6){h._vRetreatT=state.time;say(h,'retreat',{force:true,hold:2.6})}}
   else if(['tranceIn','tranceOut'].includes(ev))say(h,ev,{force:true,hold:ev==='tranceIn'?1.8:3});
   else if(ev==='explore'&&state.time>(h._voiceHold||0)+2.5&&Math.random()<.35)say(h,'explore',{hold:3});
  }
@@ -182,5 +189,5 @@ updateHero=function(h,dt){
   if(!(m&&say(h,m[1],{hold:2.2}))){h.thought=h._voiceShown=filter(raw);h._voiceHold=state.time+2}
  }
 };
-window.Game5Voice={version:'0.26.0',lines:P,say,band};
+window.Game5Voice={version:'0.27.0',lines:P,say,band,strong:STRONG};
 })();

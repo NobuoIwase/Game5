@@ -23,9 +23,9 @@ function rng(seed){return()=>{seed=(seed*1664525+1013904223)>>>0;return seed/429
 
 /* surface patches: windows whose pixels contain no grout-dark pixels */
 const patchCache=new Map();
-function patches(key){
+function patches(key,th=THEME[key],im=SRC[key]){
  if(patchCache.has(key))return patchCache.get(key);
- const th=THEME[key],im=SRC[key],[rx,ry,rw,rh]=th.region,s=th.patch,out=[];
+ const [rx,ry,rw,rh]=th.region,s=th.patch,out=[];
  try{
   const c=document.createElement('canvas');c.width=rw;c.height=rh;const g=c.getContext('2d');g.drawImage(im,rx,ry,rw,rh,0,0,rw,rh);
   const d=g.getImageData(0,0,rw,rh).data,lum=(x,y)=>{const k=(y*rw+x)*4;return d[k]*.3+d[k+1]*.59+d[k+2]*.11};
@@ -45,7 +45,9 @@ function stone(g,R,th,im,list,x,y,w,h){
  g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();g.clip();
  const p=list[(R()*list.length)|0],cx=x+w/2,cy=y+h/2,big=Math.max(w,h)*1.05;
  g.translate(cx,cy);g.rotate(((R()*4)|0)*Math.PI/2);if(R()<.5)g.scale(-1,1);
+ if(th.soft)g.filter=`blur(${th.soft}px)`;
  g.drawImage(im,p.x,p.y,p.s,p.s,-big/2,-big/2,big,big);
+ g.filter='none';
  g.setTransform(1,0,0,1,0,0);
  g.globalAlpha=th.unify;g.fillStyle=th.base;g.fillRect(x,y,w,h);
  g.globalAlpha=R()*th.jit;g.fillStyle=R()<.5?'#000':'#fff';g.fillRect(x,y,w,h);
@@ -81,7 +83,7 @@ function decals(g,R,th){
 }
 const baked=new Map(),wallTop=load('./assets/dungeon.png');
 function bake(i){
- const key=themeOf(i),th={...THEME[key],...(window.Game5RoomLook?.[i]||{})},im=SRC[key];
+ const key=themeOf(i),th={...THEME[key],...(window.Game5RoomLook?.[i]||{})},im=th.src||SRC[key],pkey=th.src?`room${i}`:key;
  if(!ok(im)||!ok(wallTop))return null;
  const R=rng(i*7907+131),raw=document.createElement('canvas');raw.width=W;raw.height=H;const g=raw.getContext('2d');
  g.fillStyle=th.grout;g.fillRect(0,0,W,H);
@@ -94,7 +96,7 @@ function bake(i){
   const out=document.createElement('canvas');out.width=W;out.height=H;const o=out.getContext('2d');o.drawImage(raw,0,0);
   window.Game5Terrain?.paintWalls?.(o,th,raw);return out;
  }
- const list=patches(key),gap=2.5;
+ const list=patches(pkey,th,im),gap=2.5;
  for(let y=60;y<H;){
   const h=40+R()*12;let x=-R()*70;
   while(x<W){const w=48+R()*44;stone(g,R,th,im,list,x+gap/2,y+gap/2,w-gap,h-gap);x+=w}
@@ -126,5 +128,5 @@ function wall(i,w){
  ctx.fillStyle='rgba(0,0,0,.35)';ctx.fillRect(w.x,w.y+cap-1,w.w,1.5);
  return true;
 }
-window.Game5Floor={version:'0.14.0',clear:()=>baked.clear(),get,wall,themeOf,themes:THEME,bake};
+window.Game5Floor={version:'0.14.0',clear:()=>{baked.clear();patchCache.clear()},get,wall,themeOf,themes:THEME,bake};
 })();

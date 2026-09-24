@@ -1,4 +1,10 @@
-# Game5 battle pilot — v0.17.0
+# Game5 battle pilot — v0.19.0
+
+## v0.19.0
+- `pack-png-v019.js` — 作り直した ChatGPT の PNG（`assets/requested/processed/`）を魔物・塔・沼・床に接続。開始画面の仲間候補
+- `tools/process-generated.js` — ChatGPT の縮小・減色された PNG アトラスを、1体ずつのドット絵に作り直す
+
+## v0.17.0
 
 ## v0.17.0
 - `pack-v017.js` — ChatGPT アセットパック（`assets/requested/`）の組み込み。魔物の絵、床の配色と模様、宝箱・塔、アイコン、台詞

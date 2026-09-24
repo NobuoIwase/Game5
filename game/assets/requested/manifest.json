@@ -10,8 +10,22 @@
       "propsVfx": "generated/extras_v018.png",
       "allies": "generated/allies_v018.png"
     },
-    "runtime": "../../generated-png-v018.js",
+    "runtime": "../../pack-png-v019.js",
     "dialogues": "dialogues.json",
-    "roomIdeas": "room_ideas.json"
+    "roomIdeas": "room_ideas.json",
+    "processed": {
+      "tool": "tools/process-generated.js",
+      "dir": "processed/",
+      "used": [
+        "monsters/*",
+        "props/tower",
+        "props/pool"
+      ],
+      "notUsed": [
+        "allies (existing motion sheets in character-motion-v1 are used)",
+        "chest/stairs cells (too small to read)",
+        "icons/vfx/nutera cells (too small; existing art kept)"
+      ]
+    }
   }
 }

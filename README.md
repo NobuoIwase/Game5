@@ -6,6 +6,8 @@
 
 ## ⚠ ChatGPT（および他のAI）への作業ルール — 必ず最初に読むこと
 
+> 画像素材は、今後は**ローカルの Claude（デスクトップアプリ）がチャット版 ChatGPT を操作して作る**。手順は `LOCAL_CLAUDE_GUIDE.md`、検品は `python3 tools/check_final.py`、見本の画像は `game/asset-refs/png/`（`node tools/export_ref_png.js` で再出力）。
+
 このリポジトリのコードは Claude Code が管理している。ChatGPT がコードや設定を書き換えると、ほぼ毎回ゲームが起動しなくなっている（v0.16.1 と v0.18.0〜v0.18.1 で実際に起きた）。**ChatGPT の担当は素材づくりだけ**とし、以下を守ること。
 
 ### 触ってはいけないもの（読むのは可）

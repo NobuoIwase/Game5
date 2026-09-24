@@ -40,3 +40,10 @@ ChatGPT へ: このファイルは**読むだけ**。直した画像を置いた
 - props/tower、props/pool（今は見本の絵を表示中）
 - nutera/hearts、nutera/sigil、nutera/estella_logo
 - icons/ の8種
+
+## 2026-09-24 追記
+
+- **monsters/mirror_slime（描き直し版 d82f94d）: 不採用**。鏡面スライムではなく、触角のある**ナメクジ**が描かれていた。見本は銀水色のドーム形スライムで、触角はない
+- **monsters/leech: ファイルが壊れている**。圧縮データのチェックサムが合わない（ブラウザでは表示されるため、ゲームでは当面このまま使う）。描き直しの対象に入れた
+- **monsters/moth**: 不採用に加えて、ファイルも壊れていた
+- 今後の納品は、ローカルの Claude がチャット版 ChatGPT で描かせて置く（リポジトリ直下の `LOCAL_CLAUDE_GUIDE.md`）。置く前に `python3 tools/check_final.py <ファイル>` で検品する

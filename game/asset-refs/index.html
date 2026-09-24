@@ -1,0 +1,12 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Game5 Asset References</title>
+<style>body{margin:0;background:#0e1114;color:#e8e4dc;font-family:"Noto Sans JP",sans-serif}h1{font-size:18px;margin:16px}h2{font-size:14px;color:#a9b0a8;margin:18px 16px 6px}.g{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px}.g img{width:620px;max-width:100%;height:auto}p{margin:0 16px;font-size:13px;color:#a9b0a8}</style></head>
+<body><h1>Game5 アセット参考画像</h1><p>詳しい仕様は同じフォルダの README.md。市松模様は「透明」の意味です（絵に描き込まないこと）。</p><div id=o></div>
+<script>
+const G={'魔物（256×256 透過）':['gel','slug','leech','worm','orb','flower','moth','mirror_slime','silk_spider','bubble_shell','crown_attendant'].map(n=>'monster_'+n),
+'小物':['prop_chest','prop_mimic','prop_stairs','prop_tower','prop_pool'],
+'ヌテラ・エステラ／アイコン':['nutera_hearts','nutera_sigil','nutera_estella_logo','icons_director'],
+'床（不透明・低コントラスト）':[1,2,3,4,5,6,7].map(n=>'floor_room'+n)};
+const o=document.getElementById('o');let n=0,t=0;
+for(const [h,fs] of Object.entries(G)){const e=document.createElement('h2');e.textContent=h;o.append(e);const g=document.createElement('div');g.className='g';o.append(g);
+ for(const f of fs){t++;const i=new Image();i.onload=i.onerror=()=>{if(++n===t)document.title+=' ready'};i.src=f+'.svg';i.alt=f;g.append(i)}}
+</script></body></html>

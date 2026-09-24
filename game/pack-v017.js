@@ -28,7 +28,7 @@ function soften(im,done){
  const out=new Image();out.onload=()=>done(out);out.src=t.toDataURL();
 }
 const req=window.Game5Assets?.requested;
-for(const [type,im] of Object.entries(D.monsters||{}))whenLoaded(im,()=>soften(im,out=>{if(req&&!window.Game5PixelArt?.has(req.monsters[type]))req.monsters[type]=out}));
+for(const [type,im] of Object.entries(D.monsters||{}))whenLoaded(im,()=>soften(im,out=>{if(req&&!window.Game5ArtLock)req.monsters[type]=out}));
 
 /* ---------- floors: the pack's palettes and motifs, baked calmly ---------- */
 window.Game5RoomLook=[

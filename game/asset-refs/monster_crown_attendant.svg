@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340">
+<defs><pattern id="chk" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="16" height="16" fill="#2b2f36"/><rect width="8" height="8" fill="#343942"/><rect x="8" y="8" width="8" height="8" fill="#343942"/></pattern><radialGradient id="aB" cx="0.4" cy="0.3" r="0.8"><stop offset="0" stop-color="#ece8f6"/><stop offset="0.5" stop-color="#b2acc6"/><stop offset="1" stop-color="#474358"/></radialGradient><style>
+text{font-family:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;fill:#e8e4dc}
+.t{font-size:19px;font-weight:700} .i{font-size:12px;fill:#a9b0a8} .s{font-size:11.5px;fill:#cfd4cc} .n{font-size:11.5px;fill:#cfd4cc} .h{font-size:11px;fill:#8d968c;letter-spacing:.08em}
+</style></defs>
+<rect width="640" height="340" rx="14" fill="#171b1f"/>
+<text x="20" y="24" class="h">GAME5 ASSET REFERENCE</text>
+<rect x="20" y="36" width="280" height="280" rx="8" fill="url(#chk)"/>
+<clipPath id="art"><rect width="256" height="256"/></clipPath><g transform="translate(20 36) scale(1.1)"><g clip-path="url(#art)"><ellipse cx="128" cy="216" rx="60" ry="13.2" fill="rgba(0,0,0,0.35)" /><path d="M72 212 C66 170 90 136 128 132 C166 136 190 170 184 212 C160 220 96 220 72 212Z" fill="url(#aB)" stroke="#2c2a36" stroke-width="4"/><path d="M104 138 L108 112 L120 126 L128 104 L136 126 L148 112 L152 138 C140 134 116 134 104 138Z" fill="#a8a39a" stroke="#4a463f" stroke-width="3" stroke-linejoin="round"/><circle cx="128" cy="180" r="10" fill="#ba78e0" opacity=".85"/><ellipse cx="112" cy="164" rx="7" ry="8" fill="#fbf8ff" /><ellipse cx="112" cy="166" rx="4.3" ry="5.2" fill="#1c1a22" /><circle cx="110.2" cy="163.9" r="1.5" fill="#ffffff" /><ellipse cx="144" cy="164" rx="7" ry="8" fill="#fbf8ff" /><ellipse cx="144" cy="166" rx="4.3" ry="5.2" fill="#1c1a22" /><circle cx="142.2" cy="163.9" r="1.5" fill="#ffffff" /><ellipse cx="98" cy="156" rx="10" ry="5" fill="rgba(255,255,255,0.55)" transform="rotate(-25 98 156)"/></g></g>
+<rect x="20.5" y="36.5" width="279" height="279" rx="8" fill="none" stroke="#ffffff22"/>
+<text x="322" y="58" class="t">灰冠の従者</text>
+<text x="322" y="78" class="i">monsters/crown_attendant.png ／ 新種・第7区画</text>
+<text x="322" y="96" class="i">256×256 透過PNG ／ 正面</text>
+<text x="322" y="112" class="h">PALETTE</text>
+<rect x="322" y="120" width="18" height="18" rx="3" fill="#ece8f6" stroke="#ffffff30"/><text x="346" y="133" class="s">#ece8f6  光</text><rect x="322" y="142" width="18" height="18" rx="3" fill="#b2acc6" stroke="#ffffff30"/><text x="346" y="155" class="s">#b2acc6  体</text><rect x="322" y="164" width="18" height="18" rx="3" fill="#7a7490" stroke="#ffffff30"/><text x="346" y="177" class="s">#7a7490  中間</text><rect x="322" y="186" width="18" height="18" rx="3" fill="#474358" stroke="#ffffff30"/><text x="346" y="199" class="s">#474358  影</text><rect x="322" y="208" width="18" height="18" rx="3" fill="#a8a39a" stroke="#ffffff30"/><text x="346" y="221" class="s">#a8a39a  冠のかけら</text><text x="322" y="254" class="n">・灰冠の粘魔を小さくした取り巻き</text><text x="322" y="271" class="n">・冠の小さなかけらを頭に載せる</text><text x="322" y="288" class="n">・ボスと並べて主従が分かるように</text><text x="322" y="305" class="n">・ボスより小さく、核も小さい</text>
+</svg>

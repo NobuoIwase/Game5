@@ -13,19 +13,10 @@
     "runtime": "../../pack-png-v019.js",
     "dialogues": "dialogues.json",
     "roomIdeas": "room_ideas.json",
-    "processed": {
-      "tool": "tools/process-generated.js",
-      "dir": "processed/",
-      "used": [
-        "monsters/*",
-        "props/tower",
-        "props/pool"
-      ],
-      "notUsed": [
-        "allies (existing motion sheets in character-motion-v1 are used)",
-        "chest/stairs cells (too small to read)",
-        "icons/vfx/nutera cells (too small; existing art kept)"
-      ]
+    "status": {
+      "monstersAndProps": "v0.18 dot art unreadable; not used. Re-request per game/asset-refs/README.md",
+      "floors": "floors_v018.png used as texture source",
+      "final": "final/ + final/index.json"
     }
   }
 }

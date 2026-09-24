@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340">
+<defs><pattern id="chk" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="16" height="16" fill="#2b2f36"/><rect width="8" height="8" fill="#343942"/><rect x="8" y="8" width="8" height="8" fill="#343942"/></pattern><style>
+text{font-family:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;fill:#e8e4dc}
+.t{font-size:19px;font-weight:700} .i{font-size:12px;fill:#a9b0a8} .s{font-size:11.5px;fill:#cfd4cc} .n{font-size:11.5px;fill:#cfd4cc} .h{font-size:11px;fill:#8d968c;letter-spacing:.08em}
+</style></defs>
+<rect width="640" height="340" rx="14" fill="#171b1f"/>
+<text x="20" y="24" class="h">GAME5 ASSET REFERENCE</text>
+<rect x="20" y="36" width="280" height="280" rx="8" fill="url(#chk)"/>
+<clipPath id="art"><rect width="256" height="128"/></clipPath><g transform="translate(20 106) scale(1.1)"><g clip-path="url(#art)"><ellipse cx="64" cy="112" rx="50" ry="9" fill="rgba(0,0,0,0.35)" /><rect x="18" y="62" width="92" height="48" rx="6" fill="#9a6230" stroke="#3a2210" stroke-width="4"/><path d="M18 66 C18 36 110 36 110 66Z" fill="#b07438" stroke="#3a2210" stroke-width="4"/><rect x="56" y="58" width="16" height="18" rx="3" fill="#ffd060" stroke="#3a2210" stroke-width="3"/><rect x="18" y="80" width="92" height="7" fill="#d6a054"/><ellipse cx="204" cy="112" rx="50" ry="9" fill="rgba(0,0,0,0.35)" /><rect x="158" y="62" width="92" height="48" rx="6" fill="#9a6230" stroke="#3a2210" stroke-width="4"/><path d="M158 62 L166 22 L242 22 L250 62Z" fill="#5a3418" stroke="#3a2210" stroke-width="4"/><rect x="164" y="56" width="80" height="12" fill="#ffe6a0" opacity=".85"/><circle cx="204" cy="56" r="30" fill="rgba(255,230,160,.25)" /><rect x="158" y="80" width="92" height="7" fill="#d6a054"/></g></g>
+<rect x="20.5" y="36.5" width="279" height="279" rx="8" fill="none" stroke="#ffffff22"/>
+<text x="322" y="58" class="t">宝箱（閉／開）</text>
+<text x="322" y="78" class="i">props/chest.png ／ 2コマ横並び</text>
+<text x="322" y="96" class="i">256×128 透過PNG（128×128×2）</text>
+<text x="322" y="112" class="h">PALETTE</text>
+<rect x="322" y="120" width="18" height="18" rx="3" fill="#ffe6a0" stroke="#ffffff30"/><text x="346" y="133" class="s">#ffe6a0  光</text><rect x="322" y="142" width="18" height="18" rx="3" fill="#d6a054" stroke="#ffffff30"/><text x="346" y="155" class="s">#d6a054  金具</text><rect x="322" y="164" width="18" height="18" rx="3" fill="#b07438" stroke="#ffffff30"/><text x="346" y="177" class="s">#b07438  蓋</text><rect x="322" y="186" width="18" height="18" rx="3" fill="#9a6230" stroke="#ffffff30"/><text x="346" y="199" class="s">#9a6230  木</text><rect x="322" y="208" width="18" height="18" rx="3" fill="#3a2210" stroke="#ffffff30"/><text x="346" y="221" class="s">#3a2210  輪郭</text><text x="322" y="254" class="n">・左：閉じた宝箱、右：開いて中が光る</text><text x="322" y="271" class="n">・2コマの位置・大きさを完全に揃える</text><text x="322" y="288" class="n">・木と金具、丸みのある蓋</text><text x="322" y="305" class="n">・偽りの宝箱も閉じた状態は同じ見た目</text>
+</svg>

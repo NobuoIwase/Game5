@@ -55,8 +55,50 @@ SHADOW = r'<ellipse [^>]*fill="rgba\(0,0,0,[^>]*/>'  # the game draws its own sh
 SPRITES = os.path.join(OUT, 'sprites')
 os.makedirs(SPRITES, exist_ok=True)
 
+# 2026-09-26 colour plan (user decision): pink only for the fleshy species and those that touch
+# skin or mucous membranes (slug, leech, gel, crown attendant); everything else keeps a fleshy,
+# wet texture but gets its own colour, chosen to stand out from the floor it lives on.
+RECOLOR = {
+ 'monster_gel.svg': {'all': [('#f2f1f7', '#ffe4ee'), ('#b3b1c2', '#e89ab8'), ('#5a5870', '#7a3050'), ('#3c3a4c', '#4a1830'), ('#8f8ca0', '#c86a90')],
+    'palette': [('#ffe4ee', '光'), ('#e89ab8', '体（半透明の肉色）'), ('#7a3050', '影'), ('#a8a39a', '石の冠'), ('#b36bdc', '核')],
+    'notes': ['半透明の肉色の巨大スライム。頭に石の冠がめり込む', '体の奥で紫の核が光る', 'ボスなので他より一回り大きく重たい形', '牙・棘なし。口は描かない']},
+ 'monster_crown_attendant.svg': {'all': [('#ece8f6', '#ffe8f0'), ('#b2acc6', '#eaa6c0'), ('#474358', '#7a3a58'), ('#2c2a36', '#4a1c32')],
+    'palette': [('#ffe8f0', '光'), ('#eaa6c0', '体'), ('#b86a8e', '中間'), ('#7a3a58', '影'), ('#a8a39a', '冠のかけら')]},
+ 'monster_leech.svg': {'all': [('#86cfe8', '#f0a0c0'), ('#24506e', '#7a2c50'), ('#dff6ff', '#ffe6f0'), ('#3f8fb4', '#c05a88'), ('#1a3c54', '#4a1a34'),
+    ('#9ad8f0', '#f4c0d8'), ('rgba(230,248,255,.85)', 'rgba(255,236,246,.85)'), ('rgba(120,200,230,.25)', 'rgba(240,160,200,.25)'), ('rgba(134,207,232,.12)', 'rgba(240,160,200,.12)')],
+    'palette': [('#ffe6f0', '発光'), ('#f0a0c0', '体'), ('#c05a88', '吸盤'), ('#7a2c50', '影'), ('#f4c0d8', '羽の縁')],
+    'notes': ['肉色の丸い体の羽虫。透ける羽が4枚', '顔の下に丸い吸盤（刺す口ではない）', '浮いているので影は体から離して小さく', '素早く飛び回る軽さ']},
+ 'monster_orb.svg': {'all': [('#bfdc72', '#e0b84a'), ('#44621f', '#6a4a14'), ('#9fc454', '#c89a38'), ('#34501a', '#4a3410'), ('#fcffe0', '#fff4d0'),
+    ('#d8f09a', '#f4d890'), ('rgba(200,240,120,.13)', 'rgba(240,200,110,.13)'), ('#1a2410', '#2a1a08')],
+    'palette': [('#fff0c0', '中心の光'), ('#e0b84a', '体（からし色）'), ('#c89a38', '胞子の粒'), ('#6a4a14', '影'), ('#4a3410', '輪郭')],
+    'notes': ['ふわふわ浮くからし色の胞子の塊（緑の床で埋もれないように）', '外周に丸いこぶが並ぶ（棘にしない）', '周りに小さな胞子の粒が漂う', '遠距離から胞子を撒く後衛']},
+ 'monster_flower.svg': {'all': [('#ffe0e2', '#fffaf0'), ('#f09aa6', '#f4ead8'), ('#c4526a', '#b8324c')],
+    'palette': [('#fffaf0', '花弁の光'), ('#f4ead8', '花弁（象牙色）'), ('#b8324c', '花弁の縁・奥（深紅）'), ('#e0a040', '花芯'), ('#5d8a4a', '蔓')],
+    'notes': ['象牙色の大きな5枚花。花弁の縁と奥が深紅（薔薇色の床で埋もれない）', '花芯に顔、蜜のしずくが垂れる', '足元は蔓（動かない待ち伏せ型）', '花弁は肉厚で濡れたツヤ。トゲなし']},
+ 'monster_moth.svg': {'all': [('#c79ab8', '#d8a860'), ('#56364a', '#6a4020'), ('#8f6282', '#a0703a'), ('#2e1a28', '#2e1c0e'), ('#f2dcea', '#fff0d0'), ('#20141a', '#1c1008'), ('#f6e6ff', '#fff4d8')],
+    'palette': [('#fff0d0', '眼状紋'), ('#d8a860', '羽（琥珀）'), ('#a0703a', '体'), ('#6a4020', '羽の影'), ('#2e1c0e', '輪郭')],
+    'notes': ['琥珀色の大きな蛾。上羽に大きな眼状紋（紫の床で埋もれない）', '鱗粉が光の粒になって舞う', '催眠の担当。眼状紋が「見つめる」印象', '体はふわふわの毛並み']},
+ 'monster_worm.svg': {'all': [('#cfc2ea', '#f2dcc8'), ('#584c78', '#8a5a44'), ('#3e3458', '#4a2e22'), ('#9483b8', '#c89a80')],
+    'palette': [('#fffaf2', '絹糸'), ('#f2dcc8', '体（象牙〜肌色）'), ('#c89a80', '節の影'), ('#8a5a44', '影'), ('#4a2e22', '輪郭')],
+    'notes': ['象牙〜淡い肌色の柔らかい輪節の芋虫（5節）', '体に細い絹糸がゆるく巻きつく', '頭の節が一番大きい。顔は丸い目だけ', '長い巻きつき拘束の担当']},
+ 'monster_silk_spider.svg': {'defs': [('#f6f2fc', '#b8b0c0'), ('#c6bcd8', '#5a5460'), ('#554868', '#2a262e')],
+    'all': [('#554868', '#2a262e'), ('#8c7ea4', '#8a8290'), ('#3a3048', '#141216')],
+    'palette': [('#f6f2fc', '糸'), ('#5a5460', '体（炭色）'), ('#8a8290', '脚先'), ('#2a262e', '脚'), ('#141216', '輪郭')],
+    'notes': ['丸くてふわふわした炭色の蜘蛛（薄紫の床で埋もれない）', '脚は太く短く、先が丸い', '目は大2＋小2', 'お尻から白い絹糸が伸びる（罠の糸を張る）']},
+ 'monster_bubble_shell.svg': {'all': [('#e9c8b6', '#f0a070'), ('#dcbcaa', '#efe2cc'), ('#6a4a3e', '#7a5a40'), ('#a88070', '#b89468')],
+    'palette': [('#fff0e6', '殻の光'), ('#efe2cc', '殻（真珠色）'), ('#b89468', '渦'), ('#f0a070', '体（珊瑚色）'), ('#e8fbff', '泡')],
+    'notes': ['真珠色の渦巻きの巻貝、殻から出る体は珊瑚色', '殻の口から泡を吹き上げる', 'ほとんど動かない固定砲台', '泡は透明＋白いハイライトで']},
+}
+
 def card(fname, title, sub, size, palette, notes, art, defs='', box=(256, 256), sprite=None):
     """640x340 card: art on the left (box scaled to fit 280x280), info on the right."""
+    rc = RECOLOR.get(fname)
+    if rc:
+        for o, n in rc.get('defs', []):
+            defs = defs.replace(o, n)
+        for o, n in rc.get('all', []):
+            defs, art = defs.replace(o, n), art.replace(o, n)
+        palette, notes = rc.get('palette', palette), rc.get('notes', notes)
     bw, bh = box
     k = min(280 / bw, 280 / bh)
     ox, oy = 20 + (280 - bw * k) / 2, 36 + (280 - bh * k) / 2
@@ -259,6 +301,100 @@ def attendant():
                 [('#ece8f6', '光'), ('#b2acc6', '体'), ('#7a7490', '中間'), ('#474358', '影'), ('#a8a39a', '冠のかけら')],
                 ['灰冠の粘魔を小さくした取り巻き', '冠の小さなかけらを頭に載せる', 'ボスと並べて主従が分かるように', 'ボスより小さく、核も小さい'], a, d)
 M.append(attendant)
+
+
+# ---------------------------------------------------------------- new species (2026-09-26, ported from Game4)
+def wisp():
+    d = rg('wiB', [(0, '#ffffff'), (.45, '#bfeaf4'), (1, 'rgba(58,120,144,.55)')], .45, .35, .75)
+    a = shadow(128, 226, 34, 7, .2)
+    a += path('M84 150 C80 96 104 66 128 64 C152 66 176 96 172 150 C170 176 160 192 150 204 C144 214 150 228 140 232 C132 222 128 212 120 214 C110 222 104 236 96 230 C100 214 86 196 84 150Z', 'url(#wiB)', 'stroke="#3a7890" stroke-width="4"')
+    a += path('M92 120 C104 100 120 92 136 92', 'none', 'stroke="#ffffff" stroke-width="6" stroke-linecap="round" opacity=".7"')
+    a += path('M100 168 q28 14 56 0', 'none', 'stroke="rgba(58,120,144,.45)" stroke-width="3"')
+    a += eyes(128, 128, 16, 9, (0, 2), '#123040')
+    a += ''.join(circ(x, y, r, 'rgba(220,250,255,.6)') for x, y, r in [(62, 110, 5), (190, 96, 4), (70, 176, 3), (186, 170, 5)])
+    return card('monster_wisp.svg', '漂い霊', 'monsters/wisp.png ／ 新種・第2・6区画', '256×256 透過PNG ／ 浮遊（下が尾）',
+                [('#ffffff', '光'), ('#bfeaf4', '体（青白い半透明）'), ('#7cc0d4', '中間'), ('#3a7890', '輪郭・影'), ('#123040', '目')],
+                ['青白く透ける、しずく形の霊。下は尾のように細る', '体は濡れた薄膜のようなツヤ（肉っぽい質感は可）', '揺れながら背後へ回り込む。軽く、速い', '顔は丸い目だけ。口・牙なし'], a, d)
+M.append(wisp)
+
+def creeping_hand():
+    d = lg('chB', [(0, '#eef1f7'), (.5, '#b4bccf'), (1, '#5a6178')], 0, 0, .3, 1)
+    a = shadow(128, 212, 84, 14)
+    # palm, flat on the floor seen from 3/4 above, fingers reaching forward (up)
+    a += path('M78 196 C70 164 84 138 112 132 L150 132 C176 138 188 164 180 196 C160 210 98 210 78 196Z', 'url(#chB)', 'stroke="#3a3f52" stroke-width="4"')
+    for x0, y0, x1, y1, w in [(92, 140, 70, 84, 17), (112, 134, 104, 64, 18), (136, 134, 144, 62, 18), (158, 140, 178, 80, 17)]:
+        a += path(f'M{x0} {y0} Q{(x0+x1)/2} {y1+30} {x1} {y1}', 'none', f'stroke="#3a3f52" stroke-width="{w+8}" stroke-linecap="round"')
+        a += path(f'M{x0} {y0} Q{(x0+x1)/2} {y1+30} {x1} {y1}', 'none', f'stroke="#c3cadb" stroke-width="{w}" stroke-linecap="round"')
+        a += circ(x1, y1, w * .32, '#e8dde4')
+    a += path('M182 186 Q214 176 222 150', 'none', 'stroke="#3a3f52" stroke-width="24" stroke-linecap="round"') + path('M182 186 Q214 176 222 150', 'none', 'stroke="#b4bccf" stroke-width="16" stroke-linecap="round"')
+    a += path('M96 176 q30 10 64 0', 'none', 'stroke="rgba(58,63,82,.4)" stroke-width="3"')
+    a += eyes(128, 170, 14, 7, (0, 1), '#1a1d28')
+    return card('monster_creeping_hand.svg', '這い寄る手', 'monsters/creeping_hand.png ／ 新種・第3・5区画', '256×256 透過PNG ／ 指が上（奥）を向く',
+                [('#eef1f7', '光'), ('#b4bccf', '肌（青白い）'), ('#e8dde4', '爪・指先'), ('#5a6178', '影'), ('#3a3f52', '輪郭')],
+                ['手首から先だけの、青白い大きな手。床を這う', '手の甲に丸い目が2つ（顔の代わり）', '指は太めで丸く、爪は短い。怖くしすぎない', '足首をつかむ拘束役'], a, d)
+M.append(creeping_hand)
+
+def gazer():
+    d = rg('gzE', [(0, '#ffffff'), (.6, '#fff0ea'), (1, '#d8b8b0')], .4, .35, .8) + lg('gzW', [(0, '#a8344e'), (1, '#4a1022')], 0, 0, 1, 1)
+    a = shadow(128, 226, 40, 8, .2)
+    for sx in (-1, 1):
+        a += path(f'M{128+sx*40} 120 C{128+sx*90} 70 {128+sx*120} 90 {128+sx*116} 122 C{128+sx*104} 140 {128+sx*70} 144 {128+sx*44} 140Z', 'url(#gzW)', 'stroke="#2e0a16" stroke-width="4"')
+    for x, c in [(104, 0), (128, 1), (152, 2)]:
+        a += path(f'M{x} 176 C{x-6} 196 {x+8} 206 {x} 222', 'none', 'stroke="#8a2a40" stroke-width="7" stroke-linecap="round"')
+    a += circ(128, 128, 54, 'url(#gzE)', 'stroke="#5a2a30" stroke-width="4"')
+    a += path('M86 120 q10 -4 18 4 M150 110 q10 2 16 12', 'none', 'stroke="#d0707a" stroke-width="2" opacity=".7"')
+    a += circ(128, 132, 26, '#8a4ad0', 'stroke="#3a1a60" stroke-width="3"') + circ(128, 132, 12, '#1a0a26') + circ(120, 124, 5, '#ffffff')
+    return card('monster_gazer.svg', '凝視の眼', 'monsters/gazer.png ／ 新種・第6・7区画', '256×256 透過PNG ／ 浮遊・正面',
+                [('#fff0ea', '白目'), ('#8a4ad0', '瞳（紫）'), ('#a8344e', '膜の羽（ワイン色）'), ('#8a2a40', '垂れた触手'), ('#2e0a16', '輪郭')],
+                ['大きな一つ目が、ワイン色の膜の羽で浮く', '白目にうっすら赤い血管（肉っぽさ）', '下に短い触手が3本垂れる', '遠くから催眠の閃光。瞳は常にアリアを追う'], a, d)
+M.append(gazer)
+
+def lure_cap():
+    d = rg('lcC', [(0, '#e8fffd'), (.45, '#7ee8e0'), (1, '#1f6e70')], .45, .3, .8)
+    a = shadow(128, 216, 60, 12)
+    a += path('M108 214 C104 180 110 150 116 128 L140 128 C146 150 152 180 148 214 C136 220 120 220 108 214Z', '#eadfca', 'stroke="#5a4a36" stroke-width="4"')
+    a += path('M52 128 C52 72 92 46 128 46 C164 46 204 72 204 128 C180 138 76 138 52 128Z', 'url(#lcC)', 'stroke="#164c50" stroke-width="4"')
+    a += path('M60 128 C90 146 166 146 196 128 C168 124 88 124 60 128Z', '#8a5ac0', 'stroke="#3a2260" stroke-width="3"')
+    a += ''.join(path(f'M{x} 130 L{x+ (x-128)*.06:.0f} 140', 'none', 'stroke="#5a3690" stroke-width="2"') for x in range(72, 190, 12))
+    a += ''.join(circ(x, y, r, '#e8fffd', 'opacity=".85"') for x, y, r in [(96, 80, 7), (140, 66, 5), (168, 92, 6), (116, 100, 4)])
+    a += eyes(128, 172, 11, 6, (0, 2), '#2a2010')
+    a += ''.join(circ(x, y, 3, '#aef6f0', 'opacity=".7"') for x, y in [(40, 90), (214, 70), (30, 150), (222, 160)])
+    return card('monster_lure_cap.svg', '誘い茸', 'monsters/lure_cap.png ／ 新種・第4・5区画', '256×256 透過PNG ／ 正面',
+                [('#e8fffd', '光る斑点'), ('#7ee8e0', '傘（青緑に光る）'), ('#8a5ac0', '傘の裏の襞（紫）'), ('#eadfca', '柄'), ('#164c50', '輪郭')],
+                ['光る青緑の傘の茸。光る茸のふりをして待つ', '傘の裏に紫の濡れた襞（肉っぽさはここで）', '柄に小さな目が2つ', '胞子を撒き、襞で脚に巻きつく'], a, d)
+M.append(lure_cap)
+
+def water_wraith():
+    d = lg('wwB', [(0, '#e6fbff'), (.4, '#6ed0ea'), (1, '#14506a')], 0, 0, 0, 1)
+    a = ell(128, 212, 96, 22, 'rgba(110,208,234,.45)', 'stroke="#aef0ff" stroke-width="3"')
+    a += path('M92 210 C84 160 96 112 128 92 C160 112 172 160 164 210Z', 'url(#wwB)', 'stroke="#14506a" stroke-width="4"')
+    for sx in (-1, 1):
+        a += path(f'M{128+sx*30} 150 C{128+sx*70} 130 {128+sx*84} 96 {128+sx*78} 70', 'none', 'stroke="#14506a" stroke-width="20" stroke-linecap="round"')
+        a += path(f'M{128+sx*30} 150 C{128+sx*70} 130 {128+sx*84} 96 {128+sx*78} 70', 'none', 'stroke="#6ed0ea" stroke-width="13" stroke-linecap="round"')
+        a += circ(128 + sx * 78, 68, 10, '#e6fbff', 'stroke="#14506a" stroke-width="3"')
+    a += path('M108 110 C114 100 124 96 134 98', 'none', 'stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity=".8"')
+    a += eyes(128, 130, 12, 7, (0, 2), '#0a2a38')
+    a += ''.join(circ(x, y, r, '#ffffff', 'opacity=".75"') for x, y, r in [(60, 206, 4), (200, 204, 5), (90, 222, 3), (170, 224, 3)])
+    return card('monster_water_wraith.svg', '水妖', 'monsters/water_wraith.png ／ 新種・第2区画', '256×256 透過PNG ／ 正面',
+                [('#e6fbff', '泡・光'), ('#6ed0ea', '水の体（明るい水色）'), ('#aef0ff', '水面の縁'), ('#14506a', '影・輪郭'), ('#0a2a38', '目')],
+                ['水たまりから立ち上がる水の人影。腕が2本伸びる', '青い床で埋もれないよう、明るい水色＋白い泡の縁', '体は透ける水。濡れたツヤを強く', '水の腕で脚をつかむ拘束役'], a, d)
+M.append(water_wraith)
+
+def stone_sentinel():
+    d = lg('ssB', [(0, '#c8c4b8'), (.5, '#9a968c'), (1, '#55524a')], 0, 0, .3, 1)
+    a = shadow(128, 220, 88)
+    a += path('M70 214 L74 150 C74 118 96 100 128 100 C160 100 182 118 182 150 L186 214 C160 222 96 222 70 214Z', 'url(#ssB)', 'stroke="#2e2c28" stroke-width="4"')
+    for sx in (-1, 1):
+        a += path(f'M{128+sx*52} 130 C{128+sx*84} 138 {128+sx*92} 170 {128+sx*84} 204', 'none', 'stroke="#2e2c28" stroke-width="30" stroke-linecap="round"')
+        a += path(f'M{128+sx*52} 130 C{128+sx*84} 138 {128+sx*92} 170 {128+sx*84} 204', 'none', 'stroke="#8e8a80" stroke-width="22" stroke-linecap="round"')
+    a += path('M100 176 L118 158 L112 140 M150 190 L140 170 L156 150 M96 128 L112 120', 'none', 'stroke="#ff7ab0" stroke-width="4" stroke-linecap="round"')
+    a += path('M100 176 L118 158 L112 140 M150 190 L140 170 L156 150 M96 128 L112 120', 'none', 'stroke="rgba(255,122,176,.35)" stroke-width="10" stroke-linecap="round"')
+    a += path('M76 206 q20 -10 40 0 M150 208 q18 -8 30 -2', 'none', 'stroke="#6e8a54" stroke-width="6" stroke-linecap="round"')
+    a += f'<rect x="102" y="116" width="52" height="16" rx="6" fill="#2e2c28"/>' + circ(116, 124, 5, '#ff9ac6') + circ(140, 124, 5, '#ff9ac6')
+    return card('monster_stone_sentinel.svg', '石の番兵', 'monsters/stone_sentinel.png ／ 新種・第4・7区画', '256×256 透過PNG ／ 正面',
+                [('#c8c4b8', '石の光'), ('#9a968c', '石'), ('#ff7ab0', 'ひびの奥の肉（光る桃色）'), ('#6e8a54', '苔'), ('#2e2c28', '輪郭')],
+                ['ずんぐりした石像の兵。太い石の腕', 'ひびの奥に、脈打つ桃色の肉が光って見える', '目は細い溝の奥に光る点が2つ', '重く詰めて、両腕で抱え込む'], a, d)
+M.append(stone_sentinel)
 
 
 # ---------------------------------------------------------------- props

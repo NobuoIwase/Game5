@@ -22,6 +22,11 @@ function install(sp){
  if(look.filter)(window.Game5SpeciesLook||={})[sp.type]=look.filter;
  // by default a new species takes over an existing support slot so the encounter size (and the
  // tuned difficulty curve) stays the same; "mode":"add" makes the floor one monster larger
+ if(sp.mode==='pool'){
+  const P=window.Game5MultiEnemy?.pools;
+  for(const f of sp.floors||[])if(P){(P[f]||=[]);if(!P[f].includes(sp.type))P[f].push(sp.type)}
+  installed.add(sp.type);return true;
+ }
  for(const f of sp.floors||[]){
   const list=window.Game5MultiEnemy?.supports?.[f];if(!list||list.includes(sp.type))continue;
   const slot=[...list.keys()].reverse().find(k=>!installed.has(list[k]));

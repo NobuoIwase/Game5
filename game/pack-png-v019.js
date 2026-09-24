@@ -12,7 +12,8 @@
      the texture source of the baked flagstone floor, softened and pulled toward the room palette
    - allies: the start card shows the existing motion sheets */
 const load=(s,fn)=>{const i=new Image();if(fn)i.onload=()=>fn(i);i.src=s;return i},ok=i=>i&&i.complete&&i.naturalWidth;
-const TYPES=['gel','slug','leech','worm','orb','flower','moth','mirror_slime','silk_spider','bubble_shell','crown_attendant'];
+const TYPES=['gel','slug','leech','worm','orb','flower','moth','mirror_slime','silk_spider','bubble_shell','crown_attendant',
+ 'wisp','creeping_hand','gazer','lure_cap','water_wraith','stone_sentinel'];
 const req=window.Game5Assets?.requested;
 const S='./asset-refs/sprites/',F='./assets/requested/final/';
 /* rasterise (SVG at 2x) and trim the transparent margin so the feet sit on the sprite's bottom edge */
@@ -44,9 +45,22 @@ const props=window.Game5Props=Object.assign(window.Game5Props||{},{});
 use(`${S}prop_tower.svg`,'props','tower',im=>props.towerPng=im);
 use(`${S}prop_pool.svg`,'props','pool',im=>props.poolPng=im);
 /* 2-frame sheets: chest (closed, open), mimic (closed, revealed), stairs */
-use(null,'props','chest',im=>props.chest=im);
-use(null,'props','mimic',im=>props.mimic=im);
-use(null,'props','stairs',im=>props.stairs=im);
+const paired={};
+use(null,'props','chest',im=>{if(!paired.chest)props.chest=im});
+use(null,'props','mimic',im=>{if(!paired.mimic)props.mimic=im});
+use(null,'props','stairs',im=>{if(!paired.stairs)props.stairs=im});
+/* frames delivered one per file (chest_closed + chest_open, ...) are joined into the same
+   2-frame sheet, each frame bottom-centred in an equal cell; they win over a delivered sheet */
+function pair(a,b,set){
+ const got={};let done=false;
+ const join=()=>{if(done||!got[a]||!got[b])return;done=true;const A=got[a],B=got[b],w=Math.max(A.naturalWidth,B.naturalWidth),h=Math.max(A.naturalHeight,B.naturalHeight);
+  const c=document.createElement('canvas');c.width=w*2;c.height=h;const g=c.getContext('2d');g.imageSmoothingQuality='high';
+  g.drawImage(A,(w-A.naturalWidth)/2,h-A.naturalHeight);g.drawImage(B,w+(w-B.naturalWidth)/2,h-B.naturalHeight);load(c.toDataURL(),set)};
+ final('props',a,im=>{got[a]=im;join()});final('props',b,im=>{got[b]=im;join()});
+}
+pair('chest_closed','chest_open',im=>{paired.chest=true;props.chest=im});
+pair('mimic_closed','mimic_open',im=>{paired.mimic=true;props.mimic=im});
+pair('stairs_open','stairs_sealed',im=>{paired.stairs=true;props.stairs=im});   // stairs sheet order: open, sealed
 /* keep the pack's softened SVG from overwriting these */
 window.Game5ArtLock=true;
 

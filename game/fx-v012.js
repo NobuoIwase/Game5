@@ -103,7 +103,8 @@ function decor(){
   if(d>90){ctx.save();ctx.translate(h.x+Math.cos(a)*46,h.y+Math.sin(a)*46);ctx.rotate(a);ctx.fillStyle='#ffe28acc';ctx.beginPath();ctx.moveTo(10,0);ctx.lineTo(-6,-7);ctx.lineTo(-6,7);ctx.closePath();ctx.fill();ctx.restore()}
  }
 }
-function roomLabel(){
+function roomLabel(){screenSpace(roomLabel0)}
+function roomLabel0(){
  const r=room();if(!r)return;
  const n=window.Game5Dungeon.rooms.length,i=roomIdx();
  ctx.save();ctx.font='600 13px system-ui,sans-serif';ctx.textBaseline='middle';
@@ -117,11 +118,11 @@ function roundRect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,
 G.drawDungeonBase=function(){floor();zones();walls();decor();roomLabel();return true};
 
 /* ---------- lighting ---------- */
-const lc=document.createElement('canvas');lc.width=W;lc.height=H;const l=lc.getContext('2d');
+const lc=document.createElement('canvas');lc.width=SW;lc.height=SH;const l=lc.getContext('2d');
 function hole(x,y,r,s=1){const g=l.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(0,0,0,${s})`);g.addColorStop(1,'rgba(0,0,0,0)');l.fillStyle=g;l.fillRect(x-r,y-r,r*2,r*2)}
 G.drawLighting=function(){
  const L=layout(),h=state.hero,t=state.time,r=room();
- l.globalCompositeOperation='source-over';l.clearRect(0,0,W,H);l.fillStyle='rgba(2,5,9,.5)';l.fillRect(0,0,W,H);
+ l.setTransform(1,0,0,1,0,0);l.globalCompositeOperation='source-over';l.clearRect(0,0,SW,SH);l.fillStyle='rgba(2,5,9,.5)';l.fillRect(0,0,SW,SH);l.setTransform(1,0,0,1,-CAM.x,-CAM.y);
  window.Game5Terrain?.fog?.(l);
  l.globalCompositeOperation='destination-out';
  hole(h.x,h.y-20,200);
@@ -129,7 +130,7 @@ G.drawLighting=function(){
  for(const tc of L?.torches||[])hole(tc.x,tc.y+30,150+6*Math.sin(t*9+tc.x),.85);
  if(L?.crystal)hole(L.crystal.x,L.crystal.y,140,.8);
  if(r&&state.dungeon?.pending)hole(r.exit[0],r.exit[1],150);
- ctx.save();ctx.globalCompositeOperation='multiply';ctx.drawImage(lc,0,0);ctx.restore();
+ ctx.save();ctx.globalCompositeOperation='multiply';ctx.drawImage(lc,CAM.x,CAM.y);ctx.restore();
  ctx.save();ctx.globalCompositeOperation='lighter';
  for(const tc of L?.torches||[])F(0,tc.x,tc.y+6,120+8*Math.sin(t*11+tc.x),.16);
  if(L?.crystal)F(1,L.crystal.x,L.crystal.y-10,130,.14);
@@ -336,30 +337,30 @@ draw=function(){
  overlays();
  if(!state.over&&state.started){trans=Math.max(0,trans-dt);clearT=Math.max(0,clearT-dt)}
 };
-function overlays(){
+function overlays(){screenSpace(()=>{
  const h=state.hero,t=state.time;
  // Estella / low stamina: pulse the screen edge so the state is readable at a glance
- const edge=(col,a)=>{const g=ctx.createRadialGradient(W/2,H/2,H*.35,W/2,H/2,W*.62);g.addColorStop(0,col+'00');g.addColorStop(1,col);ctx.save();ctx.globalAlpha=a;ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.restore()};
+ const edge=(col,a)=>{const g=ctx.createRadialGradient(SW/2,SH/2,SH*.35,SW/2,SH/2,SW*.62);g.addColorStop(0,col+'00');g.addColorStop(1,col);ctx.save();ctx.globalAlpha=a;ctx.fillStyle=g;ctx.fillRect(0,0,SW,SH);ctx.restore()};
  if(h.estella?.active){if(!window.Game5NuteraFX)edge('#e7a6ff',.35+.2*Math.sin(t*10))}
  else if(!h.dead&&h.sp<h.maxSp*.25)edge('#ff7a3d',.18+.12*Math.sin(t*8));
  if(clearT>0){
   const a=Math.min(1,clearT*2)*Math.min(1,(1.6-clearT)*6);
   ctx.save();ctx.globalAlpha=a;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='800 30px system-ui,sans-serif';
-  ctx.lineWidth=5;ctx.strokeStyle='#000b';ctx.strokeText('区画制圧',W/2,H*.3);ctx.fillStyle='#ffe9a0';ctx.fillText('区画制圧',W/2,H*.3);
-  ctx.font='600 14px system-ui,sans-serif';ctx.lineWidth=3;ctx.strokeText('階段の封印が解けた',W/2,H*.3+30);ctx.fillStyle='#f3ecd6';ctx.fillText('階段の封印が解けた',W/2,H*.3+30);ctx.restore();
+  ctx.lineWidth=5;ctx.strokeStyle='#000b';ctx.strokeText('区画制圧',SW/2,SH*.3);ctx.fillStyle='#ffe9a0';ctx.fillText('区画制圧',SW/2,SH*.3);
+  ctx.font='600 14px system-ui,sans-serif';ctx.lineWidth=3;ctx.strokeText('階段の封印が解けた',SW/2,SH*.3+30);ctx.fillStyle='#f3ecd6';ctx.fillText('階段の封印が解けた',SW/2,SH*.3+30);ctx.restore();
  }
  if(trans>0&&state.started){
   const r=room(),a=trans>1.3?1:trans/1.3;
-  ctx.save();ctx.globalAlpha=a*.92;ctx.fillStyle='#030504';ctx.fillRect(0,0,W,H);
+  ctx.save();ctx.globalAlpha=a*.92;ctx.fillStyle='#030504';ctx.fillRect(0,0,SW,SH);
   ctx.globalAlpha=Math.min(1,trans*1.4);ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillStyle='#d9c87c';ctx.font='600 14px system-ui,sans-serif';ctx.fillText(`第${roomIdx()+1}区画 / ${window.Game5Dungeon.rooms.length}`,W/2,H/2-34);
-  ctx.fillStyle='#f5eedb';ctx.font='800 34px system-ui,sans-serif';ctx.fillText(r?.name||'',W/2,H/2+2);
+  ctx.fillStyle='#d9c87c';ctx.font='600 14px system-ui,sans-serif';ctx.fillText(`第${roomIdx()+1}区画 / ${window.Game5Dungeon.rooms.length}`,SW/2,SH/2-34);
+  ctx.fillStyle='#f5eedb';ctx.font='800 34px system-ui,sans-serif';ctx.fillText(r?.name||'',SW/2,SH/2+2);
   const names=[...new Set(alive().map(e=>e.name))].join('・');
-  ctx.fillStyle='#b9c4bb';ctx.font='500 13px system-ui,sans-serif';ctx.fillText(names?`気配：${names}`:'',W/2,H/2+36);
-  if(r?.layout){ctx.fillStyle='#8fa396';ctx.fillText(`地形：${r.layout}`,W/2,H/2+56)}
+  ctx.fillStyle='#b9c4bb';ctx.font='500 13px system-ui,sans-serif';ctx.fillText(names?`気配：${names}`:'',SW/2,SH/2+36);
+  if(r?.layout){ctx.fillStyle='#8fa396';ctx.fillText(`地形：${r.layout}`,SW/2,SH/2+56)}
   ctx.restore();
  }
-}
+})}
 
 window.Game5FX={version:'0.12.0',clearLayouts:()=>layouts.clear(),perception,underActors,effects,telegraph,burst,shake:v=>shake=Math.max(shake,v)};
 })();

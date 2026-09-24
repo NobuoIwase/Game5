@@ -139,23 +139,23 @@ function screen(h,t){
  const n=(h.nutera||0)/100,e=h.estella?.active;
  if(n>=.75||e){
   const bpm=70+n*110,beat=Math.pow(Math.max(0,Math.sin(t*bpm/60*Math.PI)),6),k=e?.55:.18+.22*beat;
-  const g=ctx.createRadialGradient(W/2,H/2,H*.32,W/2,H/2,W*.62);g.addColorStop(0,'rgba(255,90,180,0)');g.addColorStop(1,`rgba(255,90,180,${k})`);
-  ctx.save();ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.restore();
-  if(e&&Math.random()<.5)emit(Math.random()*W,H+10,{ang:-Math.PI/2,speed:60+Math.random()*60,size:10+Math.random()*12,life:2.2,grav:-8,kind:Math.random()<.3?'soft':'pink'});
+  screenSpace(()=>{const g=ctx.createRadialGradient(SW/2,SH/2,SH*.32,SW/2,SH/2,SW*.62);g.addColorStop(0,'rgba(255,90,180,0)');g.addColorStop(1,`rgba(255,90,180,${k})`);
+  ctx.fillStyle=g;ctx.fillRect(0,0,SW,SH)});
+  if(e&&Math.random()<.5)emit(CAM.x+Math.random()*SW,CAM.y+SH+10,{ang:-Math.PI/2,speed:60+Math.random()*60,size:10+Math.random()*12,life:2.2,grav:-8,kind:Math.random()<.3?'soft':'pink'});
  }
  if(est.flash>0){const s=80+(1-est.flash)*420;drawHeart(h.x,h.y-40,s,est.flash*.7,0,'deep')}
- if(est.title>0){
-  const a=Math.min(1,est.title*2)*Math.min(1,(1.6-est.title)*6),y=h.y<H*.5?H*.72:H*.24;
+ if(est.title>0)screenSpace(()=>{
+  const a=Math.min(1,est.title*2)*Math.min(1,(1.6-est.title)*6),y=h.y-CAM.y<SH*.5?SH*.72:SH*.24;
   ctx.save();ctx.globalAlpha=a;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='900 44px system-ui,sans-serif';
   const logo=window.Game5NuteraArt?.logo;
-  if(logo?.complete&&logo.naturalWidth){const lw=340,lh=lw*logo.naturalHeight/logo.naturalWidth;ctx.shadowColor='#ff4fae';ctx.shadowBlur=18;ctx.drawImage(logo,W/2-lw/2,y-lh/2-4,lw,lh)}
+  if(logo?.complete&&logo.naturalWidth){const lw=340,lh=lw*logo.naturalHeight/logo.naturalWidth;ctx.shadowColor='#ff4fae';ctx.shadowBlur=18;ctx.drawImage(logo,SW/2-lw/2,y-lh/2-4,lw,lh)}
   else{
-  ctx.shadowColor='#ff4fae';ctx.shadowBlur=24;ctx.lineWidth=6;ctx.strokeStyle='#5a0f3c';ctx.strokeText('ESTELLA',W/2,y);
-  const g=ctx.createLinearGradient(0,y-22,0,y+22);g.addColorStop(0,'#fff0f8');g.addColorStop(1,'#ff6fc0');ctx.fillStyle=g;ctx.fillText('ESTELLA',W/2,y);
+  ctx.shadowColor='#ff4fae';ctx.shadowBlur=24;ctx.lineWidth=6;ctx.strokeStyle='#5a0f3c';ctx.strokeText('ESTELLA',SW/2,y);
+  const g=ctx.createLinearGradient(0,y-22,0,y+22);g.addColorStop(0,'#fff0f8');g.addColorStop(1,'#ff6fc0');ctx.fillStyle=g;ctx.fillText('ESTELLA',SW/2,y);
   }
-  ctx.shadowBlur=0;ctx.font='700 13px system-ui,sans-serif';ctx.fillStyle='#ffd6ec';ctx.fillText('ヌテラ飽和 — 行動不能・MP/SP流出',W/2,y+34);
-  ctx.restore();if(!window.Game5NuteraArt?.logo?.naturalWidth){drawHeart(W/2-150,y,26,a,-.2,'deep');drawHeart(W/2+150,y,26,a,.2,'deep')}
- }
+  ctx.shadowBlur=0;ctx.font='700 13px system-ui,sans-serif';ctx.fillStyle='#ffd6ec';ctx.fillText('ヌテラ飽和 — 行動不能・MP/SP流出',SW/2,y+34);
+  ctx.restore();if(!window.Game5NuteraArt?.logo?.naturalWidth){drawHeart(SW/2-150,y,26,a,-.2,'deep');drawHeart(SW/2+150,y,26,a,.2,'deep')}
+ });
 }
 
 /* ---------- frame ---------- */

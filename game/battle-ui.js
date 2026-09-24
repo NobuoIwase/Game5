@@ -10,7 +10,7 @@ function renderUI(){const h=state.hero,e=state.enemy,d=state.director;
 }
 $('startBtn').onclick=()=>{state.started=true;$('startOverlay').classList.add('hidden')};$('restartBtn').onclick=reset;$('autoBtn').onclick=()=>{state.director.auto=!state.director.auto;renderUI()};
 document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>{state.director.selected=b.dataset.tool;renderUI()});
-function P(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}}
+function P(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*SW/r.width+CAM.x,y:(e.clientY-r.top)*SH/r.height+CAM.y}}
 cv.addEventListener('pointermove',e=>Object.assign(state.director.cursor,P(e),{inside:true}));cv.addEventListener('pointerleave',()=>state.director.cursor.inside=false);cv.addEventListener('pointerdown',e=>{const p=P(e);placeDirectorTool(state.director.selected,p.x,p.y);renderUI()});
 addEventListener('keydown',e=>{if(e.code==='Digit1')state.director.selected='snare';if(e.code==='Digit2')state.director.selected='fog';if(e.code==='Digit3')state.director.selected='lure';if(e.code==='KeyA')state.director.auto=!state.director.auto;renderUI()});
 let last=performance.now();function frame(n){const dt=Math.min(.05,(n-last)/1000);last=n;update(dt);draw();requestAnimationFrame(frame)}reset();requestAnimationFrame(frame);

@@ -53,7 +53,7 @@ function spawnRoom(i){
  state.hazards=[];
  state.hero.memory.visited ||= new Set();state.hero.memory.visited.add(`room-${i}`);
  log(`第${i+1}区画「${r.name}」。${state.enemy.name}の気配。`);
- addFx('text',W/2,70,r.name,'#efe6c8',1.2);
+ addFx('text',state.hero.x,state.hero.y-120,r.name,'#efe6c8',1.2);
 }
 function begin(){
  state.dungeon={active:true,room:0,pending:false,clearT:0,zoneTick:.2,complete:false};

@@ -65,7 +65,8 @@ function resolveEnemy(cast){
     // slide along the charge line and stop in front of the first wall
     const blocked=window.Game5Dungeon?.blockedAt;let tx=cast.start.x,ty=cast.start.y;
     for(let d=8;d<=sk.travel;d+=8){const nx=clamp(cast.start.x+Math.cos(cast.ang)*d,65,W-65),ny=clamp(cast.start.y+Math.sin(cast.ang)*d,65,H-65);if(blocked?.(e,nx,ny))break;tx=nx;ty=ny}
-    e.x=tx;e.y=ty;
+    // v0.26: travel there over a short dash instead of appearing at the end point
+    const len=Math.hypot(tx-e.x,ty-e.y);if(len>4)e.dash={x0:e.x,y0:e.y,x1:tx,y1:ty,t:0,T:clamp(len/1150,.1,.26),ang:cast.ang};
   }
   if(sk.hazard)state.hazards.push({kind:'enemyFog',x:cast.target.x,y:cast.target.y,r:sk.r,t:5.2,tick:.2});
   e.actCd=e.phase===2?rnd(.72,1.08):rnd(1.02,1.48);e.decision='次の一手を測る';e.noise=.24;
@@ -79,6 +80,12 @@ function updateEnemy(dt){
     if(e.poisonTick<=0){e.poisonTick=1;hurtEnemy(6,{xp:false});}
   }
   if(e.hp<=e.maxHp*.48)e.phase=2;
+  if(e.dash){
+    const d=e.dash;d.t+=dt;const u=Math.min(1,d.t/d.T),k=1-(1-u)*(1-u);
+    e.x=d.x0+(d.x1-d.x0)*k;e.y=d.y0+(d.y1-d.y0)*k;e.moving=true;e._aiMoved=true;e.decision='突進';
+    if(u>=1)e.dash=null;
+    return;
+  }
   if(e.cast){updateEnemyCast(e,dt);return;}
   if(e.stun>0){e.decision='気絶';return;}
   if(e.reactT>0&&e.root<=0){

@@ -29,7 +29,7 @@ function drawBubble(h){
  const a=Math.min(1,bubble.t*3,(2.4-bubble.t)*8);
  ctx.save();ctx.globalAlpha=a;ctx.font='600 12px system-ui,sans-serif';
  const lines=wrap(bubble.text,190),w=Math.max(...lines.map(l=>ctx.measureText(l).width))+18,hh=lines.length*16+10;
- const x=clamp(h.x-w/2,8,W-w-8),y=Math.max(8,h.y-112-hh);
+ const x=clamp(h.x-w/2,CAM.x+8,CAM.x+SW-w-8),y=Math.max(CAM.y+8,h.y-112-hh);
  ctx.fillStyle='rgba(250,246,236,.94)';ctx.strokeStyle='rgba(60,50,40,.5)';ctx.lineWidth=1;
  ctx.beginPath();ctx.roundRect?ctx.roundRect(x,y,w,hh,8):ctx.rect(x,y,w,hh);ctx.fill();ctx.stroke();
  ctx.beginPath();ctx.moveTo(clamp(h.x-6,x+8,x+w-20),y+hh);ctx.lineTo(clamp(h.x,x+14,x+w-14),y+hh+8);ctx.lineTo(clamp(h.x+6,x+20,x+w-8),y+hh);ctx.closePath();ctx.fill();

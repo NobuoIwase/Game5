@@ -23,16 +23,27 @@ function segments(v){
 function im(src){const x=new Image();x.ok=false;x.onload=()=>x.ok=true;x.src=src;return x}
 function imgs(d){if(S.imgs.has(d))return S.imgs.get(d);const o={};for(const p of ['body','arm_right','arm_left','leg_right','leg_left','sword','shield','scabbard'])o[p]=MISSING[d]?.includes(p)?{ok:false}:im(`${BASE}parts/warrior/${d}/${p}.png`);S.imgs.set(d,o);return o}
 Promise.all([fetch(`${BASE}rigs/warrior.json`).then(r=>r.json()),fetch(`${BASE}rigs/warrior-gear.json`).then(r=>r.json())]).then(([r,x])=>{S.rig=r;S.gear=x;for(const d of DIRS)if(r.views[d])r.views[d].__dir=d}).catch(e=>S.err=String(e));
+/* v0.26: [t, body, shoulder, elbow, wrist, x, y] - a deeper coil, a fast wide release with a lunge,
+   and a held follow-through, so the swing reads as a committed cut */
 const K=[
-[0,0,0,0,0,0,0],[.12,-1,-12,-6,-2,-1,0],[.28,-3,-38,-22,-10,-3,1],[.42,-4,-31,-34,-18,-3,1],
-[.55,2,10,-15,7,2,0],[.66,7,67,15,25,6,-1],[.77,9,84,28,36,7,0],[.9,4,38,10,15,3,1],[1,0,0,0,0,0,0]];
+[0,0,0,0,0,0,0],[.14,-3,-24,-12,-6,-3,0],[.32,-7,-62,-38,-20,-7,1],[.46,-8,-58,-44,-24,-8,2],
+[.56,4,20,-10,12,6,0],[.64,12,92,22,40,14,-2],[.74,14,112,32,48,16,-1],[.88,6,50,14,20,6,1],[1,0,0,0,0,0,0]];
 function pose(p,dir,heavy=false,hit=.55){
  hit=Math.max(.15,Math.min(.85,hit));const q=p<=hit?p/hit*.66:.66+(p-hit)/(1-hit)*.34;let i=0;while(i<K.length-2&&q>K[i+1][0])i++;
  const a=K[i],b=K[i+1],u=(q-a[0])/(b[0]-a[0]||1),s=['front','down_right','right','up_right'].includes(dir)?-1:1,m=heavy?1.18:1;
  const V=j=>lerp(a[j],b[j],u)*m;return{kind:heavy?'heavy':'slash',body:V(1)*s*.42,sh:V(2)*s,el:V(3)*s,wr:V(4)*s,x:V(5)*(s<0?1:-1),y:V(6)};
 }
 function est(h){const e=h.estella,p=e?.total?cl(1-e.t/e.total):.5,en=p<.16?p/.16:p>.82?(1-p)/.18:1,t=g.state?.time||0;return{kind:'estella',body:(Math.sin(t*17)*2.2+Math.sin(t*29))*en,ar:(Math.sin(t*23)*8+Math.sin(t*37)*3)*en,al:(Math.sin(t*19+2)*7+Math.sin(t*31)*3)*en,lr:Math.sin(t*21+1)*3.5*en,ll:Math.sin(t*18+3)*3*en,x:Math.sin(t*26)*1.6*en,y:Math.sin(t*33)*1.2*en}}
-function bind(){const t=g.state?.time||0;return{kind:'bind',body:Math.sin(t*5)*1.2,ar:58+Math.sin(t*9)*5,al:-58+Math.sin(t*8+1)*5,lr:8+Math.sin(t*7)*3,ll:-8+Math.sin(t*7+2)*3,x:0,y:1}}
+function bind(){
+ const t=g.state?.time||0,gr=g.state?.hero?.grapple;
+ if(!gr)return{kind:'bind',body:Math.sin(t*5)*1.2,ar:58+Math.sin(t*9)*5,al:-58+Math.sin(t*8+1)*5,lr:8+Math.sin(t*7)*3,ll:-8+Math.sin(t*7+2)*3,x:0,y:1};
+ // v0.26 held by a monster: twisting against it, arms dragged in, knees pressed together;
+ // every special makes her arch, and the struggle weakens as the hold wears on
+ const w=clamp01(1-gr.t/(gr.dur||4)*.5),p=gr.pulse||0,s=gr.side||1;
+ return{kind:'bind',body:(Math.sin(t*7.5)*6*w+Math.sin(t*13)*1.5)*s-p*8*s,ar:34+Math.sin(t*8)*14*w+p*18,al:-34+Math.sin(t*8.6+1)*14*w-p*18,
+  lr:-7+Math.sin(t*11)*3,ll:7+Math.sin(t*11+1.7)*3,x:Math.sin(t*9)*5*w,y:2+p*3};
+}
+function clamp01(v){return Math.max(0,Math.min(1,v))}
 function clipdraw(c,i,p){if(!i?.ok||!p?.length)return;c.save();path(c,p);c.clip();c.drawImage(i,0,0);c.restore()}
 function limb(c,i,p,a){if(!i?.ok)return;c.save();rot(c,p,a);c.drawImage(i,0,0);c.restore()}
 function drawArm(c,v,o,p){

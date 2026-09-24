@@ -4,12 +4,12 @@
    Verified with `node tools/sim.js 60` (AUTO director ON) and `--no-auto`. */
 const B={
  hero:{spRegen:6.6,bindDrain:7.2,atkScale:.3},   // atkScale: share of ATK growth that reaches skill damage
- estella:{estellaDuration:2.3,estellaSpLoss:24,estellaMpLoss:8,naturalDecay:8,naturalDelay:1.0,sailAmpAt100:.6},
+ estella:{estellaDuration:2.3,estellaSpLoss:18,estellaMpLoss:8,naturalDecay:8,naturalDelay:1.0,sailAmpAt100:.6},
  // arriving on a new floor = a short rest on the stairs
  stairs:{hp:.22,sp:.45,nutera:30,sail:20},
  enemyHpGrowth:.12,            // per dungeon level (was .15)
  supportHp:.85,                // support enemies in mixed encounters
- director:{autoMin:5.2,autoMax:7.4,ringMin:9,ringMax:13,calmRooms:2,calmMul:1.35,enRegen:6},
+ director:{autoMin:6.5,autoMax:9,ringMin:9,ringMax:13,calmRooms:2,calmMul:1.35,enRegen:6},
  // AUTO director intensity (selectable in the UI): interval multiplier and extra aim error in px
  intensity:{easy:{label:'やさしい',interval:4,err:100},normal:{label:'ふつう',interval:2.2,err:70},hard:{label:'きびしい',interval:1.6,err:40}},
  snare:{sp:15,bind:1.35},
@@ -21,7 +21,8 @@ const B={
  estellaBindDrainMul:.5,        // binds landing while she is already convulsing drain less
  bindImmune:1.6,                // seconds after breaking free in which a new bind cannot take hold
  // support monsters per floor: difficulty now rises 1,2,2,2,2,3,3 instead of spiking on floor 5
- supports:[[],['slug'],['leech'],['moth'],['leech'],['orb','slug'],['worm','moth']],
+ // v0.26: holds and punishing make crowds much harsher; the last floors keep one support each
+ supports:[[],['slug'],['leech'],['moth'],['leech'],['orb'],['moth']],
  poolChance:.5,                  // chance that a support slot is taken by a pool species (species.json "mode":"pool")
  enemySpMul:.8,                 // SP damage of monster attacks
  // mucus/spore clouds are about Nutera, not pain: most of the old v0.3 poison is gone

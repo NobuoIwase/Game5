@@ -271,14 +271,18 @@ function explore(dt){
 }
 /* lighting hook: unexplored cells are near-black, and on the dream floor memory fades */
 const fogC=document.createElement('canvas');fogC.width=GW;fogC.height=GH;const fogG=fogC.getContext('2d');
+let fogKey='',fogT=-9;
 function fog(l){
  const f=cur();if(!f||!state.started)return;
  const ex=f.explored,now=state.time,fade=f.def.dream?9:1e9;
+ // v0.31: rebuilt a few times a second instead of every frame (2304 cells)
+ const key=`${state.dungeon?.room}:${f.seed}`;
+ if(key!==fogKey||now-fogT>.2||now<fogT){fogKey=key;fogT=now;
  fogG.clearRect(0,0,GW,GH);
  for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){
   const t=ex[idx(x,y)],k=!t?.66:clamp((now-t)/fade,0,1)*.56;if(k<=.01)continue;
   fogG.fillStyle=`rgba(0,0,0,${k})`;fogG.fillRect(x,y,1,1);
- }
+ }}
  l.save();l.imageSmoothingEnabled=true;l.imageSmoothingQuality='high';l.drawImage(fogC,0,0,GW*CS,GH*CS);l.restore();
 }
 

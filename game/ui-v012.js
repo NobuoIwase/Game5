@@ -3,7 +3,7 @@
 /* v0.12.0 UI: pause / speed / AUTO intensity controls, enemy roster, director tool
    cost and cooldown, placement preview on the canvas, colour-coded log, run statistics
    on the result screen. */
-const VERSION='0.25.0';
+const VERSION='0.26.0';
 state.version=VERSION;document.title=`Game5 v${VERSION}`;
 const alive=()=>window.Game5MultiEnemy?.alive?.()||(state.enemy?.hp>0?[state.enemy]:[]);
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
@@ -120,7 +120,7 @@ draw=function(){
   const ready=(d.cd[d.selected]||0)<=0&&d.en>=t.cost,col=ready?'#e8a6d6':'#8b7f88';
   ctx.save();ctx.globalAlpha=.8;ctx.strokeStyle=col;ctx.lineWidth=2;ctx.setLineDash([5,5]);
   if(d.selected==='ringbeam'){
-   const sx=W-52,sy=clamp(c.y,65,H-65),a=Math.atan2(c.y-sy,c.x-sx);
+   const sx=CAM.x+SW-52,sy=clamp(c.y,CAM.y+65,CAM.y+SH-65),a=Math.atan2(c.y-sy,c.x-sx);
    ctx.lineWidth=46;ctx.globalAlpha=.12;ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(sx+Math.cos(a)*920,sy+Math.sin(a)*920);ctx.stroke();
   }else{ctx.beginPath();ctx.arc(c.x,c.y,t.r,0,TAU);ctx.stroke()}
   ctx.setLineDash([]);ctx.globalAlpha=1;ctx.font='700 11px system-ui,sans-serif';ctx.textAlign='center';ctx.fillStyle=col;
@@ -128,8 +128,8 @@ draw=function(){
   ctx.restore();
  }
  if(view.paused&&state.started&&!state.over){
-  ctx.save();ctx.fillStyle='#0008';ctx.fillRect(0,0,W,H);ctx.textAlign='center';ctx.fillStyle='#f5eedb';ctx.font='800 28px system-ui,sans-serif';
-  ctx.fillText('一時停止中',W/2,H/2);ctx.font='500 13px system-ui,sans-serif';ctx.fillStyle='#b9c4bb';ctx.fillText('Space で再開',W/2,H/2+26);ctx.restore();
+  screenSpace(()=>{ctx.fillStyle='#0008';ctx.fillRect(0,0,SW,SH);ctx.textAlign='center';ctx.fillStyle='#f5eedb';ctx.font='800 28px system-ui,sans-serif';
+  ctx.fillText('一時停止中',SW/2,SH/2);ctx.font='500 13px system-ui,sans-serif';ctx.fillStyle='#b9c4bb';ctx.fillText('Space・一時停止ボタンで再開',SW/2,SH/2+26)});
  }
 };
 

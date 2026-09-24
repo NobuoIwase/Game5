@@ -1,6 +1,11 @@
 'use strict';
 const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
-const W=960,H=540,TAU=Math.PI*2;
+/* v0.26: W,H are the WORLD size (a floor is 2x2 screens); SW,SH are the canvas (screen) size.
+   The camera (CAM) follows the heroine; camera-v026.js applies it around the whole draw.
+   Anything fixed to the screen (title cards, pause, screen tints) draws inside screenSpace(). */
+const W=1920,H=1080,SW=960,SH=540,TAU=Math.PI*2;
+const CAM={x:0,y:0};
+function screenSpace(f){ctx.save();ctx.setTransform(1,0,0,1,0,0);try{f()}finally{ctx.restore()}}
 const $=id=>document.getElementById(id);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);

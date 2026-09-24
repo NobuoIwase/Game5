@@ -360,7 +360,7 @@ placeDirectorTool = function (kind, x, y, auto = false) {
   if (kind !== 'ringbeam') return _placeDirectorNuteraBase(kind, x, y, auto);
   const d = state.director, t = DIRECTOR_TOOLS.ringbeam;
   if (!state.started || state.over || d.cd.ringbeam > 0 || d.en < t.cost) return false;
-  const start = { x: W - 52, y: clamp(y, 65, H - 65) };
+  const start = { x: CAM.x + SW - 52, y: clamp(y, CAM.y + 65, CAM.y + SH - 65) };
   const ang = Math.atan2(y - start.y, x - start.x);
   d.en -= t.cost;
   d.cd.ringbeam = t.cd;

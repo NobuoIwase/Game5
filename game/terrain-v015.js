@@ -15,6 +15,8 @@
    the A* grid use the cells directly for speed. Passages are at least 3 cells (90px) wide so
    the largest monsters fit. */
 const CS=30,GW=Math.ceil(W/CS),GH=Math.ceil(H/CS),TOP=2;
+// v0.26: floors are 2x2 screens; generators scale their feature sizes and counts by S
+const S=GW/32;
 const idx=(x,y)=>y*GW+x,inb=(x,y)=>x>=0&&y>=0&&x<GW&&y<GH;
 function rng(seed){return()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}}
 const ri=(R,a,b)=>a+Math.floor(R()*(b-a+1));
@@ -86,22 +88,23 @@ function connect(g){
 
 /* ---------------- generators ---------------- */
 function genChambers(R){
- const g=solidGrid(),rooms=[];
- for(let t=0;t<60&&rooms.length<5;t++){
+ const g=solidGrid(),rooms=[],want=Math.round(5*S*S*.6);
+ for(let t=0;t<60*S*S&&rooms.length<want;t++){
   const w=ri(R,6,10),h=ri(R,4,6),x=ri(R,1,GW-1-w),y=ri(R,TOP,GH-1-h);
   if(rooms.some(r=>x<r.x+r.w+1&&x+w+1>r.x&&y<r.y+r.h+1&&y+h+1>r.y))continue;
   rooms.push({x,y,w,h});
  }
  rooms.sort((a,b)=>a.x-b.x);
  for(const r of rooms)carveRect(g,r.x,r.y,r.w,r.h);
- for(let i=1;i<rooms.length;i++){const a=rooms[i-1],b=rooms[i];carveLine(g,a.x+(a.w>>1),a.y+(a.h>>1),b.x+(b.w>>1),b.y+(b.h>>1),3)}
- if(rooms.length>3){const a=rooms[0],b=rooms[rooms.length-1];carveLine(g,a.x+(a.w>>1),a.y+(a.h>>1),b.x+(b.w>>1),b.y+(b.h>>1),3)}
+ const mid=r=>[r.x+(r.w>>1),r.y+(r.h>>1)],d2=(a,b)=>{const p=mid(a),q=mid(b);return(p[0]-q[0])**2+(p[1]-q[1])**2};
+ for(let i=1;i<rooms.length;i++){let b=rooms[0];for(let j=1;j<i;j++)if(d2(rooms[i],rooms[j])<d2(rooms[i],b))b=rooms[j];carveLine(g,...mid(b),...mid(rooms[i]),3)}
+ for(let k=0;k<Math.round(S)&&rooms.length>3;k++){const a=rooms[(R()*rooms.length)|0],b=rooms[(R()*rooms.length)|0];if(a!==b)carveLine(g,...mid(a),...mid(b),3)}
  for(const r of rooms)if(r.w>=9&&r.h>=6){g[idx(r.x+2,r.y+1)]=1;g[idx(r.x+r.w-3,r.y+1)]=1;g[idx(r.x+2,r.y+r.h-2)]=1;g[idx(r.x+r.w-3,r.y+r.h-2)]=1}
  return{g};
 }
 /* maze on a coarse grid of 5x5 cells: 3-wide corridors, 2-thick walls */
 function genMaze(R,loops){
- const g=solidGrid(),P=5,CW=6,CH=3,ox=1,oy=TOP;
+ const g=solidGrid(),P=5,CW=Math.floor((GW-2)/P),CH=Math.floor((GH-TOP-1)/P),ox=1,oy=TOP;
  const vis=new Uint8Array(CW*CH),st=[[0,ri(R,0,CH-1)]];vis[st[0][1]*CW]=1;
  const open=(cx,cy)=>carveRect(g,ox+cx*P,oy+cy*P,3,3);
  open(...st[0]);
@@ -113,36 +116,36 @@ function genMaze(R,loops){
   st.push([nx,ny]);
  }
  // extra openings turn the tree into loops so fights are not always cornered
- for(let k=0;k<loops;k++){const cx=ri(R,0,CW-2),cy=ri(R,0,CH-1);if(R()<.5)carveRect(g,ox+cx*P+3,oy+cy*P,2,3);else if(cy<CH-1)carveRect(g,ox+cx*P,oy+cy*P+3,3,2)}
+ for(let k=0;k<loops*S*S;k++){const cx=ri(R,0,CW-2),cy=ri(R,0,CH-1);if(R()<.5)carveRect(g,ox+cx*P+3,oy+cy*P,2,3);else if(cy<CH-1)carveRect(g,ox+cx*P,oy+cy*P+3,3,2)}
  // a couple of wider halls to fight in
- for(let k=0;k<2;k++){const cx=ri(R,0,CW-2),cy=ri(R,0,CH-2);carveRect(g,ox+cx*P,oy+cy*P,8,8)}
+ for(let k=0;k<2*S;k++){const cx=ri(R,0,CW-2),cy=ri(R,0,CH-2);carveRect(g,ox+cx*P,oy+cy*P,8,8)}
  return{g};
 }
 function genRings(R){
  const g=solidGrid(),cx=GW/2,cy=(GH-1+TOP)/2,e=(x,y)=>Math.hypot((x+.5-cx)/2.2,y+.5-cy);
- for(let y=TOP;y<GH-1;y++)for(let x=1;x<GW-1;x++){const d=e(x,y);if(d<1.8||(d>=3&&d<4.8)||d>=6)g[idx(x,y)]=0}
+ for(let y=TOP;y<GH-1;y++)for(let x=1;x<GW-1;x++){const d=e(x,y)/S;if(d<1.8||(d>=3&&d<4.8)||d>=6)g[idx(x,y)]=0}
  const spokes=[];
  for(const [r0,r1] of [[1.5,3.6],[4.4,6.6]]){
   const a=R()*TAU;spokes.push(a);
-  for(let t=r0;t<=r1;t+=.3){const x=Math.round(cx-.5+Math.cos(a)*t*2.2),y=Math.round(cy-.5+Math.sin(a)*t);carveRect(g,x-1,y-1,3,3)}
-  const b=a+Math.PI+(R()-.5);for(let t=r0;t<=r1;t+=.3){const x=Math.round(cx-.5+Math.cos(b)*t*2.2),y=Math.round(cy-.5+Math.sin(b)*t);carveRect(g,x-1,y-1,3,3)}
+  for(let t=r0*S;t<=r1*S;t+=.3){const x=Math.round(cx-.5+Math.cos(a)*t*2.2),y=Math.round(cy-.5+Math.sin(a)*t);carveRect(g,x-1,y-1,3,3)}
+  const b=a+Math.PI+(R()-.5);for(let t=r0*S;t<=r1*S;t+=.3){const x=Math.round(cx-.5+Math.cos(b)*t*2.2),y=Math.round(cy-.5+Math.sin(b)*t);carveRect(g,x-1,y-1,3,3)}
  }
  return{g,rings:{cx:cx*CS,cy:cy*CS}};
 }
 function genCave(R,fill,clearing){
  let g=solidGrid();
  for(let y=TOP;y<GH-1;y++)for(let x=1;x<GW-1;x++)g[idx(x,y)]=R()<fill?1:0;
- if(clearing)carveDisc(g,GW/2,(GH+TOP)/2,clearing[0],clearing[1]);
+ if(clearing)carveDisc(g,GW/2,(GH+TOP)/2,clearing[0]*S,clearing[1]*S);
  for(let s=0;s<4;s++){const o=g.slice();for(let y=TOP;y<GH-1;y++)for(let x=1;x<GW-1;x++){let n=0;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)if(o[idx(x+dx,y+dy)]===1)n++;g[idx(x,y)]=n>=5?1:0}}
- if(clearing)carveDisc(g,GW/2,(GH+TOP)/2,clearing[0]*.8,clearing[1]*.8);
+ if(clearing)carveDisc(g,GW/2,(GH+TOP)/2,clearing[0]*.8*S,clearing[1]*.8*S);
  border(g);widen(g);border(g);keepLargest(g);
  return{g};
 }
 function genArena(R){
- const g=solidGrid(),cx=GW/2+3,cy=(GH+TOP)/2;
- carveDisc(g,cx,cy,11.5,6.8);
- carveRect(g,1,Math.floor(cy)-1,Math.floor(cx-10),3);
- const pillars=[];for(let k=0;k<6;k++){const a=k/6*TAU+R()*.3,x=Math.round(cx-1+Math.cos(a)*7.2),y=Math.round(cy-1+Math.sin(a)*3.8);carveRect(g,x,y,2,2,1);pillars.push([x,y])}
+ const g=solidGrid(),cx=GW/2+3*S,cy=(GH+TOP)/2;
+ carveDisc(g,cx,cy,11.5*S,6.8*S);
+ carveRect(g,1,Math.floor(cy)-1,Math.floor(cx-10*S),3);
+ const pillars=[],np=Math.round(6*S);for(let k=0;k<np;k++){const a=k/np*TAU+R()*.3,ring=k%2?.62:1,x=Math.round(cx-1+Math.cos(a)*7.2*S*ring),y=Math.round(cy-1+Math.sin(a)*3.8*S*ring);carveRect(g,x,y,2,2,1);pillars.push([x,y])}
  return{g};
 }
 const GEN=[
@@ -188,10 +191,10 @@ function place(room,T,R,def){
  // water channels / vents / decor anchors
  const water=new Uint8Array(GW*GH);
  if(def.water)for(let i=0;i<GW*GH;i++){const [x,y]=center(i);if(g[i]!==1&&cl[i]>=1.4&&cl[i]<2.2&&((i%GW)+((i/GW)|0))%5<2&&Math.hypot(x-e[0],y-e[1])>90&&Math.hypot(x-exit[0],y-exit[1])>70)water[i]=1}
- const torches=[];for(let i=GW;i<GW*GH-GW;i++)if(g[i]===1&&g[i+GW]!==1&&R()<.09&&torches.length<6)torches.push(center(i));
- const rubble=[];for(let k=0;k<3;k++){const p=pick(0,1,1.2,[e,exit,spawn],60);if(p)rubble.push(p)}
+ const torches=[];for(let i=GW;i<GW*GH-GW;i++)if(g[i]===1&&g[i+GW]!==1&&R()<.09&&torches.length<Math.round(6*S*S*.6))torches.push(center(i));
+ const rubble=[];for(let k=0;k<3*S;k++){const p=pick(0,1,1.2,[e,exit,spawn],60);if(p)rubble.push(p)}
  const crystal=pick(.2,.8,1.4,[e,exit,spawn],120);
- const vents=[];if(def.vents)for(let k=0;k<3;k++){const p=pick(.15,.95,1.4,[e,exit,...vents.map(v=>[v.x,v.y])],150);if(p)vents.push({x:p[0],y:p[1],t:1+k*1.3})}
+ const vents=[];if(def.vents)for(let k=0;k<Math.round(3*S*.9);k++){const p=pick(.15,.95,1.4,[e,exit,...vents.map(v=>[v.x,v.y])],150);if(p)vents.push({x:p[0],y:p[1],t:1+k*1.3})}
  return{grid:g,cl,water,torches,rubble,crystal,entry:e,exit,dist,vents};
 }
 

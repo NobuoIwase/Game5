@@ -239,6 +239,7 @@ function record(win){
  }
  const suki=Object.entries(h?._sukiRec||{}).sort((a,b)=>b[1]-a[1])[0],SN=window.Game5Charm?.names||[];
  if(suki)review.push(`${nameOf(suki[0])}には「${SN[suki[1]]}」まで落ちている。本人は「ちがう」と言っている。${h.hesitations?`斬りかけて剣を止めたのが${h.hesitations}回。`:''}`);
+ if((h?.wetWalk||0)>3)review.push(`粘液に濡れたまま${h.wetWalk.toFixed(0)}秒歩いている。通ったあとの床に、足跡が残っていた。`);
  if(h?.attachTotal)review.push(`吸着羽虫の類に${h.attachTotal}回吸い付かれ、そのまま${(h.attachWorn||0).toFixed(0)}秒歩いている。${(h.attachWorn||0)>20?'途中から、取ろうとする手つきが遅くなった。':''}`);
  if(h?.impTaunts)review.push(`闇の声に${h.impTaunts}回からかわれている。${h.impTaunts>=4?'言い返す声は、回を追うごとに小さくなった。':'そのたびに、言い返そうとして言葉に詰まった。'}`);
  if(R.watched)review.push(`捕まっている間、ほかの魔物が手を出さずに見物していたことが${R.watched}回。${R.maxWatch>=2?`多いときは${R.maxWatch}体が彼女を囲んでいた。`:''}`);
@@ -246,13 +247,14 @@ function record(win){
  if(R.edge)review.push(`あと少しのところで離されたのが${R.edge}回。${R.edgePulls?`離されたあと、自分から魔物の方へ${R.edgePulls}度、腰を寄せている。本人は「脚がもつれた」と言っている。`:'離されたあとは、しばらく剣先が定まらなかった。'}`);
  if(R.estella)review.push(`エステラ${R.estella}回。${R.estella>=2?'二回目からは、声を抑えようとする素振りも消えた。':'本人は「何もなかった」と言っている。'}`);
  const self=(win?'……か、勝った、し。':'')+(R.estella>=2?'……き、記録とか……しなくて、いいから。ほ、ほんとに……ふひ……':R.estella===1?'あ、あれは……ちょっと、足が、もつれた、だけ……':R.grabs-R.lost>=5?'つ、捕まったのは……ゆ、油断した、だけ……だし……':R.grabs-R.lost>=1?'へ、へへ……ぜ、ぜんぜん、平気……だった……':'ふひっ……わ、わたし、けっこう、強い……かも……');
+ const faceKey=h?.dead?'damage':R.estella>=2?'dazed':win?'creepy':R.grabs>=3?'troubled':'normal',face=window.Game5Portrait?.still?.(faceKey,Math.min(1,R.estella*.35+R.grabs*.05));
  const self2=self+(suki&&suki[1]>=2?`……${nameOf(suki[0])}のことは……な、なんとも、思って、ない、から……`:'');
  const cell=(k,v)=>`<div><small>${k}</small><b>${v}</b></div>`;
  const earned=R.titles.length?`<p class="recTitles"><small>道中の称号</small>${R.titles.map(t=>`「${t}」`).join(' ')}</p>`:'';
  return `<small class="recK">記録</small><b class="recTitle">「${good}、${bad}」</b>${earned}
  <div class="stats">${[cell('捕まった',`${R.grabs}回`),cell('特殊攻撃',`${R.specials}回`),cell('振りほどいた',`${R.free}回`),cell('捕まっていた時間',`${R.held.toFixed(1)}秒`),cell('いちばん捕まった相手',tt?`${name}（${tt[1]}回）`:'—'),cell('好き',suki?`${nameOf(suki[0])}（${SN[suki[1]]}）`:'—'),cell('寸止め',R.edge?`${R.edge}回（追った${R.edgePulls}歩）`:'—'),cell('最大ヌテラ',`${Math.round(R.maxNut)}%`)].join('')}</div>
  <p class="recReview"><small>総評</small>${review.join('')}</p>
- <p class="recSelf"><small>自己評価</small>「${self2}」</p>`;
+ <p class="recSelf">${face?`<img class="recFace" src="${face}" alt="">`:''}<small>自己評価</small>「${self2}」</p>`;
 }
 const baseFinish=finish;
 finish=function(win){

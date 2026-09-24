@@ -86,3 +86,30 @@ kbd{background:#223027;border:1px solid #ffffff22;border-bottom-width:2px;border
 .allyRow figure{margin:0;text-align:center;font-size:11px;color:#b9c4bb}
 .allyRow canvas{width:72px;height:96px}
 .history:empty{display:none}
+/* v0.25 phones: the game screen stays in view (sticky) with the trap buttons right under it;
+   the rest of the panels follow below. Taps on the canvas never scroll or zoom the page. */
+#cv{touch-action:none}
+button{touch-action:manipulation}
+@media (max-width:760px),(max-height:520px) and (orientation:landscape){
+ .app{display:flex;flex-direction:column;padding:6px}
+ .top{order:0}.top>div:first-child{display:none}.top .enemy{margin-top:0;padding:8px 10px}
+ .arena{order:1;position:sticky;top:0;z-index:5;margin-top:6px;background:#0b110e}
+ .director{order:2;padding:8px}.controls{order:3}.dashboard{order:4}
+ .directorTop{margin-bottom:4px}
+ .tools{grid-template-columns:repeat(4,1fr);gap:4px}
+ .tools button{padding:6px 4px;font-size:11px;min-height:44px;text-align:center}
+ .tools button small{display:none}
+ .tools button.hasIcon{padding:24px 2px 4px}
+ .tools button .ticon{top:4px;right:50%;transform:translateX(50%);width:20px;height:20px}
+ #startOverlay:not(.hidden){position:fixed;inset:0;z-index:50;overflow:auto;place-items:start center;border-radius:0;padding:8px 0}
+ #startOverlay .card{margin:8px}
+}
+@media (max-height:520px) and (orientation:landscape){
+ /* landscape phone: game on the left at full height, traps and panels scroll on the right */
+ .app{display:grid;grid-template-columns:auto minmax(150px,1fr);align-items:start;gap:0 6px;max-width:none}
+ .arena{grid-column:1;grid-row:1/span 5;margin-top:0}
+ .top,.director,.controls,.dashboard{grid-column:2}
+ .director{margin-top:6px}
+ .tools{grid-template-columns:repeat(2,1fr)}
+ #cv{width:auto!important;height:calc(100svh - 12px);max-width:calc(100vw - 170px)}
+}

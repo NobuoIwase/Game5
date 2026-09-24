@@ -148,15 +148,17 @@ updateHero=function(h,dt){
  if(room!=null&&h._voiceRoom!==room){h._voiceRoom=room;const l=P.floor[room];if(l&&!ev){h.thought=h._voiceShown=l;h._voiceHold=state.time+3.2;h._voiceKey='floor';return}}
  // Estella
  const est=!!h.estella?.active;
- if(est&&!h._vEst)say(h,'estellaStart',{force:true,hold:2.2});
+ // v0.29: the moment she tips over wins over the special that tipped her (same frame)
+ if(est&&!h._vEst){say(h,'estellaStart',{force:true,hold:2.4});if(ev==='special'||ev==='grab')h._vSkipEv=true}
  else if(!est&&h._vEst)say(h,'estellaEnd',{force:true,hold:3.4});
  else if(est&&state.time>(h._voiceHold||0))say(h,'estella',{hold:1.6});
  h._vEst=est;
  // events from the new systems
- if(ev){
+ if(h._vSkipEv){h._vSkipEv=false}
+ else if(ev){
   if(ev==='grab'&&h._edgeRegrab){h._edgeRegrab=false;say(h,'edgeRegrab',{force:true,hold:2})}
   else if(ev==='grab')say(h,(h._grabRepeat||1)>=3?'grabKnown':(h._grabRepeat||1)===2?'grabAgain':'grab',{force:true,hold:1.8});
-  else if(ev==='special')say(h,(h._grabRepeat||1)>=3&&Math.random()<.35?'specialKnown':'special',{force:true,hold:1.4});
+  else if(ev==='special')say(h,(h._grabRepeat||1)>=3&&Math.random()<.35?'specialKnown':'special',{force:h._voiceKey!=='estellaStart',hold:1.4});
   else if(ev==='afterglow')say(h,'afterglow',{hold:2.6});
   else if(ev==='free')say(h,'free',{force:true,hold:2.4});
   else if(ev==='released')say(h,'released',{force:true,hold:2});

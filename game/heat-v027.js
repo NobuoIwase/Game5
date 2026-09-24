@@ -240,6 +240,7 @@ function record(win){
  const suki=Object.entries(h?._sukiRec||{}).sort((a,b)=>b[1]-a[1])[0],SN=window.Game5Charm?.names||[];
  if(suki)review.push(`${nameOf(suki[0])}には「${SN[suki[1]]}」まで落ちている。本人は「ちがう」と言っている。${h.hesitations?`斬りかけて剣を止めたのが${h.hesitations}回。`:''}`);
  if(h?.attachTotal)review.push(`吸着羽虫の類に${h.attachTotal}回吸い付かれ、そのまま${(h.attachWorn||0).toFixed(0)}秒歩いている。${(h.attachWorn||0)>20?'途中から、取ろうとする手つきが遅くなった。':''}`);
+ if(h?.impTaunts)review.push(`闇の声に${h.impTaunts}回からかわれている。${h.impTaunts>=4?'言い返す声は、回を追うごとに小さくなった。':'そのたびに、言い返そうとして言葉に詰まった。'}`);
  if(R.watched)review.push(`捕まっている間、ほかの魔物が手を出さずに見物していたことが${R.watched}回。${R.maxWatch>=2?`多いときは${R.maxWatch}体が彼女を囲んでいた。`:''}`);
  if(R.lost){const lt=top(R.lostBy);review.push(`${nameOf(lt[0])}に捕まった${R.lost}回を、本人は覚えていない。報告にも、自己評価にも出てこない。${R.trance?`立ったまま何かに頷いていたことが${R.trance}回あった。`:''}`)}
  if(R.edge)review.push(`あと少しのところで離されたのが${R.edge}回。${R.edgePulls?`離されたあと、自分から魔物の方へ${R.edgePulls}度、腰を寄せている。本人は「脚がもつれた」と言っている。`:'離されたあとは、しばらく剣先が定まらなかった。'}`);
@@ -262,5 +263,5 @@ finish=function(win){
  }
  return r;
 };
-window.Game5Heat={version:'0.28.0',cfg:C,jitter,title,record:()=>R};
+window.Game5Heat={version:'0.30.0',cfg:C,jitter,title,record:()=>R,peek:()=>Q[0]};
 })();

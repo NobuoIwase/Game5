@@ -120,3 +120,5 @@ button{touch-action:manipulation}
 .record p{margin:8px 0 0;font-size:12.5px;line-height:1.65;color:#e6d8e0}
 .record p small{display:inline-block;margin-right:8px;color:#b98cab}
 .record .recSelf{color:#ffe0f0}
+.bodyMemory{margin:6px 0 10px;font-size:12px;color:#e6c8dc}
+.bodyMemory small{display:inline-block;margin-right:8px;color:#b98cab;letter-spacing:.08em}

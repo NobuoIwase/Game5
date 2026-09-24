@@ -117,7 +117,7 @@ updateHero=function(h,dt){
  h._saidDead=false;
  // floor entry
  const room=state.dungeon?.room;
- if(room!=null&&h._voiceRoom!==room){h._voiceRoom=room;const l=P.floor[room];if(l){h.thought=h._voiceShown=l;h._voiceHold=state.time+3.2;return}}
+ if(room!=null&&h._voiceRoom!==room){h._voiceRoom=room;const l=P.floor[room];if(l&&!ev){h.thought=h._voiceShown=l;h._voiceHold=state.time+3.2;return}}
  // Estella
  const est=!!h.estella?.active;
  if(est&&!h._vEst)say(h,'estellaStart',{force:true,hold:2.2});

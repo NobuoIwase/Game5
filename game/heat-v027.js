@@ -26,11 +26,29 @@ const C={
 const alive=()=>window.Game5MultiEnemy?.alive?.()||[];
 const nameOf=t=>t==='snare'?'影の手':(window.Game5Monsters?.profiles?.[t]?.name||t);
 
+/* ---------------- memory across runs (browser storage) ----------------
+   how often each species has held her in all runs, and how many Estellas: shown on the start
+   card, and a species that has held her often enough is "known" from the first grab */
+const MK='game5.bodyMemory';
+function mem(){try{return JSON.parse(localStorage.getItem(MK)||'{}')}catch(_){return{}}}
+function memSave(m){try{localStorage.setItem(MK,JSON.stringify(m))}catch(_){}}
+function memAdd(type){const m=mem();m.held||={};m.held[type]=(m.held[type]||0)+1;memSave(m)}
+function memEstella(){const m=mem();m.estella=(m.estella||0)+1;memSave(m)}
+function memCard(){
+ const m=mem(),list=Object.entries(m.held||{}).sort((a,b)=>b[1]-a[1]).slice(0,3);
+ const card=document.querySelector('#startOverlay .card');if(!card)return;
+ let el=document.getElementById('bodyMemory');if(!list.length&&!m.estella){el?.remove();return}
+ if(!el){el=document.createElement('p');el.id='bodyMemory';el.className='bodyMemory';card.insertBefore(el,document.getElementById('startBtn'))}
+ el.innerHTML=`<small>身体の記憶</small>${list.map(([t,n])=>`${nameOf(t)} ${n}回`).join('・')}${m.estella?`／エステラ 通算${m.estella}回`:''}`;
+}
+try{setTimeout(()=>{try{memCard()}catch(_){}},1500)}catch(_){}
+
 /* ---------------- per-run record ---------------- */
 let R;
-function fresh(){R={grabs:0,specials:0,free:0,waited:0,estella:0,held:0,byType:{},special:{},maxNut:0,holdLen:[]}}
+function fresh(){R={grabs:0,specials:0,free:0,waited:0,estella:0,held:0,byType:{},special:{},maxNut:0,holdLen:[],titles:[],floor:null}}
+function floorFresh(room){R.floor={room,grabs:0,specials:0,estella:0,byType:{},special:{}}}
 fresh();
-const baseReset=reset;reset=function(){fresh();slowT=0;return baseReset()};
+const baseReset=reset;reset=function(){fresh();slowT=0;try{setTimeout(()=>{try{memCard()}catch(_){}},50)}catch(_){}if(typeof Q!=='undefined')Q.length=0;return baseReset()};
 
 /* ---------------- slow motion ---------------- */
 let slowT=0;
@@ -56,10 +74,13 @@ updateHero=function(h,dt){
  const g=h.grapple;
  // a new hold
  if(g&&g!==h._heatG){
-  const t=g.e?.type||'snare';h.heldBy||={};h.heldBy[t]=(h.heldBy[t]||0)+1;h._grabRepeat=h.heldBy[t];
+  const t=g.e?.type||'snare';h.heldBy||={};h.heldBy[t]=(h.heldBy[t]||0)+1;
+  const life=(mem().held||{})[t]||0;h._grabRepeat=Math.max(h.heldBy[t],life>=8?3:life>=3?2:1);memAdd(t);
   R.grabs++;R.byType[t]=(R.byType[t]||0)+1;g._t0=state.time;
+  if(R.floor){R.floor.grabs++;R.floor.byType[t]=(R.floor.byType[t]||0)+1}
+  if(h.heldBy[t]===3)title(h,`${nameOf(t)}に覚えられた戦士`);
  }
- if(g){R.held+=dt;if(g.specials>sp0){R.specials++;const s=h._lastSpecial;if(s)R.special[s]=(R.special[s]||0)+1}}
+ if(g){R.held+=dt;if(g.specials>sp0){R.specials++;const s=h._lastSpecial;if(s)R.special[s]=(R.special[s]||0)+1;if(R.floor){R.floor.specials++;if(s)R.floor.special[s]=(R.floor.special[s]||0)+1}}}
  // a hold that ended
  if(h._heatG&&!g){
   const len=state.time-(h._heatG._t0||state.time);R.holdLen.push(len);
@@ -69,7 +90,8 @@ updateHero=function(h,dt){
  h._heatG=g||null;
  // Estella
  const est=!!h.estella?.active;
- if(est&&!est0){R.estella++;slowT=C.slow.t;h._estellaAt=state.time}
+ if(est&&!est0){R.estella++;memEstella();slowT=C.slow.t;h._estellaAt=state.time;if(R.floor)R.floor.estella++;
+  if(R.estella===1)title(h,'声を殺せなかった戦士');if(R.estella===3)title(h,'エステラを重ねた前衛')}
  if(!est&&est0){h.afterglow=Math.max(h.afterglow||0,C.after.estella);h.afterMax=h.afterglow}
  h._heatEst=est;
  // afterglow: Nutera drains away more slowly, she mutters now and then
@@ -79,9 +101,40 @@ updateHero=function(h,dt){
   if(!g&&!est&&Math.random()<dt*.22)h._voiceEvent||='afterglow';
  }
  R.maxNut=Math.max(R.maxNut,h.nutera||0);
+ // floors: start a tally, and when one is cleared she reports on it
+ const room=state.dungeon?.room;
+ if(!R.floor||R.floor.room!==room)floorFresh(room);
+ if(state.dungeon?.pending&&!R.floor.reported){R.floor.reported=true;report(h,R.floor)}
+ speakQueue(h);
  // close-up
  window.Game5Camera?.wantZoom?.(h.dead?1:est?C.zoom.estella:g?C.zoom.hold:h.afterglow>0?C.zoom.after:1);
 };
+/* ---------------- titles earned during the run ---------------- */
+function title(h,name){
+ if(R.titles.includes(name))return;R.titles.push(name);
+ addFx('text',h.x,h.y-140,`称号「${name}」`,'#ffc2e6',2.2);log(`称号「${name}」が記録された。`);
+}
+/* ---------------- her report on a cleared floor ----------------
+   Profile 3B-5: she reports, then corrects herself, and the correction is worse than the
+   report. Only floors where something happened get one. */
+const Q=[];
+function report(h,F){
+ if(!F.grabs&&!F.estella)return;
+ const n=(F.room??0)+1,tt=top(F.byType),ts=top(F.special),name=tt?nameOf(tt[0]):'',c=tt?tt[1]:0;
+ const cnt=k=>k===1?'い、一回':k===2?'に、二回':`${k}回`;
+ // she understates first, then owns up to the real number
+ Q.push(`……だ、第${n}区画は……${name}に、${cnt(F.grabs>1?F.grabs-1:1)}……つ、捕まった、だけ……`);
+ if(F.grabs>1)Q.push(`……ち、ちが……ほ、ほんとは、${cnt(F.grabs)}……です……${Object.keys(F.byType).length>1?'ほ、ほかのにも……':''}`);
+ if(ts&&F.specials>=3)Q.push(`……「${ts[0]}」は……お、覚えて、ない……${F.specials>=6?'な、何回も、されたけど……っ':'ぜ、ぜんぜん……'}`);
+ if(F.estella)Q.push(F.estella>1?`……エ、エステラ、は……${F.estella}回……い、言わせないで……っ`:'……エ、エステラ、は……し、してない……い、一回……だけ……');
+ Q.push(F.grabs>=3||F.estella?'……つ、次は、捕まらない、から……ふ、ふひ……':'……だ、大丈夫……ぜんぜん、平気、だった、し……');
+}
+function speakQueue(h){
+ if(!Q.length||h.dead||h.grapple||h.estella?.active)return;
+ if(state.time<(h._voiceHold||0))return;
+ const l=Q.shift();h.thought=h._voiceShown=l;h._voiceHold=state.time+3.2;
+}
+
 /* ---------------- her body: trembling, heat haze, breath ---------------- */
 function jitter(h){
  if(!state.started||h.dead)return null;
@@ -138,7 +191,8 @@ function record(win){
  if(R.estella)review.push(`エステラ${R.estella}回。${R.estella>=2?'二回目からは、声を抑えようとする素振りも消えた。':'本人は「何もなかった」と言っている。'}`);
  const self=(win?'……か、勝った、し。':'')+(R.estella>=2?'……き、記録とか……しなくて、いいから。ほ、ほんとに……ふひ……':R.estella===1?'あ、あれは……ちょっと、足が、もつれた、だけ……':R.grabs>=5?'つ、捕まったのは……ゆ、油断した、だけ……だし……':R.grabs>=1?'へ、へへ……ぜ、ぜんぜん、平気……だった……':'ふひっ……わ、わたし、けっこう、強い……かも……');
  const cell=(k,v)=>`<div><small>${k}</small><b>${v}</b></div>`;
- return `<small class="recK">記録</small><b class="recTitle">「${good}、${bad}」</b>
+ const earned=R.titles.length?`<p class="recTitles"><small>道中の称号</small>${R.titles.map(t=>`「${t}」`).join(' ')}</p>`:'';
+ return `<small class="recK">記録</small><b class="recTitle">「${good}、${bad}」</b>${earned}
  <div class="stats">${[cell('捕まった',`${R.grabs}回`),cell('特殊攻撃',`${R.specials}回`),cell('振りほどいた',`${R.free}回`),cell('捕まっていた時間',`${R.held.toFixed(1)}秒`),cell('いちばん捕まった相手',tt?`${name}（${tt[1]}回）`:'—'),cell('最大ヌテラ',`${Math.round(R.maxNut)}%`)].join('')}</div>
  <p class="recReview"><small>総評</small>${review.join('')}</p>
  <p class="recSelf"><small>自己評価</small>「${self}」</p>`;

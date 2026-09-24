@@ -43,6 +43,11 @@ const SP={
  snare:{col:'#b98cff',moves:[['影の手',{nutera:8,lumane:5}],['影のまさぐり',{nutera:9,sail:3}]]}
 };
 const look=e=>SP[e?.type]||SP.snare;
+/* how each kind of hold looks (v0.27): engulfing slimes swallow her from the feet up,
+   winders wrap strands round her, the rest cling and add their own touch */
+const STYLE={gel:'engulf',slug:'engulf',mirror_slime:'engulf',crown_attendant:'engulf',water_wraith:'engulf',
+ worm:'wrap',silk_spider:'wrap',snare:'wrap',creeping_hand:'wrap',lure_cap:'wrap',flower:'wrap',stone_sentinel:'wrap',
+ leech:'cling',orb:'spore',moth:'dust',gazer:'gaze',bubble_shell:'bubble',wisp:'mist'};
 
 /* ---------- Nutera: holds are the main source ---------- */
 const baseNut=applyNutera;
@@ -106,7 +111,7 @@ function special(h,g){
  drainSp(h,.6,'拘束中の責め');
  addFx('text',h.x+(g.side*26),h.y-96,name,'#ffc2e6',.9);
  g.specials++;g.pulse=1;h._voiceEvent='special';h._lastSpecial=name;
- const NF=window.Game5NuteraFX;if(NF)for(let k=0;k<3;k++)NF.emit(h.x+(Math.random()-.5)*26,h.y-40,{kind:k?'soft':'pink'});
+ const NF=window.Game5NuteraFX;if(NF)NF.emit(h.x+(Math.random()-.5)*26,h.y-40,{kind:'pink'});
  if(g.e)g.e.flash=Math.max(g.e.flash||0,.08);
 }
 const baseHero=updateHero;
@@ -160,6 +165,34 @@ function strands(h,g,t){
  if(p>0){ctx.globalAlpha=p*.7;ctx.strokeStyle='#ff9ad3';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(h.x,h.y-40,34+26*(1-p),46+26*(1-p),0,0,TAU);ctx.stroke()}
  ctx.restore();
 }
+function engulf(h,g,t){
+ // a wobbling translucent mass swallowing her up to the waist
+ const e=g.e,col=look(e).col,p=g.pulse,rise=Math.min(1,g.t/1.1)*(30+8*p)+Math.min(10,g.specials*2.5);
+ const base=h.y+14,top=base-rise-6,w=30+4*Math.sin(t*2.6);
+ ctx.save();
+ const gr=ctx.createLinearGradient(0,top,0,base);gr.addColorStop(0,col+'70');gr.addColorStop(.5,col+'99');gr.addColorStop(1,col+'c0');
+ ctx.fillStyle=gr;ctx.beginPath();ctx.moveTo(h.x-w-6,base);
+ ctx.bezierCurveTo(h.x-w-10,base-rise*.5,h.x-w+2,top+6,h.x-w*.45,top+Math.sin(t*4)*3);
+ ctx.bezierCurveTo(h.x-w*.2,top-5+Math.sin(t*5)*3,h.x+w*.2,top+4+Math.sin(t*4.4+1)*3,h.x+w*.5,top+Math.sin(t*3.6+2)*3);
+ ctx.bezierCurveTo(h.x+w+2,top+6,h.x+w+10,base-rise*.5,h.x+w+6,base);
+ ctx.closePath();ctx.fill();
+ ctx.globalAlpha=.5;ctx.strokeStyle='#ffffff';ctx.lineWidth=1.8;ctx.beginPath();ctx.ellipse(h.x-w*.45,top+rise*.35,7,3,-.5,0,TAU);ctx.stroke();
+ ctx.globalAlpha=.35;ctx.beginPath();ctx.ellipse(h.x+w*.3,top+rise*.55,4,2,.3,0,TAU);ctx.stroke();
+ // strings of goo clinging higher up
+ ctx.globalAlpha=.65;ctx.strokeStyle=col;ctx.lineWidth=1.8;
+ for(let k=0;k<3;k++){const x=h.x-12+k*12,l=12+10*Math.abs(Math.sin(t*1.7+k));ctx.beginPath();ctx.moveTo(x,top+4);ctx.quadraticCurveTo(x+4,top-l*.5,x+1,top-l);ctx.stroke()}
+ ctx.restore();
+}
+function extra(h,g,t,style){
+ const p=g.pulse,col=look(g.e).col;ctx.save();
+ if(style==='spore'||style==='dust'){for(let k=0;k<14;k++){const a=t*1.4+k*.9,r=22+((k*37)%30),x=h.x+Math.cos(a)*r,y=h.y-40+Math.sin(a*1.3)*r*.8;ctx.globalAlpha=.5+.3*Math.sin(t*4+k);ctx.fillStyle=style==='dust'?'#fff0d0':col;ctx.beginPath();ctx.arc(x,y,style==='dust'?1.6:2.4,0,TAU);ctx.fill()}}
+ if(style==='bubble'){for(let k=0;k<8;k++){const ph=(t*.6+k/8)%1,x=h.x-20+((k*29)%40),y=h.y+4-ph*90;ctx.globalAlpha=(1-ph)*.7;ctx.strokeStyle='#e8fbff';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x,y,4+k%3*2,0,TAU);ctx.stroke()}}
+ if(style==='mist'){const gr=ctx.createRadialGradient(h.x,h.y-30,4,h.x,h.y-30,60);gr.addColorStop(0,'rgba(210,245,255,.35)');gr.addColorStop(1,'rgba(210,245,255,0)');ctx.fillStyle=gr;ctx.beginPath();ctx.arc(h.x,h.y-30,60,0,TAU);ctx.fill()}
+ if(style==='gaze'&&g.e){const e=g.e;ctx.globalCompositeOperation='lighter';for(let k=0;k<3;k++){const a=t*3+k*2.1;ctx.globalAlpha=.25+.25*p;ctx.strokeStyle='#b98cff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(e.x,e.y-e.r*.6);ctx.lineTo(h.x+Math.cos(a)*10,h.y-64+Math.sin(a)*6);ctx.stroke()}
+  ctx.globalAlpha=.4+.3*Math.sin(t*6);ctx.strokeStyle='#d8b8ff';ctx.beginPath();for(let a=0;a<TAU*2;a+=.25){const r=2+a*1.8;a?ctx.lineTo(h.x+Math.cos(a+t*4)*r,h.y-78+Math.sin(a+t*4)*r*.6):ctx.moveTo(h.x,h.y-78)}ctx.stroke()}
+ if(style==='cling'&&g.e){const e=g.e;ctx.globalAlpha=.6;ctx.strokeStyle=col;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(h.x,h.y-44);ctx.stroke();ctx.fillStyle=col;ctx.beginPath();ctx.arc(h.x,h.y-44,4+2*p,0,TAU);ctx.fill()}
+ ctx.restore();
+}
 function gauge(h,g){
  const w=64,x=h.x-w/2,y=h.y-126;
  ctx.save();ctx.fillStyle='#000b';ctx.fillRect(x-2,y-2,w+4,10);
@@ -169,6 +202,10 @@ function gauge(h,g){
  ctx.restore();
 }
 const Gr=window.Game5Graphics;
-if(Gr){const over=Gr.drawHazardsOver;Gr.drawHazardsOver=function(){over?.();const h=state.hero,g=h?.grapple;if(g&&!h.dead){strands(h,g,state.time);gauge(h,g)}}}
+if(Gr){const over=Gr.drawHazardsOver;Gr.drawHazardsOver=function(){over?.();const h=state.hero,g=h?.grapple;if(g&&!h.dead){
+ const st=STYLE[g.e?.type||'snare']||'wrap',t=state.time;
+ if(st==='engulf')engulf(h,g,t);else if(st==='wrap')strands(h,g,t);else{extra(h,g,t,st);if(st!=='cling'&&st!=='gaze')strands(h,g,t)}
+ if(st==='cling'||st==='gaze')extra(h,g,t,st);
+ gauge(h,g)}}}
 window.Game5Grapple={version:'0.26.0',cfg:C,specials:SP,start,release};
 })();

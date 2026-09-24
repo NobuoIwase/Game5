@@ -10,9 +10,17 @@ const K={x:0,y:0};const kick=(x,y)=>{K.x+=x;K.y+=y};
 /* v0.27 zoom: CAM.z (1 = normal). The view is SW/z x SH/z world pixels from CAM.x,CAM.y.
    Other modules ask for a close-up through Game5Camera.wantZoom (holds, Estella). */
 CAM.z=1;let wantZ=1;
+/* v0.27 dead zone: the view stays still while she moves inside the middle of the screen and
+   only follows once she leaves it, so turning round or pacing does not swing the whole
+   screen. In a close-up she is simply centred. */
+const DZ={x:.16,y:.14};
 function target(h){
- const lead=h.moving?70:40,f=h.facing||0,z=CAM.z,vw=SW/z,vh=SH/z,l=z>1.05?.3:1;
- return{x:clamp(h.x+Math.cos(f)*lead*l-vw/2,0,W-vw),y:clamp(h.y-(z>1.05?46:20)+Math.sin(f)*lead*.6*l-vh/2,0,H-vh)};
+ const z=CAM.z,vw=SW/z,vh=SH/z,hy=h.y-(z>1.05?46:30);
+ if(z>1.05)return{x:clamp(h.x-vw/2,0,W-vw),y:clamp(hy-vh/2,0,H-vh)};
+ let x=CAM.x,y=CAM.y;const cx=x+vw/2,cy=y+vh/2,dx=vw*DZ.x,dy=vh*DZ.y;
+ if(h.x<cx-dx)x=h.x+dx-vw/2;else if(h.x>cx+dx)x=h.x-dx-vw/2;
+ if(hy<cy-dy)y=hy+dy-vh/2;else if(hy>cy+dy)y=hy-dy-vh/2;
+ return{x:clamp(x,0,W-vw),y:clamp(y,0,H-vh)};
 }
 function follow(dt){
  const h=state.hero;if(!h)return;
@@ -21,8 +29,8 @@ function follow(dt){
  if(Math.abs(CAM.z-z0)>1e-4){const cx=CAM.x+SW/z0/2,cy=CAM.y+SH/z0/2;CAM.x=cx-SW/CAM.z/2;CAM.y=cy-SH/CAM.z/2}
  const t=target(h);
  const jump=!seen||Math.hypot(h.x-seen.x,h.y-seen.y)>260;
- if(jump){CAM.x=t.x;CAM.y=t.y}
- else{const k=1-Math.exp(-dt*5);CAM.x+=(t.x-CAM.x)*k;CAM.y+=(t.y-CAM.y)*k}
+ if(jump){CAM.x=clamp(h.x-SW/CAM.z/2,0,W-SW/CAM.z);CAM.y=clamp(h.y-30-SH/CAM.z/2,0,H-SH/CAM.z)}
+ else{const k=1-Math.exp(-dt*6);CAM.x+=(t.x-CAM.x)*k;CAM.y+=(t.y-CAM.y)*k}
  seen={x:h.x,y:h.y};
 }
 const bDraw=draw;

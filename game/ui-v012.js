@@ -58,7 +58,7 @@ function drawRoster(){
 
 /* ---------- director tools ---------- */
 const btns=[...document.querySelectorAll('[data-tool]')];
-const HINT={snare:'踏むと拘束・SP減',fog:'ヌテラとセイルが上昇',lure:'音で注意を逸らす',ringbeam:'輪紋を刻む直線',pool:'足が鈍りSPが削れる',tower:'催眠の電波を放つ',mimic:'開けると拘束',summon:'魔物を1体呼ぶ'};
+const HINT={hide:'見えない暗がりで待ち伏せ',snare:'踏むと拘束・SP減',fog:'ヌテラとセイルが上昇',lure:'音で注意を逸らす',ringbeam:'輪紋を刻む直線',pool:'足が鈍りSPが削れる',tower:'催眠の電波を放つ',mimic:'開けると拘束',summon:'魔物を1体呼ぶ'};
 for(const b of btns){const t=DIRECTOR_TOOLS[b.dataset.tool];if(!t)continue;b.insertAdjacentHTML('beforeend',`<small>EN ${t.cost} / ${HINT[b.dataset.tool]||''}</small><i class="cd"></i>`)}
 function drawTools(){
  const d=state.director;

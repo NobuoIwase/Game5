@@ -168,6 +168,26 @@ function relocate(dt){
  e.x=p.x;e.y=p.y;e.homeX=p.x;e.homeY=p.y;e.ambush=true;e.idleGoal=null;
  log(`AUTO指揮：${e.name}を、まだ見ていない暗がりへ潜ませた。`);
 }
+/* the player can do it too: tool 9 「潜伏」 moves the nearest unaware monster to the tapped spot,
+   which must be out of her sight (behind a wall or not yet explored) */
+DIRECTOR_TOOLS.hide={name:'潜伏',cost:30,cd:9,r:30,desc:'気づいていない魔物を、アリアから見えない暗がりへ潜ませる'};
+const basePlace=placeDirectorTool;
+placeDirectorTool=function(kind,x,y,auto=false){
+ if(kind!=='hide')return basePlace(kind,x,y,auto);
+ const d=state.director,t=DIRECTOR_TOOLS.hide,h=state.hero;
+ if(!state.started||state.over||!h||(d.cd.hide||0)>0||d.en<t.cost)return false;
+ const f=T()?.current?.(),CS=T()?.CS||30,i=f?Math.floor(y/CS)*T().GW+Math.floor(x/CS):-1;
+ const seen=f&&f.explored[i]&&!wall(h,{x,y})&&dist(h,{x,y})<(h.visionRange||300)+40;
+ if(!f||f.grid[i]===1||DG()?.blockedAt?.({r:24},x,y)||seen){addFx('text',x,y-20,'見えている場所には潜めない','#cfb8ff',.9);return false}
+ const e=alive().filter(o=>!o.aware&&!o.grappling&&!o.cast).sort((a,b)=>dist(a,{x,y})-dist(b,{x,y}))[0];
+ if(!e){addFx('text',x,y-20,'潜ませられる魔物がいない','#cfb8ff',.9);return false}
+ d.en-=t.cost;d.cd.hide=t.cd;
+ window.Game5FX?.burst?.(e.x,e.y,'#8a6ab8',12,90,.7);
+ e.x=x;e.y=y;e.homeX=x;e.homeY=y;e.ambush=true;e.idleGoal=null;DG()?.resolveEntity?.(e);
+ log(`${auto?'AUTO指揮':'プレイヤー'}：${e.name}を暗がりへ潜ませた。`);
+ return true;
+};
+addEventListener('keydown',ev=>{if(ev.code==='Digit9'){state.director.selected='hide';renderUI()}});
 const baseDirector=updateDirector;
 updateDirector=function(dt){baseDirector(dt);relocate(dt)};
 

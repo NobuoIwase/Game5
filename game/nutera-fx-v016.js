@@ -62,8 +62,8 @@ applyNutera=function(h,base,meta={}){
  const gain=bNutera(h,base,meta)||0;
  if(h&&gain>0){
   h._heartAcc=(h._heartAcc||0)+gain;
-  while(h._heartAcc>=2.5){h._heartAcc-=2.5;emit(h.x+(Math.random()-.5)*20,h.y-44)}
-  if(gain>=8){for(let k=0;k<5;k++)emit(h.x,h.y-40,{ang:-Math.PI/2+(k-2)*.45,speed:90+Math.random()*40,kind:'deep',size:14});ring(h.x,h.y-30,10,58,.5,PINK,2.5)}
+  while(h._heartAcc>=4){h._heartAcc-=4;emit(h.x+(Math.random()-.5)*20,h.y-44)}   // v0.27: fewer, so she stays visible
+  if(gain>=12){for(let k=0;k<3;k++)emit(h.x,h.y-40,{ang:-Math.PI/2+(k-1)*.55,speed:90+Math.random()*40,kind:'deep',size:13});ring(h.x,h.y-30,10,58,.5,PINK,2.5)}
  }
  return gain;
 };

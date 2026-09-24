@@ -3,14 +3,15 @@
   "floors": {},
   "species": "species.json",
   "assetPack": {
-    "version": "0.16.1",
-    "scripts": [
-      "requested-art-base-v0161.js",
-      "requested-art-creatures-v0161.js",
-      "requested-art-environment2-v0161.js"
-    ],
+    "version": "0.18.0",
+    "generated": {
+      "monsters": "generated/monsters_v018.png",
+      "floors": "generated/floors_v018.png",
+      "propsVfx": "generated/extras_v018.png",
+      "allies": "generated/allies_v018.png"
+    },
+    "runtime": "../../generated-png-v018.js",
     "dialogues": "dialogues.json",
-    "roomIdeas": "room_ideas.json",
-    "integration": "../../pack-v017.js"
+    "roomIdeas": "room_ideas.json"
   }
 }

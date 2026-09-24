@@ -22,6 +22,14 @@ const C={
  bindDrain:2,       // SP drain while held (the old flat bind drain was 7.2/s)
  immune:2.4
 };
+/* v0.27 寸止め (profile: 寸止め・焦らし・おあずけ, "耐えられず腰でねだるまでの過程").
+   When a special brings her to the brink (Nutera >= at) without tipping her into Estella, the
+   holder may let go on purpose and back off. She is left at the edge: Nutera only sinks slowly,
+   and every couple of seconds her body takes a step toward it on its own before she catches
+   herself. If the same monster takes her again while she is like this, it starts where it
+   stopped. */
+const EDGE={at:86,cap:95,t:7.5,sink:.9,wait:2.6,pullEvery:[1.5,2.4],pull:.75,pullSpeed:52,near:300,drain:3.2,
+ chance:{lure_cap:.5,flower:.45,creeping_hand:.45,crown_attendant:.4,wisp:.4,moth:.4,gazer:.35,silk_spider:.35,mirror_slime:.3},base:.18};
 const SP={
  gel:{col:'#e89ab8',moves:[['粘膜の包み込み',{nutera:10,lumane:6}],['冠の脈動',{nutera:8,hypnosis:8}]]},
  slug:{col:'#e28ac0',moves:[['這い上がる粘膜',{nutera:10,sail:4}],['ぬめりの舐め上げ',{nutera:11,lumane:5}]]},
@@ -70,6 +78,7 @@ function start(h,e,dur){
  h.status.bind=Math.max(h.status.bind||0,.3);
  h.grappleCount=(h.grappleCount||0)+1;
  h._voiceEvent='grab';
+ if(h._edge){if(e&&e===h._edge.e){h._edgeRegrab=true;h.grapple.next=.25}h._edge=null}
  log(`${e?e.name:'影の手'}に捕まった——もがいても、離れない。`);
  window.Game5FX?.shake?.(5);
 }
@@ -106,22 +115,59 @@ function special(h,g){
  if(fx.nutera)applyNutera(h,fx.nutera*grow,m);
  if(fx.sail)applySail(h,fx.sail);
  if(fx.lumane)applyTiered(h,'lumane',fx.lumane,m);
- if(fx.hypnosis)applyTiered(h,'hypnosis',fx.hypnosis,m);
+ if(fx.hypnosis){applyTiered(h,'hypnosis',fx.hypnosis,m);g.hypno=(g.hypno||0)+1}
  if(fx.charm&&g.e)applyTiered(h,'charm',fx.charm,{...m,family:g.e.family});
  drainSp(h,.6,'拘束中の責め');
  addFx('text',h.x+(g.side*26),h.y-96,name,'#ffc2e6',.9);
  g.specials++;g.pulse=1;h._voiceEvent='special';h._lastSpecial=name;
  const NF=window.Game5NuteraFX;if(NF)NF.emit(h.x+(Math.random()-.5)*26,h.y-40,{kind:'pink'});
  if(g.e)g.e.flash=Math.max(g.e.flash||0,.08);
+ if(g.e&&!g.edgeRolled&&!h.estella?.active&&(h.nutera||0)>=EDGE.at){g.edgeRolled=true;g.edgeNow=Math.random()<(EDGE.chance[g.e.type]??EDGE.base)}
+}
+function edgeRelease(h,g){
+ const e=g.e;h.nutera=Math.min(h.nutera,EDGE.cap);
+ release(h,'edge');
+ h._edge={e,t:EDGE.t,n:h.nutera,next:rnd(...EDGE.pullEvery)*.6,pull:0,pulling:false};
+ h.edgeCount=(h.edgeCount||0)+1;
+ if(e){
+  const a=Math.atan2(e.y-h.y,e.x-h.x),blocked=window.Game5Dungeon?.blockedAt;let tx=e.x,ty=e.y;
+  for(let d=6;d<=84;d+=6){const nx=e.x+Math.cos(a)*d,ny=e.y+Math.sin(a)*d;if(blocked?.(e,nx,ny))break;tx=nx;ty=ny}
+  e.dash={x0:e.x,y0:e.y,x1:tx,y1:ty,t:0,T:.4,ang:a};e.actCd=Math.max(e.actCd||0,EDGE.wait);e.decision='焦らしている';
+ }
+ addFx('text',h.x,h.y-104,'……寸止め','#ffb0dc',1.4);
+ log(`${e?.name||'それ'}は、あと少しのところで彼女を離した。`);
+ h._voiceEvent='edge';
+}
+/* the edge, every frame she is not held: Nutera held up, her hips following it */
+function edgeTick(h,dt,px,py){
+ const E=h._edge;if(!E)return;
+ if(h.dead||h.estella?.active){h._edge=null;return}
+ E.t-=dt;if(E.e&&E.e.hp<=0)E.e=null;
+ E.n=Math.max(0,E.n-dt*EDGE.sink);if(h.nutera<E.n)h.nutera=E.n;
+ drainSp(h,EDGE.drain*dt,'焦らし');   // she cannot get her breath back while it lasts
+ const e=E.e;
+ if(E.pull>0){
+  E.pull-=dt;
+  if(e&&!h.cast){
+   const a=Math.atan2(e.y-h.y,e.x-h.x),d=Math.hypot(e.x-px,e.y-py);
+   if(d>(e.r||24)+20){const nx=px+Math.cos(a)*EDGE.pullSpeed*dt,ny=py+Math.sin(a)*EDGE.pullSpeed*dt;
+    if(!window.Game5Dungeon?.blockedAt?.(h,nx,ny)){h.x=nx;h.y=ny;h.moving=true;h.facing=a;h.dir=dirFrom(Math.cos(a),Math.sin(a))}}
+  }
+ }else if(E.pulling){E.pulling=false;h._voiceEvent='edgeCatch'}
+ E.next-=dt;
+ if(E.next<=0&&E.pull<=0){E.next=rnd(...EDGE.pullEvery);
+  if(e&&!h.cast&&Math.hypot(e.x-h.x,e.y-h.y)<EDGE.near&&Math.random()<.8){E.pull=EDGE.pull;E.pulling=true;h.edgePulls=(h.edgePulls||0)+1;h._voiceEvent='edgePull';addFx('text',h.x,h.y-100,'腰が……','#ffb0dc',.8)}}
+ if(E.t<=0){h._edge=null;h._voiceEvent='edgeEnd'}
 }
 const baseHero=updateHero;
 updateHero=function(h,dt){
  const g=h?.grapple;
  if(g&&h.bindDrain!==C.bindDrain){h._bindDrain0??=h.bindDrain;h.bindDrain=C.bindDrain}
  if(!g&&h?._bindDrain0!=null){h.bindDrain=h._bindDrain0;h._bindDrain0=null}
+ const px=h?.x,py=h?.y;
  baseHero(h,dt);
  if(!h)return;
- if(!g)return;
+ if(!g){edgeTick(h,dt,px,py);return}
  if(h.dead||g.room!==state.dungeon?.room){release(h,'end');return}
  const e=g.e;
  if(e&&(e.hp<=0||e.stun>.2)){release(h,'hurt');return}
@@ -130,7 +176,7 @@ updateHero=function(h,dt){
  // keep the monster pressed against her
  if(e&&!e.dash){const a=Math.atan2(e.y-h.y,e.x-h.x),r=(h.r||18)+(e.r||24)*.55;e.x=h.x+Math.cos(a)*r;e.y=h.y+Math.sin(a)*r*.7;e.cast=null;e.decision='捕らえている'}
  // specials
- g.next-=dt;if(g.next<=0){g.next=rnd(...C.every)*(h.estella?.active?1.25:1);special(h,g)}
+ g.next-=dt;if(g.next<=0){g.next=rnd(...C.every)*(h.estella?.active?1.25:1);special(h,g);if(g.edgeNow&&h.grapple===g&&!h.estella?.active){edgeRelease(h,g);return}}
  // struggle
  if(!h.estella?.active&&h.status.stun<=0){
   const S=C.struggle,n=(h.nutera||0)/100,rate=(S.base+(h.knowledge?.bind||0)*S.know+(h.sp/h.maxSp)*S.sp)*(1-S.nutera*n)*(1-.4*clamp(h.fatigue||0,0,1));
@@ -145,7 +191,7 @@ if(EAI?.move){const m=EAI.move;EAI.move=function(e,h,dt){if(e.grappling){e.movin
 const baseChoose=chooseEnemyAction;
 chooseEnemyAction=function(){const e=state.enemy;if(e?.grappling){e.actCd=.4;return}return baseChoose()};
 /* reset between floors */
-const baseReset=reset;reset=function(){const h=state.hero;if(h?.grapple)h.grapple=null;return baseReset()};
+const baseReset=reset;reset=function(){const h=state.hero;if(h?.grapple)h.grapple=null;if(h)h._edge=null;return baseReset()};
 
 /* ---------- drawing: strands, pulse, struggle gauge ---------- */
 function strands(h,g,t){
@@ -207,5 +253,18 @@ if(Gr){const over=Gr.drawHazardsOver;Gr.drawHazardsOver=function(){over?.();cons
  if(st==='engulf')engulf(h,g,t);else if(st==='wrap')strands(h,g,t);else{extra(h,g,t,st);if(st!=='cling'&&st!=='gaze')strands(h,g,t)}
  if(st==='cling'||st==='gaze')extra(h,g,t,st);
  gauge(h,g)}}}
-window.Game5Grapple={version:'0.26.0',cfg:C,specials:SP,start,release};
+function edgeThread(h){
+ const E=h._edge,e=E?.e;if(!e)return;
+ const t=state.time,k=E.pull>0?1:.45,x0=h.x,y0=h.y-30,x1=e.x,y1=e.y-(e.r||24)*.4,mx=(x0+x1)/2,my=Math.min(y0,y1)-50;
+ ctx.save();ctx.lineCap='round';
+ ctx.globalAlpha=k*.35;ctx.strokeStyle='#5a0f3c';ctx.lineWidth=3+k*2;ctx.beginPath();ctx.moveTo(x0,y0);ctx.quadraticCurveTo(mx,my,x1,y1);ctx.stroke();
+ ctx.globalAlpha=.45+k*.45;ctx.strokeStyle='#ff9ad3';ctx.lineWidth=1.4+k*1.6;ctx.setLineDash([3,6]);ctx.lineDashOffset=-t*40;
+ ctx.beginPath();ctx.moveTo(x0,y0);ctx.quadraticCurveTo(mx,my,x1,y1);ctx.stroke();ctx.restore();
+ // small hearts drifting from her toward it
+ const NF=window.Game5NuteraFX;
+ for(let i=0;i<(E.pull>0?3:2);i++){const q=(t*(E.pull>0?.9:.45)+i/3)%1,bx=(1-q)*(1-q)*x0+2*(1-q)*q*mx+q*q*x1,by=(1-q)*(1-q)*y0+2*(1-q)*q*my+q*q*y1;NF?.drawHeart?.(bx,by,7+4*k,(1-q)*.9)}
+ NF?.drawHeart?.(h.x,h.y-30,9+5*k+2*Math.sin(t*9),.55+.4*k);
+}
+if(Gr){const over=Gr.drawHazardsOver;Gr.drawHazardsOver=function(){over?.();const h=state.hero;if(h&&!h.dead&&!h.grapple&&h._edge)edgeThread(h)}}
+window.Game5Grapple={version:'0.27.0',cfg:C,specials:SP,edge:EDGE,start,release};
 })();

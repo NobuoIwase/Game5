@@ -17,7 +17,7 @@
      the species that held her most, a title (a good word against a bad one), an assessment
      in a cold observer's voice and her own self-assessment, on the result screen */
 const C={
- zoom:{hold:1.4,estella:1.6,after:1.12},
+ zoom:{hold:1.7,estella:2,after:1.15},
  slow:{t:.7,k:.32},
  after:{hold:6,free:3.5,estella:10,speed:.86,keepNutera:.35},
  knownMul:1.1,
@@ -45,8 +45,8 @@ try{setTimeout(()=>{try{memCard()}catch(_){}},1500)}catch(_){}
 
 /* ---------------- per-run record ---------------- */
 let R;
-function fresh(){R={grabs:0,specials:0,free:0,waited:0,estella:0,held:0,byType:{},special:{},maxNut:0,holdLen:[],titles:[],floor:null}}
-function floorFresh(room){R.floor={room,grabs:0,specials:0,estella:0,byType:{},special:{}}}
+function fresh(){R={grabs:0,specials:0,free:0,waited:0,estella:0,edge:0,edgePulls:0,lost:0,lostBy:{},trance:0,watched:0,maxWatch:0,held:0,byType:{},special:{},maxNut:0,holdLen:[],titles:[],floor:null}}
+function floorFresh(room){R.floor={room,grabs:0,specials:0,estella:0,edge:0,pulls:0,lost:0,lostBy:{},byType:{},special:{}}}
 fresh();
 const baseReset=reset;reset=function(){fresh();slowT=0;try{setTimeout(()=>{try{memCard()}catch(_){}},50)}catch(_){}if(typeof Q!=='undefined')Q.length=0;return baseReset()};
 
@@ -80,11 +80,18 @@ updateHero=function(h,dt){
   if(R.floor){R.floor.grabs++;R.floor.byType[t]=(R.floor.byType[t]||0)+1}
   if(h.heldBy[t]===3)title(h,`${nameOf(t)}に覚えられた戦士`);
  }
- if(g){R.held+=dt;if(g.specials>sp0){R.specials++;const s=h._lastSpecial;if(s)R.special[s]=(R.special[s]||0)+1;if(R.floor){R.floor.specials++;if(s)R.floor.special[s]=(R.floor.special[s]||0)+1}}}
+ if(g){const wn=(window.Game5MultiEnemy?.alive?.()||[]).filter(o=>o.aware&&!o.grappling&&Math.hypot(o.x-h.x,o.y-h.y)<170).length;
+  if(wn&&!g._watchCounted){g._watchCounted=true;R.watched++}R.maxWatch=Math.max(R.maxWatch,wn);if(wn>=2)title(h,'衆目の中で抗った戦士')}
+ if(g){R.held+=dt;if(g.specials>sp0){R.specials++;const s=h._lastSpecial;if(s){R.special[s]=(R.special[s]||0)+1;(g._sp||={})[s]=(g._sp[s]||0)+1}if(R.floor){R.floor.specials++;if(s)R.floor.special[s]=(R.floor.special[s]||0)+1}}}
  // a hold that ended
  if(h._heatG&&!g){
   const len=state.time-(h._heatG._t0||state.time);R.holdLen.push(len);
   const freed=h._lastRelease==='free';if(freed)R.free++;else R.waited++;
+  // v0.27 hypnosis: a hold in which she was hypnotised is one she does not remember
+  const hg=h._heatG;
+  if((hg.hypno||0)>=1){const t=hg.e?.type||'snare';R.lost++;R.lostBy[t]=(R.lostBy[t]||0)+1;if(R.floor){R.floor.lost++;R.floor.lostBy[t]=(R.floor.lostBy[t]||0)+1;for(const [k,v] of Object.entries(hg._sp||{})){R.floor.special[k]=Math.max(0,(R.floor.special[k]||0)-v);R.floor.specials=Math.max(0,R.floor.specials-v)}}
+   if((hg.hypno||0)>=2){h._trance={left:(h._trance?.left||0)+1,next:rnd(9,18),t:0}}}
+  if(h._lastRelease==='edge'){R.edge++;if(R.floor)R.floor.edge++;if(R.edge===1)title(h,'剣を握ったまま、腰で追った戦士');if(R.edge===3)title(h,'寸止めを三度数えた前衛')}
   h.afterglow=Math.max(h.afterglow||0,freed?C.after.free:C.after.hold);h.afterMax=h.afterglow;
  }
  h._heatG=g||null;
@@ -101,11 +108,13 @@ updateHero=function(h,dt){
   if(!g&&!est&&Math.random()<dt*.22)h._voiceEvent||='afterglow';
  }
  R.maxNut=Math.max(R.maxNut,h.nutera||0);
+ if((h.edgePulls||0)>(h._heatPulls||0)){const d=h.edgePulls-(h._heatPulls||0);R.edgePulls+=d;if(R.floor)R.floor.pulls+=d}h._heatPulls=h.edgePulls||0;
  // floors: start a tally, and when one is cleared she reports on it
  const room=state.dungeon?.room;
  if(!R.floor||R.floor.room!==room)floorFresh(room);
  if(state.dungeon?.pending&&!R.floor.reported){R.floor.reported=true;report(h,R.floor)}
  speakQueue(h);
+ trance(h,dt);
  // close-up
  window.Game5Camera?.wantZoom?.(h.dead?1:est?C.zoom.estella:g?C.zoom.hold:h.afterglow>0?C.zoom.after:1);
 };
@@ -120,19 +129,44 @@ function title(h,name){
 const Q=[];
 function report(h,F){
  if(!F.grabs&&!F.estella)return;
+ const lostTop=top(F.lostBy);
+ const truth=F.lost?{log:`（記録）第${(F.room??0)+1}区画では、ほかに${nameOf(lostTop[0])}に${F.lost}回捕まっている。本人は覚えていない。`}:null;
+ const said=F.grabs-F.lost;
+ if(said<=0&&!F.estella){Q.push(`……だ、第${(F.room??0)+1}区画は……な、何も、なかった……と、思う……。……た、たぶん……`);if(truth)Q.push(truth);return}
+ F={...F,grabs:said,byType:Object.fromEntries(Object.entries(F.byType).map(([k,v])=>[k,v-(F.lostBy[k]||0)]).filter(([,v])=>v>0))};
+ const edgeLines=[];
+ if(F.edge){edgeLines.push('……さ、最後、の……は、は、離された、だけ……お、追いかけて、ない……ぜ、ぜったい……');if(F.pulls)edgeLines.push(`……っ、……い、${F.pulls>1?`${F.pulls}歩`:'一歩'}、だけ……です……あ、脚が、勝手に……`)}
  const n=(F.room??0)+1,tt=top(F.byType),ts=top(F.special),name=tt?nameOf(tt[0]):'',c=tt?tt[1]:0;
  const cnt=k=>k===1?'い、一回':k===2?'に、二回':`${k}回`;
  // she understates first, then owns up to the real number
  Q.push(`……だ、第${n}区画は……${name}に、${cnt(F.grabs>1?F.grabs-1:1)}……つ、捕まった、だけ……`);
  if(F.grabs>1)Q.push(`……ち、ちが……ほ、ほんとは、${cnt(F.grabs)}……です……${Object.keys(F.byType).length>1?'ほ、ほかのにも……':''}`);
  if(ts&&F.specials>=3)Q.push(`……「${ts[0]}」は……お、覚えて、ない……${F.specials>=6?'な、何回も、されたけど……っ':'ぜ、ぜんぜん……'}`);
+ Q.push(...edgeLines);
  if(F.estella)Q.push(F.estella>1?`……エ、エステラ、は……${F.estella}回……い、言わせないで……っ`:'……エ、エステラ、は……し、してない……い、一回……だけ……');
  Q.push(F.grabs>=3||F.estella?'……つ、次は、捕まらない、から……ふ、ふひ……':'……だ、大丈夫……ぜんぜん、平気、だった、し……');
+ if(truth)Q.push(truth);
 }
 function speakQueue(h){
- if(!Q.length||h.dead||h.grapple||h.estella?.active)return;
+ if(!Q.length||h.dead||h.grapple||h.estella?.active||h._trance?.t>0)return;
  if(state.time<(h._voiceHold||0))return;
- const l=Q.shift();h.thought=h._voiceShown=l;h._voiceHold=state.time+3.2;
+ const l=Q.shift();
+ if(l?.log){log(l.log);addFx('text',h.x,h.y-140,l.log,'#d4b8ff',3.4);h._voiceHold=state.time+1.2;return}
+ h.thought=h._voiceShown=l;h._voiceHold=state.time+3.2;h._voiceKey='report';
+}
+/* v0.27 trance: after being hypnotised hard in a hold, at some quiet moment later she stops,
+   answers someone who is not there, and comes back without knowing it happened */
+function trance(h,dt){
+ const T=h._trance;if(!T||h.dead)return;
+ if(T.t>0){T.t-=dt;h.status.stun=Math.max(h.status.stun||0,Math.min(.2,T.t));if(T.t<=0){h._voiceEvent='tranceOut';if(--T.left<=0)h._trance=null;else T.next=rnd(12,22)}return}
+ if(h.grapple||h.estella?.active||h.cast)return;
+ T.next-=dt;if(T.next>0)return;
+ const near=(window.Game5MultiEnemy?.alive?.()||[]).some(e=>Math.hypot(e.x-h.x,e.y-h.y)<130);
+ if(near){T.next=2;return}
+ T.t=1.8;h.status.stun=Math.max(h.status.stun||0,.2);h._voiceEvent='tranceIn';R.trance++;
+ window.Game5NuteraFX?.ring?.(h.x,h.y-60,6,60,.9,'#c9a6ff',2);
+ log('数秒、彼女は立ったまま動かなかった。何かに答えたように見えた。本人は覚えていない。');
+ if(R.trance===1)title(h,'覚えていない声に頷いた戦士');
 }
 
 /* ---------------- her body: trembling, heat haze, breath ---------------- */
@@ -188,12 +222,15 @@ function record(win){
   if(grow)review.push('捕まるたびに、抜け出すまでの時間が延びていった。本人は気づいていない。');
   if(ts)review.push(`受けた特殊攻撃は${R.specials}回。いちばん多かったのは「${ts[0]}」。`);
  }
+ if(R.watched)review.push(`捕まっている間、ほかの魔物が手を出さずに見物していたことが${R.watched}回。${R.maxWatch>=2?`多いときは${R.maxWatch}体が彼女を囲んでいた。`:''}`);
+ if(R.lost){const lt=top(R.lostBy);review.push(`${nameOf(lt[0])}に捕まった${R.lost}回を、本人は覚えていない。報告にも、自己評価にも出てこない。${R.trance?`立ったまま何かに頷いていたことが${R.trance}回あった。`:''}`)}
+ if(R.edge)review.push(`あと少しのところで離されたのが${R.edge}回。${R.edgePulls?`離されたあと、自分から魔物の方へ${R.edgePulls}度、腰を寄せている。本人は「脚がもつれた」と言っている。`:'離されたあとは、しばらく剣先が定まらなかった。'}`);
  if(R.estella)review.push(`エステラ${R.estella}回。${R.estella>=2?'二回目からは、声を抑えようとする素振りも消えた。':'本人は「何もなかった」と言っている。'}`);
- const self=(win?'……か、勝った、し。':'')+(R.estella>=2?'……き、記録とか……しなくて、いいから。ほ、ほんとに……ふひ……':R.estella===1?'あ、あれは……ちょっと、足が、もつれた、だけ……':R.grabs>=5?'つ、捕まったのは……ゆ、油断した、だけ……だし……':R.grabs>=1?'へ、へへ……ぜ、ぜんぜん、平気……だった……':'ふひっ……わ、わたし、けっこう、強い……かも……');
+ const self=(win?'……か、勝った、し。':'')+(R.estella>=2?'……き、記録とか……しなくて、いいから。ほ、ほんとに……ふひ……':R.estella===1?'あ、あれは……ちょっと、足が、もつれた、だけ……':R.grabs-R.lost>=5?'つ、捕まったのは……ゆ、油断した、だけ……だし……':R.grabs-R.lost>=1?'へ、へへ……ぜ、ぜんぜん、平気……だった……':'ふひっ……わ、わたし、けっこう、強い……かも……');
  const cell=(k,v)=>`<div><small>${k}</small><b>${v}</b></div>`;
  const earned=R.titles.length?`<p class="recTitles"><small>道中の称号</small>${R.titles.map(t=>`「${t}」`).join(' ')}</p>`:'';
  return `<small class="recK">記録</small><b class="recTitle">「${good}、${bad}」</b>${earned}
- <div class="stats">${[cell('捕まった',`${R.grabs}回`),cell('特殊攻撃',`${R.specials}回`),cell('振りほどいた',`${R.free}回`),cell('捕まっていた時間',`${R.held.toFixed(1)}秒`),cell('いちばん捕まった相手',tt?`${name}（${tt[1]}回）`:'—'),cell('最大ヌテラ',`${Math.round(R.maxNut)}%`)].join('')}</div>
+ <div class="stats">${[cell('捕まった',`${R.grabs}回`),cell('特殊攻撃',`${R.specials}回`),cell('振りほどいた',`${R.free}回`),cell('捕まっていた時間',`${R.held.toFixed(1)}秒`),cell('いちばん捕まった相手',tt?`${name}（${tt[1]}回）`:'—'),cell('寸止め',R.edge?`${R.edge}回（追った${R.edgePulls}歩）`:'—'),cell('最大ヌテラ',`${Math.round(R.maxNut)}%`)].join('')}</div>
  <p class="recReview"><small>総評</small>${review.join('')}</p>
  <p class="recSelf"><small>自己評価</small>「${self}」</p>`;
 }

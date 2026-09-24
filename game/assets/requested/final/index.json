@@ -10,7 +10,13 @@
     "monsters/bubble_shell.png",
     "monsters/silk_spider.png",
     "monsters/moth.png",
-    "monsters/crown_attendant.png"
+    "monsters/crown_attendant.png",
+    "monsters/water_wraith.png",
+    "monsters/wisp.png",
+    "monsters/creeping_hand.png",
+    "monsters/lure_cap.png",
+    "monsters/stone_sentinel.png",
+    "monsters/gazer.png"
   ],
   "floors": [
     "floors/room1.png",

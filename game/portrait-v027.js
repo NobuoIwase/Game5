@@ -33,6 +33,8 @@ function pick(h){
  if(h.estella?.active)return'estella';
  if(h.grapple)return n>=.65?'melt':'held';
  if(fresh&&(k==='edgePull'||k==='edgeRegrab'))return'melt';
+ if(fresh&&/^charm/.test(k||''))return /3$/.test(k)?'dazed':'endure';
+ if(fresh&&(k==='report'||k==='attach'||k==='attachMove'))return'endure';
  if(fresh&&STARTLE.has(k))return n>=.65?'melt':'startled';
  if(t<gleeT||fresh&&GLEE.has(k))return'glee';
  if(fresh&&GRIN.has(k)&&n<.5)return'creepy';

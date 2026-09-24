@@ -66,7 +66,7 @@ function advance(){
  if(i>=ROOMS.length-1){
    state.dungeon.complete=true;state.dungeon.active=false;
    log('最深部を踏破した。');
-   window.__game5FinishBase?.(true);
+   finish(true);   // v0.28: through every wrapper (stats, record, run history); the one below passes it on once complete
    return;
  }
  state.hero.x=ROOMS[i+1].entry?.[0]??(ROOMS[i].exit[0]>W/2?105:W-105);

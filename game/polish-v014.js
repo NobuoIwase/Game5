@@ -15,8 +15,12 @@ function watchThought(h,dt){
  const s=h.thought||'';
  if(s===bubble.seen)return;
  bubble.seen=s;
- if(!s||ROUTINE.test(s)||bubble.cool>0)return;
- if(state.time-(bubble.last.get(s)??-99)<12)return;
+ // v0.27: only lines in her voice (voice-v026) reach the bubble - a raw AI thought can sit in
+ // h.thought for one frame before she voices it - and lines about her body skip the cooldown
+ const V=window.Game5Voice;if(V&&s!==h._voiceShown){bubble.seen=null;return}
+ const strong=V?.strong?.has(h._voiceKey);
+ if(!s||ROUTINE.test(s)||bubble.cool>0&&!strong)return;
+ if(!strong&&state.time-(bubble.last.get(s)??-99)<12)return;
  bubble.last.set(s,state.time);bubble.text=s;bubble.t=2.4;bubble.cool=2.6;
 }
 function wrap(text,max){

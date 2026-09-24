@@ -70,6 +70,12 @@ function overlays(key,x,y,w,hh,h,t,final){
  if(L.sweat||n>.5){const k=(t*.35)%1;ctx.globalAlpha=1-k;ctx.fillStyle='rgba(200,235,255,.9)';ctx.strokeStyle='rgba(90,140,190,.8)';ctx.lineWidth=1;
   const sx=x+w*.86,sy=y+hh*(.28+k*.18);ctx.beginPath();ctx.moveTo(sx,sy-6);ctx.quadraticCurveTo(sx+5,sy+2,sx,sy+4);ctx.quadraticCurveTo(sx-5,sy+2,sx,sy-6);ctx.fill();ctx.stroke();ctx.globalAlpha=1}
  if(L.breath||n>.6){for(let k=0;k<2;k++){const q=(t*.8+k*.5)%1;ctx.globalAlpha=(1-q)*.55;ctx.fillStyle='#fff4f8';ctx.beginPath();ctx.ellipse(x+w*(.6+q*.25),y+hh*(.86-q*.2),5+q*9,3+q*5,0,0,TAU);ctx.fill()}ctx.globalAlpha=1}
+ // v0.31: slime on her face after a slimy hold (see wet-v031.js)
+ if((h.wet||0)>.12){const wv=h.wet,c=h.wetCol||'#e28ac0';ctx.globalAlpha=.55*wv;ctx.strokeStyle='#ffffff';ctx.lineWidth=1.6;
+  ctx.beginPath();ctx.moveTo(x+w*.18,y+hh*.2);ctx.quadraticCurveTo(x+w*.22,y+hh*.45,x+w*.2,y+hh*.62);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(x+w*.74,y+hh*.5);ctx.quadraticCurveTo(x+w*.78,y+hh*.62,x+w*.76,y+hh*.74);ctx.stroke();
+  const q=(t*.4)%1;ctx.globalAlpha=.75*wv;ctx.fillStyle=c;ctx.beginPath();ctx.ellipse(x+w*.64,y+hh*(.66+q*.3),2.2,3.2,0,0,TAU);ctx.fill();
+  ctx.strokeStyle=c;ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(x+w*.64,y+hh*.6);ctx.lineTo(x+w*.64,y+hh*(.64+q*.3));ctx.stroke();ctx.globalAlpha=1}
  const NF=window.Game5NuteraFX;
  for(let k=0;k<(L.hearts||0);k++){const q=(t*.5+k/(L.hearts||1))%1;NF?.drawHeart?.(x+w*(.12+.8*((k*.37)%1)),y+hh*(1-q),8+4*Math.sin(t*6+k),(1-q)*.85)}
  if(L.glow){ctx.globalCompositeOperation='lighter';const g=ctx.createRadialGradient(x+w/2,y+hh/2,4,x+w/2,y+hh/2,w*.6);g.addColorStop(0,`rgba(255,120,200,${.12+.08*Math.sin(t*10)})`);g.addColorStop(1,'rgba(255,120,200,0)');ctx.fillStyle=g;ctx.fillRect(x,y,w,hh)}
@@ -108,5 +114,16 @@ draw=function(){
  const h=state.hero;if(!h||!state.started)return;
  screenSpace(()=>draw_(h));
 };
-window.Game5Portrait={version:'0.27.0',pick,looks:LOOK,finals};
+/* a still of one face for the end card (heat-v027 puts it next to her self-evaluation) */
+function still(key,blush=0){
+ const f=finals[key],c=document.createElement('canvas');c.width=FW;c.height=FH;const g=c.getContext('2d');
+ if(f){const k=Math.max(FW/f.naturalWidth,FH/f.naturalHeight);g.drawImage(f,(FW-f.naturalWidth*k)/2,(FH-f.naturalHeight*k)*.3,f.naturalWidth*k,f.naturalHeight*k)}
+ else if(atlas.complete&&atlas.naturalWidth){
+  const L=LOOK[key]||LOOK.normal,[cx,cy]=SHEET[L.base]||SHEET.normal;g.drawImage(atlas,cx*FW+1,cy*FH+1,FW-6,FH-2,0,0,FW,FH);
+  const b=Math.max(L.blush||0,blush);
+  if(b>.05){g.globalCompositeOperation='multiply';const gr=g.createRadialGradient(FW*.5,FH*.62,2,FW*.5,FH*.62,FW*.42);gr.addColorStop(0,`rgba(255,110,150,${.5*b})`);gr.addColorStop(1,'rgba(255,160,180,0)');g.fillStyle=gr;g.fillRect(0,0,FW,FH)}
+ }else return null;
+ try{return c.toDataURL('image/png')}catch(_){return null}
+}
+window.Game5Portrait={version:'0.31.0',pick,looks:LOOK,finals,still};
 })();

@@ -122,3 +122,5 @@ button{touch-action:manipulation}
 .record .recSelf{color:#ffe0f0}
 .bodyMemory{margin:6px 0 10px;font-size:12px;color:#e6c8dc}
 .bodyMemory small{display:inline-block;margin-right:8px;color:#b98cab;letter-spacing:.08em}
+.record .recSelf{overflow:hidden}
+.record .recFace{float:right;width:136px;height:auto;margin:0 0 4px 10px;border-radius:8px;border:1px solid #ff9ad355}

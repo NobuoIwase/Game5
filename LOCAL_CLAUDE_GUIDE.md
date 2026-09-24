@@ -5,6 +5,13 @@
 
 コードの修正・ゲームへの組み込み・最終の検収は、クラウドの Claude Code が行います。あなたはコードに触らないでください。
 
+> **2026-09-25 更新（ユーザーの判断による変更）**
+> - 描き手は **NovelAI（V5 Full）** にする。ChatGPT は見本の図をなぞった平たい絵になった。手順は下の「3a. NovelAI での手順」
+> - **モンスターの方向性**: ピンク〜肉色の半透明の体、うっすら透ける血管、濡れたツヤ、糸を引く粘液。「かわいく」は外した（牙・トゲ・血・傷はなし）。形・目・特徴は見本カードどおり。見本カードの体色には戻さない
+> - 小物・UI・アイコンの配色は見本カードどおり（読みやすさ優先）
+> - 唯一許される加工: **アルファ 2 以下の画素を 0 にする**（NovelAI の透過が外周に見えないノイズを残すため）。検品スクリプトも、アルファ 2 以下は透明として扱う
+> - 大きいまま（1024px など）置いてよい。ゲーム用の軽い版は、クラウドの Claude Code が `tools/build_final_web.js` で作る
+
 ---
 
 ## 0. なぜこのやり方なのか
@@ -29,7 +36,7 @@ ChatGPT の**画像生成そのものは上手**です（灰冠の粘魔・ナ�
 | --- | --- |
 | ChatGPT のチャットで画像を生成させる | ChatGPT に GitHub やリポジトリを接続させる。コードや文書を書かせる |
 | 生成された画像を**ダウンロードボタンで**保存する | スクリーンショット、プレビュー画像の右クリック保存（縮小されていることがある） |
-| 保存した PNG を `game/assets/requested/final/` の下に置く | 画像を自分で加工する（縮小・拡大・減色・背景除去・切り抜き・色調補正）。**届いたままを置く** |
+| 保存した PNG を `game/assets/requested/final/` の下に置く | 画像を自分で加工する（縮小・拡大・減色・背景除去・切り抜き・色調補正）。**届いたままを置く**（例外: アルファ 2 以下を 0 にすることだけは可） |
 | `final/index.json` に名前を足す。`NOTES_FROM_CHATGPT.md` に記録する | `game/*.js`、`index.html`、README、`asset-refs/`、`tools/` を変更する |
 | 上記のファイルだけを commit して main に push する | それ以外のファイルを commit する。バージョン番号を変える |
 
@@ -63,6 +70,27 @@ ChatGPT が描いた画像のサイズが 1024×1024 などでも、**そのま�
 
 3回頼んでも背景が残る場合は、**真緑一色（#00FF00）の背景**で描かせる。ほかの色が混ざらない、影も落とさない背景にさせる。
 保存先を `game/assets/requested/final/_green/<置き場所と同じパス>` にし、報告に「緑背景」と書く。背景はクラウドの Claude Code が抜く。この場合は検品スクリプトの透明チェックが FAIL になるが、それでよい。`index.json` には足さない。
+
+## 3a. NovelAI での手順（2026-09-25 のローカル Claude の記録から）
+
+- モデル V5 Full、モード「アニメ」、「透過背景」オン、ステップ 28、正確度 7、1枚ずつ
+- i2i: 下絵は `game/asset-refs/png/<見本名>.png`（カードではなく絵だけのもの）。強度の目安は、モンスター 0.76、尖塔 0.62、粘液溜まり 0.72、ハート 0.5〜0.6、アイコン 0.7。ノイズ 0
+- プロンプトは英語タグ。モンスターの共通部分:
+  ```
+  no humans, monster, <形と特徴>, {{translucent flesh-pink ... body}}, {{two round black eyes ...}},
+  soft meaty folds and fleshy lumps under the skin, faint red-pink veins, glistening mucus membranes,
+  sticky pink strings of goo, oozing pink goo pooling around the base, moist, fleshy, organic,
+  slightly grotesque yet alluring, sensual atmosphere, warm pink inner glow, semi-realistic, painterly,
+  intricate details, rich shading, many small specular highlights, dark fantasy bestiary illustration,
+  full body, centered, the whole creature fits inside the frame with margin
+  ```
+- 除外要素の共通部分:
+  ```
+  text, watermark, signature, frame, border, pixel art, ground shadow, pedestal, fangs, teeth, spikes,
+  thorns, blood, gore, wound, human, girl, cute chibi, cropped, out of frame, cut off, touching edges,
+  lens flare, hanging from above, string from top, no eyes, tentacles
+  ```
+- 保存は NovelAI の「画像をダウンロード」ボタン → アルファ 2 以下を 0 にする → `python3 tools/check_final.py <ファイル>` で検品
 
 ## 4. 依頼文の雛形
 

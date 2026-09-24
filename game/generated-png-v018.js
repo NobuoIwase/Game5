@@ -19,9 +19,13 @@ ready(atlases.mon,()=>{for(let i=0;i<types.length;i++)A.requested.monsters[types
 ready(atlases.floor,()=>{for(let i=0;i<7;i++){A.requested.floor[i]=true;A.requested.floorImg[i]=crop(atlases.floor,4,2,i,64,64)}});
 ready(atlases.extras,()=>{
  const p=[];for(let i=0;i<12;i++)p[i]=crop(atlases.extras,4,3,i,64,64);
- window.Game5Props={chest:p[0],mimic:p[1],tower:p[2],stairs:p[3]};
- if(A.vfx){A.vfx.spore_puff=p[4];A.vfx.silk_wrap=p[5];A.vfx.nectar_drop=p[6]}
- for(const [b,i] of [...document.querySelectorAll('[data-tool]')].map((b,i)=>[b,p[7+(i%5)]])){const n=document.createElement('img');n.className='ticon';n.src=i.src;b.classList.add('hasIcon');b.appendChild(n)}
+ window.Game5Props={chest:p[0],mimic:p[1],tower:p[2],stairs:p[3],pool:p[7]};
+ if(A.vfx){A.vfx.spore_puff=p[4];A.vfx.silk_wrap=p[5];A.vfx.nectar_drop=p[6];A.vfx.hypno_ring=p[8];A.vfx.ringbeam=p[9];A.vfx.nutera_heart=p[10];A.vfx.estella=p[11]}
+ const buttons=[...document.querySelectorAll('[data-tool]')];
+ for(let i=0;i<buttons.length;i++){const b=buttons[i],im=p[4+i%8];if(!im)continue;const n=document.createElement('img');n.className='ticon';n.src=im.src;b.classList.add('hasIcon');b.appendChild(n)}
 });
-window.Game5GeneratedPNG={version:'0.18.0',atlases,allies:atlases.allies};
+ready(atlases.allies,()=>{
+ const names=['sister','witch','scout'];const out={};for(let i=0;i<names.length;i++)out[names[i]]=crop(atlases.allies,3,1,i,128,160);window.Game5AllyArt=out;
+});
+window.Game5GeneratedPNG={version:'0.18.1',atlases,allies:atlases.allies};
 })();

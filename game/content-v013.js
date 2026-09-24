@@ -333,7 +333,7 @@ if(G){
    const im=VX()?.tile?.mire,life=clamp(z.t/1.2,0,1);
    ctx.save();ctx.globalAlpha=.8*life;ctx.beginPath();ctx.arc(z.x,z.y,z.r,0,TAU);ctx.clip();
    const pp=window.Game5Props?.poolPng;
-   if(pp?.complete&&pp.naturalWidth){ctx.imageSmoothingEnabled=false;ctx.globalAlpha=.85*life;ctx.drawImage(pp,z.x-z.r*1.1,z.y-z.r*1.1,z.r*2.2,z.r*2.2)}
+   if(pp?.complete&&pp.naturalWidth){ctx.globalAlpha=.62*life;ctx.filter='saturate(.62) brightness(.82) contrast(.85)';ctx.drawImage(pp,z.x-z.r*1.15,z.y-z.r*1.15,z.r*2.3,z.r*2.3);ctx.filter='none'}
    else if(im?.complete&&im.naturalWidth)ctx.drawImage(im,z.x-z.r,z.y-z.r,z.r*2,z.r*2);else{ctx.fillStyle='#4a6a4a';ctx.fill()}
    ctx.fillStyle='rgba(90,140,90,.25)';ctx.fillRect(z.x-z.r,z.y-z.r,z.r*2,z.r*2);ctx.restore();
    ctx.save();ctx.globalAlpha=.5*life;ctx.strokeStyle='#8fd49a';ctx.setLineDash([4,6]);ctx.beginPath();ctx.arc(z.x,z.y,z.r,0,TAU);ctx.stroke();ctx.restore();

@@ -7,6 +7,7 @@
      A PNG placed at assets/requested/final/monsters/<type>.png (or props/tower.png, pool.png)
      and listed in assets/requested/final/index.json takes priority.
    - props: chest / mimic / stairs 2-frame sheets from final/props/
+   - nutera: hearts, sigil and ESTELLA logo; icons: the director tool buttons
    - floors: final/floors/roomN.png (else the room's 64x32 block of floors_v018.png) becomes
      the texture source of the baked flagstone floor, softened and pulled toward the room palette
    - allies: the start card shows the existing motion sheets */
@@ -27,9 +28,12 @@ function raster(im,done,k=2){
 }
 /* final/index.json lists delivered files per kind, either as names ("gel") or paths
    ("monsters/gel.png"). Claude removes entries that fail review; see final/REVIEW.md */
-const finals=new Set(),listed=fetch(F+'index.json').then(r=>r.ok?r.json():{}).catch(()=>({}));
+/* final/_web/ holds trimmed, downscaled WebP copies made by tools/build_final_web.js (the
+   deliveries are 1024px PNGs, ~12MB in total); they are used when the manifest lists them */
+const finals=new Set(),getJSON=u=>fetch(u).then(r=>r.ok?r.json():{}).catch(()=>({}));
+const listed=Promise.all([getJSON(F+'index.json'),getJSON(F+'_web/manifest.json')]);
 const has=(j,kind,name)=>(j?.[kind]||[]).some(e=>String(e).replace(/^.*\//,'').replace(/\.png$/,'')===name);
-function final(kind,name,fn){listed.then(j=>{if(has(j,kind,name))load(`${F}${kind}/${name}.png`,fn)})}
+function final(kind,name,fn){listed.then(([j,web])=>{if(!has(j,kind,name))return;const w=web?.files?.[kind+'/'+name];load(w?`${F}_web/${w.file}`:`${F}${kind}/${name}.png`,fn)})}
 function use(svg,kind,name,set,trim){
  const key=kind+'/'+name;
  if(svg)load(svg,im=>raster(im,r=>{if(!finals.has(key))set(r)}));
@@ -45,6 +49,28 @@ use(null,'props','mimic',im=>props.mimic=im);
 use(null,'props','stairs',im=>props.stairs=im);
 /* keep the pack's softened SVG from overwriting these */
 window.Game5ArtLock=true;
+
+/* Nutera / Estella art: hearts replace the drawn heart sprites (deep pink is the pink heart
+   darkened, as no matching delivery exists), the sigil and the ESTELLA logo are drawn by
+   nutera-fx-v016.js when present */
+const NA=window.Game5NuteraArt=window.Game5NuteraArt||{};
+function heartSprite(im,filter){
+ const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d'),k=112/Math.max(im.naturalWidth,im.naturalHeight),w=im.naturalWidth*k,h=im.naturalHeight*k;
+ g.imageSmoothingQuality='high';if(filter)g.filter=filter;g.drawImage(im,(128-w)/2,(128-h)/2,w,h);return c;
+}
+const SPR=()=>window.Game5NuteraFX?.sprites;
+final('nutera','heart_pink',im=>{const S=SPR();if(!S)return;S.pink=heartSprite(im);if(!NA.deepDelivered)S.deep=heartSprite(im,'brightness(.8) saturate(1.05)')});
+final('nutera','heart_deep',im=>{const S=SPR();if(!S)return;NA.deepDelivered=true;S.deep=heartSprite(im)});
+final('nutera','heart_pale',im=>{const S=SPR();if(S)S.soft=heartSprite(im)});
+final('nutera','heart_violet',im=>{const S=SPR();if(S)S.violet=heartSprite(im)});
+final('nutera','sigil',im=>NA.sigil=im);
+final('nutera','estella_logo',im=>NA.logo=im);
+
+/* director tool icons on the trap buttons */
+for(const b of document.querySelectorAll?.('[data-tool]')||[])final('icons',b.dataset.tool,im=>{
+ let i=b.querySelector('img.ticon');if(!i){i=document.createElement('img');i.className='ticon';i.alt='';b.classList.add('hasIcon');b.appendChild(i)}
+ i.src=im.src;
+});
 
 /* floors: a delivered final/floors/roomN.png replaces that floor's texture source */
 const FLOOR_LOOK={patch:14,soft:1.2,unify:.5,contrast:.7};

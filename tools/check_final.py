@@ -13,6 +13,8 @@ import os, sys, struct, zlib, glob
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'game', 'assets', 'requested', 'final')
 MIN_SIZE = {'monsters': 256, 'props': 128, 'icons': 64, 'nutera': 64, 'floors': 128}
+# alpha at or below this counts as transparent: generators leave invisible 1-2 alpha noise
+NOISE = 2
 CT_NAME = {0: 'gray', 2: 'RGB', 3: 'palette', 4: 'gray+alpha', 6: 'RGBA'}
 
 
@@ -91,7 +93,7 @@ def check(path):
         return rel, None, [str(e)]
     N = w * h
     colors = len({p[:3] for p in px if p[3] > 0})
-    clear = sum(1 for p in px if p[3] == 0) / N
+    clear = sum(1 for p in px if p[3] <= NOISE) / N
     corners = [px[0][3], px[w - 1][3], px[(h - 1) * w][3], px[N - 1][3]]
     # a border one pixel in: catches frames and faint boxes
     border = [px[y * w + x][3] for x in range(w) for y in (0, h - 1)] + [px[y * w + x][3] for y in range(h) for x in (0, w - 1)]
@@ -103,14 +105,14 @@ def check(path):
     elif colors < 200 and kind != 'icons':
         problems.append(f'色数が少ない（{colors}色）。減色・ドット絵化していないか')
     if kind == 'floors':
-        if clear > 0:
+        if any(p[3] < 255 for p in px):
             problems.append('床なのに透明な部分がある（床は不透明）')
     else:
         if ct in (0, 2):
             problems.append('アルファチャンネルがない（背景が透けない）')
-        if max(corners) > 0:
+        if max(corners) > NOISE:
             problems.append(f'四隅が透明でない（アルファ {corners}）。背景が残っている')
-        elif max(border) > 0:
+        elif max(border) > NOISE:
             problems.append('外周に不透明な部分がある（枠線・見切れ・背景の残り）')
         if clear < .25:
             problems.append(f'透明な部分が {clear:.0%} しかない（背景が残っているか、余白がない）')

@@ -123,8 +123,12 @@ function sigil(h,t){
  const n=h.ringmarks?.length||0;if(!n)return;
  ctx.save();ctx.translate(h.x,h.y+18);ctx.scale(1,.45);ctx.rotate(t*.6);ctx.globalAlpha=.55+.15*Math.sin(t*3);
  ctx.strokeStyle='#e89bff';ctx.shadowColor='#e89bff';ctx.shadowBlur=10;ctx.lineWidth=2;
+ const art=window.Game5NuteraArt?.sigil;
+ if(art?.complete&&art.naturalWidth){const r=36+n*7;ctx.shadowBlur=6;ctx.drawImage(art,-r,-r,r*2,r*2)}
+ else{
  for(let k=0;k<n+1;k++){ctx.beginPath();ctx.arc(0,0,26+k*7,0,TAU);ctx.stroke()}
  for(let k=0;k<8;k++){const a=k/8*TAU;ctx.beginPath();ctx.moveTo(Math.cos(a)*26,Math.sin(a)*26);ctx.lineTo(Math.cos(a)*33,Math.sin(a)*33);ctx.stroke()}
+ }
  ctx.restore();drawHeart(h.x,h.y+18,12,.7,0,'violet');
 }
 const G=window.Game5Graphics;
@@ -143,10 +147,14 @@ function screen(h,t){
  if(est.title>0){
   const a=Math.min(1,est.title*2)*Math.min(1,(1.6-est.title)*6),y=h.y<H*.5?H*.72:H*.24;
   ctx.save();ctx.globalAlpha=a;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='900 44px system-ui,sans-serif';
+  const logo=window.Game5NuteraArt?.logo;
+  if(logo?.complete&&logo.naturalWidth){const lw=340,lh=lw*logo.naturalHeight/logo.naturalWidth;ctx.shadowColor='#ff4fae';ctx.shadowBlur=18;ctx.drawImage(logo,W/2-lw/2,y-lh/2-4,lw,lh)}
+  else{
   ctx.shadowColor='#ff4fae';ctx.shadowBlur=24;ctx.lineWidth=6;ctx.strokeStyle='#5a0f3c';ctx.strokeText('ESTELLA',W/2,y);
   const g=ctx.createLinearGradient(0,y-22,0,y+22);g.addColorStop(0,'#fff0f8');g.addColorStop(1,'#ff6fc0');ctx.fillStyle=g;ctx.fillText('ESTELLA',W/2,y);
+  }
   ctx.shadowBlur=0;ctx.font='700 13px system-ui,sans-serif';ctx.fillStyle='#ffd6ec';ctx.fillText('ヌテラ飽和 — 行動不能・MP/SP流出',W/2,y+34);
-  ctx.restore();drawHeart(W/2-150,y,26,a,-.2,'deep');drawHeart(W/2+150,y,26,a,.2,'deep');
+  ctx.restore();if(!window.Game5NuteraArt?.logo?.naturalWidth){drawHeart(W/2-150,y,26,a,-.2,'deep');drawHeart(W/2+150,y,26,a,.2,'deep')}
  }
 }
 
@@ -186,5 +194,5 @@ renderUI=function(){
  blk.classList.toggle('estella',!!h.estella?.active);
  blk.style.setProperty?.('--beat',`${Math.max(.32,60/(70+h.nutera*1.1))}s`);
 };
-window.Game5NuteraFX={version:'0.16.0',emit,drawHeart,ring};
+window.Game5NuteraFX={version:'0.16.0',emit,drawHeart,ring,sprites:SPR};
 })();

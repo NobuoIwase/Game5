@@ -9,7 +9,7 @@ const B={
  stairs:{hp:.22,sp:.45,nutera:30,sail:20},
  enemyHpGrowth:.12,            // per dungeon level (was .15)
  supportHp:.7,                // support enemies in mixed encounters
- director:{autoMin:6.5,autoMax:9,ringMin:9,ringMax:13,calmRooms:2,calmMul:1.35,enRegen:6},
+ director:{autoMin:8.5,autoMax:12,ringMin:9,ringMax:13,calmRooms:2,calmMul:1.35,enRegen:6},
  // AUTO director intensity (selectable in the UI): interval multiplier and extra aim error in px
  intensity:{easy:{label:'やさしい',interval:4,err:100},normal:{label:'ふつう',interval:2.2,err:70},hard:{label:'きびしい',interval:1.6,err:40}},
  snare:{sp:15,bind:1.35},
@@ -24,7 +24,7 @@ const B={
  // v0.26: holds and punishing make crowds much harsher; the last floors keep one support each
  // v0.27: the floors are 4 screens wide, so more monsters spread over them (3-4 per floor);
  // they only fight together when one calls the others
- supports:[['slug','leech'],['leech','slug','leech'],['moth','worm','leech'],['leech','slug','orb'],['orb','slug','moth'],['orb','leech','moth'],['moth']],
+ supports:[['leech'],['leech','slug','leech'],['moth','worm','leech'],['leech','slug','orb'],['orb','slug'],['orb','leech','moth'],['moth']],
  poolChance:.5,                  // chance that a support slot is taken by a pool species (species.json "mode":"pool")
  enemySpMul:.6,                 // SP damage of monster attacks
  // mucus/spore clouds are about Nutera, not pain: most of the old v0.3 poison is gone

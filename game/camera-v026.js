@@ -7,12 +7,18 @@
 let last=performance.now(),seen=null;
 /* v0.27 kick: a short push along a hit, easing back (impact-v027.js) */
 const K={x:0,y:0};const kick=(x,y)=>{K.x+=x;K.y+=y};
+/* v0.27 zoom: CAM.z (1 = normal). The view is SW/z x SH/z world pixels from CAM.x,CAM.y.
+   Other modules ask for a close-up through Game5Camera.wantZoom (holds, Estella). */
+CAM.z=1;let wantZ=1;
 function target(h){
- const lead=h.moving?70:40,f=h.facing||0;
- return{x:clamp(h.x+Math.cos(f)*lead-SW/2,0,W-SW),y:clamp(h.y-20+Math.sin(f)*lead*.6-SH/2,0,H-SH)};
+ const lead=h.moving?70:40,f=h.facing||0,z=CAM.z,vw=SW/z,vh=SH/z,l=z>1.05?.3:1;
+ return{x:clamp(h.x+Math.cos(f)*lead*l-vw/2,0,W-vw),y:clamp(h.y-(z>1.05?46:20)+Math.sin(f)*lead*.6*l-vh/2,0,H-vh)};
 }
 function follow(dt){
  const h=state.hero;if(!h)return;
+ const z0=CAM.z;CAM.z+=(wantZ-CAM.z)*(1-Math.exp(-dt*(wantZ>CAM.z?2.6:1.8)));
+ // zoom about the view centre so the close-up does not lurch
+ if(Math.abs(CAM.z-z0)>1e-4){const cx=CAM.x+SW/z0/2,cy=CAM.y+SH/z0/2;CAM.x=cx-SW/CAM.z/2;CAM.y=cy-SH/CAM.z/2}
  const t=target(h);
  const jump=!seen||Math.hypot(h.x-seen.x,h.y-seen.y)>260;
  if(jump){CAM.x=t.x;CAM.y=t.y}
@@ -25,8 +31,9 @@ draw=function(){
  follow(dt);
  // draw at whole pixels (crisp sprites); keep the eased position for the next frame
  K.x*=Math.exp(-dt*14);K.y*=Math.exp(-dt*14);
- const fx=CAM.x,fy=CAM.y;CAM.x=Math.round(fx+K.x);CAM.y=Math.round(fy+K.y);
- ctx.save();ctx.setTransform(1,0,0,1,-CAM.x,-CAM.y);
+ const fx=CAM.x,fy=CAM.y;CAM.x=Math.round((fx+K.x)*CAM.z)/CAM.z;CAM.y=Math.round((fy+K.y)*CAM.z)/CAM.z;
+ const z=CAM.z;
+ ctx.save();ctx.setTransform(z,0,0,z,-CAM.x*z,-CAM.y*z);
  try{bDraw()}finally{ctx.restore();CAM.x=fx;CAM.y=fy}
 };
 /* minimap (top right): the whole floor, what she has explored, the stairs, her, and every
@@ -45,10 +52,10 @@ function minimap(){
   const r=window.Game5Dungeon?.room?.();if(r?.exit){const [ex,ey]=P(...r.exit);ctx.fillStyle=state.dungeon?.pending?'#ffe28a':'#8a7e6a';ctx.fillRect(ex-2.5,ey-2.5,5,5)}
   for(const e of window.Game5MultiEnemy?.alive?.()||[]){const [ex,ey]=P(e.x,e.y);ctx.fillStyle=e.aware?'#ff6f6f':'#b98cff';ctx.globalAlpha=e.aware?1:.7;ctx.beginPath();ctx.arc(ex,ey,2.4,0,TAU);ctx.fill()}
   ctx.globalAlpha=1;const hr=state.hero;if(hr){const [hx,hy]=P(hr.x,hr.y);ctx.fillStyle='#fff4c4';ctx.beginPath();ctx.arc(hx,hy,3,0,TAU);ctx.fill()}
-  ctx.strokeStyle='#ffffff55';ctx.lineWidth=1;ctx.strokeRect(x0+CAM.x/CS*k,y0+CAM.y/CS*k,SW/CS*k,SH/CS*k);
+  ctx.strokeStyle='#ffffff55';ctx.lineWidth=1;ctx.strokeRect(x0+CAM.x/CS*k,y0+CAM.y/CS*k,SW/CAM.z/CS*k,SH/CAM.z/CS*k);
  });
 }
 const bDraw2=draw;
 draw=function(){bDraw2();try{minimap()}catch(_){}};
-window.Game5Camera={version:'0.27.0',follow,snap:()=>{seen=null},minimap,kick};
+window.Game5Camera={version:'0.27.0',follow,snap:()=>{seen=null},minimap,kick,wantZoom:z=>{wantZ=clamp(z||1,1,2)}};
 })();

@@ -1,0 +1,156 @@
+(()=>{
+'use strict';
+/* v0.27.0 heat: the Nutera side of the game, made to linger.
+   Built on docs/kink-profile-integrated.md: the point is the resistance giving way by degrees,
+   effects that carry over ("what happened earlier is still in her body"), monsters she has
+   met before getting different reactions, and the run ending in numbers, a title, a cold
+   outside assessment and her own excuse.
+   - close-up: the camera eases in while she is held (x1.4) and during Estella (x1.6);
+     Estella starts in slow motion
+   - body: a pink heat haze around her once Nutera passes 35%, breath clouds from 50%, and she
+     trembles (more when held, most in Estella)
+   - afterglow: after a hold or an Estella her legs stay unsteady for a while (slower, shaking),
+     Nutera drains away more slowly, and she mutters about it
+   - memory: every species keeps count of how often it has held her; the second time and from
+     the third time on her reactions change, and from the third its specials land harder
+   - record: grabs, specials taken (and which one most), holds broken vs. waited out, Estella,
+     the species that held her most, a title (a good word against a bad one), an assessment
+     in a cold observer's voice and her own self-assessment, on the result screen */
+const C={
+ zoom:{hold:1.4,estella:1.6,after:1.12},
+ slow:{t:.7,k:.32},
+ after:{hold:6,free:3.5,estella:10,speed:.86,keepNutera:.35},
+ knownMul:1.1,
+ aura:.35,breath:.5
+};
+const alive=()=>window.Game5MultiEnemy?.alive?.()||[];
+const nameOf=t=>t==='snare'?'影の手':(window.Game5Monsters?.profiles?.[t]?.name||t);
+
+/* ---------------- per-run record ---------------- */
+let R;
+function fresh(){R={grabs:0,specials:0,free:0,waited:0,estella:0,held:0,byType:{},special:{},maxNut:0,holdLen:[]}}
+fresh();
+const baseReset=reset;reset=function(){fresh();slowT=0;return baseReset()};
+
+/* ---------------- slow motion ---------------- */
+let slowT=0;
+const baseUpdate=update;
+update=function(dt){if(slowT>0){slowT-=dt;dt*=C.slow.k}return baseUpdate(dt)};
+
+/* ---------------- memory: harder specials from a species that knows her ---------------- */
+const baseNut=applyNutera;
+applyNutera=function(h,base,meta={}){
+ const t=h?.grapple?.e?.type;
+ if(meta.grapple&&t&&(h.heldBy?.[t]||0)>=3)meta={...meta,mult:(meta.mult||1)*C.knownMul};
+ return baseNut(h,base,meta);
+};
+
+/* ---------------- tracking ---------------- */
+const baseHero=updateHero;
+updateHero=function(h,dt){
+ const g0=h?.grapple,sp0=g0?.specials||0,n0=h?.nutera||0,est0=!!h?._heatEst;
+ // afterglow: legs unsteady -> slower (applied once per intent, like the other modifiers)
+ if(h?.afterglow>0&&h.intent?.kind==='move'&&h.intent.label!=='回避'&&!h.intent._after){h.intent._after=true;h.intent.speed*=C.after.speed}
+ baseHero(h,dt);
+ if(!h||!state.started)return;
+ const g=h.grapple;
+ // a new hold
+ if(g&&g!==h._heatG){
+  const t=g.e?.type||'snare';h.heldBy||={};h.heldBy[t]=(h.heldBy[t]||0)+1;h._grabRepeat=h.heldBy[t];
+  R.grabs++;R.byType[t]=(R.byType[t]||0)+1;g._t0=state.time;
+ }
+ if(g){R.held+=dt;if(g.specials>sp0){R.specials++;const s=h._lastSpecial;if(s)R.special[s]=(R.special[s]||0)+1}}
+ // a hold that ended
+ if(h._heatG&&!g){
+  const len=state.time-(h._heatG._t0||state.time);R.holdLen.push(len);
+  const freed=h._lastRelease==='free';if(freed)R.free++;else R.waited++;
+  h.afterglow=Math.max(h.afterglow||0,freed?C.after.free:C.after.hold);h.afterMax=h.afterglow;
+ }
+ h._heatG=g||null;
+ // Estella
+ const est=!!h.estella?.active;
+ if(est&&!est0){R.estella++;slowT=C.slow.t;h._estellaAt=state.time}
+ if(!est&&est0){h.afterglow=Math.max(h.afterglow||0,C.after.estella);h.afterMax=h.afterglow}
+ h._heatEst=est;
+ // afterglow: Nutera drains away more slowly, she mutters now and then
+ if(h.afterglow>0){
+  h.afterglow=Math.max(0,h.afterglow-dt);
+  if(h.nutera<n0&&!est)h.nutera+=(n0-h.nutera)*C.after.keepNutera;
+  if(!g&&!est&&Math.random()<dt*.22)h._voiceEvent||='afterglow';
+ }
+ R.maxNut=Math.max(R.maxNut,h.nutera||0);
+ // close-up
+ window.Game5Camera?.wantZoom?.(h.dead?1:est?C.zoom.estella:g?C.zoom.hold:h.afterglow>0?C.zoom.after:1);
+};
+/* ---------------- her body: trembling, heat haze, breath ---------------- */
+function jitter(h){
+ if(!state.started||h.dead)return null;
+ const n=(h.nutera||0)/100,t=state.time;
+ let a=0;
+ if(h.estella?.active)a=2.4;else if(h.grapple)a=1.3+n;else if(h.afterglow>0)a=.6+1.4*(h.afterglow/(h.afterMax||1));
+ if(n>.6)a=Math.max(a,(n-.6)*2.5);
+ if(a<=0)return null;
+ return{x:Math.sin(t*41)*a*.6+Math.sin(t*17)*a*.4,y:Math.sin(t*29+1)*a*.25};
+}
+const puffs=[];
+function haze(h){
+ const n=(h.nutera||0)/100;if(n<C.aura&&!(h.afterglow>0))return;
+ const k=Math.max(n-C.aura,h.afterglow>0?.18:0),t=state.time,r=46+10*Math.sin(t*3);
+ const g=ctx.createRadialGradient(h.x,h.y-36,6,h.x,h.y-36,r);
+ g.addColorStop(0,`rgba(255,120,190,${.22*k+.04})`);g.addColorStop(1,'rgba(255,120,190,0)');
+ ctx.save();ctx.globalCompositeOperation='lighter';ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(h.x,h.y-36,r,r*1.25,0,0,TAU);ctx.fill();ctx.restore();
+}
+function breath(h,dt){
+ const n=(h.nutera||0)/100,on=n>C.breath||h.afterglow>0||h.grapple||h.estella?.active;
+ if(on&&!h.dead&&Math.random()<dt*(1.2+n*1.8)){
+  const side=['left','up_left','down_left'].includes(h.dir)?-1:1;
+  puffs.push({x:h.x+side*10,y:h.y-74,vx:side*(10+Math.random()*8),vy:-14-Math.random()*8,t:1,s:5+Math.random()*4});
+ }
+ for(const p of puffs){p.t-=dt*.9;p.x+=p.vx*dt;p.y+=p.vy*dt;p.s+=dt*9}
+ while(puffs.length&&puffs[0].t<=0)puffs.shift();
+ ctx.save();
+ for(const p of puffs){ctx.globalAlpha=Math.max(0,p.t)*.45;ctx.fillStyle=n>.8?'#ffd6ee':'#f4eef2';ctx.beginPath();ctx.ellipse(p.x,p.y,p.s,p.s*.7,0,0,TAU);ctx.fill()}
+ ctx.restore();
+}
+let lastT=performance.now();
+const G=window.Game5Graphics;
+if(G){
+ const under=G.drawHazardsUnder;G.drawHazardsUnder=function(){under?.();const h=state.hero;if(h&&state.started)haze(h)};
+ const over=G.drawHazardsOver;G.drawHazardsOver=function(){over?.();const h=state.hero,now=performance.now(),dt=Math.min(.1,(now-lastT)/1000);lastT=now;if(h&&state.started)breath(h,dt)};
+}
+
+/* ---------------- the record ---------------- */
+function top(o){return Object.entries(o).sort((a,b)=>b[1]-a[1])[0]||null}
+function record(win){
+ const h=state.hero,d=state.dungeon,n=window.Game5Dungeon?.rooms?.length||7,cleared=d?.complete?n:(d?.room||0);
+ const tt=top(R.byType),ts=top(R.special),name=tt?nameOf(tt[0]):null;
+ const good=cleared>=n?'最奥まで降りた':cleared>=5?'深層に届いた':cleared>=3?'中層まで進んだ':'入口で足踏みした';
+ const bad=R.estella>=3?'エステラを重ねた前衛':tt&&tt[1]>=3?`${name}に覚えられた戦士`:R.grabs>=6?'捕まりやすい前衛':R.estella>=1?'声を殺せなかった戦士':R.grabs>=1?'まだ抗える戦士':'誰にも触れさせなかった戦士';
+ const L=R.holdLen,grow=L.length>=3&&L.slice(-2).reduce((a,b)=>a+b,0)/2>L.slice(0,2).reduce((a,b)=>a+b,0)/2*1.2;
+ const review=[];
+ if(!R.grabs)review.push('一度も捕まらなかった。記録すべきことが何もないのは、この記録の中では珍しい。');
+ else{
+  if(tt&&tt[1]>=2)review.push(`${name}に${tt[1]}回捕まっている。${tt[1]>=3?'回を重ねるごとに、相手のほうが扱いに慣れていった。':'二度目は、一度目より声が早かった。'}`);
+  review.push(`振りほどけたのは${R.grabs}回中${R.free}回。${R.waited?`残る${R.waited}回は、相手が離れるまでそのままだった。`:'すべて自力で抜けている。'}`);
+  if(grow)review.push('捕まるたびに、抜け出すまでの時間が延びていった。本人は気づいていない。');
+  if(ts)review.push(`受けた特殊攻撃は${R.specials}回。いちばん多かったのは「${ts[0]}」。`);
+ }
+ if(R.estella)review.push(`エステラ${R.estella}回。${R.estella>=2?'二回目からは、声を抑えようとする素振りも消えた。':'本人は「何もなかった」と言っている。'}`);
+ const self=(win?'……か、勝った、し。':'')+(R.estella>=2?'……き、記録とか……しなくて、いいから。ほ、ほんとに……ふひ……':R.estella===1?'あ、あれは……ちょっと、足が、もつれた、だけ……':R.grabs>=5?'つ、捕まったのは……ゆ、油断した、だけ……だし……':R.grabs>=1?'へ、へへ……ぜ、ぜんぜん、平気……だった……':'ふひっ……わ、わたし、けっこう、強い……かも……');
+ const cell=(k,v)=>`<div><small>${k}</small><b>${v}</b></div>`;
+ return `<small class="recK">記録</small><b class="recTitle">「${good}、${bad}」</b>
+ <div class="stats">${[cell('捕まった',`${R.grabs}回`),cell('特殊攻撃',`${R.specials}回`),cell('振りほどいた',`${R.free}回`),cell('捕まっていた時間',`${R.held.toFixed(1)}秒`),cell('いちばん捕まった相手',tt?`${name}（${tt[1]}回）`:'—'),cell('最大ヌテラ',`${Math.round(R.maxNut)}%`)].join('')}</div>
+ <p class="recReview"><small>総評</small>${review.join('')}</p>
+ <p class="recSelf"><small>自己評価</small>「${self}」</p>`;
+}
+const baseFinish=finish;
+finish=function(win){
+ const r=baseFinish(win);
+ if(state.over){
+  let el=$('endRecord');if(!el){el=document.createElement('div');el.id='endRecord';el.className='record';($('endStats')||$('endText'))?.after(el)}
+  el.innerHTML=record(win);
+ }
+ return r;
+};
+window.Game5Heat={version:'0.27.0',cfg:C,jitter,record:()=>R};
+})();

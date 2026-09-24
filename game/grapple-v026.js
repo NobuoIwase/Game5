@@ -70,7 +70,7 @@ function start(h,e,dur){
 }
 function release(h,why){
  const g=h.grapple;if(!g)return;
- const e=g.e;h.grapple=null;h.status.bind=0;h.bindImmuneT=C.immune;
+ const e=g.e;h.grapple=null;h.status.bind=0;h.bindImmuneT=C.immune;h._lastRelease=why;
  if(e){e.grappling=false;e.actCd=Math.max(e.actCd||0,1.1);
   if(why==='free'){const a=Math.atan2(e.y-h.y,e.x-h.x);e.dash={x0:e.x,y0:e.y,x1:e.x+Math.cos(a)*70,y1:e.y+Math.sin(a)*70,t:0,T:.18,ang:a};e.stun=Math.max(e.stun||0,.35)}}
  h._voiceEvent=why==='free'?'free':'released';

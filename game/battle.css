@@ -113,3 +113,10 @@ button{touch-action:manipulation}
  .tools{grid-template-columns:repeat(2,1fr)}
  #cv{width:auto!important;height:calc(100svh - 12px);max-width:calc(100vw - 170px)}
 }
+/* v0.27 end-of-run record */
+.record{margin:10px 0 4px;padding:10px 12px;border:1px solid #ff9ad333;border-radius:10px;background:#1a1118;text-align:left}
+.record .recK{display:block;color:#d8a2c4;font-size:11px;letter-spacing:.1em}
+.record .recTitle{display:block;color:#ffd6ec;font-size:15px;margin:2px 0 8px}
+.record p{margin:8px 0 0;font-size:12.5px;line-height:1.65;color:#e6d8e0}
+.record p small{display:inline-block;margin-right:8px;color:#b98cab}
+.record .recSelf{color:#ffe0f0}

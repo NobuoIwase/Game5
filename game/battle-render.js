@@ -49,6 +49,8 @@ function draw(){
     ctx.restore()
   }
 
+  // v0.27: a hook may shake her (trembling, see heat-v027.js)
+  const jt=window.Game5Heat?.jitter?.(h)||null;ctx.save();if(jt)ctx.translate(jt.x,jt.y);
   ctx.save();ctx.shadowBlur=24;ctx.shadowColor='#d9efc4';
   const art=window.WarriorMotion?.drawGame?.(ctx,h)===true;ctx.restore();
   if(!art){
@@ -56,6 +58,7 @@ function draw(){
     if(im?.complete&&im.naturalWidth)ctx.drawImage(im,q.frame*384,(DIR_ROWS[h.dir]||0)*512,384,512,h.x-42,h.y-90,84,112);
     else C(h.x,h.y,18,h.color,'#fff')
   }
+  ctx.restore();
   if(!fx){ctx.beginPath();ctx.moveTo(h.x,h.y);ctx.lineTo(h.x+Math.cos(h.facing)*32,h.y+Math.sin(h.facing)*32);ctx.strokeStyle='#fff8';ctx.stroke();}
 
   const enemyArt=window.Game5Graphics?.drawEnemy?.(e)===true;

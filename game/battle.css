@@ -80,3 +80,9 @@ kbd{background:#223027;border:1px solid #ffffff22;border-bottom-width:2px;border
 .tools button.hasIcon{padding-right:46px}
 .tools button .ticon{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:30px;height:30px;opacity:.85;pointer-events:none}
 .tools button.dim .ticon{opacity:.4}
+/* v0.19.0 ally portraits on the start card */
+.allyRow{margin:4px 0 12px;text-align:left}
+.allyRow>div{display:flex;gap:12px;margin-top:4px}
+.allyRow figure{margin:0;text-align:center;font-size:11px;color:#b9c4bb}
+.allyRow canvas{width:72px;height:96px}
+.history:empty{display:none}

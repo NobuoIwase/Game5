@@ -303,6 +303,13 @@ function drawChest(c){
 }
 function drawTower(tw){
  const t=state.time,p=1-tw.pulse/C.tools.tower.pulse,PR=window.Game5Props;
+ if(PR?.towerPng?.complete&&PR.towerPng.naturalWidth){
+  const im=PR.towerPng,h=66,w=h*im.naturalWidth/im.naturalHeight;
+  ctx.save();ctx.fillStyle='#0007';ctx.beginPath();ctx.ellipse(tw.x,tw.y+10,20,7,0,0,TAU);ctx.fill();
+  ctx.imageSmoothingEnabled=false;ctx.shadowColor='rgba(190,150,255,'+(.35+.5*p)+')';ctx.shadowBlur=8+14*p;ctx.drawImage(im,tw.x-w/2,tw.y+12-h,w,h);ctx.restore();
+  ctx.save();ctx.fillStyle='#000a';ctx.fillRect(tw.x-18,tw.y+16,36,4);ctx.fillStyle='#b9a8ff';ctx.fillRect(tw.x-18,tw.y+16,36*tw.hp/tw.maxHp,4);ctx.restore();
+  return;
+ }
  if(PR?.tower?.complete&&PR.tower.naturalWidth){
   ctx.save();ctx.fillStyle='#0007';ctx.beginPath();ctx.ellipse(tw.x,tw.y+10,20,7,0,0,TAU);ctx.fill();ctx.restore();
   propFrame(PR.tower,Math.min(2,Math.floor(p*3)),3,tw.x,tw.y-26,46,70);
@@ -325,7 +332,9 @@ if(G){
    if(z.kind!=='directorPool')continue;
    const im=VX()?.tile?.mire,life=clamp(z.t/1.2,0,1);
    ctx.save();ctx.globalAlpha=.8*life;ctx.beginPath();ctx.arc(z.x,z.y,z.r,0,TAU);ctx.clip();
-   if(im?.complete&&im.naturalWidth)ctx.drawImage(im,z.x-z.r,z.y-z.r,z.r*2,z.r*2);else{ctx.fillStyle='#4a6a4a';ctx.fill()}
+   const pp=window.Game5Props?.poolPng;
+   if(pp?.complete&&pp.naturalWidth){ctx.imageSmoothingEnabled=false;ctx.globalAlpha=.85*life;ctx.drawImage(pp,z.x-z.r*1.1,z.y-z.r*1.1,z.r*2.2,z.r*2.2)}
+   else if(im?.complete&&im.naturalWidth)ctx.drawImage(im,z.x-z.r,z.y-z.r,z.r*2,z.r*2);else{ctx.fillStyle='#4a6a4a';ctx.fill()}
    ctx.fillStyle='rgba(90,140,90,.25)';ctx.fillRect(z.x-z.r,z.y-z.r,z.r*2,z.r*2);ctx.restore();
    ctx.save();ctx.globalAlpha=.5*life;ctx.strokeStyle='#8fd49a';ctx.setLineDash([4,6]);ctx.beginPath();ctx.arc(z.x,z.y,z.r,0,TAU);ctx.stroke();ctx.restore();
   }

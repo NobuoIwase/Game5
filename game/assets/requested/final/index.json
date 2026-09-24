@@ -1,4 +1,25 @@
 {
-  "monsters": [],
+  "monsters": [
+    "monsters/gel.png",
+    "monsters/slug.png",
+    "monsters/leech.png",
+    "monsters/worm.png",
+    "monsters/orb.png",
+    "monsters/flower.png",
+    "monsters/moth.png",
+    "monsters/mirror_slime.png",
+    "monsters/silk_spider.png",
+    "monsters/bubble_shell.png",
+    "monsters/crown_attendant.png"
+  ],
+  "floors": [
+    "floors/room1.png",
+    "floors/room2.png",
+    "floors/room3.png",
+    "floors/room4.png",
+    "floors/room5.png",
+    "floors/room6.png",
+    "floors/room7.png"
+  ],
   "props": []
 }

@@ -77,7 +77,7 @@ addFx=function(kind,x,y,text='',color='#fff',life){
 const est={flash:0,title:0,was:false};
 function onEstellaStart(h){
  est.flash=1;est.title=1.6;
- for(let k=0;k<22;k++)emit(h.x,h.y-36,{ang:k/22*TAU,speed:150+Math.random()*80,size:13+Math.random()*9,kind:k%3?'pink':'deep',life:1.1,grav:30});
+ for(let k=0;k<12;k++)emit(h.x,h.y-36,{ang:k/12*TAU,speed:200+Math.random()*80,size:12+Math.random()*7,kind:k%3?'pink':'deep',life:.9,grav:30});   // v0.27: fewer and faster, so her face shows
  ring(h.x,h.y-30,10,150,.8,PINK,5);ring(h.x,h.y-30,6,90,.6,'#fff0f8',3);
  window.Game5FX?.shake?.(7);
 }
@@ -102,7 +102,7 @@ function heartGauge(h,t){
  ctx.restore();
 }
 function orbit(h,t){
- for(let k=0;k<6;k++){const a=t*2.4+k/6*TAU,r=34+Math.sin(t*6+k)*4;drawHeart(h.x+Math.cos(a)*r*1.2,h.y-30+Math.sin(a)*r*.55,12+3*Math.sin(t*8+k),.9,Math.sin(a)*.3,k%2?'pink':'deep')}
+ for(let k=0;k<4;k++){const a=t*2.4+k/4*TAU,r=46+Math.sin(t*6+k)*4;drawHeart(h.x+Math.cos(a)*r*1.2,h.y-30+Math.sin(a)*r*.55,10+2*Math.sin(t*8+k),.8,Math.sin(a)*.3,k%2?'pink':'deep')}
  const p=.5+.5*Math.sin(t*10);ctx.save();ctx.globalCompositeOperation='lighter';
  const g=ctx.createRadialGradient(h.x,h.y-30,4,h.x,h.y-30,70);g.addColorStop(0,`rgba(255,120,200,${.35+.2*p})`);g.addColorStop(1,'rgba(255,120,200,0)');ctx.fillStyle=g;ctx.fillRect(h.x-70,h.y-100,140,140);ctx.restore();
 }
@@ -141,11 +141,11 @@ function screen(h,t){
   const bpm=70+n*110,beat=Math.pow(Math.max(0,Math.sin(t*bpm/60*Math.PI)),6),k=e?.55:.18+.22*beat;
   screenSpace(()=>{const g=ctx.createRadialGradient(SW/2,SH/2,SH*.32,SW/2,SH/2,SW*.62);g.addColorStop(0,'rgba(255,90,180,0)');g.addColorStop(1,`rgba(255,90,180,${k})`);
   ctx.fillStyle=g;ctx.fillRect(0,0,SW,SH)});
-  if(e&&Math.random()<.5)emit(CAM.x+Math.random()*SW,CAM.y+SH+10,{ang:-Math.PI/2,speed:60+Math.random()*60,size:10+Math.random()*12,life:2.2,grav:-8,kind:Math.random()<.3?'soft':'pink'});
+  if(e&&Math.random()<.3)emit(CAM.x+Math.random()*SW/(CAM.z||1),CAM.y+SH/(CAM.z||1)+10,{ang:-Math.PI/2,speed:60+Math.random()*60,size:(8+Math.random()*9)/(CAM.z||1),life:2.2,grav:-8,kind:Math.random()<.3?'soft':'pink'});
  }
  if(est.flash>0){const s=80+(1-est.flash)*420;drawHeart(h.x,h.y-40,s,est.flash*.7,0,'deep')}
  if(est.title>0)screenSpace(()=>{
-  const a=Math.min(1,est.title*2)*Math.min(1,(1.6-est.title)*6),y=h.y-CAM.y<SH*.5?SH*.72:SH*.24;
+  const a=Math.min(1,est.title*2)*Math.min(1,(1.6-est.title)*6),sy=(h.y-CAM.y)*(CAM.z||1),y=sy<SH*.5?SH*.84:SH*.15;   // v0.27: clear of her in a close-up
   ctx.save();ctx.globalAlpha=a;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='900 44px system-ui,sans-serif';
   const logo=window.Game5NuteraArt?.logo;
   if(logo?.complete&&logo.naturalWidth){const lw=340,lh=lw*logo.naturalHeight/logo.naturalWidth;ctx.shadowColor='#ff4fae';ctx.shadowBlur=18;ctx.drawImage(logo,SW/2-lw/2,y-lh/2-4,lw,lh)}
@@ -170,7 +170,7 @@ draw=function(){
   if(on&&!est.was)onEstellaStart(h);if(!on&&est.was)onEstellaEnd(h);est.was=on;
   // ambient hearts from 50% upward; while in Estella, MP/SP leak as motes
   ambient+=dt*Math.max(0,(h.nutera-45)/55)*2.4;while(ambient>=1){ambient--;emit(h.x+(Math.random()-.5)*30,h.y-40,{size:8+Math.random()*6,speed:25,kind:'soft'})}
-  if(on&&Math.random()<.6){emit(h.x+(Math.random()-.5)*20,h.y-30,{ang:Math.random()*TAU,speed:50,dot:Math.random()<.5?'#7fc4ff':'#ffc267',size:14,life:.9,grav:40})}
+  if(on&&Math.random()<.3){emit(h.x+(Math.random()<.5?-1:1)*(14+Math.random()*10),h.y-30,{ang:Math.random()*TAU,speed:50,dot:Math.random()<.5?'#7fc4ff':'#ffc267',size:14,life:.9,grav:40})}
   // Lumane wave peak: a pink ripple
   if(h.lumaneWave>.9&&!waveHigh){waveHigh=true;ring(h.x,h.y-10,20,110,1,'rgba(255,150,210,.9)',2)}if(h.lumaneWave<.7)waveHigh=false;
  }

@@ -161,6 +161,33 @@ NovelAI で、**全モンスターを同じ画質・同じ画風にそろえる*
 - `nutera/heart_deep.png`（濃いピンク #d62c8c。今はゲーム側で代用中）
 - 床 `floors/room1.png`〜`room7.png`（今の ChatGPT 版は質感の元として使えている。描き直すなら、真上から見た石畳、低コントラスト、64px の繰り返し模様にする）
 
+### D. アリアの顔（新規。モンスターより優先）
+
+ゲーム画面の左下に、アリア（主人公の戦士）の顔を出すようにした。状態に合わせて表情が変わり、拘束中は大きなカットインになる。今は、キャラクター設定画（リポジトリ直下の `ChatGPT Image 2026年9月21日 10_45_50.png`）の「表情パターン」6枚を切り抜いて仮に使っている（`game/assets/portrait/aria_faces_placeholder.png`）。これを NovelAI の顔アップに置き換えたい。
+
+- 置き場所: `game/assets/requested/final/portraits/aria_<名前>.png`。置いたら `final/index.json` に `"portraits": ["portraits/aria_<名前>.png", ...]` を足す（置いたものだけ）。ゲームは、並んでいる名前から順に差し替える
+- 形: **横長 3:2 の顔アップ**（額から顎の下と首元まで。NovelAI なら 1216×832 など）。**背景は暗めの無地でよい（透過は不要）**。検品スクリプトは透過前提なので使わず、目で確認する
+- 人物: 成人の女性戦士。オレンジの髪（ぼさっとしたポニーテール、目にかかる長い前髪）、灰青の目、目の下にうっすら隈、黒いタートルネックの肌着に肩当て。陰気で人見知り、笑うと「ふひひ」と不気味になる子
+- i2i の下絵: 設定画の表情パターンの切り抜き（`aria_faces_placeholder.png` の6コマ。左上から 通常・困り・不審な笑み／びくっ・ダメージ・レベルアップ時）。強度 0.6 前後
+- 共通のタグ（例）: `1girl, solo, adult woman, orange hair, messy ponytail, long bangs, gray-blue eyes, faint dark circles under eyes, black turtleneck, pauldron, face close-up, portrait, upper chest, dark plain background, soft lighting, anime, detailed eyes`
+- 除外（例）: `text, watermark, signature, frame, border, blood, bruise, injury, pain, crying in pain, child, loli, multiple girls, hands on face, cropped face`
+- **NG**: 痛そうな顔・血・アザは描かない。どの顔も「まだ抗っている」ことが分かるように（眉は寄せたまま、目は完全には崩さない）
+
+| 名前 | 場面 | 下絵 | 表情のタグ（例） |
+| --- | --- | --- | --- |
+| aria_normal | ふだん | 通常 | blank stare, slightly open mouth, awkward, shy |
+| aria_troubled | 動揺・疲れ | 困り | nervous, averted eyes, sweatdrop, awkward smile |
+| aria_creepy | うまくいったとき | 不審な笑み | creepy smile, half-closed eyes, smug, slight drool |
+| aria_startled | 魔物に気づく・捕まる瞬間 | びくっ | surprised, wide eyes, small pupils, sweat, open mouth |
+| aria_glee | レベルアップ・区画制圧 | レベルアップ時 | open-mouth grin, creepy happy, blush |
+| aria_damage | 倒れたとき | ダメージ | exhausted, half-closed eyes, sweat, messy hair |
+| aria_endure | ヌテラが高い（65%〜） | 困り | blush, biting lip, furrowed brows, teary eyes, sweat, heavy breathing, trying to stay composed |
+| aria_held | 拘束中 | ダメージ | blush, clenched teeth, embarrassed, looking away, sweat, trembling, wet hair strands stuck to cheek |
+| aria_melt | 拘束中でヌテラが高い・寸止め | ダメージ | heavy blush, teary half-lidded eyes, open mouth, panting, drool, still frowning |
+| aria_estella | エステラ | ダメージ | eyes squeezed shut, full-face blush, tears, open mouth, trembling, steam, head tilted back |
+| aria_dazed | 拘束のあと（余韻） | 通常 | dazed, unfocused eyes, blush, parted lips, sweat, messy hair |
+| aria_trance | 催眠のあと、立ったまま止まる | 通常 | empty eyes, dull pupils, blank expression, faint smile, hypnosis |
+
 ## 5（旧）. 作るものの一覧（2026-09-24 版。済んだもの）
 
 見本名は `game/asset-refs/png/card_<見本名>.png` の `<見本名>` の部分。置き場所はいずれも `game/assets/requested/final/` の下です。

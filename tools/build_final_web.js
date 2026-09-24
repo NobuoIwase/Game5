@@ -9,7 +9,7 @@ const {chromium}=require(process.env.PW||'playwright');
 const fs=require('fs'),path=require('path');
 const FINAL=path.join(__dirname,'..','game','assets','requested','final'),OUT=path.join(FINAL,'_web');
 // longest side in px after trimming; icons are also centred on a square with even padding
-const MAX={monsters:320,props:384,nutera:160,icons:96};
+const MAX={monsters:320,props:384,nutera:160,icons:96,portraits:360};
 const SPECIAL={'nutera/sigil':384,'nutera/estella_logo':720};
 (async()=>{
  const index=JSON.parse(fs.readFileSync(path.join(FINAL,'index.json'),'utf8'));

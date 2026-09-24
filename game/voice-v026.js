@@ -71,6 +71,24 @@ const P={
  estellaStart:['ぁ、……っ、——っ♡','い、……ぁ、……あ、ぁああ……っ♡','や、……っ、み、見ない、で……っ♡'],
  estella:['ぁ……♡ ……っ、……ぁ……','は、……っ、は、……ぁ……','——っ、……ん……♡'],
  estellaEnd:['……き、記録、しないで……ぜったい……','は……っ、は、……ぁ……い、今のは……ちが……','……い、今の……ぜ、ぜったい、誰にも……言わない……','……ふ、ふひ……さ、最悪……','……み、見られて、ない……よね……？ ……よね……'],
+ // v0.27 寸止め: let go at the brink / her hips following it / catching herself / taken again / it passing
+ edge:{calm:['……え、……な、なんで……い、今……っ'],strain:['……え、……な、なんで……い、今……っ','……は、離れ……た……？ ……よ、よかった……'],
+  yield:['……は、離れ……た……？ ……よ、よかった……よかった、の……に……っ','……え、……ちょ、ちょっと、待……ち、ちがう、なんでもない……っ'],
+  crave:['……ぁ、……え……？ ……な、なんで……っ、……ち、ちが……や、やめてほしかった、から……っ','……っ、……あ、あと、すこ……ち、ちがう、なんでもない……っ','……ふ、ふひ……よ、よかった……た、助かった……だけ……っ']},
+ edgePull:['あ、……あし、が……っ、か、勝手に……','ち、ちが……い、行かない……っ、行かない、から……','……っ、こ、腰……な、なんで、そっち……っ','ま、待っ……ち、ちが、待ってない……っ'],
+ edgeCatch:['……い、今の、なし……っ、あ、脚が、もつれた、だけ……','……ふ、ふひ……わ、わたし、今、なにして……','……っ、け、剣……剣、握って……しっかり、して、わたし……'],
+ edgeRegrab:['……ぁ……♡ ……ち、ちが……ま、待ってたんじゃ……っ','……や、……け、結局……っ、……ぁ……♡','……っ、ず、ずるい……い、一回、離した、くせに……っ'],
+ edgeEnd:['……お、おさまっ……た……？ ……よ、よかった。……よかった、はず……','……は、……っ、……だ、大丈夫……わ、わたし、ちゃんと、戦士……','……つ、次は……ぜ、ぜったい……ち、近づかない……'],
+ // raw thoughts that used to come out in the old, level voice
+ nuteraDanger:{calm:['は、離れ……な、なきゃ……'],strain:['だ、だめ……こ、これ以上、は……っ','は、離れ……な、なきゃ……っ'],
+  yield:['……ち、近づいたら、だめ……な、のに……っ','か、身体が……む、向こうに、行こうと、する……っ'],crave:['……っ、は、離れ……ぁ……♡ ……は、離れる、の……っ']},
+ watched:{calm:['み、見ないで……っ、み、見ないでって……','な、なんで、み、みんな、見て……っ','……っ、見せもの、じゃ、ない……っ'],
+  strain:['み、見ないで……っ、み、見ないでって……','……っ、見せもの、じゃ、ない……っ','こ、こっち、見る、な……っ'],
+  yield:['み、見られて……っ、……や、やだ、声……っ','……ふ、ふひ……み、見ないで……い、今、ぜったい、変な顔……っ'],
+  crave:['……み、見ないで……ぁ、……み、見……っ♡']},
+ tranceIn:['……は、い……','……わ、かり……ました……','……は……い……ふ、ふひ……'],
+ tranceOut:['……え？ ……な、なに……？ い、今、わたし、なにか、言った……？','……あ、あれ……？ た、立ったまま、寝てた……？ ふ、ふひ……','……な、何も、なかった……よ、よね……？'],
+ hypnoEcho:['……あ、あれ……？ い、今、なにか……','……ぼ、ぼーっと、してた……？ し、してない……','え、……な、なんの、話……？'],
  defeat:['……ご、ごめ……なさ……','……や、やっぱり……わたしじゃ……'],
  floor:['し、静か……ふひ、こういうの、嫌いじゃない……','じ、じめじめ……靴、濡れる……やだ……','い、糸……？ か、絡まったら、どうしよ……','こ、粉っぽい……吸ったら、だめな、やつ……','あ、甘い匂い……こ、こういうの、罠……','ね、眠くなる……だ、だめ、起きてて、わたし……','い、いちばん奥……こ、ここまで、来ちゃった……']
 };
@@ -80,6 +98,7 @@ const MAP=[
  [/全力|一気に間合い/,'heavy'],[/で仕掛ける|届かない|当てられる|斬/,'attack'],[/息が上が|離れよう|呼吸を整え|息を整え/,'rest'],
  [/偽物じゃないか|確かめてから/,'mimicWary'],[/宝箱じゃない|偽物/,'mimic'],[/宝箱/,'chest'],[/助かる/,'item'],[/塔/,'tower'],
  [/区画を制圧|階段へ/,'clear'],[/何か来る|え、/,'surprise'],[/慌てない|見えてる/,'watch'],[/怖い|遅れた/,'fear'],
+ [/ヌテラが危険域/,'nuteraDanger'],[/催眠の残響/,'hypnoEcho'],[/エステラ/,'estella'],[/ヌテラがまだ残って/,'afterglow'],[/ほどけない|ほどかないと/,'struggle'],[/相手の出方/,'watch'],
  [/足元/,'hazard'],[/近すぎる|横へ回る|間合い/,'position'],[/静かすぎる|奥を確かめる|音|足音|確かめる|さっき見えた/,'search']
 ];
 const RANK={calm:0,strain:1,yield:2,crave:3};
@@ -92,8 +111,11 @@ function pick(key,b){
  if(!bag||!bag.length){bag=arr.slice().sort(()=>Math.random()-.5);if(bag.length>1&&bag[bag.length-1]===lastLine.get(id))bag.unshift(bag.pop());bags.set(id,bag)}
  const l=bag.pop();lastLine.set(id,l);return l;
 }
+/* v0.27: lines about her body are not cut off by lines about the room */
+const STRONG=new Set(['watched','tranceIn','tranceOut','edge','edgePull','edgeCatch','edgeRegrab','edgeEnd','estellaStart','estellaEnd','grab','grabAgain','grabKnown','free']),WEAK=new Set(['spot','ambush','trip','retreat','explore','search','watch']);
 function say(h,key,o={}){
  if(!o.force&&state.time<(h._voiceHold||0))return false;
+ if(WEAK.has(key)&&STRONG.has(h._voiceKey)&&state.time<(h._voiceHold||0))return false;
  const l=pick(key,band(h));if(!l)return false;
  h.thought=h._voiceShown=l;h._voiceHold=state.time+(o.hold??2.4);h._voiceKey=key;return true;
 }
@@ -126,19 +148,27 @@ updateHero=function(h,dt){
  h._vEst=est;
  // events from the new systems
  if(ev){
-  if(ev==='grab')say(h,(h._grabRepeat||1)>=3?'grabKnown':(h._grabRepeat||1)===2?'grabAgain':'grab',{force:true,hold:1.8});
+  if(ev==='grab'&&h._edgeRegrab){h._edgeRegrab=false;say(h,'edgeRegrab',{force:true,hold:2})}
+  else if(ev==='grab')say(h,(h._grabRepeat||1)>=3?'grabKnown':(h._grabRepeat||1)===2?'grabAgain':'grab',{force:true,hold:1.8});
   else if(ev==='special')say(h,(h._grabRepeat||1)>=3&&Math.random()<.35?'specialKnown':'special',{force:true,hold:1.4});
   else if(ev==='afterglow')say(h,'afterglow',{hold:2.6});
   else if(ev==='free')say(h,'free',{force:true,hold:2.4});
   else if(ev==='released')say(h,'released',{force:true,hold:2});
+  else if(ev==='edge')say(h,'edge',{force:true,hold:2.4});
+  else if(ev==='edgePull')say(h,'edgePull',{force:true,hold:1.4});
+  else if(ev==='edgeCatch')say(h,'edgeCatch',{force:true,hold:2.2});
+  else if(ev==='edgeEnd')say(h,'edgeEnd',{force:true,hold:2.6});
   else if(['trip','ambush','spot'].includes(ev))say(h,ev,{force:true,hold:2});
   else if(ev==='retreat')say(h,'retreat',{force:true,hold:2.6});
+  else if(['tranceIn','tranceOut'].includes(ev))say(h,ev,{force:true,hold:ev==='tranceIn'?1.8:3});
   else if(ev==='explore'&&state.time>(h._voiceHold||0)+2.5&&Math.random()<.35)say(h,'explore',{hold:3});
  }
  // Nutera climbing into a new band (outside holds, which have their own lines)
  const b=band(h);
  if(!h.grapple&&!est&&RANK[b]>RANK[h._vBand||'calm'])say(h,b==='strain'?'toStrain':b==='yield'?'toYield':'toCrave',{force:true,hold:2.6});
  h._vBand=b;
+ // v0.27: the others standing round watching
+ if(h.grapple&&!h.grapple._saidWatched&&state.time>(h._voiceHold||0)-.6&&(window.Game5MultiEnemy?.alive?.()||[]).some(o=>o.aware&&!o.grappling&&Math.hypot(o.x-h.x,o.y-h.y)<170)){h.grapple._saidWatched=true;say(h,'watched',{force:true,hold:2.2})}
  if(h.grapple&&state.time>(h._voiceHold||0)+.6)say(h,'struggle',{hold:1.6});
  if(!h.grapple&&!est&&(h.fatigue||0)>.8&&h.moving&&state.time>(h._voiceHold||0)+4&&Math.random()<.02)say(h,'tired',{hold:2.2});
  if(!h.grapple&&!est&&h.sp<h.maxSp*.18&&state.time>(h._voiceHold||0)+5&&Math.random()<.02)say(h,'lowSp',{hold:2.2});

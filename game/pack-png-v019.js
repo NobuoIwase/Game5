@@ -114,5 +114,5 @@ const cvs=[...row.querySelectorAll('canvas')];
  if(!document.getElementById('startOverlay')?.classList.contains('hidden'))cvs.forEach((c,i)=>{const im=allies[i].im,g=c.getContext('2d');if(!ok(im))return;g.clearRect(0,0,96,128);g.drawImage(im,(Math.floor(t/120)%8)*384,0,384,512,0,0,96,128)});
  requestAnimationFrame(tick);
 })(0);
-window.Game5PackPng={version:'0.20.0',props,floorSheet,allies,ok};
+window.Game5PackPng={version:'0.20.0',props,floorSheet,allies,ok,final};   // final: v0.27 portraits ask for their art through it
 })();

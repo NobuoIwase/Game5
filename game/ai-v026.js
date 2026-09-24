@@ -23,6 +23,7 @@ const C={
  wander:{r:120,every:[3,5.5],speed:.36},
  ambush:{r:165,freeze:[.45,.7]},
  punish:{r:270,base:.2,perLevel:.04,max:.5},
+ audience:{r:380,ring:108,speed:.6},   // v0.27: while one holds her, the others gather round and watch
  relocate:{cost:30,every:[13,19],min:320,max:680},
  dodgeSp:.004,fatiguePerPx:.0022,fatigueDecay:.07,restDecay:.22,
  retreatAt:.85,retreatSp:.22,restUntil:.35,
@@ -107,8 +108,25 @@ function idle(e,h,dt){
  e.x+=it.x/il*sp*dt;e.y+=it.y/il*sp*dt;e.moving=true;e._aiMoved=true;e.decision='うろついている';
  return true;
 }
+/* v0.27 the audience: while she is held, the aware ones nearby take a place in a loose ring
+   around her and stand there facing her (profile: 見世物・観客) */
+function audience(e,h,dt){
+ if(dist(e,h)>C.audience.r)return false;
+ e._audA??=Math.atan2(e.y-h.y,e.x-h.x);
+ const R=C.audience.ring+(e.r||24)*.5,tx=h.x+Math.cos(e._audA)*R,ty=h.y+Math.sin(e._audA)*R*.7,gx=tx-e.x,gy=ty-e.y,l=Math.hypot(gx,gy);
+ e.decision='見物している';e._aiMoved=true;e.facing=Math.atan2(h.y-e.y,h.x-e.x);
+ if(l<8){e.moving=false;return true}
+ const it=DG()?.steer?.(e,{kind:'move',x:gx/l,y:gy/l})||{x:gx/l,y:gy/l},il=Math.hypot(it.x,it.y)||1,sp=(e.moveSpeed||69)*C.audience.speed;
+ const nx=e.x+it.x/il*sp*dt,ny=e.y+it.y/il*sp*dt;
+ if(window.Game5Dungeon?.blockedAt?.(e,nx,ny)){e.moving=false;return true}
+ e.x=nx;e.y=ny;e.moving=true;return true;
+}
 const EAI=window.Game5EnemyAI;
-if(EAI?.move){const m=EAI.move;EAI.move=function(e,h,dt){if(!e.aware&&!e.grappling)return idle(e,h,dt);return m(e,h,dt)}}
+if(EAI?.move){const m=EAI.move;EAI.move=function(e,h,dt){
+ if(!e.aware&&!e.grappling)return idle(e,h,dt);
+ if(h?.grapple&&!e.grappling&&!e.dash&&audience(e,h,dt))return true;
+ if(!h?.grapple)e._audA=null;
+ return m(e,h,dt)}}
 /* casting: nothing while unaware; a punishing monster picks a quick attack */
 const baseChoose=chooseEnemyAction;
 chooseEnemyAction=function(){

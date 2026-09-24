@@ -54,8 +54,10 @@ function telegraph(e) {
 function hpbar(e) {
   if (!e || e.hp <= 0) return;
   const w = Math.max(34, Math.min(76, e.r * 2.2));
-  const x = e.x - w / 2;
-  const y = e.y - e.r - 34;
+  // v0.27: a monster holding her would put its bar over her face; move it out to its far side
+  const side = e.grappling && state.hero ? (e.x >= state.hero.x ? 1 : -1) : 0;
+  const x = side ? e.x + side * (e.r + 34) - w / 2 : e.x - w / 2;
+  const y = side ? e.y + 4 : e.y - e.r - 34;
   ctx.save();
   ctx.globalAlpha = e === state.enemy ? 1 : .72;
   ctx.fillStyle = '#160d16';

@@ -267,12 +267,13 @@ function labels(){
  for(const e of alive())if(e.type==='gel')crown(e);
  ctx.save();ctx.textAlign='center';ctx.textBaseline='bottom';ctx.lineJoin='round';
  for(const e of alive()){
-  const y=e.y-(e.r||26)-38;
+  // v0.27: the one holding her is labelled to its far side, clear of her face
+  const side=e.grappling?(e.x>=state.hero.x?1:-1):0,lx=side?e.x+side*((e.r||26)+34):e.x,y=side?e.y:e.y-(e.r||26)-38;
   ctx.font='700 11px system-ui,sans-serif';ctx.lineWidth=3;ctx.strokeStyle='#000c';
   ctx.globalAlpha=e===state.enemy?1:.75;
   const txt=e.cast?e.cast.sk.name:e.name;
-  ctx.strokeText(txt,e.x,y);ctx.fillStyle=e.cast?(TCOL[e.cast.key]||'#fff'):'#e8e0d0';ctx.fillText(txt,e.x,y);
-  if(e.stun>0){ctx.fillStyle='#ffe98a';ctx.fillText('★ 気絶',e.x,y-13)}
+  ctx.strokeText(txt,lx,y);ctx.fillStyle=e.cast?(TCOL[e.cast.key]||'#fff'):'#e8e0d0';ctx.fillText(txt,lx,y);
+  if(e.stun>0){ctx.fillStyle='#ffe98a';ctx.fillText('★ 気絶',lx,y-13)}
  }
  const h=state.hero;
  if(!h.dead){

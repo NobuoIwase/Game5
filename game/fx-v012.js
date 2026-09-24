@@ -92,7 +92,10 @@ function decor(){
  const [ex,ey]=r.exit,open=!!state.dungeon?.pending,t=state.time;
  ctx.save();
  if(open){ctx.shadowBlur=28+8*Math.sin(t*4);ctx.shadowColor='#ffe28a'}
- T(4,ex-34,ey-34,68,68,open?1:.5);ctx.restore();
+ const st=window.Game5Props?.stairs;
+ // delivered sheet: frame 0 = open (lit), frame 1 = sealed
+ if(st?.complete&&st.naturalWidth){const fw=st.naturalWidth/2;ctx.drawImage(st,open?0:fw,0,fw,st.naturalHeight,ex-36,ey-36,72,72*st.naturalHeight/fw)}
+ else T(4,ex-34,ey-34,68,68,open?1:.5);ctx.restore();
  if(!open){
   ctx.save();ctx.strokeStyle='#8a7e6a';ctx.globalAlpha=.7;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(ex-26,ey-26);ctx.lineTo(ex+26,ey+26);ctx.moveTo(ex+26,ey-26);ctx.lineTo(ex-26,ey+26);ctx.stroke();ctx.restore();
  }else{

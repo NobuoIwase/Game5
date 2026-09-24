@@ -6,17 +6,18 @@
      dithered to read, so it is no longer used (see asset-refs/README.md for the re-request).
      A PNG placed at assets/requested/final/monsters/<type>.png (or props/tower.png, pool.png)
      and listed in assets/requested/final/index.json takes priority.
-   - floors: each floor's 64x32 block of floors_v018.png becomes the texture source of the
-     baked flagstone floor, softened and pulled toward the room palette
+   - props: chest / mimic / stairs 2-frame sheets from final/props/
+   - floors: final/floors/roomN.png (else the room's 64x32 block of floors_v018.png) becomes
+     the texture source of the baked flagstone floor, softened and pulled toward the room palette
    - allies: the start card shows the existing motion sheets */
 const load=(s,fn)=>{const i=new Image();if(fn)i.onload=()=>fn(i);i.src=s;return i},ok=i=>i&&i.complete&&i.naturalWidth;
 const TYPES=['gel','slug','leech','worm','orb','flower','moth','mirror_slime','silk_spider','bubble_shell','crown_attendant'];
 const req=window.Game5Assets?.requested;
 const S='./asset-refs/sprites/',F='./assets/requested/final/';
-/* rasterise at 2x and trim the transparent margin so the feet sit on the sprite's bottom edge */
-function raster(im,done){
+/* rasterise (SVG at 2x) and trim the transparent margin so the feet sit on the sprite's bottom edge */
+function raster(im,done,k=2){
  try{
-  const k=2,c=document.createElement('canvas');c.width=im.naturalWidth*k;c.height=im.naturalHeight*k;const g=c.getContext('2d');g.drawImage(im,0,0,c.width,c.height);
+  const c=document.createElement('canvas');c.width=im.naturalWidth*k;c.height=im.naturalHeight*k;const g=c.getContext('2d');g.drawImage(im,0,0,c.width,c.height);
   const d=g.getImageData(0,0,c.width,c.height).data;let x0=c.width,y0=c.height,x1=0,y1=0;
   for(let y=0;y<c.height;y+=2)for(let x=0;x<c.width;x+=2)if(d[(y*c.width+x)*4+3]>16){if(x<x0)x0=x;if(y<y0)y0=y;if(x>x1)x1=x;if(y>y1)y1=y}
   if(x1<=x0)return done(im);
@@ -24,25 +25,40 @@ function raster(im,done){
   load(t.toDataURL(),done);
  }catch(_){done(im)}
 }
+/* final/index.json lists delivered files per kind, either as names ("gel") or paths
+   ("monsters/gel.png"). Claude removes entries that fail review; see final/REVIEW.md */
 const finals=new Set(),listed=fetch(F+'index.json').then(r=>r.ok?r.json():{}).catch(()=>({}));
-function use(svg,png,set){
- load(svg,im=>raster(im,r=>{if(!finals.has(png))set(r)}));
- const [kind,name]=png.slice(F.length).replace('.png','').split('/');
- listed.then(j=>{if((j?.[kind]||[]).includes(name))load(png,im=>{finals.add(png);set(im)})});
+const has=(j,kind,name)=>(j?.[kind]||[]).some(e=>String(e).replace(/^.*\//,'').replace(/\.png$/,'')===name);
+function final(kind,name,fn){listed.then(j=>{if(has(j,kind,name))load(`${F}${kind}/${name}.png`,fn)})}
+function use(svg,kind,name,set,trim){
+ const key=kind+'/'+name;
+ if(svg)load(svg,im=>raster(im,r=>{if(!finals.has(key))set(r)}));
+ final(kind,name,im=>{finals.add(key);trim?raster(im,set,1):set(im)});
 }
-for(const t of TYPES)use(`${S}monster_${t}.svg`,`${F}monsters/${t}.png`,im=>{if(req)req.monsters[t]=im});
+for(const t of TYPES)use(`${S}monster_${t}.svg`,'monsters',t,im=>{if(req)req.monsters[t]=im},true);
 const props=window.Game5Props=Object.assign(window.Game5Props||{},{});
-use(`${S}prop_tower.svg`,`${F}props/tower.png`,im=>props.towerPng=im);
-use(`${S}prop_pool.svg`,`${F}props/pool.png`,im=>props.poolPng=im);
+use(`${S}prop_tower.svg`,'props','tower',im=>props.towerPng=im);
+use(`${S}prop_pool.svg`,'props','pool',im=>props.poolPng=im);
+/* 2-frame sheets: chest (closed, open), mimic (closed, revealed), stairs */
+use(null,'props','chest',im=>props.chest=im);
+use(null,'props','mimic',im=>props.mimic=im);
+use(null,'props','stairs',im=>props.stairs=im);
 /* keep the pack's softened SVG from overwriting these */
 window.Game5ArtLock=true;
+
+/* floors: a delivered final/floors/roomN.png replaces that floor's texture source */
+const FLOOR_LOOK={patch:14,soft:1.2,unify:.5,contrast:.7};
+for(let i=0;i<7;i++)final('floors',`room${i+1}`,im=>{
+ const look=window.Game5RoomLook||[];look[i]={...(look[i]||{}),src:im,region:[0,0,im.naturalWidth,im.naturalHeight],...FLOOR_LOOK,final:true};
+ window.Game5RoomLook=look;window.Game5Floor?.clear?.();
+});
 
 /* floors: 7 blocks of 64x32 in floors_v018.png, in room order */
 const floorSheet=load('./assets/requested/generated/floors_v018.png');
 const BLOCK=[[0,0],[64,0],[0,32],[64,32],[0,64],[64,64],[0,96]];
 floorSheet.onload=()=>{
  const look=window.Game5RoomLook||[];
- BLOCK.forEach(([x,y],i)=>{look[i]={...(look[i]||{}),src:floorSheet,region:[x,y,64,32],patch:9,soft:1.6,unify:.5,contrast:.72}});
+ BLOCK.forEach(([x,y],i)=>{if(look[i]?.final)return;look[i]={...(look[i]||{}),src:floorSheet,region:[x,y,64,32],patch:9,soft:1.6,unify:.5,contrast:.72}});
  window.Game5RoomLook=look;window.Game5Floor?.clear?.();
 };
 

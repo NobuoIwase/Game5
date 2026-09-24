@@ -5,12 +5,7 @@
     "monsters/leech.png",
     "monsters/worm.png",
     "monsters/orb.png",
-    "monsters/flower.png",
-    "monsters/moth.png",
-    "monsters/mirror_slime.png",
-    "monsters/silk_spider.png",
-    "monsters/bubble_shell.png",
-    "monsters/crown_attendant.png"
+    "monsters/flower.png"
   ],
   "floors": [
     "floors/room1.png",
@@ -21,5 +16,9 @@
     "floors/room6.png",
     "floors/room7.png"
   ],
-  "props": []
+  "props": [
+    "props/chest.png",
+    "props/mimic.png",
+    "props/stairs.png"
+  ]
 }

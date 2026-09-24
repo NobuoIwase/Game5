@@ -73,7 +73,11 @@ function drawSpecies(e) {
     (e?.bindVisualUntil || 0) > state.time;
 
   if (hero && !ownsBind) hero.status.bind = 0;
-  const result = single?.(e);
+  // v0.27: per-monster transform hook (squash on hit, see impact-v027.js)
+  const tf = window.Game5Graphics.enemyTransform;
+  ctx.save();
+  let result;
+  try { tf?.(e); result = single?.(e); } finally { ctx.restore(); }
   if (hero) hero.status.bind = bind;
   return result;
 }

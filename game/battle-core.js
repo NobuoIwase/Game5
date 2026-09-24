@@ -25,11 +25,13 @@ function inCone(px,py,ox,oy,ang,range,half){
   const dx=px-ox,dy=py-oy;
   return Math.hypot(dx,dy)<=range&&angDiff(Math.atan2(dy,dx),ang)<=half;
 }
+/* v0.27: eight 45-degree sectors by angle (the old sign test almost always gave a diagonal,
+   so the front / back / left / right sheets were never shown while moving) */
+const DIR8=['right','down_right','front','down_left','left','up_left','back','up_right'];
 function dirFrom(dx,dy){
-  const sx=Math.sign(dx),sy=Math.sign(dy);
-  if(sy>0)return sx>0?'down_right':sx<0?'down_left':'front';
-  if(sy<0)return sx>0?'up_right':sx<0?'up_left':'back';
-  return sx>0?'right':sx<0?'left':'front';
+  if(!dx&&!dy)return 'front';
+  const k=Math.round(Math.atan2(dy,dx)/(Math.PI/4));
+  return DIR8[(k+8)%8];
 }
 const DIR_ROWS={front:0,down_right:1,right:2,up_right:3,back:4,up_left:5,left:6,down_left:7};
 const ENEMY_LABELS={cleave:'大薙ぎ',charge:'灰槍突進',bind:'影縛り',fog:'蝕毒の霧',bolt:'黒雷'};

@@ -5,6 +5,8 @@
    toward it, and snaps when she is moved far at once (new floor, reset). The whole draw
    runs under the camera transform; screen-fixed layers use screenSpace() (battle-core.js). */
 let last=performance.now(),seen=null;
+/* v0.27 kick: a short push along a hit, easing back (impact-v027.js) */
+const K={x:0,y:0};const kick=(x,y)=>{K.x+=x;K.y+=y};
 function target(h){
  const lead=h.moving?70:40,f=h.facing||0;
  return{x:clamp(h.x+Math.cos(f)*lead-SW/2,0,W-SW),y:clamp(h.y-20+Math.sin(f)*lead*.6-SH/2,0,H-SH)};
@@ -22,7 +24,8 @@ draw=function(){
  const now=performance.now(),dt=Math.min(.1,(now-last)/1000);last=now;
  follow(dt);
  // draw at whole pixels (crisp sprites); keep the eased position for the next frame
- const fx=CAM.x,fy=CAM.y;CAM.x=Math.round(fx);CAM.y=Math.round(fy);
+ K.x*=Math.exp(-dt*14);K.y*=Math.exp(-dt*14);
+ const fx=CAM.x,fy=CAM.y;CAM.x=Math.round(fx+K.x);CAM.y=Math.round(fy+K.y);
  ctx.save();ctx.setTransform(1,0,0,1,-CAM.x,-CAM.y);
  try{bDraw()}finally{ctx.restore();CAM.x=fx;CAM.y=fy}
 };
@@ -47,5 +50,5 @@ function minimap(){
 }
 const bDraw2=draw;
 draw=function(){bDraw2();try{minimap()}catch(_){}};
-window.Game5Camera={version:'0.26.0',follow,snap:()=>{seen=null},minimap};
+window.Game5Camera={version:'0.27.0',follow,snap:()=>{seen=null},minimap,kick};
 })();

@@ -308,7 +308,7 @@ hurtHero=function(h,dmg,status=null,meta={}){
 const bResolve=resolveHero;
 resolveHero=function(h,cast){
  const sk=cast?.sk,live=h.cast===cast;bResolve(h,cast);
- if(live&&sk&&['melee','heavy'].includes(sk.kind))trails.push({x:h.x,y:h.y-14,ang:h.facing,r:sk.range*.85,t:.22,max:.22,heavy:sk.kind==='heavy'});
+ // v0.27: the sword trail is drawn by motion-v026.js (a crescent following the blade)
  if(live&&sk?.kind==='bash')burst(h.x+Math.cos(h.facing)*40,h.y+Math.sin(h.facing)*40-10,'#dfe9ff',8,130,.35,2.5);
 };
 

@@ -23,7 +23,7 @@ const C={
  wander:{r:120,every:[3,5.5],speed:.36},
  ambush:{r:165,freeze:[.45,.7]},
  punish:{r:270,base:.2,perLevel:.04,max:.5},
- relocate:{cost:30,every:[10,15],min:320,max:680},
+ relocate:{cost:30,every:[13,19],min:320,max:680},
  dodgeSp:.004,fatiguePerPx:.0022,fatigueDecay:.07,restDecay:.22,
  retreatAt:.85,retreatSp:.22,restUntil:.35,
  trip:{from:.6,chance:.5,stun:.55},
@@ -232,6 +232,13 @@ decideHero=function(h,dt){
    else if(!near.length){h.intent={kind:'hold',x:0,y:0,label:'息を整える'};h.resting=true;return h.intent}
    else h.retreat=null;
   }
+ }
+ // something that knows about her is right behind her: turn round and face it instead of
+ // wandering on (she hears it coming)
+ const chaser=alive().filter(o=>o.aware&&dist(o,h)<280).sort((a,b)=>dist(a,h)-dist(b,h))[0];
+ if(chaser&&(it?.label==='探索'||/迂回/.test(it?.label||'')||!it)&&!AI()?.sees?.(h,chaser)&&!AI()?.wallBetween?.(h,chaser)){
+  setHeroFacing(h,chaser.x,chaser.y);h.memory.lastSenseAt=state.time;h.memory.lastSeen={x:chaser.x,y:chaser.y,t:state.time};
+  h.intent={kind:'hold',x:0,y:0,label:'振り向く'};h._voiceEvent||='spot';return h.intent;
  }
  const e=state.enemy,sensed=h.memory?.lastSenseAt!=null&&state.time-h.memory.lastSenseAt<2.5;
  const blind=!alive().some(o=>o.aware&&AI()?.sees?.(h,o));

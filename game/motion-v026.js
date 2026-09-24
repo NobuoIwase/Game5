@@ -57,11 +57,11 @@ if(W5&&old){
    - monster dash (the charge that used to teleport): streaks along the path */
 function trail(h){
  const a=h._warriorMotion;if(!a||h.dead)return;
- const p=a.elapsed/a.total,hit=(a.hitAt??a.total*.55)/a.total,u=(p-(hit-.16))/.3;if(u<0||u>1)return;
+ const p=a.elapsed/a.total,hit=(a.hitAt??a.total*.55)/a.total,u=(p-(hit-.2))/.46;if(u<0||u>1)return;
  const heavy=a.name==='heavy',f=h.facing||0,span=heavy?1.5:1.2,R=heavy?76:60,cx=h.x,cy=h.y-30;
- const a0=f-span,head=a0+span*2*Math.min(1,u*1.25),tail=Math.max(a0,head-span*1.3),fade=1-Math.max(0,u-.55)/.45;
+ const a0=f-span,head=a0+span*2*Math.min(1,u*2.2),tail=Math.max(a0,head-span*1.5)+span*2*Math.max(0,u-.45)*.9,fade=1-Math.max(0,u-.5)/.5;
  // a crescent: thick at the blade, tapering to nothing at the tail
- const N=18,th=(heavy?30:22)*fade,pts=[];
+ const N=20,th=(heavy?36:26)*fade,pts=[];
  for(let i=0;i<=N;i++){const q=i/N,ang=tail+(head-tail)*q,w=th*q*q;pts.push([cx+Math.cos(ang)*R,cy+Math.sin(ang)*R*.8,cx+Math.cos(ang)*(R-w),cy+Math.sin(ang)*(R-w)*.8])}
  ctx.save();ctx.globalCompositeOperation='lighter';
  const g=ctx.createLinearGradient(pts[0][0],pts[0][1],pts[N][0],pts[N][1]);

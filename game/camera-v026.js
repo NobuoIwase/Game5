@@ -15,7 +15,7 @@ CAM.z=1;let wantZ=1;
    screen. In a close-up she is simply centred. */
 const DZ={x:.16,y:.14};
 function target(h){
- const z=CAM.z,vw=SW/z,vh=SH/z,hy=h.y-(z>1.05?46:30);
+ const z=CAM.z,vw=SW/z,vh=SH/z,hy=h.y+(z>1.05?30:28);   // v0.38: she sits higher, clear of the message window along the bottom
  if(z>1.05)return{x:clamp(h.x-vw/2,0,W-vw),y:clamp(hy-vh/2,0,H-vh)};
  let x=CAM.x,y=CAM.y;const cx=x+vw/2,cy=y+vh/2,dx=vw*DZ.x,dy=vh*DZ.y;
  if(h.x<cx-dx)x=h.x+dx-vw/2;else if(h.x>cx+dx)x=h.x-dx-vw/2;

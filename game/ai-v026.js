@@ -68,7 +68,7 @@ function sense(dt){
  const list=alive();
  for(const e of list)senseTick(e,h);
  // a monster that has found her calls the others nearby
- for(const e of list)if(e.aware&&state.time-(e.awareAt||0)>2)for(const o of list)if(!o.aware&&!o.ambush&&dist(e,o)<200)notice(o,'call');
+ for(const e of list)if(e.aware&&state.time-(e.awareAt||0)>2)for(const o of list)if(!o.aware&&!o.ambush&&dist(e,o)<300)notice(o,'call');   // v0.38: they hear each other farther off
 }
 /* hit by her: always aware */
 const baseHurtE=hurtEnemy;

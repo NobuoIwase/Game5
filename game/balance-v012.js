@@ -3,15 +3,15 @@
 /* v0.12.0 balance table. Every tuned number lives here so it can be adjusted in one place.
    Verified with `node tools/sim.js 60` (AUTO director ON) and `--no-auto`. */
 const B={
- hero:{spRegen:6.6,bindDrain:7.2,atkScale:.3},   // atkScale: share of ATK growth that reaches skill damage
- estella:{estellaDuration:2.3,estellaSpLoss:18,estellaMpLoss:8,naturalDecay:8,naturalDelay:1.0,sailAmpAt100:.6},
+ hero:{spRegen:8,bindDrain:7.2,atkScale:.3},   // atkScale: share of ATK growth that reaches skill damage
+ estella:{estellaDuration:2.3,estellaSpLoss:10,estellaMpLoss:8,naturalDecay:4.5,naturalDelay:2,sailAmpAt100:.6,estellaNuteraMin:32,estellaNuteraMax:40},   // v0.38: slower to the top, slower to cool, a softer landing
  // arriving on a new floor = a short rest on the stairs
  stairs:{hp:.22,sp:.45,nutera:30,sail:20},
  enemyHpGrowth:.12,            // per dungeon level (was .15)
  supportHp:.7,                // support enemies in mixed encounters
  director:{autoMin:8.5,autoMax:12,ringMin:9,ringMax:13,calmRooms:2,calmMul:1.35,enRegen:6},
  // AUTO director intensity (selectable in the UI): interval multiplier and extra aim error in px
- intensity:{easy:{label:'やさしい',interval:4,err:100},normal:{label:'ふつう',interval:2.6,err:70},hard:{label:'きびしい',interval:1.6,err:40}},
+ intensity:{easy:{label:'やさしい',interval:9,err:100},normal:{label:'ふつう',interval:7.5,err:70},hard:{label:'きびしい',interval:4,err:40}},
  snare:{sp:15,bind:1.35},
  xp:[0,0,70,190,360,590,880,1240,1680],   // Lv8 cap, reached around the 6th floor
  sailDecay:3.2,                          // was 1.3: Sail no longer pins at 100%

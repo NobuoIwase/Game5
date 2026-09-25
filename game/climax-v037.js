@@ -12,7 +12,7 @@
      40% off); each new floor gives a little back (3%)
    - charmed monsters: the hearts toward a monster she has fallen for only show while she can see
      it, and the moment it comes into view she jumps ("ドキッ") */
-const C={chainGap:10,heldNutera:[55,7,80],spasm:[.45,.8],maxPen:.25,perEst:.05,perFloor:.05,sight:360};
+const C={chainGap:14,heldNutera:[60,5,78],spasm:[.45,.8],maxPen:.25,perEst:.05,perFloor:.05,sight:360};
 const Vo=()=>window.Game5Voice,M=()=>window.Game5Message,N=h=>h?.name?.replace(/^戦士/,'')||'アリア';
 const L={
  chain2:['ま、また……っ、ま、まだ、おわ、って……な……っ、——〜〜っ♡','や、……っ、いま、……い、いったばっか、……ぁ、ぁあ……っ♡'],
@@ -68,7 +68,8 @@ updateHero=function(h,dt){
  if(CH)for(const e of window.Game5MultiEnemy?.alive?.()||[]){
   const lv=CH.levelFor(h,e);if(!lv){e._inView=false;continue}
   const v=visible(h,e);
-  if(v&&!e._inView&&!h.grapple&&!est){
+  if(!v&&e._inView)e._outSince=state.time;
+  if(v&&!e._inView&&!h.grapple&&!est&&state.time-(e._outSince??-99)>2.5&&state.time>(e._dokiT||0)){e._dokiT=state.time+20;   // v0.38: not again at every corner
    Vo()?.say?.(h,'charmSpot'+lv,{force:true,hold:2.2});
    addFx('text',h.x,h.y-100,'ドキッ','#ff9ad3',.9);
    const NF=window.Game5NuteraFX;for(let k=0;k<5;k++)NF?.emit?.(h.x,h.y-50,{ang:Math.atan2(e.y-h.y,e.x-h.x)+(Math.random()-.5)*.6,speed:120+Math.random()*60,kind:'pink',size:10});

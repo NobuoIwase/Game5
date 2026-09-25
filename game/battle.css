@@ -166,3 +166,6 @@ button{touch-action:manipulation}
 .summonRow button{padding:5px 10px;border-radius:14px;border:1px solid #ffffff22;background:#18221d;color:#dfe8e2;font-size:12px;cursor:pointer}
 .summonRow button.on{border-color:#e5a2d0;background:#3a2233;color:#ffe1f3}
 .summonRow.active small{color:#e5a2d0}
+/* v0.37 like / charm list */
+.likeText{display:flex;flex-wrap:wrap;gap:4px 8px;margin-top:4px;font-size:12px}
+.likeText .lk{color:#ffb0dc}.likeText .ch{color:#e3c6ff}.likeText .none{color:#8a9a90}

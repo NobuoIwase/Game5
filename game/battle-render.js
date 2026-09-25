@@ -76,6 +76,8 @@ function draw(){
   if(!enemyArt){ctx.save();ctx.shadowBlur=18;ctx.shadowColor=e.flash>0?'#fff':'#9a685c';C(e.x,e.y,32,e.flash>0?'#eee':'#34323b','#ad7b83');ctx.restore()}
   if(!window.Game5MultiEnemy){ctx.fillStyle='#511';ctx.fillRect(e.x-55,e.y+40,110,7);ctx.fillStyle='#d45a57';ctx.fillRect(e.x-55,e.y+40,110*e.hp/e.maxHp,7);}
 
+  // v0.37: pinned under a heavy monster she is drawn again over it, so she can be seen
+  if(h.grapple?.pinned&&!h.dead){const jt2=window.Game5Heat?.jitter?.(h)||null;ctx.save();if(jt2)ctx.translate(jt2.x,jt2.y);ctx.globalAlpha=.92;window.WarriorMotion?.drawGame?.(ctx,h);ctx.restore()}
   window.Game5Graphics?.drawHazardsOver?.();
 
   if(fx)fx.effects();

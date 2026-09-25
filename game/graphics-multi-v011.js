@@ -4,6 +4,7 @@
 if (!window.Game5Graphics) return;
 
 const single = window.Game5Graphics.drawEnemy;
+window.Game5Graphics.drawOne = single;   // v0.37: one monster as the live ones are drawn (used by the death roll)
 
 if (typeof resolveEnemy === 'function') {
   const baseResolve = resolveEnemy;

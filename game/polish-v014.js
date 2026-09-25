@@ -46,19 +46,38 @@ const ghosts=[];
 const bHurt=hurtEnemy;
 hurtEnemy=function(dmg,opts={}){
  const e=state.enemy,b=e?.hp;bHurt(dmg,opts);
- if(e&&b>0&&e.hp<=0&&ghosts.length<8)ghosts.push({e:{...e,hp:1,cast:null,flash:0,stun:0},t:.6,max:.6});
+ if(e&&b>0&&e.hp<=0&&ghosts.length<10){
+  // v0.37: knocked the way she struck, it rolls in its own manner, comes to rest and lies there
+  const h=state.hero,a=h?Math.atan2(e.y-h.y,e.x-h.x):0,k=DEATH[e.type]||'slime',R=DR[k];
+  let dist=R.d,step=4,B=window.Game5Dungeon?.blockedAt;for(let s=step;s<=R.d;s+=step){if(B?.(e,e.x+Math.cos(a)*s,e.y+Math.sin(a)*s)){dist=s-step;break}}
+  ghosts.push({e:{...e,hp:1,cast:null,flash:0,stun:0,moving:false,_hitT:0,_pop:0,_wasCasting:false},a,k,dist,spin:(Math.random()<.5?-1:1),t:0,roll:R.t,lie:3.2,fade:1});
+ }
 };
+const DEATH={slug:'slime',gel:'slime',mirror_slime:'slime',crown_attendant:'slime',water_wraith:'slime',bubble_shell:'shell',
+ leech:'fly',moth:'fly',orb:'ball',wisp:'wisp',gazer:'ball',worm:'roll',flower:'topple',lure_cap:'topple',silk_spider:'flip',creeping_hand:'flip',stone_sentinel:'crumble'};
+const DR={slime:{d:40,t:.55},shell:{d:55,t:.6},fly:{d:34,t:.65},ball:{d:80,t:.8},wisp:{d:20,t:.8},roll:{d:70,t:.8},topple:{d:0,t:.6},flip:{d:36,t:.5},crumble:{d:0,t:.8}};
+const ease=u=>1-Math.pow(1-Math.min(1,u),3);
 function drawGhosts(dt){
- const draw1=window.Game5DungeonGraphics?.drawEnemy;if(!draw1)return;
+ const draw1=window.Game5Graphics?.drawOne||window.Game5DungeonGraphics?.drawEnemy;if(!draw1)return;
  const h=state.hero,bind=h.status.bind;
  for(const g of ghosts){
-  g.t-=dt;const p=1-Math.max(0,g.t)/g.max,e=g.e;
-  ctx.save();ctx.globalAlpha=Math.max(0,1-p);
-  ctx.translate(e.x,e.y+20);ctx.scale(1+.35*p,1-.75*p);ctx.translate(-e.x,-e.y-20);
+  g.t+=dt;const e=g.e,u=ease(g.t/g.roll),z=e._sz||1,r=(e.r||24),by=e.y+r*.85;
+  const end=g.roll+g.lie,alpha=g.t<end?1:Math.max(0,1-(g.t-end)/g.fade);
+  const x=e.x+Math.cos(g.a)*g.dist*u,y=e.y+Math.sin(g.a)*g.dist*u,sgn=Math.cos(g.a)>=0?1:-1;
+  ctx.save();ctx.globalAlpha=alpha;ctx.filter='saturate(.55) brightness(.8)';
+  if(g.k==='slime'){ctx.translate(x,by+(y-e.y));ctx.scale(z*(1+.35*u),z*(1-.55*u));ctx.translate(-e.x,-by)}
+  else if(g.k==='shell'){ctx.translate(x,y);ctx.rotate(sgn*u*Math.PI*1.5);ctx.scale(z,z);ctx.translate(-e.x,-e.y)}
+  else if(g.k==='fly'){const fall=Math.sin(Math.min(1,g.t/g.roll)*Math.PI/2)*r*.9;ctx.translate(x,y+fall);ctx.rotate(g.spin*u*Math.PI*1.2);ctx.scale(z,z*(1-.2*u));ctx.translate(-e.x,-e.y)}
+  else if(g.k==='ball'){ctx.translate(x,y+r*.3*u);ctx.rotate(sgn*u*g.dist/Math.max(8,r)*z);ctx.scale(z,z);ctx.translate(-e.x,-e.y)}
+  else if(g.k==='wisp'){ctx.translate(x,y);ctx.scale(z*(1+.2*u),z*(1-.3*u));ctx.translate(-e.x,-e.y);ctx.globalAlpha*=1-.5*u}
+  else if(g.k==='roll'){ctx.translate(x,y);ctx.rotate(sgn*u*Math.PI);ctx.scale(z,z);ctx.translate(-e.x,-e.y)}
+  else if(g.k==='topple'){ctx.translate(e.x,by);ctx.rotate(sgn*u*Math.PI/2);ctx.scale(z,z);ctx.translate(-e.x,-by)}
+  else if(g.k==='flip'){const hop=Math.sin(Math.min(1,g.t/g.roll)*Math.PI)*14;ctx.translate(x,y-hop);ctx.scale(z,z*(1-2*u));ctx.translate(-e.x,-e.y)}
+  else if(g.k==='crumble'){ctx.translate(x,by);ctx.scale(z*(1+.15*u),z*(1-.6*u));ctx.translate(-e.x,-by)}
   h.status.bind=0;draw1(e);h.status.bind=bind;
   ctx.restore();
  }
- for(let i=ghosts.length-1;i>=0;i--)if(ghosts[i].t<=0)ghosts.splice(i,1);
+ for(let i=ghosts.length-1;i>=0;i--){const g=ghosts[i];if(g.t>g.roll+g.lie+g.fade)ghosts.splice(i,1)}
 }
 
 /* ---------- run history ---------- */

@@ -109,6 +109,7 @@ function orbit(h,t){
 function tethers(h,t){
  for(const e of window.Game5MultiEnemy?.alive?.()||[]){
   const st=charmStage(h,e.family);if(st<1)continue;
+  if(window.Game5Climax&&!window.Game5Climax.visible(h,e))continue;   // v0.37: only toward one she can see
   ctx.save();ctx.globalAlpha=.25+.12*st;ctx.strokeStyle=PINK;ctx.setLineDash([3,7]);ctx.lineDashOffset=-t*20;ctx.lineWidth=1+st*.6;
   ctx.beginPath();ctx.moveTo(h.x,h.y-30);ctx.quadraticCurveTo((h.x+e.x)/2,(h.y+e.y)/2-40,e.x,e.y-10);ctx.stroke();ctx.restore();
   const q=(t*.5)%1,mx=(1-q)*(1-q)*h.x+2*(1-q)*q*(h.x+e.x)/2+q*q*e.x,my=(1-q)*(1-q)*(h.y-30)+2*(1-q)*q*((h.y+e.y)/2-40)+q*q*(e.y-10);

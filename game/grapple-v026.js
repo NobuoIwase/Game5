@@ -30,6 +30,7 @@ const C={
    stopped. */
 const EDGE={at:86,cap:95,t:7.5,sink:.9,wait:2.6,pullEvery:[1.5,2.4],pull:.75,pullSpeed:52,near:300,drain:3.2,
  chance:{lure_cap:.5,flower:.45,creeping_hand:.45,crown_attendant:.4,wisp:.4,moth:.4,gazer:.35,silk_spider:.35,mirror_slime:.3},base:.18};
+const HEAVY={stone_sentinel:1,gel:1,worm:1,water_wraith:1,crown_attendant:1},ROOTED={lure_cap:1};   // v0.37
 const SP={
  gel:{col:'#e89ab8',moves:[['粘膜の包み込み',{nutera:10,lumane:6}],['冠の脈動',{nutera:8,hypnosis:8}]]},
  slug:{col:'#e28ac0',moves:[['這い上がる粘膜',{nutera:10,sail:4}],['ぬめりの舐め上げ',{nutera:11,lumane:5}]]},
@@ -73,7 +74,8 @@ function start(h,e,dur){
  if(e){
   e.grappling=true;e.cast=null;e.dash=null;
   const a=Math.atan2(e.y-h.y,e.x-h.x),r=(h.r||18)+(e.r||24)*.55,tx=h.x+Math.cos(a)*r,ty=h.y+Math.sin(a)*r*.7;
-  e.dash={x0:e.x,y0:e.y,x1:tx,y1:ty,t:0,T:.16,ang:a};
+  if(ROOTED[e.type]){h.grapple.rooted=true}else e.dash={x0:e.x,y0:e.y,x1:tx,y1:ty,t:0,T:.16,ang:a};
+  if(HEAVY[e.type]||e._queen){h.grapple.pinned=true;window.Game5Message?.say?.(`${e.name}に 押し倒された！`,'pin',1)}
  }
  h.status.bind=Math.max(h.status.bind||0,.3);
  h.grappleCount=(h.grappleCount||0)+1;
@@ -97,15 +99,24 @@ hurtHero=function(h,dmg,status=null,meta={}){
  const r=baseHurt(h,dmg,status,meta);
  if(h&&!h.dead&&status?.bind&&(h.status.bind||0)>0){
   if(meta?.sourceKey==='bind'&&e&&e.hp>0&&!e.grappling)start(h,e);
-  else if(!h.grapple&&/影杭|snare/.test(meta?.label||''))start(h,null,2.4);
+  else if(!h.grapple&&/影杭|snare/.test(meta?.label||''))opening(h);
  }
  return r;
 };
+/* v0.37 the shadow stake is an opening, not a hold: shadow hands pin her feet for a moment and
+   every monster nearby rushes in to take her while she cannot step away */
+const OPEN={t:1.3,r:340,rush:1.4};
+function opening(h){
+ h.status.bind=Math.max(h.status.bind||0,OPEN.t);h._snareT=OPEN.t;
+ let n=0;for(const e of window.Game5MultiEnemy?.alive?.()||[]){if(Math.hypot(e.x-h.x,e.y-h.y)>OPEN.r||e.grappling)continue;e.aware=true;e.awareAt=state.time;e.ambush=false;e.actCd=Math.min(e.actCd||0,.6);e._rushT=OPEN.rush;n++}   // they rush in; what they do when they get there is up to them
+ addFx('text',h.x,h.y-96,'影に足を掴まれた','#d6b8ff',1.2);
+ window.Game5Message?.say?.(n?`影の手が ${h.name?.replace(/^戦士/,'')||'アリア'}の足を つかんだ！ 魔物たちが せまる！`:`影の手が ${h.name?.replace(/^戦士/,'')||'アリア'}の足を つかんだ！`,'snare',1);
+}
 /* the director's shadow stake: its bind is applied directly, not through hurtHero */
 const baseHaz=updateHazards;
 updateHazards=function(dt){
  baseHaz(dt);const h=state.hero;if(!h||h.dead)return;
- for(const z of state.hazards||[])if(z.kind==='directorSnare'&&z.triggered&&!z.grappled){z.grappled=true;if(!h.grapple&&(h.bindImmuneT||0)<=0)start(h,null,2.4)}
+ for(const z of state.hazards||[])if(z.kind==='directorSnare'&&z.triggered&&!z.grappled){z.grappled=true;if(!h.grapple&&(h.bindImmuneT||0)<=0)opening(h)}
 };
 
 /* ---------- the hold, every frame ---------- */
@@ -174,17 +185,23 @@ updateHero=function(h,dt){
  g.t+=dt;g.pulse=Math.max(0,g.pulse-dt*3);
  h.status.bind=Math.max(h.status.bind||0,.25);
  // keep the monster pressed against her
- if(e&&!e.dash){const a=Math.atan2(e.y-h.y,e.x-h.x),r=(h.r||18)+(e.r||24)*.55;e.x=h.x+Math.cos(a)*r;e.y=h.y+Math.sin(a)*r*.7;e.cast=null;e.decision='捕らえている'}
+ if(e&&!e.dash){const a=Math.atan2(e.y-h.y,e.x-h.x),r=(h.r||18)+(e.r||24)*.55;
+  if(g.rooted){const tx=e.x-Math.cos(a)*r,ty=e.y-Math.sin(a)*r*.7;h.x+=(tx-h.x)*Math.min(1,dt*6);h.y+=(ty-h.y)*Math.min(1,dt*6)}   // pulled in to the mushroom
+  else if(g.pinned){const sd=e.x>=h.x?1:-1;e.x+=(h.x+sd*(e.r||24)*.95-e.x)*Math.min(1,dt*8);e.y+=(h.y+2-e.y)*Math.min(1,dt*8)}   // over her hips, her head and shoulders free                                   // on top of her
+  else{e.x=h.x+Math.cos(a)*r;e.y=h.y+Math.sin(a)*r*.7}
+  e.cast=null;e.decision=g.pinned?'押さえつけている':'捕らえている'}
  // v0.31: while held she is turned three-quarters toward the viewer, so her face shows
  h.dir=e?(e.x<h.x?'down_left':'down_right'):'front';
  // specials
  g.next-=dt;if(g.next<=0){g.next=rnd(...C.every)*(h.estella?.active?1.25:1);special(h,g);if(g.edgeNow&&h.grapple===g&&!h.estella?.active){edgeRelease(h,g);return}}
  // struggle
  if(!h.estella?.active&&h.status.stun<=0){
-  const S=C.struggle,n=(h.nutera||0)/100,rate=(S.base+(h.knowledge?.bind||0)*S.know+(h.sp/h.maxSp)*S.sp)*(1-S.nutera*n)*(1-.4*clamp(h.fatigue||0,0,1));
-  g.prog+=dt*Math.max(.03,rate);drainSp(h,S.cost*dt,'もがき');
+  const S=C.struggle,n=clamp((h.nutera||0)/100,0,1),rate=(S.base+(h.knowledge?.bind||0)*S.know+(h.sp/h.maxSp)*S.sp)*Math.pow(1-n,.8)*(1-.4*clamp(h.fatigue||0,0,1));
+  // v0.37: the more Nutera, the weaker she struggles - nothing left at the top
+  g.prog+=dt*rate;drainSp(h,S.cost*dt,'もがき');
   if(g.prog>=1){release(h,'free');return}
  }
+ else if(h.estella?.active)g.prog=Math.max(0,g.prog-dt*.45);   // v0.37: in Estella what she had gained slips away
  if(g.t>=g.dur)release(h,'end');
 };
 /* while holding her the monster does nothing else */
@@ -268,5 +285,13 @@ function edgeThread(h){
  NF?.drawHeart?.(h.x,h.y-30,9+5*k+2*Math.sin(t*9),.55+.4*k);
 }
 if(Gr){const over=Gr.drawHazardsOver;Gr.drawHazardsOver=function(){over?.();const h=state.hero;if(h&&!h.dead&&!h.grapple&&h._edge)edgeThread(h)}}
-window.Game5Grapple={version:'0.27.0',cfg:C,specials:SP,edge:EDGE,start,release};
+function snareHands(h){
+ if(!(h._snareT>0))return;h._snareT=Math.max(0,h._snareT-1/60);const t=state.time,k=Math.min(1,h._snareT/.3);
+ ctx.save();ctx.globalAlpha=.85*k;ctx.fillStyle='#2a1838';ctx.strokeStyle='#b98cff';ctx.lineWidth=1.2;
+ for(let i=0;i<4;i++){const a=i/4*TAU+.4,x=h.x+Math.cos(a)*11,y=h.y+10+Math.sin(a)*4,hgt=14+4*Math.sin(t*6+i);
+  ctx.beginPath();ctx.moveTo(x-3,y);ctx.quadraticCurveTo(x-4,y-hgt*.6,x+Math.cos(a)*-3,y-hgt);ctx.quadraticCurveTo(x+4,y-hgt*.6,x+3,y);ctx.closePath();ctx.fill();ctx.stroke()}
+ ctx.restore();
+}
+if(Gr){const ov=Gr.drawHazardsOver;Gr.drawHazardsOver=function(){ov?.();const h=state.hero;if(h&&!h.dead)snareHands(h)}}
+window.Game5Grapple={version:'0.37.0',cfg:C,specials:SP,edge:EDGE,heavy:HEAVY,start,release,opening};
 })();

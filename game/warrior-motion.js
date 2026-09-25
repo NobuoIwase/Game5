@@ -39,9 +39,12 @@ function bind(){
  if(!gr)return{kind:'bind',body:Math.sin(t*5)*1.2,ar:58+Math.sin(t*9)*5,al:-58+Math.sin(t*8+1)*5,lr:8+Math.sin(t*7)*3,ll:-8+Math.sin(t*7+2)*3,x:0,y:1};
  // v0.26 held by a monster: twisting against it, arms dragged in, knees pressed together;
  // every special makes her arch, and the struggle weakens as the hold wears on
- const w=clamp01(1-gr.t/(gr.dur||4)*.5),p=gr.pulse||0,s=gr.side||1;
- return{kind:'bind',body:(Math.sin(t*7.5)*6*w+Math.sin(t*13)*1.5)*s-p*8*s,ar:34+Math.sin(t*8)*14*w+p*18,al:-34+Math.sin(t*8.6+1)*14*w-p*18,
-  lr:-7+Math.sin(t*11)*3,ll:7+Math.sin(t*11+1.7)*3,x:Math.sin(t*9)*5*w,y:2+p*3};
+ // v0.41: she pulls in bursts - a hard wrench every so often, then a moment gathering herself -
+ // and the bursts fade as her Nutera rises; her knees press together and rub as it does
+ const w=clamp01(1-gr.t/(gr.dur||4)*.5),p=gr.pulse||0,s=gr.side||1,H=g.state?.hero,nu=clamp01((H?.nutera||0)/100),str=w*(1-nu*.85),
+  jk=Math.pow(Math.max(0,Math.sin(t*3.6+(gr.ph??=Math.random()*6))),8)*str,rub=Math.sin(t*5.2)*nu;
+ return{kind:'bind',body:(Math.sin(t*7.5)*5*str+Math.sin(t*13)*1.5+jk*14)*s-p*8*s,ar:34+Math.sin(t*8)*12*str+jk*22+p*18,al:-34+Math.sin(t*8.6+1)*12*str-jk*22-p*18,
+  lr:-7+Math.sin(t*11)*3*(1-nu)-nu*5+rub*4,ll:7+Math.sin(t*11+1.7)*3*(1-nu)+nu*5+rub*4,x:Math.sin(t*9)*4*str+jk*6*s,y:2+p*3+nu*2};
 }
 function clamp01(v){return Math.max(0,Math.min(1,v))}
 function clipdraw(c,i,p){if(!i?.ok||!p?.length)return;c.save();path(c,p);c.clip();c.drawImage(i,0,0);c.restore()}

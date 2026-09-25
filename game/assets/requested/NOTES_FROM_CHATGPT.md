@@ -126,3 +126,24 @@ props と UI は、ゲームで見分けたり読み取ったりしやすいよ�
 ### C. 任意
 - **nutera/heart_deep.png: 今回も飛ばした**。指定色で塗った下絵を強度 0.38 で使ったが、明るい赤紫になり、`heart_pink.png` より明るくなった（計4回失敗）。ゲーム側の代用のままにしてほしい。
 - **床 room1〜7: 作っていない**。NovelAI では、64px で継ぎ目なく繰り返す模様を確実に作れないため。
+
+### D. アリアの表情ポートレイト（12枚。`LOCAL_CLAUDE_GUIDE.md` セクション 5-D）
+NovelAI V5 Full。キャラクターシート PNG に埋め込まれたプロンプトを元に、金髪→オレンジ髪、全身→顔クローズアップに変更。i2i は使わず、プロンプトの強調タグ（`{{{{顔のクローズアップ}}}}`, `{{ポートレイト}}`）で構図を制御。1216×832、不透明暗背景、ステップ 28、スケール 7、Euler Ancestral。
+
+| ファイル | 表情タグ |
+| --- | --- |
+| portraits/aria_normal.png | blank stare, slightly open mouth, awkward, shy |
+| portraits/aria_troubled.png | nervous, averted eyes, sweatdrop, awkward smile |
+| portraits/aria_creepy.png | creepy smile, half-closed eyes, smug, slight drool |
+| portraits/aria_startled.png | surprised, wide eyes, small pupils, sweat, open mouth |
+| portraits/aria_glee.png | open-mouth grin, creepy happy, blush |
+| portraits/aria_damage.png | exhausted, half-closed eyes, sweat, messy hair |
+| portraits/aria_endure.png | blush, biting lip, furrowed brows, teary eyes, sweat, heavy breathing, trying to stay composed |
+| portraits/aria_held.png | blush, clenched teeth, embarrassed, looking away, sweat, trembling, wet hair strands stuck to cheek |
+| portraits/aria_melt.png | heavy blush, teary half-lidded eyes, open mouth, panting, drool, still frowning |
+| portraits/aria_estella.png | eyes squeezed shut, full-face blush, tears, open mouth, trembling, steam, head tilted back |
+| portraits/aria_dazed.png | dazed, unfocused eyes, blush, parted lips, sweat, messy hair |
+| portraits/aria_trance.png | empty eyes, dull pupils, blank expression, faint smile |
+
+- aria_dazed と aria_melt はユーザーが再生成した版を採用。
+- `index.json` に portraits 配列（12枚）を追加。

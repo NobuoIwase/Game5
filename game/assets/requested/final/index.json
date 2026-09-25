@@ -56,5 +56,19 @@
     "icons/tower.png",
     "icons/mimic.png",
     "icons/summon.png"
+  ],
+  "portraits": [
+    "portraits/aria_normal.png",
+    "portraits/aria_troubled.png",
+    "portraits/aria_creepy.png",
+    "portraits/aria_startled.png",
+    "portraits/aria_glee.png",
+    "portraits/aria_damage.png",
+    "portraits/aria_endure.png",
+    "portraits/aria_held.png",
+    "portraits/aria_melt.png",
+    "portraits/aria_estella.png",
+    "portraits/aria_dazed.png",
+    "portraits/aria_trance.png"
   ]
 }

@@ -34,7 +34,12 @@ decideHero=function(h,dt){
  if(!near||r?.kind==='cast'||/回避|防御|構え/.test(r?.label||'')||h.intent?.label==='回避')return r;   // a dodge or a guard comes first
  if(near.cast&&!(h._awayT>0))return r;                                                         // it is already swinging: her own reading of it decides
  const dx=h.x-near.x,dy=h.y-near.y,d=Math.hypot(dx,dy)||1;
- const away=()=>{h.intent={kind:'move',x:dx/d,y:dy/d,speed:1.05,label:'間合いを取る'};h.facing=Math.atan2(-dy,-dx);return h.intent};
+ // v0.40: with several around her, she backs away from all of them at once (the closer, the
+ // more it counts), sliding along a wall rather than into it, so she is not caught between two
+ const away=()=>{let ax=0,ay=0;for(const o of alive()){if(!o.aware)continue;const ox=h.x-o.x,oy=h.y-o.y,od=Math.hypot(ox,oy)||1;if(od>320)continue;ax+=ox/od/od;ay+=oy/od/od}
+  let l=Math.hypot(ax,ay);if(l<1e-6){ax=dx/d;ay=dy/d;l=1}ax/=l;ay/=l;
+  const B=window.Game5Dungeon?.blockedAt;if(B?.(h,h.x+ax*30,h.y+ay*30)){const sx=-ay,sy=ax,k=B(h,h.x+sx*30,h.y+sy*30)?-1:1;ax=sx*k;ay=sy*k}
+  h.intent={kind:'move',x:ax,y:ay,speed:1.05,label:'間合いを取る'};h.facing=Math.atan2(-dy,-dx);return h.intent};
  if(h._awayT>0)return away();                                                                  // struck: step back out
  if(d<C.tooClose+(near.r||24)&&!(h._backT>0)&&Math.random()<.6){h._backT=C.back;return away()} // too close: out of arm's reach first
  if(h._backT>0)return away();

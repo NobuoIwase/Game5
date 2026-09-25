@@ -6,6 +6,7 @@ function limb(c,i,p,a){if(!i?.ok||!p)return;c.save();rot(c,p,a||0);c.drawImage(i
 function pose(h,a){let s=sg(h.dir||'front'),t=window.state?.time||performance.now()/1000,p=a.p||0,e=P(p),q=Q(p),n=a.n;
 if(n==='bash'){let z=Q(C(p<=a.hit?p/a.hit:1-(p-a.hit)/(1-a.hit)));return[-s*5*z,s*58*z,-s*14*z,-s*5*z,s*4*z,7*z,-2*z]}
 if(n==='guard')return[s*2,s*66,-s*18,-s*2,s*2,0,1];
+if(n==='ready'){let br=Math.sin(t*3.2);return[s*(5+br*.6),s*(48+br*2),-s*(82+br*2),s*3,-s*3,0,3+br*.6]}   // v0.34: on guard when a monster is close (sword up, shield forward, knees bent)
 if(n==='dodge')return[-s*11*e,s*22*e,-s*30*e,s*11*Math.sin(p*Math.PI*2),-s*8*Math.sin(p*Math.PI*2),(s<0?1:-1)*8*e,-5*e];
 if(n==='hit')return[s*11*e,-s*28*e,s*30*e,-s*5*e,s*5*e,-5*e,2*e];
 if(n==='stun')return[s*(10+Math.sin(t*5)*1.2),-s*24,s*19,-s*4,s*4,Math.sin(t*5)*.6,4];

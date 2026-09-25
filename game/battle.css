@@ -148,3 +148,15 @@ button{touch-action:manipulation}
 .nbSlip ul{margin:0;padding-left:18px;font-size:12.5px;line-height:1.7}.nbSlip li small{margin-left:6px;color:#8a7d6c}
 .nbSlip .nbM{color:#b0467e}
 .tools button[data-tool="hide"] .ticon{filter:brightness(1.7) drop-shadow(0 0 3px #ff8fd0cc)}
+/* v0.34 message window */
+.cmdWin{position:absolute;left:15.5%;right:1.2%;bottom:1.6%;padding:.45em .9em;background:rgba(4,4,8,.8);border:2px solid #ecebe6;border-radius:7px;box-shadow:0 0 0 2px #0008;pointer-events:none;z-index:2;font-size:clamp(11px,1.45vw,15px);line-height:1.55;color:#f4f2ea;letter-spacing:.04em;min-height:4.9em}
+.cmdWin.hidden{display:none}
+.cmdWin p{margin:0;min-height:1.55em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cmdWin .old{color:#a9a69c}
+/* v0.34: the end card (stats + record) is taller than a phone screen; it used to be cut off with
+   the restart button out of reach. Both cards now scroll, the end one over the whole screen,
+   and the buttons stay pinned at the bottom of the view */
+.overlay{overflow-y:auto;overscroll-behavior:contain}
+#endOverlay{position:fixed;inset:0;z-index:40;border-radius:0;place-items:start center;padding:8px 0 16px}
+#startOverlay{place-items:start center}
+#endOverlay #restartBtn,#startOverlay #startBtn{position:sticky;bottom:8px;z-index:1;box-shadow:0 4px 18px #000c}

@@ -125,5 +125,5 @@ function still(key,blush=0){
  }else return null;
  try{return c.toDataURL('image/png')}catch(_){return null}
 }
-window.Game5Portrait={version:'0.31.0',pick,looks:LOOK,finals,still};
+window.Game5Portrait={version:'0.34.0',pick,looks:LOOK,finals,still,width:()=>Math.round(128+96*size)};
 })();

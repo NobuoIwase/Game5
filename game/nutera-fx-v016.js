@@ -104,7 +104,7 @@ function heartGauge(h,t){
 function orbit(h,t){
  for(let k=0;k<4;k++){const a=t*2.4+k/4*TAU,r=46+Math.sin(t*6+k)*4;drawHeart(h.x+Math.cos(a)*r*1.2,h.y-30+Math.sin(a)*r*.55,10+2*Math.sin(t*8+k),.8,Math.sin(a)*.3,k%2?'pink':'deep')}
  const p=.5+.5*Math.sin(t*10);ctx.save();ctx.globalCompositeOperation='lighter';
- const g=ctx.createRadialGradient(h.x,h.y-30,4,h.x,h.y-30,70);g.addColorStop(0,`rgba(255,120,200,${.14+.1*p})`);   // v0.31: she was washed out under itg.addColorStop(1,'rgba(255,120,200,0)');ctx.fillStyle=g;ctx.fillRect(h.x-70,h.y-100,140,140);ctx.restore();
+ const g=ctx.createRadialGradient(h.x,h.y-30,4,h.x,h.y-30,70);g.addColorStop(0,`rgba(255,120,200,${.14+.1*p})`);g.addColorStop(1,'rgba(255,120,200,0)');ctx.fillStyle=g;ctx.fillRect(h.x-70,h.y-100,140,140);ctx.restore();   // v0.32.2: weaker, she was washed out under it
 }
 function tethers(h,t){
  for(const e of window.Game5MultiEnemy?.alive?.()||[]){

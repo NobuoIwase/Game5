@@ -85,6 +85,11 @@ function monsterMotion(e){
  if(e._rcl){const R=e._rcl,u=1-R.t/R.T,k=Math.sin(Math.min(1,u*1.6)*Math.PI)*R.k;dx+=R.x*10*k;sx*=1+.12*k;sy*=1-.14*k;sk-=R.x*.12*k;R.t-=1/60;if(R.t<=0)e._rcl=null}
  if(e.moving&&h&&!e.grappling){const lx=Math.max(-1,Math.min(1,(h.x-e.x)/200));e._lean=(e._lean||0)+(lx*.1-(e._lean||0))*.12}else e._lean=(e._lean||0)*.9;
  sk+=e._lean||0;
+ // v0.41: it draws back while winding up and lunges at her as the attack goes off
+ if(h){const hx=Math.sign(h.x-e.x||1),hy=Math.max(-1,Math.min(1,(h.y-e.y)/80));
+  if(e.cast&&e.cast.total>0){const u=Math.max(0,Math.min(1,1-Math.max(0,e.cast.t)/e.cast.total));dx-=hx*5*u;e._lg0=true}
+  else if(e._lg0){e._lg0=false;if(!e.grappling&&e.type!=='lure_cap')e._lg={t:.22,T:.22,x:hx,y:hy}}
+  if(e._lg){const u=1-e._lg.t/e._lg.T,k=Math.sin(u*Math.PI);dx+=e._lg.x*16*k;dy+=e._lg.y*8*k;e._lg.t-=1/60;if(e._lg.t<=0)e._lg=null}}
  if(!dx&&!dy&&sx===1&&sy===1&&Math.abs(sk)<.002)return;
  ctx.translate(ax+dx,ay+dy);if(sk)ctx.transform(1,0,-sk,1,0,0);ctx.scale(sx,sy);ctx.translate(-ax,-ay);
 }

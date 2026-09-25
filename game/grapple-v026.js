@@ -20,6 +20,7 @@ const C={
  every:[.8,1.2],
  struggle:{base:.28,know:.1,sp:.12,nutera:.45,cost:.8},
  bindDrain:2,       // SP drain while held (the old flat bind drain was 7.2/s)
+ nuteraMul:.6,       // v0.38: Nutera from a hold's specials, so she has longer to break free
  immune:2.4
 };
 /* v0.27 寸止め (profile: 寸止め・焦らし・おあずけ, "耐えられず腰でねだるまでの過程").
@@ -123,7 +124,7 @@ updateHazards=function(dt){
 function special(h,g){
  const L=look(g.e),[name,fx]=L.moves[(g.specials+(g.e?0:1))%L.moves.length],grow=1+Math.min(.5,g.specials*.1),src=`${g.e?g.e.name+'・':''}${name}`;
  const m={source:src,grapple:true};
- if(fx.nutera)applyNutera(h,fx.nutera*grow,m);
+ if(fx.nutera)applyNutera(h,fx.nutera*grow*C.nuteraMul,m);   // v0.38: a hold takes longer to bring her over
  if(fx.sail)applySail(h,fx.sail);
  if(fx.lumane)applyTiered(h,'lumane',fx.lumane,m);
  if(fx.hypnosis){applyTiered(h,'hypnosis',fx.hypnosis,m);g.hypno=(g.hypno||0)+1}
@@ -202,6 +203,10 @@ updateHero=function(h,dt){
   if(g.prog>=1){release(h,'free');return}
  }
  else if(h.estella?.active)g.prog=Math.max(0,g.prog-dt*.45);   // v0.37: in Estella what she had gained slips away
+ // v0.38: a climax in a hold does not end it: the hold is extended through the Estella and a
+ // little after, and her struggle starts over from nothing
+ if(h.estella?.active){if(!g._inEst){g._inEst=true;if(!g.extended){g.extended=true;g.dur=Math.max(g.dur,g.t+(h.estella.t||2.3)+2.5)}}}   // extended once: a hold does not go on for ever
+ else if(g._inEst){g._inEst=false;g.prog=0;g.climaxes=(g.climaxes||0)+1}
  if(g.t>=g.dur)release(h,'end');
 };
 /* while holding her the monster does nothing else */
@@ -213,19 +218,34 @@ chooseEnemyAction=function(){const e=state.enemy;if(e?.grappling){e.actCd=.4;ret
 const baseReset=reset;reset=function(){const h=state.hero;if(h?.grapple)h.grapple=null;if(h)h._edge=null;return baseReset()};
 
 /* ---------- drawing: strands, pulse, struggle gauge ---------- */
+function shade(hex,f){const n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255,m=v=>Math.round(f<0?v*(1+f):v+(255-v)*f);return`rgb(${m(r)},${m(g)},${m(b)})`}
 function strands(h,g,t){
- const e=g.e,L=look(e),col=L.col,n=e?5:6,p=g.pulse;
+ const e=g.e,L=look(e),col=L.col,n=e?4:5,p=g.pulse;
  ctx.save();ctx.lineCap='round';
  for(let k=0;k<n;k++){
   // anchor on the monster (or rising from the floor for shadow hands) -> wrap around her body
   const ax=e?e.x+Math.cos(k*1.9)*e.r*.35:h.x+Math.cos(k/n*TAU)*34,ay=e?e.y-e.r*.4+Math.sin(k*2.3)*e.r*.3:h.y+10+Math.sin(k/n*TAU)*10;
-  const by=h.y-12-k*(58/n),bx=h.x+Math.sin(t*3+k)*4;
+  // v0.38: lying pinned, the loops run along her body on the floor (head toward headSide)
+  const headSide=['front','down_right','right','up_right'].includes(h.dir)?-1:1;
+  const by=g.pinned?h.y-6+Math.sin(t*3+k)*1.5:h.y-12-k*(58/n),bx=g.pinned?h.x+headSide*(k*(52/n)-6):h.x+Math.sin(t*3+k)*4;
   const wob=Math.sin(t*6+k*1.7)*10,mx=(ax+bx)/2+wob,my=Math.min(ay,by)-18-k*3;
-  ctx.globalAlpha=.55+.3*p;ctx.strokeStyle='rgba(0,0,0,.3)';ctx.lineWidth=4.5;ctx.beginPath();ctx.moveTo(ax,ay);ctx.quadraticCurveTo(mx,my,bx,by);ctx.stroke();
-  ctx.strokeStyle=col;ctx.lineWidth=2.4+p*1.2;ctx.beginPath();ctx.moveTo(ax,ay);ctx.quadraticCurveTo(mx,my,bx,by);ctx.stroke();
-  // the loop around her body: back half first, front half drawn over
-  const ry=5,rx=17-k*.6;
-  ctx.lineWidth=2+p;ctx.beginPath();ctx.ellipse(bx,by,rx,ry,0,.15,Math.PI-.15);ctx.stroke();
+  // v0.38: shaded - a cast shadow, a body dark at the root and lit toward the tip, a wet
+  // highlight along it, suckers, and a loop around her with its own light and shade
+  const path=(ox=0,oy=0)=>{ctx.beginPath();ctx.moveTo(ax+ox,ay+oy);ctx.quadraticCurveTo(mx+ox,my+oy,bx+ox,by+oy)};
+  const w=2.6+p*1.2,dark=shade(col,-.45),lite=shade(col,.35);
+  ctx.globalAlpha=.35;ctx.strokeStyle='#000';ctx.lineWidth=w+2;path(2,3);ctx.stroke();
+  ctx.globalAlpha=1;const gr=ctx.createLinearGradient(ax,ay,bx,by);gr.addColorStop(0,dark);gr.addColorStop(.55,col);gr.addColorStop(1,lite);
+  ctx.strokeStyle=dark;ctx.lineWidth=w+1.4;path();ctx.stroke();
+  ctx.strokeStyle=gr;ctx.lineWidth=w;path();ctx.stroke();
+  ctx.globalAlpha=.7;ctx.strokeStyle='#fff';ctx.lineWidth=.9;path(-.9,-1.1);ctx.stroke();ctx.globalAlpha=1;
+  for(let q=.25;q<.9;q+=.2){const u=1-q,sx=u*u*ax+2*u*q*mx+q*q*bx,sy=u*u*ay+2*u*q*my+q*q*by;ctx.fillStyle=lite;ctx.strokeStyle=dark;ctx.lineWidth=.6;ctx.beginPath();ctx.arc(sx+1,sy+1,1.2,0,TAU);ctx.fill();ctx.stroke()}
+  // the loop around her body: shadowed underside, lit top edge
+  const ry=g.pinned?9-k*.3:4.5,rx=g.pinned?4.5:14-k*.6;
+  ctx.save();ctx.globalAlpha=.85;
+  ctx.globalAlpha=.35;ctx.strokeStyle='#000';ctx.lineWidth=w;ctx.beginPath();ctx.ellipse(bx+1,by+2,rx,ry,0,.15,Math.PI-.15);ctx.stroke();
+  ctx.globalAlpha=1;ctx.strokeStyle=dark;ctx.lineWidth=w+1;ctx.beginPath();ctx.ellipse(bx,by,rx,ry,0,.15,Math.PI-.15);ctx.stroke();
+  ctx.strokeStyle=col;ctx.lineWidth=w-.6;ctx.beginPath();ctx.ellipse(bx,by,rx,ry,0,.15,Math.PI-.15);ctx.stroke();
+  ctx.globalAlpha=.55;ctx.strokeStyle='#fff';ctx.lineWidth=.8;ctx.beginPath();ctx.ellipse(bx,by-1,rx-1,ry-1,0,.5,Math.PI-.5);ctx.stroke();ctx.restore();
  }
  if(p>0){ctx.globalAlpha=p*.7;ctx.strokeStyle='#ff9ad3';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(h.x,h.y-40,34+26*(1-p),46+26*(1-p),0,0,TAU);ctx.stroke()}
  ctx.restore();

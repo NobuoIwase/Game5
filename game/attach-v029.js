@@ -8,7 +8,7 @@
    record counts how long she walked around with them on. */
 const SPOTS=[[-7,-30],[8,-24],[-3,-50],[6,-40],[-9,-18],[2,-34]];
 /* v0.37: the leeches go for her nipples and her clitoris, one each */
-const PARTS=[{spot:[-5,-41],name:'左の乳首',v:'attachNipple'},{spot:[5,-41],name:'右の乳首',v:'attachNipple'},{spot:[0,-20],name:'陰核',v:'attachClit'}];
+const PARTS=[{spot:[-5,-33],name:'左の乳首',v:'attachNipple'},{spot:[5,-33],name:'右の乳首',v:'attachNipple'},{spot:[0,-17],name:'陰核',v:'attachClit'}];   // v0.38: measured on the sprite (feet at 0)
 const V=()=>window.Game5Voice;
 const L={
  attach:['ひっ……な、なにか、く、くっついて……っ','……と、取れ、ない……っ','……へ、変な、とこ、に……す、吸い付いて……っ'],

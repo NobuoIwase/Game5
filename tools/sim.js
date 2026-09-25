@@ -32,7 +32,9 @@ function load(ctx){
   // Top-level `function`/`const` in classic scripts share one global scope; emulate by concatenating.
   const list=scripts();
   let src='';
+  const skip=(process.env.SIM_SKIP||'').split(',').filter(Boolean);   // SIM_SKIP=a.js,b.js: leave scripts out (bisecting)
   for(const f of list){
+    if(skip.includes(f))continue;
     if(!fs.existsSync(path.join(GAME,f))){if(!globalThis.__warned){console.error('missing script (skipped like a 404):',f);globalThis.__warned=1}continue}
     let code=fs.readFileSync(path.join(GAME,f),'utf8');
     if(f==='battle-utera.js')code=fs.readFileSync(path.join(GAME,'battle-nutera.js'),'utf8');

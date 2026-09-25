@@ -68,7 +68,7 @@ updateHero=function(h,dt){
 const baseStart=startHeroSkill;
 startHeroSkill=function(slot,reason=''){const h=state.hero,r=baseStart(slot,reason);if(r&&h?.skills?.[slot])say(`${HN()}の ${h.skills[slot].name}！`,'hs',.3);return r};
 const baseEnemy=startEnemySkill;
-startEnemySkill=function(key,target){const e=state.enemy,r=baseEnemy(key,target);const s=e?.cast?.sk?.name;if(e&&s)say(`${nm(e)}の ${s}！`,'es:'+(e.id??e.type),1.2);return r};
+startEnemySkill=function(key,target){const e=state.enemy,r=baseEnemy(key,target);const s=e?.cast?.sk?.name;if(e&&s){const tg=s.endsWith('〕')?'':(window.Game5Status?.tag?.(e,key)||'');say(`${nm(e)}の ${s}${tg}！`,'es:'+(e.id??e.type),1.2)}return r};
 const baseHurtE=hurtEnemy;
 hurtEnemy=function(dmg,opts={}){const e=state.enemy,hp=e?.hp;const r=baseHurtE(dmg,opts);
  if(e&&hp>0){const d=Math.round(hp-Math.max(0,e.hp));if(e.hp<=0)say(`${nm(e)}を たおした！`,'kill');else if(d>0)say(`${nm(e)}に ${d}の ダメージ！`,'dmg',.35)}return r};

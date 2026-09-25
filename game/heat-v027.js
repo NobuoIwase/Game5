@@ -97,6 +97,7 @@ updateHero=function(h,dt){
  h._heatG=g||null;
  // Estella
  const est=!!h.estella?.active;
+ if(est&&!g)h.dir=['left','up_left','down_left'].includes(h.dir)?'down_left':'down_right';   // v0.31: facing the viewer
  if(est&&!est0){R.estella++;memEstella();slowT=C.slow.t;h._estellaAt=state.time;if(R.floor)R.floor.estella++;
   if(R.estella===1)title(h,'声を殺せなかった戦士');if(R.estella===3)title(h,'エステラを重ねた前衛')}
  if(!est&&est0){h.afterglow=Math.max(h.afterglow||0,C.after.estella);h.afterMax=h.afterglow}

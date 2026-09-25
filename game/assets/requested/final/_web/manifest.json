@@ -364,6 +364,17 @@
     640
    ]
   },
+  "nutera/heart_deep": {
+   "file": "nutera/heart_deep.webp",
+   "size": [
+    160,
+    142
+   ],
+   "source": [
+    1024,
+    1024
+   ]
+  },
   "icons/snare": {
    "file": "icons/snare.webp",
    "size": [
@@ -443,6 +454,17 @@
   },
   "icons/summon": {
    "file": "icons/summon.webp",
+   "size": [
+    96,
+    96
+   ],
+   "source": [
+    1024,
+    1024
+   ]
+  },
+  "icons/hide": {
+   "file": "icons/hide.webp",
    "size": [
     96,
     96

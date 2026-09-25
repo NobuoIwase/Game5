@@ -158,9 +158,9 @@ NovelAI で、**全モンスターを同じ画質・同じ画風にそろえる*
 | stairs 下り階段（封印／開放） | prop_stairs | 同上。`stairs_sealed.png` と `stairs_open.png` |
 
 ### C. 任意（余裕があれば）
-- `icons/hide.png`（敵側の道具「9 潜伏」のアイコン。暗がりに潜む影と、ピンクに光る二つの目。ほかのアイコンと同じ大きさ・画風。今はゲーム側の仮の絵）
-- `nutera/heart_deep.png`（濃いピンク #d62c8c。今はゲーム側で代用中）
-- 床 `floors/room1.png`〜`room7.png`（今の ChatGPT 版は質感の元として使えている。描き直すなら、真上から見た石畳、低コントラスト、64px の繰り返し模様にする）
+- `icons/hide.png`（済。組み込み済み）
+- `nutera/heart_deep.png`（済。組み込み済み）
+- 床 `floors/room1.png`〜`room7.png`（作らない。ユーザーの判断）
 
 ### D. アリアの顔（済。12枚とも組み込み済み）
 

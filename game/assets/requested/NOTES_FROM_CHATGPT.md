@@ -143,7 +143,19 @@ NovelAI V5 Full。キャラクターシート PNG に埋め込まれたプロン
 | portraits/aria_melt.png | heavy blush, teary half-lidded eyes, open mouth, panting, drool, still frowning |
 | portraits/aria_estella.png | eyes squeezed shut, full-face blush, tears, open mouth, trembling, steam, head tilted back |
 | portraits/aria_dazed.png | dazed, unfocused eyes, blush, parted lips, sweat, messy hair |
-| portraits/aria_trance.png | empty eyes, dull pupils, blank expression, faint smile |
+| portraits/aria_trance.png | empty eyes, dull pupils, blank expression, faint smile, hypnosis |
 
 - aria_dazed と aria_melt はユーザーが再生成した版を採用。
 - `index.json` に portraits 配列（12枚）を追加。
+
+### C（続き）. 任意のうち2枚（検品はすべて PASS）
+NovelAI V5 Full、1024×1024、透過背景オン、ステップ 28、正確度 7。保存は「画像をダウンロード」→ アルファ 2 以下を 0。
+
+| ファイル | 内容・作り方 |
+| --- | --- |
+| icons/hide.png | 「9 潜伏」のアイコン。フードをかぶったような丸い影（黒紫、下は波打つ裾）、ピンクに光る目2つ、太い輪郭。自作の単純な下絵（影＋目2つ）を i2i に使った（強度 0.7。下絵は作業用で、納品物ではない） |
+| nutera/heart_deep.png | 濃いピンクのハート。採用済みの `heart_pink.png` を i2i の下絵にした（強度 0.6）ので形はそろう。本体の色の中央値は #cf2d70（指定 #d62c8c より少し赤寄り）。`heart_pink.png`（中央値 #ef55c3）より暗く、見分けられる |
+
+- heart_deep は3回目で採用。1回目は暗すぎ（#6f023c）、2回目は紫寄り（#c30ba1）。除外要素に明るいピンク・ワイン色・紫・マゼンタを入れて寄せた。
+- `index.json` の icons に hide、nutera に heart_deep を追加。
+- 床は作っていない（ユーザーの指示で不要）。

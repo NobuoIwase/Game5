@@ -45,7 +45,8 @@
     "nutera/heart_pale.png",
     "nutera/heart_violet.png",
     "nutera/sigil.png",
-    "nutera/estella_logo.png"
+    "nutera/estella_logo.png",
+    "nutera/heart_deep.png"
   ],
   "icons": [
     "icons/snare.png",
@@ -55,7 +56,8 @@
     "icons/pool.png",
     "icons/tower.png",
     "icons/mimic.png",
-    "icons/summon.png"
+    "icons/summon.png",
+    "icons/hide.png"
   ],
   "portraits": [
     "portraits/aria_normal.png",

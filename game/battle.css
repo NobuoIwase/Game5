@@ -142,3 +142,8 @@ button{touch-action:manipulation}
 .nbImp{margin:6px 0 0;font-size:12px;color:#ff8fd0;transform:rotate(-1.2deg);font-family:system-ui,sans-serif;font-weight:700}
 .nbBlank,.nbEmpty{color:#a8977f;font-size:12px;font-style:italic}
 .record .recNote{color:#e6d8e0}
+.nbSlip{margin:14px 0 4px;padding:10px 12px;background:#e9e2d3;color:#2b2620;border-radius:4px;transform:rotate(.4deg);font-family:system-ui,sans-serif}
+.nbSlip h4{margin:0 0 6px;font-size:11px;color:#6b5f52;font-weight:400}
+.nbSlipHead{margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:.05em}
+.nbSlip ul{margin:0;padding-left:18px;font-size:12.5px;line-height:1.7}.nbSlip li small{margin-left:6px;color:#8a7d6c}
+.nbSlip .nbM{color:#b0467e}

@@ -113,8 +113,10 @@ function page(t,n,lost){
 function html(){
  const m=counts(mem()),types=[...new Set([...Object.keys(m.noted||{}),...Object.keys(m.lostHeld||{})])].filter(t=>E[t]);
  types.sort((a,b)=>((m.noted[b]||0)+(m.lostHeld?.[b]||0))-((m.noted[a]||0)+(m.lostHeld?.[a]||0)));
- if(!types.length)return '<p class="nbEmpty">まだ何も書かれていない。</p>';
- return types.map(t=>page(t,m.noted[t]||0,m.lostHeld?.[t]||0)).join('');
+ const T=Object.entries(m.titles||{}).sort((a,b)=>b[1]-a[1]);
+ const slip=T.length?`<section class="nbSlip"><h4>（最後のページに、誰かが紙を貼っている）</h4><p class="nbSlipHead">記録係の控え——この戦士に付いた称号</p><ul>${T.map(([n,c])=>`<li>「${n}」${c>1?`<small>×${c}</small>`:''}</li>`).join('')}</ul><p class="nbM">欄外（本人の字）：剥がせない。</p></section>`:'';
+ if(!types.length)return (slip||'<p class="nbEmpty">まだ何も書かれていない。</p>');
+ return types.map(t=>page(t,m.noted[t]||0,m.lostHeld?.[t]||0)).join('')+slip;
 }
 function open(){
  let o=document.getElementById('notebook');

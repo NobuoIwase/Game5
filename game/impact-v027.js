@@ -10,7 +10,7 @@
    Numbers are in C. */
 const C={
  stepSpeed:1.35,
- stop:{melee:.06,bash:.07,heavy:.12,hurt:.04},
+ stop:{melee:.1,bash:.12,heavy:.2,hurt:.08},   // v0.35: longer, so the hit is felt
  push:{melee:16,bash:26,heavy:42},
  kick:{melee:7,bash:9,heavy:15,hurt:6},
  shake:{melee:3,bash:4,heavy:8}
@@ -56,7 +56,8 @@ hurtEnemy=function(dmg,opts={}){
  const a=Math.atan2(e.y-h.y,e.x-h.x);
  window.Game5Camera?.kick?.(Math.cos(a)*C.kick[k],Math.sin(a)*C.kick[k]);
  window.Game5FX?.shake?.(C.shake[k]);
- e.squash=1;e.squashA=a;
+ e.squash=1;e.squashA=a;e._hitT=C.stop[k]+.03;
+ window.Game5Impact?.flash?.(k==='heavy'?.22:.12);
  if(!e.grappling&&!e.dash&&e.hp>0){
   const d=C.push[k],blocked=window.Game5Dungeon?.blockedAt;let tx=e.x,ty=e.y;
   for(let s=4;s<=d;s+=4){const nx=e.x+Math.cos(a)*s,ny=e.y+Math.sin(a)*s;if(blocked?.(e,nx,ny))break;tx=nx;ty=ny}
@@ -67,7 +68,7 @@ hurtEnemy=function(dmg,opts={}){
 const baseHurtH=hurtHero;
 hurtHero=function(h,dmg,status=null,meta={}){
  const hp0=h?.hp,r=baseHurtH(h,dmg,status,meta);
- if(h&&h.hp<hp0&&meta?.sourceKey){stop(C.stop.hurt);const e=state.enemy;if(e){const a=Math.atan2(h.y-e.y,h.x-e.x);window.Game5Camera?.kick?.(Math.cos(a)*C.kick.hurt,Math.sin(a)*C.kick.hurt)}}
+ if(h&&h.hp<hp0&&meta?.sourceKey){stop(C.stop.hurt);flash(.18,'255,60,90');const e=state.enemy;if(e){const a=Math.atan2(h.y-e.y,h.x-e.x);window.Game5Camera?.kick?.(Math.cos(a)*C.kick.hurt,Math.sin(a)*C.kick.hurt)}}
  return r;
 };
 /* squash-and-stretch on the monster that was hit */
@@ -81,5 +82,9 @@ if(G){
   ctx.translate(e.x,e.y);ctx.rotate(a);ctx.scale(1-k,1+k*.8);ctx.rotate(-a);ctx.translate(-e.x,-e.y);
  };
 }
-window.Game5Impact={version:'0.27.0',cfg:C,stop};
+/* v0.35: a white flash over the whole screen on a hit, a red one when she is hit */
+let flashA=0,flashC='255,255,255';
+function flash(a,c='255,255,255'){flashA=Math.max(flashA,a);flashC=c}
+const bDraw=draw;draw=function(){bDraw();if(flashA>0){screenSpace(()=>{ctx.save();ctx.globalAlpha=flashA;ctx.fillStyle=`rgb(${flashC})`;ctx.globalCompositeOperation='lighter';ctx.fillRect(0,0,SW,SH);ctx.restore()});flashA=Math.max(0,flashA-.04)}};
+window.Game5Impact={version:'0.35.0',cfg:C,stop,flash};
 })();

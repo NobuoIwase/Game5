@@ -249,7 +249,7 @@ function clearedRoom(h,dt){
  h.resting=false;
  const p=pathDir(h,goal)||norm(goal.x-h.x,goal.y-h.y);
  h.intent={kind:'move',x:p.x,y:p.y,speed:1.0,label:'階段へ移動'};
- h.thought='区画を制圧。次の階段へ進む。';
+ h.thought=(window.Game5MultiEnemy?.alive?.()||[]).length?'今のうちに、下へ。':'区画を制圧。次の階段へ進む。';   // v0.36: she may leave monsters behind
  return h.intent;
 }
 

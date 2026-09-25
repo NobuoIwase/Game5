@@ -57,7 +57,7 @@ function minimap(){
   ctx.globalAlpha=.28;ctx.drawImage(mm,x0,y0);
   ctx.globalAlpha=.9;for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){const i=y*GW+x;if(f.explored[i]&&f.grid[i]!==1){ctx.fillStyle='#a9b8ad';ctx.fillRect(x0+x*k,y0+y*k,k,k)}}
   const P=(px,py)=>[x0+px/CS*k,y0+py/CS*k];
-  const r=window.Game5Dungeon?.room?.();if(r?.exit){const [ex,ey]=P(...r.exit);ctx.fillStyle=state.dungeon?.pending?'#ffe28a':'#8a7e6a';ctx.fillRect(ex-2.5,ey-2.5,5,5)}
+  const r=window.Game5Dungeon?.room?.();if(r?.exit){const [ex,ey]=P(...r.exit);ctx.fillStyle=(state.dungeon?.pending||state.dungeon?.stairsFound)?'#ffe28a':'#8a7e6a';ctx.fillRect(ex-2.5,ey-2.5,5,5)}
   for(const e of window.Game5MultiEnemy?.alive?.()||[]){const [ex,ey]=P(e.x,e.y);ctx.fillStyle=e.aware?'#ff6f6f':'#b98cff';ctx.globalAlpha=e.aware?1:.7;ctx.beginPath();ctx.arc(ex,ey,2.4,0,TAU);ctx.fill()}
   ctx.globalAlpha=1;const hr=state.hero;if(hr){const [hx,hy]=P(hr.x,hr.y);ctx.fillStyle='#fff4c4';ctx.beginPath();ctx.arc(hx,hy,3,0,TAU);ctx.fill()}
   ctx.strokeStyle='#ffffff55';ctx.lineWidth=1;ctx.strokeRect(x0+CAM.x/CS*k,y0+CAM.y/CS*k,SW/CAM.z/CS*k,SH/CAM.z/CS*k);

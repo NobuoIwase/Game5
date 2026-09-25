@@ -160,3 +160,9 @@ button{touch-action:manipulation}
 #endOverlay{position:fixed;inset:0;z-index:40;border-radius:0;place-items:start center;padding:8px 0 16px}
 #startOverlay{place-items:start center}
 #endOverlay #restartBtn,#startOverlay #startBtn{position:sticky;bottom:8px;z-index:1;box-shadow:0 4px 18px #000c}
+/* v0.35 which monster the summon places */
+.summonRow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0 2px}
+.summonRow small{color:#9fb0a6;font-size:11px;margin-right:4px;width:100%}
+.summonRow button{padding:5px 10px;border-radius:14px;border:1px solid #ffffff22;background:#18221d;color:#dfe8e2;font-size:12px;cursor:pointer}
+.summonRow button.on{border-color:#e5a2d0;background:#3a2233;color:#ffe1f3}
+.summonRow.active small{color:#e5a2d0}

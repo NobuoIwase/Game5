@@ -22,6 +22,17 @@ function drawFloor(){
   for(let x=0;x<W;x+=64){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
   for(let y=0;y<H;y+=64){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
 }
+/* v0.34: walking toward or away from the viewer her stride read too wide; below the hips the
+   frame is drawn in thin strips that narrow toward the feet, so her knees and feet come inward */
+const NARROW={front:.8,back:.8,down_left:.9,down_right:.9,up_left:.9,up_right:.9};
+function drawWalkFrame(im,frame,row,x,y,dir){
+  const sx=frame*384,sy=row*512,k=NARROW[dir];
+  if(!k){ctx.drawImage(im,sx,sy,384,512,x,y,84,112);return}
+  const hip=300,N=10,cx=x+42;
+  ctx.drawImage(im,sx,sy,384,hip,x,y,84,hip*112/512);
+  for(let i=0;i<N;i++){const a=hip+(512-hip)*i/N,b=hip+(512-hip)*(i+1)/N,u=(i+.5)/N,sc=1-(1-k)*u,w=84*sc;
+    ctx.drawImage(im,sx,sy+a,384,b-a+.6,cx-w/2,y+a*112/512,w,(b-a)*112/512+.15)}
+}
 function draw(){
   drawFloor();
   const h=state.hero,e=state.enemy;
@@ -55,7 +66,7 @@ function draw(){
   const art=window.WarriorMotion?.drawGame?.(ctx,h)===true;ctx.restore();
   if(!art){
     const q=heroSpriteSample(h),im=q.image;
-    if(im?.complete&&im.naturalWidth)ctx.drawImage(im,q.frame*384,(DIR_ROWS[h.dir]||0)*512,384,512,h.x-42,h.y-90,84,112);
+    if(im?.complete&&im.naturalWidth)drawWalkFrame(im,q.frame,DIR_ROWS[h.dir]||0,h.x-42,h.y-90,h.dir);
     else C(h.x,h.y,18,h.color,'#fff')
   }
   ctx.restore();

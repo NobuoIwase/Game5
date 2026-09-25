@@ -81,10 +81,37 @@ function walls(){
   ctx.save();ctx.fillStyle='rgba(220,226,240,.2)';ctx.fillRect(w.x,w.y,w.w,2);ctx.strokeStyle='rgba(0,0,0,.45)';ctx.lineWidth=1;ctx.strokeRect(w.x+.5,w.y+.5,w.w-1,w.h-1);ctx.restore();
  }
 }
+/* v0.34 torch: an iron sconce with a flame in three layers that flickers and sways on its own
+   rhythm, embers rising from it, and a soft warm glow (the old glow sprite read as a ring) */
+function torch(tc){
+ const t=state.time,ph=tc.x*.37+tc.y*.11,x=tc.x,y=tc.y-6;
+ const n=(a,b)=>Math.sin(t*a+ph*b);
+ const fl=.82+.1*n(13,1)+.06*n(29,2)+.05*n(7.3,3),sw=2.2*n(3.1,1)+1.2*n(8.7,2);
+ ctx.save();
+ // glow on the wall
+ ctx.globalCompositeOperation='lighter';
+ let g=ctx.createRadialGradient(x,y-12,2,x,y-12,62*fl);g.addColorStop(0,`rgba(255,170,80,${.30*fl})`);g.addColorStop(.45,`rgba(255,120,40,${.12*fl})`);g.addColorStop(1,'rgba(255,100,30,0)');
+ ctx.fillStyle=g;ctx.fillRect(x-70,y-80,140,140);
+ ctx.globalCompositeOperation='source-over';
+ // sconce: wall plate, arm and cup
+ ctx.fillStyle='#1d1a18';ctx.fillRect(x-3,y-2,6,14);ctx.fillStyle='#2e2924';ctx.fillRect(x-2,y,4,10);
+ ctx.fillStyle='#34302b';ctx.beginPath();ctx.moveTo(x-8,y-6);ctx.lineTo(x+8,y-6);ctx.lineTo(x+5,y+1);ctx.lineTo(x-5,y+1);ctx.closePath();ctx.fill();
+ ctx.strokeStyle='#5a4f44';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x-8,y-6);ctx.lineTo(x+8,y-6);ctx.stroke();
+ // flame: outer, middle, core
+ const layer=(h,w,c0,c1,off)=>{const tx=x+sw*off,ty=y-7-h;const gg=ctx.createLinearGradient(0,y-6,0,ty);gg.addColorStop(0,c0);gg.addColorStop(1,c1);ctx.fillStyle=gg;
+  ctx.beginPath();ctx.moveTo(x-w,y-6);ctx.bezierCurveTo(x-w*1.1,y-6-h*.45,tx-w*.35,ty+h*.25,tx,ty);ctx.bezierCurveTo(tx+w*.35,ty+h*.25,x+w*1.1,y-6-h*.45,x+w,y-6);ctx.closePath();ctx.fill()};
+ ctx.globalCompositeOperation='lighter';
+ layer(24*fl,6.5,'rgba(255,90,20,.85)','rgba(255,60,10,0)',1);
+ layer(17*fl,4.6,'rgba(255,170,50,.9)','rgba(255,140,40,0)',.75);
+ layer(10*fl,2.8,'rgba(255,245,200,.95)','rgba(255,230,160,0)',.45);
+ // embers
+ for(let k=0;k<3;k++){const q=(t*.9+k/3+ph)%1;ctx.globalAlpha=(1-q)*.8;ctx.fillStyle='#ffb050';ctx.fillRect(x+Math.sin(q*9+k*2+ph)*5*q,y-14-q*34,1.4,1.4)}
+ ctx.restore();
+}
 function decor(){
  const L=layout(),r=room();if(!L||!r)return;
  for(const b of L.rubble)T(12,b.x-b.s/2,b.y-b.s/2,b.s*.8,b.s*.8,.45);
- for(const t of L.torches)T(6,t.x-22,t.y-30,44,52);
+ for(const t of L.torches)torch(t);   // v0.34: drawn and animated here (the tile's flame was a still image)
  if(L.crystal)T(7,L.crystal.x-30,L.crystal.y-40,60,64);
  if(!L.terrain)T(5,L.entry.x-(L.entry.x<W/2?8:52),L.entry.y-48,60,78,.55);
  else{ctx.save();ctx.globalAlpha=.5;ctx.strokeStyle='#d9c87c';ctx.setLineDash([4,5]);ctx.beginPath();ctx.ellipse(L.entry.x,L.entry.y,22,10,0,0,TAU);ctx.stroke();ctx.restore()}
@@ -135,7 +162,7 @@ G.drawLighting=function(){
  if(r&&state.dungeon?.pending)hole(r.exit[0],r.exit[1],150);
  ctx.save();if(window.__lightMul)ctx.globalCompositeOperation='multiply';ctx.drawImage(lc,CAM.x,CAM.y,SW,SH);ctx.restore();
  ctx.save();ctx.globalCompositeOperation='lighter';
- for(const tc of L?.torches||[])F(0,tc.x,tc.y+6,120+8*Math.sin(t*11+tc.x),.16);
+ for(const tc of L?.torches||[]){const r=110+8*Math.sin(t*11+tc.x),g=ctx.createRadialGradient(tc.x,tc.y+10,4,tc.x,tc.y+10,r);g.addColorStop(0,'rgba(255,150,70,.10)');g.addColorStop(1,'rgba(255,120,50,0)');ctx.fillStyle=g;ctx.fillRect(tc.x-r,tc.y+10-r,r*2,r*2)}   // soft pool of light, not a ring
  if(L?.crystal)F(1,L.crystal.x,L.crystal.y-10,130,.14);
  ctx.restore();
 };
@@ -200,7 +227,9 @@ function telegraph(e){
 function shadows(){
  const h=state.hero;
  ctx.save();ctx.fillStyle='#000';
- ctx.globalAlpha=.34;ctx.beginPath();ctx.ellipse(h.x,h.y+22,19,7,0,0,TAU);ctx.fill();
+ // v0.34: at her feet (the walk frames' soles are measured per direction in motion-v026.js); it was about 10px low
+ const fy=h.y+((window.Game5Motion?.calibration?.[h.dir]?.ay)??12)-1;
+ ctx.globalAlpha=.36;ctx.beginPath();ctx.ellipse(h.x,fy,17,6,0,0,TAU);ctx.fill();
  for(const e of alive()){
   const fly=e.type==='leech'||e.type==='moth'||e.type==='orb';
   ctx.globalAlpha=fly?.2:.32;ctx.beginPath();ctx.ellipse(e.x,e.y+(fly?34:24),(e.r||26)*(fly?.8:1.1),(e.r||26)*.36,0,0,TAU);ctx.fill();

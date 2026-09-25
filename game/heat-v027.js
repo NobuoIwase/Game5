@@ -118,7 +118,7 @@ updateHero=function(h,dt){
  speakQueue(h);
  trance(h,dt);
  // the stairs wait for the end of her report (see decideHero below)
- const dd=state.dungeon;if(dd?.pending&&Q.some(q=>typeof q==='string')&&state.time-(h._reportT0??state.time)<14){h._reportT0??=state.time;dd.clearT=0}
+ const dd=state.dungeon;if(dd?.pending&&Q.some(q=>typeof q==='string')&&!(window.Game5MultiEnemy?.alive?.()||[]).some(e=>e.aware&&Math.hypot(e.x-h.x,e.y-h.y)<320)&&state.time-(h._reportT0??state.time)<14){h._reportT0??=state.time;dd.clearT=0}
  // close-up
  window.Game5Camera?.wantZoom?.(h.dead?1:est?C.zoom.estella:g?C.zoom.hold:h.afterglow>0?C.zoom.after:1);
 };
@@ -165,7 +165,7 @@ const baseDecide=decideHero;
 decideHero=function(h,dt){
  const it=baseDecide(h,dt),d=state.dungeon,r=window.Game5Dungeon?.room?.();
  if(!d?.pending){h._reportT0=null;return it}
- if(r?.exit&&Q.some(q=>typeof q==='string')&&Math.hypot(h.x-r.exit[0],h.y-r.exit[1])<90){
+ if(r?.exit&&Q.some(q=>typeof q==='string')&&Math.hypot(h.x-r.exit[0],h.y-r.exit[1])<90&&!(window.Game5MultiEnemy?.alive?.()||[]).some(e=>e.aware&&Math.hypot(e.x-h.x,e.y-h.y)<320)){
   h._reportT0??=state.time;
   if(state.time-h._reportT0<14){h.intent={kind:'hold',x:0,y:0,label:'報告'};return h.intent}
  }

@@ -43,7 +43,7 @@ function onVoice(h,k){
  else if(/^charmHesitate/.test(k))say(`${n}は ためらった！`,'hes',2);
  else if(k==='attach')say(`なにかが ${n}に 吸いついた！`,'att',2);
  else if(k==='watched')say(`まわりの 魔物が ${n}を 見ている……`,'watch',4);
- else if(k==='clear')say(`区画を 制圧した！`,'clear',8);
+ else if(k==='clear'&&!(window.Game5MultiEnemy?.alive?.()||[]).length)say(`区画を 制圧した！`,'clear',8);
 }
 let shown0=null,intent0=null,special0=null,room0=null,level0=null,pend0=false;
 const baseHero=updateHero;
@@ -53,13 +53,13 @@ updateHero=function(h,dt){
  const n=HN();
  const room=state.dungeon?.room;
  if(room!==room0){room0=room;const r=window.Game5Dungeon?.rooms?.[room];if(r)say(`第${room+1}区画 ${r.name}に たどりついた。`,'room')}
- if(state.dungeon?.pending&&!pend0)say('区画を 制圧した！ 階段の 封印が とけた。','clear');pend0=!!state.dungeon?.pending;
+ if(state.dungeon?.pending&&!pend0&&!(window.Game5MultiEnemy?.alive?.()||[]).length)say('区画を 制圧した！','clear');pend0=!!state.dungeon?.pending;
  if(level0!=null&&h.level>level0)say(`${n}は レベル${h.level}に あがった！`,'lv');level0=h.level;
  const lab=h.intent?.label;
  if(lab!==intent0){intent0=lab;const I=INTENT[lab];if(I)say(n+I[0],'i:'+lab,I[1])}
  if(h._voiceShown!==shown0){shown0=h._voiceShown;onVoice(h,h._voiceKey)}
  const g=h.grapple;
- if(g&&g.specials!==special0&&h._lastSpecial){if(special0!=null&&g.specials>special0)say(`${nm(g.e)||'影の手'}の ${h._lastSpecial}！`,'sp',.4)}
+ if(g&&g.specials!==special0&&h._lastSpecial&&!h.estella?.active&&!window.Game5Lewd?.busy?.()){if(special0!=null&&g.specials>special0)say(`${nm(g.e)||'影の手'}の ${h._lastSpecial}！`,'sp',.4)}
  special0=g?g.specials:null;
  if(h.dead&&!h._msgDead){h._msgDead=true;say(`${n}は ちからつきた……`,'dead')}
  if(!h.dead)h._msgDead=false;

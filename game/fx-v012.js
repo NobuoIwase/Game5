@@ -116,7 +116,7 @@ function decor(){
  if(!L.terrain)T(5,L.entry.x-(L.entry.x<W/2?8:52),L.entry.y-48,60,78,.55);
  else{ctx.save();ctx.globalAlpha=.5;ctx.strokeStyle='#d9c87c';ctx.setLineDash([4,5]);ctx.beginPath();ctx.ellipse(L.entry.x,L.entry.y,22,10,0,0,TAU);ctx.stroke();ctx.restore()}
  // stairs: sealed until the encounter is cleared
- const [ex,ey]=r.exit,open=!!state.dungeon?.pending,t=state.time;
+ const [ex,ey]=r.exit,open=!!(state.dungeon?.pending||state.dungeon?.stairsFound),t=state.time;   // v0.36: open once found
  ctx.save();
  if(open){ctx.shadowBlur=28+8*Math.sin(t*4);ctx.shadowColor='#ffe28a'}
  const st=window.Game5Props?.stairs;
@@ -159,7 +159,7 @@ G.drawLighting=function(){
  for(const e of alive())hole(e.x,e.y,70,.5);
  for(const tc of L?.torches||[])hole(tc.x,tc.y+30,150+6*Math.sin(t*9+tc.x),.85);
  if(L?.crystal)hole(L.crystal.x,L.crystal.y,140,.8);
- if(r&&state.dungeon?.pending)hole(r.exit[0],r.exit[1],150);
+ if(r&&(state.dungeon?.pending||state.dungeon?.stairsFound))hole(r.exit[0],r.exit[1],150);
  ctx.save();if(window.__lightMul)ctx.globalCompositeOperation='multiply';ctx.drawImage(lc,CAM.x,CAM.y,SW,SH);ctx.restore();
  ctx.save();ctx.globalCompositeOperation='lighter';
  for(const tc of L?.torches||[]){const r=110+8*Math.sin(t*11+tc.x),g=ctx.createRadialGradient(tc.x,tc.y+10,4,tc.x,tc.y+10,r);g.addColorStop(0,'rgba(255,150,70,.10)');g.addColorStop(1,'rgba(255,120,50,0)');ctx.fillStyle=g;ctx.fillRect(tc.x-r,tc.y+10-r,r*2,r*2)}   // soft pool of light, not a ring
@@ -361,7 +361,7 @@ draw=function(){
  const i=roomIdx();
  if(i!==lastRoom||(state.started&&!wasStarted)){lastRoom=i;trans=1.8;parts.length=0;trails.length=0}
  wasStarted=state.started;
- const pend=!!state.dungeon?.pending;if(pend&&!wasPending)clearT=1.6;wasPending=pend;
+ const pend=!!state.dungeon?.pending;if(pend&&!wasPending&&!alive().length)clearT=1.6;wasPending=pend;   // the banner only when the floor really was cleared
  const s=shake;
  ctx.save();if(s>.2)ctx.translate((Math.random()-.5)*s*2,(Math.random()-.5)*s*2);
  bDraw();

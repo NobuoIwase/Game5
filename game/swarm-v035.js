@@ -56,7 +56,8 @@ const baseEnemy=updateEnemy;
 updateEnemy=function(dt){
  const r=baseEnemy(dt);   // called once a frame for the whole floor
  setupFloor();
- for(const e of alive()){sizeUp(e);if(e._queen)queenTick(e,dt)}
+ for(const e of alive()){sizeUp(e);if(e._queen)queenTick(e,dt);
+  if(e.type==='lure_cap'){e._root??={x:e.x,y:e.y};e.x=e._root.x;e.y=e._root.y;e.dash=null;e.moving=false}}   // not even a charge moves it
  return r;
 };
 /* the queen rarely attacks herself */
@@ -67,7 +68,9 @@ chooseEnemyAction=function(){const e=state.enemy;if(e?._queen&&Math.random()<.65
 const EAI=window.Game5EnemyAI,B=()=>window.Game5Dungeon?.blockedAt;
 if(EAI?.move){const m=EAI.move;EAI.move=function(e,h,dt){
  const x0=e.x,y0=e.y,r=m(e,h,dt);
+ if(e.type==='lure_cap'){e.x=x0;e.y=y0;e.moving=false;return r}   // v0.37: the mushroom never moves; it waits
  const dx=e.x-x0,dy=e.y-y0,l=Math.hypot(dx,dy);if(l<.01||e.grappling||e.dash)return r;
+ if(e._rushT>0){e._rushT-=dt;const nx=x0+dx*1.4,ny=y0+dy*1.4;if(!B()?.(e,nx,ny)){e.x=nx;e.y=ny}return r}   // v0.37: rushing in on a shadow-stake opening
  const t=state.time,ph=e._ph??(e._ph=Math.random()*6.28),ux=dx/l,uy=dy/l,px=-uy,py=ux;
  let f=1,side=0;
  switch(e.type){

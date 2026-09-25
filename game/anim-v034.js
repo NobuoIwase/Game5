@@ -34,7 +34,8 @@ function anim(e){
  if(c&&c.total>0){const u=Math.max(0,Math.min(1,1-Math.max(0,c.t)/c.total));sx*=1+.1*u;sy*=1-.12*u;if(u>.7){dx+=Math.sin(t*70)*1.6*(u-.7)/.3}e._wasCasting=true}
  else if(e._wasCasting){e._wasCasting=false;e._pop=1}
  if(e._pop>0){const p=e._pop;sx*=1-.1*p;sy*=1+.16*p;e._pop=Math.max(0,p-1/60/.2)}
- const z=e._sz||1;sx*=z;sy*=z;   // v0.35: species size (swarm-v035.js)
+ const z=e._sz||1;sx*=z;sy*=z;
+ if(e.grappling&&state.hero?.grapple?.pinned)ctx.globalAlpha*=.6;   // v0.37: she shows through the one pinning her   // v0.35: species size (swarm-v035.js)
  if(e._hitT>0){e._hitT-=1/60;ctx.filter='brightness(2.6) saturate(.25)'}   // v0.35: the frame she lands a hit, it flashes white
  if(sx===1&&sy===1&&!rot&&!dx&&!dy&&!skew)return;
  ctx.translate(ax+dx,ay+dy);if(rot)ctx.rotate(rot);if(skew)ctx.transform(1,0,skew,1,0,0);ctx.scale(sx,sy);ctx.translate(-ax,-ay);

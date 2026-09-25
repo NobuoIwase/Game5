@@ -67,7 +67,13 @@ function draw(c,d,p,sc){
  c.restore();return true;
 }
 function action(h){if(h.estella?.active)return['estella',0,.55];if((h.status?.bind||0)>0)return['bind',0,.55];const a=h._warriorMotion;return a&&a.elapsed<a.total?[a.name,cl(a.elapsed/a.total),cl((a.hitAt??a.total*.55)/a.total)]:null}
-function drawGame(c,h){const a=action(h);if(!a)return false;const p=a[0]==='estella'?est(h):a[0]==='bind'?bind():pose(a[1],h.dir,a[0]==='heavy',a[2]);return draw(c,h.dir,p,{x:h.x,y:h.y,scale:112/543})}
+/* v0.39: a swing starts from wherever her arm was (the guard, a step) and eases out of it over the
+   first moments instead of snapping to the rest pose */
+function carry(h,p){
+ const now=performance.now()/1000,B=h._pb;
+ if(!h._cf||h._cf.m!==h._warriorMotion){h._cf=B&&now-B.t<.12&&B.d===h.dir?{sh:B.v[2],body:B.v[0],t0:now}:{sh:0,body:0,t0:now};h._cf.m=h._warriorMotion}
+const k=Math.exp(-(now-h._cf.t0)/.07);p.sh+=h._cf.sh*k;p.body+=h._cf.body*k;return p}
+function drawGame(c,h){const a=action(h);if(!a)return false;const p=a[0]==='estella'?est(h):a[0]==='bind'?bind():carry(h,pose(a[1],h.dir,a[0]==='heavy',a[2]));return draw(c,h.dir,p,{x:h.x,y:h.y,scale:112/543})}
 function qa(){let max=0,last=null,peak=0,pi=0;for(let i=0;i<=240;i++){const p=pose(i/240,'right'),v=[p.sh,p.el,p.wr];if(last){const d=Math.max(...v.map((x,j)=>Math.abs(x-last[j])));max=Math.max(max,d);const sp=v.reduce((s,x,j)=>s+Math.abs(x-last[j]),0);if(sp>peak){peak=sp;pi=i}}last=v}return{maxJointDelta:+max.toFixed(3),peakProgress:+(pi/240).toFixed(3),smooth:max<3,impactClose:Math.abs(pi/240-.55)<.18}}
 if(typeof g.startHeroSkill==='function'){const b=g.startHeroSkill;g.startHeroSkill=function(slot,reason=''){const h=g.activeHero?.(),sk=h?.skills?.[slot],ok=b(slot,reason);if(ok&&h?.id==='warrior'&&sk&&A.has(sk.kind))h._warriorMotion={name:sk.kind==='heavy'?'heavy':'slash',elapsed:0,total:sk.cast+(sk.kind==='heavy'?.34:.2),hitAt:sk.cast};return ok}}
 if(typeof g.updateHero==='function'){const b=g.updateHero;g.updateHero=function(a,dt){const h=a;b(h,dt);if(h?._warriorMotion){h._warriorMotion.elapsed+=dt;if(h._warriorMotion.elapsed>=h._warriorMotion.total)h._warriorMotion=null}}}

@@ -89,6 +89,7 @@ updateHero=function(h,dt){
   const freed=h._lastRelease==='free';if(freed)R.free++;else R.waited++;
   // v0.27 hypnosis: a hold in which she was hypnotised is one she does not remember
   const hg=h._heatG;
+  try{window.Game5Notebook?.note?.(hg.e?.type||'snare',(hg.hypno||0)>=1)}catch(_){}
   if((hg.hypno||0)>=1){const t=hg.e?.type||'snare';R.lost++;R.lostBy[t]=(R.lostBy[t]||0)+1;if(R.floor){R.floor.lost++;R.floor.lostBy[t]=(R.floor.lostBy[t]||0)+1;for(const [k,v] of Object.entries(hg._sp||{})){R.floor.special[k]=Math.max(0,(R.floor.special[k]||0)-v);R.floor.specials=Math.max(0,R.floor.specials-v)}}
    if((hg.hypno||0)>=2){h._trance={left:(h._trance?.left||0)+1,next:rnd(9,18),t:0}}}
   if(h._lastRelease==='edge'){R.edge++;if(R.floor)R.floor.edge++;if(R.edge===1)title(h,'剣を握ったまま、腰で追った戦士');if(R.edge===3)title(h,'寸止めを三度数えた前衛')}
@@ -251,11 +252,13 @@ function record(win){
  const faceKey=h?.dead?'damage':R.estella>=2?'dazed':win?'creepy':R.grabs>=3?'troubled':'normal',face=window.Game5Portrait?.still?.(faceKey,Math.min(1,R.estella*.35+R.grabs*.05));
  const self2=self+(suki&&suki[1]>=2?`……${nameOf(suki[0])}のことは……な、なんとも、思って、ない、から……`:'');
  const cell=(k,v)=>`<div><small>${k}</small><b>${v}</b></div>`;
+ const NB=window.Game5Notebook,adds=NB?.added?.()||[];
+ const noteLine=adds.length?`<p class="recNote"><small>手帳</small>${adds.map(a=>a.tier===1?`${NB.nameOf(a.t)}のページが新しく書かれた`:a.tier>=4?`${NB.nameOf(a.t)}のページに、最後の一行が書き足された`:`${NB.nameOf(a.t)}のページに、書き込みが増えた`).join('。')}。</p>`:'';
  const earned=R.titles.length?`<p class="recTitles"><small>道中の称号</small>${R.titles.map(t=>`「${t}」`).join(' ')}</p>`:'';
  return `<small class="recK">記録</small><b class="recTitle">「${good}、${bad}」</b>${earned}
  <div class="stats">${[cell('捕まった',`${R.grabs}回`),cell('特殊攻撃',`${R.specials}回`),cell('振りほどいた',`${R.free}回`),cell('捕まっていた時間',`${R.held.toFixed(1)}秒`),cell('いちばん捕まった相手',tt?`${name}（${tt[1]}回）`:'—'),cell('好き',suki?`${nameOf(suki[0])}（${SN[suki[1]]}）`:'—'),cell('寸止め',R.edge?`${R.edge}回（追った${R.edgePulls}歩）`:'—'),cell('最大ヌテラ',`${Math.round(R.maxNut)}%`)].join('')}</div>
  <p class="recReview"><small>総評</small>${review.join('')}</p>
- <p class="recSelf">${face?`<img class="recFace" src="${face}" alt="">`:''}<small>自己評価</small>「${self2}」</p>`;
+ ${noteLine}<p class="recSelf">${face?`<img class="recFace" src="${face}" alt="">`:''}<small>自己評価</small>「${self2}」</p>`;
 }
 const baseFinish=finish;
 finish=function(win){

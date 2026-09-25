@@ -120,7 +120,7 @@ function special(h,g){
  drainSp(h,.6,'拘束中の責め');
  addFx('text',h.x+(g.side*26),h.y-96,name,'#ffc2e6',.9);
  g.specials++;g.pulse=1;h._voiceEvent='special';h._lastSpecial=name;
- const NF=window.Game5NuteraFX;if(NF)NF.emit(h.x+(Math.random()-.5)*26,h.y-40,{kind:'pink'});
+ const NF=window.Game5NuteraFX;if(NF)NF.emit(h.x+(Math.random()<.5?-1:1)*(18+Math.random()*8),h.y-60,{kind:'pink'});
  if(g.e)g.e.flash=Math.max(g.e.flash||0,.08);
  if(g.e&&!g.edgeRolled&&!h.estella?.active&&(h.nutera||0)>=EDGE.at){g.edgeRolled=true;g.edgeNow=Math.random()<(EDGE.chance[g.e.type]??EDGE.base)}
 }
@@ -175,6 +175,8 @@ updateHero=function(h,dt){
  h.status.bind=Math.max(h.status.bind||0,.25);
  // keep the monster pressed against her
  if(e&&!e.dash){const a=Math.atan2(e.y-h.y,e.x-h.x),r=(h.r||18)+(e.r||24)*.55;e.x=h.x+Math.cos(a)*r;e.y=h.y+Math.sin(a)*r*.7;e.cast=null;e.decision='捕らえている'}
+ // v0.31: while held she is turned three-quarters toward the viewer, so her face shows
+ h.dir=e?(e.x<h.x?'down_left':'down_right'):'front';
  // specials
  g.next-=dt;if(g.next<=0){g.next=rnd(...C.every)*(h.estella?.active?1.25:1);special(h,g);if(g.edgeNow&&h.grapple===g&&!h.estella?.active){edgeRelease(h,g);return}}
  // struggle

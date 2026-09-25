@@ -62,14 +62,14 @@ applyNutera=function(h,base,meta={}){
  const gain=bNutera(h,base,meta)||0;
  if(h&&gain>0){
   h._heartAcc=(h._heartAcc||0)+gain;
-  while(h._heartAcc>=4){h._heartAcc-=4;emit(h.x+(Math.random()-.5)*20,h.y-44)}   // v0.27: fewer, so she stays visible
-  if(gain>=12){for(let k=0;k<3;k++)emit(h.x,h.y-40,{ang:-Math.PI/2+(k-1)*.55,speed:90+Math.random()*40,kind:'deep',size:13});ring(h.x,h.y-30,10,58,.5,PINK,2.5)}
+  while(h._heartAcc>=4){h._heartAcc-=4;const sd=Math.random()<.5?-1:1;emit(h.x+sd*(16+Math.random()*10),h.y-58-Math.random()*16)}   // beside her head, not over her face   // v0.27: fewer, so she stays visible
+  if(gain>=12){for(let k=0;k<3;k++)emit(h.x+(k-1)*16,h.y-84,{ang:-Math.PI/2+(k-1)*.55,speed:90+Math.random()*40,kind:'deep',size:13});ring(h.x,h.y-30,10,58,.5,PINK,2.5)}
  }
  return gain;
 };
 const bAddFx=addFx;
 addFx=function(kind,x,y,text='',color='#fff',life){
- if(kind==='text'&&/^ヌテラ \+/.test(text))return bAddFx(kind,x,y,`♡+${text.slice(4)}`,'#ff9ad6',life);
+ if(kind==='text'&&/^ヌテラ \+/.test(text))return bAddFx(kind,x,y,`♡+${text.slice(5)}`,'#ff9ad6',life);
  return bAddFx(kind,x,y,text,color,life);
 };
 
@@ -169,7 +169,7 @@ draw=function(){
   const on=!!h.estella?.active;
   if(on&&!est.was)onEstellaStart(h);if(!on&&est.was)onEstellaEnd(h);est.was=on;
   // ambient hearts from 50% upward; while in Estella, MP/SP leak as motes
-  ambient+=dt*Math.max(0,(h.nutera-45)/55)*2.4;while(ambient>=1){ambient--;emit(h.x+(Math.random()-.5)*30,h.y-40,{size:8+Math.random()*6,speed:25,kind:'soft'})}
+  ambient+=dt*Math.max(0,(h.nutera-45)/55)*2.4;while(ambient>=1){ambient--;emit(h.x+(Math.random()<.5?-1:1)*(16+Math.random()*12),h.y-50-Math.random()*20,{size:8+Math.random()*6,speed:25,kind:'soft'})}
   if(on&&Math.random()<.3){emit(h.x+(Math.random()<.5?-1:1)*(14+Math.random()*10),h.y-30,{ang:Math.random()*TAU,speed:50,dot:Math.random()<.5?'#7fc4ff':'#ffc267',size:14,life:.9,grav:40})}
   // Lumane wave peak: a pink ripple
   if(h.lumaneWave>.9&&!waveHigh){waveHigh=true;ring(h.x,h.y-10,20,110,1,'rgba(255,150,210,.9)',2)}if(h.lumaneWave<.7)waveHigh=false;

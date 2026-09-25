@@ -125,6 +125,7 @@ updateHero=function(h,dt){
 /* ---------------- titles earned during the run ---------------- */
 function title(h,name){
  if(R.titles.includes(name))return;R.titles.push(name);
+ try{const m=mem();(m.titles||={})[name]=(m.titles[name]||0)+1;memSave(m)}catch(_){}
  addFx('text',h.x,h.y-140,`称号「${name}」`,'#ffc2e6',2.2);log(`称号「${name}」が記録された。`);
 }
 /* ---------------- her report on a cleared floor ----------------

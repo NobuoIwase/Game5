@@ -35,6 +35,7 @@ function draw(h){
  const flip=['left','up_left','down_left'].includes(h.dir)?-1:1;
  ctx.save();if(j)ctx.translate(j.x,j.y);
  for(const a of A){
+  a._ph??=Math.random()*6;   // it can be drawn in the frame it was added, before updateHero sets it up
   const [ox,oy]=a._spot||[0,-30],x=h.x+ox*flip,y=h.y+oy,p=.5+.5*Math.sin(t*9+a._ph),s=1+.12*p,life=Math.min(1,a.t/.4);
   ctx.save();ctx.globalAlpha=life;
   // glow as it drains

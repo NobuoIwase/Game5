@@ -451,6 +451,138 @@
     1024,
     1024
    ]
+  },
+  "portraits/aria_normal": {
+   "file": "portraits/aria_normal.webp",
+   "size": [
+    360,
+    248
+   ],
+   "source": [
+    1216,
+    832
+   ]
+  },
+  "portraits/aria_troubled": {
+   "file": "portraits/aria_troubled.webp",
+   "size": [
+    360,
+    248
+   ],
+   "source": [
+    1216,
+    832
+   ]
+  },
+  "portraits/aria_creepy": {
+   "file": "portraits/aria_creepy.webp",
+   "size": [
+    360,
+    248
+   ],
+   "source": [
+    1216,
+    832
+   ]
+  },
+  "portraits/aria_startled": {
+   "file": "portraits/aria_startled.webp",
+   "size": [
+    360,
+    248
+   ],
+   "source": [
+    1216,
+    832
+   ]
+  },
+  "portraits/aria_glee": {
+   "file": "portraits/aria_glee.webp",
+   "size": [
+    360,
+    248
+   ],
+   "source": [
+    1216,
+    832
+   ]
+  },
+  "portraits/aria_damage": {
+   "file": "portraits/aria_damage.webp",
+   "size": [
+    360,
+    248
+   ],
+   "source": [
+    1216,
+    832
+   ]
+  },
+  "portraits/aria_endure": {
+   "file": "portraits/aria_endure.webp",
+   "size": [
+    360,
+    248
+   ],
+   "source": [
+    1216,
+    832
+   ]
+  },
+  "portraits/aria_held": {
+   "file": "portraits/aria_held.webp",
+   "size": [
+    360,
+    248
+   ],
+   "source": [
+    1216,
+    832
+   ]
+  },
+  "portraits/aria_melt": {
+   "file": "portraits/aria_melt.webp",
+   "size": [
+    360,
+    248
+   ],
+   "source": [
+    1216,
+    832
+   ]
+  },
+  "portraits/aria_estella": {
+   "file": "portraits/aria_estella.webp",
+   "size": [
+    360,
+    248
+   ],
+   "source": [
+    1216,
+    832
+   ]
+  },
+  "portraits/aria_dazed": {
+   "file": "portraits/aria_dazed.webp",
+   "size": [
+    360,
+    248
+   ],
+   "source": [
+    1216,
+    832
+   ]
+  },
+  "portraits/aria_trance": {
+   "file": "portraits/aria_trance.webp",
+   "size": [
+    360,
+    248
+   ],
+   "source": [
+    1216,
+    832
+   ]
   }
  }
 }

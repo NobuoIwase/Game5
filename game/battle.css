@@ -147,3 +147,4 @@ button{touch-action:manipulation}
 .nbSlipHead{margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:.05em}
 .nbSlip ul{margin:0;padding-left:18px;font-size:12.5px;line-height:1.7}.nbSlip li small{margin-left:6px;color:#8a7d6c}
 .nbSlip .nbM{color:#b0467e}
+.tools button[data-tool="hide"] .ticon{filter:brightness(1.7) drop-shadow(0 0 3px #ff8fd0cc)}

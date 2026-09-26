@@ -118,7 +118,7 @@ for(const [kind,lib] of sets)for(const [m,byDir] of Object.entries(lib.poses)){
    frames.push({id,motion:m,view:v,frame:i,label:meta.label,phase:fr.phase||'',look,chars:look?[look]:Object.keys(CHARACTERS),situations:sit,
     prompt:[VIEW[v],...poseTags(fr),...EXPR(fr.expr,look),...holdTags(fr,look)].join(', '),
     note:noteOf(fr.phase||''),base:`base/${id}.png`,guide:`guide/${id}.png`,
-    ja:MOTION_JA[m]?.[0]||'',held:MOTION_JA[m]?.[1]||'',step:(/^[^\x00-\x7f…]\S*/.exec(fr.phase||'')||[''])[0]});
+    ja:MOTION_JA[m]||null,step:(/^[^\x00-\x7f…]\S*/.exec(fr.phase||'')||[''])[0]});
    // the base picture: the pose only, in skin-like colours so they do not bleed into the picture
    const g=figs[i].replace(/<ellipse [^>]*fill="#0a0f15"\/>/,'').replace(/#5ab6f0|#ee9d5a|#b6c2cc|#d2dbe1|#e1e8ec/gi,'#f2dccd').replace(/#637487|#9fb0bd|#246a9e/gi,'#d8bba8');
    guides.push([id,`<svg xmlns="http://www.w3.org/2000/svg" viewBox="24 18 240 240" width="320" height="320"><rect x="24" y="18" width="240" height="240" fill="#ffffff"/>${held[i]}</svg>`]);
@@ -149,9 +149,10 @@ let body='';
 for(const [s,label] of Object.entries(SITUATIONS)){
  const fs_=frames.filter(f=>f.situations.includes(s));if(!fs_.length)continue;
  const ms=[...new Set(fs_.map(f=>f.motion))];
- body+=`<section id="${s}"><h2>${esc(label)} <small>${fs_.length}コマ</small></h2><p class="hint">この欄に書くとよいもの：${esc(SIT_HINT[s]||'')}</p>`;
+ body+=`<section id="${s}"><h2>${esc(label)} <small>${fs_.length}コマ</small></h2><p class="hint">この欄に書くこと：<b>${esc(SIT_HINT[s]||'')}</b></p>`;
  for(const m of ms){const mf=fs_.filter(f=>f.motion===m),f0=mf[0];
-  body+=`<article><h3>${esc(f0.label)}</h3><p>${esc(f0.ja)}</p><p class="meta">押さえられている所：<b>${esc(f0.held)}</b>　／　描くキャラクター：${f0.chars.map(c=>CL[c]).join('・')}</p><div class="row">`;
+  const J=f0.ja||{};
+  body+=`<article><h3>${esc(f0.label)}</h3><table>${[['体勢',J.body],['腕',J.arms],['脚',J.legs],['押さえ',J.held],['動き',J.move]].map(([k,v])=>`<tr><th>${k}</th><td>${esc(v||'')}</td></tr>`).join('')}</table><p class="meta">描くキャラクター：${f0.chars.map(c=>CL[c]).join('・')}</p><div class="row">`;
   for(const f of mf)body+=`<figure><img loading="lazy" src="${f.guide}" alt=""><img loading="lazy" src="${f.base}" alt=""><figcaption>${VJ[f.view]||f.view}・${f.frame}コマ目${f.step?'：'+esc(f.step):''}<br><code>${esc(f.prompt)}</code></figcaption></figure>`;
   body+='</div></article>';
  }
@@ -166,10 +167,10 @@ h1{font-size:22px}h2{margin-top:36px;border-bottom:2px solid var(--acc);padding-
 h3{margin:0 0 4px;font-size:17px}.hint{background:var(--card);border-left:4px solid var(--acc);padding:6px 10px}.meta{color:var(--sub);font-size:14px}
 article{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px;margin:12px 0}.row{display:flex;flex-wrap:wrap;gap:10px}
 figure{margin:0;width:318px}figure img{width:150px;height:150px;border:1px solid var(--line);border-radius:4px;background:#fff}figure img+img{margin-left:6px}
+table{border-collapse:collapse;margin:4px 0 6px}th{text-align:left;color:var(--sub);font-weight:400;padding:2px 14px 2px 0;white-space:nowrap;vertical-align:top}td{padding:2px 0}
 figcaption{font-size:13px;color:var(--sub)}code{font-size:12px;word-break:break-word}nav a{display:inline-block;margin:2px 10px 2px 0}
 </style></head><body><main><h1>NovelAI 場面の説明</h1>
-<p>手伝いの「設定」の欄は、場面の種類ごとに1つです。その種類に入るモーションとコマを、ここに全部並べています。</p>
-<ul><li>左の絵：<b>どこを押さえられているか</b>（色の線や塊が押さえているもの）。あなたが読むためだけの絵で、NovelAI には送りません</li>
-<li>右の絵：NovelAI に送る下絵（姿勢だけ）</li><li>絵の下の英語：こちらで入れてある言葉（向き・姿勢・表情だけ）。押さえているものは入れていません</li>
-<li>設定の欄に書いた言葉は、その種類の<b>全部のコマ</b>に足されます。1つのモーションにだけ足したいときは、そのコマを入れたときに枠に出る「このモーションだけの言葉」に書きます</li></ul>
+<p><b>見方</b></p><ul><li>左の絵：<b>どこを押さえられているか</b>（色の線・塊）。読むだけの絵。NovelAI には送らない</li>
+<li>右の絵：NovelAI に送る下絵（姿勢だけ）</li><li>英語：こちらで入れてある言葉（向き・姿勢・顔だけ）</li></ul>
+<p><b>押さえているものの名前は、どこにも入れていない。</b>「押さえ」の所を何にするかを、あなたが「設定」の欄に書く。</p>
 <nav>${toc}</nav>${body}</main></body></html>`);

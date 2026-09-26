@@ -45,24 +45,24 @@
   "defeat": "倒れる・敗北"
  },
  "hints": {
-  "bound": "つかんで・縛っているもの（何で、何色で、どんな形か）。手首・膝などを固定している",
-  "bound_rock": "縛っているものと、何が体を揺さぶっているか",
-  "pinned": "床に押さえつけているもの（何が、手首や膝を押さえているか）",
-  "pinned_rock": "押さえつけているものと、何が体を揺さぶっているか",
-  "held": "後ろから抱えているもの（人か、何か、色・形）",
-  "kiss": "口づけの相手（どんな姿か）。下絵には相手を描いていない",
-  "clinger": "胸と脚の付け根の前に張り付いている小さなもの（何か、色・形）",
-  "engulf": "床の柔らかい塊（何か、色・透け方）",
-  "wrap": "胴に巻きついているもの（何か、色・太さ）",
-  "grabbed": "足首や尻尾をつかむもの。振りほどく前に縛っていたもの",
-  "trance": "目の前にいるもの・胞子・泡など、ぼんやりさせているもの",
-  "tempt": "見せたい相手や、表情・様子の言葉",
-  "endure": "耐えている理由になるもの、表情の言葉",
-  "exposure": "表情や様子の言葉",
-  "climax": "頂点のコマに重ねて足す、表情・体の様子の言葉（ほかの場面の言葉と一緒に入る）",
-  "afterglow": "力が抜けたあとの表情・体の様子",
-  "recover": "我に返るときの表情・様子",
-  "defeat": "倒れる場面の様子"
+  "bound": "縛っているもの（何・色・形）",
+  "bound_rock": "① 縛っているもの　② 体を揺らしているもの",
+  "pinned": "押さえつけているもの（何・色・形）",
+  "pinned_rock": "① 押さえつけているもの　② 体を揺らしているもの",
+  "held": "後ろから抱えているもの",
+  "kiss": "口づけの相手（下絵には描いていない）",
+  "clinger": "胸と脚の付け根に張り付いている小さなもの",
+  "engulf": "床の柔らかい塊",
+  "wrap": "胴に巻きついているもの",
+  "grabbed": "足首・尻尾をつかむもの",
+  "trance": "ぼんやりさせているもの（目の前の何か・胞子・泡）",
+  "tempt": "顔・体の様子",
+  "endure": "顔・体の様子",
+  "exposure": "顔・体の様子",
+  "climax": "頂点の顔・体の様子（ほかの欄の言葉と一緒に入る）",
+  "afterglow": "力が抜けたあとの顔・体の様子",
+  "recover": "我に返るときの顔・様子",
+  "defeat": "倒れるときの様子"
  },
  "frames": {
   "arms_behind_squirm__front__0": {
@@ -86,8 +86,13 @@
    "note": "hips sway and twist, knees pressed together and shifting, looks down and away",
    "base": "base/arms_behind_squirm__front__0.png",
    "guide": "guide/arms_behind_squirm__front__0.png",
-   "ja": "立ったまま、両手首を背中で1つにまとめて固定されている。逃げられず、腰をくねらせ、閉じた膝をすり合わせ、かかとを片方ずつ上げる。うつむいて目をそらす。",
-   "held": "両手首（背中で1つに）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手（手首を背中でまとめる）",
+    "legs": "膝を閉じる",
+    "held": "両手首",
+    "move": "腰をくねらせる。膝をすり合わせる。かかとを交互に上げる。下を向く"
+   },
    "step": ""
   },
   "arms_behind_squirm__front__2": {
@@ -111,8 +116,13 @@
    "note": "hips sway and twist, knees pressed together and shifting, looks down and away",
    "base": "base/arms_behind_squirm__front__2.png",
    "guide": "guide/arms_behind_squirm__front__2.png",
-   "ja": "立ったまま、両手首を背中で1つにまとめて固定されている。逃げられず、腰をくねらせ、閉じた膝をすり合わせ、かかとを片方ずつ上げる。うつむいて目をそらす。",
-   "held": "両手首（背中で1つに）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手（手首を背中でまとめる）",
+    "legs": "膝を閉じる",
+    "held": "両手首",
+    "move": "腰をくねらせる。膝をすり合わせる。かかとを交互に上げる。下を向く"
+   },
    "step": ""
   },
   "arms_behind_wrench__front__0": {
@@ -136,8 +146,13 @@
    "note": "wrench to her left, shoulders twist, chest thrown out, up on the pushing toes",
    "base": "base/arms_behind_wrench__front__0.png",
    "guide": "guide/arms_behind_wrench__front__0.png",
-   "ja": "後ろ手に固定されたまま、肩をひねって左右へ振りほどこうとする。胸が前に出て、踏ん張る足は爪先立ちになる。",
-   "held": "両手首（背中で1つに）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "踏ん張る足は爪先立ち",
+    "held": "両手首",
+    "move": "肩をひねって左右に振りほどこうとする。胸が前に出る"
+   },
    "step": ""
   },
   "arms_behind_wrench__front__5": {
@@ -161,8 +176,13 @@
    "note": "wrench to her right, shoulders twist, chest thrown out, up on the pushing toes",
    "base": "base/arms_behind_wrench__front__5.png",
    "guide": "guide/arms_behind_wrench__front__5.png",
-   "ja": "後ろ手に固定されたまま、肩をひねって左右へ振りほどこうとする。胸が前に出て、踏ん張る足は爪先立ちになる。",
-   "held": "両手首（背中で1つに）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "踏ん張る足は爪先立ち",
+    "held": "両手首",
+    "move": "肩をひねって左右に振りほどこうとする。胸が前に出る"
+   },
    "step": ""
   },
   "elbows_up_strain__front__0": {
@@ -186,8 +206,13 @@
    "note": "hunches and bends the knees while straining",
    "base": "base/elbows_up_strain__front__0.png",
    "guide": "guide/elbows_up_strain__front__0.png",
-   "ja": "両手首を、それぞれ頭の上から吊られている。腕を片方ずつ引き下ろそうと力んで背を丸め、膝を曲げる。負けると爪先立ちに引き上げられる。",
-   "held": "両手首（頭の上から吊る）",
+   "ja": {
+    "body": "立つ",
+    "arms": "両手を頭の上に上げる",
+    "legs": "膝を少し曲げる",
+    "held": "両手首（上から吊る）",
+    "move": "腕を引き下ろそうと力む。負けると爪先立ちに引き上げられる"
+   },
    "step": ""
   },
   "elbows_up_strain__front__2": {
@@ -211,8 +236,13 @@
    "note": "hunches and bends the knees while straining",
    "base": "base/elbows_up_strain__front__2.png",
    "guide": "guide/elbows_up_strain__front__2.png",
-   "ja": "両手首を、それぞれ頭の上から吊られている。腕を片方ずつ引き下ろそうと力んで背を丸め、膝を曲げる。負けると爪先立ちに引き上げられる。",
-   "held": "両手首（頭の上から吊る）",
+   "ja": {
+    "body": "立つ",
+    "arms": "両手を頭の上に上げる",
+    "legs": "膝を少し曲げる",
+    "held": "両手首（上から吊る）",
+    "move": "腕を引き下ろそうと力む。負けると爪先立ちに引き上げられる"
+   },
    "step": ""
   },
   "legs_pulled_open__front__0": {
@@ -236,8 +266,13 @@
    "note": "knees pressed together, toes turned in",
    "base": "base/legs_pulled_open__front__0.png",
    "guide": "guide/legs_pulled_open__front__0.png",
-   "ja": "後ろ手のまま、閉じていた両膝を左右から引っぱられて開かれる。最初は膝を閉じて内股、最後は膝が外を向いて腰が落ちる。",
-   "held": "両手首（背中）・両膝（左右へ引く）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "閉じた膝 → 左右に開かれる",
+    "held": "両手首・両膝（左右へ引く）",
+    "move": "はじめ内股 → 最後はがに股で腰が落ちる"
+   },
    "step": "閉じる"
   },
   "legs_pulled_open__front__7": {
@@ -261,8 +296,13 @@
    "note": "pulled wide, knees turned out, hips low (gani-mata)",
    "base": "base/legs_pulled_open__front__7.png",
    "guide": "guide/legs_pulled_open__front__7.png",
-   "ja": "後ろ手のまま、閉じていた両膝を左右から引っぱられて開かれる。最初は膝を閉じて内股、最後は膝が外を向いて腰が落ちる。",
-   "held": "両手首（背中）・両膝（左右へ引く）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "閉じた膝 → 左右に開かれる",
+    "held": "両手首・両膝（左右へ引く）",
+    "move": "はじめ内股 → 最後はがに股で腰が落ちる"
+   },
    "step": "開かれた"
   },
   "legs_held_open__front__0": {
@@ -286,8 +326,13 @@
    "note": "held open, the knees quiver, the hips tremble",
    "base": "base/legs_held_open__front__0.png",
    "guide": "guide/legs_held_open__front__0.png",
-   "ja": "後ろ手のまま、開かれた両膝を左右で固定されている。膝と腰が小さく震える。",
-   "held": "両手首（背中）・両膝（左右）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "左右に開いたまま",
+    "held": "両手首・両膝（左右）",
+    "move": "膝と腰が小さく震える"
+   },
    "step": ""
   },
   "legs_held_open__front__2": {
@@ -311,8 +356,13 @@
    "note": "held open, the knees quiver, the hips tremble",
    "base": "base/legs_held_open__front__2.png",
    "guide": "guide/legs_held_open__front__2.png",
-   "ja": "後ろ手のまま、開かれた両膝を左右で固定されている。膝と腰が小さく震える。",
-   "held": "両手首（背中）・両膝（左右）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "左右に開いたまま",
+    "held": "両手首・両膝（左右）",
+    "move": "膝と腰が小さく震える"
+   },
    "step": ""
   },
   "hip_rock_spread__front__0": {
@@ -336,8 +386,13 @@
    "note": "",
    "base": "base/hip_rock_spread__front__0.png",
    "guide": "guide/hip_rock_spread__front__0.png",
-   "ja": "後ろ手で、両膝を左右に開かれたまま、腰が前後に揺さぶられる。前に押し出されると肩が後ろへ引ける。",
-   "held": "両手首（背中）・両膝（左右）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "左右に開いたまま",
+    "held": "両手首・両膝（左右）",
+    "move": "腰が前後に揺らされる"
+   },
    "step": ""
   },
   "hip_rock_spread__front__3": {
@@ -361,8 +416,13 @@
    "note": "hips pushed forward, shoulders back",
    "base": "base/hip_rock_spread__front__3.png",
    "guide": "guide/hip_rock_spread__front__3.png",
-   "ja": "後ろ手で、両膝を左右に開かれたまま、腰が前後に揺さぶられる。前に押し出されると肩が後ろへ引ける。",
-   "held": "両手首（背中）・両膝（左右）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "左右に開いたまま",
+    "held": "両手首・両膝（左右）",
+    "move": "腰が前後に揺らされる"
+   },
    "step": ""
   },
   "hip_rock_closed__front__0": {
@@ -386,8 +446,13 @@
    "note": "knees kept together, small rocks of the hips, rising onto the toes each time",
    "base": "base/hip_rock_closed__front__0.png",
    "guide": "guide/hip_rock_closed__front__0.png",
-   "ja": "後ろ手で、膝は閉じたまま、腰が小さく前後に揺さぶられ、そのたびに爪先立ちになる。",
-   "held": "両手首（背中）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "膝を閉じたまま",
+    "held": "両手首",
+    "move": "腰が小さく前後に揺らされる。そのたび爪先立ち"
+   },
    "step": ""
   },
   "hip_rock_closed__front__3": {
@@ -411,8 +476,13 @@
    "note": "knees kept together, small rocks of the hips, rising onto the toes each time",
    "base": "base/hip_rock_closed__front__3.png",
    "guide": "guide/hip_rock_closed__front__3.png",
-   "ja": "後ろ手で、膝は閉じたまま、腰が小さく前後に揺さぶられ、そのたびに爪先立ちになる。",
-   "held": "両手首（背中）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "膝を閉じたまま",
+    "held": "両手首",
+    "move": "腰が小さく前後に揺らされる。そのたび爪先立ち"
+   },
    "step": ""
   },
   "bounce_spread__front__0": {
@@ -436,8 +506,13 @@
    "note": "up, lifted onto her toes",
    "base": "base/bounce_spread__front__0.png",
    "guide": "guide/bounce_spread__front__0.png",
-   "ja": "後ろ手で、両膝を左右に開かれたまま、体が上下に揺さぶられる。上では爪先立ち、下では膝が曲がって沈む。",
-   "held": "両手首（背中）・両膝（左右）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "左右に開いたまま",
+    "held": "両手首・両膝（左右）",
+    "move": "体が上下に揺らされる。上で爪先立ち、下で膝が曲がる"
+   },
    "step": ""
   },
   "bounce_spread__front__4": {
@@ -461,8 +536,13 @@
    "note": "down, knees bend, weight drops",
    "base": "base/bounce_spread__front__4.png",
    "guide": "guide/bounce_spread__front__4.png",
-   "ja": "後ろ手で、両膝を左右に開かれたまま、体が上下に揺さぶられる。上では爪先立ち、下では膝が曲がって沈む。",
-   "held": "両手首（背中）・両膝（左右）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "左右に開いたまま",
+    "held": "両手首・両膝（左右）",
+    "move": "体が上下に揺らされる。上で爪先立ち、下で膝が曲がる"
+   },
    "step": ""
   },
   "bounce_hung__front__0": {
@@ -486,8 +566,13 @@
    "note": "hung by the wrists and bounced, the arms stretch as she drops",
    "base": "base/bounce_hung__front__0.png",
    "guide": "guide/bounce_hung__front__0.png",
-   "ja": "両手首を頭の上から吊られ、両膝も左右に開かれたまま、体が上下に揺さぶられる。沈むと腕が伸びきる。",
-   "held": "両手首（頭の上から吊る）・両膝（左右）",
+   "ja": {
+    "body": "吊られて立つ",
+    "arms": "両手を頭の上に上げる",
+    "legs": "左右に開いたまま",
+    "held": "両手首（上から吊る）・両膝（左右）",
+    "move": "体が上下に揺らされる。沈むと腕が伸びきる"
+   },
    "step": ""
   },
   "bounce_hung__front__4": {
@@ -511,8 +596,13 @@
    "note": "hung by the wrists and bounced, the arms stretch as she drops",
    "base": "base/bounce_hung__front__4.png",
    "guide": "guide/bounce_hung__front__4.png",
-   "ja": "両手首を頭の上から吊られ、両膝も左右に開かれたまま、体が上下に揺さぶられる。沈むと腕が伸びきる。",
-   "held": "両手首（頭の上から吊る）・両膝（左右）",
+   "ja": {
+    "body": "吊られて立つ",
+    "arms": "両手を頭の上に上げる",
+    "legs": "左右に開いたまま",
+    "held": "両手首（上から吊る）・両膝（左右）",
+    "move": "体が上下に揺らされる。沈むと腕が伸びきる"
+   },
    "step": ""
   },
   "tension_tiptoe__front__0": {
@@ -536,8 +626,13 @@
    "note": "tension rising, knees locked",
    "base": "base/tension_tiptoe__front__0.png",
    "guide": "guide/tension_tiptoe__front__0.png",
-   "ja": "後ろ手で膝を開かれたまま、全身に力が入ってこわばる。頂点では爪先を強く伸ばして脚が突っ張り、頭がのけぞる。そのあと力が抜ける。",
-   "held": "両手首（背中）・両膝（左右）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "左右に開いたまま",
+    "held": "両手首・両膝（左右）",
+    "move": "全身に力が入る → 頂点：爪先立ち、脚が突っ張る、頭がのけぞる → 力が抜ける"
+   },
    "step": "こわばり"
   },
   "tension_tiptoe__front__3": {
@@ -561,8 +656,13 @@
    "note": "peak, toes pointed hard, legs rigid, head back",
    "base": "base/tension_tiptoe__front__3.png",
    "guide": "guide/tension_tiptoe__front__3.png",
-   "ja": "後ろ手で膝を開かれたまま、全身に力が入ってこわばる。頂点では爪先を強く伸ばして脚が突っ張り、頭がのけぞる。そのあと力が抜ける。",
-   "held": "両手首（背中）・両膝（左右）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "左右に開いたまま",
+    "held": "両手首・両膝（左右）",
+    "move": "全身に力が入る → 頂点：爪先立ち、脚が突っ張る、頭がのけぞる → 力が抜ける"
+   },
    "step": "頂点"
   },
   "tension_arch__front__0": {
@@ -586,8 +686,13 @@
    "note": "standing",
    "base": "base/tension_arch__front__0.png",
    "guide": "guide/tension_arch__front__0.png",
-   "ja": "後ろ手で立ったまま、背中を大きく反らせてこわばる。頂点では頭がのけぞって爪先立ち。そのあと前へ崩れる。",
-   "held": "両手首（背中）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "立つ",
+    "held": "両手首",
+    "move": "背中を大きく反らす → 頂点：頭がのけぞる、爪先立ち → 前へ崩れる"
+   },
    "step": "立つ"
   },
   "tension_arch__front__3": {
@@ -611,8 +716,13 @@
    "note": "peak, arched right back, head thrown back, on the toes",
    "base": "base/tension_arch__front__3.png",
    "guide": "guide/tension_arch__front__3.png",
-   "ja": "後ろ手で立ったまま、背中を大きく反らせてこわばる。頂点では頭がのけぞって爪先立ち。そのあと前へ崩れる。",
-   "held": "両手首（背中）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "立つ",
+    "held": "両手首",
+    "move": "背中を大きく反らす → 頂点：頭がのけぞる、爪先立ち → 前へ崩れる"
+   },
    "step": "頂点"
   },
   "afterglow_spread__front__0": {
@@ -636,8 +746,13 @@
    "note": "head down, shoulders heaving",
    "base": "base/afterglow_spread__front__0.png",
    "guide": "guide/afterglow_spread__front__0.png",
-   "ja": "上の「爪先立ちでこわばる」のあと。膝を開かれたまま、拘束にぶら下がるように力が抜け、うなだれて肩で息をする。ときどき体がびくっと跳ねる。",
-   "held": "両手首（背中）・両膝（左右）",
+   "ja": {
+    "body": "立ったままぶら下がる",
+    "arms": "後ろ手",
+    "legs": "左右に開いたまま",
+    "held": "両手首・両膝（左右）",
+    "move": "力が抜けてうなだれる。肩で息をする。ときどきびくっと跳ねる"
+   },
    "step": ""
   },
   "afterglow_spread__front__5": {
@@ -661,8 +776,13 @@
    "note": "an aftershock, toes point, the body jerks once",
    "base": "base/afterglow_spread__front__5.png",
    "guide": "guide/afterglow_spread__front__5.png",
-   "ja": "上の「爪先立ちでこわばる」のあと。膝を開かれたまま、拘束にぶら下がるように力が抜け、うなだれて肩で息をする。ときどき体がびくっと跳ねる。",
-   "held": "両手首（背中）・両膝（左右）",
+   "ja": {
+    "body": "立ったままぶら下がる",
+    "arms": "後ろ手",
+    "legs": "左右に開いたまま",
+    "held": "両手首・両膝（左右）",
+    "move": "力が抜けてうなだれる。肩で息をする。ときどきびくっと跳ねる"
+   },
    "step": "余震"
   },
   "afterglow_slump__front__0": {
@@ -686,8 +806,13 @@
    "note": "slumped forward, knees in, head hanging, shoulders heaving",
    "base": "base/afterglow_slump__front__0.png",
    "guide": "guide/afterglow_slump__front__0.png",
-   "ja": "上の「背中を反らせる」のあと。後ろ手のまま前へ崩れ、膝を内に寄せ、うなだれて肩で息をする。ときどき一瞬爪先立ちになる。",
-   "held": "両手首（背中）",
+   "ja": {
+    "body": "前へ崩れて立つ",
+    "arms": "後ろ手",
+    "legs": "膝を内に寄せる",
+    "held": "両手首",
+    "move": "うなだれて肩で息をする。ときどき一瞬爪先立ち"
+   },
    "step": ""
   },
   "afterglow_slump__front__5": {
@@ -711,8 +836,13 @@
    "note": "an aftershock, a jerk, up on the toes for a moment",
    "base": "base/afterglow_slump__front__5.png",
    "guide": "guide/afterglow_slump__front__5.png",
-   "ja": "上の「背中を反らせる」のあと。後ろ手のまま前へ崩れ、膝を内に寄せ、うなだれて肩で息をする。ときどき一瞬爪先立ちになる。",
-   "held": "両手首（背中）",
+   "ja": {
+    "body": "前へ崩れて立つ",
+    "arms": "後ろ手",
+    "legs": "膝を内に寄せる",
+    "held": "両手首",
+    "move": "うなだれて肩で息をする。ときどき一瞬爪先立ち"
+   },
    "step": "余震"
   },
   "recover_slump__front__0": {
@@ -736,8 +866,13 @@
    "note": "limp",
    "base": "base/recover_slump__front__0.png",
    "guide": "guide/recover_slump__front__0.png",
-   "ja": "力が抜けた状態から我に返り、顔を上げて立ち直る。",
-   "held": "両手首（背中）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "立つ",
+    "held": "両手首",
+    "move": "我に返る → 顔を上げて立ち直る"
+   },
    "step": "脱力"
   },
   "recover_slump__front__2": {
@@ -761,8 +896,13 @@
    "note": "lifts her head",
    "base": "base/recover_slump__front__2.png",
    "guide": "guide/recover_slump__front__2.png",
-   "ja": "力が抜けた状態から我に返り、顔を上げて立ち直る。",
-   "held": "両手首（背中）",
+   "ja": {
+    "body": "立つ",
+    "arms": "後ろ手",
+    "legs": "立つ",
+    "held": "両手首",
+    "move": "我に返る → 顔を上げて立ち直る"
+   },
    "step": "顔を上げる"
   },
   "bent_over__up_right__0": {
@@ -786,8 +926,13 @@
    "note": "bent right over, hips up and back, the hips sway side to side, looks back over the shoulder",
    "base": "base/bent_over__up_right__0.png",
    "guide": "guide/bent_over__up_right__0.png",
-   "ja": "前屈みで腰を高く後ろへ突き出し、両手首を前の低い所で固定されている。腰を左右に揺らし、肩ごしに振り返る。斜め後ろから見た絵。",
-   "held": "両手首（前の低い所）",
+   "ja": {
+    "body": "前屈み。腰を高く突き出す",
+    "arms": "前へ伸ばす",
+    "legs": "立ったまま",
+    "held": "両手首（前の低い所）",
+    "move": "腰を左右に揺らす。肩ごしに振り返る（斜め後ろから見た絵）"
+   },
    "step": ""
   },
   "bent_over__up_right__2": {
@@ -811,8 +956,13 @@
    "note": "bent right over, hips up and back, the hips sway side to side, looks back over the shoulder",
    "base": "base/bent_over__up_right__2.png",
    "guide": "guide/bent_over__up_right__2.png",
-   "ja": "前屈みで腰を高く後ろへ突き出し、両手首を前の低い所で固定されている。腰を左右に揺らし、肩ごしに振り返る。斜め後ろから見た絵。",
-   "held": "両手首（前の低い所）",
+   "ja": {
+    "body": "前屈み。腰を高く突き出す",
+    "arms": "前へ伸ばす",
+    "legs": "立ったまま",
+    "held": "両手首（前の低い所）",
+    "move": "腰を左右に揺らす。肩ごしに振り返る（斜め後ろから見た絵）"
+   },
    "step": ""
   },
   "down_fall_back__right__0": {
@@ -836,8 +986,13 @@
    "note": "standing, hands up",
    "base": "base/down_fall_back__right__0.png",
    "guide": "guide/down_fall_back__right__0.png",
-   "ja": "立っているところを前から押され、よろけて尻もちをつき、仰向けに倒れる。真横から見た絵。",
-   "held": "なし（押されるだけ）",
+   "ja": {
+    "body": "立つ → 仰向け",
+    "arms": "前に出す → 後ろにつく",
+    "legs": "よろける",
+    "held": "なし（前から押されるだけ）",
+    "move": "押されてよろける → 尻もち → 仰向けに倒れる"
+   },
    "step": "立つ"
   },
   "down_fall_back__right__2": {
@@ -861,8 +1016,13 @@
    "note": "pushed, leans back, arms out",
    "base": "base/down_fall_back__right__2.png",
    "guide": "guide/down_fall_back__right__2.png",
-   "ja": "立っているところを前から押され、よろけて尻もちをつき、仰向けに倒れる。真横から見た絵。",
-   "held": "なし（押されるだけ）",
+   "ja": {
+    "body": "立つ → 仰向け",
+    "arms": "前に出す → 後ろにつく",
+    "legs": "よろける",
+    "held": "なし（前から押されるだけ）",
+    "move": "押されてよろける → 尻もち → 仰向けに倒れる"
+   },
    "step": "押される"
   },
   "down_fall_back__right__8": {
@@ -886,8 +1046,13 @@
    "note": "knees give, hands reach back",
    "base": "base/down_fall_back__right__8.png",
    "guide": "guide/down_fall_back__right__8.png",
-   "ja": "立っているところを前から押され、よろけて尻もちをつき、仰向けに倒れる。真横から見た絵。",
-   "held": "なし（押されるだけ）",
+   "ja": {
+    "body": "立つ → 仰向け",
+    "arms": "前に出す → 後ろにつく",
+    "legs": "よろける",
+    "held": "なし（前から押されるだけ）",
+    "move": "押されてよろける → 尻もち → 仰向けに倒れる"
+   },
    "step": "よろける"
   },
   "down_fall_back__right__12": {
@@ -911,8 +1076,13 @@
    "note": "sits down hard, catches herself",
    "base": "base/down_fall_back__right__12.png",
    "guide": "guide/down_fall_back__right__12.png",
-   "ja": "立っているところを前から押され、よろけて尻もちをつき、仰向けに倒れる。真横から見た絵。",
-   "held": "なし（押されるだけ）",
+   "ja": {
+    "body": "立つ → 仰向け",
+    "arms": "前に出す → 後ろにつく",
+    "legs": "よろける",
+    "held": "なし（前から押されるだけ）",
+    "move": "押されてよろける → 尻もち → 仰向けに倒れる"
+   },
    "step": "尻もち"
   },
   "down_fall_back__right__17": {
@@ -936,8 +1106,13 @@
    "note": "falls onto her back, head bumps, feet come up",
    "base": "base/down_fall_back__right__17.png",
    "guide": "guide/down_fall_back__right__17.png",
-   "ja": "立っているところを前から押され、よろけて尻もちをつき、仰向けに倒れる。真横から見た絵。",
-   "held": "なし（押されるだけ）",
+   "ja": {
+    "body": "立つ → 仰向け",
+    "arms": "前に出す → 後ろにつく",
+    "legs": "よろける",
+    "held": "なし（前から押されるだけ）",
+    "move": "押されてよろける → 尻もち → 仰向けに倒れる"
+   },
    "step": "倒れる"
   },
   "down_pinned_kick__right__0": {
@@ -961,8 +1136,13 @@
    "note": "twists at the hips, turns her face away",
    "base": "base/down_pinned_kick__right__0.png",
    "guide": "guide/down_pinned_kick__right__0.png",
-   "ja": "仰向けで、両手首を頭の上の床に押さえつけられている。脚を片方ずつばたつかせ、腰をひねり、顔をそむける。真横から見た絵。",
-   "held": "両手首（頭の上の床）",
+   "ja": {
+    "body": "仰向け",
+    "arms": "両手を頭の上へ",
+    "legs": "ばたつかせる",
+    "held": "両手首（頭の上の床）",
+    "move": "脚を片方ずつばたつかせる。腰をひねる。顔をそむける"
+   },
    "step": ""
   },
   "down_pinned_kick__right__2": {
@@ -986,8 +1166,13 @@
    "note": "twists at the hips, turns her face away",
    "base": "base/down_pinned_kick__right__2.png",
    "guide": "guide/down_pinned_kick__right__2.png",
-   "ja": "仰向けで、両手首を頭の上の床に押さえつけられている。脚を片方ずつばたつかせ、腰をひねり、顔をそむける。真横から見た絵。",
-   "held": "両手首（頭の上の床）",
+   "ja": {
+    "body": "仰向け",
+    "arms": "両手を頭の上へ",
+    "legs": "ばたつかせる",
+    "held": "両手首（頭の上の床）",
+    "move": "脚を片方ずつばたつかせる。腰をひねる。顔をそむける"
+   },
    "step": ""
   },
   "down_pinned_spread__down_right__0": {
@@ -1011,8 +1196,13 @@
    "note": "knees held apart, tries to close them, twists the hips",
    "base": "base/down_pinned_spread__down_right__0.png",
    "guide": "guide/down_pinned_spread__down_right__0.png",
-   "ja": "仰向けで両手首を頭の上に押さえられ、立てた両膝を左右へ開かれている。膝を閉じようとして腰をよじる。斜め前から見た絵。",
-   "held": "両手首（頭の上の床）・両膝（左右）",
+   "ja": {
+    "body": "仰向け",
+    "arms": "両手を頭の上へ",
+    "legs": "立てた膝を左右に開かれる",
+    "held": "両手首（床）・両膝（左右）",
+    "move": "膝を閉じようとして腰をよじる"
+   },
    "step": ""
   },
   "down_pinned_spread__down_right__6": {
@@ -1036,8 +1226,13 @@
    "note": "knees held apart, tries to close them, twists the hips",
    "base": "base/down_pinned_spread__down_right__6.png",
    "guide": "guide/down_pinned_spread__down_right__6.png",
-   "ja": "仰向けで両手首を頭の上に押さえられ、立てた両膝を左右へ開かれている。膝を閉じようとして腰をよじる。斜め前から見た絵。",
-   "held": "両手首（頭の上の床）・両膝（左右）",
+   "ja": {
+    "body": "仰向け",
+    "arms": "両手を頭の上へ",
+    "legs": "立てた膝を左右に開かれる",
+    "held": "両手首（床）・両膝（左右）",
+    "move": "膝を閉じようとして腰をよじる"
+   },
    "step": ""
   },
   "down_pinned_rock__down_right__0": {
@@ -1061,8 +1256,13 @@
    "note": "",
    "base": "base/down_pinned_rock__down_right__0.png",
    "guide": "guide/down_pinned_rock__down_right__0.png",
-   "ja": "仰向けで手首は頭の上、膝は左右に開かれたまま、体全体が頭の方へ押されては戻る。押されたとき口が開く。斜め前から見た絵。",
-   "held": "両手首（頭の上の床）・両膝（左右）",
+   "ja": {
+    "body": "仰向け",
+    "arms": "両手を頭の上へ",
+    "legs": "立てた膝を左右に開かれる",
+    "held": "両手首（床）・両膝（左右）",
+    "move": "体全体が頭の方へ押されては戻る。押されたとき口が開く"
+   },
    "step": ""
   },
   "down_pinned_rock__down_right__3": {
@@ -1086,8 +1286,13 @@
    "note": "pushed toward her head",
    "base": "base/down_pinned_rock__down_right__3.png",
    "guide": "guide/down_pinned_rock__down_right__3.png",
-   "ja": "仰向けで手首は頭の上、膝は左右に開かれたまま、体全体が頭の方へ押されては戻る。押されたとき口が開く。斜め前から見た絵。",
-   "held": "両手首（頭の上の床）・両膝（左右）",
+   "ja": {
+    "body": "仰向け",
+    "arms": "両手を頭の上へ",
+    "legs": "立てた膝を左右に開かれる",
+    "held": "両手首（床）・両膝（左右）",
+    "move": "体全体が頭の方へ押されては戻る。押されたとき口が開く"
+   },
    "step": ""
   },
   "down_face_down__right__0": {
@@ -1111,8 +1316,13 @@
    "note": "hips twisting",
    "base": "base/down_face_down__right__0.png",
    "guide": "guide/down_face_down__right__0.png",
-   "ja": "うつ伏せで、両手首を頭の先の床に押さえられている。顔は横向き、膝から下を片方ずつ跳ね上げてもがく。真横から見た絵。",
-   "held": "両手首（頭の先の床）",
+   "ja": {
+    "body": "うつ伏せ",
+    "arms": "両手を頭の先へ",
+    "legs": "膝から下を跳ね上げる",
+    "held": "両手首（頭の先の床）",
+    "move": "脚を片方ずつ跳ね上げてもがく。顔は横向き"
+   },
    "step": ""
   },
   "down_face_down__right__4": {
@@ -1136,8 +1346,13 @@
    "note": "hips twisting",
    "base": "base/down_face_down__right__4.png",
    "guide": "guide/down_face_down__right__4.png",
-   "ja": "うつ伏せで、両手首を頭の先の床に押さえられている。顔は横向き、膝から下を片方ずつ跳ね上げてもがく。真横から見た絵。",
-   "held": "両手首（頭の先の床）",
+   "ja": {
+    "body": "うつ伏せ",
+    "arms": "両手を頭の先へ",
+    "legs": "膝から下を跳ね上げる",
+    "held": "両手首（頭の先の床）",
+    "move": "脚を片方ずつ跳ね上げてもがく。顔は横向き"
+   },
    "step": ""
   },
   "down_hips_up__right__0": {
@@ -1161,8 +1376,13 @@
    "note": "",
    "base": "base/down_hips_up__right__0.png",
    "guide": "guide/down_hips_up__right__0.png",
-   "ja": "膝をついて胸を床につけ、腰を高く上げた姿勢。両手首は頭の先の床に押さえられ、体が前後に揺さぶられる。真横から見た絵。",
-   "held": "両手首（頭の先の床）",
+   "ja": {
+    "body": "膝をつき胸を床につける。腰を高く上げる",
+    "arms": "両手を頭の先へ",
+    "legs": "膝をつく",
+    "held": "両手首（頭の先の床）",
+    "move": "体が前後に揺らされる"
+   },
    "step": ""
   },
   "down_hips_up__right__2": {
@@ -1186,8 +1406,13 @@
    "note": "hips pushed forward",
    "base": "base/down_hips_up__right__2.png",
    "guide": "guide/down_hips_up__right__2.png",
-   "ja": "膝をついて胸を床につけ、腰を高く上げた姿勢。両手首は頭の先の床に押さえられ、体が前後に揺さぶられる。真横から見た絵。",
-   "held": "両手首（頭の先の床）",
+   "ja": {
+    "body": "膝をつき胸を床につける。腰を高く上げる",
+    "arms": "両手を頭の先へ",
+    "legs": "膝をつく",
+    "held": "両手首（頭の先の床）",
+    "move": "体が前後に揺らされる"
+   },
    "step": ""
   },
   "get_up__right__0": {
@@ -1211,8 +1436,13 @@
    "note": "on her back, knees up",
    "base": "base/get_up__right__0.png",
    "guide": "guide/get_up__right__0.png",
-   "ja": "仰向けから、肘をつき、座り、しゃがみ、立ち上がる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "仰向け → 立つ",
+    "arms": "肘をつく → 手をつく",
+    "legs": "膝を立てる → しゃがむ → 立つ",
+    "held": "なし",
+    "move": "起き上がって立つ（真横から見た絵）"
+   },
    "step": "仰向け"
   },
   "get_up__right__4": {
@@ -1236,8 +1466,13 @@
    "note": "up on her elbows",
    "base": "base/get_up__right__4.png",
    "guide": "guide/get_up__right__4.png",
-   "ja": "仰向けから、肘をつき、座り、しゃがみ、立ち上がる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "仰向け → 立つ",
+    "arms": "肘をつく → 手をつく",
+    "legs": "膝を立てる → しゃがむ → 立つ",
+    "held": "なし",
+    "move": "起き上がって立つ（真横から見た絵）"
+   },
    "step": "肘をつく"
   },
   "get_up__right__8": {
@@ -1261,8 +1496,13 @@
    "note": "sitting, knees up, hands on the floor behind",
    "base": "base/get_up__right__8.png",
    "guide": "guide/get_up__right__8.png",
-   "ja": "仰向けから、肘をつき、座り、しゃがみ、立ち上がる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "仰向け → 立つ",
+    "arms": "肘をつく → 手をつく",
+    "legs": "膝を立てる → しゃがむ → 立つ",
+    "held": "なし",
+    "move": "起き上がって立つ（真横から見た絵）"
+   },
    "step": "座る"
   },
   "get_up__right__13": {
@@ -1286,8 +1526,13 @@
    "note": "rocks forward onto her feet, hands to the floor in front",
    "base": "base/get_up__right__13.png",
    "guide": "guide/get_up__right__13.png",
-   "ja": "仰向けから、肘をつき、座り、しゃがみ、立ち上がる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "仰向け → 立つ",
+    "arms": "肘をつく → 手をつく",
+    "legs": "膝を立てる → しゃがむ → 立つ",
+    "held": "なし",
+    "move": "起き上がって立つ（真横から見た絵）"
+   },
    "step": "しゃがむ"
   },
   "get_up__right__16": {
@@ -1311,8 +1556,13 @@
    "note": "rising, hands on her knees",
    "base": "base/get_up__right__16.png",
    "guide": "guide/get_up__right__16.png",
-   "ja": "仰向けから、肘をつき、座り、しゃがみ、立ち上がる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "仰向け → 立つ",
+    "arms": "肘をつく → 手をつく",
+    "legs": "膝を立てる → しゃがむ → 立つ",
+    "held": "なし",
+    "move": "起き上がって立つ（真横から見た絵）"
+   },
    "step": "立ち上がる"
   },
   "get_up__right__18": {
@@ -1336,8 +1586,13 @@
    "note": "standing",
    "base": "base/get_up__right__18.png",
    "guide": "guide/get_up__right__18.png",
-   "ja": "仰向けから、肘をつき、座り、しゃがみ、立ち上がる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "仰向け → 立つ",
+    "arms": "肘をつく → 手をつく",
+    "legs": "膝を立てる → しゃがむ → 立つ",
+    "held": "なし",
+    "move": "起き上がって立つ（真横から見た絵）"
+   },
    "step": "立つ"
   },
   "kiss_forced__right__0": {
@@ -1361,8 +1616,13 @@
    "note": "held at the mouth, the body twists",
    "base": "base/kiss_forced__right__0.png",
    "guide": "guide/kiss_forced__right__0.png",
-   "ja": "相手に口をふさがれて（口づけ）、両手で相手を押し返そうとし、体をひねる。真横から見た絵。相手は下絵に描いていない。",
-   "held": "口元",
+   "ja": {
+    "body": "立つ",
+    "arms": "両手で相手を押し返す",
+    "legs": "立つ",
+    "held": "口元（口づけ）",
+    "move": "押し返そうとして体をひねる（相手は下絵にない）"
+   },
    "step": ""
   },
   "kiss_forced__right__6": {
@@ -1386,8 +1646,13 @@
    "note": "held at the mouth, the body twists",
    "base": "base/kiss_forced__right__6.png",
    "guide": "guide/kiss_forced__right__6.png",
-   "ja": "相手に口をふさがれて（口づけ）、両手で相手を押し返そうとし、体をひねる。真横から見た絵。相手は下絵に描いていない。",
-   "held": "口元",
+   "ja": {
+    "body": "立つ",
+    "arms": "両手で相手を押し返す",
+    "legs": "立つ",
+    "held": "口元（口づけ）",
+    "move": "押し返そうとして体をひねる（相手は下絵にない）"
+   },
    "step": ""
   },
   "kiss_tension__right__0": {
@@ -1411,8 +1676,13 @@
    "note": "still pushing",
    "base": "base/kiss_tension__right__0.png",
    "guide": "guide/kiss_tension__right__0.png",
-   "ja": "口づけされたまま押し返していたのが、頂点で両手がぱっと開いて爪先が伸びる。そのあと膝が内に崩れ、口元だけで支えられる。",
-   "held": "口元",
+   "ja": {
+    "body": "立つ",
+    "arms": "押し返す → ぱっと開く → だらりと下がる",
+    "legs": "爪先が伸びる → 膝が内に崩れる",
+    "held": "口元（口づけ）",
+    "move": "全身に力が入る → 頂点 → 膝が崩れて口元だけで支えられる"
+   },
    "step": "押し返す"
   },
   "kiss_tension__right__3": {
@@ -1436,8 +1706,13 @@
    "note": "peak, hands fly open, toes pointed",
    "base": "base/kiss_tension__right__3.png",
    "guide": "guide/kiss_tension__right__3.png",
-   "ja": "口づけされたまま押し返していたのが、頂点で両手がぱっと開いて爪先が伸びる。そのあと膝が内に崩れ、口元だけで支えられる。",
-   "held": "口元",
+   "ja": {
+    "body": "立つ",
+    "arms": "押し返す → ぱっと開く → だらりと下がる",
+    "legs": "爪先が伸びる → 膝が内に崩れる",
+    "held": "口元（口づけ）",
+    "move": "全身に力が入る → 頂点 → 膝が崩れて口元だけで支えられる"
+   },
    "step": "頂点"
   },
   "kiss_tension__right__8": {
@@ -1461,8 +1736,13 @@
    "note": "knees give inward, arms hang, held up at the mouth",
    "base": "base/kiss_tension__right__8.png",
    "guide": "guide/kiss_tension__right__8.png",
-   "ja": "口づけされたまま押し返していたのが、頂点で両手がぱっと開いて爪先が伸びる。そのあと膝が内に崩れ、口元だけで支えられる。",
-   "held": "口元",
+   "ja": {
+    "body": "立つ",
+    "arms": "押し返す → ぱっと開く → だらりと下がる",
+    "legs": "爪先が伸びる → 膝が内に崩れる",
+    "held": "口元（口づけ）",
+    "move": "全身に力が入る → 頂点 → 膝が崩れて口元だけで支えられる"
+   },
    "step": "崩れる"
   },
   "kiss_respond__right__0": {
@@ -1486,8 +1766,13 @@
    "note": "rises onto her toes, leans in, head tilted",
    "base": "base/kiss_respond__right__0.png",
    "guide": "guide/kiss_respond__right__0.png",
-   "ja": "口づけに応えて、爪先立ちで身を寄せ、首をかしげ、両腕を相手の首に回す。真横から見た絵。",
-   "held": "口元",
+   "ja": {
+    "body": "爪先立ち",
+    "arms": "両腕を相手の首に回す",
+    "legs": "爪先立ち",
+    "held": "口元（口づけ）",
+    "move": "身を寄せる。首をかしげる"
+   },
    "step": ""
   },
   "kiss_respond__right__6": {
@@ -1511,8 +1796,13 @@
    "note": "rises onto her toes, leans in, head tilted",
    "base": "base/kiss_respond__right__6.png",
    "guide": "guide/kiss_respond__right__6.png",
-   "ja": "口づけに応えて、爪先立ちで身を寄せ、首をかしげ、両腕を相手の首に回す。真横から見た絵。",
-   "held": "口元",
+   "ja": {
+    "body": "爪先立ち",
+    "arms": "両腕を相手の首に回す",
+    "legs": "爪先立ち",
+    "held": "口元（口づけ）",
+    "move": "身を寄せる。首をかしげる"
+   },
    "step": ""
   },
   "tempt_pose__front__0": {
@@ -1536,8 +1826,13 @@
    "note": "legs apart, hips pushed forward and swaying slowly, one hand on her chest, head tilted, looking down",
    "base": "base/tempt_pose__front__0.png",
    "guide": "guide/tempt_pose__front__0.png",
-   "ja": "脚を開いて腰を前に出し、ゆっくり揺らす。片手は胸、片手は太もも。首をかしげて見下ろす。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "片手は胸、片手は太もも",
+    "legs": "脚を開く",
+    "held": "なし",
+    "move": "腰を前に出してゆっくり揺らす。首をかしげて見下ろす"
+   },
    "step": ""
   },
   "tempt_pose__front__6": {
@@ -1561,8 +1856,13 @@
    "note": "legs apart, hips pushed forward and swaying slowly, one hand on her chest, head tilted, looking down",
    "base": "base/tempt_pose__front__6.png",
    "guide": "guide/tempt_pose__front__6.png",
-   "ja": "脚を開いて腰を前に出し、ゆっくり揺らす。片手は胸、片手は太もも。首をかしげて見下ろす。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "片手は胸、片手は太もも",
+    "legs": "脚を開く",
+    "held": "なし",
+    "move": "腰を前に出してゆっくり揺らす。首をかしげて見下ろす"
+   },
    "step": ""
   },
   "chain_splay__front__0": {
@@ -1586,8 +1886,13 @@
    "note": "knees splayed and shaking, hips trembling, arms hanging loose, head back",
    "base": "base/chain_splay__front__0.png",
    "guide": "guide/chain_splay__front__0.png",
-   "ja": "脚が大きく開いて膝が外を向き、膝と腰が小刻みに震える。腕はだらりと下がり、頭がのけぞる。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "だらりと下げる",
+    "legs": "がに股に大きく開く",
+    "held": "なし",
+    "move": "膝と腰が小刻みに震える。頭がのけぞる"
+   },
    "step": ""
   },
   "chain_splay__front__3": {
@@ -1611,8 +1916,13 @@
    "note": "knees splayed and shaking, hips trembling, arms hanging loose, head back",
    "base": "base/chain_splay__front__3.png",
    "guide": "guide/chain_splay__front__3.png",
-   "ja": "脚が大きく開いて膝が外を向き、膝と腰が小刻みに震える。腕はだらりと下がり、頭がのけぞる。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "だらりと下げる",
+    "legs": "がに股に大きく開く",
+    "held": "なし",
+    "move": "膝と腰が小刻みに震える。頭がのけぞる"
+   },
    "step": ""
   },
   "tension_free__front__0": {
@@ -1636,8 +1946,13 @@
    "note": "hands pressed to her chest and belly",
    "base": "base/tension_free__front__0.png",
    "guide": "guide/tension_free__front__0.png",
-   "ja": "拘束なしで立ったまま、手を胸とお腹に当てて堪えている。頂点では反って爪先立ちになり、頭がのけぞる。そのあと膝から崩れて、脚を左右に折って座り込む。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 座り込む",
+    "arms": "胸とお腹を押さえる",
+    "legs": "爪先立ち → 膝が崩れる",
+    "held": "なし",
+    "move": "堪える → 頂点：反る、爪先立ち、頭がのけぞる → 女の子座りに座り込む"
+   },
    "step": "押さえる"
   },
   "tension_free__front__4": {
@@ -1661,8 +1976,13 @@
    "note": "peak, arches, up on her toes, head back",
    "base": "base/tension_free__front__4.png",
    "guide": "guide/tension_free__front__4.png",
-   "ja": "拘束なしで立ったまま、手を胸とお腹に当てて堪えている。頂点では反って爪先立ちになり、頭がのけぞる。そのあと膝から崩れて、脚を左右に折って座り込む。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 座り込む",
+    "arms": "胸とお腹を押さえる",
+    "legs": "爪先立ち → 膝が崩れる",
+    "held": "なし",
+    "move": "堪える → 頂点：反る、爪先立ち、頭がのけぞる → 女の子座りに座り込む"
+   },
    "step": "頂点"
   },
   "tension_free__front__11": {
@@ -1686,8 +2006,13 @@
    "note": "knees give",
    "base": "base/tension_free__front__11.png",
    "guide": "guide/tension_free__front__11.png",
-   "ja": "拘束なしで立ったまま、手を胸とお腹に当てて堪えている。頂点では反って爪先立ちになり、頭がのけぞる。そのあと膝から崩れて、脚を左右に折って座り込む。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 座り込む",
+    "arms": "胸とお腹を押さえる",
+    "legs": "爪先立ち → 膝が崩れる",
+    "held": "なし",
+    "move": "堪える → 頂点：反る、爪先立ち、頭がのけぞる → 女の子座りに座り込む"
+   },
    "step": "崩れる"
   },
   "tension_free__front__13": {
@@ -1711,8 +2036,13 @@
    "note": "sinks to the floor, legs folded out to the sides",
    "base": "base/tension_free__front__13.png",
    "guide": "guide/tension_free__front__13.png",
-   "ja": "拘束なしで立ったまま、手を胸とお腹に当てて堪えている。頂点では反って爪先立ちになり、頭がのけぞる。そのあと膝から崩れて、脚を左右に折って座り込む。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 座り込む",
+    "arms": "胸とお腹を押さえる",
+    "legs": "爪先立ち → 膝が崩れる",
+    "held": "なし",
+    "move": "堪える → 頂点：反る、爪先立ち、頭がのけぞる → 女の子座りに座り込む"
+   },
    "step": "座り込む"
   },
   "sit_afterglow__front__0": {
@@ -1736,8 +2066,13 @@
    "note": "sitting with legs folded out to the sides, shoulders heaving",
    "base": "base/sit_afterglow__front__0.png",
    "guide": "guide/sit_afterglow__front__0.png",
-   "ja": "脚を左右に折って座り（女の子座り）、肩で息をする。",
-   "held": "なし",
+   "ja": {
+    "body": "女の子座り（脚を左右に折る）",
+    "arms": "膝の上",
+    "legs": "座る",
+    "held": "なし",
+    "move": "肩で息をする"
+   },
    "step": ""
   },
   "held_from_behind__front__0": {
@@ -1761,8 +2096,13 @@
    "note": "arms pinned to her sides by a hold from behind, twists, looks back",
    "base": "base/held_from_behind__front__0.png",
    "guide": "guide/held_from_behind__front__0.png",
-   "ja": "後ろから胴を腕ごと抱きすくめられ、両肘を体の横に押さえつけられている。身をよじり、足を片方ずつ蹴り、振り返る。",
-   "held": "両肩・両肘（後ろから）",
+   "ja": {
+    "body": "立つ",
+    "arms": "体の横に押さえつけられる",
+    "legs": "足を交互に蹴る",
+    "held": "両肩・両肘（後ろから抱えられる）",
+    "move": "身をよじる。足を蹴る。振り返る"
+   },
    "step": ""
   },
   "held_from_behind__front__2": {
@@ -1786,8 +2126,13 @@
    "note": "arms pinned to her sides by a hold from behind, twists, looks back",
    "base": "base/held_from_behind__front__2.png",
    "guide": "guide/held_from_behind__front__2.png",
-   "ja": "後ろから胴を腕ごと抱きすくめられ、両肘を体の横に押さえつけられている。身をよじり、足を片方ずつ蹴り、振り返る。",
-   "held": "両肩・両肘（後ろから）",
+   "ja": {
+    "body": "立つ",
+    "arms": "体の横に押さえつけられる",
+    "legs": "足を交互に蹴る",
+    "held": "両肩・両肘（後ろから抱えられる）",
+    "move": "身をよじる。足を蹴る。振り返る"
+   },
    "step": ""
   },
   "down_afterglow__down_right__0": {
@@ -1811,8 +2156,13 @@
    "note": "on her back, knees fallen open, arms loose, face turned aside, chest heaving",
    "base": "base/down_afterglow__down_right__0.png",
    "guide": "guide/down_afterglow__down_right__0.png",
-   "ja": "仰向けで膝が左右に倒れ、腕を投げ出し、顔を横に向けて胸で息をする。ときどき腰が跳ねて爪先が伸びる。",
-   "held": "なし",
+   "ja": {
+    "body": "仰向け",
+    "arms": "投げ出す",
+    "legs": "膝が左右に倒れる",
+    "held": "なし",
+    "move": "顔を横に向けて胸で息をする。ときどき腰が跳ねる"
+   },
    "step": ""
   },
   "down_afterglow__down_right__5": {
@@ -1836,8 +2186,13 @@
    "note": "an aftershock, the hips jerk, toes point",
    "base": "base/down_afterglow__down_right__5.png",
    "guide": "guide/down_afterglow__down_right__5.png",
-   "ja": "仰向けで膝が左右に倒れ、腕を投げ出し、顔を横に向けて胸で息をする。ときどき腰が跳ねて爪先が伸びる。",
-   "held": "なし",
+   "ja": {
+    "body": "仰向け",
+    "arms": "投げ出す",
+    "legs": "膝が左右に倒れる",
+    "held": "なし",
+    "move": "顔を横に向けて胸で息をする。ときどき腰が跳ねる"
+   },
    "step": "余震"
   },
   "down_recover__down_right__2": {
@@ -1861,8 +2216,13 @@
    "note": "draws her knees together",
    "base": "base/down_recover__down_right__2.png",
    "guide": "guide/down_recover__down_right__2.png",
-   "ja": "仰向けで力が抜けた状態から、膝を閉じて体を起こしかける。",
-   "held": "なし",
+   "ja": {
+    "body": "仰向け",
+    "arms": "床につく",
+    "legs": "膝を閉じる",
+    "held": "なし",
+    "move": "膝を閉じて体を起こしかける"
+   },
    "step": "膝を閉じる"
   },
   "kiss_afterglow__right__0": {
@@ -1886,8 +2246,13 @@
    "note": "knees still weak, swaying, head down, shoulders heaving",
    "base": "base/kiss_afterglow__right__0.png",
    "guide": "guide/kiss_afterglow__right__0.png",
-   "ja": "相手が離れたあと。膝に力が入らずふらつき、うなだれて肩で息をする。",
-   "held": "なし",
+   "ja": {
+    "body": "ふらついて立つ",
+    "arms": "だらりと下げる",
+    "legs": "膝に力が入らない",
+    "held": "なし（相手が離れたあと）",
+    "move": "うなだれて肩で息をする"
+   },
    "step": ""
   },
   "kiss_afterglow__right__5": {
@@ -1911,8 +2276,13 @@
    "note": "knees still weak, swaying, head down, shoulders heaving",
    "base": "base/kiss_afterglow__right__5.png",
    "guide": "guide/kiss_afterglow__right__5.png",
-   "ja": "相手が離れたあと。膝に力が入らずふらつき、うなだれて肩で息をする。",
-   "held": "なし",
+   "ja": {
+    "body": "ふらついて立つ",
+    "arms": "だらりと下げる",
+    "legs": "膝に力が入らない",
+    "held": "なし（相手が離れたあと）",
+    "move": "うなだれて肩で息をする"
+   },
    "step": ""
   },
   "kiss_recover__right__0": {
@@ -1936,8 +2306,13 @@
    "note": "swaying",
    "base": "base/kiss_recover__right__0.png",
    "guide": "guide/kiss_recover__right__0.png",
-   "ja": "我に返って手の甲で口元をぬぐい、もう片方の手を前に出して一歩下がり、構える。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "手の甲で口をぬぐう。片手を前に出す",
+    "legs": "一歩下がる",
+    "held": "なし",
+    "move": "我に返る → 口をぬぐう → 下がって構える"
+   },
    "step": "ふらつく"
   },
   "kiss_recover__right__5": {
@@ -1961,8 +2336,13 @@
    "note": "comes to herself, back of the hand to her mouth",
    "base": "base/kiss_recover__right__5.png",
    "guide": "guide/kiss_recover__right__5.png",
-   "ja": "我に返って手の甲で口元をぬぐい、もう片方の手を前に出して一歩下がり、構える。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "手の甲で口をぬぐう。片手を前に出す",
+    "legs": "一歩下がる",
+    "held": "なし",
+    "move": "我に返る → 口をぬぐう → 下がって構える"
+   },
    "step": "ぬぐう"
   },
   "kiss_recover__right__8": {
@@ -1986,8 +2366,13 @@
    "note": "steps back",
    "base": "base/kiss_recover__right__8.png",
    "guide": "guide/kiss_recover__right__8.png",
-   "ja": "我に返って手の甲で口元をぬぐい、もう片方の手を前に出して一歩下がり、構える。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "手の甲で口をぬぐう。片手を前に出す",
+    "legs": "一歩下がる",
+    "held": "なし",
+    "move": "我に返る → 口をぬぐう → 下がって構える"
+   },
    "step": "下がる"
   },
   "kiss_recover__right__10": {
@@ -2011,8 +2396,13 @@
    "note": "standing, guarded",
    "base": "base/kiss_recover__right__10.png",
    "guide": "guide/kiss_recover__right__10.png",
-   "ja": "我に返って手の甲で口元をぬぐい、もう片方の手を前に出して一歩下がり、構える。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "手の甲で口をぬぐう。片手を前に出す",
+    "legs": "一歩下がる",
+    "held": "なし",
+    "move": "我に返る → 口をぬぐう → 下がって構える"
+   },
    "step": "構え"
   },
   "sit_recover__front__2": {
@@ -2036,8 +2426,13 @@
    "note": "hands to the floor in front",
    "base": "base/sit_recover__front__2.png",
    "guide": "guide/sit_recover__front__2.png",
-   "ja": "女の子座りから、前に手をつき、膝立ち、片膝をついて、立ち上がる。",
-   "held": "なし",
+   "ja": {
+    "body": "女の子座り → 立つ",
+    "arms": "前に手をつく",
+    "legs": "膝立ち → 片膝 → 立つ",
+    "held": "なし",
+    "move": "立ち上がる"
+   },
    "step": "手をつく"
   },
   "sit_recover__front__5": {
@@ -2061,8 +2456,13 @@
    "note": "up on her knees",
    "base": "base/sit_recover__front__5.png",
    "guide": "guide/sit_recover__front__5.png",
-   "ja": "女の子座りから、前に手をつき、膝立ち、片膝をついて、立ち上がる。",
-   "held": "なし",
+   "ja": {
+    "body": "女の子座り → 立つ",
+    "arms": "前に手をつく",
+    "legs": "膝立ち → 片膝 → 立つ",
+    "held": "なし",
+    "move": "立ち上がる"
+   },
    "step": "膝立ち"
   },
   "sit_recover__front__9": {
@@ -2086,8 +2486,13 @@
    "note": "one foot forward",
    "base": "base/sit_recover__front__9.png",
    "guide": "guide/sit_recover__front__9.png",
-   "ja": "女の子座りから、前に手をつき、膝立ち、片膝をついて、立ち上がる。",
-   "held": "なし",
+   "ja": {
+    "body": "女の子座り → 立つ",
+    "arms": "前に手をつく",
+    "legs": "膝立ち → 片膝 → 立つ",
+    "held": "なし",
+    "move": "立ち上がる"
+   },
    "step": "片膝"
   },
   "sit_recover__front__11": {
@@ -2111,8 +2516,13 @@
    "note": "rising",
    "base": "base/sit_recover__front__11.png",
    "guide": "guide/sit_recover__front__11.png",
-   "ja": "女の子座りから、前に手をつき、膝立ち、片膝をついて、立ち上がる。",
-   "held": "なし",
+   "ja": {
+    "body": "女の子座り → 立つ",
+    "arms": "前に手をつく",
+    "legs": "膝立ち → 片膝 → 立つ",
+    "held": "なし",
+    "move": "立ち上がる"
+   },
    "step": "立ち上がる"
   },
   "sit_recover__front__13": {
@@ -2136,8 +2546,13 @@
    "note": "standing",
    "base": "base/sit_recover__front__13.png",
    "guide": "guide/sit_recover__front__13.png",
-   "ja": "女の子座りから、前に手をつき、膝立ち、片膝をついて、立ち上がる。",
-   "held": "なし",
+   "ja": {
+    "body": "女の子座り → 立つ",
+    "arms": "前に手をつく",
+    "legs": "膝立ち → 片膝 → 立つ",
+    "held": "なし",
+    "move": "立ち上がる"
+   },
    "step": "立つ"
   },
   "clinger_afterglow__front__5": {
@@ -2161,8 +2576,13 @@
    "note": "an aftershock, jerks, hands fly off her lap",
    "base": "base/clinger_afterglow__front__5.png",
    "guide": "guide/clinger_afterglow__front__5.png",
-   "ja": "張り付かれたまま座り込み、肩で息をする。ときどき体が跳ねて、手が膝から離れる。",
-   "held": "胸の左右・脚の付け根の前",
+   "ja": {
+    "body": "座り込む",
+    "arms": "膝の上",
+    "legs": "座る",
+    "held": "胸の左右・脚の付け根の前",
+    "move": "肩で息をする。ときどき跳ねて手が膝から離れる"
+   },
    "step": "余震"
   },
   "clinger_recover__front__15": {
@@ -2186,8 +2606,13 @@
    "note": "standing, hands over them",
    "base": "base/clinger_recover__front__15.png",
    "guide": "guide/clinger_recover__front__15.png",
-   "ja": "張り付かれたまま立ち上がり、手で胸を押さえる。",
-   "held": "胸の左右・脚の付け根の前",
+   "ja": {
+    "body": "立つ",
+    "arms": "胸を押さえる",
+    "legs": "立つ",
+    "held": "胸の左右・脚の付け根の前",
+    "move": "立ち上がって胸を押さえる"
+   },
    "step": "立つ"
   },
   "clinger_peel__front__0": {
@@ -2211,8 +2636,13 @@
    "note": "looks down at them",
    "base": "base/clinger_peel__front__0.png",
    "guide": "guide/clinger_peel__front__0.png",
-   "ja": "胸の左右と脚の付け根の前に、小さなものが3つ張り付いている。見下ろして気づき、手で引き剥がそうとするが弾かれ、膝を閉じてすくみ、お腹に手をやる。",
-   "held": "胸の左右・脚の付け根の前",
+   "ja": {
+    "body": "立つ",
+    "arms": "手で引き剥がそうとする → お腹に手",
+    "legs": "膝を閉じる",
+    "held": "胸の左右・脚の付け根の前（小さなものが3つ）",
+    "move": "見下ろして気づく → 剥がそうとして弾かれる → すくむ"
+   },
    "step": "気づく"
   },
   "clinger_peel__front__7": {
@@ -2236,8 +2666,13 @@
    "note": "her hand flies out",
    "base": "base/clinger_peel__front__7.png",
    "guide": "guide/clinger_peel__front__7.png",
-   "ja": "胸の左右と脚の付け根の前に、小さなものが3つ張り付いている。見下ろして気づき、手で引き剥がそうとするが弾かれ、膝を閉じてすくみ、お腹に手をやる。",
-   "held": "胸の左右・脚の付け根の前",
+   "ja": {
+    "body": "立つ",
+    "arms": "手で引き剥がそうとする → お腹に手",
+    "legs": "膝を閉じる",
+    "held": "胸の左右・脚の付け根の前（小さなものが3つ）",
+    "move": "見下ろして気づく → 剥がそうとして弾かれる → すくむ"
+   },
    "step": "はじかれる"
   },
   "clinger_peel__front__20": {
@@ -2261,8 +2696,13 @@
    "note": "shudders, knees together, hands to her belly",
    "base": "base/clinger_peel__front__20.png",
    "guide": "guide/clinger_peel__front__20.png",
-   "ja": "胸の左右と脚の付け根の前に、小さなものが3つ張り付いている。見下ろして気づき、手で引き剥がそうとするが弾かれ、膝を閉じてすくみ、お腹に手をやる。",
-   "held": "胸の左右・脚の付け根の前",
+   "ja": {
+    "body": "立つ",
+    "arms": "手で引き剥がそうとする → お腹に手",
+    "legs": "膝を閉じる",
+    "held": "胸の左右・脚の付け根の前（小さなものが3つ）",
+    "move": "見下ろして気づく → 剥がそうとして弾かれる → すくむ"
+   },
    "step": "すくむ"
   },
   "clinger_tension__front__4": {
@@ -2286,8 +2726,13 @@
    "note": "peak, arches, arms thrown back, on her toes",
    "base": "base/clinger_tension__front__4.png",
    "guide": "guide/clinger_tension__front__4.png",
-   "ja": "張り付かれたまま全身がこわばる。頂点では背中が反り、腕が後ろへ振られ、爪先立ち。そのあと座り込む。",
-   "held": "胸の左右・脚の付け根の前",
+   "ja": {
+    "body": "立つ → 座り込む",
+    "arms": "後ろへ振る",
+    "legs": "爪先立ち",
+    "held": "胸の左右・脚の付け根の前",
+    "move": "頂点：背中が反る → 座り込む"
+   },
    "step": "頂点"
   },
   "clinger_accept__front__0": {
@@ -2311,8 +2756,13 @@
    "note": "stops fighting, arms hang open, chest forward, head tipped back, hips swaying slowly",
    "base": "base/clinger_accept__front__0.png",
    "guide": "guide/clinger_accept__front__0.png",
-   "ja": "張り付かれたまま振り払うのをやめ、腕を開いて胸を前に出し、頭を後ろへ倒し、腰をゆっくり揺らす。",
-   "held": "胸の左右・脚の付け根の前",
+   "ja": {
+    "body": "立つ",
+    "arms": "腕を開いて下げる",
+    "legs": "立つ",
+    "held": "胸の左右・脚の付け根の前",
+    "move": "振り払うのをやめる。胸を前に出す。頭を後ろへ倒す。腰をゆっくり揺らす"
+   },
    "step": ""
   },
   "clinger_accept__front__2": {
@@ -2336,8 +2786,13 @@
    "note": "stops fighting, arms hang open, chest forward, head tipped back, hips swaying slowly",
    "base": "base/clinger_accept__front__2.png",
    "guide": "guide/clinger_accept__front__2.png",
-   "ja": "張り付かれたまま振り払うのをやめ、腕を開いて胸を前に出し、頭を後ろへ倒し、腰をゆっくり揺らす。",
-   "held": "胸の左右・脚の付け根の前",
+   "ja": {
+    "body": "立つ",
+    "arms": "腕を開いて下げる",
+    "legs": "立つ",
+    "held": "胸の左右・脚の付け根の前",
+    "move": "振り払うのをやめる。胸を前に出す。頭を後ろへ倒す。腰をゆっくり揺らす"
+   },
    "step": ""
   },
   "down_tension__down_right__0": {
@@ -2361,8 +2816,13 @@
    "note": "held down, knees apart",
    "base": "base/down_tension__down_right__0.png",
    "guide": "guide/down_tension__down_right__0.png",
-   "ja": "仰向けで手首と膝を押さえられたまま、全身がこわばる。頂点では腰が床から浮いて背中が反り、頭が床に押しつけられ、爪先が伸びる。そのあと力が抜ける。",
-   "held": "両手首（頭の上の床）・両膝（左右）",
+   "ja": {
+    "body": "仰向け",
+    "arms": "両手を頭の上へ",
+    "legs": "膝を左右に開かれる",
+    "held": "両手首（床）・両膝（左右）",
+    "move": "全身に力が入る → 頂点：腰が床から浮く、背中が反る、爪先が伸びる → 力が抜ける"
+   },
    "step": "揺れ"
   },
   "down_tension__down_right__3": {
@@ -2386,8 +2846,13 @@
    "note": "peak, hips off the floor, back arched, head pressed back, toes pointed",
    "base": "base/down_tension__down_right__3.png",
    "guide": "guide/down_tension__down_right__3.png",
-   "ja": "仰向けで手首と膝を押さえられたまま、全身がこわばる。頂点では腰が床から浮いて背中が反り、頭が床に押しつけられ、爪先が伸びる。そのあと力が抜ける。",
-   "held": "両手首（頭の上の床）・両膝（左右）",
+   "ja": {
+    "body": "仰向け",
+    "arms": "両手を頭の上へ",
+    "legs": "膝を左右に開かれる",
+    "held": "両手首（床）・両膝（左右）",
+    "move": "全身に力が入る → 頂点：腰が床から浮く、背中が反る、爪先が伸びる → 力が抜ける"
+   },
    "step": "頂点"
   },
   "down_tension__down_right__12": {
@@ -2411,8 +2876,13 @@
    "note": "limp (on to down_afterglow)",
    "base": "base/down_tension__down_right__12.png",
    "guide": "guide/down_tension__down_right__12.png",
-   "ja": "仰向けで手首と膝を押さえられたまま、全身がこわばる。頂点では腰が床から浮いて背中が反り、頭が床に押しつけられ、爪先が伸びる。そのあと力が抜ける。",
-   "held": "両手首（頭の上の床）・両膝（左右）",
+   "ja": {
+    "body": "仰向け",
+    "arms": "両手を頭の上へ",
+    "legs": "膝を左右に開かれる",
+    "held": "両手首（床）・両膝（左右）",
+    "move": "全身に力が入る → 頂点：腰が床から浮く、背中が反る、爪先が伸びる → 力が抜ける"
+   },
    "step": "脱力"
   },
   "engulf_sink__front__0": {
@@ -2436,8 +2906,13 @@
    "note": "",
    "base": "base/engulf_sink__front__0.png",
    "guide": "guide/engulf_sink__front__0.png",
-   "ja": "床の柔らかい塊に、足元から膝、太ももまで沈んでいく。下を見て腕を広げて釣り合いを取り、片脚を引き抜こうとするが抜けない。",
-   "held": "足元から太ももまで（塊の中）",
+   "ja": {
+    "body": "立つ",
+    "arms": "広げて釣り合いを取る",
+    "legs": "足元 → 膝 → 太ももまで沈む",
+    "held": "足元から太もも（床の塊の中）",
+    "move": "下を見る。片脚を抜こうとするが抜けない"
+   },
    "step": "足元"
   },
   "engulf_sink__front__3": {
@@ -2461,8 +2936,13 @@
    "note": "up to her knees, she looks down, arms out for balance",
    "base": "base/engulf_sink__front__3.png",
    "guide": "guide/engulf_sink__front__3.png",
-   "ja": "床の柔らかい塊に、足元から膝、太ももまで沈んでいく。下を見て腕を広げて釣り合いを取り、片脚を引き抜こうとするが抜けない。",
-   "held": "足元から太ももまで（塊の中）",
+   "ja": {
+    "body": "立つ",
+    "arms": "広げて釣り合いを取る",
+    "legs": "足元 → 膝 → 太ももまで沈む",
+    "held": "足元から太もも（床の塊の中）",
+    "move": "下を見る。片脚を抜こうとするが抜けない"
+   },
    "step": "膝まで"
   },
   "engulf_sink__front__6": {
@@ -2486,8 +2966,13 @@
    "note": "up to her thighs, twists, pulls one leg in vain",
    "base": "base/engulf_sink__front__6.png",
    "guide": "guide/engulf_sink__front__6.png",
-   "ja": "床の柔らかい塊に、足元から膝、太ももまで沈んでいく。下を見て腕を広げて釣り合いを取り、片脚を引き抜こうとするが抜けない。",
-   "held": "足元から太ももまで（塊の中）",
+   "ja": {
+    "body": "立つ",
+    "arms": "広げて釣り合いを取る",
+    "legs": "足元 → 膝 → 太ももまで沈む",
+    "held": "足元から太もも（床の塊の中）",
+    "move": "下を見る。片脚を抜こうとするが抜けない"
+   },
    "step": "もがく"
   },
   "engulf_struggle__front__0": {
@@ -2511,8 +2996,13 @@
    "note": "twists at the chest (the legs cannot move)",
    "base": "base/engulf_struggle__front__0.png",
    "guide": "guide/engulf_struggle__front__0.png",
-   "ja": "腰まで塊に埋まって、脚は動かない。上体をひねり、片手ずつ塊を押して抜け出そうとする。",
-   "held": "腰から下（塊の中）",
+   "ja": {
+    "body": "腰まで埋まる",
+    "arms": "片手ずつ塊を押す",
+    "legs": "動かない",
+    "held": "腰から下（塊の中）",
+    "move": "上体をひねって抜け出そうとする"
+   },
    "step": ""
   },
   "engulf_struggle__front__6": {
@@ -2536,8 +3026,13 @@
    "note": "twists at the chest (the legs cannot move)",
    "base": "base/engulf_struggle__front__6.png",
    "guide": "guide/engulf_struggle__front__6.png",
-   "ja": "腰まで塊に埋まって、脚は動かない。上体をひねり、片手ずつ塊を押して抜け出そうとする。",
-   "held": "腰から下（塊の中）",
+   "ja": {
+    "body": "腰まで埋まる",
+    "arms": "片手ずつ塊を押す",
+    "legs": "動かない",
+    "held": "腰から下（塊の中）",
+    "move": "上体をひねって抜け出そうとする"
+   },
    "step": ""
   },
   "engulf_rock__front__0": {
@@ -2561,8 +3056,13 @@
    "note": "panting",
    "base": "base/engulf_rock__front__0.png",
    "guide": "guide/engulf_rock__front__0.png",
-   "ja": "腰まで埋まったまま、両手を塊について息を荒くする。ときどき腰がびくっと前へ跳ね、背中が反り、頭がのけぞる。",
-   "held": "腰から下（塊の中）",
+   "ja": {
+    "body": "腰まで埋まる",
+    "arms": "両手を塊につく",
+    "legs": "動かない",
+    "held": "腰から下（塊の中）",
+    "move": "息が荒い。ときどき腰がびくっと前へ跳ね、背中が反る"
+   },
    "step": ""
   },
   "engulf_rock__front__1": {
@@ -2586,8 +3086,13 @@
    "note": "the back arches, head goes back",
    "base": "base/engulf_rock__front__1.png",
    "guide": "guide/engulf_rock__front__1.png",
-   "ja": "腰まで埋まったまま、両手を塊について息を荒くする。ときどき腰がびくっと前へ跳ね、背中が反り、頭がのけぞる。",
-   "held": "腰から下（塊の中）",
+   "ja": {
+    "body": "腰まで埋まる",
+    "arms": "両手を塊につく",
+    "legs": "動かない",
+    "held": "腰から下（塊の中）",
+    "move": "息が荒い。ときどき腰がびくっと前へ跳ね、背中が反る"
+   },
    "step": "跳ねる"
   },
   "engulf_tension__front__0": {
@@ -2611,8 +3116,13 @@
    "note": "",
    "base": "base/engulf_tension__front__0.png",
    "guide": "guide/engulf_tension__front__0.png",
-   "ja": "腰まで埋まったまま全身がこわばる。頂点では背中が反り、腕が上と外へ投げ出され、頭がのけぞる。そのあと塊の上へ前に崩れ、前腕を塊にのせる。",
-   "held": "腰から下（塊の中）",
+   "ja": {
+    "body": "腰まで埋まる",
+    "arms": "上と外へ投げ出す → 塊の上にのせる",
+    "legs": "動かない",
+    "held": "腰から下（塊の中）",
+    "move": "頂点：背中が反る、頭がのけぞる → 塊の上に前へ崩れる"
+   },
    "step": "揺れ"
   },
   "engulf_tension__front__2": {
@@ -2636,8 +3146,13 @@
    "note": "peak, arches back, arms flung up and out, head back",
    "base": "base/engulf_tension__front__2.png",
    "guide": "guide/engulf_tension__front__2.png",
-   "ja": "腰まで埋まったまま全身がこわばる。頂点では背中が反り、腕が上と外へ投げ出され、頭がのけぞる。そのあと塊の上へ前に崩れ、前腕を塊にのせる。",
-   "held": "腰から下（塊の中）",
+   "ja": {
+    "body": "腰まで埋まる",
+    "arms": "上と外へ投げ出す → 塊の上にのせる",
+    "legs": "動かない",
+    "held": "腰から下（塊の中）",
+    "move": "頂点：背中が反る、頭がのけぞる → 塊の上に前へ崩れる"
+   },
    "step": "頂点"
   },
   "engulf_tension__front__6": {
@@ -2661,8 +3176,13 @@
    "note": "jerk",
    "base": "base/engulf_tension__front__6.png",
    "guide": "guide/engulf_tension__front__6.png",
-   "ja": "腰まで埋まったまま全身がこわばる。頂点では背中が反り、腕が上と外へ投げ出され、頭がのけぞる。そのあと塊の上へ前に崩れ、前腕を塊にのせる。",
-   "held": "腰から下（塊の中）",
+   "ja": {
+    "body": "腰まで埋まる",
+    "arms": "上と外へ投げ出す → 塊の上にのせる",
+    "legs": "動かない",
+    "held": "腰から下（塊の中）",
+    "move": "頂点：背中が反る、頭がのけぞる → 塊の上に前へ崩れる"
+   },
    "step": "震え"
   },
   "engulf_tension__front__10": {
@@ -2686,8 +3206,13 @@
    "note": "",
    "base": "base/engulf_tension__front__10.png",
    "guide": "guide/engulf_tension__front__10.png",
-   "ja": "腰まで埋まったまま全身がこわばる。頂点では背中が反り、腕が上と外へ投げ出され、頭がのけぞる。そのあと塊の上へ前に崩れ、前腕を塊にのせる。",
-   "held": "腰から下（塊の中）",
+   "ja": {
+    "body": "腰まで埋まる",
+    "arms": "上と外へ投げ出す → 塊の上にのせる",
+    "legs": "動かない",
+    "held": "腰から下（塊の中）",
+    "move": "頂点：背中が反る、頭がのけぞる → 塊の上に前へ崩れる"
+   },
    "step": "崩れる"
   },
   "wrap_squeeze__front__0": {
@@ -2711,8 +3236,13 @@
    "note": "eases off, she gasps",
    "base": "base/wrap_squeeze__front__0.png",
    "guide": "guide/wrap_squeeze__front__0.png",
-   "ja": "腕ごと胴に何かが巻きついている（胸・お腹・腰の高さ）。締めつけられるたびに背中が反り、緩むとあえぐ。",
-   "held": "胴（胸・お腹・腰）",
+   "ja": {
+    "body": "立つ",
+    "arms": "胴と一緒に巻かれる",
+    "legs": "立つ",
+    "held": "胴（胸・お腹・腰に巻きつく）",
+    "move": "締めつけられると背中が反る。緩むとあえぐ"
+   },
    "step": ""
   },
   "wrap_tension__front__0": {
@@ -2736,8 +3266,13 @@
    "note": "held",
    "base": "base/wrap_tension__front__0.png",
    "guide": "guide/wrap_tension__front__0.png",
-   "ja": "巻きつかれたまま全身がこわばる。頂点では強く反り、爪先が伸びる。そのあと力が抜け、巻きついたものに支えられて膝が内に入る。",
-   "held": "胴（胸・お腹・腰）",
+   "ja": {
+    "body": "立つ",
+    "arms": "胴と一緒に巻かれる",
+    "legs": "爪先が伸びる → 膝が内に入る",
+    "held": "胴（胸・お腹・腰に巻きつく）",
+    "move": "頂点：強く反る → 力が抜けて巻きついたものに支えられる"
+   },
    "step": "締め付け"
   },
   "wrap_tension__front__2": {
@@ -2761,8 +3296,13 @@
    "note": "peak, toes pointed",
    "base": "base/wrap_tension__front__2.png",
    "guide": "guide/wrap_tension__front__2.png",
-   "ja": "巻きつかれたまま全身がこわばる。頂点では強く反り、爪先が伸びる。そのあと力が抜け、巻きついたものに支えられて膝が内に入る。",
-   "held": "胴（胸・お腹・腰）",
+   "ja": {
+    "body": "立つ",
+    "arms": "胴と一緒に巻かれる",
+    "legs": "爪先が伸びる → 膝が内に入る",
+    "held": "胴（胸・お腹・腰に巻きつく）",
+    "move": "頂点：強く反る → 力が抜けて巻きついたものに支えられる"
+   },
    "step": "頂点"
   },
   "wrap_tension__front__8": {
@@ -2786,8 +3326,13 @@
    "note": "limp, knees in",
    "base": "base/wrap_tension__front__8.png",
    "guide": "guide/wrap_tension__front__8.png",
-   "ja": "巻きつかれたまま全身がこわばる。頂点では強く反り、爪先が伸びる。そのあと力が抜け、巻きついたものに支えられて膝が内に入る。",
-   "held": "胴（胸・お腹・腰）",
+   "ja": {
+    "body": "立つ",
+    "arms": "胴と一緒に巻かれる",
+    "legs": "爪先が伸びる → 膝が内に入る",
+    "held": "胴（胸・お腹・腰に巻きつく）",
+    "move": "頂点：強く反る → 力が抜けて巻きついたものに支えられる"
+   },
    "step": "脱力"
   },
   "ankle_grabbed__right__0": {
@@ -2811,8 +3356,13 @@
    "note": "the left ankle is caught",
    "base": "base/ankle_grabbed__right__0.png",
    "guide": "guide/ankle_grabbed__right__0.png",
-   "ja": "左の足首を後ろからつかまれて引かれ、前のめりになる。片足跳びで腕を振り回し、最後は両手と片膝をつき、つかまれた脚は後ろへ伸びる。真横から見た絵。",
-   "held": "左の足首（後ろから）",
+   "ja": {
+    "body": "立つ → 四つん這い",
+    "arms": "振り回す → 両手をつく",
+    "legs": "片足跳び → 片膝をつく",
+    "held": "左の足首（後ろから）",
+    "move": "足首をつかまれ後ろへ引かれる → 前のめり → 倒れる（真横から見た絵）"
+   },
    "step": "つかまれる"
   },
   "ankle_grabbed__right__4": {
@@ -2836,8 +3386,13 @@
    "note": "the foot is pulled back, she pitches forward",
    "base": "base/ankle_grabbed__right__4.png",
    "guide": "guide/ankle_grabbed__right__4.png",
-   "ja": "左の足首を後ろからつかまれて引かれ、前のめりになる。片足跳びで腕を振り回し、最後は両手と片膝をつき、つかまれた脚は後ろへ伸びる。真横から見た絵。",
-   "held": "左の足首（後ろから）",
+   "ja": {
+    "body": "立つ → 四つん這い",
+    "arms": "振り回す → 両手をつく",
+    "legs": "片足跳び → 片膝をつく",
+    "held": "左の足首（後ろから）",
+    "move": "足首をつかまれ後ろへ引かれる → 前のめり → 倒れる（真横から見た絵）"
+   },
    "step": "引かれる"
   },
   "ankle_grabbed__right__6": {
@@ -2861,8 +3416,13 @@
    "note": "arms flailing",
    "base": "base/ankle_grabbed__right__6.png",
    "guide": "guide/ankle_grabbed__right__6.png",
-   "ja": "左の足首を後ろからつかまれて引かれ、前のめりになる。片足跳びで腕を振り回し、最後は両手と片膝をつき、つかまれた脚は後ろへ伸びる。真横から見た絵。",
-   "held": "左の足首（後ろから）",
+   "ja": {
+    "body": "立つ → 四つん這い",
+    "arms": "振り回す → 両手をつく",
+    "legs": "片足跳び → 片膝をつく",
+    "held": "左の足首（後ろから）",
+    "move": "足首をつかまれ後ろへ引かれる → 前のめり → 倒れる（真横から見た絵）"
+   },
    "step": "片足跳び"
   },
   "ankle_grabbed__right__14": {
@@ -2886,8 +3446,13 @@
    "note": "down on her hands and one knee, the caught leg stretched back",
    "base": "base/ankle_grabbed__right__14.png",
    "guide": "guide/ankle_grabbed__right__14.png",
-   "ja": "左の足首を後ろからつかまれて引かれ、前のめりになる。片足跳びで腕を振り回し、最後は両手と片膝をつき、つかまれた脚は後ろへ伸びる。真横から見た絵。",
-   "held": "左の足首（後ろから）",
+   "ja": {
+    "body": "立つ → 四つん這い",
+    "arms": "振り回す → 両手をつく",
+    "legs": "片足跳び → 片膝をつく",
+    "held": "左の足首（後ろから）",
+    "move": "足首をつかまれ後ろへ引かれる → 前のめり → 倒れる（真横から見た絵）"
+   },
    "step": "倒れる"
   },
   "break_free__front__2": {
@@ -2911,8 +3476,13 @@
    "note": "crouches and gathers herself",
    "base": "base/break_free__front__2.png",
    "guide": "guide/break_free__front__2.png",
-   "ja": "拘束を振りほどく。しゃがんで力をため、体をひねって両腕を大きく広げて跳ね返し、一歩よろけてから構え直す。",
-   "held": "最初だけ（振りほどく前）",
+   "ja": {
+    "body": "しゃがむ → 立つ",
+    "arms": "大きく広げる → 構える",
+    "legs": "一歩よろける",
+    "held": "はじめだけ",
+    "move": "力をためる → 振りほどく → よろける → 構え直す"
+   },
    "step": "力む"
   },
   "break_free__front__3": {
@@ -2936,8 +3506,13 @@
    "note": "bursts out, twists and flings both arms wide",
    "base": "base/break_free__front__3.png",
    "guide": "guide/break_free__front__3.png",
-   "ja": "拘束を振りほどく。しゃがんで力をため、体をひねって両腕を大きく広げて跳ね返し、一歩よろけてから構え直す。",
-   "held": "最初だけ（振りほどく前）",
+   "ja": {
+    "body": "しゃがむ → 立つ",
+    "arms": "大きく広げる → 構える",
+    "legs": "一歩よろける",
+    "held": "はじめだけ",
+    "move": "力をためる → 振りほどく → よろける → 構え直す"
+   },
    "step": "振りほどく"
   },
   "break_free__front__6": {
@@ -2961,8 +3536,13 @@
    "note": "staggers a step back",
    "base": "base/break_free__front__6.png",
    "guide": "guide/break_free__front__6.png",
-   "ja": "拘束を振りほどく。しゃがんで力をため、体をひねって両腕を大きく広げて跳ね返し、一歩よろけてから構え直す。",
-   "held": "最初だけ（振りほどく前）",
+   "ja": {
+    "body": "しゃがむ → 立つ",
+    "arms": "大きく広げる → 構える",
+    "legs": "一歩よろける",
+    "held": "はじめだけ",
+    "move": "力をためる → 振りほどく → よろける → 構え直す"
+   },
    "step": "よろける"
   },
   "break_free__front__8": {
@@ -2986,8 +3566,13 @@
    "note": "hands up, knees soft, ready again",
    "base": "base/break_free__front__8.png",
    "guide": "guide/break_free__front__8.png",
-   "ja": "拘束を振りほどく。しゃがんで力をため、体をひねって両腕を大きく広げて跳ね返し、一歩よろけてから構え直す。",
-   "held": "最初だけ（振りほどく前）",
+   "ja": {
+    "body": "しゃがむ → 立つ",
+    "arms": "大きく広げる → 構える",
+    "legs": "一歩よろける",
+    "held": "はじめだけ",
+    "move": "力をためる → 振りほどく → よろける → 構え直す"
+   },
    "step": "構え直す"
   },
   "edge_pull__right__0": {
@@ -3011,8 +3596,13 @@
    "note": "breathing hard",
    "base": "base/edge_pull__right__0.png",
    "guide": "guide/edge_pull__right__0.png",
-   "ja": "息を荒くして立っていたのが、腰から先に一歩前へ寄ってしまい、はっとして前屈みになり、下腹を押さえる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 前屈み",
+    "arms": "下腹を押さえる",
+    "legs": "一歩前へ出てしまう",
+    "held": "なし",
+    "move": "息が荒い → 腰から先に一歩寄ってしまう → はっとする（真横から見た絵）"
+   },
    "step": "立つ"
   },
   "edge_pull__right__3": {
@@ -3036,8 +3626,13 @@
    "note": "the hips go first, a foot follows",
    "base": "base/edge_pull__right__3.png",
    "guide": "guide/edge_pull__right__3.png",
-   "ja": "息を荒くして立っていたのが、腰から先に一歩前へ寄ってしまい、はっとして前屈みになり、下腹を押さえる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 前屈み",
+    "arms": "下腹を押さえる",
+    "legs": "一歩前へ出てしまう",
+    "held": "なし",
+    "move": "息が荒い → 腰から先に一歩寄ってしまう → はっとする（真横から見た絵）"
+   },
    "step": "腰が出る"
   },
   "edge_pull__right__7": {
@@ -3061,8 +3656,13 @@
    "note": "catches herself, bends, hands pressed to her lower belly",
    "base": "base/edge_pull__right__7.png",
    "guide": "guide/edge_pull__right__7.png",
-   "ja": "息を荒くして立っていたのが、腰から先に一歩前へ寄ってしまい、はっとして前屈みになり、下腹を押さえる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 前屈み",
+    "arms": "下腹を押さえる",
+    "legs": "一歩前へ出てしまう",
+    "held": "なし",
+    "move": "息が荒い → 腰から先に一歩寄ってしまう → はっとする（真横から見た絵）"
+   },
    "step": "はっとする"
   },
   "gaze_trance__front__0": {
@@ -3086,8 +3686,13 @@
    "note": "stands stock-still, arms hanging, eyes on the one before her, nods slowly, lips moving",
    "base": "base/gaze_trance__front__0.png",
    "guide": "guide/gaze_trance__front__0.png",
-   "ja": "目の前の何かに見つめられ、腕を下げて棒立ちのまま、ゆっくり頷き、唇が動く。",
-   "held": "なし",
+   "ja": {
+    "body": "棒立ち",
+    "arms": "だらりと下げる",
+    "legs": "立つ",
+    "held": "なし",
+    "move": "目の前の何かを見つめたまま、ゆっくり頷く。唇が動く"
+   },
    "step": ""
   },
   "gaze_trance__front__1": {
@@ -3111,8 +3716,13 @@
    "note": "stands stock-still, arms hanging, eyes on the one before her, nods slowly, lips moving",
    "base": "base/gaze_trance__front__1.png",
    "guide": "guide/gaze_trance__front__1.png",
-   "ja": "目の前の何かに見つめられ、腕を下げて棒立ちのまま、ゆっくり頷き、唇が動く。",
-   "held": "なし",
+   "ja": {
+    "body": "棒立ち",
+    "arms": "だらりと下げる",
+    "legs": "立つ",
+    "held": "なし",
+    "move": "目の前の何かを見つめたまま、ゆっくり頷く。唇が動く"
+   },
    "step": ""
   },
   "spore_inhale__front__0": {
@@ -3136,8 +3746,13 @@
    "note": "hand over her mouth, face turned away",
    "base": "base/spore_inhale__front__0.png",
    "guide": "guide/spore_inhale__front__0.png",
-   "ja": "手で口を覆って顔をそむける。吸い込んでしまって咳き込み、少し前屈みになり、膝が内に折れる。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 少し前屈み",
+    "arms": "口を手で覆う",
+    "legs": "膝が内に折れる",
+    "held": "なし",
+    "move": "顔をそむける → 吸い込んで咳き込む"
+   },
    "step": ""
   },
   "spore_inhale__front__2": {
@@ -3161,8 +3776,13 @@
    "note": "breathes some in, coughs, doubles over a little, knees fold in",
    "base": "base/spore_inhale__front__2.png",
    "guide": "guide/spore_inhale__front__2.png",
-   "ja": "手で口を覆って顔をそむける。吸い込んでしまって咳き込み、少し前屈みになり、膝が内に折れる。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 少し前屈み",
+    "arms": "口を手で覆う",
+    "legs": "膝が内に折れる",
+    "held": "なし",
+    "move": "顔をそむける → 吸い込んで咳き込む"
+   },
    "step": "吸う"
   },
   "shiver_hug__front__0": {
@@ -3186,8 +3806,13 @@
    "note": "hugging herself, shoulders up, shivering",
    "base": "base/shiver_hug__front__0.png",
    "guide": "guide/shiver_hug__front__0.png",
-   "ja": "自分の体を抱いて肩をすくめ、小刻みに震える。ときどき何かに触れられたように跳ねる。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "自分の体を抱く",
+    "legs": "立つ",
+    "held": "なし",
+    "move": "肩をすくめて小刻みに震える。ときどき跳ねる"
+   },
    "step": ""
   },
   "shiver_hug__front__4": {
@@ -3211,8 +3836,13 @@
    "note": "jumps at a touch",
    "base": "base/shiver_hug__front__4.png",
    "guide": "guide/shiver_hug__front__4.png",
-   "ja": "自分の体を抱いて肩をすくめ、小刻みに震える。ときどき何かに触れられたように跳ねる。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "自分の体を抱く",
+    "legs": "立つ",
+    "held": "なし",
+    "move": "肩をすくめて小刻みに震える。ときどき跳ねる"
+   },
    "step": "跳ねる"
   },
   "bubble_float__front__0": {
@@ -3236,8 +3866,13 @@
    "note": "curled up a little, palms on its wall, mouth opening and closing",
    "base": "base/bubble_float__front__0.png",
    "guide": "guide/bubble_float__front__0.png",
-   "ja": "大きな泡の中で床から浮き、少し体を丸め、手のひらを泡の内側につけ、口をぱくぱくさせる。",
-   "held": "全身（泡の中）",
+   "ja": {
+    "body": "泡の中で浮く。少し丸まる",
+    "arms": "手のひらを泡の内側につく",
+    "legs": "床から浮く",
+    "held": "全身（泡の中）",
+    "move": "口をぱくぱくさせる"
+   },
    "step": ""
   },
   "bubble_float__front__2": {
@@ -3261,8 +3896,13 @@
    "note": "curled up a little, palms on its wall, mouth opening and closing",
    "base": "base/bubble_float__front__2.png",
    "guide": "guide/bubble_float__front__2.png",
-   "ja": "大きな泡の中で床から浮き、少し体を丸め、手のひらを泡の内側につけ、口をぱくぱくさせる。",
-   "held": "全身（泡の中）",
+   "ja": {
+    "body": "泡の中で浮く。少し丸まる",
+    "arms": "手のひらを泡の内側につく",
+    "legs": "床から浮く",
+    "held": "全身（泡の中）",
+    "move": "口をぱくぱくさせる"
+   },
    "step": ""
   },
   "daze_sway__front__0": {
@@ -3286,8 +3926,13 @@
    "note": "standing there dazed, arms loose, head tilting from side to side",
    "base": "base/daze_sway__front__0.png",
    "guide": "guide/daze_sway__front__0.png",
-   "ja": "ぼーっと立ち尽くし、腕をだらりと下げ、首を左右にかしげてゆらゆら揺れる。",
-   "held": "なし",
+   "ja": {
+    "body": "立ち尽くす",
+    "arms": "だらりと下げる",
+    "legs": "立つ",
+    "held": "なし",
+    "move": "ぼーっとして、首を左右にかしげて揺れる"
+   },
    "step": ""
   },
   "daze_sway__front__2": {
@@ -3311,8 +3956,13 @@
    "note": "standing there dazed, arms loose, head tilting from side to side",
    "base": "base/daze_sway__front__2.png",
    "guide": "guide/daze_sway__front__2.png",
-   "ja": "ぼーっと立ち尽くし、腕をだらりと下げ、首を左右にかしげてゆらゆら揺れる。",
-   "held": "なし",
+   "ja": {
+    "body": "立ち尽くす",
+    "arms": "だらりと下げる",
+    "legs": "立つ",
+    "held": "なし",
+    "move": "ぼーっとして、首を左右にかしげて揺れる"
+   },
    "step": ""
   },
   "reach_toward__right__0": {
@@ -3336,8 +3986,13 @@
    "note": "",
    "base": "base/reach_toward__right__0.png",
    "guide": "guide/reach_toward__right__0.png",
-   "ja": "何かを見て、思わず片手を伸ばして一歩寄り、はっとして手を胸に引っ込め、目をそらす。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "片手を伸ばす → 胸に引っ込める",
+    "legs": "一歩寄る",
+    "held": "なし",
+    "move": "何かに思わず手を伸ばす → はっとして目をそらす（真横から見た絵）"
+   },
    "step": "見る"
   },
   "reach_toward__right__4": {
@@ -3361,8 +4016,13 @@
    "note": "a small step",
    "base": "base/reach_toward__right__4.png",
    "guide": "guide/reach_toward__right__4.png",
-   "ja": "何かを見て、思わず片手を伸ばして一歩寄り、はっとして手を胸に引っ込め、目をそらす。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "片手を伸ばす → 胸に引っ込める",
+    "legs": "一歩寄る",
+    "held": "なし",
+    "move": "何かに思わず手を伸ばす → はっとして目をそらす（真横から見た絵）"
+   },
    "step": "伸ばす"
   },
   "reach_toward__right__8": {
@@ -3386,8 +4046,13 @@
    "note": "snatches the hand back to her chest, looks away",
    "base": "base/reach_toward__right__8.png",
    "guide": "guide/reach_toward__right__8.png",
-   "ja": "何かを見て、思わず片手を伸ばして一歩寄り、はっとして手を胸に引っ込め、目をそらす。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "片手を伸ばす → 胸に引っ込める",
+    "legs": "一歩寄る",
+    "held": "なし",
+    "move": "何かに思わず手を伸ばす → はっとして目をそらす（真横から見た絵）"
+   },
    "step": "引っ込める"
   },
   "trip_fall__right__0": {
@@ -3411,8 +4076,13 @@
    "note": "stepping",
    "base": "base/trip_fall__right__0.png",
    "guide": "guide/trip_fall__right__0.png",
-   "ja": "歩いていて後ろ足がつまずき、前のめりに両手と膝をつく。顔を上げ、片膝から立ち上がる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "歩く → 四つん這い → 立つ",
+    "arms": "前に出す → 手をつく",
+    "legs": "つまずく → 膝をつく",
+    "held": "なし",
+    "move": "つまずいて転ぶ → 顔を上げる → 立ち上がる（真横から見た絵）"
+   },
    "step": "歩く"
   },
   "trip_fall__right__4": {
@@ -3436,8 +4106,13 @@
    "note": "the back foot catches, she pitches forward, arms out",
    "base": "base/trip_fall__right__4.png",
    "guide": "guide/trip_fall__right__4.png",
-   "ja": "歩いていて後ろ足がつまずき、前のめりに両手と膝をつく。顔を上げ、片膝から立ち上がる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "歩く → 四つん這い → 立つ",
+    "arms": "前に出す → 手をつく",
+    "legs": "つまずく → 膝をつく",
+    "held": "なし",
+    "move": "つまずいて転ぶ → 顔を上げる → 立ち上がる（真横から見た絵）"
+   },
    "step": "つまずく"
   },
   "trip_fall__right__11": {
@@ -3461,8 +4136,13 @@
    "note": "down on her hands and knees",
    "base": "base/trip_fall__right__11.png",
    "guide": "guide/trip_fall__right__11.png",
-   "ja": "歩いていて後ろ足がつまずき、前のめりに両手と膝をつく。顔を上げ、片膝から立ち上がる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "歩く → 四つん這い → 立つ",
+    "arms": "前に出す → 手をつく",
+    "legs": "つまずく → 膝をつく",
+    "held": "なし",
+    "move": "つまずいて転ぶ → 顔を上げる → 立ち上がる（真横から見た絵）"
+   },
    "step": "手をつく"
   },
   "trip_fall__right__13": {
@@ -3486,8 +4166,13 @@
    "note": "looks up",
    "base": "base/trip_fall__right__13.png",
    "guide": "guide/trip_fall__right__13.png",
-   "ja": "歩いていて後ろ足がつまずき、前のめりに両手と膝をつく。顔を上げ、片膝から立ち上がる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "歩く → 四つん這い → 立つ",
+    "arms": "前に出す → 手をつく",
+    "legs": "つまずく → 膝をつく",
+    "held": "なし",
+    "move": "つまずいて転ぶ → 顔を上げる → 立ち上がる（真横から見た絵）"
+   },
    "step": "顔を上げる"
   },
   "trip_fall__right__18": {
@@ -3511,8 +4196,13 @@
    "note": "one foot forward",
    "base": "base/trip_fall__right__18.png",
    "guide": "guide/trip_fall__right__18.png",
-   "ja": "歩いていて後ろ足がつまずき、前のめりに両手と膝をつく。顔を上げ、片膝から立ち上がる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "歩く → 四つん這い → 立つ",
+    "arms": "前に出す → 手をつく",
+    "legs": "つまずく → 膝をつく",
+    "held": "なし",
+    "move": "つまずいて転ぶ → 顔を上げる → 立ち上がる（真横から見た絵）"
+   },
    "step": "片膝"
   },
   "trip_fall__right__20": {
@@ -3536,8 +4226,13 @@
    "note": "rising",
    "base": "base/trip_fall__right__20.png",
    "guide": "guide/trip_fall__right__20.png",
-   "ja": "歩いていて後ろ足がつまずき、前のめりに両手と膝をつく。顔を上げ、片膝から立ち上がる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "歩く → 四つん這い → 立つ",
+    "arms": "前に出す → 手をつく",
+    "legs": "つまずく → 膝をつく",
+    "held": "なし",
+    "move": "つまずいて転ぶ → 顔を上げる → 立ち上がる（真横から見た絵）"
+   },
    "step": "立ち上がる"
   },
   "defeat_collapse__right__0": {
@@ -3561,8 +4256,13 @@
    "note": "swaying",
    "base": "base/defeat_collapse__right__0.png",
    "guide": "guide/defeat_collapse__right__0.png",
-   "ja": "ふらつき、膝から崩れ、膝立ちから前へ倒れ、うつ伏せで動かなくなる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 膝立ち → うつ伏せ",
+    "arms": "だらりと下げる",
+    "legs": "膝から崩れる",
+    "held": "なし",
+    "move": "力尽きて倒れ、動かなくなる（真横から見た絵）"
+   },
    "step": "ふらつく"
   },
   "defeat_collapse__right__2": {
@@ -3586,8 +4286,13 @@
    "note": "the knees go",
    "base": "base/defeat_collapse__right__2.png",
    "guide": "guide/defeat_collapse__right__2.png",
-   "ja": "ふらつき、膝から崩れ、膝立ちから前へ倒れ、うつ伏せで動かなくなる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 膝立ち → うつ伏せ",
+    "arms": "だらりと下げる",
+    "legs": "膝から崩れる",
+    "held": "なし",
+    "move": "力尽きて倒れ、動かなくなる（真横から見た絵）"
+   },
    "step": "崩れる"
   },
   "defeat_collapse__right__5": {
@@ -3611,8 +4316,13 @@
    "note": "on her knees",
    "base": "base/defeat_collapse__right__5.png",
    "guide": "guide/defeat_collapse__right__5.png",
-   "ja": "ふらつき、膝から崩れ、膝立ちから前へ倒れ、うつ伏せで動かなくなる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 膝立ち → うつ伏せ",
+    "arms": "だらりと下げる",
+    "legs": "膝から崩れる",
+    "held": "なし",
+    "move": "力尽きて倒れ、動かなくなる（真横から見た絵）"
+   },
    "step": "膝をつく"
   },
   "defeat_collapse__right__9": {
@@ -3636,8 +4346,13 @@
    "note": "falling forward",
    "base": "base/defeat_collapse__right__9.png",
    "guide": "guide/defeat_collapse__right__9.png",
-   "ja": "ふらつき、膝から崩れ、膝立ちから前へ倒れ、うつ伏せで動かなくなる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 膝立ち → うつ伏せ",
+    "arms": "だらりと下げる",
+    "legs": "膝から崩れる",
+    "held": "なし",
+    "move": "力尽きて倒れ、動かなくなる（真横から見た絵）"
+   },
    "step": "倒れる"
   },
   "defeat_collapse__right__13": {
@@ -3661,8 +4376,13 @@
    "note": "face down, still",
    "base": "base/defeat_collapse__right__13.png",
    "guide": "guide/defeat_collapse__right__13.png",
-   "ja": "ふらつき、膝から崩れ、膝立ちから前へ倒れ、うつ伏せで動かなくなる。真横から見た絵。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 膝立ち → うつ伏せ",
+    "arms": "だらりと下げる",
+    "legs": "膝から崩れる",
+    "held": "なし",
+    "move": "力尽きて倒れ、動かなくなる（真横から見た絵）"
+   },
    "step": "うつ伏せ"
   },
   "grabbed_flinch__front__0": {
@@ -3686,8 +4406,13 @@
    "note": "guarded",
    "base": "base/grabbed_flinch__front__0.png",
    "guide": "guide/grabbed_flinch__front__0.png",
-   "ja": "構えていたところを捕まって、びくっと跳ね、捕まった所を見下ろす。",
-   "held": "どこか1か所（場面による）",
+   "ja": {
+    "body": "構えて立つ",
+    "arms": "構える",
+    "legs": "立つ",
+    "held": "どこか1か所",
+    "move": "捕まってびくっと跳ねる → 捕まった所を見下ろす"
+   },
    "step": "構え"
   },
   "grabbed_flinch__front__3": {
@@ -3711,8 +4436,13 @@
    "note": "looks down at where she is caught",
    "base": "base/grabbed_flinch__front__3.png",
    "guide": "guide/grabbed_flinch__front__3.png",
-   "ja": "構えていたところを捕まって、びくっと跳ね、捕まった所を見下ろす。",
-   "held": "どこか1か所（場面による）",
+   "ja": {
+    "body": "構えて立つ",
+    "arms": "構える",
+    "legs": "立つ",
+    "held": "どこか1か所",
+    "move": "捕まってびくっと跳ねる → 捕まった所を見下ろす"
+   },
    "step": "見下ろす"
   },
   "mage_suppress__front__0": {
@@ -3733,8 +4463,13 @@
    "note": "knees together, the mechanical hand over her mouth, holding every sound in",
    "base": "base/mage_suppress__front__0.png",
    "guide": "guide/mage_suppress__front__0.png",
-   "ja": "魔法使い。膝を閉じ、機械の手で自分の口を押さえ、声を一切もらさず耐える。ときどき震えを飲み込み、手を強く押し当てる。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "機械の手で自分の口を押さえる",
+    "legs": "膝を閉じる",
+    "held": "なし",
+    "move": "声を出さずに耐える。震えを飲み込み、手を強く押し当てる"
+   },
    "step": ""
   },
   "mage_suppress__front__5": {
@@ -3755,8 +4490,13 @@
    "note": "a shudder she swallows, the hand presses harder",
    "base": "base/mage_suppress__front__5.png",
    "guide": "guide/mage_suppress__front__5.png",
-   "ja": "魔法使い。膝を閉じ、機械の手で自分の口を押さえ、声を一切もらさず耐える。ときどき震えを飲み込み、手を強く押し当てる。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "機械の手で自分の口を押さえる",
+    "legs": "膝を閉じる",
+    "held": "なし",
+    "move": "声を出さずに耐える。震えを飲み込み、手を強く押し当てる"
+   },
    "step": "堪える"
   },
   "mage_suppress_tension__front__0": {
@@ -3777,8 +4517,13 @@
    "note": "",
    "base": "base/mage_suppress_tension__front__0.png",
    "guide": "guide/mage_suppress_tension__front__0.png",
-   "ja": "魔法使い。頂点でも反らずに、口を押さえた手の上に体を丸めて肩をすくめ、声を出さない。そのあと杖にすがって片膝をつく。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 片膝をつく",
+    "arms": "口を押さえる → 杖にすがる",
+    "legs": "膝を閉じる → 片膝",
+    "held": "なし",
+    "move": "頂点：反らずに体を丸めて肩をすくめる。声を出さない → 片膝をつく"
+   },
    "step": "堪える"
   },
   "mage_suppress_tension__front__2": {
@@ -3799,8 +4544,13 @@
    "note": "peak, curled in, not arched, hunched over the hand, shoulders up, silent",
    "base": "base/mage_suppress_tension__front__2.png",
    "guide": "guide/mage_suppress_tension__front__2.png",
-   "ja": "魔法使い。頂点でも反らずに、口を押さえた手の上に体を丸めて肩をすくめ、声を出さない。そのあと杖にすがって片膝をつく。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 片膝をつく",
+    "arms": "口を押さえる → 杖にすがる",
+    "legs": "膝を閉じる → 片膝",
+    "held": "なし",
+    "move": "頂点：反らずに体を丸めて肩をすくめる。声を出さない → 片膝をつく"
+   },
    "step": "頂点"
   },
   "mage_suppress_tension__front__6": {
@@ -3821,8 +4571,13 @@
    "note": "down on one knee, leaning on the staff planted beside her",
    "base": "base/mage_suppress_tension__front__6.png",
    "guide": "guide/mage_suppress_tension__front__6.png",
-   "ja": "魔法使い。頂点でも反らずに、口を押さえた手の上に体を丸めて肩をすくめ、声を出さない。そのあと杖にすがって片膝をつく。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 片膝をつく",
+    "arms": "口を押さえる → 杖にすがる",
+    "legs": "膝を閉じる → 片膝",
+    "held": "なし",
+    "move": "頂点：反らずに体を丸めて肩をすくめる。声を出さない → 片膝をつく"
+   },
    "step": "膝をつく"
   },
   "scout_tail_grabbed__right__0": {
@@ -3843,8 +4598,13 @@
    "note": "something reaches her tail from behind",
    "base": "base/scout_tail_grabbed__right__0.png",
    "guide": "guide/scout_tail_grabbed__right__0.png",
-   "ja": "斥候。後ろから尻尾をつかまれ、跳び上がって爪先立ちになる。肩ごしに振り返って両手を後ろへやり、膝が内に崩れながら引っぱり返す。真横から見た絵。",
-   "held": "尻尾",
+   "ja": {
+    "body": "立つ",
+    "arms": "両手を後ろへやる",
+    "legs": "跳び上がって爪先立ち → 膝が内に崩れる",
+    "held": "尻尾（後ろから）",
+    "move": "尻尾をつかまれて跳び上がる → 振り返る → 引っぱり返す（真横から見た絵）"
+   },
    "step": "立つ"
   },
   "scout_tail_grabbed__right__1": {
@@ -3865,8 +4625,13 @@
    "note": "the tail is seized, she jumps upright onto her toes",
    "base": "base/scout_tail_grabbed__right__1.png",
    "guide": "guide/scout_tail_grabbed__right__1.png",
-   "ja": "斥候。後ろから尻尾をつかまれ、跳び上がって爪先立ちになる。肩ごしに振り返って両手を後ろへやり、膝が内に崩れながら引っぱり返す。真横から見た絵。",
-   "held": "尻尾",
+   "ja": {
+    "body": "立つ",
+    "arms": "両手を後ろへやる",
+    "legs": "跳び上がって爪先立ち → 膝が内に崩れる",
+    "held": "尻尾（後ろから）",
+    "move": "尻尾をつかまれて跳び上がる → 振り返る → 引っぱり返す（真横から見た絵）"
+   },
    "step": "びくっ"
   },
   "scout_tail_grabbed__right__5": {
@@ -3887,8 +4652,13 @@
    "note": "looks back over her shoulder",
    "base": "base/scout_tail_grabbed__right__5.png",
    "guide": "guide/scout_tail_grabbed__right__5.png",
-   "ja": "斥候。後ろから尻尾をつかまれ、跳び上がって爪先立ちになる。肩ごしに振り返って両手を後ろへやり、膝が内に崩れながら引っぱり返す。真横から見た絵。",
-   "held": "尻尾",
+   "ja": {
+    "body": "立つ",
+    "arms": "両手を後ろへやる",
+    "legs": "跳び上がって爪先立ち → 膝が内に崩れる",
+    "held": "尻尾（後ろから）",
+    "move": "尻尾をつかまれて跳び上がる → 振り返る → 引っぱり返す（真横から見た絵）"
+   },
    "step": "振り返る"
   },
   "scout_tail_grabbed__right__7": {
@@ -3909,8 +4679,13 @@
    "note": "knees give inward",
    "base": "base/scout_tail_grabbed__right__7.png",
    "guide": "guide/scout_tail_grabbed__right__7.png",
-   "ja": "斥候。後ろから尻尾をつかまれ、跳び上がって爪先立ちになる。肩ごしに振り返って両手を後ろへやり、膝が内に崩れながら引っぱり返す。真横から見た絵。",
-   "held": "尻尾",
+   "ja": {
+    "body": "立つ",
+    "arms": "両手を後ろへやる",
+    "legs": "跳び上がって爪先立ち → 膝が内に崩れる",
+    "held": "尻尾（後ろから）",
+    "move": "尻尾をつかまれて跳び上がる → 振り返る → 引っぱり返す（真横から見た絵）"
+   },
    "step": "すくむ"
   },
   "scout_tension__front__0": {
@@ -3931,8 +4706,13 @@
    "note": "gripping her straps",
    "base": "base/scout_tension__front__0.png",
    "guide": "guide/scout_tension__front__0.png",
-   "ja": "斥候。ベルトを握ってこらえる。頂点では爪先立ちになり、尻尾がまっすぐ立って毛が逆立ち、耳も立つ。そのあと膝が崩れ、尻尾と耳が下がる。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 崩れる",
+    "arms": "ベルトを握る",
+    "legs": "爪先立ち → 膝が崩れる",
+    "held": "なし",
+    "move": "頂点：尻尾がまっすぐ立って毛が逆立つ、耳も立つ → 尻尾と耳が下がる"
+   },
    "step": "こらえる"
   },
   "scout_tension__front__2": {
@@ -3953,8 +4733,13 @@
    "note": "peak, up on her toes, the tail straight up and bristling, ears up",
    "base": "base/scout_tension__front__2.png",
    "guide": "guide/scout_tension__front__2.png",
-   "ja": "斥候。ベルトを握ってこらえる。頂点では爪先立ちになり、尻尾がまっすぐ立って毛が逆立ち、耳も立つ。そのあと膝が崩れ、尻尾と耳が下がる。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 崩れる",
+    "arms": "ベルトを握る",
+    "legs": "爪先立ち → 膝が崩れる",
+    "held": "なし",
+    "move": "頂点：尻尾がまっすぐ立って毛が逆立つ、耳も立つ → 尻尾と耳が下がる"
+   },
    "step": "頂点"
   },
   "scout_tension__front__8": {
@@ -3975,8 +4760,13 @@
    "note": "knees give, the tail and ears drop",
    "base": "base/scout_tension__front__8.png",
    "guide": "guide/scout_tension__front__8.png",
-   "ja": "斥候。ベルトを握ってこらえる。頂点では爪先立ちになり、尻尾がまっすぐ立って毛が逆立ち、耳も立つ。そのあと膝が崩れ、尻尾と耳が下がる。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 崩れる",
+    "arms": "ベルトを握る",
+    "legs": "爪先立ち → 膝が崩れる",
+    "held": "なし",
+    "move": "頂点：尻尾がまっすぐ立って毛が逆立つ、耳も立つ → 尻尾と耳が下がる"
+   },
    "step": "崩れる"
   },
   "mage_arms_bound__front__0": {
@@ -3997,8 +4787,13 @@
    "note": "she twists and pulls, keeping her face composed",
    "base": "base/mage_arms_bound__front__0.png",
    "guide": "guide/mage_arms_bound__front__0.png",
-   "ja": "魔法使いの機械の両腕を、頭の上で交差させて固定され、魔法を使えない。身をよじって引くが、顔は平静を保とうとしている。",
-   "held": "両手首（頭の上で1つに）",
+   "ja": {
+    "body": "立つ",
+    "arms": "両腕を頭の上で交差",
+    "legs": "立つ",
+    "held": "両手首（頭の上でまとめる）",
+    "move": "身をよじって引く。顔は平静を保とうとする"
+   },
    "step": ""
   },
   "mage_arms_bound__front__2": {
@@ -4019,8 +4814,13 @@
    "note": "she twists and pulls, keeping her face composed",
    "base": "base/mage_arms_bound__front__2.png",
    "guide": "guide/mage_arms_bound__front__2.png",
-   "ja": "魔法使いの機械の両腕を、頭の上で交差させて固定され、魔法を使えない。身をよじって引くが、顔は平静を保とうとしている。",
-   "held": "両手首（頭の上で1つに）",
+   "ja": {
+    "body": "立つ",
+    "arms": "両腕を頭の上で交差",
+    "legs": "立つ",
+    "held": "両手首（頭の上でまとめる）",
+    "move": "身をよじって引く。顔は平静を保とうとする"
+   },
    "step": ""
   },
   "healer_panel_catch__front__3": {
@@ -4041,8 +4841,13 @@
    "note": "the panels flip up, she starts",
    "base": "base/healer_panel_catch__front__3.png",
    "guide": "guide/healer_panel_catch__front__3.png",
-   "ja": "ヒーラー。胸の前の前垂れがめくれ上がりかけ、びくっとして、腕を胸の前に当てて押さえ、顔を赤くして背ける。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "腕を胸の前に当てて押さえる",
+    "legs": "立つ",
+    "held": "なし",
+    "move": "胸の前の前垂れがめくれかける → びくっとして押さえる → 顔を赤くして背ける"
+   },
    "step": "めくれる"
   },
   "healer_panel_catch__front__6": {
@@ -4063,8 +4868,13 @@
    "note": "slaps them down with her arm across her chest, face turned away",
    "base": "base/healer_panel_catch__front__6.png",
    "guide": "guide/healer_panel_catch__front__6.png",
-   "ja": "ヒーラー。胸の前の前垂れがめくれ上がりかけ、びくっとして、腕を胸の前に当てて押さえ、顔を赤くして背ける。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ",
+    "arms": "腕を胸の前に当てて押さえる",
+    "legs": "立つ",
+    "held": "なし",
+    "move": "胸の前の前垂れがめくれかける → びくっとして押さえる → 顔を赤くして背ける"
+   },
    "step": "押さえる"
   },
   "healer_tension_refuse__front__0": {
@@ -4085,8 +4895,13 @@
    "note": "shaking her head, no",
    "base": "base/healer_tension_refuse__front__0.png",
    "guide": "guide/healer_tension_refuse__front__0.png",
-   "ja": "ヒーラー。首を横に振って拒みながらこわばる。頂点では反って爪先立ちになるが、胸はかばったまま唇を結ぶ。そのあと床に崩れ、腕は胸の前、顔は背けたまま。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 床に崩れる",
+    "arms": "胸をかばう",
+    "legs": "爪先立ち → 崩れる",
+    "held": "なし",
+    "move": "首を横に振って拒む → 頂点：反って爪先立ち、唇を結ぶ → 崩れる、顔は背けたまま"
+   },
    "step": "拒む"
   },
   "healer_tension_refuse__front__2": {
@@ -4107,8 +4922,13 @@
    "note": "peak, arched, on her toes, still covering herself, lips pressed",
    "base": "base/healer_tension_refuse__front__2.png",
    "guide": "guide/healer_tension_refuse__front__2.png",
-   "ja": "ヒーラー。首を横に振って拒みながらこわばる。頂点では反って爪先立ちになるが、胸はかばったまま唇を結ぶ。そのあと床に崩れ、腕は胸の前、顔は背けたまま。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 床に崩れる",
+    "arms": "胸をかばう",
+    "legs": "爪先立ち → 崩れる",
+    "held": "なし",
+    "move": "首を横に振って拒む → 頂点：反って爪先立ち、唇を結ぶ → 崩れる、顔は背けたまま"
+   },
    "step": "頂点"
   },
   "healer_tension_refuse__front__7": {
@@ -4129,8 +4949,13 @@
    "note": "sinks to the floor, arm still across her chest, face turned away",
    "base": "base/healer_tension_refuse__front__7.png",
    "guide": "guide/healer_tension_refuse__front__7.png",
-   "ja": "ヒーラー。首を横に振って拒みながらこわばる。頂点では反って爪先立ちになるが、胸はかばったまま唇を結ぶ。そのあと床に崩れ、腕は胸の前、顔は背けたまま。",
-   "held": "なし",
+   "ja": {
+    "body": "立つ → 床に崩れる",
+    "arms": "胸をかばう",
+    "legs": "爪先立ち → 崩れる",
+    "held": "なし",
+    "move": "首を横に振って拒む → 頂点：反って爪先立ち、唇を結ぶ → 崩れる、顔は背けたまま"
+   },
    "step": "崩れる"
   }
  },

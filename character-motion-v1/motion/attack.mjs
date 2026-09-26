@@ -143,24 +143,34 @@ function feminine(k){
  return q;
 }
 export function pose(k0){
- const k=feminine(k0);
+ const k=k0.raw?{...k0,sway:k0.sway||0}:feminine(k0);   // raw: poses authored exactly (restraint.mjs)
  const J={},root=[k.sway||0,k.hipY,k.rootZ||0],P=rad(k.pitch),chest=k.pelvis+k.torso;
  // a point on the trunk: [lateral, rise above the hip joints, forward], turned by yaw then leaned
  const trunk=(l,rise,z,yaw)=>{const [l1,z1]=yawPt(l,z,yaw),z2=z1*Math.cos(P)+rise*Math.sin(P),r2=rise*Math.cos(P)-z1*Math.sin(P);return[root[0]+l1,root[1]-r2,root[2]+z2]};
  J.root=root;const cs=-(k.sway||0)*.9;J.waist=trunk(cs*.3,19.5,0,k.pelvis);J.thorax=trunk(cs,36.5,0,chest);J.neck=trunk(cs*.8,55.5,0,chest);   // the chest answers the hips (S line)
- J.head=[J.neck[0],J.neck[1]-L.neckToHead,J.neck[2]+2];            // the head stays level, eyes on the target
+ // the head stays level, eyes on the target - unless the key tips it: head [pitch (+ back), roll (+ toward
+ // her left shoulder), yaw (+ turns to her left)]
+ const hp=rad((k.head||[])[0]||0),hr=rad((k.head||[])[1]||0),hy=rad((k.head||[])[2]||0);
+ J.head=[J.neck[0]+Math.sin(hr)*L.neckToHead,J.neck[1]-L.neckToHead*Math.cos(hp)*Math.cos(hr),J.neck[2]+2-Math.sin(hp)*L.neckToHead];
+ {const fwd=[Math.sin(hy),Math.sin(hp)*-.0+(-Math.sin(hp))*0,Math.cos(hy)];const up=Math.sin(hp);J.face=[J.head[0]+Math.sin(hy)*Math.cos(hp)*9+Math.sin(hr)*2,J.head[1]-up*9,J.head[2]+Math.cos(hy)*Math.cos(hp)*9]}   // where she looks: 9px ahead of the head centre
+ J.crotch=[root[0],root[1]+7,root[2]+1];
  for(const [side,sg] of [['right',-1],['left',1]]){
   const hip=trunk(8.5*sg,0,0,k.pelvis),f=k['foot'+(side==='right'?'R':'L')],fy=rad(f[3]||0);
   const toe=[-sg*Math.sin(fy)*(side==='right'?1:-1)*0+(side==='right'?-Math.sin(fy):Math.sin(fy)),0,Math.cos(fy)];   // toes turned out to her own side
-  const onToe=f[2]>0&&f[2]<=8&&!f[4],ankle=[f[0],232-(onToe?Math.min(f[2],4.5):f[2]),f[1]];   // heel up: the ankle rises only as far as the foot allows
+  const onToe=f[2]>0&&f[2]<=8&&!f[4];let ankle=[f[0],232-(onToe?Math.min(f[2],4.5):f[2]),f[1]];   // heel up: the ankle rises only as far as the foot allows
+  // f[5]: pointed toes (degrees past the resting foot angle). On the ground she rises onto her toes
+  // (the toes stay where they were, the heel comes up); in the air the toes point down.
+  const pt=f[5]||0,fp=rad(36+pt),FL=13.6;
+  if(pt&&!f[4]&&f[2]<=8){const t0=[f[0]+toe[0]*11,240,f[1]+toe[2]*11];ankle=[t0[0]-toe[0]*FL*Math.cos(fp),240-FL*Math.sin(fp),t0[2]-toe[2]*FL*Math.cos(fp)]}
   // knees go the way the toes point (and a little outward), never inward across the body
-  const leg=ik3(hip,ankle,L.thigh,L.shin,norm(add(toe,[-sg*.08,0,0])));   // knees track a touch inward
+  const ko=f[6]!=null?f[6]:-.08;const leg=ik3(hip,ankle,L.thigh,L.shin,norm(add(toe,[sg*ko,0,0])));   // knees track a touch inward; f[6] sets it (- = knees together, + = splayed out)
   J['hip_'+side]=hip;J['knee_'+side]=leg.mid;J['ankle_'+side]=leg.end;
   const lift=f[2]>2?1:0;   // a lifted foot hangs toes-down a little
   // a planted foot whose heel comes up (lift <= 8 on the ground) keeps its toes on the floor
   const ty=onToe?240:leg.end[1]+8-lift*3,tz=onToe?Math.sqrt(Math.max(0,185-(240-leg.end[1])**2)):11;
-  J['toe_'+side]=[leg.end[0]+toe[0]*tz,ty,leg.end[2]+toe[2]*tz];
-  const sh=trunk(11.5*sg+cs,41,0,chest),A=k['arm'+(side==='right'?'R':'L')],hv=add(sh,mul(norm(A.d),(L.upper+L.fore-.06)*A.e));
+  if(pt){const e=leg.end,gnd=!f[4]&&f[2]<=8;J['toe_'+side]=gnd?[e[0]+toe[0]*FL*Math.cos(fp),240,e[2]+toe[2]*FL*Math.cos(fp)]:[e[0]+toe[0]*FL*Math.cos(fp),e[1]+FL*Math.sin(fp),e[2]+toe[2]*FL*Math.cos(fp)]}
+  else J['toe_'+side]=[leg.end[0]+toe[0]*tz,ty,leg.end[2]+toe[2]*tz];
+  const sh=trunk(11.5*sg+cs,41+(k.shrug||0),0,chest),A=k['arm'+(side==='right'?'R':'L')],hv=A.t?trunk(A.t[0],A.t[1],A.t[2],chest):add(sh,mul(norm(A.d),(L.upper+L.fore-.06)*A.e));   // A.t: a hand position on the body (tied behind her back...)
   // elbows point out and down; the sword elbow lifts out to the side when the hand is overhead
   const over=hv[1]<sh[1]-12;const pole=A.p||(side==='right'?(over?[-1,-.2,-.6]:[-1,.6,-.3]):[1,.9,.05]);   // A.p: an elbow direction for this key   // the shield elbow stays close to her side
   const arm=ik3(sh,hv,L.upper,L.fore,pole);
@@ -170,6 +180,7 @@ export function pose(k0){
  // the blade: the sword forearm turned about the cut's lateral axis by the wrist angle. When a
  // key gives tip (the angle of the tip seen from her right shoulder, side view: 0 = ahead,
  // -90 = straight up, 90 = straight down), the wrist angle is solved to put it there.
+ if(!k.noSword){
  const PL=PLANES[k.plane||'vertical'],ax=norm(cross(PL.e2,PL.e1));   // the wrist turns the blade about the plane's normal
  const f=norm(sub(J.wrist_right,J.elbow_right)),axf=cross(ax,f);
  const bladeAt=w=>{let v=norm(add(add(mul(f,Math.cos(w)),mul(axf,Math.sin(w))),mul(ax,dot(ax,f)*(1-Math.cos(w)))));return norm(sub(v,mul(ax,dot(v,ax)*.6)))};   // kept mostly in the plane
@@ -179,6 +190,8 @@ export function pose(k0){
  J.sword_tip=add(J.hand_right,mul(sd,L.sword));
  // the cross-guard: across the blade, flat to the swing
  const side=norm(cross(sd,[0,-1,0]).map((v,i)=>v||(i===0?1:0)));J.guard_a=add(J.hand_right,mul(side,6));J.guard_b=add(J.hand_right,mul(side,-6));
+ }
+ if(!k.noShield){
  // the shield rides on the outside of the left forearm, its face turned by shieldN
  const fm=mul(add(J.elbow_left,J.wrist_left),.5),n=norm(k.shieldN||[0,0,1]);J.shield=add(fm,mul(n,3));
  // the rim (8 points) and a point just in front of the face: the renderer draws the ellipse
@@ -189,6 +202,9 @@ export function pose(k0){
  J.shield_face=add(J.shield,mul(n,6));
  for(let q=0;q<8;q++){const a=q*Math.PI/4;J['shield_b'+q]=add(J.shield,add(add(mul(u,14*Math.cos(a)),mul(v,14*Math.sin(a))),mul(n,-3.5)))}   // the back rim: the shield has a thickness
  const fa2=norm(sub(J.wrist_left,J.elbow_left));J.strap_a=add(J.shield,mul(fa2,-8));J.strap_b=add(J.shield,mul(fa2,8));
+ }
+ // restraints (restraint.mjs): each bind ties a joint to an anchor in the world or to another joint
+ (k.binds||[]).forEach((b,i)=>{if(b.to)J['bind'+i]=b.to.slice();if(b.via)J['bindvia'+i]=b.via.slice()});
  return J;
 }
 const PARENT={root:null,waist:'root',thorax:'waist',neck:'thorax',head:'neck',hip_right:'root',knee_right:'hip_right',ankle_right:'knee_right',toe_right:'ankle_right',

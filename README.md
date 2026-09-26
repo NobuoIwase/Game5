@@ -56,6 +56,27 @@ ChatGPT の仕事は、世界観・区画・魔物の生態・台詞などの**�
 - 日本語を含むファイルは **UTF-8 のまま** 保存する。変換してからアップロードしない
 - 既存のファイルを部分的に書き換えるツールで日本語ファイルを編集しない（v0.16.1 の `ASSET_PACK_v0161.md` と v0.18.1 の README が途中から化けた）
 
+## モーション資料：ゲームの拘束と状態に合わせた21種（`character-motion-v1/`、ゲーム本体の変更なし）
+ゲームのモンスターのエロ攻撃・状態と照らし合わせ、足りなかったモーションを追加した。使い道は `game/RESTRAINT_MOTION_MAP.md`。
+- 押し倒し中の絶頂（`down_tension`）
+- 呑み込み：`engulf_sink` / `engulf_struggle` / `engulf_rock` / `engulf_tension`
+- 巻きつき：`wrap_squeeze` / `wrap_tension`
+- 足首つかみ：`ankle_grabbed`
+- 振りほどき：`break_free`
+- 寸止め後に引き寄せられる：`edge_pull`
+- ふらつく歩き：`walk_unsteady`
+- 凝視・トランス：`gaze_trance`
+- 胞子：`spore_inhale`
+- 鱗粉・冷気：`shiver_hug`
+- 泡：`bubble_float`
+- ぼーっとする・寄っていく：`daze_sway` / `reach_toward`
+- 転ぶ：`trip_fall`
+- 戦闘不能：`defeat_collapse`
+- 捕まった瞬間：`grabbed_flinch`
+- 攻撃モーションに、斬るのをためらう `swing_abandon`
+- 参考図に、胴に巻きつく輪・腰まで包む塊・体を包む泡を描けるようにした（どれもゲームが描くもので、依頼先には描かせない）
+- 張り付く生き物の3匹目を、ゲームと同じ位置（骨格の新しい点 `groin`、脚の付け根の前）に移した
+
 ## モーション資料：絶頂後の余韻と回復、見た目の不具合の修正（`character-motion-v1/`、ゲーム本体の変更なし）
 - **絶頂後の余韻と回復**を11種追加（拘束16種、床・口づけ・拘束なし・張り付き25種になった）。各絶頂モーションの最後のコマから余韻（ループ、6コマ目に余震）が始まり、回復は次の姿勢の最初のコマへつながる
   - 拘束：`afterglow_spread` / `recover_spread`（`tension_tiptoe` のあと）、`afterglow_slump` / `recover_slump`（`tension_arch` のあと）

@@ -7,6 +7,8 @@
 - **使い回し**：ほかのコマと同じ絵で済むコマは `REUSE_LIST.md`（`motion/reuse.json`）にまとめてある。
 - **作り方の計画**：どのコマを1枚絵で描き、どのコマを部位の組み立てで作るかは `PRODUCTION_PLAN.md`（`motion/plan.json`）。キャラクターごとの量もそこにある。
   - 部位は1枚絵から切り出さず、部位として描く（のりしろ付き・切り口に輪郭線なし・関節は別の絵）。
+- **描き手**：次の7つの1枚絵は NovelAI で作る（`nai/README.md`）。ほかの1枚絵と部位の絵は ChatGPT に頼む
+  - `scout_tail_grabbed`、`scout_tension`、`mage_suppress`、`mage_suppress_tension`、`mage_arms_bound`、`healer_panel_catch`、`healer_tension_refuse`
 
 ## 1. 目的
 

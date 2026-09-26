@@ -33,7 +33,7 @@ updateHero=function(h,dt){
  h._lungeT=Math.max(0,(h._lungeT||0)-dt);
 };
 const WM=window.WarriorMotion;
-if(WM?.drawGame){const d=WM.drawGame;WM.drawGame=(c,h)=>h._lungeT>0&&!h.dead?false:d(c,h)}
+// v0.44: the step-in is drawn by the rig's overhead cut now (warrior-motion.js), not as running frames
 if(typeof heroSpriteSample==='function'){
  const b=heroSpriteSample;
  heroSpriteSample=function(h){

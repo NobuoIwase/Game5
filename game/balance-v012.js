@@ -11,7 +11,7 @@ const B={
  supportHp:.7,                // support enemies in mixed encounters
  director:{autoMin:8.5,autoMax:12,ringMin:9,ringMax:13,calmRooms:2,calmMul:1.35,enRegen:6},
  // AUTO director intensity (selectable in the UI): interval multiplier and extra aim error in px
- intensity:{easy:{label:'やさしい',interval:7,err:100},normal:{label:'ふつう',interval:3.4,err:70},hard:{label:'きびしい',interval:2.2,err:40}},
+ intensity:{easy:{label:'やさしい',interval:5.5,err:100},normal:{label:'ふつう',interval:2.7,err:70},hard:{label:'きびしい',interval:1.7,err:40}},
  snare:{sp:15,bind:1.35},
  xp:[0,0,70,190,360,590,880,1240,1680],   // Lv8 cap, reached around the 6th floor
  sailDecay:3.2,                          // was 1.3: Sail no longer pins at 100%

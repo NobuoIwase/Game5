@@ -25,13 +25,22 @@ function imgs(d){if(S.imgs.has(d))return S.imgs.get(d);const o={};for(const p of
 Promise.all([fetch(`${BASE}rigs/warrior.json`).then(r=>r.json()),fetch(`${BASE}rigs/warrior-gear.json`).then(r=>r.json())]).then(([r,x])=>{S.rig=r;S.gear=x;for(const d of DIRS)if(r.views[d])r.views[d].__dir=d}).catch(e=>S.err=String(e));
 /* v0.26: [t, body, shoulder, elbow, wrist, x, y] - a deeper coil, a fast wide release with a lunge,
    and a held follow-through, so the swing reads as a committed cut */
+/* v0.44: an overhead cut with weight - [t, body, shoulder, elbow, wrist, x, y, legFront, legBack]
+   0-.42  from the guard the blade goes up over her head as she steps in (front foot out)
+   .42-.52 held high for a breath, the whole body drawn back like a bow
+   .52-.60 brought down hard (the hit lands at .60, where the hit-stop freezes it)
+   .60-.84 carried through low, knees bent, weight on the front foot - and held there
+   .84-1   back up toward the guard */
 const K=[
-[0,0,0,0,0,0,0],[.14,-3,-24,-12,-6,-3,0],[.32,-7,-62,-38,-20,-7,1],[.46,-8,-58,-44,-24,-8,2],
-[.56,4,20,-10,12,6,0],[.64,12,92,22,40,14,-2],[.74,14,112,32,48,16,-1],[.88,6,50,14,20,6,1],[1,0,0,0,0,0,0]];
+[0,0,48,0,0,0,0,0,0],[.2,-3,92,8,6,-2,0,3,-2],[.42,-8,128,16,12,-5,-1,8,-6],[.52,-10,136,20,16,-4,-1,9,-7],
+[.60,10,72,-4,-10,11,3,11,-8],[.70,13,58,-8,-14,13,5,12,-9],[.84,10,60,-4,-8,11,4,11,-8],[1,3,50,0,-2,3,1,3,-2]];
 function pose(p,dir,heavy=false,hit=.55){
- hit=Math.max(.15,Math.min(.85,hit));const q=p<=hit?p/hit*.66:.66+(p-hit)/(1-hit)*.34;let i=0;while(i<K.length-2&&q>K[i+1][0])i++;
- const a=K[i],b=K[i+1],u=(q-a[0])/(b[0]-a[0]||1),s=['front','down_right','right','up_right'].includes(dir)?-1:1,m=heavy?1.18:1;
- const V=j=>lerp(a[j],b[j],u)*m;return{kind:heavy?'heavy':'slash',body:V(1)*s*.42,sh:V(2)*s,el:V(3)*s,wr:V(4)*s,x:V(5)*(s<0?1:-1),y:V(6)};
+ hit=Math.max(.15,Math.min(.85,hit));const q=p<=hit?p/hit*.6:.6+(p-hit)/(1-hit)*.4;let i=0;while(i<K.length-2&&q>K[i+1][0])i++;
+ const a=K[i],b=K[i+1],raw=(q-a[0])/(b[0]-a[0]||1),u=i===3?raw*raw:raw<.5?2*raw*raw:1-2*(1-raw)*(1-raw),s=['front','down_right','right','up_right'].includes(dir)?-1:1,m=heavy?1.25:1;   // the stroke itself accelerates
+ // how far up the raise has to go to read as "over her head" differs with the view: facing the
+ // viewer it needs more turn than seen from the side
+ const RF={front:1.45,back:1.45,down_right:1.25,down_left:1.25,up_right:1.1,up_left:1.1}[dir]||1,sh0=lerp(a[2],b[2],u),shv=sh0>60?60+(sh0-60)*RF:sh0;
+ const V=j=>lerp(a[j],b[j],u);return{kind:heavy?'heavy':'slash',body:V(1)*s*.42*m,sh:shv*s,el:V(3)*s,wr:V(4)*s,x:V(5)*m*(s<0?1:-1),y:V(6)*m,lr:V(7)*s*m,ll:V(8)*s*m};
 }
 function est(h){const e=h.estella,p=e?.total?cl(1-e.t/e.total):.5,en=p<.16?p/.16:p>.82?(1-p)/.18:1,t=g.state?.time||0;return{kind:'estella',body:(Math.sin(t*17)*2.2+Math.sin(t*29))*en,ar:(Math.sin(t*23)*8+Math.sin(t*37)*3)*en,al:(Math.sin(t*19+2)*7+Math.sin(t*31)*3)*en,lr:Math.sin(t*21+1)*3.5*en,ll:Math.sin(t*18+3)*3*en,x:Math.sin(t*26)*1.6*en,y:Math.sin(t*33)*1.2*en}}
 function bind(){
@@ -59,7 +68,7 @@ function draw(c,d,p,sc){
  const v=S.rig?.views?.[d];if(!v)return false;const o=imgs(d);if(!o.body.ok)return false;const scale=sc.scale||112/543;
  const rx=sc.rootX??sc.x,ry=sc.rootY??((sc.y||0)-26),left=rx-v.root[0]*scale+p.x*scale,top=ry-v.root[1]*scale+p.y*scale;
  c.save();c.translate(left,top);c.scale(scale,scale);if(o.scabbard.ok)c.drawImage(o.scabbard,0,0);
- for(const L of v.legs){const a=p.kind==='estella'?(L.side==='right'?p.lr:p.ll):p.kind==='bind'?(L.side==='right'?p.lr:p.ll):0;limb(c,o['leg_'+L.side],L.hip,a||0)}
+ for(const L of v.legs){const a=L.side==='right'?p.lr:p.ll;limb(c,o['leg_'+L.side],L.hip,a||0)}   // v0.44: the swing moves the legs too
  const wn=near(d,'right'),sn=near(d,'left');
  if(p.kind==='slash'||p.kind==='heavy'){
   if(!wn)drawArm(c,v,o,p);if(!sn)shield(c,d,v,o,-p.sh*.1);c.save();rot(c,v.root,p.body);c.drawImage(o.body,0,0);c.restore();if(sn)shield(c,d,v,o,-p.sh*.1);if(wn)drawArm(c,v,o,p);
@@ -74,12 +83,14 @@ function action(h){if(h.estella?.active)return['estella',0,.55];if((h.status?.bi
    first moments instead of snapping to the rest pose */
 function carry(h,p){
  const now=performance.now()/1000,B=h._pb;
- if(!h._cf||h._cf.m!==h._warriorMotion){h._cf=B&&now-B.t<.12&&B.d===h.dir?{sh:B.v[2],body:B.v[0],t0:now}:{sh:0,body:0,t0:now};h._cf.m=h._warriorMotion}
-const k=Math.exp(-(now-h._cf.t0)/.07);p.sh+=h._cf.sh*k;p.body+=h._cf.body*k;return p}
+ if(!h._cf||h._cf.m!==h._warriorMotion){h._cf=B&&now-B.t<.12&&B.d===h.dir?{sh:B.v[2]-p.sh,body:B.v[0]-p.body,t0:now}:{sh:0,body:0,t0:now};h._cf.m=h._warriorMotion}   // the gap to where the arm was
+const k=Math.exp(-(now-h._cf.t0)/.07);p.sh+=h._cf.sh*k;p.body+=h._cf.body*k;
+ // v0.44: hand the last swing pose on, so the guard afterwards eases out of it (warrior-motion-extra.js blend)
+ h._pb={v:[p.body,-p.sh*.1,p.sh,p.lr||0,p.ll||0,p.x,p.y,0],t:now,d:h.dir};return p}
 function drawGame(c,h){const a=action(h);if(!a)return false;const p=a[0]==='estella'?est(h):a[0]==='bind'?bind():carry(h,pose(a[1],h.dir,a[0]==='heavy',a[2]));return draw(c,h.dir,p,{x:h.x,y:h.y,scale:112/543})}
 function qa(){let max=0,last=null,peak=0,pi=0;for(let i=0;i<=240;i++){const p=pose(i/240,'right'),v=[p.sh,p.el,p.wr];if(last){const d=Math.max(...v.map((x,j)=>Math.abs(x-last[j])));max=Math.max(max,d);const sp=v.reduce((s,x,j)=>s+Math.abs(x-last[j]),0);if(sp>peak){peak=sp;pi=i}}last=v}return{maxJointDelta:+max.toFixed(3),peakProgress:+(pi/240).toFixed(3),smooth:max<3,impactClose:Math.abs(pi/240-.55)<.18}}
-if(typeof g.startHeroSkill==='function'){const b=g.startHeroSkill;g.startHeroSkill=function(slot,reason=''){const h=g.activeHero?.(),sk=h?.skills?.[slot],ok=b(slot,reason);if(ok&&h?.id==='warrior'&&sk&&A.has(sk.kind))h._warriorMotion={name:sk.kind==='heavy'?'heavy':'slash',elapsed:0,total:sk.cast+(sk.kind==='heavy'?.34:.2),hitAt:sk.cast};return ok}}
+if(typeof g.startHeroSkill==='function'){const b=g.startHeroSkill;g.startHeroSkill=function(slot,reason=''){const h=g.activeHero?.(),sk=h?.skills?.[slot],ok=b(slot,reason);if(ok&&h?.id==='warrior'&&sk&&A.has(sk.kind))h._warriorMotion={name:sk.kind==='heavy'?'heavy':'slash',elapsed:0,total:sk.cast+(sk.kind==='heavy'?.46:.28),hitAt:sk.cast};return ok}}
 if(typeof g.updateHero==='function'){const b=g.updateHero;g.updateHero=function(a,dt){const h=a;b(h,dt);if(h?._warriorMotion){h._warriorMotion.elapsed+=dt;if(h._warriorMotion.elapsed>=h._warriorMotion.total)h._warriorMotion=null}}}
 if(g.state)g.state.version='0.6.0';
-g.WarriorMotion={drawGame,drawLab:(c,d,n,p,o={})=>draw(c,d,n==='estella'?est({estella:{t:(1-p)*2.6,total:2.6}}):n==='bind'?bind():pose(p,d,n==='heavy',o.hitP??.55),{rootX:o.rootX??181,rootY:o.rootY??314,scale:o.scale||1}),qa,ready:()=>!!S.rig,error:()=>S.err};
+g.WarriorMotion={drawPose:(c,d,p,o={})=>draw(c,d,{kind:'slash',body:0,sh:0,el:0,wr:0,x:0,y:0,...p},{rootX:o.rootX??181,rootY:o.rootY??314,scale:o.scale||1}),drawGame,drawLab:(c,d,n,p,o={})=>draw(c,d,n==='estella'?est({estella:{t:(1-p)*2.6,total:2.6}}):n==='bind'?bind():pose(p,d,n==='heavy',o.hitP??.55),{rootX:o.rootX??181,rootY:o.rootY??314,scale:o.scale||1}),qa,ready:()=>!!S.rig,error:()=>S.err};
 })(window);

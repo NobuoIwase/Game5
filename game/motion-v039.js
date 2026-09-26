@@ -27,7 +27,7 @@ updateHero=function(h,dt){
  if(h.moving)h._stepPh=(((h._stepPh||0)+back*d/cyc*8)%8+8)%8;
  else if(h._stepPh%4>.01){const t=Math.round(h._stepPh/4)*4;h._stepPh+=(t-h._stepPh)*Math.min(1,dt*14);if(Math.abs(t-h._stepPh)<.05)h._stepPh=t%8}   // settle onto a planted foot
  // lean: toward the way she moves, and back for a moment when she stops short
- const sp=Math.hypot(vx,vy),lx=sp>1?vx/(h.speed||158):0;
+ const sp=Math.hypot(vx,vy),lx=sp>1?vx/(h.speed||158):0;h._mv={x:vx,y:vy,s:sp};
  if(h._spPrev>120&&sp<20)h._brakeT=.18;
  h._spPrev=h.moving?sp:0;h._brakeT=Math.max(0,(h._brakeT||0)-dt);
  const want=Math.max(-1,Math.min(1,lx))*C.lean*(run?1:.45)-(h._brakeT>0?Math.sign(h._leanDir||0)*C.brake*h._brakeT/.18:0);

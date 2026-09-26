@@ -1,0 +1,83 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Game5 モーション参考資料</title>
+<style>
+:root{--bg:#f4f1ea;--card:#fffdf8;--ink:#23252c;--sub:#6b6f7a;--line:#d8d2c4;--acc:#7b3fa0}
+@media (prefers-color-scheme:dark){:root{--bg:#17181c;--card:#202127;--ink:#e8e6e1;--sub:#a3a6ae;--line:#34363e;--acc:#c79be6}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif}
+header{padding:20px 16px 8px;max-width:1280px;margin:0 auto}h1{font-size:22px;margin:0 0 4px}header p{margin:0;color:var(--sub);font-size:13px}
+nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 16px;z-index:2}
+nav .in{max-width:1280px;margin:0 auto;display:flex;gap:8px;flex-wrap:wrap}
+nav button{font:inherit;font-size:13px;padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+nav button[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:#fff}
+main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;margin:24px 0 10px;border-left:4px solid var(--acc);padding-left:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,560px),1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}
+.card h3{margin:0;font-size:15px}.meta{margin:2px 0 8px;color:var(--sub);font-size:12px}.meta code{font-size:11px}
+.card img{display:block;width:100%;height:auto;border-radius:6px;background:#f4f1ea}
+.links{margin:8px 0 0;display:flex;gap:6px;flex-wrap:wrap}.links a{font-size:12px;color:var(--acc);text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+.hide{display:none}
+</style></head><body>
+<header><h1>Game5 モーション参考資料</h1><p>骨格から描いたマネキン図（青＝本人の右半身、橙＝左半身、紫＝拘束）。図をタップすると大きく開きます。依頼書：<a href="https://github.com/NobuoIwase/Game5/blob/main/character-motion-v1/ATTACK_MOTION_REQUEST.md">攻撃</a> · <a href="https://github.com/NobuoIwase/Game5/blob/main/character-motion-v1/RESTRAINT_MOTION_REQUEST.md">拘束された姿勢</a></p></header>
+<nav><div class="in"><button data-f="all" aria-pressed="true">すべて</button><button data-f="attack" aria-pressed="false">攻撃（7）</button><button data-f="restraint" aria-pressed="false">拘束された姿勢（12）</button></div></nav>
+<main>
+<section data-kind="attack"><h2>攻撃</h2><div class="grid"><article class="card" data-kind="attack"><h3>通常斬り（踏み込み振り下ろし）</h3><p class="meta"><code>slash</code> · 12コマ · 950ms · 1回 · 命中 6コマ目</p>
+<a href="attack-v1/slash_preview.svg" target="_blank"><img loading="lazy" src="attack-v1/slash_preview.svg" alt="通常斬り（踏み込み振り下ろし）"></a>
+<p class="links"><a href="attack-v1/slash_sheet.svg" target="_blank">全方向×全コマ</a><a href="attack-v1/slash_keys_right.svg" target="_blank">要所（右）</a><a href="attack-v1/slash_keys_down_right.svg" target="_blank">要所（右斜め前）</a></p></article>
+<article class="card" data-kind="attack"><h3>破城斬り（跳び上がって叩きつけ）</h3><p class="meta"><code>heavy</code> · 11コマ · 1170ms · 1回 · 命中 6コマ目</p>
+<a href="attack-v1/heavy_preview.svg" target="_blank"><img loading="lazy" src="attack-v1/heavy_preview.svg" alt="破城斬り（跳び上がって叩きつけ）"></a>
+<p class="links"><a href="attack-v1/heavy_sheet.svg" target="_blank">全方向×全コマ</a><a href="attack-v1/heavy_keys_right.svg" target="_blank">要所（右）</a><a href="attack-v1/heavy_keys_down_right.svg" target="_blank">要所（右斜め前）</a></p></article>
+<article class="card" data-kind="attack"><h3>袈裟懸け（右上から左下への斜め斬り）</h3><p class="meta"><code>kesa</code> · 12コマ · 950ms · 1回 · 命中 6コマ目</p>
+<a href="attack-v1/kesa_preview.svg" target="_blank"><img loading="lazy" src="attack-v1/kesa_preview.svg" alt="袈裟懸け（右上から左下への斜め斬り）"></a>
+<p class="links"><a href="attack-v1/kesa_sheet.svg" target="_blank">全方向×全コマ</a><a href="attack-v1/kesa_keys_right.svg" target="_blank">要所（右）</a><a href="attack-v1/kesa_keys_down_right.svg" target="_blank">要所（右斜め前）</a></p></article>
+<article class="card" data-kind="attack"><h3>横一文字（右から左への水平斬り）</h3><p class="meta"><code>yoko</code> · 12コマ · 950ms · 1回 · 命中 6コマ目</p>
+<a href="attack-v1/yoko_preview.svg" target="_blank"><img loading="lazy" src="attack-v1/yoko_preview.svg" alt="横一文字（右から左への水平斬り）"></a>
+<p class="links"><a href="attack-v1/yoko_sheet.svg" target="_blank">全方向×全コマ</a><a href="attack-v1/yoko_keys_right.svg" target="_blank">要所（右）</a><a href="attack-v1/yoko_keys_down_right.svg" target="_blank">要所（右斜め前）</a></p></article>
+<article class="card" data-kind="attack"><h3>突き</h3><p class="meta"><code>thrust</code> · 9コマ · 760ms · 1回 · 命中 4コマ目</p>
+<a href="attack-v1/thrust_preview.svg" target="_blank"><img loading="lazy" src="attack-v1/thrust_preview.svg" alt="突き"></a>
+<p class="links"><a href="attack-v1/thrust_sheet.svg" target="_blank">全方向×全コマ</a><a href="attack-v1/thrust_keys_right.svg" target="_blank">要所（右）</a><a href="attack-v1/thrust_keys_down_right.svg" target="_blank">要所（右斜め前）</a></p></article>
+<article class="card" data-kind="attack"><h3>構えたまま前進</h3><p class="meta"><code>advance</code> · 8コマ · 720ms · ループ</p>
+<a href="attack-v1/advance_preview.svg" target="_blank"><img loading="lazy" src="attack-v1/advance_preview.svg" alt="構えたまま前進"></a>
+<p class="links"><a href="attack-v1/advance_sheet.svg" target="_blank">全方向×全コマ</a><a href="attack-v1/advance_keys_right.svg" target="_blank">要所（右）</a><a href="attack-v1/advance_keys_down_right.svg" target="_blank">要所（右斜め前）</a></p></article>
+<article class="card" data-kind="attack"><h3>構えたまま後退</h3><p class="meta"><code>retreat</code> · 8コマ · 720ms · ループ</p>
+<a href="attack-v1/retreat_preview.svg" target="_blank"><img loading="lazy" src="attack-v1/retreat_preview.svg" alt="構えたまま後退"></a>
+<p class="links"><a href="attack-v1/retreat_sheet.svg" target="_blank">全方向×全コマ</a><a href="attack-v1/retreat_keys_right.svg" target="_blank">要所（右）</a><a href="attack-v1/retreat_keys_down_right.svg" target="_blank">要所（右斜め前）</a></p></article></div></section>
+<section data-kind="restraint"><h2>拘束された姿勢</h2><div class="grid"><article class="card" data-kind="restraint"><h3>後ろ手に縛られて身をよじる</h3><p class="meta"><code>arms_behind_squirm</code> · 8コマ · 960ms · ループ · 向き：正面</p>
+<a href="restraint-v1/arms_behind_squirm_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/arms_behind_squirm_preview.svg" alt="後ろ手に縛られて身をよじる"></a>
+<p class="links"><a href="restraint-v1/arms_behind_squirm_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/arms_behind_squirm_keys_front.svg" target="_blank">要所（正面）</a><a href="restraint-v1/arms_behind_squirm_keys_right.svg" target="_blank">要所（右）</a></p></article>
+<article class="card" data-kind="restraint"><h3>後ろ手に縛られて振りほどこうとする</h3><p class="meta"><code>arms_behind_wrench</code> · 8コマ · 800ms · ループ · 向き：正面</p>
+<a href="restraint-v1/arms_behind_wrench_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/arms_behind_wrench_preview.svg" alt="後ろ手に縛られて振りほどこうとする"></a>
+<p class="links"><a href="restraint-v1/arms_behind_wrench_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/arms_behind_wrench_keys_front.svg" target="_blank">要所（正面）</a><a href="restraint-v1/arms_behind_wrench_keys_right.svg" target="_blank">要所（右）</a></p></article>
+<article class="card" data-kind="restraint"><h3>両手首を上から吊られ、腕を引き下ろそうと力む</h3><p class="meta"><code>elbows_up_strain</code> · 8コマ · 880ms · ループ · 向き：正面</p>
+<a href="restraint-v1/elbows_up_strain_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/elbows_up_strain_preview.svg" alt="両手首を上から吊られ、腕を引き下ろそうと力む"></a>
+<p class="links"><a href="restraint-v1/elbows_up_strain_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/elbows_up_strain_keys_front.svg" target="_blank">要所（正面）</a><a href="restraint-v1/elbows_up_strain_keys_right.svg" target="_blank">要所（右）</a></p></article>
+<article class="card" data-kind="restraint"><h3>閉じた膝を左右へ引き開かれる</h3><p class="meta"><code>legs_pulled_open</code> · 12コマ · 1260ms · 1回 · 向き：正面</p>
+<a href="restraint-v1/legs_pulled_open_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/legs_pulled_open_preview.svg" alt="閉じた膝を左右へ引き開かれる"></a>
+<p class="links"><a href="restraint-v1/legs_pulled_open_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/legs_pulled_open_keys_front.svg" target="_blank">要所（正面）</a><a href="restraint-v1/legs_pulled_open_keys_right.svg" target="_blank">要所（右）</a></p></article>
+<article class="card" data-kind="restraint"><h3>脚を開かれたまま耐える</h3><p class="meta"><code>legs_held_open</code> · 8コマ · 720ms · ループ · 向き：正面</p>
+<a href="restraint-v1/legs_held_open_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/legs_held_open_preview.svg" alt="脚を開かれたまま耐える"></a>
+<p class="links"><a href="restraint-v1/legs_held_open_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/legs_held_open_keys_front.svg" target="_blank">要所（正面）</a><a href="restraint-v1/legs_held_open_keys_right.svg" target="_blank">要所（右）</a></p></article>
+<article class="card" data-kind="restraint"><h3>脚を開いた姿勢で腰を前後に揺らす</h3><p class="meta"><code>hip_rock_spread</code> · 8コマ · 680ms · ループ · 向き：正面</p>
+<a href="restraint-v1/hip_rock_spread_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/hip_rock_spread_preview.svg" alt="脚を開いた姿勢で腰を前後に揺らす"></a>
+<p class="links"><a href="restraint-v1/hip_rock_spread_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/hip_rock_spread_keys_front.svg" target="_blank">要所（正面）</a><a href="restraint-v1/hip_rock_spread_keys_right.svg" target="_blank">要所（右）</a></p></article>
+<article class="card" data-kind="restraint"><h3>膝を閉じた姿勢で腰を小さく前後に揺らす</h3><p class="meta"><code>hip_rock_closed</code> · 8コマ · 760ms · ループ · 向き：正面</p>
+<a href="restraint-v1/hip_rock_closed_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/hip_rock_closed_preview.svg" alt="膝を閉じた姿勢で腰を小さく前後に揺らす"></a>
+<p class="links"><a href="restraint-v1/hip_rock_closed_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/hip_rock_closed_keys_front.svg" target="_blank">要所（正面）</a><a href="restraint-v1/hip_rock_closed_keys_right.svg" target="_blank">要所（右）</a></p></article>
+<article class="card" data-kind="restraint"><h3>脚を開いた姿勢で上下に揺れる</h3><p class="meta"><code>bounce_spread</code> · 8コマ · 640ms · ループ · 向き：正面</p>
+<a href="restraint-v1/bounce_spread_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/bounce_spread_preview.svg" alt="脚を開いた姿勢で上下に揺れる"></a>
+<p class="links"><a href="restraint-v1/bounce_spread_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/bounce_spread_keys_front.svg" target="_blank">要所（正面）</a><a href="restraint-v1/bounce_spread_keys_right.svg" target="_blank">要所（右）</a></p></article>
+<article class="card" data-kind="restraint"><h3>手首を吊られたまま上下に揺れる</h3><p class="meta"><code>bounce_hung</code> · 8コマ · 600ms · ループ · 向き：正面</p>
+<a href="restraint-v1/bounce_hung_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/bounce_hung_preview.svg" alt="手首を吊られたまま上下に揺れる"></a>
+<p class="links"><a href="restraint-v1/bounce_hung_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/bounce_hung_keys_front.svg" target="_blank">要所（正面）</a><a href="restraint-v1/bounce_hung_keys_right.svg" target="_blank">要所（右）</a></p></article>
+<article class="card" data-kind="restraint"><h3>全身がこわばって爪先立ち、そのあと脱力</h3><p class="meta"><code>tension_tiptoe</code> · 12コマ · 1280ms · 1回 · 向き：正面</p>
+<a href="restraint-v1/tension_tiptoe_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/tension_tiptoe_preview.svg" alt="全身がこわばって爪先立ち、そのあと脱力"></a>
+<p class="links"><a href="restraint-v1/tension_tiptoe_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/tension_tiptoe_keys_front.svg" target="_blank">要所（正面）</a><a href="restraint-v1/tension_tiptoe_keys_right.svg" target="_blank">要所（右）</a></p></article>
+<article class="card" data-kind="restraint"><h3>背中を大きく反らせてこわばり、そのあと脱力</h3><p class="meta"><code>tension_arch</code> · 12コマ · 1280ms · 1回 · 向き：正面</p>
+<a href="restraint-v1/tension_arch_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/tension_arch_preview.svg" alt="背中を大きく反らせてこわばり、そのあと脱力"></a>
+<p class="links"><a href="restraint-v1/tension_arch_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/tension_arch_keys_front.svg" target="_blank">要所（正面）</a><a href="restraint-v1/tension_arch_keys_right.svg" target="_blank">要所（右）</a></p></article>
+<article class="card" data-kind="restraint"><h3>前屈みで手首を床の前に縛られ、腰を左右に揺らす（後ろ・斜め後ろから）</h3><p class="meta"><code>bent_over</code> · 8コマ · 880ms · ループ · 向き：斜め後ろ</p>
+<a href="restraint-v1/bent_over_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/bent_over_preview.svg" alt="前屈みで手首を床の前に縛られ、腰を左右に揺らす（後ろ・斜め後ろから）"></a>
+<p class="links"><a href="restraint-v1/bent_over_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/bent_over_keys_up_right.svg" target="_blank">要所（斜め後ろ）</a><a href="restraint-v1/bent_over_keys_back.svg" target="_blank">要所（後ろ）</a><a href="restraint-v1/bent_over_keys_right.svg" target="_blank">要所（右）</a></p></article></div></section>
+</main>
+<script>
+const bs=[...document.querySelectorAll('nav button')];
+bs.forEach(b=>b.onclick=()=>{bs.forEach(x=>x.setAttribute('aria-pressed',x===b));const f=b.dataset.f;document.querySelectorAll('section').forEach(s=>s.classList.toggle('hide',f!=='all'&&s.dataset.kind!==f))});
+</script></body></html>

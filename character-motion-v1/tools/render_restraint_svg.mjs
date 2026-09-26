@@ -1,8 +1,8 @@
-// Renders the restraint / H-scene reference poses (motion/restraint.mjs) as SVG mannequins.
+// Renders the restrained-pose references (motion/restraint.mjs) as SVG mannequins.
 //   node tools/render_restraint_svg.mjs
 // Output: motion/restraint-poses.json and references/restraint-v1/*.svg
-// The scene is shown from one direction (motions.<id>.view: front, or back for show_rear); the
-// sheets also give a 3/4 view and the side view, which shows the depth of a thrust or an arch.
+// Each motion is shown from one direction (motions.<id>.view: front, or from behind for bent_over); the
+// sheets also give a 3/4 view and the side view, which shows the depth of a rock or an arch.
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';
 import {library} from '../motion/restraint.mjs';
 import {sheet,keys,preview} from './mannequin_svg.mjs';

@@ -28,7 +28,7 @@ function follow(dt){
  const h=state.hero;if(!h)return;
  const z0=CAM.z;CAM.z+=(wantZ-CAM.z)*(1-Math.exp(-dt*(wantZ>CAM.z?2.6:1.8)));
  // zoom about the view centre so the close-up does not lurch
- if(Math.abs(CAM.z-z0)>1e-4){const cx=CAM.x+SW/z0/2,cy=CAM.y+SH/z0/2;CAM.x=cx-SW/CAM.z/2;CAM.y=cy-SH/CAM.z/2}
+ if(Math.abs(CAM.z-z0)>1e-4){const cx=CAM.x+SW/z0/2,cy=CAM.y+SH/z0/2;CAM.x=clamp(cx-SW/CAM.z/2,0,W-SW/CAM.z);CAM.y=clamp(cy-SH/CAM.z/2,0,H-SH/CAM.z)}   // v0.45: never past the floor's edge
  const t=target(h);
  const jump=!seen||Math.hypot(h.x-seen.x,h.y-seen.y)>260;
  if(jump){CAM.x=clamp(h.x-SW/CAM.z/2,0,W-SW/CAM.z);CAM.y=clamp(h.y-30-SH/CAM.z/2,0,H-SH/CAM.z)}

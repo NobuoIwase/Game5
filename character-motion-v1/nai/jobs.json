@@ -1,0 +1,6475 @@
+{
+ "version": "2026-09-26",
+ "size": [
+  1024,
+  1024
+ ],
+ "common": "1girl, solo, adult, mature female, full body, simple background, white background",
+ "negative": "child, loli, young, text, watermark, signature, frame, border, cropped, out of frame, multiple views, extra limbs, extra arms, extra legs, mannequin, doll joints, grid, blood, gore, injury, wound, crying in pain, egg, pregnant, birth, insect, bug, zoophilia",
+ "bind_default": "pink tentacles",
+ "characters": {
+  "aria": {
+   "label": "アリア（戦士）",
+   "tags": "orange hair, high ponytail, heavy bangs, grey-blue eyes, dark brown leather armor bodysuit, blue sleeves, black thighhighs, silver armored boots, silver gauntlets"
+  },
+  "scout": {
+   "label": "斥候（シーフ）",
+   "tags": "fennec fox girl, very large fox ears, fox tail with peach-pink tip, short pale blond hair with peach-pink tips, red eyes, large backpack with a rolled bedroll on top"
+  },
+  "mage": {
+   "label": "魔法使い",
+   "tags": "witch, very long wavy pale lavender hair, violet eyes, huge black pointed witch hat with magenta band, long coat, mechanical prosthetic forearms, metal hands"
+  },
+  "healer": {
+   "label": "ヒーラー",
+   "tags": "elf, long pointy ears, long straight dark grey hair, blunt bangs, braid, white and gold cleric outfit, two narrow hanging cloth panels in front of her chest, long white gloves, white thighhighs"
+  }
+ },
+ "situations": {
+  "bound": "拘束されている（腕・脚を縛られる、前屈みで縛られる）",
+  "bound_rock": "拘束されたまま揺さぶられる",
+  "pinned": "床に押し倒される・押さえつけられる",
+  "pinned_rock": "押さえつけられたまま揺さぶられる",
+  "held": "後ろから抱えられる",
+  "kiss": "口づけ",
+  "clinger": "小さな生き物に張り付かれる",
+  "engulf": "柔らかい塊に呑まれる",
+  "wrap": "胴に巻きつかれる",
+  "grabbed": "足首・尻尾などをつかまれる、引きずられる",
+  "trance": "ぼんやりする・催眠・胞子・泡",
+  "tempt": "誘う姿勢",
+  "endure": "声を出さずに耐える",
+  "exposure": "前垂れがめくれかける",
+  "climax": "こわばり・絶頂の頂点",
+  "afterglow": "余韻でぐったりする",
+  "recover": "余韻から起き上がる",
+  "defeat": "倒れる・敗北"
+ },
+ "frames": {
+  "arms_behind_squirm__front__0": {
+   "id": "arms_behind_squirm__front__0",
+   "motion": "arms_behind_squirm",
+   "view": "front",
+   "frame": 0,
+   "label": "後ろ手に縛られて身をよじる",
+   "phase": "hips sway and twist, knees pressed together and shifting, one heel then the other comes up; looks down and away",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, looking down, closed mouth, clenched teeth, wrists bound together by {bind}, wrist held by {bind}, restrained",
+   "note": "hips sway and twist, knees pressed together and shifting, one heel then the other comes up; looks down and away",
+   "base": "base/arms_behind_squirm__front__0.png"
+  },
+  "arms_behind_squirm__front__2": {
+   "id": "arms_behind_squirm__front__2",
+   "motion": "arms_behind_squirm",
+   "view": "front",
+   "frame": 2,
+   "label": "後ろ手に縛られて身をよじる",
+   "phase": "hips sway and twist, knees pressed together and shifting, one heel then the other comes up; looks down and away",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, looking down, closed mouth, clenched teeth, wrists bound together by {bind}, wrist held by {bind}, restrained",
+   "note": "hips sway and twist, knees pressed together and shifting, one heel then the other comes up; looks down and away",
+   "base": "base/arms_behind_squirm__front__2.png"
+  },
+  "arms_behind_wrench__front__0": {
+   "id": "arms_behind_wrench__front__0",
+   "motion": "arms_behind_wrench",
+   "view": "front",
+   "frame": 0,
+   "label": "後ろ手に縛られて振りほどこうとする",
+   "phase": "wrench to her left: shoulders twist, chest thrown out, up on the pushing toes",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, closed mouth, clenched teeth, wrists bound together by {bind}, wrist held by {bind}, restrained",
+   "note": "wrench to her left: shoulders twist, chest thrown out, up on the pushing toes",
+   "base": "base/arms_behind_wrench__front__0.png"
+  },
+  "arms_behind_wrench__front__5": {
+   "id": "arms_behind_wrench__front__5",
+   "motion": "arms_behind_wrench",
+   "view": "front",
+   "frame": 5,
+   "label": "後ろ手に縛られて振りほどこうとする",
+   "phase": "wrench to her right: shoulders twist, chest thrown out, up on the pushing toes",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, closed mouth, clenched teeth, wrists bound together by {bind}, wrist held by {bind}, restrained",
+   "note": "wrench to her right: shoulders twist, chest thrown out, up on the pushing toes",
+   "base": "base/arms_behind_wrench__front__5.png"
+  },
+  "elbows_up_strain__front__0": {
+   "id": "elbows_up_strain__front__0",
+   "motion": "elbows_up_strain",
+   "view": "front",
+   "frame": 0,
+   "label": "両手首を上から吊られ、腕を引き下ろそうと力む",
+   "phase": "pulls one arm down against the restraint, then the other; hunches and bends the knees while straining, is drawn up onto the toes when the restraint wins",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound"
+   ],
+   "prompt": "from front, facing viewer, standing, closed mouth, clenched teeth, wrist held by {bind}, restrained",
+   "note": "pulls one arm down against the restraint, then the other; hunches and bends the knees while straining, is drawn up onto the toes when the restraint wins",
+   "base": "base/elbows_up_strain__front__0.png"
+  },
+  "elbows_up_strain__front__2": {
+   "id": "elbows_up_strain__front__2",
+   "motion": "elbows_up_strain",
+   "view": "front",
+   "frame": 2,
+   "label": "両手首を上から吊られ、腕を引き下ろそうと力む",
+   "phase": "pulls one arm down against the restraint, then the other; hunches and bends the knees while straining, is drawn up onto the toes when the restraint wins",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound"
+   ],
+   "prompt": "from front, facing viewer, standing, closed mouth, clenched teeth, wrist held by {bind}, restrained",
+   "note": "pulls one arm down against the restraint, then the other; hunches and bends the knees while straining, is drawn up onto the toes when the restraint wins",
+   "base": "base/elbows_up_strain__front__2.png"
+  },
+  "legs_pulled_open__front__0": {
+   "id": "legs_pulled_open__front__0",
+   "motion": "legs_pulled_open",
+   "view": "front",
+   "frame": 0,
+   "label": "閉じた膝を左右へ引き開かれる",
+   "phase": "閉じる knees pressed together, toes turned in; the restraints reach for her knees",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, closed mouth, clenched teeth, wrists bound together by {bind}, knee held by {bind}, restrained",
+   "note": "knees pressed together, toes turned in; the restraints reach for her knees",
+   "base": "base/legs_pulled_open__front__0.png"
+  },
+  "legs_pulled_open__front__7": {
+   "id": "legs_pulled_open__front__7",
+   "motion": "legs_pulled_open",
+   "view": "front",
+   "frame": 7,
+   "label": "閉じた膝を左右へ引き開かれる",
+   "phase": "開かれた pulled wide: knees turned out, hips low (gani-mata)",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound"
+   ],
+   "prompt": "from front, facing viewer, squatting, arms behind back, spread legs, closed mouth, clenched teeth, wrists bound together by {bind}, knee held by {bind}, restrained",
+   "note": "pulled wide: knees turned out, hips low (gani-mata)",
+   "base": "base/legs_pulled_open__front__7.png"
+  },
+  "legs_held_open__front__0": {
+   "id": "legs_held_open__front__0",
+   "motion": "legs_held_open",
+   "view": "front",
+   "frame": 0,
+   "label": "脚を開かれたまま耐える",
+   "phase": "held open: the knees quiver, the hips tremble",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound"
+   ],
+   "prompt": "from front, facing viewer, squatting, arms behind back, spread legs, closed mouth, clenched teeth, wrists bound together by {bind}, knee held by {bind}, restrained",
+   "note": "held open: the knees quiver, the hips tremble",
+   "base": "base/legs_held_open__front__0.png"
+  },
+  "legs_held_open__front__2": {
+   "id": "legs_held_open__front__2",
+   "motion": "legs_held_open",
+   "view": "front",
+   "frame": 2,
+   "label": "脚を開かれたまま耐える",
+   "phase": "held open: the knees quiver, the hips tremble",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound"
+   ],
+   "prompt": "from front, facing viewer, squatting, arms behind back, spread legs, closed mouth, clenched teeth, wrists bound together by {bind}, knee held by {bind}, restrained",
+   "note": "held open: the knees quiver, the hips tremble",
+   "base": "base/legs_held_open__front__2.png"
+  },
+  "hip_rock_spread__front__0": {
+   "id": "hip_rock_spread__front__0",
+   "motion": "hip_rock_spread",
+   "view": "front",
+   "frame": 0,
+   "label": "脚を開いた姿勢で腰を前後に揺らす",
+   "phase": "…",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound_rock"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, spread legs, open mouth, wrists bound together by {bind}, knee held by {bind}, restrained",
+   "note": "",
+   "base": "base/hip_rock_spread__front__0.png"
+  },
+  "hip_rock_spread__front__3": {
+   "id": "hip_rock_spread__front__3",
+   "motion": "hip_rock_spread",
+   "view": "front",
+   "frame": 3,
+   "label": "脚を開いた姿勢で腰を前後に揺らす",
+   "phase": "hips pushed forward, shoulders back",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound_rock"
+   ],
+   "prompt": "from front, facing viewer, squatting, arms behind back, spread legs, open mouth, wrists bound together by {bind}, knee held by {bind}, restrained",
+   "note": "hips pushed forward, shoulders back",
+   "base": "base/hip_rock_spread__front__3.png"
+  },
+  "hip_rock_closed__front__0": {
+   "id": "hip_rock_closed__front__0",
+   "motion": "hip_rock_closed",
+   "view": "front",
+   "frame": 0,
+   "label": "膝を閉じた姿勢で腰を小さく前後に揺らす",
+   "phase": "knees kept together; small rocks of the hips, rising onto the toes each time",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound_rock"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, open mouth, wrists bound together by {bind}, restrained",
+   "note": "knees kept together; small rocks of the hips, rising onto the toes each time",
+   "base": "base/hip_rock_closed__front__0.png"
+  },
+  "hip_rock_closed__front__3": {
+   "id": "hip_rock_closed__front__3",
+   "motion": "hip_rock_closed",
+   "view": "front",
+   "frame": 3,
+   "label": "膝を閉じた姿勢で腰を小さく前後に揺らす",
+   "phase": "knees kept together; small rocks of the hips, rising onto the toes each time",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound_rock"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, open mouth, wrists bound together by {bind}, restrained",
+   "note": "knees kept together; small rocks of the hips, rising onto the toes each time",
+   "base": "base/hip_rock_closed__front__3.png"
+  },
+  "bounce_spread__front__0": {
+   "id": "bounce_spread__front__0",
+   "motion": "bounce_spread",
+   "view": "front",
+   "frame": 0,
+   "label": "脚を開いた姿勢で上下に揺れる",
+   "phase": "up: lifted onto her toes",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound_rock"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, spread legs, open mouth, wrists bound together by {bind}, knee held by {bind}, restrained",
+   "note": "up: lifted onto her toes",
+   "base": "base/bounce_spread__front__0.png"
+  },
+  "bounce_spread__front__4": {
+   "id": "bounce_spread__front__4",
+   "motion": "bounce_spread",
+   "view": "front",
+   "frame": 4,
+   "label": "脚を開いた姿勢で上下に揺れる",
+   "phase": "down: knees bend, weight drops",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound_rock"
+   ],
+   "prompt": "from front, facing viewer, squatting, arms behind back, spread legs, open mouth, wrists bound together by {bind}, knee held by {bind}, restrained",
+   "note": "down: knees bend, weight drops",
+   "base": "base/bounce_spread__front__4.png"
+  },
+  "bounce_hung__front__0": {
+   "id": "bounce_hung__front__0",
+   "motion": "bounce_hung",
+   "view": "front",
+   "frame": 0,
+   "label": "手首を吊られたまま上下に揺れる",
+   "phase": "hung by the wrists and bounced; the arms stretch as she drops",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound_rock"
+   ],
+   "prompt": "from front, facing viewer, standing, spread legs, open mouth, wrist held by {bind}, knee held by {bind}, restrained",
+   "note": "hung by the wrists and bounced; the arms stretch as she drops",
+   "base": "base/bounce_hung__front__0.png"
+  },
+  "bounce_hung__front__4": {
+   "id": "bounce_hung__front__4",
+   "motion": "bounce_hung",
+   "view": "front",
+   "frame": 4,
+   "label": "手首を吊られたまま上下に揺れる",
+   "phase": "hung by the wrists and bounced; the arms stretch as she drops",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound_rock"
+   ],
+   "prompt": "from front, facing viewer, squatting, spread legs, open mouth, wrist held by {bind}, knee held by {bind}, restrained",
+   "note": "hung by the wrists and bounced; the arms stretch as she drops",
+   "base": "base/bounce_hung__front__4.png"
+  },
+  "tension_tiptoe__front__0": {
+   "id": "tension_tiptoe__front__0",
+   "motion": "tension_tiptoe",
+   "view": "front",
+   "frame": 0,
+   "label": "全身がこわばって爪先立ち、そのあと脱力",
+   "phase": "こわばり tension rising, knees locked",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, spread legs, closed mouth, clenched teeth, wrists bound together by {bind}, knee held by {bind}, restrained",
+   "note": "tension rising, knees locked",
+   "base": "base/tension_tiptoe__front__0.png"
+  },
+  "tension_tiptoe__front__3": {
+   "id": "tension_tiptoe__front__3",
+   "motion": "tension_tiptoe",
+   "view": "front",
+   "frame": 3,
+   "label": "全身がこわばって爪先立ち、そのあと脱力",
+   "phase": "頂点 peak: toes pointed hard, legs rigid, head back",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, spread legs, closed eyes, open mouth, wrists bound together by {bind}, knee held by {bind}, restrained",
+   "note": "peak: toes pointed hard, legs rigid, head back",
+   "base": "base/tension_tiptoe__front__3.png"
+  },
+  "tension_arch__front__0": {
+   "id": "tension_arch__front__0",
+   "motion": "tension_arch",
+   "view": "front",
+   "frame": 0,
+   "label": "背中を大きく反らせてこわばり、そのあと脱力",
+   "phase": "立つ standing, bound",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, closed mouth, clenched teeth, wrists bound together by {bind}, wrist held by {bind}, restrained",
+   "note": "standing, bound",
+   "base": "base/tension_arch__front__0.png"
+  },
+  "tension_arch__front__3": {
+   "id": "tension_arch__front__3",
+   "motion": "tension_arch",
+   "view": "front",
+   "frame": 3,
+   "label": "背中を大きく反らせてこわばり、そのあと脱力",
+   "phase": "頂点 peak: arched right back, head thrown back, on the toes",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, arched back, closed eyes, open mouth, wrists bound together by {bind}, wrist held by {bind}, restrained",
+   "note": "peak: arched right back, head thrown back, on the toes",
+   "base": "base/tension_arch__front__3.png"
+  },
+  "afterglow_spread__front__0": {
+   "id": "afterglow_spread__front__0",
+   "motion": "afterglow_spread",
+   "view": "front",
+   "frame": 0,
+   "label": "脚を開かれたまま脱力し、肩で息をする（tension_tiptoe のあと）",
+   "phase": "hanging limp in the restraints, head down, shoulders heaving",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "afterglow"
+   ],
+   "prompt": "from front, facing viewer, squatting, arms behind back, spread legs, open mouth, wrists bound together by {bind}, knee held by {bind}, restrained",
+   "note": "hanging limp in the restraints, head down, shoulders heaving",
+   "base": "base/afterglow_spread__front__0.png"
+  },
+  "afterglow_spread__front__5": {
+   "id": "afterglow_spread__front__5",
+   "motion": "afterglow_spread",
+   "view": "front",
+   "frame": 5,
+   "label": "脚を開かれたまま脱力し、肩で息をする（tension_tiptoe のあと）",
+   "phase": "余震 an aftershock: toes point, the body jerks once",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "afterglow"
+   ],
+   "prompt": "from front, facing viewer, squatting, arms behind back, spread legs, closed eyes, open mouth, wrists bound together by {bind}, knee held by {bind}, restrained",
+   "note": "an aftershock: toes point, the body jerks once",
+   "base": "base/afterglow_spread__front__5.png"
+  },
+  "afterglow_slump__front__0": {
+   "id": "afterglow_slump__front__0",
+   "motion": "afterglow_slump",
+   "view": "front",
+   "frame": 0,
+   "label": "前へ崩れたまま脱力し、肩で息をする（tension_arch のあと）",
+   "phase": "slumped forward, knees in, head hanging, shoulders heaving",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "afterglow"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, open mouth, wrists bound together by {bind}, wrist held by {bind}, restrained",
+   "note": "slumped forward, knees in, head hanging, shoulders heaving",
+   "base": "base/afterglow_slump__front__0.png"
+  },
+  "afterglow_slump__front__5": {
+   "id": "afterglow_slump__front__5",
+   "motion": "afterglow_slump",
+   "view": "front",
+   "frame": 5,
+   "label": "前へ崩れたまま脱力し、肩で息をする（tension_arch のあと）",
+   "phase": "余震 an aftershock: a jerk, up on the toes for a moment",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "afterglow"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, closed eyes, open mouth, wrists bound together by {bind}, wrist held by {bind}, restrained",
+   "note": "an aftershock: a jerk, up on the toes for a moment",
+   "base": "base/afterglow_slump__front__5.png"
+  },
+  "recover_slump__front__0": {
+   "id": "recover_slump__front__0",
+   "motion": "recover_slump",
+   "view": "front",
+   "frame": 0,
+   "label": "脱力から我に返り、立ち直る",
+   "phase": "脱力 limp",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, open mouth, wrists bound together by {bind}, wrist held by {bind}, restrained",
+   "note": "limp",
+   "base": "base/recover_slump__front__0.png"
+  },
+  "recover_slump__front__2": {
+   "id": "recover_slump__front__2",
+   "motion": "recover_slump",
+   "view": "front",
+   "frame": 2,
+   "label": "脱力から我に返り、立ち直る",
+   "phase": "顔を上げる lifts her head",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, closed mouth, clenched teeth, wrists bound together by {bind}, wrist held by {bind}, restrained",
+   "note": "lifts her head",
+   "base": "base/recover_slump__front__2.png"
+  },
+  "bent_over__up_right__0": {
+   "id": "bent_over__up_right__0",
+   "motion": "bent_over",
+   "view": "up_right",
+   "frame": 0,
+   "label": "前屈みで手首を床の前に縛られ、腰を左右に揺らす（後ろ・斜め後ろから）",
+   "phase": "bent right over, hips up and back; the hips sway side to side; looks back over the shoulder",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound"
+   ],
+   "prompt": "from behind, three-quarter view, looking away, bent over, standing, open mouth, wrist held by {bind}, wrists bound together by {bind}, restrained",
+   "note": "bent right over, hips up and back; the hips sway side to side; looks back over the shoulder",
+   "base": "base/bent_over__up_right__0.png"
+  },
+  "bent_over__up_right__2": {
+   "id": "bent_over__up_right__2",
+   "motion": "bent_over",
+   "view": "up_right",
+   "frame": 2,
+   "label": "前屈みで手首を床の前に縛られ、腰を左右に揺らす（後ろ・斜め後ろから）",
+   "phase": "bent right over, hips up and back; the hips sway side to side; looks back over the shoulder",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound"
+   ],
+   "prompt": "from behind, three-quarter view, looking away, bent over, standing, open mouth, wrist held by {bind}, wrists bound together by {bind}, restrained",
+   "note": "bent right over, hips up and back; the hips sway side to side; looks back over the shoulder",
+   "base": "base/bent_over__up_right__2.png"
+  },
+  "down_fall_back__right__0": {
+   "id": "down_fall_back__right__0",
+   "motion": "down_fall_back",
+   "view": "right",
+   "frame": 0,
+   "label": "押されて尻もちをつき、仰向けに倒れる",
+   "phase": "立つ standing, hands up",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "pinned"
+   ],
+   "prompt": "from side, profile, standing",
+   "note": "standing, hands up",
+   "base": "base/down_fall_back__right__0.png"
+  },
+  "down_fall_back__right__2": {
+   "id": "down_fall_back__right__2",
+   "motion": "down_fall_back",
+   "view": "right",
+   "frame": 2,
+   "label": "押されて尻もちをつき、仰向けに倒れる",
+   "phase": "押される pushed: leans back, arms out",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "pinned"
+   ],
+   "prompt": "from side, profile, standing, open mouth",
+   "note": "pushed: leans back, arms out",
+   "base": "base/down_fall_back__right__2.png"
+  },
+  "down_fall_back__right__8": {
+   "id": "down_fall_back__right__8",
+   "motion": "down_fall_back",
+   "view": "right",
+   "frame": 8,
+   "label": "押されて尻もちをつき、仰向けに倒れる",
+   "phase": "よろける knees give, hands reach back",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "pinned"
+   ],
+   "prompt": "from side, profile, squatting, arms behind back, open mouth",
+   "note": "knees give, hands reach back",
+   "base": "base/down_fall_back__right__8.png"
+  },
+  "down_fall_back__right__12": {
+   "id": "down_fall_back__right__12",
+   "motion": "down_fall_back",
+   "view": "right",
+   "frame": 12,
+   "label": "押されて尻もちをつき、仰向けに倒れる",
+   "phase": "尻もち sits down hard, catches herself",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "pinned"
+   ],
+   "prompt": "from side, profile, sitting on the floor, arms behind back, open mouth",
+   "note": "sits down hard, catches herself",
+   "base": "base/down_fall_back__right__12.png"
+  },
+  "down_fall_back__right__17": {
+   "id": "down_fall_back__right__17",
+   "motion": "down_fall_back",
+   "view": "right",
+   "frame": 17,
+   "label": "押されて尻もちをつき、仰向けに倒れる",
+   "phase": "倒れる falls onto her back, head bumps, feet come up",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "pinned"
+   ],
+   "prompt": "from side, profile, lying on back, closed eyes, open mouth",
+   "note": "falls onto her back, head bumps, feet come up",
+   "base": "base/down_fall_back__right__17.png"
+  },
+  "down_pinned_kick__right__0": {
+   "id": "down_pinned_kick__right__0",
+   "motion": "down_pinned_kick",
+   "view": "right",
+   "frame": 0,
+   "label": "仰向けで両手首を頭の上に押さえられ、脚をばたつかせる",
+   "phase": "kicks with one leg then the other, twists at the hips, turns her face away",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "pinned"
+   ],
+   "prompt": "from side, profile, lying on back, arms up, closed mouth, clenched teeth, wrist held by {bind}, restrained",
+   "note": "kicks with one leg then the other, twists at the hips, turns her face away",
+   "base": "base/down_pinned_kick__right__0.png"
+  },
+  "down_pinned_kick__right__2": {
+   "id": "down_pinned_kick__right__2",
+   "motion": "down_pinned_kick",
+   "view": "right",
+   "frame": 2,
+   "label": "仰向けで両手首を頭の上に押さえられ、脚をばたつかせる",
+   "phase": "kicks with one leg then the other, twists at the hips, turns her face away",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "pinned"
+   ],
+   "prompt": "from side, profile, lying on back, arms up, closed mouth, clenched teeth, wrist held by {bind}, restrained",
+   "note": "kicks with one leg then the other, twists at the hips, turns her face away",
+   "base": "base/down_pinned_kick__right__2.png"
+  },
+  "down_pinned_spread__down_right__0": {
+   "id": "down_pinned_spread__down_right__0",
+   "motion": "down_pinned_spread",
+   "view": "down_right",
+   "frame": 0,
+   "label": "仰向けで立てた膝を左右へ開かれ、腰をよじる",
+   "phase": "knees held apart; tries to close them, twists the hips",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "pinned"
+   ],
+   "prompt": "three-quarter view, lying on back, arms up, closed mouth, clenched teeth, wrist held by {bind}, knee held by {bind}, restrained",
+   "note": "knees held apart; tries to close them, twists the hips",
+   "base": "base/down_pinned_spread__down_right__0.png"
+  },
+  "down_pinned_spread__down_right__6": {
+   "id": "down_pinned_spread__down_right__6",
+   "motion": "down_pinned_spread",
+   "view": "down_right",
+   "frame": 6,
+   "label": "仰向けで立てた膝を左右へ開かれ、腰をよじる",
+   "phase": "knees held apart; tries to close them, twists the hips",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "pinned"
+   ],
+   "prompt": "three-quarter view, lying on back, arms up, spread legs, closed mouth, clenched teeth, wrist held by {bind}, knee held by {bind}, restrained",
+   "note": "knees held apart; tries to close them, twists the hips",
+   "base": "base/down_pinned_spread__down_right__6.png"
+  },
+  "down_pinned_rock__down_right__0": {
+   "id": "down_pinned_rock__down_right__0",
+   "motion": "down_pinned_rock",
+   "view": "down_right",
+   "frame": 0,
+   "label": "仰向けで膝を開かれ、体が頭の方へ前後に揺れる",
+   "phase": "…",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "pinned_rock"
+   ],
+   "prompt": "three-quarter view, lying on back, arms up, spread legs, closed eyes, wrist held by {bind}, knee held by {bind}, restrained",
+   "note": "",
+   "base": "base/down_pinned_rock__down_right__0.png"
+  },
+  "down_pinned_rock__down_right__3": {
+   "id": "down_pinned_rock__down_right__3",
+   "motion": "down_pinned_rock",
+   "view": "down_right",
+   "frame": 3,
+   "label": "仰向けで膝を開かれ、体が頭の方へ前後に揺れる",
+   "phase": "pushed toward her head",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "pinned_rock"
+   ],
+   "prompt": "three-quarter view, lying on back, arms up, spread legs, open mouth, wrist held by {bind}, knee held by {bind}, restrained",
+   "note": "pushed toward her head",
+   "base": "base/down_pinned_rock__down_right__3.png"
+  },
+  "down_face_down__right__0": {
+   "id": "down_face_down__right__0",
+   "motion": "down_face_down",
+   "view": "right",
+   "frame": 0,
+   "label": "うつ伏せで押さえられ、脚をばたつかせてもがく",
+   "phase": "kicks from the knees one leg after the other, hips twisting",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "pinned"
+   ],
+   "prompt": "from side, profile, lying on stomach, closed mouth, clenched teeth, wrist held by {bind}, restrained",
+   "note": "kicks from the knees one leg after the other, hips twisting",
+   "base": "base/down_face_down__right__0.png"
+  },
+  "down_face_down__right__4": {
+   "id": "down_face_down__right__4",
+   "motion": "down_face_down",
+   "view": "right",
+   "frame": 4,
+   "label": "うつ伏せで押さえられ、脚をばたつかせてもがく",
+   "phase": "kicks from the knees one leg after the other, hips twisting",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "pinned"
+   ],
+   "prompt": "from side, profile, lying on stomach, closed mouth, clenched teeth, wrist held by {bind}, restrained",
+   "note": "kicks from the knees one leg after the other, hips twisting",
+   "base": "base/down_face_down__right__4.png"
+  },
+  "down_hips_up__right__0": {
+   "id": "down_hips_up__right__0",
+   "motion": "down_hips_up",
+   "view": "right",
+   "frame": 0,
+   "label": "膝をついて胸を床につけ、腰を上げたまま前後に揺れる",
+   "phase": "…",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "pinned"
+   ],
+   "prompt": "from side, profile, all fours, hips up, arms up, closed eyes, wrist held by {bind}, restrained",
+   "note": "",
+   "base": "base/down_hips_up__right__0.png"
+  },
+  "down_hips_up__right__2": {
+   "id": "down_hips_up__right__2",
+   "motion": "down_hips_up",
+   "view": "right",
+   "frame": 2,
+   "label": "膝をついて胸を床につけ、腰を上げたまま前後に揺れる",
+   "phase": "hips pushed forward",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "pinned"
+   ],
+   "prompt": "from side, profile, all fours, hips up, arms up, open mouth, wrist held by {bind}, restrained",
+   "note": "hips pushed forward",
+   "base": "base/down_hips_up__right__2.png"
+  },
+  "get_up__right__0": {
+   "id": "get_up__right__0",
+   "motion": "get_up",
+   "view": "right",
+   "frame": 0,
+   "label": "仰向けから起き上がる",
+   "phase": "仰向け on her back, knees up",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from side, profile, lying on back, closed eyes",
+   "note": "on her back, knees up",
+   "base": "base/get_up__right__0.png"
+  },
+  "get_up__right__4": {
+   "id": "get_up__right__4",
+   "motion": "get_up",
+   "view": "right",
+   "frame": 4,
+   "label": "仰向けから起き上がる",
+   "phase": "肘をつく up on her elbows",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from side, profile, leaning back, half lying, arms behind back",
+   "note": "up on her elbows",
+   "base": "base/get_up__right__4.png"
+  },
+  "get_up__right__8": {
+   "id": "get_up__right__8",
+   "motion": "get_up",
+   "view": "right",
+   "frame": 8,
+   "label": "仰向けから起き上がる",
+   "phase": "座る sitting, knees up, hands on the floor behind",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from side, profile, sitting on the floor, arms behind back",
+   "note": "sitting, knees up, hands on the floor behind",
+   "base": "base/get_up__right__8.png"
+  },
+  "get_up__right__13": {
+   "id": "get_up__right__13",
+   "motion": "get_up",
+   "view": "right",
+   "frame": 13,
+   "label": "仰向けから起き上がる",
+   "phase": "しゃがむ rocks forward onto her feet, hands to the floor in front",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from side, profile, squatting",
+   "note": "rocks forward onto her feet, hands to the floor in front",
+   "base": "base/get_up__right__13.png"
+  },
+  "get_up__right__16": {
+   "id": "get_up__right__16",
+   "motion": "get_up",
+   "view": "right",
+   "frame": 16,
+   "label": "仰向けから起き上がる",
+   "phase": "立ち上がる rising, hands on her knees",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from side, profile, squatting",
+   "note": "rising, hands on her knees",
+   "base": "base/get_up__right__16.png"
+  },
+  "get_up__right__18": {
+   "id": "get_up__right__18",
+   "motion": "get_up",
+   "view": "right",
+   "frame": 18,
+   "label": "仰向けから起き上がる",
+   "phase": "立つ standing",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from side, profile, standing",
+   "note": "standing",
+   "base": "base/get_up__right__18.png"
+  },
+  "kiss_forced__right__0": {
+   "id": "kiss_forced__right__0",
+   "motion": "kiss_forced",
+   "view": "right",
+   "frame": 0,
+   "label": "口づけされて押し返そうとする",
+   "phase": "held at the mouth; both hands push at the other, the body twists",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "kiss"
+   ],
+   "prompt": "from side, profile, standing, eyes squeezed shut, closed mouth, clenched teeth, kiss, another head close to her face",
+   "note": "held at the mouth; both hands push at the other, the body twists",
+   "base": "base/kiss_forced__right__0.png"
+  },
+  "kiss_forced__right__6": {
+   "id": "kiss_forced__right__6",
+   "motion": "kiss_forced",
+   "view": "right",
+   "frame": 6,
+   "label": "口づけされて押し返そうとする",
+   "phase": "held at the mouth; both hands push at the other, the body twists",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "kiss"
+   ],
+   "prompt": "from side, profile, standing, eyes squeezed shut, closed mouth, clenched teeth, kiss, another head close to her face",
+   "note": "held at the mouth; both hands push at the other, the body twists",
+   "base": "base/kiss_forced__right__6.png"
+  },
+  "kiss_tension__right__0": {
+   "id": "kiss_tension__right__0",
+   "motion": "kiss_tension",
+   "view": "right",
+   "frame": 0,
+   "label": "口づけされたまま全身がこわばり、膝が崩れる",
+   "phase": "押し返す still pushing",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from side, profile, standing, eyes squeezed shut, closed mouth, clenched teeth, kiss, another head close to her face",
+   "note": "still pushing",
+   "base": "base/kiss_tension__right__0.png"
+  },
+  "kiss_tension__right__3": {
+   "id": "kiss_tension__right__3",
+   "motion": "kiss_tension",
+   "view": "right",
+   "frame": 3,
+   "label": "口づけされたまま全身がこわばり、膝が崩れる",
+   "phase": "頂点 peak: hands fly open, toes pointed",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from side, profile, standing, closed eyes, kiss, another head close to her face",
+   "note": "peak: hands fly open, toes pointed",
+   "base": "base/kiss_tension__right__3.png"
+  },
+  "kiss_tension__right__8": {
+   "id": "kiss_tension__right__8",
+   "motion": "kiss_tension",
+   "view": "right",
+   "frame": 8,
+   "label": "口づけされたまま全身がこわばり、膝が崩れる",
+   "phase": "崩れる knees give inward, arms hang, held up at the mouth",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from side, profile, standing, closed eyes, open mouth, kiss, another head close to her face",
+   "note": "knees give inward, arms hang, held up at the mouth",
+   "base": "base/kiss_tension__right__8.png"
+  },
+  "kiss_respond__right__0": {
+   "id": "kiss_respond__right__0",
+   "motion": "kiss_respond",
+   "view": "right",
+   "frame": 0,
+   "label": "口づけに応える（爪先立ちで身を寄せる）",
+   "phase": "rises onto her toes, leans in, head tilted; arms reach up and round the other",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "kiss"
+   ],
+   "prompt": "from side, profile, standing, closed eyes, kiss, another head close to her face",
+   "note": "rises onto her toes, leans in, head tilted; arms reach up and round the other",
+   "base": "base/kiss_respond__right__0.png"
+  },
+  "kiss_respond__right__6": {
+   "id": "kiss_respond__right__6",
+   "motion": "kiss_respond",
+   "view": "right",
+   "frame": 6,
+   "label": "口づけに応える（爪先立ちで身を寄せる）",
+   "phase": "rises onto her toes, leans in, head tilted; arms reach up and round the other",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "kiss"
+   ],
+   "prompt": "from side, profile, standing, closed eyes, kiss, another head close to her face",
+   "note": "rises onto her toes, leans in, head tilted; arms reach up and round the other",
+   "base": "base/kiss_respond__right__6.png"
+  },
+  "tempt_pose__front__0": {
+   "id": "tempt_pose__front__0",
+   "motion": "tempt_pose",
+   "view": "front",
+   "frame": 0,
+   "label": "脚を開いて腰を前に出し、ゆっくり揺らす（誘う姿勢）",
+   "phase": "legs apart, hips pushed forward and swaying slowly; one hand on her chest, the other on her thigh; head tilted, looking down",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "tempt"
+   ],
+   "prompt": "from front, facing viewer, standing",
+   "note": "legs apart, hips pushed forward and swaying slowly; one hand on her chest, the other on her thigh; head tilted, looking down",
+   "base": "base/tempt_pose__front__0.png"
+  },
+  "tempt_pose__front__6": {
+   "id": "tempt_pose__front__6",
+   "motion": "tempt_pose",
+   "view": "front",
+   "frame": 6,
+   "label": "脚を開いて腰を前に出し、ゆっくり揺らす（誘う姿勢）",
+   "phase": "legs apart, hips pushed forward and swaying slowly; one hand on her chest, the other on her thigh; head tilted, looking down",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "tempt"
+   ],
+   "prompt": "from front, facing viewer, standing",
+   "note": "legs apart, hips pushed forward and swaying slowly; one hand on her chest, the other on her thigh; head tilted, looking down",
+   "base": "base/tempt_pose__front__6.png"
+  },
+  "chain_splay__front__0": {
+   "id": "chain_splay__front__0",
+   "motion": "chain_splay",
+   "view": "front",
+   "frame": 0,
+   "label": "脚ががに股に開き、膝と腰が小刻みに震える",
+   "phase": "knees splayed and shaking, hips trembling, arms hanging loose, head back",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound"
+   ],
+   "prompt": "from front, facing viewer, standing, spread legs, closed eyes, open mouth",
+   "note": "knees splayed and shaking, hips trembling, arms hanging loose, head back",
+   "base": "base/chain_splay__front__0.png"
+  },
+  "chain_splay__front__3": {
+   "id": "chain_splay__front__3",
+   "motion": "chain_splay",
+   "view": "front",
+   "frame": 3,
+   "label": "脚ががに股に開き、膝と腰が小刻みに震える",
+   "phase": "knees splayed and shaking, hips trembling, arms hanging loose, head back",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "bound"
+   ],
+   "prompt": "from front, facing viewer, standing, spread legs, closed eyes, open mouth",
+   "note": "knees splayed and shaking, hips trembling, arms hanging loose, head back",
+   "base": "base/chain_splay__front__3.png"
+  },
+  "tension_free__front__0": {
+   "id": "tension_free__front__0",
+   "motion": "tension_free",
+   "view": "front",
+   "frame": 0,
+   "label": "立ったまま全身がこわばり、膝から崩れて座り込む",
+   "phase": "押さえる hands pressed to her chest and belly",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing",
+   "note": "hands pressed to her chest and belly",
+   "base": "base/tension_free__front__0.png"
+  },
+  "tension_free__front__4": {
+   "id": "tension_free__front__4",
+   "motion": "tension_free",
+   "view": "front",
+   "frame": 4,
+   "label": "立ったまま全身がこわばり、膝から崩れて座り込む",
+   "phase": "頂点 peak: arches, up on her toes, head back",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, arched back, on tiptoes, closed eyes, open mouth",
+   "note": "peak: arches, up on her toes, head back",
+   "base": "base/tension_free__front__4.png"
+  },
+  "tension_free__front__11": {
+   "id": "tension_free__front__11",
+   "motion": "tension_free",
+   "view": "front",
+   "frame": 11,
+   "label": "立ったまま全身がこわばり、膝から崩れて座り込む",
+   "phase": "崩れる knees give",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, squatting, closed eyes, open mouth",
+   "note": "knees give",
+   "base": "base/tension_free__front__11.png"
+  },
+  "tension_free__front__13": {
+   "id": "tension_free__front__13",
+   "motion": "tension_free",
+   "view": "front",
+   "frame": 13,
+   "label": "立ったまま全身がこわばり、膝から崩れて座り込む",
+   "phase": "座り込む sinks to the floor, legs folded out to the sides",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, sitting on the floor, open mouth",
+   "note": "sinks to the floor, legs folded out to the sides",
+   "base": "base/tension_free__front__13.png"
+  },
+  "sit_afterglow__front__0": {
+   "id": "sit_afterglow__front__0",
+   "motion": "sit_afterglow",
+   "view": "front",
+   "frame": 0,
+   "label": "女の子座りで肩で息をする",
+   "phase": "sitting with legs folded out to the sides, shoulders heaving",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "afterglow"
+   ],
+   "prompt": "from front, facing viewer, sitting on the floor, open mouth",
+   "note": "sitting with legs folded out to the sides, shoulders heaving",
+   "base": "base/sit_afterglow__front__0.png"
+  },
+  "held_from_behind__front__0": {
+   "id": "held_from_behind__front__0",
+   "motion": "held_from_behind",
+   "view": "front",
+   "frame": 0,
+   "label": "後ろから腕ごと胴を抱きすくめられ、もがく",
+   "phase": "arms pinned to her sides by a hold from behind; twists, kicks one foot then the other, looks back",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "held"
+   ],
+   "prompt": "from front, facing viewer, standing, closed mouth, clenched teeth, elbows bound together by {bind}, limb held by {bind}, restrained",
+   "note": "arms pinned to her sides by a hold from behind; twists, kicks one foot then the other, looks back",
+   "base": "base/held_from_behind__front__0.png"
+  },
+  "held_from_behind__front__2": {
+   "id": "held_from_behind__front__2",
+   "motion": "held_from_behind",
+   "view": "front",
+   "frame": 2,
+   "label": "後ろから腕ごと胴を抱きすくめられ、もがく",
+   "phase": "arms pinned to her sides by a hold from behind; twists, kicks one foot then the other, looks back",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "held"
+   ],
+   "prompt": "from front, facing viewer, standing, closed mouth, clenched teeth, elbows bound together by {bind}, limb held by {bind}, restrained",
+   "note": "arms pinned to her sides by a hold from behind; twists, kicks one foot then the other, looks back",
+   "base": "base/held_from_behind__front__2.png"
+  },
+  "down_afterglow__down_right__0": {
+   "id": "down_afterglow__down_right__0",
+   "motion": "down_afterglow",
+   "view": "down_right",
+   "frame": 0,
+   "label": "仰向けで膝が倒れたまま、肩で息をする",
+   "phase": "on her back, knees fallen open, arms loose, face turned aside, chest heaving",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "afterglow"
+   ],
+   "prompt": "three-quarter view, lying on back, spread legs, open mouth",
+   "note": "on her back, knees fallen open, arms loose, face turned aside, chest heaving",
+   "base": "base/down_afterglow__down_right__0.png"
+  },
+  "down_afterglow__down_right__5": {
+   "id": "down_afterglow__down_right__5",
+   "motion": "down_afterglow",
+   "view": "down_right",
+   "frame": 5,
+   "label": "仰向けで膝が倒れたまま、肩で息をする",
+   "phase": "余震 an aftershock: the hips jerk, toes point",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "afterglow"
+   ],
+   "prompt": "three-quarter view, lying on back, spread legs, closed eyes, open mouth",
+   "note": "an aftershock: the hips jerk, toes point",
+   "base": "base/down_afterglow__down_right__5.png"
+  },
+  "down_recover__down_right__2": {
+   "id": "down_recover__down_right__2",
+   "motion": "down_recover",
+   "view": "down_right",
+   "frame": 2,
+   "label": "仰向けの余韻から膝を閉じて体を起こしかける（そのあと get_up）",
+   "phase": "膝を閉じる draws her knees together",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "three-quarter view, lying on back, closed mouth, clenched teeth",
+   "note": "draws her knees together",
+   "base": "base/down_recover__down_right__2.png"
+  },
+  "kiss_afterglow__right__0": {
+   "id": "kiss_afterglow__right__0",
+   "motion": "kiss_afterglow",
+   "view": "right",
+   "frame": 0,
+   "label": "口づけのあと、膝が抜けたままふらつき、肩で息をする（kiss_tension のあと）",
+   "phase": "the other has drawn back; knees still weak, swaying, head down, shoulders heaving",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "afterglow"
+   ],
+   "prompt": "from side, profile, squatting, open mouth, kiss, another head close to her face",
+   "note": "the other has drawn back; knees still weak, swaying, head down, shoulders heaving",
+   "base": "base/kiss_afterglow__right__0.png"
+  },
+  "kiss_afterglow__right__5": {
+   "id": "kiss_afterglow__right__5",
+   "motion": "kiss_afterglow",
+   "view": "right",
+   "frame": 5,
+   "label": "口づけのあと、膝が抜けたままふらつき、肩で息をする（kiss_tension のあと）",
+   "phase": "the other has drawn back; knees still weak, swaying, head down, shoulders heaving",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "afterglow"
+   ],
+   "prompt": "from side, profile, squatting, open mouth, kiss, another head close to her face",
+   "note": "the other has drawn back; knees still weak, swaying, head down, shoulders heaving",
+   "base": "base/kiss_afterglow__right__5.png"
+  },
+  "kiss_recover__right__0": {
+   "id": "kiss_recover__right__0",
+   "motion": "kiss_recover",
+   "view": "right",
+   "frame": 0,
+   "label": "我に返って口元をぬぐい、一歩下がる",
+   "phase": "ふらつく swaying",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from side, profile, squatting, open mouth, kiss, another head close to her face",
+   "note": "swaying",
+   "base": "base/kiss_recover__right__0.png"
+  },
+  "kiss_recover__right__5": {
+   "id": "kiss_recover__right__5",
+   "motion": "kiss_recover",
+   "view": "right",
+   "frame": 5,
+   "label": "我に返って口元をぬぐい、一歩下がる",
+   "phase": "ぬぐう comes to herself, back of the hand to her mouth",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from side, profile, standing, closed mouth, clenched teeth, kiss, another head close to her face",
+   "note": "comes to herself, back of the hand to her mouth",
+   "base": "base/kiss_recover__right__5.png"
+  },
+  "kiss_recover__right__8": {
+   "id": "kiss_recover__right__8",
+   "motion": "kiss_recover",
+   "view": "right",
+   "frame": 8,
+   "label": "我に返って口元をぬぐい、一歩下がる",
+   "phase": "下がる steps back, other hand up to keep it off",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from side, profile, standing, closed mouth, clenched teeth, kiss, another head close to her face",
+   "note": "steps back, other hand up to keep it off",
+   "base": "base/kiss_recover__right__8.png"
+  },
+  "kiss_recover__right__10": {
+   "id": "kiss_recover__right__10",
+   "motion": "kiss_recover",
+   "view": "right",
+   "frame": 10,
+   "label": "我に返って口元をぬぐい、一歩下がる",
+   "phase": "構え standing, guarded",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from side, profile, standing, closed mouth, clenched teeth",
+   "note": "standing, guarded",
+   "base": "base/kiss_recover__right__10.png"
+  },
+  "sit_recover__front__2": {
+   "id": "sit_recover__front__2",
+   "motion": "sit_recover",
+   "view": "front",
+   "frame": 2,
+   "label": "女の子座りから立ち上がる（tension_free・sit_afterglow のあと）",
+   "phase": "手をつく hands to the floor in front",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from front, facing viewer, sitting on the floor, open mouth",
+   "note": "hands to the floor in front",
+   "base": "base/sit_recover__front__2.png"
+  },
+  "sit_recover__front__5": {
+   "id": "sit_recover__front__5",
+   "motion": "sit_recover",
+   "view": "front",
+   "frame": 5,
+   "label": "女の子座りから立ち上がる（tension_free・sit_afterglow のあと）",
+   "phase": "膝立ち up on her knees",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from front, facing viewer, kneeling",
+   "note": "up on her knees",
+   "base": "base/sit_recover__front__5.png"
+  },
+  "sit_recover__front__9": {
+   "id": "sit_recover__front__9",
+   "motion": "sit_recover",
+   "view": "front",
+   "frame": 9,
+   "label": "女の子座りから立ち上がる（tension_free・sit_afterglow のあと）",
+   "phase": "片膝 one foot forward",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from front, facing viewer, on one knee",
+   "note": "one foot forward",
+   "base": "base/sit_recover__front__9.png"
+  },
+  "sit_recover__front__11": {
+   "id": "sit_recover__front__11",
+   "motion": "sit_recover",
+   "view": "front",
+   "frame": 11,
+   "label": "女の子座りから立ち上がる（tension_free・sit_afterglow のあと）",
+   "phase": "立ち上がる rising",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from front, facing viewer, standing",
+   "note": "rising",
+   "base": "base/sit_recover__front__11.png"
+  },
+  "sit_recover__front__13": {
+   "id": "sit_recover__front__13",
+   "motion": "sit_recover",
+   "view": "front",
+   "frame": 13,
+   "label": "女の子座りから立ち上がる（tension_free・sit_afterglow のあと）",
+   "phase": "立つ standing",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from front, facing viewer, standing",
+   "note": "standing",
+   "base": "base/sit_recover__front__13.png"
+  },
+  "clinger_afterglow__front__5": {
+   "id": "clinger_afterglow__front__5",
+   "motion": "clinger_afterglow",
+   "view": "front",
+   "frame": 5,
+   "label": "張り付かれたまま座り込み、肩で息をする（clinger_tension のあと）",
+   "phase": "余震 an aftershock: jerks, hands fly off her lap",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "afterglow"
+   ],
+   "prompt": "from front, facing viewer, sitting on the floor, closed eyes, open mouth, small pink winged creatures clinging to her chest, small pink winged creatures clinging to her lower body",
+   "note": "an aftershock: jerks, hands fly off her lap",
+   "base": "base/clinger_afterglow__front__5.png"
+  },
+  "clinger_recover__front__15": {
+   "id": "clinger_recover__front__15",
+   "motion": "clinger_recover",
+   "view": "front",
+   "frame": 15,
+   "label": "張り付かれたまま立ち上がり、胸を押さえる",
+   "phase": "立つ standing, hands over them",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "recover"
+   ],
+   "prompt": "from front, facing viewer, standing, closed mouth, clenched teeth, small pink winged creatures clinging to her chest, small pink winged creatures clinging to her lower body",
+   "note": "standing, hands over them",
+   "base": "base/clinger_recover__front__15.png"
+  },
+  "clinger_peel__front__0": {
+   "id": "clinger_peel__front__0",
+   "motion": "clinger_peel",
+   "view": "front",
+   "frame": 0,
+   "label": "胸と脚の付け根の前に張り付いた小さな生き物を引き剥がそうとする",
+   "phase": "気づく looks down at them",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "clinger"
+   ],
+   "prompt": "from front, facing viewer, standing, looking down, small pink winged creatures clinging to her chest, small pink winged creatures clinging to her lower body",
+   "note": "looks down at them",
+   "base": "base/clinger_peel__front__0.png"
+  },
+  "clinger_peel__front__7": {
+   "id": "clinger_peel__front__7",
+   "motion": "clinger_peel",
+   "view": "front",
+   "frame": 7,
+   "label": "胸と脚の付け根の前に張り付いた小さな生き物を引き剥がそうとする",
+   "phase": "はじかれる it snaps back; her hand flies out",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "clinger"
+   ],
+   "prompt": "from front, facing viewer, standing, open mouth, small pink winged creatures clinging to her chest, small pink winged creatures clinging to her lower body",
+   "note": "it snaps back; her hand flies out",
+   "base": "base/clinger_peel__front__7.png"
+  },
+  "clinger_peel__front__20": {
+   "id": "clinger_peel__front__20",
+   "motion": "clinger_peel",
+   "view": "front",
+   "frame": 20,
+   "label": "胸と脚の付け根の前に張り付いた小さな生き物を引き剥がそうとする",
+   "phase": "すくむ shudders, knees together, hands to her belly",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "clinger"
+   ],
+   "prompt": "from front, facing viewer, standing, eyes squeezed shut, closed mouth, clenched teeth, small pink winged creatures clinging to her chest, small pink winged creatures clinging to her lower body",
+   "note": "shudders, knees together, hands to her belly",
+   "base": "base/clinger_peel__front__20.png"
+  },
+  "clinger_tension__front__4": {
+   "id": "clinger_tension__front__4",
+   "motion": "clinger_tension",
+   "view": "front",
+   "frame": 4,
+   "label": "張り付かれたまま全身がこわばり、座り込む",
+   "phase": "頂点 peak: arches, arms thrown back, on her toes",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, arched back, on tiptoes, closed eyes, open mouth, small pink winged creatures clinging to her chest, small pink winged creatures clinging to her lower body",
+   "note": "peak: arches, arms thrown back, on her toes",
+   "base": "base/clinger_tension__front__4.png"
+  },
+  "clinger_accept__front__0": {
+   "id": "clinger_accept__front__0",
+   "motion": "clinger_accept",
+   "view": "front",
+   "frame": 0,
+   "label": "張り付かれたまま振り払うのをやめ、身を任せる",
+   "phase": "stops fighting: arms hang open, chest forward, head tipped back, hips swaying slowly",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "clinger"
+   ],
+   "prompt": "from front, facing viewer, standing, closed eyes, open mouth, small pink winged creatures clinging to her chest, small pink winged creatures clinging to her lower body",
+   "note": "stops fighting: arms hang open, chest forward, head tipped back, hips swaying slowly",
+   "base": "base/clinger_accept__front__0.png"
+  },
+  "clinger_accept__front__2": {
+   "id": "clinger_accept__front__2",
+   "motion": "clinger_accept",
+   "view": "front",
+   "frame": 2,
+   "label": "張り付かれたまま振り払うのをやめ、身を任せる",
+   "phase": "stops fighting: arms hang open, chest forward, head tipped back, hips swaying slowly",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "clinger"
+   ],
+   "prompt": "from front, facing viewer, standing, closed eyes, open mouth, small pink winged creatures clinging to her chest, small pink winged creatures clinging to her lower body",
+   "note": "stops fighting: arms hang open, chest forward, head tipped back, hips swaying slowly",
+   "base": "base/clinger_accept__front__2.png"
+  },
+  "down_tension__down_right__0": {
+   "id": "down_tension__down_right__0",
+   "motion": "down_tension",
+   "view": "down_right",
+   "frame": 0,
+   "label": "仰向けで押さえられたまま全身がこわばり、腰が浮く",
+   "phase": "揺れ held down, knees apart",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "three-quarter view, lying on back, arms up, spread legs, open mouth, wrist held by {bind}, knee held by {bind}, restrained",
+   "note": "held down, knees apart",
+   "base": "base/down_tension__down_right__0.png"
+  },
+  "down_tension__down_right__3": {
+   "id": "down_tension__down_right__3",
+   "motion": "down_tension",
+   "view": "down_right",
+   "frame": 3,
+   "label": "仰向けで押さえられたまま全身がこわばり、腰が浮く",
+   "phase": "頂点 peak: hips off the floor, back arched, head pressed back, toes pointed",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "three-quarter view, lying on back, arms up, spread legs, arched back, closed eyes, open mouth, wrist held by {bind}, knee held by {bind}, restrained",
+   "note": "peak: hips off the floor, back arched, head pressed back, toes pointed",
+   "base": "base/down_tension__down_right__3.png"
+  },
+  "down_tension__down_right__12": {
+   "id": "down_tension__down_right__12",
+   "motion": "down_tension",
+   "view": "down_right",
+   "frame": 12,
+   "label": "仰向けで押さえられたまま全身がこわばり、腰が浮く",
+   "phase": "脱力 limp (on to down_afterglow)",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "three-quarter view, lying on back, arms up, spread legs, open mouth, wrist held by {bind}, restrained",
+   "note": "limp (on to down_afterglow)",
+   "base": "base/down_tension__down_right__12.png"
+  },
+  "engulf_sink__front__0": {
+   "id": "engulf_sink__front__0",
+   "motion": "engulf_sink",
+   "view": "front",
+   "frame": 0,
+   "label": "柔らかい塊に足元から腰まで呑まれていく",
+   "phase": "足元 it closes over her feet",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "engulf"
+   ],
+   "prompt": "from front, facing viewer, standing, open mouth, lower body engulfed in a translucent pink slime blob",
+   "note": "it closes over her feet",
+   "base": "base/engulf_sink__front__0.png"
+  },
+  "engulf_sink__front__3": {
+   "id": "engulf_sink__front__3",
+   "motion": "engulf_sink",
+   "view": "front",
+   "frame": 3,
+   "label": "柔らかい塊に足元から腰まで呑まれていく",
+   "phase": "膝まで up to her knees; she looks down, arms out for balance",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "engulf"
+   ],
+   "prompt": "from front, facing viewer, standing, looking down, open mouth, lower body engulfed in a translucent pink slime blob",
+   "note": "up to her knees; she looks down, arms out for balance",
+   "base": "base/engulf_sink__front__3.png"
+  },
+  "engulf_sink__front__6": {
+   "id": "engulf_sink__front__6",
+   "motion": "engulf_sink",
+   "view": "front",
+   "frame": 6,
+   "label": "柔らかい塊に足元から腰まで呑まれていく",
+   "phase": "もがく up to her thighs; twists, pulls one leg in vain",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "engulf"
+   ],
+   "prompt": "from front, facing viewer, standing, closed mouth, clenched teeth, lower body engulfed in a translucent pink slime blob",
+   "note": "up to her thighs; twists, pulls one leg in vain",
+   "base": "base/engulf_sink__front__6.png"
+  },
+  "engulf_struggle__front__0": {
+   "id": "engulf_struggle__front__0",
+   "motion": "engulf_struggle",
+   "view": "front",
+   "frame": 0,
+   "label": "腰まで呑まれたまま、上体をひねって抜け出そうとする",
+   "phase": "twists at the chest (the legs cannot move), pushing down on the mass with one hand then the other",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "engulf"
+   ],
+   "prompt": "from front, facing viewer, standing, closed mouth, clenched teeth, lower body engulfed in a translucent pink slime blob",
+   "note": "twists at the chest (the legs cannot move), pushing down on the mass with one hand then the other",
+   "base": "base/engulf_struggle__front__0.png"
+  },
+  "engulf_struggle__front__6": {
+   "id": "engulf_struggle__front__6",
+   "motion": "engulf_struggle",
+   "view": "front",
+   "frame": 6,
+   "label": "腰まで呑まれたまま、上体をひねって抜け出そうとする",
+   "phase": "twists at the chest (the legs cannot move), pushing down on the mass with one hand then the other",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "engulf"
+   ],
+   "prompt": "from front, facing viewer, standing, closed mouth, clenched teeth, lower body engulfed in a translucent pink slime blob",
+   "note": "twists at the chest (the legs cannot move), pushing down on the mass with one hand then the other",
+   "base": "base/engulf_struggle__front__6.png"
+  },
+  "engulf_rock__front__0": {
+   "id": "engulf_rock__front__0",
+   "motion": "engulf_rock",
+   "view": "front",
+   "frame": 0,
+   "label": "腰まで呑まれたまま、腰がびくびくと跳ねる",
+   "phase": "hands pressed on the mass, panting",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "engulf"
+   ],
+   "prompt": "from front, facing viewer, standing, open mouth, lower body engulfed in a translucent pink slime blob",
+   "note": "hands pressed on the mass, panting",
+   "base": "base/engulf_rock__front__0.png"
+  },
+  "engulf_rock__front__1": {
+   "id": "engulf_rock__front__1",
+   "motion": "engulf_rock",
+   "view": "front",
+   "frame": 1,
+   "label": "腰まで呑まれたまま、腰がびくびくと跳ねる",
+   "phase": "跳ねる the hips jerk forward inside it, the back arches, head goes back",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "engulf"
+   ],
+   "prompt": "from front, facing viewer, standing, arched back, closed eyes, open mouth, lower body engulfed in a translucent pink slime blob",
+   "note": "the hips jerk forward inside it, the back arches, head goes back",
+   "base": "base/engulf_rock__front__1.png"
+  },
+  "engulf_tension__front__0": {
+   "id": "engulf_tension__front__0",
+   "motion": "engulf_tension",
+   "view": "front",
+   "frame": 0,
+   "label": "腰まで呑まれたまま全身がこわばり、前へ崩れる",
+   "phase": "揺れ",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, open mouth, lower body engulfed in a translucent pink slime blob",
+   "note": "",
+   "base": "base/engulf_tension__front__0.png"
+  },
+  "engulf_tension__front__2": {
+   "id": "engulf_tension__front__2",
+   "motion": "engulf_tension",
+   "view": "front",
+   "frame": 2,
+   "label": "腰まで呑まれたまま全身がこわばり、前へ崩れる",
+   "phase": "頂点 peak: arches back, arms flung up and out, head back",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, arched back, closed eyes, open mouth, lower body engulfed in a translucent pink slime blob",
+   "note": "peak: arches back, arms flung up and out, head back",
+   "base": "base/engulf_tension__front__2.png"
+  },
+  "engulf_tension__front__6": {
+   "id": "engulf_tension__front__6",
+   "motion": "engulf_tension",
+   "view": "front",
+   "frame": 6,
+   "label": "腰まで呑まれたまま全身がこわばり、前へ崩れる",
+   "phase": "震え jerk",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, closed eyes, open mouth, lower body engulfed in a translucent pink slime blob",
+   "note": "jerk",
+   "base": "base/engulf_tension__front__6.png"
+  },
+  "engulf_tension__front__10": {
+   "id": "engulf_tension__front__10",
+   "motion": "engulf_tension",
+   "view": "front",
+   "frame": 10,
+   "label": "腰まで呑まれたまま全身がこわばり、前へ崩れる",
+   "phase": "崩れる folds forward over it, forearms resting on the mass",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, open mouth, lower body engulfed in a translucent pink slime blob",
+   "note": "folds forward over it, forearms resting on the mass",
+   "base": "base/engulf_tension__front__10.png"
+  },
+  "wrap_squeeze__front__0": {
+   "id": "wrap_squeeze__front__0",
+   "motion": "wrap_squeeze",
+   "view": "front",
+   "frame": 0,
+   "label": "腕ごと胴に巻きつかれ、締め付けられるたびに背中が反る",
+   "phase": "eases off; she gasps",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "wrap"
+   ],
+   "prompt": "from front, facing viewer, standing, open mouth, {bind} coiled around her torso, {bind} coiled around her waist, restrained",
+   "note": "eases off; she gasps",
+   "base": "base/wrap_squeeze__front__0.png"
+  },
+  "wrap_tension__front__0": {
+   "id": "wrap_tension__front__0",
+   "motion": "wrap_tension",
+   "view": "front",
+   "frame": 0,
+   "label": "巻きつかれたまま全身がこわばり、脱力する",
+   "phase": "締め付け held",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, closed mouth, clenched teeth, {bind} coiled around her torso, {bind} coiled around her waist, restrained",
+   "note": "held",
+   "base": "base/wrap_tension__front__0.png"
+  },
+  "wrap_tension__front__2": {
+   "id": "wrap_tension__front__2",
+   "motion": "wrap_tension",
+   "view": "front",
+   "frame": 2,
+   "label": "巻きつかれたまま全身がこわばり、脱力する",
+   "phase": "頂点 peak: arched hard inside the coils, toes pointed",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, arms behind back, arched back, closed eyes, open mouth, {bind} coiled around her torso, {bind} coiled around her waist, restrained",
+   "note": "peak: arched hard inside the coils, toes pointed",
+   "base": "base/wrap_tension__front__2.png"
+  },
+  "wrap_tension__front__8": {
+   "id": "wrap_tension__front__8",
+   "motion": "wrap_tension",
+   "view": "front",
+   "frame": 8,
+   "label": "巻きつかれたまま全身がこわばり、脱力する",
+   "phase": "脱力 limp, held up by the coils, knees in",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, open mouth, {bind} coiled around her torso, {bind} coiled around her waist, restrained",
+   "note": "limp, held up by the coils, knees in",
+   "base": "base/wrap_tension__front__8.png"
+  },
+  "ankle_grabbed__right__0": {
+   "id": "ankle_grabbed__right__0",
+   "motion": "ankle_grabbed",
+   "view": "right",
+   "frame": 0,
+   "label": "足首をつかまれて後ろへ引かれ、よろけて四つん這いになる",
+   "phase": "つかまれる the left ankle is caught",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from side, profile, standing, open mouth, ankle held by {bind}, restrained",
+   "note": "the left ankle is caught",
+   "base": "base/ankle_grabbed__right__0.png"
+  },
+  "ankle_grabbed__right__4": {
+   "id": "ankle_grabbed__right__4",
+   "motion": "ankle_grabbed",
+   "view": "right",
+   "frame": 4,
+   "label": "足首をつかまれて後ろへ引かれ、よろけて四つん這いになる",
+   "phase": "引かれる the foot is pulled back, she pitches forward",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from side, profile, standing, open mouth, ankle held by {bind}, restrained",
+   "note": "the foot is pulled back, she pitches forward",
+   "base": "base/ankle_grabbed__right__4.png"
+  },
+  "ankle_grabbed__right__6": {
+   "id": "ankle_grabbed__right__6",
+   "motion": "ankle_grabbed",
+   "view": "right",
+   "frame": 6,
+   "label": "足首をつかまれて後ろへ引かれ、よろけて四つん這いになる",
+   "phase": "片足跳び hops on the other foot, arms flailing",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from side, profile, standing, open mouth, ankle held by {bind}, restrained",
+   "note": "hops on the other foot, arms flailing",
+   "base": "base/ankle_grabbed__right__6.png"
+  },
+  "ankle_grabbed__right__14": {
+   "id": "ankle_grabbed__right__14",
+   "motion": "ankle_grabbed",
+   "view": "right",
+   "frame": 14,
+   "label": "足首をつかまれて後ろへ引かれ、よろけて四つん這いになる",
+   "phase": "倒れる down on her hands and one knee, the caught leg stretched back",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from side, profile, lying on stomach, closed mouth, clenched teeth, ankle held by {bind}, restrained",
+   "note": "down on her hands and one knee, the caught leg stretched back",
+   "base": "base/ankle_grabbed__right__14.png"
+  },
+  "break_free__front__2": {
+   "id": "break_free__front__2",
+   "motion": "break_free",
+   "view": "front",
+   "frame": 2,
+   "label": "拘束を振りほどき、よろけてから構え直す",
+   "phase": "力む crouches and gathers herself",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from front, facing viewer, standing, eyes squeezed shut, closed mouth, clenched teeth",
+   "note": "crouches and gathers herself",
+   "base": "base/break_free__front__2.png"
+  },
+  "break_free__front__3": {
+   "id": "break_free__front__3",
+   "motion": "break_free",
+   "view": "front",
+   "frame": 3,
+   "label": "拘束を振りほどき、よろけてから構え直す",
+   "phase": "振りほどく bursts out: twists and flings both arms wide",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from front, facing viewer, standing, open mouth",
+   "note": "bursts out: twists and flings both arms wide",
+   "base": "base/break_free__front__3.png"
+  },
+  "break_free__front__6": {
+   "id": "break_free__front__6",
+   "motion": "break_free",
+   "view": "front",
+   "frame": 6,
+   "label": "拘束を振りほどき、よろけてから構え直す",
+   "phase": "よろける staggers a step back",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from front, facing viewer, standing, open mouth",
+   "note": "staggers a step back",
+   "base": "base/break_free__front__6.png"
+  },
+  "break_free__front__8": {
+   "id": "break_free__front__8",
+   "motion": "break_free",
+   "view": "front",
+   "frame": 8,
+   "label": "拘束を振りほどき、よろけてから構え直す",
+   "phase": "構え直す hands up, knees soft, ready again",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from front, facing viewer, standing, closed mouth, clenched teeth",
+   "note": "hands up, knees soft, ready again",
+   "base": "base/break_free__front__8.png"
+  },
+  "edge_pull__right__0": {
+   "id": "edge_pull__right__0",
+   "motion": "edge_pull",
+   "view": "right",
+   "frame": 0,
+   "label": "腰から先に一歩寄ってしまい、はっと引き戻す",
+   "phase": "立つ breathing hard",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from side, profile, standing, open mouth",
+   "note": "breathing hard",
+   "base": "base/edge_pull__right__0.png"
+  },
+  "edge_pull__right__3": {
+   "id": "edge_pull__right__3",
+   "motion": "edge_pull",
+   "view": "right",
+   "frame": 3,
+   "label": "腰から先に一歩寄ってしまい、はっと引き戻す",
+   "phase": "腰が出る the hips go first, a foot follows",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from side, profile, standing, arms behind back, closed eyes, open mouth",
+   "note": "the hips go first, a foot follows",
+   "base": "base/edge_pull__right__3.png"
+  },
+  "edge_pull__right__7": {
+   "id": "edge_pull__right__7",
+   "motion": "edge_pull",
+   "view": "right",
+   "frame": 7,
+   "label": "腰から先に一歩寄ってしまい、はっと引き戻す",
+   "phase": "はっとする catches herself: bends, hands pressed to her lower belly",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from side, profile, standing, closed mouth, clenched teeth",
+   "note": "catches herself: bends, hands pressed to her lower belly",
+   "base": "base/edge_pull__right__7.png"
+  },
+  "gaze_trance__front__0": {
+   "id": "gaze_trance__front__0",
+   "motion": "gaze_trance",
+   "view": "front",
+   "frame": 0,
+   "label": "見つめられて動けず、棒立ちのまま小さく頷く",
+   "phase": "stands stock-still, arms hanging, eyes on the one before her; nods slowly, lips moving",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "trance"
+   ],
+   "prompt": "from front, facing viewer, standing",
+   "note": "stands stock-still, arms hanging, eyes on the one before her; nods slowly, lips moving",
+   "base": "base/gaze_trance__front__0.png"
+  },
+  "gaze_trance__front__1": {
+   "id": "gaze_trance__front__1",
+   "motion": "gaze_trance",
+   "view": "front",
+   "frame": 1,
+   "label": "見つめられて動けず、棒立ちのまま小さく頷く",
+   "phase": "stands stock-still, arms hanging, eyes on the one before her; nods slowly, lips moving",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "trance"
+   ],
+   "prompt": "from front, facing viewer, standing, open mouth",
+   "note": "stands stock-still, arms hanging, eyes on the one before her; nods slowly, lips moving",
+   "base": "base/gaze_trance__front__1.png"
+  },
+  "spore_inhale__front__0": {
+   "id": "spore_inhale__front__0",
+   "motion": "spore_inhale",
+   "view": "front",
+   "frame": 0,
+   "label": "胞子を吸い込み、口を覆って顔をそむけ、膝が内に折れる",
+   "phase": "hand over her mouth, face turned away",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "trance"
+   ],
+   "prompt": "from front, facing viewer, standing, closed mouth, clenched teeth",
+   "note": "hand over her mouth, face turned away",
+   "base": "base/spore_inhale__front__0.png"
+  },
+  "spore_inhale__front__2": {
+   "id": "spore_inhale__front__2",
+   "motion": "spore_inhale",
+   "view": "front",
+   "frame": 2,
+   "label": "胞子を吸い込み、口を覆って顔をそむけ、膝が内に折れる",
+   "phase": "吸う breathes some in: coughs, doubles over a little, knees fold in",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "trance"
+   ],
+   "prompt": "from front, facing viewer, standing, closed eyes",
+   "note": "breathes some in: coughs, doubles over a little, knees fold in",
+   "base": "base/spore_inhale__front__2.png"
+  },
+  "shiver_hug__front__0": {
+   "id": "shiver_hug__front__0",
+   "motion": "shiver_hug",
+   "view": "front",
+   "frame": 0,
+   "label": "自分の体を抱いて小刻みに震え、ときどき跳ねる",
+   "phase": "hugging herself, shoulders up, shivering",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "trance"
+   ],
+   "prompt": "from front, facing viewer, standing, eyes squeezed shut, closed mouth, clenched teeth",
+   "note": "hugging herself, shoulders up, shivering",
+   "base": "base/shiver_hug__front__0.png"
+  },
+  "shiver_hug__front__4": {
+   "id": "shiver_hug__front__4",
+   "motion": "shiver_hug",
+   "view": "front",
+   "frame": 4,
+   "label": "自分の体を抱いて小刻みに震え、ときどき跳ねる",
+   "phase": "跳ねる jumps at a touch",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "trance"
+   ],
+   "prompt": "from front, facing viewer, standing, open mouth",
+   "note": "jumps at a touch",
+   "base": "base/shiver_hug__front__4.png"
+  },
+  "bubble_float__front__0": {
+   "id": "bubble_float__front__0",
+   "motion": "bubble_float",
+   "view": "front",
+   "frame": 0,
+   "label": "泡に包まれて床から浮き、体を丸めて口をぱくぱくさせる",
+   "phase": "lifted off the floor inside it, curled up a little, palms on its wall, mouth opening and closing",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "trance"
+   ],
+   "prompt": "from front, facing viewer, standing, curled up, closed eyes, open mouth, inside a large transparent floating bubble",
+   "note": "lifted off the floor inside it, curled up a little, palms on its wall, mouth opening and closing",
+   "base": "base/bubble_float__front__0.png"
+  },
+  "bubble_float__front__2": {
+   "id": "bubble_float__front__2",
+   "motion": "bubble_float",
+   "view": "front",
+   "frame": 2,
+   "label": "泡に包まれて床から浮き、体を丸めて口をぱくぱくさせる",
+   "phase": "lifted off the floor inside it, curled up a little, palms on its wall, mouth opening and closing",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "trance"
+   ],
+   "prompt": "from front, facing viewer, standing, curled up, closed eyes, open mouth, inside a large transparent floating bubble",
+   "note": "lifted off the floor inside it, curled up a little, palms on its wall, mouth opening and closing",
+   "base": "base/bubble_float__front__2.png"
+  },
+  "daze_sway__front__0": {
+   "id": "daze_sway__front__0",
+   "motion": "daze_sway",
+   "view": "front",
+   "frame": 0,
+   "label": "ぼーっと立ち尽くし、首をかしげてゆらゆら揺れる",
+   "phase": "standing there dazed, arms loose, head tilting from side to side",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "trance"
+   ],
+   "prompt": "from front, facing viewer, standing, open mouth",
+   "note": "standing there dazed, arms loose, head tilting from side to side",
+   "base": "base/daze_sway__front__0.png"
+  },
+  "daze_sway__front__2": {
+   "id": "daze_sway__front__2",
+   "motion": "daze_sway",
+   "view": "front",
+   "frame": 2,
+   "label": "ぼーっと立ち尽くし、首をかしげてゆらゆら揺れる",
+   "phase": "standing there dazed, arms loose, head tilting from side to side",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "trance"
+   ],
+   "prompt": "from front, facing viewer, standing, open mouth",
+   "note": "standing there dazed, arms loose, head tilting from side to side",
+   "base": "base/daze_sway__front__2.png"
+  },
+  "reach_toward__right__0": {
+   "id": "reach_toward__right__0",
+   "motion": "reach_toward",
+   "view": "right",
+   "frame": 0,
+   "label": "思わず片手を伸ばして一歩寄り、手を胸に引っ込める",
+   "phase": "見る looking at it",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "trance"
+   ],
+   "prompt": "from side, profile, standing, open mouth",
+   "note": "looking at it",
+   "base": "base/reach_toward__right__0.png"
+  },
+  "reach_toward__right__4": {
+   "id": "reach_toward__right__4",
+   "motion": "reach_toward",
+   "view": "right",
+   "frame": 4,
+   "label": "思わず片手を伸ばして一歩寄り、手を胸に引っ込める",
+   "phase": "伸ばす reaches toward it, a small step",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "trance"
+   ],
+   "prompt": "from side, profile, standing, open mouth",
+   "note": "reaches toward it, a small step",
+   "base": "base/reach_toward__right__4.png"
+  },
+  "reach_toward__right__8": {
+   "id": "reach_toward__right__8",
+   "motion": "reach_toward",
+   "view": "right",
+   "frame": 8,
+   "label": "思わず片手を伸ばして一歩寄り、手を胸に引っ込める",
+   "phase": "引っ込める snatches the hand back to her chest, looks away",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "trance"
+   ],
+   "prompt": "from side, profile, standing, closed mouth, clenched teeth",
+   "note": "snatches the hand back to her chest, looks away",
+   "base": "base/reach_toward__right__8.png"
+  },
+  "trip_fall__right__0": {
+   "id": "trip_fall__right__0",
+   "motion": "trip_fall",
+   "view": "right",
+   "frame": 0,
+   "label": "つまずいて手と膝をつき、起き上がる",
+   "phase": "歩く stepping",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "defeat"
+   ],
+   "prompt": "from side, profile, standing",
+   "note": "stepping",
+   "base": "base/trip_fall__right__0.png"
+  },
+  "trip_fall__right__4": {
+   "id": "trip_fall__right__4",
+   "motion": "trip_fall",
+   "view": "right",
+   "frame": 4,
+   "label": "つまずいて手と膝をつき、起き上がる",
+   "phase": "つまずく the back foot catches; she pitches forward, arms out",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "defeat"
+   ],
+   "prompt": "from side, profile, standing, open mouth",
+   "note": "the back foot catches; she pitches forward, arms out",
+   "base": "base/trip_fall__right__4.png"
+  },
+  "trip_fall__right__11": {
+   "id": "trip_fall__right__11",
+   "motion": "trip_fall",
+   "view": "right",
+   "frame": 11,
+   "label": "つまずいて手と膝をつき、起き上がる",
+   "phase": "手をつく down on her hands and knees",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "defeat"
+   ],
+   "prompt": "from side, profile, all fours, closed eyes",
+   "note": "down on her hands and knees",
+   "base": "base/trip_fall__right__11.png"
+  },
+  "trip_fall__right__13": {
+   "id": "trip_fall__right__13",
+   "motion": "trip_fall",
+   "view": "right",
+   "frame": 13,
+   "label": "つまずいて手と膝をつき、起き上がる",
+   "phase": "顔を上げる looks up",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "defeat"
+   ],
+   "prompt": "from side, profile, all fours, closed mouth, clenched teeth",
+   "note": "looks up",
+   "base": "base/trip_fall__right__13.png"
+  },
+  "trip_fall__right__18": {
+   "id": "trip_fall__right__18",
+   "motion": "trip_fall",
+   "view": "right",
+   "frame": 18,
+   "label": "つまずいて手と膝をつき、起き上がる",
+   "phase": "片膝 one foot forward",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "defeat"
+   ],
+   "prompt": "from side, profile, on one knee, closed mouth, clenched teeth",
+   "note": "one foot forward",
+   "base": "base/trip_fall__right__18.png"
+  },
+  "trip_fall__right__20": {
+   "id": "trip_fall__right__20",
+   "motion": "trip_fall",
+   "view": "right",
+   "frame": 20,
+   "label": "つまずいて手と膝をつき、起き上がる",
+   "phase": "立ち上がる rising",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "defeat"
+   ],
+   "prompt": "from side, profile, squatting",
+   "note": "rising",
+   "base": "base/trip_fall__right__20.png"
+  },
+  "defeat_collapse__right__0": {
+   "id": "defeat_collapse__right__0",
+   "motion": "defeat_collapse",
+   "view": "right",
+   "frame": 0,
+   "label": "力尽きて膝から崩れ、うつ伏せに倒れる",
+   "phase": "ふらつく swaying",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "defeat"
+   ],
+   "prompt": "from side, profile, standing, closed eyes, open mouth",
+   "note": "swaying",
+   "base": "base/defeat_collapse__right__0.png"
+  },
+  "defeat_collapse__right__2": {
+   "id": "defeat_collapse__right__2",
+   "motion": "defeat_collapse",
+   "view": "right",
+   "frame": 2,
+   "label": "力尽きて膝から崩れ、うつ伏せに倒れる",
+   "phase": "崩れる the knees go",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "defeat"
+   ],
+   "prompt": "from side, profile, squatting, closed eyes",
+   "note": "the knees go",
+   "base": "base/defeat_collapse__right__2.png"
+  },
+  "defeat_collapse__right__5": {
+   "id": "defeat_collapse__right__5",
+   "motion": "defeat_collapse",
+   "view": "right",
+   "frame": 5,
+   "label": "力尽きて膝から崩れ、うつ伏せに倒れる",
+   "phase": "膝をつく on her knees",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "defeat"
+   ],
+   "prompt": "from side, profile, kneeling, closed eyes",
+   "note": "on her knees",
+   "base": "base/defeat_collapse__right__5.png"
+  },
+  "defeat_collapse__right__9": {
+   "id": "defeat_collapse__right__9",
+   "motion": "defeat_collapse",
+   "view": "right",
+   "frame": 9,
+   "label": "力尽きて膝から崩れ、うつ伏せに倒れる",
+   "phase": "倒れる falling forward",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "defeat"
+   ],
+   "prompt": "from side, profile, leaning back, half lying, closed eyes",
+   "note": "falling forward",
+   "base": "base/defeat_collapse__right__9.png"
+  },
+  "defeat_collapse__right__13": {
+   "id": "defeat_collapse__right__13",
+   "motion": "defeat_collapse",
+   "view": "right",
+   "frame": 13,
+   "label": "力尽きて膝から崩れ、うつ伏せに倒れる",
+   "phase": "うつ伏せ face down, still",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "defeat"
+   ],
+   "prompt": "from side, profile, lying on stomach, closed eyes",
+   "note": "face down, still",
+   "base": "base/defeat_collapse__right__13.png"
+  },
+  "grabbed_flinch__front__0": {
+   "id": "grabbed_flinch__front__0",
+   "motion": "grabbed_flinch",
+   "view": "front",
+   "frame": 0,
+   "label": "捕まった瞬間にびくっと跳ね、捕まった所を見下ろす",
+   "phase": "構え guarded",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from front, facing viewer, standing, closed mouth, clenched teeth",
+   "note": "guarded",
+   "base": "base/grabbed_flinch__front__0.png"
+  },
+  "grabbed_flinch__front__3": {
+   "id": "grabbed_flinch__front__3",
+   "motion": "grabbed_flinch",
+   "view": "front",
+   "frame": 3,
+   "label": "捕まった瞬間にびくっと跳ね、捕まった所を見下ろす",
+   "phase": "見下ろす looks down at where she is caught",
+   "look": null,
+   "chars": [
+    "aria",
+    "scout",
+    "mage",
+    "healer"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from front, facing viewer, standing, looking down, open mouth",
+   "note": "looks down at where she is caught",
+   "base": "base/grabbed_flinch__front__3.png"
+  },
+  "mage_suppress__front__0": {
+   "id": "mage_suppress__front__0",
+   "motion": "mage_suppress",
+   "view": "front",
+   "frame": 0,
+   "label": "魔法使い：機械の手で口を押さえ、声を出さずに耐える",
+   "phase": "knees together, the mechanical hand over her mouth, holding every sound in",
+   "look": "mage",
+   "chars": [
+    "mage"
+   ],
+   "situations": [
+    "endure"
+   ],
+   "prompt": "from front, facing viewer, standing, eyes squeezed shut, closed mouth, clenched teeth",
+   "note": "knees together, the mechanical hand over her mouth, holding every sound in",
+   "base": "base/mage_suppress__front__0.png"
+  },
+  "mage_suppress__front__5": {
+   "id": "mage_suppress__front__5",
+   "motion": "mage_suppress",
+   "view": "front",
+   "frame": 5,
+   "label": "魔法使い：機械の手で口を押さえ、声を出さずに耐える",
+   "phase": "堪える a shudder she swallows: the hand presses harder",
+   "look": "mage",
+   "chars": [
+    "mage"
+   ],
+   "situations": [
+    "endure"
+   ],
+   "prompt": "from front, facing viewer, standing, eyes squeezed shut, closed mouth, clenched teeth",
+   "note": "a shudder she swallows: the hand presses harder",
+   "base": "base/mage_suppress__front__5.png"
+  },
+  "mage_suppress_tension__front__0": {
+   "id": "mage_suppress_tension__front__0",
+   "motion": "mage_suppress_tension",
+   "view": "front",
+   "frame": 0,
+   "label": "魔法使い：口を押さえたまま全身がこわばり、杖にすがって片膝をつく",
+   "phase": "堪える",
+   "look": "mage",
+   "chars": [
+    "mage"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, eyes squeezed shut, closed mouth, clenched teeth",
+   "note": "",
+   "base": "base/mage_suppress_tension__front__0.png"
+  },
+  "mage_suppress_tension__front__2": {
+   "id": "mage_suppress_tension__front__2",
+   "motion": "mage_suppress_tension",
+   "view": "front",
+   "frame": 2,
+   "label": "魔法使い：口を押さえたまま全身がこわばり、杖にすがって片膝をつく",
+   "phase": "頂点 peak, curled in, not arched: hunched over the hand, shoulders up, silent",
+   "look": "mage",
+   "chars": [
+    "mage"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, arched back, curled up, eyes squeezed shut, closed mouth, clenched teeth",
+   "note": "peak, curled in, not arched: hunched over the hand, shoulders up, silent",
+   "base": "base/mage_suppress_tension__front__2.png"
+  },
+  "mage_suppress_tension__front__6": {
+   "id": "mage_suppress_tension__front__6",
+   "motion": "mage_suppress_tension",
+   "view": "front",
+   "frame": 6,
+   "label": "魔法使い：口を押さえたまま全身がこわばり、杖にすがって片膝をつく",
+   "phase": "膝をつく down on one knee, leaning on the staff planted beside her",
+   "look": "mage",
+   "chars": [
+    "mage"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, on one knee, closed eyes",
+   "note": "down on one knee, leaning on the staff planted beside her",
+   "base": "base/mage_suppress_tension__front__6.png"
+  },
+  "scout_tail_grabbed__right__0": {
+   "id": "scout_tail_grabbed__right__0",
+   "motion": "scout_tail_grabbed",
+   "view": "right",
+   "frame": 0,
+   "label": "斥候：尻尾をつかまれて跳び上がり、手を後ろへやる",
+   "phase": "立つ something reaches her tail from behind",
+   "look": "scout",
+   "chars": [
+    "scout"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from side, profile, standing, tail held by {bind}, restrained",
+   "note": "something reaches her tail from behind",
+   "base": "base/scout_tail_grabbed__right__0.png"
+  },
+  "scout_tail_grabbed__right__1": {
+   "id": "scout_tail_grabbed__right__1",
+   "motion": "scout_tail_grabbed",
+   "view": "right",
+   "frame": 1,
+   "label": "斥候：尻尾をつかまれて跳び上がり、手を後ろへやる",
+   "phase": "びくっ the tail is seized: she jumps upright onto her toes",
+   "look": "scout",
+   "chars": [
+    "scout"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from side, profile, standing, open mouth, tail held by {bind}, restrained",
+   "note": "the tail is seized: she jumps upright onto her toes",
+   "base": "base/scout_tail_grabbed__right__1.png"
+  },
+  "scout_tail_grabbed__right__5": {
+   "id": "scout_tail_grabbed__right__5",
+   "motion": "scout_tail_grabbed",
+   "view": "right",
+   "frame": 5,
+   "label": "斥候：尻尾をつかまれて跳び上がり、手を後ろへやる",
+   "phase": "振り返る looks back over her shoulder, both hands reaching back for it",
+   "look": "scout",
+   "chars": [
+    "scout"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from side, profile, standing, arms behind back, closed mouth, clenched teeth, tail held by {bind}, restrained",
+   "note": "looks back over her shoulder, both hands reaching back for it",
+   "base": "base/scout_tail_grabbed__right__5.png"
+  },
+  "scout_tail_grabbed__right__7": {
+   "id": "scout_tail_grabbed__right__7",
+   "motion": "scout_tail_grabbed",
+   "view": "right",
+   "frame": 7,
+   "label": "斥候：尻尾をつかまれて跳び上がり、手を後ろへやる",
+   "phase": "すくむ knees give inward; pulling at it",
+   "look": "scout",
+   "chars": [
+    "scout"
+   ],
+   "situations": [
+    "grabbed"
+   ],
+   "prompt": "from side, profile, standing, arms behind back, eyes squeezed shut, closed mouth, clenched teeth, tail held by {bind}, restrained",
+   "note": "knees give inward; pulling at it",
+   "base": "base/scout_tail_grabbed__right__7.png"
+  },
+  "scout_tension__front__0": {
+   "id": "scout_tension__front__0",
+   "motion": "scout_tension",
+   "view": "front",
+   "frame": 0,
+   "label": "斥候：全身がこわばり尻尾が逆立つ、そのあと膝が崩れる",
+   "phase": "こらえる gripping her straps",
+   "look": "scout",
+   "chars": [
+    "scout"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, closed mouth, clenched teeth",
+   "note": "gripping her straps",
+   "base": "base/scout_tension__front__0.png"
+  },
+  "scout_tension__front__2": {
+   "id": "scout_tension__front__2",
+   "motion": "scout_tension",
+   "view": "front",
+   "frame": 2,
+   "label": "斥候：全身がこわばり尻尾が逆立つ、そのあと膝が崩れる",
+   "phase": "頂点 peak: up on her toes, the tail straight up and bristling, ears up",
+   "look": "scout",
+   "chars": [
+    "scout"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, on tiptoes, closed eyes, open mouth",
+   "note": "peak: up on her toes, the tail straight up and bristling, ears up",
+   "base": "base/scout_tension__front__2.png"
+  },
+  "scout_tension__front__8": {
+   "id": "scout_tension__front__8",
+   "motion": "scout_tension",
+   "view": "front",
+   "frame": 8,
+   "label": "斥候：全身がこわばり尻尾が逆立つ、そのあと膝が崩れる",
+   "phase": "崩れる knees give, the tail and ears drop",
+   "look": "scout",
+   "chars": [
+    "scout"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, squatting, open mouth",
+   "note": "knees give, the tail and ears drop",
+   "base": "base/scout_tension__front__8.png"
+  },
+  "mage_arms_bound__front__0": {
+   "id": "mage_arms_bound__front__0",
+   "motion": "mage_arms_bound",
+   "view": "front",
+   "frame": 0,
+   "label": "魔法使い：両方の義腕を頭の上でまとめて縛られ、魔法を封じられてもがく",
+   "phase": "the metal forearms crossed and bound high over her head; she twists and pulls, keeping her face composed",
+   "look": "mage",
+   "chars": [
+    "mage"
+   ],
+   "situations": [
+    "bound"
+   ],
+   "prompt": "from front, facing viewer, standing, arms up, closed mouth, clenched teeth, wrists bound together by {bind}, wrist held by {bind}, restrained",
+   "note": "the metal forearms crossed and bound high over her head; she twists and pulls, keeping her face composed",
+   "base": "base/mage_arms_bound__front__0.png"
+  },
+  "mage_arms_bound__front__2": {
+   "id": "mage_arms_bound__front__2",
+   "motion": "mage_arms_bound",
+   "view": "front",
+   "frame": 2,
+   "label": "魔法使い：両方の義腕を頭の上でまとめて縛られ、魔法を封じられてもがく",
+   "phase": "the metal forearms crossed and bound high over her head; she twists and pulls, keeping her face composed",
+   "look": "mage",
+   "chars": [
+    "mage"
+   ],
+   "situations": [
+    "bound"
+   ],
+   "prompt": "from front, facing viewer, standing, arms up, closed mouth, clenched teeth, wrists bound together by {bind}, wrist held by {bind}, restrained",
+   "note": "the metal forearms crossed and bound high over her head; she twists and pulls, keeping her face composed",
+   "base": "base/mage_arms_bound__front__2.png"
+  },
+  "healer_panel_catch__front__3": {
+   "id": "healer_panel_catch__front__3",
+   "motion": "healer_panel_catch",
+   "view": "front",
+   "frame": 3,
+   "label": "ヒーラー：めくれかけた前垂れを慌てて押さえ、顔を赤くして背ける",
+   "phase": "めくれる the panels flip up: she starts",
+   "look": "healer",
+   "chars": [
+    "healer"
+   ],
+   "situations": [
+    "exposure"
+   ],
+   "prompt": "from front, facing viewer, standing, open mouth",
+   "note": "the panels flip up: she starts",
+   "base": "base/healer_panel_catch__front__3.png"
+  },
+  "healer_panel_catch__front__6": {
+   "id": "healer_panel_catch__front__6",
+   "motion": "healer_panel_catch",
+   "view": "front",
+   "frame": 6,
+   "label": "ヒーラー：めくれかけた前垂れを慌てて押さえ、顔を赤くして背ける",
+   "phase": "押さえる slaps them down with her arm across her chest, face turned away",
+   "look": "healer",
+   "chars": [
+    "healer"
+   ],
+   "situations": [
+    "exposure"
+   ],
+   "prompt": "from front, facing viewer, standing, eyes squeezed shut, closed mouth, clenched teeth",
+   "note": "slaps them down with her arm across her chest, face turned away",
+   "base": "base/healer_panel_catch__front__6.png"
+  },
+  "healer_tension_refuse__front__0": {
+   "id": "healer_tension_refuse__front__0",
+   "motion": "healer_tension_refuse",
+   "view": "front",
+   "frame": 0,
+   "label": "ヒーラー：首を横に振って拒みながら全身がこわばり、胸をかばったまま崩れる",
+   "phase": "拒む shaking her head: no",
+   "look": "healer",
+   "chars": [
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, closed mouth, clenched teeth",
+   "note": "shaking her head: no",
+   "base": "base/healer_tension_refuse__front__0.png"
+  },
+  "healer_tension_refuse__front__2": {
+   "id": "healer_tension_refuse__front__2",
+   "motion": "healer_tension_refuse",
+   "view": "front",
+   "frame": 2,
+   "label": "ヒーラー：首を横に振って拒みながら全身がこわばり、胸をかばったまま崩れる",
+   "phase": "頂点 peak: arched, on her toes, still covering herself, lips pressed",
+   "look": "healer",
+   "chars": [
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, standing, arched back, on tiptoes, eyes squeezed shut, closed mouth, clenched teeth",
+   "note": "peak: arched, on her toes, still covering herself, lips pressed",
+   "base": "base/healer_tension_refuse__front__2.png"
+  },
+  "healer_tension_refuse__front__7": {
+   "id": "healer_tension_refuse__front__7",
+   "motion": "healer_tension_refuse",
+   "view": "front",
+   "frame": 7,
+   "label": "ヒーラー：首を横に振って拒みながら全身がこわばり、胸をかばったまま崩れる",
+   "phase": "崩れる sinks to the floor, arm still across her chest, face turned away",
+   "look": "healer",
+   "chars": [
+    "healer"
+   ],
+   "situations": [
+    "climax"
+   ],
+   "prompt": "from front, facing viewer, sitting on the floor, closed mouth, clenched teeth",
+   "note": "sinks to the floor, arm still across her chest, face turned away",
+   "base": "base/healer_tension_refuse__front__7.png"
+  }
+ },
+ "jobs": [
+  {
+   "char": "aria",
+   "frame": "arms_behind_squirm__front__0",
+   "file": "aria__arms_behind_squirm__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "arms_behind_squirm__front__2",
+   "file": "aria__arms_behind_squirm__front__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "arms_behind_wrench__front__0",
+   "file": "aria__arms_behind_wrench__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "arms_behind_wrench__front__5",
+   "file": "aria__arms_behind_wrench__front__5.png"
+  },
+  {
+   "char": "aria",
+   "frame": "elbows_up_strain__front__0",
+   "file": "aria__elbows_up_strain__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "elbows_up_strain__front__2",
+   "file": "aria__elbows_up_strain__front__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "legs_pulled_open__front__0",
+   "file": "aria__legs_pulled_open__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "legs_pulled_open__front__7",
+   "file": "aria__legs_pulled_open__front__7.png"
+  },
+  {
+   "char": "aria",
+   "frame": "legs_held_open__front__0",
+   "file": "aria__legs_held_open__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "legs_held_open__front__2",
+   "file": "aria__legs_held_open__front__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "hip_rock_spread__front__0",
+   "file": "aria__hip_rock_spread__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "hip_rock_spread__front__3",
+   "file": "aria__hip_rock_spread__front__3.png"
+  },
+  {
+   "char": "aria",
+   "frame": "hip_rock_closed__front__0",
+   "file": "aria__hip_rock_closed__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "hip_rock_closed__front__3",
+   "file": "aria__hip_rock_closed__front__3.png"
+  },
+  {
+   "char": "aria",
+   "frame": "bounce_spread__front__0",
+   "file": "aria__bounce_spread__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "bounce_spread__front__4",
+   "file": "aria__bounce_spread__front__4.png"
+  },
+  {
+   "char": "aria",
+   "frame": "bounce_hung__front__0",
+   "file": "aria__bounce_hung__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "bounce_hung__front__4",
+   "file": "aria__bounce_hung__front__4.png"
+  },
+  {
+   "char": "aria",
+   "frame": "tension_tiptoe__front__0",
+   "file": "aria__tension_tiptoe__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "tension_tiptoe__front__3",
+   "file": "aria__tension_tiptoe__front__3.png"
+  },
+  {
+   "char": "aria",
+   "frame": "tension_arch__front__0",
+   "file": "aria__tension_arch__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "tension_arch__front__3",
+   "file": "aria__tension_arch__front__3.png"
+  },
+  {
+   "char": "aria",
+   "frame": "afterglow_spread__front__0",
+   "file": "aria__afterglow_spread__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "afterglow_spread__front__5",
+   "file": "aria__afterglow_spread__front__5.png"
+  },
+  {
+   "char": "aria",
+   "frame": "afterglow_slump__front__0",
+   "file": "aria__afterglow_slump__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "afterglow_slump__front__5",
+   "file": "aria__afterglow_slump__front__5.png"
+  },
+  {
+   "char": "aria",
+   "frame": "recover_slump__front__0",
+   "file": "aria__recover_slump__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "recover_slump__front__2",
+   "file": "aria__recover_slump__front__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "bent_over__up_right__0",
+   "file": "aria__bent_over__up_right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "bent_over__up_right__2",
+   "file": "aria__bent_over__up_right__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_fall_back__right__0",
+   "file": "aria__down_fall_back__right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_fall_back__right__2",
+   "file": "aria__down_fall_back__right__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_fall_back__right__8",
+   "file": "aria__down_fall_back__right__8.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_fall_back__right__12",
+   "file": "aria__down_fall_back__right__12.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_fall_back__right__17",
+   "file": "aria__down_fall_back__right__17.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_pinned_kick__right__0",
+   "file": "aria__down_pinned_kick__right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_pinned_kick__right__2",
+   "file": "aria__down_pinned_kick__right__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_pinned_spread__down_right__0",
+   "file": "aria__down_pinned_spread__down_right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_pinned_spread__down_right__6",
+   "file": "aria__down_pinned_spread__down_right__6.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_pinned_rock__down_right__0",
+   "file": "aria__down_pinned_rock__down_right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_pinned_rock__down_right__3",
+   "file": "aria__down_pinned_rock__down_right__3.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_face_down__right__0",
+   "file": "aria__down_face_down__right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_face_down__right__4",
+   "file": "aria__down_face_down__right__4.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_hips_up__right__0",
+   "file": "aria__down_hips_up__right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_hips_up__right__2",
+   "file": "aria__down_hips_up__right__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "get_up__right__0",
+   "file": "aria__get_up__right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "get_up__right__4",
+   "file": "aria__get_up__right__4.png"
+  },
+  {
+   "char": "aria",
+   "frame": "get_up__right__8",
+   "file": "aria__get_up__right__8.png"
+  },
+  {
+   "char": "aria",
+   "frame": "get_up__right__13",
+   "file": "aria__get_up__right__13.png"
+  },
+  {
+   "char": "aria",
+   "frame": "get_up__right__16",
+   "file": "aria__get_up__right__16.png"
+  },
+  {
+   "char": "aria",
+   "frame": "get_up__right__18",
+   "file": "aria__get_up__right__18.png"
+  },
+  {
+   "char": "aria",
+   "frame": "kiss_forced__right__0",
+   "file": "aria__kiss_forced__right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "kiss_forced__right__6",
+   "file": "aria__kiss_forced__right__6.png"
+  },
+  {
+   "char": "aria",
+   "frame": "kiss_tension__right__0",
+   "file": "aria__kiss_tension__right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "kiss_tension__right__3",
+   "file": "aria__kiss_tension__right__3.png"
+  },
+  {
+   "char": "aria",
+   "frame": "kiss_tension__right__8",
+   "file": "aria__kiss_tension__right__8.png"
+  },
+  {
+   "char": "aria",
+   "frame": "kiss_respond__right__0",
+   "file": "aria__kiss_respond__right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "kiss_respond__right__6",
+   "file": "aria__kiss_respond__right__6.png"
+  },
+  {
+   "char": "aria",
+   "frame": "tempt_pose__front__0",
+   "file": "aria__tempt_pose__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "tempt_pose__front__6",
+   "file": "aria__tempt_pose__front__6.png"
+  },
+  {
+   "char": "aria",
+   "frame": "chain_splay__front__0",
+   "file": "aria__chain_splay__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "chain_splay__front__3",
+   "file": "aria__chain_splay__front__3.png"
+  },
+  {
+   "char": "aria",
+   "frame": "tension_free__front__0",
+   "file": "aria__tension_free__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "tension_free__front__4",
+   "file": "aria__tension_free__front__4.png"
+  },
+  {
+   "char": "aria",
+   "frame": "tension_free__front__11",
+   "file": "aria__tension_free__front__11.png"
+  },
+  {
+   "char": "aria",
+   "frame": "tension_free__front__13",
+   "file": "aria__tension_free__front__13.png"
+  },
+  {
+   "char": "aria",
+   "frame": "sit_afterglow__front__0",
+   "file": "aria__sit_afterglow__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "held_from_behind__front__0",
+   "file": "aria__held_from_behind__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "held_from_behind__front__2",
+   "file": "aria__held_from_behind__front__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_afterglow__down_right__0",
+   "file": "aria__down_afterglow__down_right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_afterglow__down_right__5",
+   "file": "aria__down_afterglow__down_right__5.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_recover__down_right__2",
+   "file": "aria__down_recover__down_right__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "kiss_afterglow__right__0",
+   "file": "aria__kiss_afterglow__right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "kiss_afterglow__right__5",
+   "file": "aria__kiss_afterglow__right__5.png"
+  },
+  {
+   "char": "aria",
+   "frame": "kiss_recover__right__0",
+   "file": "aria__kiss_recover__right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "kiss_recover__right__5",
+   "file": "aria__kiss_recover__right__5.png"
+  },
+  {
+   "char": "aria",
+   "frame": "kiss_recover__right__8",
+   "file": "aria__kiss_recover__right__8.png"
+  },
+  {
+   "char": "aria",
+   "frame": "kiss_recover__right__10",
+   "file": "aria__kiss_recover__right__10.png"
+  },
+  {
+   "char": "aria",
+   "frame": "sit_recover__front__2",
+   "file": "aria__sit_recover__front__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "sit_recover__front__5",
+   "file": "aria__sit_recover__front__5.png"
+  },
+  {
+   "char": "aria",
+   "frame": "sit_recover__front__9",
+   "file": "aria__sit_recover__front__9.png"
+  },
+  {
+   "char": "aria",
+   "frame": "sit_recover__front__11",
+   "file": "aria__sit_recover__front__11.png"
+  },
+  {
+   "char": "aria",
+   "frame": "sit_recover__front__13",
+   "file": "aria__sit_recover__front__13.png"
+  },
+  {
+   "char": "aria",
+   "frame": "clinger_afterglow__front__5",
+   "file": "aria__clinger_afterglow__front__5.png"
+  },
+  {
+   "char": "aria",
+   "frame": "clinger_recover__front__15",
+   "file": "aria__clinger_recover__front__15.png"
+  },
+  {
+   "char": "aria",
+   "frame": "clinger_peel__front__0",
+   "file": "aria__clinger_peel__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "clinger_peel__front__7",
+   "file": "aria__clinger_peel__front__7.png"
+  },
+  {
+   "char": "aria",
+   "frame": "clinger_peel__front__20",
+   "file": "aria__clinger_peel__front__20.png"
+  },
+  {
+   "char": "aria",
+   "frame": "clinger_tension__front__4",
+   "file": "aria__clinger_tension__front__4.png"
+  },
+  {
+   "char": "aria",
+   "frame": "clinger_accept__front__0",
+   "file": "aria__clinger_accept__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "clinger_accept__front__2",
+   "file": "aria__clinger_accept__front__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_tension__down_right__0",
+   "file": "aria__down_tension__down_right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_tension__down_right__3",
+   "file": "aria__down_tension__down_right__3.png"
+  },
+  {
+   "char": "aria",
+   "frame": "down_tension__down_right__12",
+   "file": "aria__down_tension__down_right__12.png"
+  },
+  {
+   "char": "aria",
+   "frame": "engulf_sink__front__0",
+   "file": "aria__engulf_sink__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "engulf_sink__front__3",
+   "file": "aria__engulf_sink__front__3.png"
+  },
+  {
+   "char": "aria",
+   "frame": "engulf_sink__front__6",
+   "file": "aria__engulf_sink__front__6.png"
+  },
+  {
+   "char": "aria",
+   "frame": "engulf_struggle__front__0",
+   "file": "aria__engulf_struggle__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "engulf_struggle__front__6",
+   "file": "aria__engulf_struggle__front__6.png"
+  },
+  {
+   "char": "aria",
+   "frame": "engulf_rock__front__0",
+   "file": "aria__engulf_rock__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "engulf_rock__front__1",
+   "file": "aria__engulf_rock__front__1.png"
+  },
+  {
+   "char": "aria",
+   "frame": "engulf_tension__front__0",
+   "file": "aria__engulf_tension__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "engulf_tension__front__2",
+   "file": "aria__engulf_tension__front__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "engulf_tension__front__6",
+   "file": "aria__engulf_tension__front__6.png"
+  },
+  {
+   "char": "aria",
+   "frame": "engulf_tension__front__10",
+   "file": "aria__engulf_tension__front__10.png"
+  },
+  {
+   "char": "aria",
+   "frame": "wrap_squeeze__front__0",
+   "file": "aria__wrap_squeeze__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "wrap_tension__front__0",
+   "file": "aria__wrap_tension__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "wrap_tension__front__2",
+   "file": "aria__wrap_tension__front__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "wrap_tension__front__8",
+   "file": "aria__wrap_tension__front__8.png"
+  },
+  {
+   "char": "aria",
+   "frame": "ankle_grabbed__right__0",
+   "file": "aria__ankle_grabbed__right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "ankle_grabbed__right__4",
+   "file": "aria__ankle_grabbed__right__4.png"
+  },
+  {
+   "char": "aria",
+   "frame": "ankle_grabbed__right__6",
+   "file": "aria__ankle_grabbed__right__6.png"
+  },
+  {
+   "char": "aria",
+   "frame": "ankle_grabbed__right__14",
+   "file": "aria__ankle_grabbed__right__14.png"
+  },
+  {
+   "char": "aria",
+   "frame": "break_free__front__2",
+   "file": "aria__break_free__front__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "break_free__front__3",
+   "file": "aria__break_free__front__3.png"
+  },
+  {
+   "char": "aria",
+   "frame": "break_free__front__6",
+   "file": "aria__break_free__front__6.png"
+  },
+  {
+   "char": "aria",
+   "frame": "break_free__front__8",
+   "file": "aria__break_free__front__8.png"
+  },
+  {
+   "char": "aria",
+   "frame": "edge_pull__right__0",
+   "file": "aria__edge_pull__right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "edge_pull__right__3",
+   "file": "aria__edge_pull__right__3.png"
+  },
+  {
+   "char": "aria",
+   "frame": "edge_pull__right__7",
+   "file": "aria__edge_pull__right__7.png"
+  },
+  {
+   "char": "aria",
+   "frame": "gaze_trance__front__0",
+   "file": "aria__gaze_trance__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "gaze_trance__front__1",
+   "file": "aria__gaze_trance__front__1.png"
+  },
+  {
+   "char": "aria",
+   "frame": "spore_inhale__front__0",
+   "file": "aria__spore_inhale__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "spore_inhale__front__2",
+   "file": "aria__spore_inhale__front__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "shiver_hug__front__0",
+   "file": "aria__shiver_hug__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "shiver_hug__front__4",
+   "file": "aria__shiver_hug__front__4.png"
+  },
+  {
+   "char": "aria",
+   "frame": "bubble_float__front__0",
+   "file": "aria__bubble_float__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "bubble_float__front__2",
+   "file": "aria__bubble_float__front__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "daze_sway__front__0",
+   "file": "aria__daze_sway__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "daze_sway__front__2",
+   "file": "aria__daze_sway__front__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "reach_toward__right__0",
+   "file": "aria__reach_toward__right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "reach_toward__right__4",
+   "file": "aria__reach_toward__right__4.png"
+  },
+  {
+   "char": "aria",
+   "frame": "reach_toward__right__8",
+   "file": "aria__reach_toward__right__8.png"
+  },
+  {
+   "char": "aria",
+   "frame": "trip_fall__right__0",
+   "file": "aria__trip_fall__right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "trip_fall__right__4",
+   "file": "aria__trip_fall__right__4.png"
+  },
+  {
+   "char": "aria",
+   "frame": "trip_fall__right__11",
+   "file": "aria__trip_fall__right__11.png"
+  },
+  {
+   "char": "aria",
+   "frame": "trip_fall__right__13",
+   "file": "aria__trip_fall__right__13.png"
+  },
+  {
+   "char": "aria",
+   "frame": "trip_fall__right__18",
+   "file": "aria__trip_fall__right__18.png"
+  },
+  {
+   "char": "aria",
+   "frame": "trip_fall__right__20",
+   "file": "aria__trip_fall__right__20.png"
+  },
+  {
+   "char": "aria",
+   "frame": "defeat_collapse__right__0",
+   "file": "aria__defeat_collapse__right__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "defeat_collapse__right__2",
+   "file": "aria__defeat_collapse__right__2.png"
+  },
+  {
+   "char": "aria",
+   "frame": "defeat_collapse__right__5",
+   "file": "aria__defeat_collapse__right__5.png"
+  },
+  {
+   "char": "aria",
+   "frame": "defeat_collapse__right__9",
+   "file": "aria__defeat_collapse__right__9.png"
+  },
+  {
+   "char": "aria",
+   "frame": "defeat_collapse__right__13",
+   "file": "aria__defeat_collapse__right__13.png"
+  },
+  {
+   "char": "aria",
+   "frame": "grabbed_flinch__front__0",
+   "file": "aria__grabbed_flinch__front__0.png"
+  },
+  {
+   "char": "aria",
+   "frame": "grabbed_flinch__front__3",
+   "file": "aria__grabbed_flinch__front__3.png"
+  },
+  {
+   "char": "scout",
+   "frame": "arms_behind_squirm__front__0",
+   "file": "scout__arms_behind_squirm__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "arms_behind_squirm__front__2",
+   "file": "scout__arms_behind_squirm__front__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "arms_behind_wrench__front__0",
+   "file": "scout__arms_behind_wrench__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "arms_behind_wrench__front__5",
+   "file": "scout__arms_behind_wrench__front__5.png"
+  },
+  {
+   "char": "scout",
+   "frame": "elbows_up_strain__front__0",
+   "file": "scout__elbows_up_strain__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "elbows_up_strain__front__2",
+   "file": "scout__elbows_up_strain__front__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "legs_pulled_open__front__0",
+   "file": "scout__legs_pulled_open__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "legs_pulled_open__front__7",
+   "file": "scout__legs_pulled_open__front__7.png"
+  },
+  {
+   "char": "scout",
+   "frame": "legs_held_open__front__0",
+   "file": "scout__legs_held_open__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "legs_held_open__front__2",
+   "file": "scout__legs_held_open__front__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "hip_rock_spread__front__0",
+   "file": "scout__hip_rock_spread__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "hip_rock_spread__front__3",
+   "file": "scout__hip_rock_spread__front__3.png"
+  },
+  {
+   "char": "scout",
+   "frame": "hip_rock_closed__front__0",
+   "file": "scout__hip_rock_closed__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "hip_rock_closed__front__3",
+   "file": "scout__hip_rock_closed__front__3.png"
+  },
+  {
+   "char": "scout",
+   "frame": "bounce_spread__front__0",
+   "file": "scout__bounce_spread__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "bounce_spread__front__4",
+   "file": "scout__bounce_spread__front__4.png"
+  },
+  {
+   "char": "scout",
+   "frame": "bounce_hung__front__0",
+   "file": "scout__bounce_hung__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "bounce_hung__front__4",
+   "file": "scout__bounce_hung__front__4.png"
+  },
+  {
+   "char": "scout",
+   "frame": "tension_tiptoe__front__0",
+   "file": "scout__tension_tiptoe__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "tension_tiptoe__front__3",
+   "file": "scout__tension_tiptoe__front__3.png"
+  },
+  {
+   "char": "scout",
+   "frame": "tension_arch__front__0",
+   "file": "scout__tension_arch__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "tension_arch__front__3",
+   "file": "scout__tension_arch__front__3.png"
+  },
+  {
+   "char": "scout",
+   "frame": "afterglow_spread__front__0",
+   "file": "scout__afterglow_spread__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "afterglow_spread__front__5",
+   "file": "scout__afterglow_spread__front__5.png"
+  },
+  {
+   "char": "scout",
+   "frame": "afterglow_slump__front__0",
+   "file": "scout__afterglow_slump__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "afterglow_slump__front__5",
+   "file": "scout__afterglow_slump__front__5.png"
+  },
+  {
+   "char": "scout",
+   "frame": "recover_slump__front__0",
+   "file": "scout__recover_slump__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "recover_slump__front__2",
+   "file": "scout__recover_slump__front__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "bent_over__up_right__0",
+   "file": "scout__bent_over__up_right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "bent_over__up_right__2",
+   "file": "scout__bent_over__up_right__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_fall_back__right__0",
+   "file": "scout__down_fall_back__right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_fall_back__right__2",
+   "file": "scout__down_fall_back__right__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_fall_back__right__8",
+   "file": "scout__down_fall_back__right__8.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_fall_back__right__12",
+   "file": "scout__down_fall_back__right__12.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_fall_back__right__17",
+   "file": "scout__down_fall_back__right__17.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_pinned_kick__right__0",
+   "file": "scout__down_pinned_kick__right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_pinned_kick__right__2",
+   "file": "scout__down_pinned_kick__right__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_pinned_spread__down_right__0",
+   "file": "scout__down_pinned_spread__down_right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_pinned_spread__down_right__6",
+   "file": "scout__down_pinned_spread__down_right__6.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_pinned_rock__down_right__0",
+   "file": "scout__down_pinned_rock__down_right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_pinned_rock__down_right__3",
+   "file": "scout__down_pinned_rock__down_right__3.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_face_down__right__0",
+   "file": "scout__down_face_down__right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_face_down__right__4",
+   "file": "scout__down_face_down__right__4.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_hips_up__right__0",
+   "file": "scout__down_hips_up__right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_hips_up__right__2",
+   "file": "scout__down_hips_up__right__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "get_up__right__0",
+   "file": "scout__get_up__right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "get_up__right__4",
+   "file": "scout__get_up__right__4.png"
+  },
+  {
+   "char": "scout",
+   "frame": "get_up__right__8",
+   "file": "scout__get_up__right__8.png"
+  },
+  {
+   "char": "scout",
+   "frame": "get_up__right__13",
+   "file": "scout__get_up__right__13.png"
+  },
+  {
+   "char": "scout",
+   "frame": "get_up__right__16",
+   "file": "scout__get_up__right__16.png"
+  },
+  {
+   "char": "scout",
+   "frame": "get_up__right__18",
+   "file": "scout__get_up__right__18.png"
+  },
+  {
+   "char": "scout",
+   "frame": "kiss_forced__right__0",
+   "file": "scout__kiss_forced__right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "kiss_forced__right__6",
+   "file": "scout__kiss_forced__right__6.png"
+  },
+  {
+   "char": "scout",
+   "frame": "kiss_tension__right__0",
+   "file": "scout__kiss_tension__right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "kiss_tension__right__3",
+   "file": "scout__kiss_tension__right__3.png"
+  },
+  {
+   "char": "scout",
+   "frame": "kiss_tension__right__8",
+   "file": "scout__kiss_tension__right__8.png"
+  },
+  {
+   "char": "scout",
+   "frame": "kiss_respond__right__0",
+   "file": "scout__kiss_respond__right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "kiss_respond__right__6",
+   "file": "scout__kiss_respond__right__6.png"
+  },
+  {
+   "char": "scout",
+   "frame": "tempt_pose__front__0",
+   "file": "scout__tempt_pose__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "tempt_pose__front__6",
+   "file": "scout__tempt_pose__front__6.png"
+  },
+  {
+   "char": "scout",
+   "frame": "chain_splay__front__0",
+   "file": "scout__chain_splay__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "chain_splay__front__3",
+   "file": "scout__chain_splay__front__3.png"
+  },
+  {
+   "char": "scout",
+   "frame": "tension_free__front__0",
+   "file": "scout__tension_free__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "tension_free__front__4",
+   "file": "scout__tension_free__front__4.png"
+  },
+  {
+   "char": "scout",
+   "frame": "tension_free__front__11",
+   "file": "scout__tension_free__front__11.png"
+  },
+  {
+   "char": "scout",
+   "frame": "tension_free__front__13",
+   "file": "scout__tension_free__front__13.png"
+  },
+  {
+   "char": "scout",
+   "frame": "sit_afterglow__front__0",
+   "file": "scout__sit_afterglow__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "held_from_behind__front__0",
+   "file": "scout__held_from_behind__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "held_from_behind__front__2",
+   "file": "scout__held_from_behind__front__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_afterglow__down_right__0",
+   "file": "scout__down_afterglow__down_right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_afterglow__down_right__5",
+   "file": "scout__down_afterglow__down_right__5.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_recover__down_right__2",
+   "file": "scout__down_recover__down_right__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "kiss_afterglow__right__0",
+   "file": "scout__kiss_afterglow__right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "kiss_afterglow__right__5",
+   "file": "scout__kiss_afterglow__right__5.png"
+  },
+  {
+   "char": "scout",
+   "frame": "kiss_recover__right__0",
+   "file": "scout__kiss_recover__right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "kiss_recover__right__5",
+   "file": "scout__kiss_recover__right__5.png"
+  },
+  {
+   "char": "scout",
+   "frame": "kiss_recover__right__8",
+   "file": "scout__kiss_recover__right__8.png"
+  },
+  {
+   "char": "scout",
+   "frame": "kiss_recover__right__10",
+   "file": "scout__kiss_recover__right__10.png"
+  },
+  {
+   "char": "scout",
+   "frame": "sit_recover__front__2",
+   "file": "scout__sit_recover__front__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "sit_recover__front__5",
+   "file": "scout__sit_recover__front__5.png"
+  },
+  {
+   "char": "scout",
+   "frame": "sit_recover__front__9",
+   "file": "scout__sit_recover__front__9.png"
+  },
+  {
+   "char": "scout",
+   "frame": "sit_recover__front__11",
+   "file": "scout__sit_recover__front__11.png"
+  },
+  {
+   "char": "scout",
+   "frame": "sit_recover__front__13",
+   "file": "scout__sit_recover__front__13.png"
+  },
+  {
+   "char": "scout",
+   "frame": "clinger_afterglow__front__5",
+   "file": "scout__clinger_afterglow__front__5.png"
+  },
+  {
+   "char": "scout",
+   "frame": "clinger_recover__front__15",
+   "file": "scout__clinger_recover__front__15.png"
+  },
+  {
+   "char": "scout",
+   "frame": "clinger_peel__front__0",
+   "file": "scout__clinger_peel__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "clinger_peel__front__7",
+   "file": "scout__clinger_peel__front__7.png"
+  },
+  {
+   "char": "scout",
+   "frame": "clinger_peel__front__20",
+   "file": "scout__clinger_peel__front__20.png"
+  },
+  {
+   "char": "scout",
+   "frame": "clinger_tension__front__4",
+   "file": "scout__clinger_tension__front__4.png"
+  },
+  {
+   "char": "scout",
+   "frame": "clinger_accept__front__0",
+   "file": "scout__clinger_accept__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "clinger_accept__front__2",
+   "file": "scout__clinger_accept__front__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_tension__down_right__0",
+   "file": "scout__down_tension__down_right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_tension__down_right__3",
+   "file": "scout__down_tension__down_right__3.png"
+  },
+  {
+   "char": "scout",
+   "frame": "down_tension__down_right__12",
+   "file": "scout__down_tension__down_right__12.png"
+  },
+  {
+   "char": "scout",
+   "frame": "engulf_sink__front__0",
+   "file": "scout__engulf_sink__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "engulf_sink__front__3",
+   "file": "scout__engulf_sink__front__3.png"
+  },
+  {
+   "char": "scout",
+   "frame": "engulf_sink__front__6",
+   "file": "scout__engulf_sink__front__6.png"
+  },
+  {
+   "char": "scout",
+   "frame": "engulf_struggle__front__0",
+   "file": "scout__engulf_struggle__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "engulf_struggle__front__6",
+   "file": "scout__engulf_struggle__front__6.png"
+  },
+  {
+   "char": "scout",
+   "frame": "engulf_rock__front__0",
+   "file": "scout__engulf_rock__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "engulf_rock__front__1",
+   "file": "scout__engulf_rock__front__1.png"
+  },
+  {
+   "char": "scout",
+   "frame": "engulf_tension__front__0",
+   "file": "scout__engulf_tension__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "engulf_tension__front__2",
+   "file": "scout__engulf_tension__front__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "engulf_tension__front__6",
+   "file": "scout__engulf_tension__front__6.png"
+  },
+  {
+   "char": "scout",
+   "frame": "engulf_tension__front__10",
+   "file": "scout__engulf_tension__front__10.png"
+  },
+  {
+   "char": "scout",
+   "frame": "wrap_squeeze__front__0",
+   "file": "scout__wrap_squeeze__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "wrap_tension__front__0",
+   "file": "scout__wrap_tension__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "wrap_tension__front__2",
+   "file": "scout__wrap_tension__front__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "wrap_tension__front__8",
+   "file": "scout__wrap_tension__front__8.png"
+  },
+  {
+   "char": "scout",
+   "frame": "ankle_grabbed__right__0",
+   "file": "scout__ankle_grabbed__right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "ankle_grabbed__right__4",
+   "file": "scout__ankle_grabbed__right__4.png"
+  },
+  {
+   "char": "scout",
+   "frame": "ankle_grabbed__right__6",
+   "file": "scout__ankle_grabbed__right__6.png"
+  },
+  {
+   "char": "scout",
+   "frame": "ankle_grabbed__right__14",
+   "file": "scout__ankle_grabbed__right__14.png"
+  },
+  {
+   "char": "scout",
+   "frame": "break_free__front__2",
+   "file": "scout__break_free__front__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "break_free__front__3",
+   "file": "scout__break_free__front__3.png"
+  },
+  {
+   "char": "scout",
+   "frame": "break_free__front__6",
+   "file": "scout__break_free__front__6.png"
+  },
+  {
+   "char": "scout",
+   "frame": "break_free__front__8",
+   "file": "scout__break_free__front__8.png"
+  },
+  {
+   "char": "scout",
+   "frame": "edge_pull__right__0",
+   "file": "scout__edge_pull__right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "edge_pull__right__3",
+   "file": "scout__edge_pull__right__3.png"
+  },
+  {
+   "char": "scout",
+   "frame": "edge_pull__right__7",
+   "file": "scout__edge_pull__right__7.png"
+  },
+  {
+   "char": "scout",
+   "frame": "gaze_trance__front__0",
+   "file": "scout__gaze_trance__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "gaze_trance__front__1",
+   "file": "scout__gaze_trance__front__1.png"
+  },
+  {
+   "char": "scout",
+   "frame": "spore_inhale__front__0",
+   "file": "scout__spore_inhale__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "spore_inhale__front__2",
+   "file": "scout__spore_inhale__front__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "shiver_hug__front__0",
+   "file": "scout__shiver_hug__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "shiver_hug__front__4",
+   "file": "scout__shiver_hug__front__4.png"
+  },
+  {
+   "char": "scout",
+   "frame": "bubble_float__front__0",
+   "file": "scout__bubble_float__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "bubble_float__front__2",
+   "file": "scout__bubble_float__front__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "daze_sway__front__0",
+   "file": "scout__daze_sway__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "daze_sway__front__2",
+   "file": "scout__daze_sway__front__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "reach_toward__right__0",
+   "file": "scout__reach_toward__right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "reach_toward__right__4",
+   "file": "scout__reach_toward__right__4.png"
+  },
+  {
+   "char": "scout",
+   "frame": "reach_toward__right__8",
+   "file": "scout__reach_toward__right__8.png"
+  },
+  {
+   "char": "scout",
+   "frame": "trip_fall__right__0",
+   "file": "scout__trip_fall__right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "trip_fall__right__4",
+   "file": "scout__trip_fall__right__4.png"
+  },
+  {
+   "char": "scout",
+   "frame": "trip_fall__right__11",
+   "file": "scout__trip_fall__right__11.png"
+  },
+  {
+   "char": "scout",
+   "frame": "trip_fall__right__13",
+   "file": "scout__trip_fall__right__13.png"
+  },
+  {
+   "char": "scout",
+   "frame": "trip_fall__right__18",
+   "file": "scout__trip_fall__right__18.png"
+  },
+  {
+   "char": "scout",
+   "frame": "trip_fall__right__20",
+   "file": "scout__trip_fall__right__20.png"
+  },
+  {
+   "char": "scout",
+   "frame": "defeat_collapse__right__0",
+   "file": "scout__defeat_collapse__right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "defeat_collapse__right__2",
+   "file": "scout__defeat_collapse__right__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "defeat_collapse__right__5",
+   "file": "scout__defeat_collapse__right__5.png"
+  },
+  {
+   "char": "scout",
+   "frame": "defeat_collapse__right__9",
+   "file": "scout__defeat_collapse__right__9.png"
+  },
+  {
+   "char": "scout",
+   "frame": "defeat_collapse__right__13",
+   "file": "scout__defeat_collapse__right__13.png"
+  },
+  {
+   "char": "scout",
+   "frame": "grabbed_flinch__front__0",
+   "file": "scout__grabbed_flinch__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "grabbed_flinch__front__3",
+   "file": "scout__grabbed_flinch__front__3.png"
+  },
+  {
+   "char": "scout",
+   "frame": "scout_tail_grabbed__right__0",
+   "file": "scout__scout_tail_grabbed__right__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "scout_tail_grabbed__right__1",
+   "file": "scout__scout_tail_grabbed__right__1.png"
+  },
+  {
+   "char": "scout",
+   "frame": "scout_tail_grabbed__right__5",
+   "file": "scout__scout_tail_grabbed__right__5.png"
+  },
+  {
+   "char": "scout",
+   "frame": "scout_tail_grabbed__right__7",
+   "file": "scout__scout_tail_grabbed__right__7.png"
+  },
+  {
+   "char": "scout",
+   "frame": "scout_tension__front__0",
+   "file": "scout__scout_tension__front__0.png"
+  },
+  {
+   "char": "scout",
+   "frame": "scout_tension__front__2",
+   "file": "scout__scout_tension__front__2.png"
+  },
+  {
+   "char": "scout",
+   "frame": "scout_tension__front__8",
+   "file": "scout__scout_tension__front__8.png"
+  },
+  {
+   "char": "mage",
+   "frame": "arms_behind_squirm__front__0",
+   "file": "mage__arms_behind_squirm__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "arms_behind_squirm__front__2",
+   "file": "mage__arms_behind_squirm__front__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "arms_behind_wrench__front__0",
+   "file": "mage__arms_behind_wrench__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "arms_behind_wrench__front__5",
+   "file": "mage__arms_behind_wrench__front__5.png"
+  },
+  {
+   "char": "mage",
+   "frame": "elbows_up_strain__front__0",
+   "file": "mage__elbows_up_strain__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "elbows_up_strain__front__2",
+   "file": "mage__elbows_up_strain__front__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "legs_pulled_open__front__0",
+   "file": "mage__legs_pulled_open__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "legs_pulled_open__front__7",
+   "file": "mage__legs_pulled_open__front__7.png"
+  },
+  {
+   "char": "mage",
+   "frame": "legs_held_open__front__0",
+   "file": "mage__legs_held_open__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "legs_held_open__front__2",
+   "file": "mage__legs_held_open__front__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "hip_rock_spread__front__0",
+   "file": "mage__hip_rock_spread__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "hip_rock_spread__front__3",
+   "file": "mage__hip_rock_spread__front__3.png"
+  },
+  {
+   "char": "mage",
+   "frame": "hip_rock_closed__front__0",
+   "file": "mage__hip_rock_closed__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "hip_rock_closed__front__3",
+   "file": "mage__hip_rock_closed__front__3.png"
+  },
+  {
+   "char": "mage",
+   "frame": "bounce_spread__front__0",
+   "file": "mage__bounce_spread__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "bounce_spread__front__4",
+   "file": "mage__bounce_spread__front__4.png"
+  },
+  {
+   "char": "mage",
+   "frame": "bounce_hung__front__0",
+   "file": "mage__bounce_hung__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "bounce_hung__front__4",
+   "file": "mage__bounce_hung__front__4.png"
+  },
+  {
+   "char": "mage",
+   "frame": "tension_tiptoe__front__0",
+   "file": "mage__tension_tiptoe__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "tension_tiptoe__front__3",
+   "file": "mage__tension_tiptoe__front__3.png"
+  },
+  {
+   "char": "mage",
+   "frame": "tension_arch__front__0",
+   "file": "mage__tension_arch__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "tension_arch__front__3",
+   "file": "mage__tension_arch__front__3.png"
+  },
+  {
+   "char": "mage",
+   "frame": "afterglow_spread__front__0",
+   "file": "mage__afterglow_spread__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "afterglow_spread__front__5",
+   "file": "mage__afterglow_spread__front__5.png"
+  },
+  {
+   "char": "mage",
+   "frame": "afterglow_slump__front__0",
+   "file": "mage__afterglow_slump__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "afterglow_slump__front__5",
+   "file": "mage__afterglow_slump__front__5.png"
+  },
+  {
+   "char": "mage",
+   "frame": "recover_slump__front__0",
+   "file": "mage__recover_slump__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "recover_slump__front__2",
+   "file": "mage__recover_slump__front__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "bent_over__up_right__0",
+   "file": "mage__bent_over__up_right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "bent_over__up_right__2",
+   "file": "mage__bent_over__up_right__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_fall_back__right__0",
+   "file": "mage__down_fall_back__right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_fall_back__right__2",
+   "file": "mage__down_fall_back__right__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_fall_back__right__8",
+   "file": "mage__down_fall_back__right__8.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_fall_back__right__12",
+   "file": "mage__down_fall_back__right__12.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_fall_back__right__17",
+   "file": "mage__down_fall_back__right__17.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_pinned_kick__right__0",
+   "file": "mage__down_pinned_kick__right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_pinned_kick__right__2",
+   "file": "mage__down_pinned_kick__right__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_pinned_spread__down_right__0",
+   "file": "mage__down_pinned_spread__down_right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_pinned_spread__down_right__6",
+   "file": "mage__down_pinned_spread__down_right__6.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_pinned_rock__down_right__0",
+   "file": "mage__down_pinned_rock__down_right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_pinned_rock__down_right__3",
+   "file": "mage__down_pinned_rock__down_right__3.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_face_down__right__0",
+   "file": "mage__down_face_down__right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_face_down__right__4",
+   "file": "mage__down_face_down__right__4.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_hips_up__right__0",
+   "file": "mage__down_hips_up__right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_hips_up__right__2",
+   "file": "mage__down_hips_up__right__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "get_up__right__0",
+   "file": "mage__get_up__right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "get_up__right__4",
+   "file": "mage__get_up__right__4.png"
+  },
+  {
+   "char": "mage",
+   "frame": "get_up__right__8",
+   "file": "mage__get_up__right__8.png"
+  },
+  {
+   "char": "mage",
+   "frame": "get_up__right__13",
+   "file": "mage__get_up__right__13.png"
+  },
+  {
+   "char": "mage",
+   "frame": "get_up__right__16",
+   "file": "mage__get_up__right__16.png"
+  },
+  {
+   "char": "mage",
+   "frame": "get_up__right__18",
+   "file": "mage__get_up__right__18.png"
+  },
+  {
+   "char": "mage",
+   "frame": "kiss_forced__right__0",
+   "file": "mage__kiss_forced__right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "kiss_forced__right__6",
+   "file": "mage__kiss_forced__right__6.png"
+  },
+  {
+   "char": "mage",
+   "frame": "kiss_tension__right__0",
+   "file": "mage__kiss_tension__right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "kiss_tension__right__3",
+   "file": "mage__kiss_tension__right__3.png"
+  },
+  {
+   "char": "mage",
+   "frame": "kiss_tension__right__8",
+   "file": "mage__kiss_tension__right__8.png"
+  },
+  {
+   "char": "mage",
+   "frame": "kiss_respond__right__0",
+   "file": "mage__kiss_respond__right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "kiss_respond__right__6",
+   "file": "mage__kiss_respond__right__6.png"
+  },
+  {
+   "char": "mage",
+   "frame": "tempt_pose__front__0",
+   "file": "mage__tempt_pose__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "tempt_pose__front__6",
+   "file": "mage__tempt_pose__front__6.png"
+  },
+  {
+   "char": "mage",
+   "frame": "chain_splay__front__0",
+   "file": "mage__chain_splay__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "chain_splay__front__3",
+   "file": "mage__chain_splay__front__3.png"
+  },
+  {
+   "char": "mage",
+   "frame": "tension_free__front__0",
+   "file": "mage__tension_free__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "tension_free__front__4",
+   "file": "mage__tension_free__front__4.png"
+  },
+  {
+   "char": "mage",
+   "frame": "tension_free__front__11",
+   "file": "mage__tension_free__front__11.png"
+  },
+  {
+   "char": "mage",
+   "frame": "tension_free__front__13",
+   "file": "mage__tension_free__front__13.png"
+  },
+  {
+   "char": "mage",
+   "frame": "sit_afterglow__front__0",
+   "file": "mage__sit_afterglow__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "held_from_behind__front__0",
+   "file": "mage__held_from_behind__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "held_from_behind__front__2",
+   "file": "mage__held_from_behind__front__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_afterglow__down_right__0",
+   "file": "mage__down_afterglow__down_right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_afterglow__down_right__5",
+   "file": "mage__down_afterglow__down_right__5.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_recover__down_right__2",
+   "file": "mage__down_recover__down_right__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "kiss_afterglow__right__0",
+   "file": "mage__kiss_afterglow__right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "kiss_afterglow__right__5",
+   "file": "mage__kiss_afterglow__right__5.png"
+  },
+  {
+   "char": "mage",
+   "frame": "kiss_recover__right__0",
+   "file": "mage__kiss_recover__right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "kiss_recover__right__5",
+   "file": "mage__kiss_recover__right__5.png"
+  },
+  {
+   "char": "mage",
+   "frame": "kiss_recover__right__8",
+   "file": "mage__kiss_recover__right__8.png"
+  },
+  {
+   "char": "mage",
+   "frame": "kiss_recover__right__10",
+   "file": "mage__kiss_recover__right__10.png"
+  },
+  {
+   "char": "mage",
+   "frame": "sit_recover__front__2",
+   "file": "mage__sit_recover__front__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "sit_recover__front__5",
+   "file": "mage__sit_recover__front__5.png"
+  },
+  {
+   "char": "mage",
+   "frame": "sit_recover__front__9",
+   "file": "mage__sit_recover__front__9.png"
+  },
+  {
+   "char": "mage",
+   "frame": "sit_recover__front__11",
+   "file": "mage__sit_recover__front__11.png"
+  },
+  {
+   "char": "mage",
+   "frame": "sit_recover__front__13",
+   "file": "mage__sit_recover__front__13.png"
+  },
+  {
+   "char": "mage",
+   "frame": "clinger_afterglow__front__5",
+   "file": "mage__clinger_afterglow__front__5.png"
+  },
+  {
+   "char": "mage",
+   "frame": "clinger_recover__front__15",
+   "file": "mage__clinger_recover__front__15.png"
+  },
+  {
+   "char": "mage",
+   "frame": "clinger_peel__front__0",
+   "file": "mage__clinger_peel__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "clinger_peel__front__7",
+   "file": "mage__clinger_peel__front__7.png"
+  },
+  {
+   "char": "mage",
+   "frame": "clinger_peel__front__20",
+   "file": "mage__clinger_peel__front__20.png"
+  },
+  {
+   "char": "mage",
+   "frame": "clinger_tension__front__4",
+   "file": "mage__clinger_tension__front__4.png"
+  },
+  {
+   "char": "mage",
+   "frame": "clinger_accept__front__0",
+   "file": "mage__clinger_accept__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "clinger_accept__front__2",
+   "file": "mage__clinger_accept__front__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_tension__down_right__0",
+   "file": "mage__down_tension__down_right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_tension__down_right__3",
+   "file": "mage__down_tension__down_right__3.png"
+  },
+  {
+   "char": "mage",
+   "frame": "down_tension__down_right__12",
+   "file": "mage__down_tension__down_right__12.png"
+  },
+  {
+   "char": "mage",
+   "frame": "engulf_sink__front__0",
+   "file": "mage__engulf_sink__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "engulf_sink__front__3",
+   "file": "mage__engulf_sink__front__3.png"
+  },
+  {
+   "char": "mage",
+   "frame": "engulf_sink__front__6",
+   "file": "mage__engulf_sink__front__6.png"
+  },
+  {
+   "char": "mage",
+   "frame": "engulf_struggle__front__0",
+   "file": "mage__engulf_struggle__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "engulf_struggle__front__6",
+   "file": "mage__engulf_struggle__front__6.png"
+  },
+  {
+   "char": "mage",
+   "frame": "engulf_rock__front__0",
+   "file": "mage__engulf_rock__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "engulf_rock__front__1",
+   "file": "mage__engulf_rock__front__1.png"
+  },
+  {
+   "char": "mage",
+   "frame": "engulf_tension__front__0",
+   "file": "mage__engulf_tension__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "engulf_tension__front__2",
+   "file": "mage__engulf_tension__front__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "engulf_tension__front__6",
+   "file": "mage__engulf_tension__front__6.png"
+  },
+  {
+   "char": "mage",
+   "frame": "engulf_tension__front__10",
+   "file": "mage__engulf_tension__front__10.png"
+  },
+  {
+   "char": "mage",
+   "frame": "wrap_squeeze__front__0",
+   "file": "mage__wrap_squeeze__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "wrap_tension__front__0",
+   "file": "mage__wrap_tension__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "wrap_tension__front__2",
+   "file": "mage__wrap_tension__front__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "wrap_tension__front__8",
+   "file": "mage__wrap_tension__front__8.png"
+  },
+  {
+   "char": "mage",
+   "frame": "ankle_grabbed__right__0",
+   "file": "mage__ankle_grabbed__right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "ankle_grabbed__right__4",
+   "file": "mage__ankle_grabbed__right__4.png"
+  },
+  {
+   "char": "mage",
+   "frame": "ankle_grabbed__right__6",
+   "file": "mage__ankle_grabbed__right__6.png"
+  },
+  {
+   "char": "mage",
+   "frame": "ankle_grabbed__right__14",
+   "file": "mage__ankle_grabbed__right__14.png"
+  },
+  {
+   "char": "mage",
+   "frame": "break_free__front__2",
+   "file": "mage__break_free__front__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "break_free__front__3",
+   "file": "mage__break_free__front__3.png"
+  },
+  {
+   "char": "mage",
+   "frame": "break_free__front__6",
+   "file": "mage__break_free__front__6.png"
+  },
+  {
+   "char": "mage",
+   "frame": "break_free__front__8",
+   "file": "mage__break_free__front__8.png"
+  },
+  {
+   "char": "mage",
+   "frame": "edge_pull__right__0",
+   "file": "mage__edge_pull__right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "edge_pull__right__3",
+   "file": "mage__edge_pull__right__3.png"
+  },
+  {
+   "char": "mage",
+   "frame": "edge_pull__right__7",
+   "file": "mage__edge_pull__right__7.png"
+  },
+  {
+   "char": "mage",
+   "frame": "gaze_trance__front__0",
+   "file": "mage__gaze_trance__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "gaze_trance__front__1",
+   "file": "mage__gaze_trance__front__1.png"
+  },
+  {
+   "char": "mage",
+   "frame": "spore_inhale__front__0",
+   "file": "mage__spore_inhale__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "spore_inhale__front__2",
+   "file": "mage__spore_inhale__front__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "shiver_hug__front__0",
+   "file": "mage__shiver_hug__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "shiver_hug__front__4",
+   "file": "mage__shiver_hug__front__4.png"
+  },
+  {
+   "char": "mage",
+   "frame": "bubble_float__front__0",
+   "file": "mage__bubble_float__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "bubble_float__front__2",
+   "file": "mage__bubble_float__front__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "daze_sway__front__0",
+   "file": "mage__daze_sway__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "daze_sway__front__2",
+   "file": "mage__daze_sway__front__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "reach_toward__right__0",
+   "file": "mage__reach_toward__right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "reach_toward__right__4",
+   "file": "mage__reach_toward__right__4.png"
+  },
+  {
+   "char": "mage",
+   "frame": "reach_toward__right__8",
+   "file": "mage__reach_toward__right__8.png"
+  },
+  {
+   "char": "mage",
+   "frame": "trip_fall__right__0",
+   "file": "mage__trip_fall__right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "trip_fall__right__4",
+   "file": "mage__trip_fall__right__4.png"
+  },
+  {
+   "char": "mage",
+   "frame": "trip_fall__right__11",
+   "file": "mage__trip_fall__right__11.png"
+  },
+  {
+   "char": "mage",
+   "frame": "trip_fall__right__13",
+   "file": "mage__trip_fall__right__13.png"
+  },
+  {
+   "char": "mage",
+   "frame": "trip_fall__right__18",
+   "file": "mage__trip_fall__right__18.png"
+  },
+  {
+   "char": "mage",
+   "frame": "trip_fall__right__20",
+   "file": "mage__trip_fall__right__20.png"
+  },
+  {
+   "char": "mage",
+   "frame": "defeat_collapse__right__0",
+   "file": "mage__defeat_collapse__right__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "defeat_collapse__right__2",
+   "file": "mage__defeat_collapse__right__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "defeat_collapse__right__5",
+   "file": "mage__defeat_collapse__right__5.png"
+  },
+  {
+   "char": "mage",
+   "frame": "defeat_collapse__right__9",
+   "file": "mage__defeat_collapse__right__9.png"
+  },
+  {
+   "char": "mage",
+   "frame": "defeat_collapse__right__13",
+   "file": "mage__defeat_collapse__right__13.png"
+  },
+  {
+   "char": "mage",
+   "frame": "grabbed_flinch__front__0",
+   "file": "mage__grabbed_flinch__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "grabbed_flinch__front__3",
+   "file": "mage__grabbed_flinch__front__3.png"
+  },
+  {
+   "char": "mage",
+   "frame": "mage_suppress__front__0",
+   "file": "mage__mage_suppress__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "mage_suppress__front__5",
+   "file": "mage__mage_suppress__front__5.png"
+  },
+  {
+   "char": "mage",
+   "frame": "mage_suppress_tension__front__0",
+   "file": "mage__mage_suppress_tension__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "mage_suppress_tension__front__2",
+   "file": "mage__mage_suppress_tension__front__2.png"
+  },
+  {
+   "char": "mage",
+   "frame": "mage_suppress_tension__front__6",
+   "file": "mage__mage_suppress_tension__front__6.png"
+  },
+  {
+   "char": "mage",
+   "frame": "mage_arms_bound__front__0",
+   "file": "mage__mage_arms_bound__front__0.png"
+  },
+  {
+   "char": "mage",
+   "frame": "mage_arms_bound__front__2",
+   "file": "mage__mage_arms_bound__front__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "arms_behind_squirm__front__0",
+   "file": "healer__arms_behind_squirm__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "arms_behind_squirm__front__2",
+   "file": "healer__arms_behind_squirm__front__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "arms_behind_wrench__front__0",
+   "file": "healer__arms_behind_wrench__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "arms_behind_wrench__front__5",
+   "file": "healer__arms_behind_wrench__front__5.png"
+  },
+  {
+   "char": "healer",
+   "frame": "elbows_up_strain__front__0",
+   "file": "healer__elbows_up_strain__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "elbows_up_strain__front__2",
+   "file": "healer__elbows_up_strain__front__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "legs_pulled_open__front__0",
+   "file": "healer__legs_pulled_open__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "legs_pulled_open__front__7",
+   "file": "healer__legs_pulled_open__front__7.png"
+  },
+  {
+   "char": "healer",
+   "frame": "legs_held_open__front__0",
+   "file": "healer__legs_held_open__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "legs_held_open__front__2",
+   "file": "healer__legs_held_open__front__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "hip_rock_spread__front__0",
+   "file": "healer__hip_rock_spread__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "hip_rock_spread__front__3",
+   "file": "healer__hip_rock_spread__front__3.png"
+  },
+  {
+   "char": "healer",
+   "frame": "hip_rock_closed__front__0",
+   "file": "healer__hip_rock_closed__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "hip_rock_closed__front__3",
+   "file": "healer__hip_rock_closed__front__3.png"
+  },
+  {
+   "char": "healer",
+   "frame": "bounce_spread__front__0",
+   "file": "healer__bounce_spread__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "bounce_spread__front__4",
+   "file": "healer__bounce_spread__front__4.png"
+  },
+  {
+   "char": "healer",
+   "frame": "bounce_hung__front__0",
+   "file": "healer__bounce_hung__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "bounce_hung__front__4",
+   "file": "healer__bounce_hung__front__4.png"
+  },
+  {
+   "char": "healer",
+   "frame": "tension_tiptoe__front__0",
+   "file": "healer__tension_tiptoe__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "tension_tiptoe__front__3",
+   "file": "healer__tension_tiptoe__front__3.png"
+  },
+  {
+   "char": "healer",
+   "frame": "tension_arch__front__0",
+   "file": "healer__tension_arch__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "tension_arch__front__3",
+   "file": "healer__tension_arch__front__3.png"
+  },
+  {
+   "char": "healer",
+   "frame": "afterglow_spread__front__0",
+   "file": "healer__afterglow_spread__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "afterglow_spread__front__5",
+   "file": "healer__afterglow_spread__front__5.png"
+  },
+  {
+   "char": "healer",
+   "frame": "afterglow_slump__front__0",
+   "file": "healer__afterglow_slump__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "afterglow_slump__front__5",
+   "file": "healer__afterglow_slump__front__5.png"
+  },
+  {
+   "char": "healer",
+   "frame": "recover_slump__front__0",
+   "file": "healer__recover_slump__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "recover_slump__front__2",
+   "file": "healer__recover_slump__front__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "bent_over__up_right__0",
+   "file": "healer__bent_over__up_right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "bent_over__up_right__2",
+   "file": "healer__bent_over__up_right__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_fall_back__right__0",
+   "file": "healer__down_fall_back__right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_fall_back__right__2",
+   "file": "healer__down_fall_back__right__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_fall_back__right__8",
+   "file": "healer__down_fall_back__right__8.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_fall_back__right__12",
+   "file": "healer__down_fall_back__right__12.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_fall_back__right__17",
+   "file": "healer__down_fall_back__right__17.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_pinned_kick__right__0",
+   "file": "healer__down_pinned_kick__right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_pinned_kick__right__2",
+   "file": "healer__down_pinned_kick__right__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_pinned_spread__down_right__0",
+   "file": "healer__down_pinned_spread__down_right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_pinned_spread__down_right__6",
+   "file": "healer__down_pinned_spread__down_right__6.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_pinned_rock__down_right__0",
+   "file": "healer__down_pinned_rock__down_right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_pinned_rock__down_right__3",
+   "file": "healer__down_pinned_rock__down_right__3.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_face_down__right__0",
+   "file": "healer__down_face_down__right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_face_down__right__4",
+   "file": "healer__down_face_down__right__4.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_hips_up__right__0",
+   "file": "healer__down_hips_up__right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_hips_up__right__2",
+   "file": "healer__down_hips_up__right__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "get_up__right__0",
+   "file": "healer__get_up__right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "get_up__right__4",
+   "file": "healer__get_up__right__4.png"
+  },
+  {
+   "char": "healer",
+   "frame": "get_up__right__8",
+   "file": "healer__get_up__right__8.png"
+  },
+  {
+   "char": "healer",
+   "frame": "get_up__right__13",
+   "file": "healer__get_up__right__13.png"
+  },
+  {
+   "char": "healer",
+   "frame": "get_up__right__16",
+   "file": "healer__get_up__right__16.png"
+  },
+  {
+   "char": "healer",
+   "frame": "get_up__right__18",
+   "file": "healer__get_up__right__18.png"
+  },
+  {
+   "char": "healer",
+   "frame": "kiss_forced__right__0",
+   "file": "healer__kiss_forced__right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "kiss_forced__right__6",
+   "file": "healer__kiss_forced__right__6.png"
+  },
+  {
+   "char": "healer",
+   "frame": "kiss_tension__right__0",
+   "file": "healer__kiss_tension__right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "kiss_tension__right__3",
+   "file": "healer__kiss_tension__right__3.png"
+  },
+  {
+   "char": "healer",
+   "frame": "kiss_tension__right__8",
+   "file": "healer__kiss_tension__right__8.png"
+  },
+  {
+   "char": "healer",
+   "frame": "kiss_respond__right__0",
+   "file": "healer__kiss_respond__right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "kiss_respond__right__6",
+   "file": "healer__kiss_respond__right__6.png"
+  },
+  {
+   "char": "healer",
+   "frame": "tempt_pose__front__0",
+   "file": "healer__tempt_pose__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "tempt_pose__front__6",
+   "file": "healer__tempt_pose__front__6.png"
+  },
+  {
+   "char": "healer",
+   "frame": "chain_splay__front__0",
+   "file": "healer__chain_splay__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "chain_splay__front__3",
+   "file": "healer__chain_splay__front__3.png"
+  },
+  {
+   "char": "healer",
+   "frame": "tension_free__front__0",
+   "file": "healer__tension_free__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "tension_free__front__4",
+   "file": "healer__tension_free__front__4.png"
+  },
+  {
+   "char": "healer",
+   "frame": "tension_free__front__11",
+   "file": "healer__tension_free__front__11.png"
+  },
+  {
+   "char": "healer",
+   "frame": "tension_free__front__13",
+   "file": "healer__tension_free__front__13.png"
+  },
+  {
+   "char": "healer",
+   "frame": "sit_afterglow__front__0",
+   "file": "healer__sit_afterglow__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "held_from_behind__front__0",
+   "file": "healer__held_from_behind__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "held_from_behind__front__2",
+   "file": "healer__held_from_behind__front__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_afterglow__down_right__0",
+   "file": "healer__down_afterglow__down_right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_afterglow__down_right__5",
+   "file": "healer__down_afterglow__down_right__5.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_recover__down_right__2",
+   "file": "healer__down_recover__down_right__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "kiss_afterglow__right__0",
+   "file": "healer__kiss_afterglow__right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "kiss_afterglow__right__5",
+   "file": "healer__kiss_afterglow__right__5.png"
+  },
+  {
+   "char": "healer",
+   "frame": "kiss_recover__right__0",
+   "file": "healer__kiss_recover__right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "kiss_recover__right__5",
+   "file": "healer__kiss_recover__right__5.png"
+  },
+  {
+   "char": "healer",
+   "frame": "kiss_recover__right__8",
+   "file": "healer__kiss_recover__right__8.png"
+  },
+  {
+   "char": "healer",
+   "frame": "kiss_recover__right__10",
+   "file": "healer__kiss_recover__right__10.png"
+  },
+  {
+   "char": "healer",
+   "frame": "sit_recover__front__2",
+   "file": "healer__sit_recover__front__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "sit_recover__front__5",
+   "file": "healer__sit_recover__front__5.png"
+  },
+  {
+   "char": "healer",
+   "frame": "sit_recover__front__9",
+   "file": "healer__sit_recover__front__9.png"
+  },
+  {
+   "char": "healer",
+   "frame": "sit_recover__front__11",
+   "file": "healer__sit_recover__front__11.png"
+  },
+  {
+   "char": "healer",
+   "frame": "sit_recover__front__13",
+   "file": "healer__sit_recover__front__13.png"
+  },
+  {
+   "char": "healer",
+   "frame": "clinger_afterglow__front__5",
+   "file": "healer__clinger_afterglow__front__5.png"
+  },
+  {
+   "char": "healer",
+   "frame": "clinger_recover__front__15",
+   "file": "healer__clinger_recover__front__15.png"
+  },
+  {
+   "char": "healer",
+   "frame": "clinger_peel__front__0",
+   "file": "healer__clinger_peel__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "clinger_peel__front__7",
+   "file": "healer__clinger_peel__front__7.png"
+  },
+  {
+   "char": "healer",
+   "frame": "clinger_peel__front__20",
+   "file": "healer__clinger_peel__front__20.png"
+  },
+  {
+   "char": "healer",
+   "frame": "clinger_tension__front__4",
+   "file": "healer__clinger_tension__front__4.png"
+  },
+  {
+   "char": "healer",
+   "frame": "clinger_accept__front__0",
+   "file": "healer__clinger_accept__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "clinger_accept__front__2",
+   "file": "healer__clinger_accept__front__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_tension__down_right__0",
+   "file": "healer__down_tension__down_right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_tension__down_right__3",
+   "file": "healer__down_tension__down_right__3.png"
+  },
+  {
+   "char": "healer",
+   "frame": "down_tension__down_right__12",
+   "file": "healer__down_tension__down_right__12.png"
+  },
+  {
+   "char": "healer",
+   "frame": "engulf_sink__front__0",
+   "file": "healer__engulf_sink__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "engulf_sink__front__3",
+   "file": "healer__engulf_sink__front__3.png"
+  },
+  {
+   "char": "healer",
+   "frame": "engulf_sink__front__6",
+   "file": "healer__engulf_sink__front__6.png"
+  },
+  {
+   "char": "healer",
+   "frame": "engulf_struggle__front__0",
+   "file": "healer__engulf_struggle__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "engulf_struggle__front__6",
+   "file": "healer__engulf_struggle__front__6.png"
+  },
+  {
+   "char": "healer",
+   "frame": "engulf_rock__front__0",
+   "file": "healer__engulf_rock__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "engulf_rock__front__1",
+   "file": "healer__engulf_rock__front__1.png"
+  },
+  {
+   "char": "healer",
+   "frame": "engulf_tension__front__0",
+   "file": "healer__engulf_tension__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "engulf_tension__front__2",
+   "file": "healer__engulf_tension__front__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "engulf_tension__front__6",
+   "file": "healer__engulf_tension__front__6.png"
+  },
+  {
+   "char": "healer",
+   "frame": "engulf_tension__front__10",
+   "file": "healer__engulf_tension__front__10.png"
+  },
+  {
+   "char": "healer",
+   "frame": "wrap_squeeze__front__0",
+   "file": "healer__wrap_squeeze__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "wrap_tension__front__0",
+   "file": "healer__wrap_tension__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "wrap_tension__front__2",
+   "file": "healer__wrap_tension__front__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "wrap_tension__front__8",
+   "file": "healer__wrap_tension__front__8.png"
+  },
+  {
+   "char": "healer",
+   "frame": "ankle_grabbed__right__0",
+   "file": "healer__ankle_grabbed__right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "ankle_grabbed__right__4",
+   "file": "healer__ankle_grabbed__right__4.png"
+  },
+  {
+   "char": "healer",
+   "frame": "ankle_grabbed__right__6",
+   "file": "healer__ankle_grabbed__right__6.png"
+  },
+  {
+   "char": "healer",
+   "frame": "ankle_grabbed__right__14",
+   "file": "healer__ankle_grabbed__right__14.png"
+  },
+  {
+   "char": "healer",
+   "frame": "break_free__front__2",
+   "file": "healer__break_free__front__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "break_free__front__3",
+   "file": "healer__break_free__front__3.png"
+  },
+  {
+   "char": "healer",
+   "frame": "break_free__front__6",
+   "file": "healer__break_free__front__6.png"
+  },
+  {
+   "char": "healer",
+   "frame": "break_free__front__8",
+   "file": "healer__break_free__front__8.png"
+  },
+  {
+   "char": "healer",
+   "frame": "edge_pull__right__0",
+   "file": "healer__edge_pull__right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "edge_pull__right__3",
+   "file": "healer__edge_pull__right__3.png"
+  },
+  {
+   "char": "healer",
+   "frame": "edge_pull__right__7",
+   "file": "healer__edge_pull__right__7.png"
+  },
+  {
+   "char": "healer",
+   "frame": "gaze_trance__front__0",
+   "file": "healer__gaze_trance__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "gaze_trance__front__1",
+   "file": "healer__gaze_trance__front__1.png"
+  },
+  {
+   "char": "healer",
+   "frame": "spore_inhale__front__0",
+   "file": "healer__spore_inhale__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "spore_inhale__front__2",
+   "file": "healer__spore_inhale__front__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "shiver_hug__front__0",
+   "file": "healer__shiver_hug__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "shiver_hug__front__4",
+   "file": "healer__shiver_hug__front__4.png"
+  },
+  {
+   "char": "healer",
+   "frame": "bubble_float__front__0",
+   "file": "healer__bubble_float__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "bubble_float__front__2",
+   "file": "healer__bubble_float__front__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "daze_sway__front__0",
+   "file": "healer__daze_sway__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "daze_sway__front__2",
+   "file": "healer__daze_sway__front__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "reach_toward__right__0",
+   "file": "healer__reach_toward__right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "reach_toward__right__4",
+   "file": "healer__reach_toward__right__4.png"
+  },
+  {
+   "char": "healer",
+   "frame": "reach_toward__right__8",
+   "file": "healer__reach_toward__right__8.png"
+  },
+  {
+   "char": "healer",
+   "frame": "trip_fall__right__0",
+   "file": "healer__trip_fall__right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "trip_fall__right__4",
+   "file": "healer__trip_fall__right__4.png"
+  },
+  {
+   "char": "healer",
+   "frame": "trip_fall__right__11",
+   "file": "healer__trip_fall__right__11.png"
+  },
+  {
+   "char": "healer",
+   "frame": "trip_fall__right__13",
+   "file": "healer__trip_fall__right__13.png"
+  },
+  {
+   "char": "healer",
+   "frame": "trip_fall__right__18",
+   "file": "healer__trip_fall__right__18.png"
+  },
+  {
+   "char": "healer",
+   "frame": "trip_fall__right__20",
+   "file": "healer__trip_fall__right__20.png"
+  },
+  {
+   "char": "healer",
+   "frame": "defeat_collapse__right__0",
+   "file": "healer__defeat_collapse__right__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "defeat_collapse__right__2",
+   "file": "healer__defeat_collapse__right__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "defeat_collapse__right__5",
+   "file": "healer__defeat_collapse__right__5.png"
+  },
+  {
+   "char": "healer",
+   "frame": "defeat_collapse__right__9",
+   "file": "healer__defeat_collapse__right__9.png"
+  },
+  {
+   "char": "healer",
+   "frame": "defeat_collapse__right__13",
+   "file": "healer__defeat_collapse__right__13.png"
+  },
+  {
+   "char": "healer",
+   "frame": "grabbed_flinch__front__0",
+   "file": "healer__grabbed_flinch__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "grabbed_flinch__front__3",
+   "file": "healer__grabbed_flinch__front__3.png"
+  },
+  {
+   "char": "healer",
+   "frame": "healer_panel_catch__front__3",
+   "file": "healer__healer_panel_catch__front__3.png"
+  },
+  {
+   "char": "healer",
+   "frame": "healer_panel_catch__front__6",
+   "file": "healer__healer_panel_catch__front__6.png"
+  },
+  {
+   "char": "healer",
+   "frame": "healer_tension_refuse__front__0",
+   "file": "healer__healer_tension_refuse__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "healer_tension_refuse__front__2",
+   "file": "healer__healer_tension_refuse__front__2.png"
+  },
+  {
+   "char": "healer",
+   "frame": "healer_tension_refuse__front__7",
+   "file": "healer__healer_tension_refuse__front__7.png"
+  }
+ ]
+}

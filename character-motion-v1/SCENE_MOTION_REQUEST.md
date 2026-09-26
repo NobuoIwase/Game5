@@ -2,6 +2,8 @@
 
 作成：Claude（2026-09-26、v3）。参考資料は `references/scene-v1/`（一覧は同フォルダの README、全モーションの一覧ページは `references/index.html`）。
 
+- **描き手**：このモーションの1枚絵（`PRODUCTION_PLAN.md` で「1枚絵」のコマ）は NovelAI で作る（`nai/README.md`）。部位の絵と組み立ては、これまでどおり
+
 ## 1. 目的
 
 キャラクターの姿勢と動きの追加分。

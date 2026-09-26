@@ -138,7 +138,7 @@ export function figure(J,binds=[],yaw=0,expr='',memo=null,fr={}){   // fr: the w
  return `<ellipse cx="${f(P('root')[0])}" cy="242" rx="30" ry="6" fill="#0a0f15"/>`+items.map(i=>i.svg).join('');
 }
 /* the figures of one view in order, each drawn with the memo left by the frame before (primed with one pass) */
-const run=frames=>{const memo={};for(const fr of frames)figure(fr.joints,fr.binds,fr.yaw,fr.expr,memo,fr);return frames.map(fr=>figure(fr.joints,fr.binds,fr.yaw,fr.expr,memo,fr))};
+export const run=frames=>{const memo={};for(const fr of frames)figure(fr.joints,fr.binds,fr.yaw,fr.expr,memo,fr);return frames.map(fr=>figure(fr.joints,fr.binds,fr.yaw,fr.expr,memo,fr))};
 const cell=(cw,ch,hl)=>{let g=`<rect width="${cw}" height="${ch}" fill="${hl?C.hit:C.bg}" stroke="#2c3542"/>`;for(let x=24;x<cw;x+=24)g+=`<line x1="${x}" y1="40" x2="${x}" y2="${ch}" stroke="${C.grid}"/>`;for(let y=48;y<ch;y+=24)g+=`<line x1="0" y1="${y}" x2="${cw}" y2="${y}" stroke="${C.grid}"/>`;return g};
 /* sheet: rows = directions, columns = frames */
 export function sheet(lib,m,dirs,{mark}={}){

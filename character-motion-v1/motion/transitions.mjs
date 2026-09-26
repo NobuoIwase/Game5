@@ -8,11 +8,11 @@
  * and ends exactly where the next begins, and a wrist never passes through the body on the way.
  */
 import {pose,project,DIRECTIONS,YAW} from './attack.mjs';
-import {between,keyGap} from './blend.mjs';
+import {between,keyGap,bindTravel,holdTravel} from './blend.mjs';
 import {MOTIONS as RM,library as RL} from './restraint.mjs';
 import {MOTIONS as SM,library as SL,NEUTRAL} from './scenes.mjs';
 export const LIMIT=20;    // px: a joint may move this far from one frame to the next (inside the motions the median step is ~5)
-export const STEP=12;     // px: the average step a join is cut into (its middle, eased, is ~1.5x this)
+export const STEP=10;     // px: the average step a join is cut into (its middle, eased, is ~1.5x this)
 export const EDGES=`
 stand>grabbed_flinch stand>down_fall_back stand>engulf_sink stand>kiss_forced stand>clinger_peel stand>tempt_pose stand>daze_sway stand>edge_pull stand>reach_toward stand>walk_unsteady stand>trip_fall stand>defeat_collapse stand>ankle_grabbed stand>chain_splay
 grabbed_flinch>arms_behind_squirm grabbed_flinch>elbows_up_strain grabbed_flinch>legs_pulled_open grabbed_flinch>wrap_squeeze grabbed_flinch>held_from_behind grabbed_flinch>spore_inhale grabbed_flinch>shiver_hug grabbed_flinch>gaze_trance grabbed_flinch>bubble_float grabbed_flinch>clinger_peel
@@ -36,9 +36,10 @@ function info(m){if(m==='stand')return{first:NEUTRAL,last:NEUTRAL,view:'front',e
  const src=RM[m]?'restraint':'scene',K=(RM[m]||SM[m]).keys,lib=LIBS[src],F=lib.poses[m].front,lp=lib.motions[m].loop;
  return{first:{...K[0],expr:F[0].expr},last:{...K[lp?0:K.length-1],expr:F[lp?0:F.length-1].expr},view:lib.motions[m].view,label:lib.motions[m].label}}
 export function joinFrames(a,b){const A=info(a),B=info(b),g=keyGap(A.last,B.first);
- if(g<=LIMIT)return{gap:g,frames:[]};
- const n=Math.ceil(g/STEP)-1,out=[];
- for(let j=1;j<=n;j++){const u=j/(n+1),e=u*u*(3-2*u),q=between(A.last,B.first,e);q.binds=b==='break_free'?A.last.binds:e<.5?A.last.binds:B.first.binds;q.expr=e<.5?A.last.expr:B.first.expr;q.ms=70;q.phase=j===1?`つなぎ ${a} → ${b}`:'…';out.push(q)}
+ const tr=b==='break_free'?holdTravel(A.last)+g:bindTravel(A.last,B.first);   // into break_free: the lines loosen while her arms and legs move, so both count   // restraint lines grow and go back over the join too
+ if(Math.max(g,tr)<=LIMIT)return{gap:g,frames:[]};
+ const n=Math.ceil(Math.max(g,tr)/STEP)-1,out=[];
+ for(let j=1;j<=n;j++){const u=j/(n+1),e=u*u*(3-2*u),q=between(A.last,B.first,e,{keepA:b==='break_free',u});q.ms=70;q.phase=j===1?`つなぎ ${a} → ${b}`:'…';out.push(q)}
  return{gap:g,frames:out,from:A,to:B}}
 const bindsOut=k=>(k.binds||[]).map((b,bi)=>({joint:b.j,joint2:b.j2,anchor:b.to?'bind'+bi:null,creature:b.creature?1:undefined,partner:b.partner?1:undefined,noLoop:b.noLoop?1:undefined,coil:b.coil?1:undefined,r:b.r,engulf:b.engulf?1:undefined,level:b.level,bubble:b.bubble?1:undefined}));
 export const frameOf=(k,d)=>({direction:d,yaw:YAW[d],frame_ms:k.ms,phase:k.phase,expr:k.expr,binds:bindsOut(k),joints:project(pose(k),d)});

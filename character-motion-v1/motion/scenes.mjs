@@ -10,7 +10,7 @@
  * expr sets the face drawn in the references: 'shut' eyes, 'o' open mouth, 'line' pressed mouth.
  */
 import {pose,project,DIRECTIONS,YAW} from './attack.mjs';
-import {between,keyGap} from './blend.mjs';
+import {between,keyGap,bindTravel} from './blend.mjs';
 const TAU=Math.PI*2,S=t=>Math.sin(TAU*t),C=t=>Math.cos(TAU*t);
 /* foot: [lateral, forward, heel lift (- = lower, lying), toe yaw, in the air, pointed toes, knee out, knee up, knee direction, foot direction ('shin' = along the shin)] */
 const foot=(l,z,{lift=0,yaw=0,air=0,point=0,knee=-.08,up=0,dir,toes}={})=>[l,z,lift,yaw,air?1:0,point,knee,up,dir,toes];
@@ -23,8 +23,8 @@ const loop=(n,ms,f)=>Array.from({length:n},(_,i)=>({...f(i/n,i),ms}));
 const SNAP=/^(頂点|振りほどく|はじかれる|びくっ)/;
 /* each step is cut into at least as many frames as it asks for, and more if a joint would move over ~24 px (the eased middle of a step is 1.5x its average, so 16 px on average)
    in one frame (not into a snap); the step keeps its length in time (msScale shortens the frames) */
-function tween(steps){const out=[];steps.forEach(([k,n0],i)=>{const nx=steps[i+1]?.[0];const n=nx&&n0>0&&!SNAP.test(nx.phase||'')?Math.max(n0,Math.ceil(keyGap(k,nx)/16)):n0;
- for(let j=0;j<(nx?n:1);j++){const u=nx?j/n:0,e=u*u*(3-2*u);const q=nx&&j>0?{...between(k,nx,e)}:{...k};if(j>0){q.phase='…';q.binds=u<.5?k.binds:nx.binds;q.expr=u<.5?k.expr:nx.expr}q.msScale=nx&&n0>0?n0/n:1;out.push(q)}});return out}
+function tween(steps){const out=[];steps.forEach(([k,n0],i)=>{const nx=steps[i+1]?.[0];const n=nx&&n0>0&&!SNAP.test(nx.phase||'')?Math.max(n0,Math.ceil(Math.max(keyGap(k,nx),bindTravel(k,nx))/14)):n0;
+ for(let j=0;j<(nx?n:1);j++){const u=nx?j/n:0,e=u*u*(3-2*u);const q=nx&&j>0?{...between(k,nx,e,{u})}:{...k};if(j>0)q.phase='…';q.msScale=nx&&n0>0?n0/n:1;out.push(q)}});return out}
 /* a loop through key poses with in-betweens: each key's ms is shared out over its frames */
 const loopTween=(keys,n=2)=>tween([...keys.map(k=>[k,n]),[keys[0],0]]).slice(0,-1).map(q=>({...q,ms:Math.round(q.ms*q.msScale/n),msScale:1}));
 /* getting up from sitting with the legs folded out: onto the knees, one foot forward, up */
@@ -80,7 +80,7 @@ export const MOTIONS={
   rootZ:4*S(t),head:[85-8*S(t-.1),0,0],shrug:1.5*S(t),
   footL:foot(18,22+2*S(t),{knee:1.15,up:.9,point:10}),footR:foot(-18,22+2*S(t),{knee:1.15,up:.9,point:10}),
   binds:[...WRISTS_OVERHEAD,{j:'knee_left',to:[56,236,26]},{j:'knee_right',to:[-56,236,26]}],expr:S(t)>0?'o':'shut',phase:S(t)>.3?'pushed toward her head':S(t)<-.3?'slides back':'…'}))},
- down_face_down:{label:'うつ伏せで押さえられ、脚をばたつかせてもがく',loop:true,view:'right',keys:loop(12,67,t=>({...PRONE,
+ down_face_down:{label:'うつ伏せで押さえられ、脚をばたつかせてもがく',loop:true,view:'right',keys:loop(16,50,t=>({...PRONE,
   pelvis:8*S(t),sway:2*S(t),head:[-80,0,25*S(t)],
   footL:foot(9,-54+20*Math.max(0,S(t)),{lift:-3+28*Math.max(0,S(t)),air:S(t)>.2,knee:0,up:-1,toes:'shin'}),footR:foot(-9,-54+20*Math.max(0,-S(t)),{lift:-3+28*Math.max(0,-S(t)),air:S(t)<-.2,knee:0,up:-1,toes:'shin'}),
   binds:WRISTS_AHEAD,expr:'line',phase:'kicks from the knees one leg after the other, hips twisting'}))},

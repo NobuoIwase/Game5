@@ -50,7 +50,7 @@ hurtEnemy=function(dmg,opts={}){
   // v0.37: knocked the way she struck, it rolls in its own manner, comes to rest and lies there
   const h=state.hero,a=h?Math.atan2(e.y-h.y,e.x-h.x):0,k=DEATH[e.type]||'slime',R=DR[k];
   let dist=R.d,step=4,B=window.Game5Dungeon?.blockedAt;for(let s=step;s<=R.d;s+=step){if(B?.(e,e.x+Math.cos(a)*s,e.y+Math.sin(a)*s)){dist=s-step;break}}
-  ghosts.push({e:{...e,hp:1,cast:null,flash:0,stun:0,moving:false,_hitT:0,_pop:0,_wasCasting:false},a,k,dist,spin:(Math.random()<.5?-1:1),t:0,roll:R.t,lie:1.8,fade:.9});
+  ghosts.push({e:{...e,hp:1,_ghost:true,_lg:null,_hop:null,_rcl:null,_lg0:false,cast:null,flash:0,stun:0,moving:false,_hitT:0,_pop:0,_wasCasting:false},a,k,dist,spin:(Math.random()<.5?-1:1),t:0,roll:R.t,lie:1.8,fade:.9});
  }
 };
 const DEATH={slug:'slime',gel:'slime',mirror_slime:'slime',crown_attendant:'slime',water_wraith:'slime',bubble_shell:'shell',
@@ -65,12 +65,12 @@ function drawGhosts(dt){
   const end=g.roll+g.lie,alpha=g.t<end?1:Math.max(0,1-(g.t-end)/g.fade);
   const x=e.x+Math.cos(g.a)*g.dist*u,y=e.y+Math.sin(g.a)*g.dist*u,sgn=Math.cos(g.a)>=0?1:-1;
   // v0.38: no squashing; dim and half see-through so a body is not in the way
-  const dim=Math.min(1,g.t/g.roll);ctx.save();ctx.globalAlpha=alpha*(1-.45*dim);ctx.filter=`saturate(${1-.6*dim}) brightness(${1-.55*dim})`;
+  const dim=Math.min(1,g.t/g.roll);ctx.save();e._dimA=alpha*(1-.45*dim);e._dimF=`saturate(${1-.6*dim}) brightness(${1-.55*dim})`;   // v0.43: handed to the renderer, which used to overwrite ctx.filter/globalAlpha itself
   if(g.k==='slime'){ctx.translate(x,y);ctx.rotate(sgn*u*.35);ctx.scale(z,z);ctx.translate(-e.x,-e.y)}
   else if(g.k==='shell'){ctx.translate(x,y);ctx.rotate(sgn*u*Math.PI*1.5);ctx.scale(z,z);ctx.translate(-e.x,-e.y)}
   else if(g.k==='fly'){const fall=Math.sin(Math.min(1,g.t/g.roll)*Math.PI/2)*r*.9;ctx.translate(x,y+fall);ctx.rotate(g.spin*u*Math.PI*1.2);ctx.scale(z,z);ctx.translate(-e.x,-e.y)}
   else if(g.k==='ball'){ctx.translate(x,y+r*.3*u);ctx.rotate(sgn*u*g.dist/Math.max(8,r)*z);ctx.scale(z,z);ctx.translate(-e.x,-e.y)}
-  else if(g.k==='wisp'){ctx.translate(x,y);ctx.scale(z,z);ctx.translate(-e.x,-e.y);ctx.globalAlpha*=1-.5*u}
+  else if(g.k==='wisp'){ctx.translate(x,y);ctx.scale(z,z);ctx.translate(-e.x,-e.y);e._dimA*=1-.5*u}
   else if(g.k==='roll'){ctx.translate(x,y);ctx.rotate(sgn*u*Math.PI);ctx.scale(z,z);ctx.translate(-e.x,-e.y)}
   else if(g.k==='topple'){ctx.translate(e.x,by);ctx.rotate(sgn*u*Math.PI/2);ctx.scale(z,z);ctx.translate(-e.x,-by)}
   else if(g.k==='flip'){const hop=Math.sin(Math.min(1,g.t/g.roll)*Math.PI)*14;ctx.translate(x,y-hop);ctx.rotate(sgn*u*Math.PI);ctx.scale(z,z);ctx.translate(-e.x,-e.y)}

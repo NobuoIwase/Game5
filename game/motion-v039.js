@@ -94,7 +94,7 @@ function monsterMotion(e){
  ctx.translate(ax+dx,ay+dy);if(sk)ctx.transform(1,0,-sk,1,0,0);ctx.scale(sx,sy);ctx.translate(-ax,-ay);
 }
 const G=window.Game5Graphics;
-if(G){const prev=G.enemyTransform;G.enemyTransform=function(e){if(e&&e.hp>0&&state.started)monsterMotion(e);prev?.(e)}}
+if(G){const prev=G.enemyTransform;G.enemyTransform=function(e){if(e&&e.hp>0&&!e._ghost&&state.started)monsterMotion(e);prev?.(e)}}
 const baseReset=reset;reset=function(){const r=baseReset();px=py=null;const h=state.hero;if(h){h._stepPh=0;h._lean=0;h._pb=null}return r};
 window.Game5Motion39={version:'0.39.0',cfg:C};
 })();

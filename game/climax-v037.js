@@ -35,7 +35,7 @@ updateHero=function(h,dt){
   h.chainN=t-lastEnd<C.chainGap?(h.chainN||1)+1:1;h.maxChain=Math.max(h.maxChain||0,h.chainN);
   if(h.chainN>=2){
    addFx('text',h.x,h.y-120,`連続絶頂 ×${h.chainN}`,'#ff8fd0',1.6);
-   window.Game5FX?.shake?.(5+h.chainN);
+   window.Game5FX?.shake?.(3+Math.min(2,h.chainN*.5));
    const nk=Math.min(4,h.chainN);M()?.say?.(NARR[nk][0],null);setTimeout?.(()=>M()?.say?.(NARR[nk][1],null),1400);
    Vo()?.say?.(h,h.chainN>=3?'chain3':'chain2',{force:true,hold:2.4});
    if(h.chainN===3)window.Game5Heat?.title?.(h,'三度つづけて果てた戦士');
@@ -61,7 +61,7 @@ updateHero=function(h,dt){
  h._spApplied=h.maxSp;
  // ---- convulsions ----
  if(est){spasmT-=dt;if(spasmT<=0){const ch=h.chainN||1;spasmT=C.spasm[0]+Math.random()*(C.spasm[1]-C.spasm[0])-Math.min(.2,ch*.05);h._spasm=1;
-   window.Game5FX?.shake?.(2+Math.min(4,ch));addFx('text',h.x+(Math.random()-.5)*30,h.y-70,Math.random()<.5?'びくんっ':'びくっ','#ffc2e6',.6)}}
+   window.Game5FX?.shake?.(.8+Math.min(1.2,ch*.3));addFx('text',h.x+(Math.random()-.5)*30,h.y-70,Math.random()<.5?'びくんっ':'びくっ','#ffc2e6',.6)}}
  h._spasm=Math.max(0,(h._spasm||0)-dt*5);
  // ---- charmed monsters come into view ----
  const CH=window.Game5Charm;

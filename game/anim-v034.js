@@ -41,6 +41,6 @@ function anim(e){
  ctx.translate(ax+dx,ay+dy);if(rot)ctx.rotate(rot);if(skew)ctx.transform(1,0,skew,1,0,0);ctx.scale(sx,sy);ctx.translate(-ax,-ay);
 }
 const G=window.Game5Graphics;
-if(G){const prev=G.enemyTransform;G.enemyTransform=function(e){prev?.(e);if(e&&e.hp>0)anim(e)}}
+if(G){const prev=G.enemyTransform;G.enemyTransform=function(e){prev?.(e);if(e&&e.hp>0&&!e._ghost)anim(e)}}
 window.Game5Anim={version:'0.34.0',kinds:KIND};
 })();

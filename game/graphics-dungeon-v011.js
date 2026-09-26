@@ -10,12 +10,12 @@ function drawEnemy(e=state.enemy){
  ctx.save();
  ctx.translate(e.x,e.y+bob);
  ctx.filter=e.visualFilter||`hue-rotate(${e.visualHue||0}deg) saturate(${e.type==='gel'?1.1:1.25})`;
- ctx.globalAlpha=e.stun>0?.72:1;
+ ctx.globalAlpha=(e.stun>0?.72:1)*(e._dimA??1);   // v0.43: _dimA/_dimF - a fallen monster lying dim (polish-v014.js)
  const art=window.Game5Assets?.monster?.(e);
  ctx.shadowBlur=art?(e.phase===2?14:8):(e.phase===2?24:15);
  ctx.shadowColor=art?(e.phase===2?'rgba(255,120,200,.7)':'rgba(0,0,0,.55)'):(e.type==='orb'||e.type==='moth'?'#c995ff':'#74d6bb');
  const custom=window.Game5Assets?.monster?.(e);
- if(custom){ctx.filter='none';if(window.Game5PixelArt?.has(custom))ctx.imageSmoothingEnabled=false;let cw=size*.86,ch=cw*custom.naturalHeight/custom.naturalWidth;if(ch>size*1.05){cw*=size*1.05/ch;ch=size*1.05}ctx.drawImage(custom,-cw/2,size*.3-ch,cw,ch)}
+ if(custom){ctx.filter=e._dimF||'none';if(window.Game5PixelArt?.has(custom))ctx.imageSmoothingEnabled=false;let cw=size*.86,ch=cw*custom.naturalHeight/custom.naturalWidth;if(ch>size*1.05){cw*=size*1.05/ch;ch=size*1.05}ctx.drawImage(custom,-cw/2,size*.3-ch,cw,ch)}
  else ctx.drawImage(atlas,(idx%4)*s,Math.floor(idx/4)*s,s,s,-size/2,-size*.6,size,size);
  ctx.restore();
  if(e.cast?.key==='bind'||(state.hero.status?.bind||0)>0){

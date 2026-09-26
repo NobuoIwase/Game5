@@ -37,8 +37,16 @@ for(const [kind,label,lib,views] of SETS)for(const [m,byDir] of Object.entries(l
 // the part pictures still needed by the frames that are put together (parts / finish)
 const need=new Map();for(const [m,o] of Object.entries(plan))for(const [v,F] of Object.entries(o))F.forEach(e=>{if(e.use!=='parts'&&e.use!=='finish')return;for(const k of PR[m]?.[v]?.[e.frame]||[]){need.set(k,(need.get(k)||0)+1)}});
 const groups={};for(const k of need.keys()){const p=k.split('|')[0];groups[p]=(groups[p]||0)+1}
+// bent elbows and knees in the assembled frames: the walk bends the elbow to about 42 degrees at most, so a joint bent
+// further needs its own picture of the bent joint (drawn over the fold), per direction: half (60-110) and deep (110+)
+const JB={},bentFrames={half:0,deep:0},sub3=(p,q)=>p.map((v,i)=>v-q[i]),ang=(u,v)=>Math.acos(Math.max(-1,Math.min(1,(u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/Math.hypot(...u)/Math.hypot(...v))))*180/Math.PI;
+for(const [kind,,lib,views] of SETS)for(const [m,byDir] of Object.entries(lib.poses))for(const v of views(m,lib.motions[m]))byDir[v].forEach((f,i)=>{const e=plan[m][v][i];if(e.use!=='parts'&&e.use!=='finish')return;
+ const W=k=>f.joints[k].world;let worst=0;for(const [j,a1,b1,c1] of [['肘','shoulder','elbow','wrist'],['膝','hip','knee','ankle']])for(const sd of ['left','right']){const b=ang(sub3(W(b1+'_'+sd),W(a1+'_'+sd)),sub3(W(c1+'_'+sd),W(b1+'_'+sd)));
+  if(b>=60){const k=`${j}|${b<110?'半分曲げた（60〜110度）':'深く曲げた（110度〜）'}|${v}`;JB[k]=(JB[k]||0)+1;worst=Math.max(worst,b)}}
+ if(worst>=110)bentFrames.deep++;else if(worst>=60)bentFrames.half++});
+const nJoints=Object.keys(JB).length;
 const nParts=[...need.keys()].length,nFaces=groups['顔']||0;
-fs.writeFileSync(path.join(ROOT,'motion','plan.json'),JSON.stringify({notes:{same:'use the frame in from',draw:'a whole picture',finish:'put together from parts, then touched up',parts:'put together from parts only'},part_pictures:[...need.keys()],frames:plan}));
+fs.writeFileSync(path.join(ROOT,'motion','plan.json'),JSON.stringify({notes:{same:'use the frame in from',draw:'a whole picture',finish:'put together from parts, then touched up',parts:'put together from parts only',joint_pictures:'bent elbows and knees drawn as their own pictures (joint|bend|direction: frames using it)'},part_pictures:[...need.keys()],joint_pictures:JB,frames:plan}));
 const tot=Object.values(count).reduce((a,b)=>a+b,0);
 const kindRows=SETS.map(([k,l])=>{const c=byKind[k];return`| ${l} | ${c.draw} | ${c.finish} | ${c.parts} | ${c.same} | ${c.draw+c.finish+c.parts+c.same} |`}).join('\n');
 const motionRows=SETS.map(([k,l,lib,views])=>`### ${l}\n\n| id | 1枚絵で描くコマ | 組み立て＋描き足し | 部位で組み立て | 同じ絵 |\n|---|---|---|---|---|\n`+Object.keys(lib.poses).map(m=>{const vs=views(m,lib.motions[m]),F=plan[m][vs[0]],pick=u=>F.filter(e=>e.use===u).map(e=>e.frame);
@@ -71,6 +79,10 @@ fs.writeFileSync(path.join(ROOT,'PRODUCTION_PLAN.md'),`# 作り方の計画（1�
 - 同じ絵 ${count.same}
 
 **組み立てに使う新しい部位の絵：${nParts}枚**（うち表情${nFaces}枚）
+- **曲げた肘・膝の絵：${nJoints}枚**
+  - 半分（60〜110度）／深く（110度〜）×方向
+  - 歩行の肘は最大42度ほどしか曲がらないため、それより曲がる関節には専用の絵が要る
+  - 組み立てのコマのうち、半分曲げが${bentFrames.half}コマ、深く曲げが${bentFrames.deep}コマ
 - 手の形：3種類（開いた手のひら・体に当てる手・強く握った手）×方向
 - 衣装・髪の差分：キャラクターごとに別途
 - 部位の分け方の前提は \`REUSE_LIST.md\` 後半のとおり（各キャラクターを歩行と同じ部位に8方向ぶん分ける）
@@ -84,18 +96,42 @@ ${kindRows}
 - すべて組み立て：部位の絵107枚だけで済むが、動きの要のコマまで組み立てになり、硬く見える
 - この計画：要のコマ${count.draw}枚を1枚絵にし、${count.finish}コマは組み立てたあとに描き足す
 
-## 部位の組み立てのコマを良く見せるために
+## 部位の絵の描き方（関節が切り取ったように見えないように）
 
-- **1枚絵を部位の基準にする**
-  - 1枚絵で描いたコマから部位を切り出して、組み立ての部位に使う
-  - 同じモーションの中で絵柄がそろう（歩行で太ももを使い回したのと同じ考え方）
-- **つなぎは短い**
-  - 1コマ70msで、前後の1枚絵・組み立てのコマに挟まれる
-  - 部位の組み立てで十分
-- **描き足しの範囲**：部位の切れ目、胴の曲がり、衣装のしわや髪の流れ
+1枚絵から部位を切り出すと、関節の所が切り取られたように見える。
+- 切り口に輪郭線が残る、トゲが出る、曲げると隙間ができる
+- 歩行でも、脚の切り口のトゲや首の切り口の線を1つずつ直した（\`walk-graphics-handoff/docs/04_HISTORY.md\`）
+
+そのため、**部位は部位として最初から描く**。1枚絵は切り出しに使わない。
+
+1. **のりしろを付ける**
+   - 上腕・前腕・太もも・すねは、関節の中心を越えて、太さの半分ほど先まで描く
+   - 先は丸く閉じる
+   - 隣の部位と重なって、曲げても隙間ができない
+2. **切り口には輪郭線を描かない**
+   - 関節側の端は、輪郭線を付けずにぼかすように終える
+   - 外から見える輪郭は、隣の部位や関節の絵が受け持つ
+3. **関節は別の絵にする**
+   - 肩・肘・手首・股・膝・足首を、丸い関節の絵として別に描く（歩行と同じ）
+   - 手前にあるときは上、奥にあるときは下に重ねる。関節の丸を常に一番上に貼ると、膝が逆向きに見える
+4. **曲げた肘・膝は専用の絵**
+   - 60度を超えて曲げる肘・膝は、曲げた形の関節の絵（上の${nJoints}枚）を使う
+   - 膝の前の角と裏のしわを、1枚の関節の絵に描いておく
+   - 伸ばした関節の絵を回して、深い曲げをごまかさない
+5. **胴には受け口を描く**
+   - 上半身・下半身の絵に、肩・股・首がはまる受け口（\`socket\`）を描く
+   - 腕・脚・首の付け根は、胴の絵の内側に隠れるようにする
+6. **1枚絵と部位は同じ設定画から描く**
+   - 絵柄・衣装・配色は、同じキャラクターの設定画と部位一覧をもとに、部位の絵と1枚絵の両方で合わせる
+   - 1枚絵を部位の見本にはするが、切り出しには使わない
+7. **組み立てたら関節を拡大して確かめる**（歩行の確認手順と同じ）
+   - 首・肩・肘・膝・手首・足首を拡大する
+   - 隙間、切り口の線、トゲ、裏向きの関節がないか見る
+- **つなぎは短い**：1コマ70msで前後の絵に挟まれるので、部位の組み立てで十分
+- **描き足しの範囲**：部位の境目の最終調整、胴の曲がり、衣装のしわや髪の流れ
 
 ## モーションごとの振り分け
 
 ${motionRows}
 `);
-console.log(`plan: draw ${count.draw}, finish ${count.finish}, parts ${count.parts}, same ${count.same} (of ${tot}); part pictures ${nParts} (faces ${nFaces})`,JSON.stringify(byKind));
+console.log(`plan: draw ${count.draw}, finish ${count.finish}, parts ${count.parts}, same ${count.same} (of ${tot}); part pictures ${nParts} (faces ${nFaces}); joint pictures ${nJoints}; bent frames ${JSON.stringify(bentFrames)}`,JSON.stringify(byKind));

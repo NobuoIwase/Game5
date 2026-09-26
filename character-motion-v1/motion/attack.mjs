@@ -152,7 +152,10 @@ export function pose(k0){
  // her left shoulder), yaw (+ turns to her left)]
  const hp=rad((k.head||[])[0]||0),hr=rad((k.head||[])[1]||0),hy=rad((k.head||[])[2]||0);
  J.head=[J.neck[0]+Math.sin(hr)*L.neckToHead,J.neck[1]-L.neckToHead*Math.cos(hp)*Math.cos(hr),J.neck[2]+2-Math.sin(hp)*L.neckToHead];
- {const fwd=[Math.sin(hy),Math.sin(hp)*-.0+(-Math.sin(hp))*0,Math.cos(hy)];const up=Math.sin(hp);J.face=[J.head[0]+Math.sin(hy)*Math.cos(hp)*9+Math.sin(hr)*2,J.head[1]-up*9,J.head[2]+Math.cos(hy)*Math.cos(hp)*9]}   // where she looks: 9px ahead of the head centre
+ // where she looks (9px ahead of the head centre) and her two eyes, set across the head's own
+ // left-right axis - so a head thrown back still has its eyes side by side
+ {const fw=[Math.sin(hy)*Math.cos(hp),-Math.sin(hp),Math.cos(hy)*Math.cos(hp)],lat=[Math.cos(hy)*Math.cos(hr),Math.sin(hr),-Math.sin(hy)*Math.cos(hr)];
+  J.face=add(J.head,mul(fw,9));const ec=add(J.head,add(mul(fw,8.5),[0,-1,0]));J.eye_left=add(ec,mul(lat,4));J.eye_right=add(ec,mul(lat,-4))}
  J.crotch=[root[0],root[1]+7,root[2]+1];
  for(const [side,sg] of [['right',-1],['left',1]]){
   const hip=trunk(8.5*sg,0,0,k.pelvis),f=k['foot'+(side==='right'?'R':'L')],fy=rad(f[3]||0);

@@ -1,15 +1,23 @@
 // Shared SVG mannequin drawing for the motion references (attack / restraint).
 // Colours follow generic/ : blue = her anatomical RIGHT, orange = her LEFT.
 // Drawn when present: sword (blade + cross-guard), shield (a thick disc on the outer left
-// forearm: face / edge / back), restraints (purple tentacles and bands), and which way the head
+// forearm: face / edge / back), restraints (purple lines and bands), and which way the head
 // faces (eyes when the face is toward the viewer, hair when it is turned away).
 export const LABEL={front:'正面',down_right:'右斜め前',right:'右',up_right:'右斜め後ろ',back:'後ろ',up_left:'左斜め後ろ',left:'左',down_left:'左斜め前'};
 const COL={right:'#2f6fd6',left:'#e8912d',trunk:'#8e93a3',head:'#cfd5df',line:'#1b1d24',tent:'#9b4fc0',tentDark:'#4a1f63'};
 const f=n=>(+n).toFixed(1);
 function hull(pts){pts=pts.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]);const cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]);const lo=[],up=[];for(const p of pts){while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],p)<=0)lo.pop();lo.push(p)}for(const p of pts.reverse()){while(up.length>=2&&cr(up[up.length-2],up[up.length-1],p)<=0)up.pop();up.push(p)}return lo.slice(0,-1).concat(up.slice(0,-1))}
-export function figure(J,binds=[]){
- const P=id=>J[id].position,D=id=>J[id].depth,items=[];
- const seg=(a,b,w,col)=>items.push({d:(D(a)+D(b))/2,svg:`<line x1="${f(P(a)[0])}" y1="${f(P(a)[1])}" x2="${f(P(b)[0])}" y2="${f(P(b)[1])}" stroke="${COL.line}" stroke-width="${w+2}" stroke-linecap="round"/><line x1="${f(P(a)[0])}" y1="${f(P(a)[1])}" x2="${f(P(b)[0])}" y2="${f(P(b)[1])}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`});
+export function figure(J,binds=[],yaw=0){
+ const P=id=>J[id].position,D=id=>J[id].depth,W=id=>J[id].world,items=[];
+ // the trunk's facing: forward = up x right (world), and whether that faces the viewer
+ const sb=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]],cr=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],dt=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+ const up=sb(W('neck'),W('root')),rt=sb(W('shoulder_left'),W('shoulder_right')),fwd0=cr(up,rt),fl=Math.hypot(...fwd0)||1,fwd=fwd0.map(v=>v/fl);
+ const yr=yaw*Math.PI/180,faces=Math.cos(yr)*fwd[2]-Math.sin(yr)*fwd[0]>0,TD=D('thorax');
+ const side=w=>dt(sb(w,W('thorax')),fwd);   // + in front of the trunk, - behind it
+ const place=(d,w)=>{if(!w)return d;const sd=side(w);if(sd<-3)return faces?Math.min(d,TD-1-.01*Math.min(40,-sd)):Math.max(d,TD+1);if(sd>3)return faces?Math.max(d,TD+1):Math.min(d,TD-1);return d};
+ const mid=(a,b)=>[(W(a)[0]+W(b)[0])/2,(W(a)[1]+W(b)[1])/2,(W(a)[2]+W(b)[2])/2];
+ const arm=/shoulder|elbow|wrist|hand/;
+ const seg=(a,b,w,col)=>items.push({d:arm.test(a)?place((D(a)+D(b))/2,mid(a,b)):(D(a)+D(b))/2,svg:`<line x1="${f(P(a)[0])}" y1="${f(P(a)[1])}" x2="${f(P(b)[0])}" y2="${f(P(b)[1])}" stroke="${COL.line}" stroke-width="${w+2}" stroke-linecap="round"/><line x1="${f(P(a)[0])}" y1="${f(P(a)[1])}" x2="${f(P(b)[0])}" y2="${f(P(b)[1])}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`});
  for(const s of ['right','left']){const c=COL[s];
   seg('hip_'+s,'knee_'+s,9,c);seg('knee_'+s,'ankle_'+s,7,c);seg('ankle_'+s,'toe_'+s,5,c);
   seg('shoulder_'+s,'elbow_'+s,6.5,c);seg('elbow_'+s,'wrist_'+s,5.5,c);seg('wrist_'+s,'hand_'+s,5,c);}
@@ -19,13 +27,14 @@ export function figure(J,binds=[]){
  // the head, and which way it faces
  {const h=P('head');let g=`<circle cx="${f(h[0])}" cy="${f(h[1])}" r="13" fill="${COL.head}" stroke="${COL.line}" stroke-width="2"/>`;
   if(J.face){const fc=P('face'),dx=fc[0]-h[0],dy=fc[1]-h[1],dd=D('face')-D('head'),toward=dd>0,r=Math.hypot(dx,dy);
-   if(Math.abs(dd)<4.5&&r>4){g+=`<circle cx="${f(h[0]+dx*.85)}" cy="${f(h[1]+dy*.85-1)}" r="1.9" fill="${COL.line}"/>`}   // profile: one eye on the side she looks to
-   else if(toward){const ex=h[0]+dx*.75,ey=h[1]+dy*.75,px=-dy/(r||1)*4,py=dx/(r||1)*4;   // two eyes across the look direction
+   if(J.eye_left&&dd>-4.5){for(const e of ['eye_left','eye_right']){const q=P(e),v=D(e)-D('head');if(v>-2.5)g+=`<circle cx="${f(q[0])}" cy="${f(q[1])}" r="1.9" fill="${COL.line}"/>`}}   // the eyes that face the viewer
+   else if(Math.abs(dd)<4.5&&r>4){g+=`<circle cx="${f(h[0]+dx*.85)}" cy="${f(h[1]+dy*.85-1)}" r="1.9" fill="${COL.line}"/>`}
+   else if(toward){const ex=h[0]+dx*.75,ey=h[1]+dy*.75,px=-dy/(r||1)*4,py=dx/(r||1)*4;
     g+=`<circle cx="${f(ex+px)}" cy="${f(ey+py-1)}" r="1.9" fill="${COL.line}"/><circle cx="${f(ex-px)}" cy="${f(ey-py-1)}" r="1.9" fill="${COL.line}"/>`}
    else g+=`<path d="M${f(h[0]-11)},${f(h[1]-2)} Q${f(h[0])},${f(h[1]-17)} ${f(h[0]+11)},${f(h[1]-2)} Q${f(h[0])},${f(h[1]+6)} ${f(h[0]-11)},${f(h[1]-2)}Z" fill="#7a6a5a" opacity=".55"/>`}   // hair: the back of her head
   items.push({d:D('head'),svg:g})}
  if(J.sword_tip){
-  items.push({d:(D('hand_right')+D('sword_tip'))/2+.5,svg:`<line x1="${f(P('hand_right')[0])}" y1="${f(P('hand_right')[1])}" x2="${f(P('sword_tip')[0])}" y2="${f(P('sword_tip')[1])}" stroke="#333" stroke-width="4.5" stroke-linecap="round"/><line x1="${f(P('hand_right')[0])}" y1="${f(P('hand_right')[1])}" x2="${f(P('sword_tip')[0])}" y2="${f(P('sword_tip')[1])}" stroke="#e8eef5" stroke-width="2.5" stroke-linecap="round"/>`});
+  items.push({d:place((D('hand_right')+D('sword_tip'))/2+.5,mid('hand_right','sword_tip')),svg:`<line x1="${f(P('hand_right')[0])}" y1="${f(P('hand_right')[1])}" x2="${f(P('sword_tip')[0])}" y2="${f(P('sword_tip')[1])}" stroke="#333" stroke-width="4.5" stroke-linecap="round"/><line x1="${f(P('hand_right')[0])}" y1="${f(P('hand_right')[1])}" x2="${f(P('sword_tip')[0])}" y2="${f(P('sword_tip')[1])}" stroke="#e8eef5" stroke-width="2.5" stroke-linecap="round"/>`});
   if(J.guard_a)items.push({d:D('hand_right')+.55,svg:`<line x1="${f(P('guard_a')[0])}" y1="${f(P('guard_a')[1])}" x2="${f(P('guard_b')[0])}" y2="${f(P('guard_b')[1])}" stroke="#333" stroke-width="3" stroke-linecap="round"/>`});
  }
  // the shield: an ellipse through its rim as seen from this side - its face (bronze, boss, blue
@@ -39,19 +48,19 @@ export function figure(J,binds=[]){
    g+=`<line x1="${f(x[0])}" y1="${f(x[1])}" x2="${f(x[2])}" y2="${f(x[3])}" stroke="#2f5fae" stroke-width="3" stroke-linecap="round"/><line x1="${f(y[0])}" y1="${f(y[1])}" x2="${f(y[2])}" y2="${f(y[3])}" stroke="#2f5fae" stroke-width="3" stroke-linecap="round"/><circle cx="${f((c[0]+bf[0])/2)}" cy="${f((c[1]+bf[1])/2)}" r="2.6" fill="#e8d7a8" stroke="${COL.line}" stroke-width="1"/>`}
   else if(!face&&fr>.35)g+=`<line x1="${f(P('strap_a')[0])}" y1="${f(P('strap_a')[1])}" x2="${f(P('strap_b')[0])}" y2="${f(P('strap_b')[1])}" stroke="#8a6a44" stroke-width="3.5" stroke-linecap="round"/>`;
   items.push({d:D('shield')+(face?.6:-.6),svg:g})}
- // restraints: tentacles from an anchor to a joint (with a coil round it), bands between two
- // joints, and a tentacle running from one anchor through a point to another
- const tube=(pts,d)=>{const p=pts.map(x=>x.map(f).join(','));let path=`M${p[0]}`;
+ // restraints: a line from an anchor to a joint (with a loop round it), bands between two joints,
+ // and a line running from one anchor through a point to another
+ const tube=(pts,d,w)=>{d=place(d,w);const p=pts.map(x=>x.map(f).join(','));let path=`M${p[0]}`;
   if(pts.length===2){const [a,b]=pts,mx=(a[0]+b[0])/2+(b[1]-a[1])*.12,my=(a[1]+b[1])/2-(b[0]-a[0])*.12;path+=` Q${f(mx)},${f(my)} ${p[1]}`}
   else path+=` Q${p[1]} ${p[2]}`;
   items.push({d,svg:`<path d="${path}" fill="none" stroke="${COL.tentDark}" stroke-width="6.5" stroke-linecap="round"/><path d="${path}" fill="none" stroke="${COL.tent}" stroke-width="4" stroke-linecap="round"/>`})};
- const coil=(id)=>{const p=P(id);items.push({d:D(id)+.4,svg:`<ellipse cx="${f(p[0])}" cy="${f(p[1])}" rx="5.5" ry="3.2" fill="none" stroke="${COL.tentDark}" stroke-width="3.5"/><ellipse cx="${f(p[0])}" cy="${f(p[1])}" rx="5.5" ry="3.2" fill="none" stroke="${COL.tent}" stroke-width="2"/>`})};
+ const coil=(id)=>{const p=P(id);items.push({d:place(D(id)+.4,W(id)),svg:`<ellipse cx="${f(p[0])}" cy="${f(p[1])}" rx="5.5" ry="3.2" fill="none" stroke="${COL.tentDark}" stroke-width="3.5"/><ellipse cx="${f(p[0])}" cy="${f(p[1])}" rx="5.5" ry="3.2" fill="none" stroke="${COL.tent}" stroke-width="2"/>`})};
  for(const b of binds){
-  if(b.joint2){tube([P(b.joint),P(b.joint2)],(D(b.joint)+D(b.joint2))/2+.3);coil(b.joint);coil(b.joint2);continue}
+  if(b.joint2){tube([P(b.joint),P(b.joint2)],(D(b.joint)+D(b.joint2))/2+.3,mid(b.joint,b.joint2));coil(b.joint);coil(b.joint2);continue}
   if(b.via&&b.anchor2){const a=P(b.anchor),v=P(b.via),c=P(b.anchor2);   // through: two curves meeting under the joint
    tube([a,[(a[0]+v[0])/2,v[1]+2],v],D(b.via)+.2);tube([v,[(v[0]+c[0])/2,v[1]+2],c],D(b.via)-.2);continue}
   if(b.via){tube([P(b.anchor),[(P(b.anchor)[0]+P(b.via)[0])/2,P(b.via)[1]+10],P(b.via)],D(b.via)+.1);continue}
-  if(b.anchor){tube([P(b.anchor),P(b.joint)],D(b.joint)-.2);coil(b.joint)}
+  if(b.anchor){tube([P(b.anchor),P(b.joint)],D(b.joint)-.2,W(b.joint));coil(b.joint)}
  }
  items.sort((a,b)=>a.d-b.d);
  return `<ellipse cx="${f(P('root')[0])}" cy="242" rx="26" ry="6" fill="#000" opacity=".18"/>`+items.map(i=>i.svg).join('');
@@ -62,7 +71,7 @@ export function sheet(lib,m,dirs,{mark}={}){
  let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W/2}" height="${H/2}" font-family="sans-serif"><rect width="${W}" height="${H}" fill="#f4f1ea"/>`;
  for(let i=0;i<N;i++)s+=`<text x="${lw+i*cw+cw/2}" y="18" font-size="15" text-anchor="middle" fill="${i===hit?'#c0392b':'#333'}">${i}${i===hit?' 命中':''} · ${meta.frame_ms[i]}ms</text>`;
  dirs.forEach((d,r)=>{s+=`<text x="8" y="${pad+r*ch+ch/2}" font-size="16" fill="#333">${LABEL[d]}</text><text x="8" y="${pad+r*ch+ch/2+18}" font-size="12" fill="#777">${d}</text>`;
-  for(let i=0;i<N;i++){const fr=P[d][i];s+=`<g transform="translate(${lw+i*cw},${pad+r*ch})"><rect width="${cw}" height="${ch}" fill="${i===hit?'#fbe9e7':'none'}" stroke="#d8d2c4"/><line x1="0" x2="${cw}" y1="242" y2="242" stroke="#bbb"/>${figure(fr.joints,fr.binds)}</g>`}});
+  for(let i=0;i<N;i++){const fr=P[d][i];s+=`<g transform="translate(${lw+i*cw},${pad+r*ch})"><rect width="${cw}" height="${ch}" fill="${i===hit?'#fbe9e7':'none'}" stroke="#d8d2c4"/><line x1="0" x2="${cw}" y1="242" y2="242" stroke="#bbb"/>${figure(fr.joints,fr.binds,fr.yaw)}</g>`}});
  return s+'</svg>';
 }
 /* keys: one direction, big, with each frame's intent written under it and the path of one joint
@@ -74,7 +83,7 @@ export function keys(lib,m,d,{trail='sword_tip',mark}={}){
  for(let i=0;i<N;i++){const fr=F[i];
   s+=`<g transform="translate(${i*cw},0)"><rect width="${cw}" height="${ch}" fill="${i===hit?'#fbe9e7':'none'}" stroke="#d8d2c4"/><line x1="0" x2="${cw}" y1="242" y2="242" stroke="#bbb"/>`+
    (tr?`<polyline points="${tr.map(t=>t.map(f).join(',')).join(' ')}" fill="none" stroke="#c0392b" stroke-width="1" stroke-dasharray="3 3" opacity=".5"/><circle cx="${f(tr[i][0])}" cy="${f(tr[i][1])}" r="3" fill="#c0392b"/>`:'')+
-   `${figure(fr.joints,fr.binds)}</g>`;
+   `${figure(fr.joints,fr.binds,fr.yaw)}</g>`;
   const ph=(fr.phase||'').split(' '),j=ph.shift();
   s+=`<text x="${i*cw+8}" y="${ch+22}" font-size="16" font-weight="700" fill="#333">${i}. ${j}</text><foreignObject x="${i*cw+6}" y="${ch+30}" width="${cw-12}" height="110"><div xmlns="http://www.w3.org/1999/xhtml" style="font:12px sans-serif;color:#555;line-height:1.35">${ph.join(' ')}<br/>${fr.frame_ms}ms</div></foreignObject>`;
  }
@@ -87,7 +96,7 @@ export function preview(lib,m,dirs,cols=4){
  let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" font-family="sans-serif"><rect width="${W}" height="${H}" fill="#f4f1ea"/>`;
  dirs.forEach((d,r)=>{const x=(r%cols)*cw,y=Math.floor(r/cols)*(ch+10);s+=`<g transform="translate(${x},${y})"><line x1="0" x2="${cw}" y1="242" y2="242" stroke="#bbb"/><text x="6" y="16" font-size="13" fill="#555">${LABEL[d]}</text>`;
   for(let i=0;i<N;i++){const vals=ms.map((_,k)=>k===i?'inline':'none').join(';'),fr=P[d][i];
-   s+=`<g display="${i===0?'inline':'none'}">${figure(fr.joints,fr.binds)}<animate attributeName="display" values="${vals}" keyTimes="${kt.map(v=>v.toFixed(4)).join(';')}" calcMode="discrete" dur="${tot}ms" repeatCount="indefinite"/></g>`}
+   s+=`<g display="${i===0?'inline':'none'}">${figure(fr.joints,fr.binds,fr.yaw)}<animate attributeName="display" values="${vals}" keyTimes="${kt.map(v=>v.toFixed(4)).join(';')}" calcMode="discrete" dur="${tot}ms" repeatCount="indefinite"/></g>`}
   s+='</g>'});
  return s+'</svg>';
 }

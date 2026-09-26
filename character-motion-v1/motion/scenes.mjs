@@ -342,3 +342,4 @@ export function library(){
    extra_joints:{face:'where she looks',eye_left:'eyes',eye_right:'eyes',chest_left:'body points where creatures cling',chest_right:'',groin:'the front of the crotch (a creature clings here)',belly:'lower belly',crotch:'just under the hips'}},
   motions:meta,poses};
 }
+export {tween,loop,loopTween,foot,BASE,STAND,SIT,ONBACK,PRONE,HIPSUP,CREATURES};   // for the heroines' own motions (heroines.mjs)

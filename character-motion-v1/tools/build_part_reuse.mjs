@@ -14,7 +14,7 @@
 // Hands (open, pressing, gripping) are counted from the key poses (see HANDS below).
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';
 import {library as A,DIRECTIONS,YAW} from '../motion/attack.mjs';
-import {library as R} from '../motion/restraint.mjs';import {library as S} from '../motion/scenes.mjs';import {library as T} from '../motion/transitions.mjs';
+import {library as R} from '../motion/restraint.mjs';import {library as S} from '../motion/scenes.mjs';import {library as T} from '../motion/transitions.mjs';import {library as H} from '../motion/heroines.mjs';
 const ROOT=path.join(path.dirname(fileURLToPath(import.meta.url)),'..'),ELV=30,FORE=.5,PT=145;
 const sub=(a,b)=>a.map((v,i)=>v-b[i]),dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2],len=a=>Math.hypot(...a),norm=a=>{const l=len(a)||1;return a.map(v=>v/l)},cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],mul=(a,k)=>a.map(v=>v*k),deg=r=>r*180/Math.PI,cl=v=>Math.max(-1,Math.min(1,v));
 const AZ=['正面','右斜め前','右','右斜め後ろ','後ろ','左斜め後ろ','左','左斜め前'],azBin=a=>((Math.round(a/45)%8)+8)%8;
@@ -33,7 +33,7 @@ function needs(f,dir){const y=YAW[dir]*Math.PI/180,V=[-Math.sin(y),0,Math.cos(y)
  return out}
 /* hands: what the hands do, read from the key poses (arms given as a hand on the body, pushing, on the floor...) */
 const HANDS={'体に当てる手（胸・下腹・口を押さえる、自分を抱く）':/arm[RL]:\{t:/,'剣を握る手':null,'床・壁・相手に当てる開いた手（押す・支える・伸ばす）':null};
-const SETS=[['attack','攻撃',A(),()=>DIRECTIONS],['restraint','拘束された姿勢',R(),(m,x)=>[x.view]],['scene','床・口づけ・拘束なし・張り付き',S(),(m,x)=>m==='walk_unsteady'?DIRECTIONS:[x.view]],['join','つなぎ',T(),(m,x)=>[x.view]]];
+const SETS=[['attack','攻撃',A(),()=>DIRECTIONS],['restraint','拘束された姿勢',R(),(m,x)=>[x.view]],['scene','床・口づけ・拘束なし・張り付き',S(),(m,x)=>m==='walk_unsteady'?DIRECTIONS:[x.view]],['heroine','ほかのヒロイン',H(),(m,x)=>x.all8?DIRECTIONS:[x.view]],['join','つなぎ',T(),(m,x)=>[x.view]]];
 const need=new Map(),per={},dirsUsed=new Set();let frames=0,plain=0,heavy=[];
 for(const [kind,label,lib,views] of SETS)for(const [m,byDir] of Object.entries(lib.poses))for(const v of views(m,lib.motions[m]))byDir[v].forEach((f,i)=>{frames++;dirsUsed.add(v);
  const n=needs(f,v);if(!n.length)plain++;for(const k of n){if(!need.has(k))need.set(k,new Set());need.get(k).add(m)}

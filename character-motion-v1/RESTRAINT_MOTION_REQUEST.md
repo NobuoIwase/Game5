@@ -37,6 +37,8 @@
   - `exports/manifest.json` への追記：`frame_ms` の配列、`loop`、`view`
 - **コマの大きさ**：攻撃モーションと同じ **576×576 px、透過**。足裏の基準点は `feet_anchor [288,470]`。体の大きさは歩きのシートと同じ。
 
+- **使い回し**：ほかのコマと同じ絵で済むコマ、顔や頭だけ描き替えればよいコマは `REUSE_LIST.md`（機械が読む版は `motion/reuse.json`）にまとめてある。「同じ絵」のコマは描かずに元のコマを使い、「顔だけ」「頭だけ」はその部分だけ描き替える。
+
 ## 3. 骨格データ
 
 `motion/restraint-poses.json`（生成元は `motion/restraint.mjs`、再生成は `node tools/render_restraint_svg.mjs`）。

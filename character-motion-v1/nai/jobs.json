@@ -36,7 +36,7 @@
   "wrap": "胴に巻きつかれる",
   "grabbed": "足首・尻尾などをつかまれる、引きずられる",
   "trance": "ぼんやりする・催眠・胞子・泡",
-  "tempt": "誘う姿勢",
+  "tempt": "誘う姿勢・体が勝手に寄る",
   "endure": "声を出さずに耐える",
   "exposure": "前垂れがめくれかける",
   "climax": "こわばり・絶頂の頂点",
@@ -54,15 +54,27 @@
   "clinger": "胸と脚の付け根に張り付いている小さなもの",
   "engulf": "床の柔らかい塊",
   "wrap": "胴に巻きついているもの",
-  "grabbed": "足首・尻尾をつかむもの",
-  "trance": "ぼんやりさせているもの（目の前の何か・胞子・泡）",
-  "tempt": "顔・体の様子",
+  "grabbed": "つかまれたときの顔・体の様子（つかむものは、モーションごとの欄に書く）",
+  "trance": "ぼんやりしたときの顔・体の様子（目の前の何か・胞子・泡は、モーションごとの欄に書く）",
+  "tempt": "顔・体の様子（押さえているものはない）",
   "endure": "顔・体の様子",
   "exposure": "顔・体の様子",
   "climax": "頂点の顔・体の様子（ほかの欄の言葉と一緒に入る）",
   "afterglow": "力が抜けたあとの顔・体の様子",
   "recover": "我に返るときの顔・様子",
   "defeat": "倒れるときの様子"
+ },
+ "slots": {
+  "ankle_grabbed": "足首をつかむもの（這い寄る手）",
+  "scout_tail_grabbed": "尻尾をつかむもの",
+  "break_free": "振りほどく前に縛っていたもの（はじめのコマだけ見える）",
+  "grabbed_flinch": "捕まえたもの（どこか1か所）",
+  "gaze_trance": "見つめている目（凝視の眼）",
+  "spore_inhale": "胞子（ルマネ胞子球・誘い茸）",
+  "shiver_hug": "鱗粉や冷気（夢鱗蛾・漂い霊）",
+  "bubble_float": "泡（泡吹き貝）",
+  "daze_sway": "なし（様子だけ）",
+  "reach_toward": "手を伸ばす先の何か"
  },
  "frames": {
   "arms_behind_squirm__front__0": {
@@ -620,6 +632,7 @@
     "healer"
    ],
    "situations": [
+    "bound",
     "climax"
    ],
    "prompt": "from front, facing viewer, standing, arms behind back, spread legs, closed mouth, clenched teeth, wrists together",
@@ -650,6 +663,7 @@
     "healer"
    ],
    "situations": [
+    "bound",
     "climax"
    ],
    "prompt": "from front, facing viewer, standing, arms behind back, spread legs, closed eyes, open mouth, wrists together",
@@ -680,6 +694,7 @@
     "healer"
    ],
    "situations": [
+    "bound",
     "climax"
    ],
    "prompt": "from front, facing viewer, standing, arms behind back, closed mouth, clenched teeth, wrists together",
@@ -710,6 +725,7 @@
     "healer"
    ],
    "situations": [
+    "bound",
     "climax"
    ],
    "prompt": "from front, facing viewer, standing, arms behind back, arched back, closed eyes, open mouth, wrists together",
@@ -740,6 +756,7 @@
     "healer"
    ],
    "situations": [
+    "bound",
     "afterglow"
    ],
    "prompt": "from front, facing viewer, squatting, arms behind back, spread legs, open mouth, wrists together",
@@ -770,6 +787,7 @@
     "healer"
    ],
    "situations": [
+    "bound",
     "afterglow"
    ],
    "prompt": "from front, facing viewer, squatting, arms behind back, spread legs, closed eyes, open mouth, wrists together",
@@ -800,6 +818,7 @@
     "healer"
    ],
    "situations": [
+    "bound",
     "afterglow"
    ],
    "prompt": "from front, facing viewer, standing, arms behind back, open mouth, wrists together",
@@ -830,6 +849,7 @@
     "healer"
    ],
    "situations": [
+    "bound",
     "afterglow"
    ],
    "prompt": "from front, facing viewer, standing, arms behind back, closed eyes, open mouth, wrists together",
@@ -860,6 +880,7 @@
     "healer"
    ],
    "situations": [
+    "bound",
     "recover"
    ],
    "prompt": "from front, facing viewer, standing, arms behind back, open mouth, wrists together",
@@ -890,6 +911,7 @@
     "healer"
    ],
    "situations": [
+    "bound",
     "recover"
    ],
    "prompt": "from front, facing viewer, standing, arms behind back, closed mouth, clenched teeth, wrists together",
@@ -1670,6 +1692,7 @@
     "healer"
    ],
    "situations": [
+    "kiss",
     "climax"
    ],
    "prompt": "from side, profile, standing, eyes squeezed shut, closed mouth, clenched teeth",
@@ -1700,6 +1723,7 @@
     "healer"
    ],
    "situations": [
+    "kiss",
     "climax"
    ],
    "prompt": "from side, profile, standing, closed eyes",
@@ -1730,6 +1754,7 @@
     "healer"
    ],
    "situations": [
+    "kiss",
     "climax"
    ],
    "prompt": "from side, profile, standing, closed eyes, open mouth",
@@ -1880,7 +1905,7 @@
     "healer"
    ],
    "situations": [
-    "bound"
+    "climax"
    ],
    "prompt": "from front, facing viewer, standing, spread legs, closed eyes, open mouth",
    "note": "knees splayed and shaking, hips trembling, arms hanging loose, head back",
@@ -1910,7 +1935,7 @@
     "healer"
    ],
    "situations": [
-    "bound"
+    "climax"
    ],
    "prompt": "from front, facing viewer, standing, spread legs, closed eyes, open mouth",
    "note": "knees splayed and shaking, hips trembling, arms hanging loose, head back",
@@ -2570,6 +2595,7 @@
     "healer"
    ],
    "situations": [
+    "clinger",
     "afterglow"
    ],
    "prompt": "from front, facing viewer, sitting on the floor, closed eyes, open mouth",
@@ -2600,6 +2626,7 @@
     "healer"
    ],
    "situations": [
+    "clinger",
     "recover"
    ],
    "prompt": "from front, facing viewer, standing, closed mouth, clenched teeth",
@@ -2720,6 +2747,7 @@
     "healer"
    ],
    "situations": [
+    "clinger",
     "climax"
    ],
    "prompt": "from front, facing viewer, standing, arms behind back, arched back, on tiptoes, closed eyes, open mouth",
@@ -2810,6 +2838,7 @@
     "healer"
    ],
    "situations": [
+    "pinned",
     "climax"
    ],
    "prompt": "three-quarter view, lying on back, arms up, spread legs, open mouth",
@@ -2840,6 +2869,7 @@
     "healer"
    ],
    "situations": [
+    "pinned",
     "climax"
    ],
    "prompt": "three-quarter view, lying on back, arms up, spread legs, arched back, closed eyes, open mouth",
@@ -2870,6 +2900,7 @@
     "healer"
    ],
    "situations": [
+    "pinned",
     "climax"
    ],
    "prompt": "three-quarter view, lying on back, arms up, spread legs, open mouth",
@@ -3110,6 +3141,7 @@
     "healer"
    ],
    "situations": [
+    "engulf",
     "climax"
    ],
    "prompt": "from front, facing viewer, standing, open mouth",
@@ -3140,6 +3172,7 @@
     "healer"
    ],
    "situations": [
+    "engulf",
     "climax"
    ],
    "prompt": "from front, facing viewer, standing, arched back, closed eyes, open mouth",
@@ -3170,6 +3203,7 @@
     "healer"
    ],
    "situations": [
+    "engulf",
     "climax"
    ],
    "prompt": "from front, facing viewer, standing, closed eyes, open mouth",
@@ -3200,6 +3234,7 @@
     "healer"
    ],
    "situations": [
+    "engulf",
     "climax"
    ],
    "prompt": "from front, facing viewer, standing, open mouth",
@@ -3260,6 +3295,7 @@
     "healer"
    ],
    "situations": [
+    "wrap",
     "climax"
    ],
    "prompt": "from front, facing viewer, standing, closed mouth, clenched teeth",
@@ -3290,6 +3326,7 @@
     "healer"
    ],
    "situations": [
+    "wrap",
     "climax"
    ],
    "prompt": "from front, facing viewer, standing, arms behind back, arched back, closed eyes, open mouth",
@@ -3320,6 +3357,7 @@
     "healer"
    ],
    "situations": [
+    "wrap",
     "climax"
    ],
    "prompt": "from front, facing viewer, standing, open mouth",
@@ -3590,7 +3628,7 @@
     "healer"
    ],
    "situations": [
-    "grabbed"
+    "tempt"
    ],
    "prompt": "from side, profile, standing, open mouth",
    "note": "breathing hard",
@@ -3620,7 +3658,7 @@
     "healer"
    ],
    "situations": [
-    "grabbed"
+    "tempt"
    ],
    "prompt": "from side, profile, standing, arms behind back, closed eyes, open mouth",
    "note": "the hips go first, a foot follows",
@@ -3650,7 +3688,7 @@
     "healer"
    ],
    "situations": [
-    "grabbed"
+    "tempt"
    ],
    "prompt": "from side, profile, standing, closed mouth, clenched teeth",
    "note": "catches herself, bends, hands pressed to her lower belly",
@@ -4511,6 +4549,7 @@
     "mage"
    ],
    "situations": [
+    "endure",
     "climax"
    ],
    "prompt": "from front, facing viewer, standing, eyes squeezed shut, closed mouth, clenched teeth",
@@ -4538,6 +4577,7 @@
     "mage"
    ],
    "situations": [
+    "endure",
     "climax"
    ],
    "prompt": "from front, facing viewer, standing, arched back, curled up, eyes squeezed shut, closed mouth, clenched teeth",
@@ -4565,6 +4605,7 @@
     "mage"
    ],
    "situations": [
+    "endure",
     "climax"
    ],
    "prompt": "from front, facing viewer, on one knee, closed eyes",

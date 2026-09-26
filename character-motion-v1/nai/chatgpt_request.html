@@ -1,0 +1,113 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NovelAI 言葉の依頼</title><style>
+:root{--bg:#f6f7f9;--fg:#1d232b;--sub:#5a6573;--card:#fff;--line:#d9dee5;--acc:#2f6fb3}
+@media (prefers-color-scheme:dark){:root{--bg:#141a22;--fg:#e6edf3;--sub:#9fb0c0;--card:#1b2330;--line:#3a4658;--acc:#7fb4ea}}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.7 system-ui,sans-serif}main{max-width:1000px;margin:0 auto;padding:16px}
+h2{margin-top:32px;border-bottom:2px solid var(--acc)}section{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid var(--line);padding:3px 6px;text-align:left;vertical-align:top}
+.user{background:var(--card);border-left:4px solid #b3522f;padding:8px 12px}pre{background:var(--card);border:1px solid var(--line);padding:10px;overflow:auto;font-size:13px}
+.wrap{overflow-x:auto}
+</style></head><body><main>
+<h1>NovelAI の言葉の依頼（ChatGPT 向け）</h1>
+<div class="user"><b>使い方（ユーザー向け）</b><ol>
+<li>このページを ChatGPT に渡す（ファイルを添付するか、全部コピーして貼る）</li>
+<li>ChatGPT が返した JSON（<code>{</code> から <code>}</code> まで）をコピーする</li>
+<li>NovelAI の右下の枠 →「設定（ユーザー用）」→「ChatGPT の答えを取り込む」に貼って、「取り込む」を押す</li></ol>
+取り込んだあとも、欄は手で直せます。</div>
+
+<h2>1. お願いしたいこと</h2>
+<p>Game5 というブラウザのダンジョンゲームで、ヒロイン4人のモーションの1枚絵を NovelAI（V4.5、精密参照つき）で作っています。
+プロンプトの大部分はこちらで決めてあり、<b>下の「欄」だけが空欄</b>です。欄を英語の言葉で埋めて、最後の「答えの形」の JSON で返してください。</p>
+
+<h2>2. こちらで入れてある言葉（欄には書かない）</h2>
+<ul><li>共通：<code>1girl, solo, adult, mature female, full body, simple background, white background</code></li><li>キャラクターの見た目（例：アリア）：<code>orange hair, high ponytail, heavy bangs, grey-blue eyes, dark brown leather armor bodysuit, blue sleeves, black thighhighs, silver armored boots, silver gauntlets</code></li>
+<li>コマごとの向き・姿勢・表情（例）：<code>from front, facing viewer, standing, arms behind back, spread legs, open mouth, wrists together</code></li><li>除外：<code>child, loli, young, text, watermark, signature, frame, border, cropped, out of frame, multiple views, extra limbs, extra arms, extra legs, mannequin, doll joints, grid, blood, gore, injury, wound, crying in pain, egg, pregnant, birth, insect, bug, zoophilia</code></li></ul>
+<p>送るときの並び：<b>共通 → キャラクターの見た目 → キャラクターの欄 → 場面の種類の欄 → モーションの欄 → 向き・姿勢・表情</b>。
+姿勢は img2img の下絵（姿勢だけのマネキン）でも決めています。</p>
+
+<h2>3. 書き方</h2>
+<ul>
+<li>英語の言葉（NovelAI のタグの書き方）。カンマ区切り。1つの欄は 5〜25 語くらい</li>
+<li><b>押さえているもの・つかむもの・揺らしているものは、必ず「何か・色・形・質感」まで書く</b>。「tentacles」だけだと、色も種類もばらばらの物が出てくるため。下の魔物の表の色の言葉を使う</li>
+<li>欄に書いた言葉は、その欄に入る<b>全部のモーション・全部のコマ</b>に入る。1つのモーションにしか合わない言葉は書かない</li>
+<li>向き・姿勢・キャラクターの見た目・人数は書かない（下絵とぶつかる）</li>
+<li>登場人物は全員大人。子ども、出産・産卵、血・痛み・傷、動物との行為、本物の虫は入れない</li>
+<li>顔は「困っているが、まだ抗っている」方向（眉は寄せたまま、目は崩しきらない）</li>
+<li>書くことがない欄は <code>""</code> のまま</li></ul>
+
+<h2>4. 魔物の見た目（色の言葉はここから）</h2>
+<p>ピンク〜肉色にしてよいのは、表でピンク系の種だけ。ほかは表の色にする。</p>
+<div class="wrap"><table><tr><th>名前</th><th>色</th><th>色の言葉</th></tr><tr><td>艶沼ナメクジ</td><td>ピンク〜桃紫</td><td>translucent flesh-pink body, pink goo</td></tr><tr><td>吸着羽虫</td><td>ピンク〜肉色（小さな丸い体、透ける羽4枚、顔の下に丸い吸盤）</td><td>small round translucent flesh-pink body, four clear wings, round sucker</td></tr><tr><td>泡吹き貝</td><td>真珠色の殻＋珊瑚色の体</td><td>pearly cream spiral shell, coral-orange soft body, clear bubbles</td></tr><tr><td>水妖</td><td>明るい水色＋白い泡の縁</td><td>translucent bright aqua water body, white foam rim</td></tr><tr><td>漂い霊</td><td>青白い半透明</td><td>translucent pale cyan-white membrane body, cold glow</td></tr><tr><td>絹輪ワーム</td><td>象牙〜淡い肌色</td><td>ivory-beige segmented body, white silk threads</td></tr><tr><td>糸繰り蜘蛛</td><td>炭色＋白い糸</td><td>charcoal-gray fuzzy body, white silk</td></tr><tr><td>這い寄る手</td><td>青白い肌</td><td>pale bluish-gray skin, short rounded nails</td></tr><tr><td>ルマネ胞子球</td><td>からし色</td><td>mustard-yellow fleshy spore ball, amber glow</td></tr><tr><td>誘い茸</td><td>青緑に光る傘＋紫の襞</td><td>glowing turquoise mushroom cap, wet violet gills</td></tr><tr><td>石の番兵</td><td>灰色の石＋ひびの奥の桃色の肉</td><td>gray stone golem, glowing pink flesh inside the cracks, moss</td></tr><tr><td>粘花</td><td>象牙色の花弁、縁と奥が深紅</td><td>thick ivory petals with deep crimson edges, amber nectar</td></tr><tr><td>夢鱗蛾</td><td>琥珀色</td><td>amber-brown furry moth, cream eye spots</td></tr><tr><td>鏡面スライム</td><td>銀＋水色の反射</td><td>chrome-silver mirror slime, pale cyan reflections</td></tr><tr><td>凝視の眼</td><td>白目＋紫の瞳、ワイン色の膜の羽</td><td>huge white eyeball, violet iris, wine-red membrane wings</td></tr><tr><td>灰冠の従者</td><td>ピンク〜肉色＋灰色の冠（ボスを小さくした取り巻き）</td><td>small translucent flesh-pink slime, gray stone crown fragment</td></tr><tr><td>灰冠の粘魔（ボス）</td><td>肉色の半透明＋灰色の石の冠、紫の核</td><td>translucent flesh-pink giant slime, gray stone crown, violet core</td></tr></table></div>
+
+<h2>5. 場面の種類の欄（<code>words</code>）</h2>
+<p>表は、その欄に入るモーション。「押さえ」の所を何が押さえているかを、欄に書きます。「ゲームでこれをする魔物」が何種類もある欄は、代表を1つ選んでください。</p>
+<section><h3><code>bound</code>　拘束されている（腕・脚を縛られる、前屈みで縛られる）</h3><p><b>書くこと：</b>縛っているもの（何・色・形）</p><p><b>ゲームでこれをする魔物：</b>床や壁から伸びる触手（ゲームの拘束）</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>後ろ手に縛られて身をよじる</td><td>立つ</td><td>後ろ手（手首を背中でまとめる）</td><td>膝を閉じる</td><td>両手首</td><td>腰をくねらせる。膝をすり合わせる。かかとを交互に上げる。下を向く</td></tr><tr><td>後ろ手に縛られて振りほどこうとする</td><td>立つ</td><td>後ろ手</td><td>踏ん張る足は爪先立ち</td><td>両手首</td><td>肩をひねって左右に振りほどこうとする。胸が前に出る</td></tr><tr><td>両手首を上から吊られ、腕を引き下ろそうと力む</td><td>立つ</td><td>両手を頭の上に上げる</td><td>膝を少し曲げる</td><td>両手首（上から吊る）</td><td>腕を引き下ろそうと力む。負けると爪先立ちに引き上げられる</td></tr><tr><td>閉じた膝を左右へ引き開かれる</td><td>立つ</td><td>後ろ手</td><td>閉じた膝 → 左右に開かれる</td><td>両手首・両膝（左右へ引く）</td><td>はじめ内股 → 最後はがに股で腰が落ちる</td></tr><tr><td>脚を開かれたまま耐える</td><td>立つ</td><td>後ろ手</td><td>左右に開いたまま</td><td>両手首・両膝（左右）</td><td>膝と腰が小さく震える</td></tr><tr><td>全身がこわばって爪先立ち、そのあと脱力</td><td>立つ</td><td>後ろ手</td><td>左右に開いたまま</td><td>両手首・両膝（左右）</td><td>全身に力が入る → 頂点：爪先立ち、脚が突っ張る、頭がのけぞる → 力が抜ける</td></tr><tr><td>背中を大きく反らせてこわばり、そのあと脱力</td><td>立つ</td><td>後ろ手</td><td>立つ</td><td>両手首</td><td>背中を大きく反らす → 頂点：頭がのけぞる、爪先立ち → 前へ崩れる</td></tr><tr><td>脚を開かれたまま脱力し、肩で息をする（tension_tiptoe のあと）</td><td>立ったままぶら下がる</td><td>後ろ手</td><td>左右に開いたまま</td><td>両手首・両膝（左右）</td><td>力が抜けてうなだれる。肩で息をする。ときどきびくっと跳ねる</td></tr><tr><td>前へ崩れたまま脱力し、肩で息をする（tension_arch のあと）</td><td>前へ崩れて立つ</td><td>後ろ手</td><td>膝を内に寄せる</td><td>両手首</td><td>うなだれて肩で息をする。ときどき一瞬爪先立ち</td></tr><tr><td>脱力から我に返り、立ち直る</td><td>立つ</td><td>後ろ手</td><td>立つ</td><td>両手首</td><td>我に返る → 顔を上げて立ち直る</td></tr><tr><td>前屈みで手首を床の前に縛られ、腰を左右に揺らす（後ろ・斜め後ろから）</td><td>前屈み。腰を高く突き出す</td><td>前へ伸ばす</td><td>立ったまま</td><td>両手首（前の低い所）</td><td>腰を左右に揺らす。肩ごしに振り返る（斜め後ろから見た絵）</td></tr><tr><td>魔法使い：両方の義腕を頭の上でまとめて縛られ、魔法を封じられてもがく</td><td>立つ</td><td>両腕を頭の上で交差</td><td>立つ</td><td>両手首（頭の上でまとめる）</td><td>身をよじって引く。顔は平静を保とうとする</td></tr></table></section><section><h3><code>bound_rock</code>　拘束されたまま揺さぶられる</h3><p><b>書くこと：</b>① 縛っているもの　② 体を揺らしているもの</p><p><b>ゲームでこれをする魔物：</b>床や壁から伸びる触手（ゲームの拘束）</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>脚を開いた姿勢で腰を前後に揺らす</td><td>立つ</td><td>後ろ手</td><td>左右に開いたまま</td><td>両手首・両膝（左右）</td><td>腰が前後に揺らされる</td></tr><tr><td>膝を閉じた姿勢で腰を小さく前後に揺らす</td><td>立つ</td><td>後ろ手</td><td>膝を閉じたまま</td><td>両手首</td><td>腰が小さく前後に揺らされる。そのたび爪先立ち</td></tr><tr><td>脚を開いた姿勢で上下に揺れる</td><td>立つ</td><td>後ろ手</td><td>左右に開いたまま</td><td>両手首・両膝（左右）</td><td>体が上下に揺らされる。上で爪先立ち、下で膝が曲がる</td></tr><tr><td>手首を吊られたまま上下に揺れる</td><td>吊られて立つ</td><td>両手を頭の上に上げる</td><td>左右に開いたまま</td><td>両手首（上から吊る）・両膝（左右）</td><td>体が上下に揺らされる。沈むと腕が伸びきる</td></tr></table></section><section><h3><code>pinned</code>　床に押し倒される・押さえつけられる</h3><p><b>書くこと：</b>押さえつけているもの（何・色・形）</p><p><b>ゲームでこれをする魔物：</b>灰冠の粘魔・絹輪ワーム・水妖・灰冠の従者・石の番兵</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>押されて尻もちをつき、仰向けに倒れる</td><td>立つ → 仰向け</td><td>前に出す → 後ろにつく</td><td>よろける</td><td>なし（前から押されるだけ）</td><td>押されてよろける → 尻もち → 仰向けに倒れる</td></tr><tr><td>仰向けで両手首を頭の上に押さえられ、脚をばたつかせる</td><td>仰向け</td><td>両手を頭の上へ</td><td>ばたつかせる</td><td>両手首（頭の上の床）</td><td>脚を片方ずつばたつかせる。腰をひねる。顔をそむける</td></tr><tr><td>仰向けで立てた膝を左右へ開かれ、腰をよじる</td><td>仰向け</td><td>両手を頭の上へ</td><td>立てた膝を左右に開かれる</td><td>両手首（床）・両膝（左右）</td><td>膝を閉じようとして腰をよじる</td></tr><tr><td>うつ伏せで押さえられ、脚をばたつかせてもがく</td><td>うつ伏せ</td><td>両手を頭の先へ</td><td>膝から下を跳ね上げる</td><td>両手首（頭の先の床）</td><td>脚を片方ずつ跳ね上げてもがく。顔は横向き</td></tr><tr><td>膝をついて胸を床につけ、腰を上げたまま前後に揺れる</td><td>膝をつき胸を床につける。腰を高く上げる</td><td>両手を頭の先へ</td><td>膝をつく</td><td>両手首（頭の先の床）</td><td>体が前後に揺らされる</td></tr><tr><td>仰向けで押さえられたまま全身がこわばり、腰が浮く</td><td>仰向け</td><td>両手を頭の上へ</td><td>膝を左右に開かれる</td><td>両手首（床）・両膝（左右）</td><td>全身に力が入る → 頂点：腰が床から浮く、背中が反る、爪先が伸びる → 力が抜ける</td></tr></table></section><section><h3><code>pinned_rock</code>　押さえつけられたまま揺さぶられる</h3><p><b>書くこと：</b>① 押さえつけているもの　② 体を揺らしているもの</p><p><b>ゲームでこれをする魔物：</b>灰冠の粘魔・絹輪ワーム・水妖・灰冠の従者・石の番兵</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>仰向けで膝を開かれ、体が頭の方へ前後に揺れる</td><td>仰向け</td><td>両手を頭の上へ</td><td>立てた膝を左右に開かれる</td><td>両手首（床）・両膝（左右）</td><td>体全体が頭の方へ押されては戻る。押されたとき口が開く</td></tr></table></section><section><h3><code>held</code>　後ろから抱えられる</h3><p><b>書くこと：</b>後ろから抱えているもの</p><p><b>ゲームでこれをする魔物：</b>まだ決まっていない</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>後ろから腕ごと胴を抱きすくめられ、もがく</td><td>立つ</td><td>体の横に押さえつけられる</td><td>足を交互に蹴る</td><td>両肩・両肘（後ろから抱えられる）</td><td>身をよじる。足を蹴る。振り返る</td></tr></table></section><section><h3><code>kiss</code>　口づけ</h3><p><b>書くこと：</b>口づけの相手（下絵には描いていない）</p><p><b>ゲームでこれをする魔物：</b>まだ決まっていない</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>口づけされて押し返そうとする</td><td>立つ</td><td>両手で相手を押し返す</td><td>立つ</td><td>口元（口づけ）</td><td>押し返そうとして体をひねる（相手は下絵にない）</td></tr><tr><td>口づけされたまま全身がこわばり、膝が崩れる</td><td>立つ</td><td>押し返す → ぱっと開く → だらりと下がる</td><td>爪先が伸びる → 膝が内に崩れる</td><td>口元（口づけ）</td><td>全身に力が入る → 頂点 → 膝が崩れて口元だけで支えられる</td></tr><tr><td>口づけに応える（爪先立ちで身を寄せる）</td><td>爪先立ち</td><td>両腕を相手の首に回す</td><td>爪先立ち</td><td>口元（口づけ）</td><td>身を寄せる。首をかしげる</td></tr></table></section><section><h3><code>clinger</code>　小さな生き物に張り付かれる</h3><p><b>書くこと：</b>胸と脚の付け根に張り付いている小さなもの</p><p><b>ゲームでこれをする魔物：</b>吸着羽虫（3匹）</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>張り付かれたまま座り込み、肩で息をする（clinger_tension のあと）</td><td>座り込む</td><td>膝の上</td><td>座る</td><td>胸の左右・脚の付け根の前</td><td>肩で息をする。ときどき跳ねて手が膝から離れる</td></tr><tr><td>張り付かれたまま立ち上がり、胸を押さえる</td><td>立つ</td><td>胸を押さえる</td><td>立つ</td><td>胸の左右・脚の付け根の前</td><td>立ち上がって胸を押さえる</td></tr><tr><td>胸と脚の付け根の前に張り付いた小さな生き物を引き剥がそうとする</td><td>立つ</td><td>手で引き剥がそうとする → お腹に手</td><td>膝を閉じる</td><td>胸の左右・脚の付け根の前（小さなものが3つ）</td><td>見下ろして気づく → 剥がそうとして弾かれる → すくむ</td></tr><tr><td>張り付かれたまま全身がこわばり、座り込む</td><td>立つ → 座り込む</td><td>後ろへ振る</td><td>爪先立ち</td><td>胸の左右・脚の付け根の前</td><td>頂点：背中が反る → 座り込む</td></tr><tr><td>張り付かれたまま振り払うのをやめ、身を任せる</td><td>立つ</td><td>腕を開いて下げる</td><td>立つ</td><td>胸の左右・脚の付け根の前</td><td>振り払うのをやめる。胸を前に出す。頭を後ろへ倒す。腰をゆっくり揺らす</td></tr></table></section><section><h3><code>engulf</code>　柔らかい塊に呑まれる</h3><p><b>書くこと：</b>床の柔らかい塊</p><p><b>ゲームでこれをする魔物：</b>艶沼ナメクジ・鏡面スライム</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>柔らかい塊に足元から腰まで呑まれていく</td><td>立つ</td><td>広げて釣り合いを取る</td><td>足元 → 膝 → 太ももまで沈む</td><td>足元から太もも（床の塊の中）</td><td>下を見る。片脚を抜こうとするが抜けない</td></tr><tr><td>腰まで呑まれたまま、上体をひねって抜け出そうとする</td><td>腰まで埋まる</td><td>片手ずつ塊を押す</td><td>動かない</td><td>腰から下（塊の中）</td><td>上体をひねって抜け出そうとする</td></tr><tr><td>腰まで呑まれたまま、腰がびくびくと跳ねる</td><td>腰まで埋まる</td><td>両手を塊につく</td><td>動かない</td><td>腰から下（塊の中）</td><td>息が荒い。ときどき腰がびくっと前へ跳ね、背中が反る</td></tr><tr><td>腰まで呑まれたまま全身がこわばり、前へ崩れる</td><td>腰まで埋まる</td><td>上と外へ投げ出す → 塊の上にのせる</td><td>動かない</td><td>腰から下（塊の中）</td><td>頂点：背中が反る、頭がのけぞる → 塊の上に前へ崩れる</td></tr></table></section><section><h3><code>wrap</code>　胴に巻きつかれる</h3><p><b>書くこと：</b>胴に巻きついているもの</p><p><b>ゲームでこれをする魔物：</b>糸繰り蜘蛛・誘い茸・粘花・影の手（罠）</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>腕ごと胴に巻きつかれ、締め付けられるたびに背中が反る</td><td>立つ</td><td>胴と一緒に巻かれる</td><td>立つ</td><td>胴（胸・お腹・腰に巻きつく）</td><td>締めつけられると背中が反る。緩むとあえぐ</td></tr><tr><td>巻きつかれたまま全身がこわばり、脱力する</td><td>立つ</td><td>胴と一緒に巻かれる</td><td>爪先が伸びる → 膝が内に入る</td><td>胴（胸・お腹・腰に巻きつく）</td><td>頂点：強く反る → 力が抜けて巻きついたものに支えられる</td></tr></table></section><section><h3><code>grabbed</code>　足首・尻尾などをつかまれる、引きずられる</h3><p><b>書くこと：</b>つかまれたときの顔・体の様子（つかむものは、モーションごとの欄に書く）</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>足首をつかまれて後ろへ引かれ、よろけて四つん這いになる</td><td>立つ → 四つん這い</td><td>振り回す → 両手をつく</td><td>片足跳び → 片膝をつく</td><td>左の足首（後ろから）</td><td>足首をつかまれ後ろへ引かれる → 前のめり → 倒れる（真横から見た絵）</td></tr><tr><td>拘束を振りほどき、よろけてから構え直す</td><td>しゃがむ → 立つ</td><td>大きく広げる → 構える</td><td>一歩よろける</td><td>はじめだけ</td><td>力をためる → 振りほどく → よろける → 構え直す</td></tr><tr><td>捕まった瞬間にびくっと跳ね、捕まった所を見下ろす</td><td>構えて立つ</td><td>構える</td><td>立つ</td><td>どこか1か所</td><td>捕まってびくっと跳ねる → 捕まった所を見下ろす</td></tr><tr><td>斥候：尻尾をつかまれて跳び上がり、手を後ろへやる</td><td>立つ</td><td>両手を後ろへやる</td><td>跳び上がって爪先立ち → 膝が内に崩れる</td><td>尻尾（後ろから）</td><td>尻尾をつかまれて跳び上がる → 振り返る → 引っぱり返す（真横から見た絵）</td></tr></table></section><section><h3><code>trance</code>　ぼんやりする・催眠・胞子・泡</h3><p><b>書くこと：</b>ぼんやりしたときの顔・体の様子（目の前の何か・胞子・泡は、モーションごとの欄に書く）</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>見つめられて動けず、棒立ちのまま小さく頷く</td><td>棒立ち</td><td>だらりと下げる</td><td>立つ</td><td>なし</td><td>目の前の何かを見つめたまま、ゆっくり頷く。唇が動く</td></tr><tr><td>胞子を吸い込み、口を覆って顔をそむけ、膝が内に折れる</td><td>立つ → 少し前屈み</td><td>口を手で覆う</td><td>膝が内に折れる</td><td>なし</td><td>顔をそむける → 吸い込んで咳き込む</td></tr><tr><td>自分の体を抱いて小刻みに震え、ときどき跳ねる</td><td>立つ</td><td>自分の体を抱く</td><td>立つ</td><td>なし</td><td>肩をすくめて小刻みに震える。ときどき跳ねる</td></tr><tr><td>泡に包まれて床から浮き、体を丸めて口をぱくぱくさせる</td><td>泡の中で浮く。少し丸まる</td><td>手のひらを泡の内側につく</td><td>床から浮く</td><td>全身（泡の中）</td><td>口をぱくぱくさせる</td></tr><tr><td>ぼーっと立ち尽くし、首をかしげてゆらゆら揺れる</td><td>立ち尽くす</td><td>だらりと下げる</td><td>立つ</td><td>なし</td><td>ぼーっとして、首を左右にかしげて揺れる</td></tr><tr><td>思わず片手を伸ばして一歩寄り、手を胸に引っ込める</td><td>立つ</td><td>片手を伸ばす → 胸に引っ込める</td><td>一歩寄る</td><td>なし</td><td>何かに思わず手を伸ばす → はっとして目をそらす（真横から見た絵）</td></tr></table></section><section><h3><code>tempt</code>　誘う姿勢・体が勝手に寄る</h3><p><b>書くこと：</b>顔・体の様子（押さえているものはない）</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>脚を開いて腰を前に出し、ゆっくり揺らす（誘う姿勢）</td><td>立つ</td><td>片手は胸、片手は太もも</td><td>脚を開く</td><td>なし</td><td>腰を前に出してゆっくり揺らす。首をかしげて見下ろす</td></tr><tr><td>腰から先に一歩寄ってしまい、はっと引き戻す</td><td>立つ → 前屈み</td><td>下腹を押さえる</td><td>一歩前へ出てしまう</td><td>なし</td><td>息が荒い → 腰から先に一歩寄ってしまう → はっとする（真横から見た絵）</td></tr></table></section><section><h3><code>endure</code>　声を出さずに耐える</h3><p><b>書くこと：</b>顔・体の様子</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>魔法使い：機械の手で口を押さえ、声を出さずに耐える</td><td>立つ</td><td>機械の手で自分の口を押さえる</td><td>膝を閉じる</td><td>なし</td><td>声を出さずに耐える。震えを飲み込み、手を強く押し当てる</td></tr><tr><td>魔法使い：口を押さえたまま全身がこわばり、杖にすがって片膝をつく</td><td>立つ → 片膝をつく</td><td>口を押さえる → 杖にすがる</td><td>膝を閉じる → 片膝</td><td>なし</td><td>頂点：反らずに体を丸めて肩をすくめる。声を出さない → 片膝をつく</td></tr></table></section><section><h3><code>exposure</code>　前垂れがめくれかける</h3><p><b>書くこと：</b>顔・体の様子</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>ヒーラー：めくれかけた前垂れを慌てて押さえ、顔を赤くして背ける</td><td>立つ</td><td>腕を胸の前に当てて押さえる</td><td>立つ</td><td>なし</td><td>胸の前の前垂れがめくれかける → びくっとして押さえる → 顔を赤くして背ける</td></tr></table></section><section><h3><code>climax</code>　こわばり・絶頂の頂点</h3><p><b>書くこと：</b>頂点の顔・体の様子（ほかの欄の言葉と一緒に入る）</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>全身がこわばって爪先立ち、そのあと脱力</td><td>立つ</td><td>後ろ手</td><td>左右に開いたまま</td><td>両手首・両膝（左右）</td><td>全身に力が入る → 頂点：爪先立ち、脚が突っ張る、頭がのけぞる → 力が抜ける</td></tr><tr><td>背中を大きく反らせてこわばり、そのあと脱力</td><td>立つ</td><td>後ろ手</td><td>立つ</td><td>両手首</td><td>背中を大きく反らす → 頂点：頭がのけぞる、爪先立ち → 前へ崩れる</td></tr><tr><td>口づけされたまま全身がこわばり、膝が崩れる</td><td>立つ</td><td>押し返す → ぱっと開く → だらりと下がる</td><td>爪先が伸びる → 膝が内に崩れる</td><td>口元（口づけ）</td><td>全身に力が入る → 頂点 → 膝が崩れて口元だけで支えられる</td></tr><tr><td>脚ががに股に開き、膝と腰が小刻みに震える</td><td>立つ</td><td>だらりと下げる</td><td>がに股に大きく開く</td><td>なし</td><td>膝と腰が小刻みに震える。頭がのけぞる</td></tr><tr><td>立ったまま全身がこわばり、膝から崩れて座り込む</td><td>立つ → 座り込む</td><td>胸とお腹を押さえる</td><td>爪先立ち → 膝が崩れる</td><td>なし</td><td>堪える → 頂点：反る、爪先立ち、頭がのけぞる → 女の子座りに座り込む</td></tr><tr><td>張り付かれたまま全身がこわばり、座り込む</td><td>立つ → 座り込む</td><td>後ろへ振る</td><td>爪先立ち</td><td>胸の左右・脚の付け根の前</td><td>頂点：背中が反る → 座り込む</td></tr><tr><td>仰向けで押さえられたまま全身がこわばり、腰が浮く</td><td>仰向け</td><td>両手を頭の上へ</td><td>膝を左右に開かれる</td><td>両手首（床）・両膝（左右）</td><td>全身に力が入る → 頂点：腰が床から浮く、背中が反る、爪先が伸びる → 力が抜ける</td></tr><tr><td>腰まで呑まれたまま全身がこわばり、前へ崩れる</td><td>腰まで埋まる</td><td>上と外へ投げ出す → 塊の上にのせる</td><td>動かない</td><td>腰から下（塊の中）</td><td>頂点：背中が反る、頭がのけぞる → 塊の上に前へ崩れる</td></tr><tr><td>巻きつかれたまま全身がこわばり、脱力する</td><td>立つ</td><td>胴と一緒に巻かれる</td><td>爪先が伸びる → 膝が内に入る</td><td>胴（胸・お腹・腰に巻きつく）</td><td>頂点：強く反る → 力が抜けて巻きついたものに支えられる</td></tr><tr><td>魔法使い：口を押さえたまま全身がこわばり、杖にすがって片膝をつく</td><td>立つ → 片膝をつく</td><td>口を押さえる → 杖にすがる</td><td>膝を閉じる → 片膝</td><td>なし</td><td>頂点：反らずに体を丸めて肩をすくめる。声を出さない → 片膝をつく</td></tr><tr><td>斥候：全身がこわばり尻尾が逆立つ、そのあと膝が崩れる</td><td>立つ → 崩れる</td><td>ベルトを握る</td><td>爪先立ち → 膝が崩れる</td><td>なし</td><td>頂点：尻尾がまっすぐ立って毛が逆立つ、耳も立つ → 尻尾と耳が下がる</td></tr><tr><td>ヒーラー：首を横に振って拒みながら全身がこわばり、胸をかばったまま崩れる</td><td>立つ → 床に崩れる</td><td>胸をかばう</td><td>爪先立ち → 崩れる</td><td>なし</td><td>首を横に振って拒む → 頂点：反って爪先立ち、唇を結ぶ → 崩れる、顔は背けたまま</td></tr></table></section><section><h3><code>afterglow</code>　余韻でぐったりする</h3><p><b>書くこと：</b>力が抜けたあとの顔・体の様子</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>脚を開かれたまま脱力し、肩で息をする（tension_tiptoe のあと）</td><td>立ったままぶら下がる</td><td>後ろ手</td><td>左右に開いたまま</td><td>両手首・両膝（左右）</td><td>力が抜けてうなだれる。肩で息をする。ときどきびくっと跳ねる</td></tr><tr><td>前へ崩れたまま脱力し、肩で息をする（tension_arch のあと）</td><td>前へ崩れて立つ</td><td>後ろ手</td><td>膝を内に寄せる</td><td>両手首</td><td>うなだれて肩で息をする。ときどき一瞬爪先立ち</td></tr><tr><td>女の子座りで肩で息をする</td><td>女の子座り（脚を左右に折る）</td><td>膝の上</td><td>座る</td><td>なし</td><td>肩で息をする</td></tr><tr><td>仰向けで膝が倒れたまま、肩で息をする</td><td>仰向け</td><td>投げ出す</td><td>膝が左右に倒れる</td><td>なし</td><td>顔を横に向けて胸で息をする。ときどき腰が跳ねる</td></tr><tr><td>口づけのあと、膝が抜けたままふらつき、肩で息をする（kiss_tension のあと）</td><td>ふらついて立つ</td><td>だらりと下げる</td><td>膝に力が入らない</td><td>なし（相手が離れたあと）</td><td>うなだれて肩で息をする</td></tr><tr><td>張り付かれたまま座り込み、肩で息をする（clinger_tension のあと）</td><td>座り込む</td><td>膝の上</td><td>座る</td><td>胸の左右・脚の付け根の前</td><td>肩で息をする。ときどき跳ねて手が膝から離れる</td></tr></table></section><section><h3><code>recover</code>　余韻から起き上がる</h3><p><b>書くこと：</b>我に返るときの顔・様子</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>脱力から我に返り、立ち直る</td><td>立つ</td><td>後ろ手</td><td>立つ</td><td>両手首</td><td>我に返る → 顔を上げて立ち直る</td></tr><tr><td>仰向けから起き上がる</td><td>仰向け → 立つ</td><td>肘をつく → 手をつく</td><td>膝を立てる → しゃがむ → 立つ</td><td>なし</td><td>起き上がって立つ（真横から見た絵）</td></tr><tr><td>仰向けの余韻から膝を閉じて体を起こしかける（そのあと get_up）</td><td>仰向け</td><td>床につく</td><td>膝を閉じる</td><td>なし</td><td>膝を閉じて体を起こしかける</td></tr><tr><td>我に返って口元をぬぐい、一歩下がる</td><td>立つ</td><td>手の甲で口をぬぐう。片手を前に出す</td><td>一歩下がる</td><td>なし</td><td>我に返る → 口をぬぐう → 下がって構える</td></tr><tr><td>女の子座りから立ち上がる（tension_free・sit_afterglow のあと）</td><td>女の子座り → 立つ</td><td>前に手をつく</td><td>膝立ち → 片膝 → 立つ</td><td>なし</td><td>立ち上がる</td></tr><tr><td>張り付かれたまま立ち上がり、胸を押さえる</td><td>立つ</td><td>胸を押さえる</td><td>立つ</td><td>胸の左右・脚の付け根の前</td><td>立ち上がって胸を押さえる</td></tr></table></section><section><h3><code>defeat</code>　倒れる・敗北</h3><p><b>書くこと：</b>倒れるときの様子</p>
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td>つまずいて手と膝をつき、起き上がる</td><td>歩く → 四つん這い → 立つ</td><td>前に出す → 手をつく</td><td>つまずく → 膝をつく</td><td>なし</td><td>つまずいて転ぶ → 顔を上げる → 立ち上がる（真横から見た絵）</td></tr><tr><td>力尽きて膝から崩れ、うつ伏せに倒れる</td><td>立つ → 膝立ち → うつ伏せ</td><td>だらりと下げる</td><td>膝から崩れる</td><td>なし</td><td>力尽きて倒れ、動かなくなる（真横から見た絵）</td></tr></table></section>
+
+<h2>6. モーションごとの欄（<code>motionWords</code>）</h2>
+<p>同じ場面の種類の中で、押さえているものがモーションごとに違うものは、こちらに書きます。</p>
+<div class="wrap"><table><tr><th>キー</th><th>モーション</th><th>書くこと</th><th>動き</th></tr><tr><td>ankle_grabbed</td><td>足首をつかまれて後ろへ引かれ、よろけて四つん這いになる</td><td>足首をつかむもの（這い寄る手）</td><td>足首をつかまれ後ろへ引かれる → 前のめり → 倒れる（真横から見た絵）</td></tr><tr><td>scout_tail_grabbed</td><td>斥候：尻尾をつかまれて跳び上がり、手を後ろへやる</td><td>尻尾をつかむもの</td><td>尻尾をつかまれて跳び上がる → 振り返る → 引っぱり返す（真横から見た絵）</td></tr><tr><td>break_free</td><td>拘束を振りほどき、よろけてから構え直す</td><td>振りほどく前に縛っていたもの（はじめのコマだけ見える）</td><td>力をためる → 振りほどく → よろける → 構え直す</td></tr><tr><td>grabbed_flinch</td><td>捕まった瞬間にびくっと跳ね、捕まった所を見下ろす</td><td>捕まえたもの（どこか1か所）</td><td>捕まってびくっと跳ねる → 捕まった所を見下ろす</td></tr><tr><td>gaze_trance</td><td>見つめられて動けず、棒立ちのまま小さく頷く</td><td>見つめている目（凝視の眼）</td><td>目の前の何かを見つめたまま、ゆっくり頷く。唇が動く</td></tr><tr><td>spore_inhale</td><td>胞子を吸い込み、口を覆って顔をそむけ、膝が内に折れる</td><td>胞子（ルマネ胞子球・誘い茸）</td><td>顔をそむける → 吸い込んで咳き込む</td></tr><tr><td>shiver_hug</td><td>自分の体を抱いて小刻みに震え、ときどき跳ねる</td><td>鱗粉や冷気（夢鱗蛾・漂い霊）</td><td>肩をすくめて小刻みに震える。ときどき跳ねる</td></tr><tr><td>bubble_float</td><td>泡に包まれて床から浮き、体を丸めて口をぱくぱくさせる</td><td>泡（泡吹き貝）</td><td>口をぱくぱくさせる</td></tr><tr><td>daze_sway</td><td>ぼーっと立ち尽くし、首をかしげてゆらゆら揺れる</td><td>なし（様子だけ）</td><td>ぼーっとして、首を左右にかしげて揺れる</td></tr><tr><td>reach_toward</td><td>思わず片手を伸ばして一歩寄り、手を胸に引っ込める</td><td>手を伸ばす先の何か</td><td>何かに思わず手を伸ばす → はっとして目をそらす（真横から見た絵）</td></tr></table></div>
+
+<h2>7. キャラクターの欄（<code>charWords</code>）</h2>
+<p>見た目は2.で入れてあります。足したいもの（例：いつもの表情の癖）があれば書きます。なければ <code>""</code>。</p>
+<ul><li><code>aria</code>：アリア（戦士）</li><li><code>scout</code>：斥候（シーフ）</li><li><code>mage</code>：魔法使い</li><li><code>healer</code>：ヒーラー</li></ul>
+
+<h2>8. 答えの形</h2>
+<p>この形の JSON を、コードブロック1つで返してください。キーは変えないでください。</p>
+<pre>{
+ &quot;words&quot;: {
+  &quot;bound&quot;: &quot;&quot;,
+  &quot;bound_rock&quot;: &quot;&quot;,
+  &quot;pinned&quot;: &quot;&quot;,
+  &quot;pinned_rock&quot;: &quot;&quot;,
+  &quot;held&quot;: &quot;&quot;,
+  &quot;kiss&quot;: &quot;&quot;,
+  &quot;clinger&quot;: &quot;&quot;,
+  &quot;engulf&quot;: &quot;&quot;,
+  &quot;wrap&quot;: &quot;&quot;,
+  &quot;grabbed&quot;: &quot;&quot;,
+  &quot;trance&quot;: &quot;&quot;,
+  &quot;tempt&quot;: &quot;&quot;,
+  &quot;endure&quot;: &quot;&quot;,
+  &quot;exposure&quot;: &quot;&quot;,
+  &quot;climax&quot;: &quot;&quot;,
+  &quot;afterglow&quot;: &quot;&quot;,
+  &quot;recover&quot;: &quot;&quot;,
+  &quot;defeat&quot;: &quot;&quot;
+ },
+ &quot;motionWords&quot;: {
+  &quot;ankle_grabbed&quot;: &quot;&quot;,
+  &quot;scout_tail_grabbed&quot;: &quot;&quot;,
+  &quot;break_free&quot;: &quot;&quot;,
+  &quot;grabbed_flinch&quot;: &quot;&quot;,
+  &quot;gaze_trance&quot;: &quot;&quot;,
+  &quot;spore_inhale&quot;: &quot;&quot;,
+  &quot;shiver_hug&quot;: &quot;&quot;,
+  &quot;bubble_float&quot;: &quot;&quot;,
+  &quot;daze_sway&quot;: &quot;&quot;,
+  &quot;reach_toward&quot;: &quot;&quot;
+ },
+ &quot;charWords&quot;: {
+  &quot;aria&quot;: &quot;&quot;,
+  &quot;scout&quot;: &quot;&quot;,
+  &quot;mage&quot;: &quot;&quot;,
+  &quot;healer&quot;: &quot;&quot;
+ }
+}</pre>
+</main></body></html>

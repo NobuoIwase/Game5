@@ -10,9 +10,9 @@ export const SIT_HINT={
  clinger:'胸と脚の付け根に張り付いている小さなもの',
  engulf:'床の柔らかい塊',
  wrap:'胴に巻きついているもの',
- grabbed:'足首・尻尾をつかむもの',
- trance:'ぼんやりさせているもの（目の前の何か・胞子・泡）',
- tempt:'顔・体の様子',
+ grabbed:'つかまれたときの顔・体の様子（つかむものは、モーションごとの欄に書く）',
+ trance:'ぼんやりしたときの顔・体の様子（目の前の何か・胞子・泡は、モーションごとの欄に書く）',
+ tempt:'顔・体の様子（押さえているものはない）',
  endure:'顔・体の様子',
  exposure:'顔・体の様子',
  climax:'頂点の顔・体の様子（ほかの欄の言葉と一緒に入る）',
@@ -92,3 +92,29 @@ export const MOTION_JA={
  healer_panel_catch:T('立つ','腕を胸の前に当てて押さえる','立つ','なし','胸の前の前垂れがめくれかける → びくっとして押さえる → 顔を赤くして背ける'),
  healer_tension_refuse:T('立つ → 床に崩れる','胸をかばう','爪先立ち → 崩れる','なし','首を横に振って拒む → 頂点：反って爪先立ち、唇を結ぶ → 崩れる、顔は背けたまま'),
 };
+
+/* which of the game's monsters do it (game/RESTRAINT_MOTION_MAP.md); the request to ChatGPT picks one look per field from these */
+export const SIT_WHO={
+ bound:'床や壁から伸びる触手（ゲームの拘束）',bound_rock:'床や壁から伸びる触手（ゲームの拘束）',
+ pinned:'灰冠の粘魔・絹輪ワーム・水妖・灰冠の従者・石の番兵',pinned_rock:'灰冠の粘魔・絹輪ワーム・水妖・灰冠の従者・石の番兵',
+ held:'まだ決まっていない',kiss:'まだ決まっていない',clinger:'吸着羽虫（3匹）',engulf:'艶沼ナメクジ・鏡面スライム',
+ wrap:'糸繰り蜘蛛・誘い茸・粘花・影の手（罠）',
+};
+/* motions whose holder differs inside one kind of scene: it goes in the motion's own field */
+export const MOTION_SLOT={
+ ankle_grabbed:'足首をつかむもの（這い寄る手）',scout_tail_grabbed:'尻尾をつかむもの',break_free:'振りほどく前に縛っていたもの（はじめのコマだけ見える）',
+ grabbed_flinch:'捕まえたもの（どこか1か所）',gaze_trance:'見つめている目（凝視の眼）',spore_inhale:'胞子（ルマネ胞子球・誘い茸）',
+ shiver_hug:'鱗粉や冷気（夢鱗蛾・漂い霊）',bubble_float:'泡（泡吹き貝）',daze_sway:'なし（様子だけ）',reach_toward:'手を伸ばす先の何か',
+};
+/* the monsters' looks (LOCAL_CLAUDE_GUIDE.md 5-A) */
+export const MONSTERS=[
+ ['艶沼ナメクジ','ピンク〜桃紫','translucent flesh-pink body, pink goo'],['吸着羽虫','ピンク〜肉色（小さな丸い体、透ける羽4枚、顔の下に丸い吸盤）','small round translucent flesh-pink body, four clear wings, round sucker'],
+ ['泡吹き貝','真珠色の殻＋珊瑚色の体','pearly cream spiral shell, coral-orange soft body, clear bubbles'],['水妖','明るい水色＋白い泡の縁','translucent bright aqua water body, white foam rim'],
+ ['漂い霊','青白い半透明','translucent pale cyan-white membrane body, cold glow'],['絹輪ワーム','象牙〜淡い肌色','ivory-beige segmented body, white silk threads'],
+ ['糸繰り蜘蛛','炭色＋白い糸','charcoal-gray fuzzy body, white silk'],['這い寄る手','青白い肌','pale bluish-gray skin, short rounded nails'],
+ ['ルマネ胞子球','からし色','mustard-yellow fleshy spore ball, amber glow'],['誘い茸','青緑に光る傘＋紫の襞','glowing turquoise mushroom cap, wet violet gills'],
+ ['石の番兵','灰色の石＋ひびの奥の桃色の肉','gray stone golem, glowing pink flesh inside the cracks, moss'],['粘花','象牙色の花弁、縁と奥が深紅','thick ivory petals with deep crimson edges, amber nectar'],
+ ['夢鱗蛾','琥珀色','amber-brown furry moth, cream eye spots'],['鏡面スライム','銀＋水色の反射','chrome-silver mirror slime, pale cyan reflections'],
+ ['凝視の眼','白目＋紫の瞳、ワイン色の膜の羽','huge white eyeball, violet iris, wine-red membrane wings'],['灰冠の従者','ピンク〜肉色＋灰色の冠（ボスを小さくした取り巻き）','small translucent flesh-pink slime, gray stone crown fragment'],
+ ['灰冠の粘魔（ボス）','肉色の半透明＋灰色の石の冠、紫の核','translucent flesh-pink giant slime, gray stone crown, violet core'],
+];

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Game5 NAI helper
 // @namespace    nobuoiwase-game5
-// @version      1.1
+// @version      1.2
 // @description  Game5 のモーションの元絵を NovelAI で作るための手伝い。ボタン1つで次のコマの下絵とプロンプトを入れる
 // @match        https://novelai.net/*
 // @run-at       document-start
@@ -27,7 +27,7 @@ const SRC='https://nobuoiwase.github.io/Game5/character-motion-v1/nai/';
 const W=unsafeWindow;
 const get=(k,d)=>{try{const v=GM_getValue(k);return v===undefined?d:v}catch(e){return d}},set=(k,v)=>{try{GM_setValue(k,v)}catch(e){}};
 let DATA=null,armed=null,armedImage=null,msg='';
-const st={char:get('char','aria'),done:get('done',{}),words:get('words',{}),charWords:get('charWords',{}),extraNeg:get('extraNeg',''),
+const st={char:get('char','aria'),done:get('done',{}),words:get('words',{}),charWords:get('charWords',{}),motionWords:get('motionWords',{}),extraNeg:get('extraNeg',''),
  useBase:get('useBase',true),autoSave:get('autoSave',false),strength:get('strength',0.7),pos:get('pos',{})};
 const save=()=>{for(const k of Object.keys(st))set(k,st[k])};
 
@@ -38,7 +38,7 @@ const b64=buf=>{const u=new Uint8Array(buf);let s='';for(let i=0;i<u.length;i+=0
 const jobsOf=c=>DATA?DATA.jobs.filter(j=>j.char===c):[];
 function promptOf(job){
  const f=DATA.frames[job.frame],ch=DATA.characters[job.char];
- const parts=[DATA.common,ch.tags,st.charWords[job.char]||'',...f.situations.map(s=>st.words[s]||''),f.prompt,f.note];
+ const parts=[DATA.common,ch.tags,st.charWords[job.char]||'',...f.situations.map(s=>st.words[s]||''),st.motionWords[f.motion]||'',f.prompt,f.note];
  return parts.map(x=>(x||'').trim()).filter(Boolean).join(', ');
 }
 const negOf=()=>[DATA.negative,st.extraNeg].map(x=>(x||'').trim()).filter(Boolean).join(', ');
@@ -70,7 +70,8 @@ W.fetch=function(input,init){
 function currentImage(){let best=null;for(const im of document.querySelectorAll('img')){if(!/^(blob:|data:image)/.test(im.src))continue;if(!best||im.naturalWidth*im.naturalHeight>best.naturalWidth*best.naturalHeight)best=im}return best}
 
 /* ---- panel ---- */
-let root;
+let root,detOpen=false;
+const VJ={front:'正面',right:'真横',left:'真横',down_right:'斜め前',down_left:'斜め前',up_right:'斜め後ろ',up_left:'斜め後ろ',back:'後ろ'};
 const h=(tag,attrs={},...kids)=>{const e=document.createElement(tag);for(const [k,v] of Object.entries(attrs)){if(k==='style')e.style.cssText=v;else if(k.startsWith('on'))e.addEventListener(k.slice(2),v);else e.setAttribute(k,v)}for(const c of kids)e.append(c);return e};
 function note(t){msg=t;draw()}
 function nextJob(from){const js=jobsOf(st.char);if(!js.length)return null;const i0=from==null?(st.pos[st.char]??-1):from;
@@ -92,7 +93,9 @@ function draw(){
  const box='position:fixed;right:12px;bottom:12px;z-index:2147483647;width:340px;max-height:80vh;overflow:auto;background:#1b2330;color:#e6edf3;font:13px/1.45 sans-serif;border:1px solid #3a4658;border-radius:8px;padding:10px;box-shadow:0 4px 16px #0008';
  root.style.cssText=box;
  const btn=(t,f,c='#2f6fb3')=>h('button',{style:`margin:2px 4px 2px 0;padding:6px 10px;border:0;border-radius:5px;background:${c};color:#fff;cursor:pointer;font:inherit`,onclick:f},t);
+ const ta=(label,val,onv,sub)=>{const t=h('textarea',{rows:'2',style:'width:100%;box-sizing:border-box;background:#0f151d;color:#e6edf3;border:1px solid #3a4658;border-radius:4px'});t.value=val||'';t.addEventListener('change',e=>{onv(e.target.value);save()});return h('div',{style:'margin:6px 0'},h('div',{style:'font-weight:700'},label),sub?h('div',{style:'color:#9fb0c0;font-size:12px'},sub):'',t)};
  root.append(h('div',{style:'font-weight:700;margin-bottom:6px'},'Game5 モーションの元絵'));
+ root.append(h('div',{},h('a',{href:SRC+'scenes.html',target:'_blank',style:'color:#7fb4ea'},'場面の説明を開く（どの場面が、どんな姿勢か）')));
  if(!DATA){root.append(h('div',{},msg||'一覧を読み込み中…'));return}
  const sel=h('select',{style:'width:100%;margin-bottom:6px',onchange:e=>{st.char=e.target.value;armed=null;save();note('精密参照に「'+DATA.characters[st.char].label+'」の参照画像を入れてください')}});
  for(const [k,c] of Object.entries(DATA.characters)){const o=h('option',{value:k},c.label);if(k===st.char)o.selected=true;sel.append(o)}
@@ -100,16 +103,22 @@ function draw(){
  const js=jobsOf(st.char),nd=js.filter(j=>st.done[j.file]).length;
  root.append(h('div',{},`保存済み ${nd} / ${js.length}`));
  if(armed){const f=DATA.frames[armed.frame];root.append(h('div',{style:'margin:6px 0;padding:6px;background:#0f151d;border-radius:5px'},
-  h('div',{style:'font-weight:700'},armed.file),h('div',{},f.label),h('div',{style:'color:#9fb0c0'},`${f.view} / ${f.frame}コマ目：${f.phase}`),
-  h('img',{src:SRC+f.base,style:'width:120px;height:120px;background:#fff;margin-top:4px;border-radius:4px'})))}
+  h('div',{style:'font-weight:700'},armed.file),h('div',{},f.label),h('div',{style:'color:#9fb0c0'},`${VJ[f.view]||f.view}から・${f.frame}コマ目${f.step?'：'+f.step:''}`),
+  h('div',{style:'margin-top:4px'},f.ja||''),h('div',{style:'color:#ffd48a'},'押さえられている所：'+(f.held||'')),
+  h('div',{style:'color:#9fb0c0'},'場面の種類：'+f.situations.map(x=>DATA.situations[x]).join(' ＋ ')),
+  h('div',{},h('img',{src:SRC+(f.guide||f.base),title:'どこを押さえられているか（読むためだけの絵）',style:'width:120px;height:120px;background:#fff;margin:4px 4px 0 0;border-radius:4px'}),
+   h('img',{src:SRC+f.base,title:'送る下絵（姿勢だけ）',style:'width:120px;height:120px;background:#fff;margin-top:4px;border-radius:4px'})),
+  h('div',{style:'color:#9fb0c0;font-size:12px'},'左：どこを押さえられているか　右：送る下絵'),
+  ta('このモーションだけの言葉（全キャラクター・全コマに足す）',st.motionWords[f.motion],v=>st.motionWords[f.motion]=v)))}
  root.append(h('div',{},btn('次のコマを入れる',()=>arm(nextJob()),'#2f8f4e'),btn('飛ばす',()=>arm(nextJob(armed?js.indexOf(armed):undefined)),'#56606e')));
  root.append(h('div',{},btn('保存（ユーザー用）',saveImage,'#b3522f')));
  if(msg)root.append(h('div',{style:'margin-top:6px;color:#ffd48a'},msg));
  // settings: the words for each kind of scene (kept in this browser only)
- const det=h('details',{style:'margin-top:8px'});det.append(h('summary',{style:'cursor:pointer'},'設定（ユーザー用）'));
+ const det=h('details',{style:'margin-top:8px'});det.open=detOpen;det.addEventListener('toggle',()=>{detOpen=det.open});det.append(h('summary',{style:'cursor:pointer'},'設定（ユーザー用）'));
  det.append(h('div',{style:'color:#9fb0c0;margin:4px 0'},'場面の種類ごとの言葉。このブラウザにだけ保存され、プロンプト欄には表示されません。送るときに足されます。'));
- const ta=(label,val,onv)=>{const t=h('textarea',{rows:'2',style:'width:100%;box-sizing:border-box;background:#0f151d;color:#e6edf3;border:1px solid #3a4658;border-radius:4px'});t.value=val||'';t.addEventListener('change',e=>{onv(e.target.value);save()});return h('div',{style:'margin:4px 0'},h('div',{},label),t)};
- for(const [k,label] of Object.entries(DATA.situations))det.append(ta(label,st.words[k],v=>st.words[k]=v));
+ for(const [k,label] of Object.entries(DATA.situations)){
+  const ms=[...new Set(Object.values(DATA.frames).filter(f=>f.situations.includes(k)).map(f=>f.label))];
+  det.append(ta(label,st.words[k],v=>st.words[k]=v,'書くとよいもの：'+((DATA.hints||{})[k]||'')+'　／　入るモーション：'+ms.join('、')))}
  for(const [k,c] of Object.entries(DATA.characters))det.append(ta('キャラクター：'+c.label,st.charWords[k],v=>st.charWords[k]=v));
  det.append(ta('除外する言葉の追加',st.extraNeg,v=>st.extraNeg=v));
  const cb=h('input',{type:'checkbox'});cb.checked=st.useBase;cb.addEventListener('change',e=>{st.useBase=e.target.checked;save()});

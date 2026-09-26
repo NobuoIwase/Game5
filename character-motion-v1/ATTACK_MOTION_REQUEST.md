@@ -55,6 +55,8 @@
 
 骨盤の前後の移動量は各コマの `root_forward` にある。
 
+- **使い回し**：ほかのコマと同じ絵で済むコマ、顔や頭だけ描き替えればよいコマは `REUSE_LIST.md`（機械が読む版は `motion/reuse.json`）にまとめてある。「同じ絵」のコマは描かずに元のコマを使い、「顔だけ」「頭だけ」はその部分だけ描き替える。
+
 ## 3. 骨格データ（これに沿って描く）
 
 `motion/attack-poses.json`（生成元は `motion/attack.mjs`、再生成は `node tools/render_attack_svg.mjs`）。

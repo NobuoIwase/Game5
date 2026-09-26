@@ -101,6 +101,7 @@ export const MOTIONS={
   [7,185,-28,-.25,30,[40,5,0],3,60,'震え jerk'],[9,187,-34,-.18,36,[48,-5,0],4,60,'jerk'],[7,185,-29,-.25,30,[41,4,0],3,60,'jerk'],[9,186,-33,-.2,35,[46,-4,0],4,70,'jerk'],
   [5,184,-18,-.3,18,[24,2,0],2,90,'…'],
   [2,184,-8,-.4,6,[5,0,0],0,100,'抜ける release'],
+  [1.5,188,4,-.5,3,[-10,0,0],0,80,'…'],
   [1,191,16,-.62,0,[-25,0,0],0,160,'崩れる folds forward, knees buckling in'],
   [0,193,18,-.66,0,[-30,6,0],0,240,'脱力 limp']].map(([rz,hy,pi,kn,pt,hd,sh,ms,ph])=>({...BASE,rootZ:rz,hipY:hy,pitch:pi,shrug:sh,
    footL:foot(10,0,{yaw:-10,knee:Math.max(kn*.45,-.2),point:pt}),footR:foot(-10,0,{yaw:-10,knee:Math.max(kn*.45,-.2),point:pt}),head:hd,binds:[WRIST_BAND,{j:'wrist_right',to:[0,150,-70]}],ms,phase:ph}))},
@@ -132,12 +133,12 @@ export const MOTIONS={
 
 /* the face drawn in the references (expr): resisting = mouth pressed shut, rocking = mouth open,
    the peak of a tension = eyes shut and mouth open, then eyes shut, then limp with the mouth open */
-const EXPR=(name,i)=>/^(afterglow|recover)_/.test(name)?'o':/^tension_/.test(name)?(i<3?'line':i<9?'shut-o':i<11?'shut':'o'):/^(hip_rock|bounce|bent_over)/.test(name)?'o':'line';
+const EXPR=(name,i,n)=>/^(afterglow|recover)_/.test(name)?'o':/^tension_/.test(name)?(i<3?'line':i<9?'shut-o':i<n-1?'shut':'o'):/^(hip_rock|bounce|bent_over)/.test(name)?'o':'line';
 export function library(){
  const poses={},meta={};
  for(const [name,m] of Object.entries(MOTIONS)){
   poses[name]={};
-  for(const d of DIRECTIONS)poses[name][d]=m.keys.map((k,i)=>{const J=pose(k);return{direction:d,yaw:YAW[d],motion:name,frame:i,frame_ms:k.ms,phase:k.phase,expr:k.expr||EXPR(name,i),
+  for(const d of DIRECTIONS)poses[name][d]=m.keys.map((k,i)=>{const J=pose(k);return{direction:d,yaw:YAW[d],motion:name,frame:i,frame_ms:k.ms,phase:k.phase,expr:k.expr||EXPR(name,i,m.keys.length),
    binds:(k.binds||[]).map((b,bi)=>({joint:b.j,joint2:b.j2,anchor:b.to?'bind'+bi:null,via:b.via?'bindvia'+bi:null,anchor2:b.to2?'bindb'+bi:null})),
    joints:project(Object.assign(J,Object.fromEntries((k.binds||[]).flatMap((b,bi)=>b.to2?[['bindb'+bi,b.to2]]:[]))),d)}});
   meta[name]={label:m.label,loop:m.loop,view:m.view,frame_ms:m.keys.map(k=>k.ms),phases:m.keys.map(k=>k.phase)};

@@ -14,6 +14,12 @@
 | `afterglow_slump` → `recover_slump` | `tension_arch`（のけぞり絶頂）のあとの余韻 → 回復（吊られた拘束に戻る） |
 | `bent_over` | 尻を突き出す前屈みの拘束（後ろ・斜め後ろ向きで表示） |
 
+**モーションの切り替え方**
+- ループするモーションへは0コマ目で入り、0コマ目で抜ける
+- 切り替えるときは、`character-motion-v1/motion/transition-poses.json` にその組み合わせのつなぎ（`<前>__<次>`）があれば、間に再生する
+- つなぎがない組み合わせは、そのままつないでも跳ばない
+- どの組み合わせがありえるかは `motion/transitions.mjs` の `EDGES`
+
 股の下を通る触手・床から伸びる触手は、ゲーム側で描く（骨格データの `crotch` の点が位置の目安）。
 
 ## 床・口づけ・拘束なし・張り付き（`character-motion-v1/motion/scenes.mjs`、依頼書 `SCENE_MOTION_REQUEST.md`）

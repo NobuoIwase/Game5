@@ -24,51 +24,51 @@
 
 | id | 姿勢と動き | コマ | 再生 | 向き |
 |---|---|---|---|---|
-| `down_fall_back` | 押されて尻もちをつき、仰向けに倒れる | 10 | 1回 | 真横 |
+| `down_fall_back` | 押されて尻もちをつき、仰向けに倒れる | 16 | 1回 | 真横 |
 | `down_pinned_kick` | 仰向けで両手首を頭の上に押さえられ、脚をばたつかせる | 8 | ループ | 真横 |
 | `down_pinned_spread` | 仰向けで立てた膝を左右へ開かれ、腰をよじる | 8 | ループ | 斜め前 |
 | `down_pinned_rock` | 仰向けで膝を開かれ、体が頭の方へ前後に揺れる | 8 | ループ | 斜め前 |
-| `down_face_down` | うつ伏せで手首を前に押さえられ、脚をばたつかせる | 8 | ループ | 真横 |
+| `down_face_down` | うつ伏せで手首を前に押さえられ、脚をばたつかせる | 12 | ループ | 真横 |
 | `down_hips_up` | 膝をついて胸を床につけ、腰を上げたまま前後に揺れる | 8 | ループ | 真横 |
-| `get_up` | 仰向けから起き上がる | 11 | 1回 | 真横 |
+| `get_up` | 仰向けから起き上がる | 17 | 1回 | 真横 |
 | `down_afterglow` | 仰向けで膝が倒れたまま、肩で息をする | 8 | ループ | 斜め前 |
 | `down_recover` | 仰向けの余韻から膝を閉じる（そのあと `get_up` へ） | 5 | 1回 | 斜め前 |
 | `kiss_forced` | 口づけされて押し返そうとする | 8 | ループ | 真横 |
 | `kiss_tension` | 口づけされたまま全身がこわばり、膝が崩れる | 10 | 1回 | 真横 |
 | `kiss_respond` | 口づけに応える（爪先立ちで身を寄せる） | 8 | ループ | 真横 |
 | `kiss_afterglow` | 口づけのあと、膝が抜けたままふらつき、肩で息をする | 8 | ループ | 真横 |
-| `kiss_recover` | 我に返って口元をぬぐい、一歩下がる | 7 | 1回 | 真横 |
+| `kiss_recover` | 我に返って口元をぬぐい、一歩下がる | 10 | 1回 | 真横 |
 | `tempt_pose` | 脚を開いて腰を前に出し、ゆっくり揺らす | 8 | ループ | 正面 |
 | `chain_splay` | 脚ががに股に開き、膝と腰が小刻みに震える | 8 | ループ | 正面 |
-| `tension_free` | 立ったまま全身がこわばり、膝から崩れて座り込む | 11 | 1回 | 正面 |
+| `tension_free` | 立ったまま全身がこわばり、膝から崩れて座り込む | 13 | 1回 | 正面 |
 | `sit_afterglow` | 女の子座りで肩で息をする | 8 | ループ | 正面 |
-| `sit_recover` | 女の子座りから立ち上がる | 11 | 1回 | 正面 |
+| `sit_recover` | 女の子座りから立ち上がる | 12 | 1回 | 正面 |
 | `held_from_behind` | 後ろから腕ごと胴を抱きすくめられ、もがく | 8 | ループ | 正面 |
-| `clinger_peel` | 胸と脚の付け根の前に張り付いた小さな生き物を引き剥がそうとする | 16 | ループ | 正面 |
-| `clinger_tension` | 張り付かれたまま全身がこわばり、座り込む | 11 | 1回 | 正面 |
+| `clinger_peel` | 胸と脚の付け根の前に張り付いた小さな生き物を引き剥がそうとする | 20 | ループ | 正面 |
+| `clinger_tension` | 張り付かれたまま全身がこわばり、座り込む | 14 | 1回 | 正面 |
 | `clinger_accept` | 張り付かれたまま振り払うのをやめ、身を任せる | 8 | ループ | 正面 |
 | `clinger_afterglow` | 張り付かれたまま座り込み、肩で息をする | 8 | ループ | 正面 |
-| `clinger_recover` | 張り付かれたまま立ち上がり、胸を押さえる | 11 | 1回 | 正面 |
+| `clinger_recover` | 張り付かれたまま立ち上がり、胸を押さえる | 13 | 1回 | 正面 |
 | `down_tension` | 仰向けで押さえられたまま全身がこわばり、腰が浮く（そのあと `down_afterglow`） | 10 | 1回 | 斜め前 |
-| `engulf_sink` | 柔らかい塊に足元から腰まで包まれていく | 7 | 1回 | 正面 |
+| `engulf_sink` | 柔らかい塊に足元から腰まで包まれていく | 10 | 1回 | 正面 |
 | `engulf_struggle` | 腰まで包まれたまま、上体をひねって抜け出そうとする | 8 | ループ | 正面 |
 | `engulf_rock` | 腰まで包まれたまま、腰がびくびくと跳ねる | 8 | ループ | 正面 |
-| `engulf_tension` | 腰まで包まれたまま全身がこわばり、前へ崩れる | 8 | 1回 | 正面 |
+| `engulf_tension` | 腰まで包まれたまま全身がこわばり、前へ崩れる | 10 | 1回 | 正面 |
 | `wrap_squeeze` | 腕ごと胴に輪が巻かれ、締められるたびに背中が反る | 8 | ループ | 正面 |
-| `wrap_tension` | 輪に巻かれたまま全身がこわばり、脱力する | 7 | 1回 | 正面 |
-| `ankle_grabbed` | 足首をつかまれて後ろへ引かれ、よろけて四つん這いになる | 8 | 1回 | 真横 |
-| `break_free` | 輪を振りほどき、よろけてから構え直す | 7 | 1回 | 正面 |
-| `edge_pull` | 腰から先に一歩寄ってしまい、はっと引き戻す | 8 | 1回 | 真横 |
+| `wrap_tension` | 輪に巻かれたまま全身がこわばり、脱力する | 9 | 1回 | 正面 |
+| `ankle_grabbed` | 足首をつかまれて後ろへ引かれ、よろけて四つん這いになる | 15 | 1回 | 真横 |
+| `break_free` | 輪を振りほどき、よろけてから構え直す | 8 | 1回 | 正面 |
+| `edge_pull` | 腰から先に一歩寄ってしまい、はっと引き戻す | 9 | 1回 | 真横 |
 | `walk_unsteady` | 膝が震えて内股で歩く（下腹に手を当てて） | 8 | ループ | 真横（歩きなので8方向） |
 | `gaze_trance` | 見つめられて動けず、棒立ちのまま小さく頷く | 8 | ループ | 正面 |
 | `spore_inhale` | 口を手で覆って顔をそむけ、吸い込むたびに膝が内に折れる | 8 | ループ | 正面 |
 | `shiver_hug` | 自分の体を抱いて小刻みに震え、ときどき跳ねる | 8 | ループ | 正面 |
 | `bubble_float` | 泡に包まれて床から浮き、体を丸めて口をぱくぱくさせる | 8 | ループ | 正面 |
 | `daze_sway` | ぼーっと立ち尽くし、首をかしげてゆらゆら揺れる | 8 | ループ | 正面 |
-| `reach_toward` | 思わず片手を伸ばして一歩寄り、手を胸に引っ込める | 8 | 1回 | 真横 |
-| `trip_fall` | つまずいて手と膝をつき、起き上がる | 12 | 1回 | 真横 |
-| `defeat_collapse` | 力尽きて膝から崩れ、うつ伏せに倒れる | 8 | 1回 | 真横 |
-| `grabbed_flinch` | 捕まった瞬間にびくっと跳ね、捕まった所を見下ろす | 5 | 1回 | 正面 |
+| `reach_toward` | 思わず片手を伸ばして一歩寄り、手を胸に引っ込める | 10 | 1回 | 真横 |
+| `trip_fall` | つまずいて手と膝をつき、起き上がる | 21 | 1回 | 真横 |
+| `defeat_collapse` | 力尽きて膝から崩れ、うつ伏せに倒れる | 13 | 1回 | 真横 |
+| `grabbed_flinch` | 捕まった瞬間にびくっと跳ね、捕まった所を見下ろす | 6 | 1回 | 正面 |
 
 - **出力**
   - 各キャラクター・各モーションについて、向きの1方向分のシート `exports/<character>/pose_<id>.png`（横にコマ）
@@ -179,7 +179,7 @@
      - 振り払うのをやめて腕を垂らす
      - 胸を前に出し、頭を後ろへ倒す
      - 腰をゆっくり揺らす
-   - `clinger_peel` は16コマ。つかむ・引く・はじかれるの各動作の間に中割りのコマがある
+   - `clinger_peel` は20コマ。つかむ・引く・はじかれるの各動作の間に中割りのコマがある
 9. **こわばりのあとの余韻と立ち直り**（各 `*_afterglow` は、こわばりのモーションの最後のコマと同じ姿勢から始まる）：
    - 余韻（ループ）：
      - 肩を上下させて息をつく。頭は垂れるか横を向く
@@ -241,7 +241,84 @@
 14. **髪・服の揺れ**：体の動きより1〜2コマ遅れて揺れる。仰向けでは髪が床に広がる。
 15. **痛み・流血の表現はしない**。
 
-## 5. 受け入れの確認
+## 5. つなぎ（モーションとモーションの間のコマ）
+
+モーションは、次のモーションへ跳ばずにつながるように作ってある。
+- 前のモーションの最後のコマと次の最初のコマが離れている組み合わせには、間をつなぐ短いコマ（つなぎ）を用意した。
+- ループするモーションには0コマ目から入り、0コマ目で抜ける。
+- 「立ち姿勢」は、腕を下ろして自然に立った姿勢（骨格は `motion/scenes.mjs` の `NEUTRAL`）。
+
+- **データ**
+  - `motion/transition-poses.json`（生成元は `motion/transitions.mjs`、再生成は `node tools/render_transition_svg.mjs`）
+  - 形式はほかの骨格データと同じ。`motions.<id>.from` / `.to` が、つなぐ2つのモーション
+- **参考図**：`references/transition-v1/`。前のモーションの終わり → つなぎ → 次のモーションの始まり、を続けて描いてある
+- **描き方**
+  - 前後のモーションと同じ見た目で、腕・脚・胴の位置を骨格どおりに移していく
+  - 表情・拘束の見た目は、つなぎの半分で次のモーションのものに替わる
+  - ただし `break_free` へのつなぎでは、拘束は振りほどくまで残す
+- **コマの長さ**：1コマ70ms
+- **一覧**：56種・計143コマ
+
+| id | 前 | 次 | コマ |
+|---|---|---|---|
+| `stand__grabbed_flinch` | 立ち姿勢 | `grabbed_flinch` | 2 |
+| `stand__down_fall_back` | 立ち姿勢 | `down_fall_back` | 2 |
+| `stand__kiss_forced` | 立ち姿勢 | `kiss_forced` | 4 |
+| `stand__tempt_pose` | 立ち姿勢 | `tempt_pose` | 3 |
+| `stand__walk_unsteady` | 立ち姿勢 | `walk_unsteady` | 1 |
+| `stand__chain_splay` | 立ち姿勢 | `chain_splay` | 1 |
+| `grabbed_flinch__arms_behind_squirm` | `grabbed_flinch` | `arms_behind_squirm` | 3 |
+| `grabbed_flinch__elbows_up_strain` | `grabbed_flinch` | `elbows_up_strain` | 4 |
+| `grabbed_flinch__legs_pulled_open` | `grabbed_flinch` | `legs_pulled_open` | 3 |
+| `grabbed_flinch__wrap_squeeze` | `grabbed_flinch` | `wrap_squeeze` | 2 |
+| `grabbed_flinch__held_from_behind` | `grabbed_flinch` | `held_from_behind` | 2 |
+| `grabbed_flinch__spore_inhale` | `grabbed_flinch` | `spore_inhale` | 5 |
+| `grabbed_flinch__shiver_hug` | `grabbed_flinch` | `shiver_hug` | 3 |
+| `grabbed_flinch__gaze_trance` | `grabbed_flinch` | `gaze_trance` | 2 |
+| `grabbed_flinch__bubble_float` | `grabbed_flinch` | `bubble_float` | 3 |
+| `grabbed_flinch__clinger_peel` | `grabbed_flinch` | `clinger_peel` | 2 |
+| `arms_behind_squirm__bent_over` | `arms_behind_squirm` | `bent_over` | 5 |
+| `bent_over__arms_behind_squirm` | `bent_over` | `arms_behind_squirm` | 5 |
+| `elbows_up_strain__bounce_hung` | `elbows_up_strain` | `bounce_hung` | 2 |
+| `bounce_hung__elbows_up_strain` | `bounce_hung` | `elbows_up_strain` | 2 |
+| `legs_held_open__break_free` | `legs_held_open` | `break_free` | 2 |
+| `elbows_up_strain__break_free` | `elbows_up_strain` | `break_free` | 4 |
+| `wrap_tension__break_free` | `wrap_tension` | `break_free` | 2 |
+| `engulf_struggle__break_free` | `engulf_struggle` | `break_free` | 2 |
+| `break_free__stand` | `break_free` | 立ち姿勢 | 2 |
+| `break_free__walk_unsteady` | `break_free` | `walk_unsteady` | 3 |
+| `down_fall_back__down_pinned_kick` | `down_fall_back` | `down_pinned_kick` | 1 |
+| `down_tension__down_afterglow` | `down_tension` | `down_afterglow` | 1 |
+| `down_pinned_kick__get_up` | `down_pinned_kick` | `get_up` | 1 |
+| `ankle_grabbed__down_face_down` | `ankle_grabbed` | `down_face_down` | 4 |
+| `down_face_down__down_hips_up` | `down_face_down` | `down_hips_up` | 3 |
+| `down_hips_up__down_face_down` | `down_hips_up` | `down_face_down` | 3 |
+| `kiss_forced__kiss_respond` | `kiss_forced` | `kiss_respond` | 2 |
+| `kiss_respond__kiss_tension` | `kiss_respond` | `kiss_tension` | 2 |
+| `tempt_pose__kiss_respond` | `tempt_pose` | `kiss_respond` | 6 |
+| `kiss_recover__stand` | `kiss_recover` | 立ち姿勢 | 2 |
+| `clinger_peel__clinger_accept` | `clinger_peel` | `clinger_accept` | 1 |
+| `clinger_accept__clinger_peel` | `clinger_accept` | `clinger_peel` | 1 |
+| `clinger_peel__clinger_tension` | `clinger_peel` | `clinger_tension` | 3 |
+| `clinger_accept__clinger_tension` | `clinger_accept` | `clinger_tension` | 3 |
+| `clinger_recover__stand` | `clinger_recover` | 立ち姿勢 | 3 |
+| `clinger_recover__walk_unsteady` | `clinger_recover` | `walk_unsteady` | 3 |
+| `tempt_pose__stand` | `tempt_pose` | 立ち姿勢 | 3 |
+| `sit_recover__walk_unsteady` | `sit_recover` | `walk_unsteady` | 1 |
+| `chain_splay__sit_afterglow` | `chain_splay` | `sit_afterglow` | 3 |
+| `spore_inhale__tension_free` | `spore_inhale` | `tension_free` | 2 |
+| `shiver_hug__tension_free` | `shiver_hug` | `tension_free` | 1 |
+| `gaze_trance__tension_free` | `gaze_trance` | `tension_free` | 3 |
+| `spore_inhale__stand` | `spore_inhale` | 立ち姿勢 | 5 |
+| `shiver_hug__stand` | `shiver_hug` | 立ち姿勢 | 3 |
+| `bubble_float__stand` | `bubble_float` | 立ち姿勢 | 4 |
+| `reach_toward__stand` | `reach_toward` | 立ち姿勢 | 3 |
+| `edge_pull__stand` | `edge_pull` | 立ち姿勢 | 1 |
+| `edge_pull__walk_unsteady` | `edge_pull` | `walk_unsteady` | 2 |
+| `walk_unsteady__stand` | `walk_unsteady` | 立ち姿勢 | 1 |
+| `walk_unsteady__trip_fall` | `walk_unsteady` | `trip_fall` | 1 |
+
+## 6. 受け入れの確認
 
 - [ ] 45モーションそれぞれ（`walk_unsteady` は8方向）、向きの1方向分のシートがある（576×576・透過）
 - [ ] 体の大きさが歩きのシートと同じで、床の位置が `feet_anchor` にそろっている
@@ -253,4 +330,5 @@
 - [ ] ループは最後のコマから最初のコマへ自然につながる
 - [ ] 余韻は、こわばりのモーションの最後のコマから自然につながる
 - [ ] 脚が交差していない
+- [ ] つなぎ（5章の表）がそろい、前のモーションの最後のコマから次の最初のコマまで、どの部位も1コマで大きく跳ばない（`node tools/check_transitions.mjs` で確認）
 - [ ] 痛み・流血の表現がない

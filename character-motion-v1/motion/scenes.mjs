@@ -10,18 +10,23 @@
  * expr sets the face drawn in the references: 'shut' eyes, 'o' open mouth, 'line' pressed mouth.
  */
 import {pose,project,DIRECTIONS,YAW} from './attack.mjs';
+import {between,keyGap} from './blend.mjs';
 const TAU=Math.PI*2,S=t=>Math.sin(TAU*t),C=t=>Math.cos(TAU*t);
 /* foot: [lateral, forward, heel lift (- = lower, lying), toe yaw, in the air, pointed toes, knee out, knee up, knee direction, foot direction ('shin' = along the shin)] */
 const foot=(l,z,{lift=0,yaw=0,air=0,point=0,knee=-.08,up=0,dir,toes}={})=>[l,z,lift,yaw,air?1:0,point,knee,up,dir,toes];
 const BASE={raw:1,noSword:1,noShield:1,rootZ:0,hipY:181,pelvis:0,torso:0,pitch:0,sway:0,head:[0,0,0],
  footL:foot(10,0,{yaw:-8,knee:-.25}),footR:foot(-10,0,{yaw:-8,knee:-.25}),armR:{d:[-.2,.95,.1],e:.95},armL:{d:[.2,.95,.1],e:.95}};
 const loop=(n,ms,f)=>Array.from({length:n},(_,i)=>({...f(i/n,i),ms}));
-/* tween: a smooth run of frames between key poses ([key, frames to the next key]) */
-function lerpV(a,b,u){if(typeof a==='number'&&typeof b==='number')return a+(b-a)*u;if(Array.isArray(a)&&Array.isArray(b))return a.map((v,i)=>lerpV(v,b[i]??v,u));
- if(a&&b&&typeof a==='object'&&typeof b==='object'){const o={};for(const k of new Set([...Object.keys(a),...Object.keys(b)]))o[k]=k in a&&k in b?lerpV(a[k],b[k],u):(u<.5?a[k]??b[k]:b[k]??a[k]);return o}return u<.5?a:b}
-function tween(steps){const out=[];steps.forEach(([k,n],i)=>{const nx=steps[i+1]?.[0];for(let j=0;j<(nx?n:1);j++){const u=nx?j/n:0,e=u*u*(3-2*u);const q=nx?lerpV(k,nx,e):{...k};if(j>0){q.phase='…';q.binds=u<.5?k.binds:nx.binds;q.expr=u<.5?k.expr:nx.expr}out.push(q)}});return out}
+/* tween: a smooth run of frames between key poses ([key, frames to the next key]); the frames between are
+   blended by where the body is (blend.mjs), so nothing jumps where two keys describe a limb differently */
+/* a snap: a key reached in one go on purpose (the peak of a climax, bursting free, being flung off) */
+const SNAP=/^(頂点|振りほどく|はじかれる|びくっ)/;
+/* each step is cut into at least as many frames as it asks for, and more if a joint would move over ~24 px (the eased middle of a step is 1.5x its average, so 16 px on average)
+   in one frame (not into a snap); the step keeps its length in time (msScale shortens the frames) */
+function tween(steps){const out=[];steps.forEach(([k,n0],i)=>{const nx=steps[i+1]?.[0];const n=nx&&n0>0&&!SNAP.test(nx.phase||'')?Math.max(n0,Math.ceil(keyGap(k,nx)/16)):n0;
+ for(let j=0;j<(nx?n:1);j++){const u=nx?j/n:0,e=u*u*(3-2*u);const q=nx&&j>0?{...between(k,nx,e)}:{...k};if(j>0){q.phase='…';q.binds=u<.5?k.binds:nx.binds;q.expr=u<.5?k.expr:nx.expr}q.msScale=nx&&n0>0?n0/n:1;out.push(q)}});return out}
 /* a loop through key poses with in-betweens: each key's ms is shared out over its frames */
-const loopTween=(keys,n=2)=>{const f=tween([...keys.map(k=>[k,n]),[keys[0],0]]).slice(0,-1);return f.map((q,i)=>({...q,ms:Math.round(keys[Math.floor(i/n)].ms/n)}))};
+const loopTween=(keys,n=2)=>tween([...keys.map(k=>[k,n]),[keys[0],0]]).slice(0,-1).map(q=>({...q,ms:Math.round(q.ms*q.msScale/n),msScale:1}));
 /* getting up from sitting with the legs folded out: onto the knees, one foot forward, up */
 const fromSit=(binds,last)=>tween([
  [{...SIT,head:[-12,6,0],binds,expr:'o',phase:'座る sitting'},2],
@@ -52,6 +57,7 @@ const SIT={...BASE,hipY:228,pitch:4,head:[-8,0,0],
  armR:{d:[-.05,.8,.6],e:.8},armL:{d:[.05,.8,.6],e:.8}};
 /* standing, free */
 const STAND={...BASE};
+export const NEUTRAL=STAND;   // standing at rest: where most motions start and end (the transition check compares against it)
 
 export const MOTIONS={
  /* ======== pushed down, held on the floor ======== */
@@ -74,7 +80,7 @@ export const MOTIONS={
   rootZ:4*S(t),head:[85-8*S(t-.1),0,0],shrug:1.5*S(t),
   footL:foot(18,22+2*S(t),{knee:1.15,up:.9,point:10}),footR:foot(-18,22+2*S(t),{knee:1.15,up:.9,point:10}),
   binds:[...WRISTS_OVERHEAD,{j:'knee_left',to:[56,236,26]},{j:'knee_right',to:[-56,236,26]}],expr:S(t)>0?'o':'shut',phase:S(t)>.3?'pushed toward her head':S(t)<-.3?'slides back':'…'}))},
- down_face_down:{label:'うつ伏せで押さえられ、脚をばたつかせてもがく',loop:true,view:'right',keys:loop(8,100,t=>({...PRONE,
+ down_face_down:{label:'うつ伏せで押さえられ、脚をばたつかせてもがく',loop:true,view:'right',keys:loop(12,67,t=>({...PRONE,
   pelvis:8*S(t),sway:2*S(t),head:[-80,0,25*S(t)],
   footL:foot(9,-54+20*Math.max(0,S(t)),{lift:-3+28*Math.max(0,S(t)),air:S(t)>.2,knee:0,up:-1,toes:'shin'}),footR:foot(-9,-54+20*Math.max(0,-S(t)),{lift:-3+28*Math.max(0,-S(t)),air:S(t)<-.2,knee:0,up:-1,toes:'shin'}),
   binds:WRISTS_AHEAD,expr:'line',phase:'kicks from the knees one leg after the other, hips twisting'}))},
@@ -234,10 +240,10 @@ export const MOTIONS={
   [{...STAND,hipY:208,pitch:80,rootZ:0,head:[-50,0,0],footL:foot(10,-54,{lift:4,air:1,knee:0,toes:'shin'}),footR:foot(-10,-30,{lift:-6,point:40,dir:[0,1,.2]}),armR:{d:[-.15,1,.05],e:1},armL:{d:[.15,1,.05],e:1},binds:[{j:'ankle_left',to:[10,232,-64]}],expr:'line',phase:'倒れる down on her hands and one knee, the caught leg stretched back'},2],
   [{...STAND,hipY:208,pitch:80,rootZ:-4,head:[-30,0,55],footL:foot(10,-58,{lift:2,air:1,knee:0,toes:'shin'}),footR:foot(-10,-32,{lift:-6,point:40,dir:[0,1,.2]}),armR:{d:[-.15,1,.15],e:1},armL:{d:[.15,1,.15],e:1},binds:[{j:'ankle_left',to:[10,234,-70]}],expr:'line',phase:'振り返る dragged back a little, looks back over her shoulder'},0]]).map(k=>({...k,ms:90}))},
 
- /* ======== breaking free of a hold ======== */
+ /* ======== breaking free of a hold (any hold: whatever held her is the game's to draw, up to the burst) ======== */
  break_free:{label:'拘束を振りほどき、よろけてから構え直す',loop:false,view:'front',keys:tween([
-  [{...STAND,armR:{d:[-.07,.97,.12],e:.95},armL:{d:[.07,.97,.12],e:.95},binds:[{coil:1,j:'thorax',r:18},{coil:1,j:'waist',r:17}],expr:'line',phase:'捕まっている held'},2],
-  [{...STAND,hipY:190,pitch:12,shrug:3,torso:-10,footL:foot(12,0,{knee:.1}),footR:foot(-12,0,{knee:.1}),armR:{d:[-.2,.95,.2],e:.9},armL:{d:[.2,.95,.2],e:.9},binds:[{coil:1,j:'thorax',r:18},{coil:1,j:'waist',r:17}],expr:'shut-line',phase:'力む crouches and gathers herself'},1],
+  [{...STAND,armR:{d:[-.07,.97,.12],e:.95},armL:{d:[.07,.97,.12],e:.95},expr:'line',phase:'捕まっている held (by whatever held her)'},2],
+  [{...STAND,hipY:190,pitch:12,shrug:3,torso:-10,footL:foot(12,0,{knee:.1}),footR:foot(-12,0,{knee:.1}),armR:{d:[-.2,.95,.2],e:.9},armL:{d:[.2,.95,.2],e:.9},expr:'shut-line',phase:'力む crouches and gathers herself'},1],
   [{...STAND,hipY:180,pitch:-6,torso:22,footL:foot(12,0,{knee:0}),footR:foot(-12,0,{knee:0}),armR:{d:[-.9,-.1,.3],e:1},armL:{d:[.9,.1,.2],e:1},expr:'o',phase:'振りほどく bursts out: twists and flings both arms wide'},1],
   [{...STAND,rootZ:-6,hipY:186,pitch:-10,torso:6,footL:foot(10,-2,{knee:-.1}),footR:foot(-10,-18,{knee:.1}),armR:{d:[-.6,.3,.6],e:.9},armL:{d:[.6,.4,.5],e:.9},expr:'o',phase:'よろける staggers a step back'},2],
   [{...STAND,rootZ:-8,hipY:188,pitch:6,footL:foot(11,-2,{knee:.1}),footR:foot(-11,-16,{knee:.1}),armR:{d:[-.3,.3,.9],e:.7},armL:{d:[.3,.3,.9],e:.7},expr:'line',phase:'構え直す hands up, knees soft, ready again'},0]]).map(k=>({...k,ms:k.phase?.startsWith('振りほどく')?70:95}))},
@@ -322,11 +328,11 @@ export function library(){
  const poses={},meta={};
  for(const [name,m] of Object.entries(MOTIONS)){
   poses[name]={};
-  for(const d of DIRECTIONS)poses[name][d]=m.keys.map((k,i)=>{const J=pose(k);return{direction:d,yaw:YAW[d],motion:name,frame:i,frame_ms:k.ms,phase:k.phase,expr:k.expr,
+  for(const d of DIRECTIONS)poses[name][d]=m.keys.map((k,i)=>{const J=pose(k);return{direction:d,yaw:YAW[d],motion:name,frame:i,frame_ms:Math.round(k.ms*(k.msScale||1)),phase:k.phase,expr:k.expr,
    binds:(k.binds||[]).map((b,bi)=>({joint:b.j,joint2:b.j2,anchor:b.to?'bind'+bi:null,creature:b.creature?1:undefined,partner:b.partner?1:undefined,noLoop:b.noLoop?1:undefined,
     coil:b.coil?1:undefined,r:b.r,engulf:b.engulf?1:undefined,level:b.level,bubble:b.bubble?1:undefined})),
    joints:project(J,d)}});
-  meta[name]={label:m.label,loop:m.loop,view:m.view,frame_ms:m.keys.map(k=>k.ms),phases:m.keys.map(k=>k.phase)};
+  meta[name]={label:m.label,loop:m.loop,view:m.view,frame_ms:m.keys.map(k=>Math.round(k.ms*(k.msScale||1))),phases:m.keys.map(k=>k.phase)};
  }
  return{schema:'anatomical-eight-direction-motion/1.0',extends:'poses.json / attack-poses.json / restraint-poses.json (same skeleton, 288x288 canvas, centre x 144, projection)',
   canvas:[288,288],centre_x:144,ground_y:242,directions:DIRECTIONS,yaw:YAW,

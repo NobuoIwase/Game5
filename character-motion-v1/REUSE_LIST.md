@@ -24,13 +24,13 @@
 
 ## 全体
 
-全 **2400** コマのうち：
-- **新規 1938**
-- 同じ絵 402
-- 顔だけ 7
-- 頭だけ 53
+全 **2887** コマのうち：
+- **新規 2345**
+- 同じ絵 469
+- 顔だけ 9
+- 頭だけ 64
 
-描く量は 1938 コマ＋部分描き替え 60 コマ。
+描く量は 2345 コマ＋部分描き替え 73 コマ。
 
 **作成済みで依頼しないもの**
 - 歩行・走行：`exports/<character>/walk.png` / `run.png`
@@ -129,7 +129,7 @@
 
 ## ほかのヒロイン（依頼書：HEROINE_MOTION_REQUEST.md）
 
-新規 **629** コマ・同じ絵 71・顔だけ 0・頭だけ 6（全706コマ）
+新規 **937** コマ・同じ絵 130・顔だけ 0・頭だけ 17（全1084コマ）
 
 | id | 向き | コマ | 新規 | 同じ絵 | 顔だけ | 頭だけ | 使い回すコマ（このコマ＝元のコマ） |
 |---|---|---|---|---|---|---|---|
@@ -148,10 +148,26 @@
 | `healer_hex` | front | 6 | **3** | 3 | 0 | 0 | 0＝healer_buff 0、4＝2、5＝healer_buff 0 |
 | `healer_disgust` | front | 9 | **8** | 1 | 0 | 0 | 0＝healer_buff 0 |
 | `healer_cover` | front | 8 | **3** | 5 | 0 | 0 | 2＝1、3＝1、4＝0、6＝5、7＝5 |
+| `scout_sidestep` | 8方向 | 64 | **56** | 8 | 0 | 0 | 0＝scout_knife_combo 0（8方向とも、同じ方向のコマ） |
+| `scout_dash_stop` | right | 10 | **10** | 0 | 0 | 0 | ― |
+| `scout_tail_grabbed` | right | 8 | **8** | 0 | 0 | 0 | ― |
+| `scout_pack_adjust` | down_right | 11 | **9** | 2 | 0 | 0 | 0＝scout_rummage 0、10＝scout_rummage 0 |
+| `scout_tension` | front | 9 | **9** | 0 | 0 | 0 | ― |
+| `mage_barrier` | 8方向 | 80 | **64** | 16 | 0 | 0 | 0＝mage_bolt 0、9＝mage_bolt 0（8方向とも、同じ方向のコマ） |
+| `mage_overheat` | front | 12 | **9** | 3 | 0 | 0 | 5＝3、6＝2、11＝mage_bolt 0 |
+| `mage_hat_tug` | down_right | 12 | **10** | 1 | 0 | 1 | 0＝mage_bolt 0、11＝（頭）mage_bolt 0 |
+| `mage_arms_bound` | front | 8 | **5** | 3 | 0 | 0 | 3＝1、4＝0、7＝5 |
+| `mage_recover` | front | 14 | **12** | 2 | 0 | 0 | 0＝mage_suppress_tension 6、13＝mage_bolt 0 |
+| `healer_kneel_heal` | down_right | 8 | **3** | 5 | 0 | 0 | 2＝1、3＝1、4＝0、6＝5、7＝5 |
+| `healer_purify` | 8方向 | 104 | **88** | 16 | 0 | 0 | 0＝healer_buff 0、12＝healer_buff 0（8方向とも、同じ方向のコマ） |
+| `healer_panel_catch` | front | 9 | **8** | 1 | 0 | 0 | 0＝healer_buff 0 |
+| `healer_run_cover` | right | 8 | **8** | 0 | 0 | 0 | ― |
+| `healer_dark_prayer` | up_right | 13 | **3** | 2 | 0 | 8 | 0＝healer_buff 0、1＝（頭）healer_buff 0、2＝（頭）healer_buff 0、6＝（頭）5、7＝（頭）5、8＝（頭）5、9＝（頭）5、10＝（頭）4、11＝（頭）3、12＝healer_buff 0 |
+| `healer_tension_refuse` | front | 8 | **6** | 0 | 0 | 2 | 0＝（頭）healer_cover 0、1＝（頭）healer_cover 0 |
 
 ## つなぎ（依頼書：SCENE_MOTION_REQUEST.md 5章）
 
-新規 **296** コマ・同じ絵 92・顔だけ 3・頭だけ 1（全392コマ）
+新規 **395** コマ・同じ絵 100・顔だけ 5・頭だけ 1（全501コマ）
 
 | id | 向き | コマ | 新規 | 同じ絵 | 顔だけ | 頭だけ | 使い回すコマ（このコマ＝元のコマ） |
 |---|---|---|---|---|---|---|---|
@@ -226,6 +242,24 @@
 | `stand@mage__mage_suppress` | front | 6 | **6** | 0 | 0 | 0 | ― |
 | `mage_suppress__stand@mage` | front | 6 | **0** | 6 | 0 | 0 | 0＝stand@mage__mage_suppress 5、1＝stand@mage__mage_suppress 4、2＝stand@mage__mage_suppress 3、3＝stand@mage__mage_suppress 2、4＝stand@mage__mage_suppress 1、5＝stand@mage__mage_suppress 0 |
 | `mage_suppress_tension__stand@mage` | front | 3 | **3** | 0 | 0 | 0 | ― |
+| `stand@scout__scout_sidestep` | front | 3 | **3** | 0 | 0 | 0 | ― |
+| `scout_sidestep__stand@scout` | front | 4 | **4** | 0 | 0 | 0 | ― |
+| `stand@scout__scout_dash_stop` | right | 4 | **4** | 0 | 0 | 0 | ― |
+| `stand@scout__scout_tail_grabbed` | right | 4 | **1** | 3 | 0 | 0 | 1＝0、2＝0、3＝0 |
+| `scout_tail_grabbed__stand@scout` | right | 8 | **8** | 0 | 0 | 0 | ― |
+| `stand@scout__scout_tension` | front | 3 | **3** | 0 | 0 | 0 | ― |
+| `scout_tension__sit_afterglow` | front | 2 | **2** | 0 | 0 | 0 | ― |
+| `scout_tail_grabbed__scout_tension` | front | 8 | **8** | 0 | 0 | 0 | ― |
+| `mage_bolt__mage_overheat` | front | 3 | **3** | 0 | 0 | 0 | ― |
+| `stand@mage__mage_arms_bound` | front | 18 | **18** | 0 | 0 | 0 | ― |
+| `mage_arms_bound__break_free` | front | 15 | **15** | 0 | 0 | 0 | ― |
+| `mage_arms_bound__mage_suppress_tension` | front | 20 | **19** | 1 | 0 | 0 | 19＝mage_suppress_tension 0 |
+| `stand@healer__healer_kneel_heal` | down_right | 3 | **3** | 0 | 0 | 0 | ― |
+| `healer_kneel_heal__stand@healer` | down_right | 3 | **0** | 2 | 1 | 0 | 0＝stand@healer__healer_kneel_heal 2、1＝（顔）stand@healer__healer_kneel_heal 1、2＝stand@healer__healer_kneel_heal 0 |
+| `stand@healer__healer_run_cover` | right | 3 | **3** | 0 | 0 | 0 | ― |
+| `healer_run_cover__healer_panel_catch` | front | 3 | **3** | 0 | 0 | 0 | ― |
+| `healer_run_cover__stand@healer` | right | 3 | **0** | 2 | 1 | 0 | 0＝stand@healer__healer_run_cover 2、1＝（顔）stand@healer__healer_run_cover 1、2＝stand@healer__healer_run_cover 0 |
+| `healer_tension_refuse__sit_recover` | front | 2 | **2** | 0 | 0 | 0 | ― |
 | `stand@healer__healer_pray` | front | 3 | **3** | 0 | 0 | 0 | ― |
 | `healer_pray__stand@healer` | front | 3 | **0** | 2 | 1 | 0 | 0＝stand@healer__healer_pray 2、1＝（顔）stand@healer__healer_pray 1、2＝stand@healer__healer_pray 0 |
 | `healer_cover__stand@healer` | front | 3 | **3** | 0 | 0 | 0 | ― |
@@ -251,7 +285,7 @@
 - いまの戦士の部位素材（`parts/warrior/`）は腕・脚が1枚ずつで、肘・膝は変形で曲げている
   - この見積もりの形にするには、上腕・前腕・太もも・すねに分け直す必要がある
 
-**判定のしかた**：依頼する全2400コマについて、部位ごとに見える角度を骨格から計算した。回すだけで済まず、新しい絵が要るのは次の場合。
+**判定のしかた**：依頼する全2887コマについて、部位ごとに見える角度を骨格から計算した。回すだけで済まず、新しい絵が要るのは次の場合。
 
 | 部位 | 新しい絵が要る場合 |
 |---|---|
@@ -262,9 +296,9 @@
 | 足 | つま先まで伸ばす／足裏が見える／甲を上から見る |
 
 **結果**
-- **既存の部位だけで組める**：768コマ（32%）
-- **ほかの1632コマ**：次の新しい部位の絵を足せば組める
-- **新しく描く部位の絵**：115枚（うち表情30枚）。1枚描けば、それを使う全コマで使い回せる
+- **既存の部位だけで組める**：981コマ（34%）
+- **ほかの1906コマ**：次の新しい部位の絵を足せば組める
+- **新しく描く部位の絵**：120枚（うち表情33枚）。1枚描けば、それを使う全コマで使い回せる
 
 ### 頭（3枚）
 
@@ -274,26 +308,28 @@
 | 正面・上から（うつむき・頭頂が見える） | `afterglow_slump`、`scout_disarm` |
 | 正面・下から（のけぞり・あごの下が見える） | `tension_arch` |
 
-### 顔（30枚）
+### 顔（33枚）
 
 | 見え方 | 使うモーション |
 |---|---|
-| 正面・口を結んだ | `arms_behind_squirm`、`arms_behind_wrench`、`elbows_up_strain`、`legs_pulled_open`、`legs_held_open`、`tension_tiptoe` ほか53 |
-| 正面・口を開けた | `hip_rock_spread`、`hip_rock_closed`、`bounce_spread`、`bounce_hung`、`tension_tiptoe`、`tension_arch` ほか33 |
-| 右・口を結んだ | `down_pinned_kick`、`down_pinned_spread`、`down_face_down`、`kiss_recover`、`ankle_grabbed`、`edge_pull` ほか16 |
-| 正面・目を閉じて口を開けた | `tension_tiptoe`、`tension_arch`、`afterglow_spread`、`chain_splay`、`tension_free`、`clinger_afterglow` ほか14 |
-| 右・口を開けた | `down_fall_back`、`down_hips_up`、`down_afterglow`、`down_recover`、`kiss_afterglow`、`kiss_recover` ほか14 |
-| 右・目を閉じた | `down_fall_back`、`down_hips_up`、`get_up`、`kiss_tension`、`kiss_respond`、`down_tension` ほか9 |
-| 正面・目を閉じて口を結んだ | `clinger_peel`、`clinger_tension`、`wrap_squeeze`、`break_free`、`shiver_hug`、`mage_suppress` ほか6 |
-| 右斜め前・口を結んだ | `held_from_behind`、`spore_inhale`、`scout_knife_combo`、`scout_throw`、`scout_sense`、`healer_hex` ほか3 |
-| 正面・目を閉じた | `tension_tiptoe`、`tension_arch`、`mage_suppress_tension`、`healer_pray`、`mage_suppress_tension__stand@mage`、`stand@healer__healer_pray` ほか1 |
+| 正面・口を結んだ | `arms_behind_squirm`、`arms_behind_wrench`、`elbows_up_strain`、`legs_pulled_open`、`legs_held_open`、`tension_tiptoe` ほか65 |
+| 正面・口を開けた | `hip_rock_spread`、`hip_rock_closed`、`bounce_spread`、`bounce_hung`、`tension_tiptoe`、`tension_arch` ほか37 |
+| 右・口を結んだ | `down_pinned_kick`、`down_pinned_spread`、`down_face_down`、`kiss_recover`、`ankle_grabbed`、`edge_pull` ほか19 |
+| 右・口を開けた | `down_fall_back`、`down_hips_up`、`down_afterglow`、`down_recover`、`kiss_afterglow`、`kiss_recover` ほか16 |
+| 正面・目を閉じて口を開けた | `tension_tiptoe`、`tension_arch`、`afterglow_spread`、`chain_splay`、`tension_free`、`clinger_afterglow` ほか15 |
+| 右・目を閉じた | `down_fall_back`、`down_hips_up`、`get_up`、`kiss_tension`、`kiss_respond`、`down_tension` ほか10 |
+| 正面・目を閉じて口を結んだ | `clinger_peel`、`clinger_tension`、`wrap_squeeze`、`break_free`、`shiver_hug`、`mage_suppress` ほか8 |
+| 右斜め前・口を結んだ | `held_from_behind`、`spore_inhale`、`scout_knife_combo`、`scout_throw`、`scout_sense`、`healer_hex` ほか5 |
+| 正面・目を閉じた | `tension_tiptoe`、`tension_arch`、`mage_suppress_tension`、`healer_pray`、`mage_recover`、`healer_purify` ほか3 |
+| 左斜め前・口を結んだ | `held_from_behind`、`scout_knife_combo`、`scout_throw`、`scout_sense`、`healer_disgust`、`healer_panel_catch` ほか1 |
 | 右・目を閉じて口を開けた | `down_fall_back`、`kiss_tension`、`down_afterglow`、`edge_pull`、`walk_unsteady`、`defeat_collapse` |
 | 右・目を閉じて口を結んだ | `kiss_forced`、`kiss_tension`、`stand__kiss_forced`、`kiss_forced__kiss_respond`、`kiss_respond__kiss_tension` |
-| 左斜め前・口を結んだ | `held_from_behind`、`scout_knife_combo`、`scout_throw`、`scout_sense`、`healer_disgust` |
+| 右斜め前・目を閉じた | `spore_inhale`、`healer_kneel_heal`、`healer_purify`、`stand@healer__healer_kneel_heal`、`healer_kneel_heal__stand@healer` |
 | 右・下から・口を結んだ | `down_pinned_spread`、`down_recover`、`down_pinned_kick__down_pinned_spread` |
+| 右斜め前・口を開けた | `walk_unsteady`、`scout_rummage`、`scout_pack_adjust` |
 | 右・下から・口を開けた | `down_pinned_rock`、`down_tension` |
-| 右斜め前・口を開けた | `walk_unsteady`、`scout_rummage` |
 | 左・口を結んだ | `scout_knife_combo`、`scout_throw` |
+| 左斜め前・目を閉じて口を結んだ | `healer_disgust`、`healer_panel_catch` |
 | 正面・下から・目を閉じて口を開けた | `tension_arch` |
 | 正面・上から・口を開けた | `afterglow_slump` |
 | 正面・上から・目を閉じて口を開けた | `afterglow_slump` |
@@ -305,9 +341,10 @@
 | 左・目を閉じて口を開けた | `walk_unsteady` |
 | 左斜め前・口を開けた | `walk_unsteady` |
 | 左斜め前・目を閉じて口を開けた | `walk_unsteady` |
-| 右斜め前・目を閉じた | `spore_inhale` |
 | 正面・上から・口を結んだ | `scout_disarm` |
-| 左斜め前・目を閉じて口を結んだ | `healer_disgust` |
+| 左・目を閉じた | `healer_purify` |
+| 左斜め前・目を閉じた | `healer_purify` |
+| 右斜め前・目を閉じて口を結んだ | `scout_tail_grabbed__scout_tension` |
 
 ### 上半身（5枚）
 
@@ -333,12 +370,12 @@
 
 | 見え方 | 使うモーション |
 |---|---|
-| front向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko`、`swing_abandon`、`scout_knife_combo` ほか8 |
-| back向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`swing_abandon`、`scout_knife_combo` ほか3 |
-| down_right向きの図・先がこちら向き | `yoko`、`thrust`、`swing_abandon`、`scout_knife_combo`、`scout_throw`、`scout_rummage` ほか2 |
+| front向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko`、`swing_abandon`、`scout_knife_combo` ほか13 |
+| back向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`swing_abandon`、`scout_knife_combo` ほか4 |
+| down_right向きの図・先がこちら向き | `yoko`、`thrust`、`swing_abandon`、`scout_knife_combo`、`scout_throw`、`scout_rummage` ほか3 |
+| up_right向きの図・先が奥向き | `heavy`、`yoko`、`scout_knife_combo`、`scout_throw`、`mage_bolt`、`mage_area` ほか2 |
+| down_left向きの図・先がこちら向き | `heavy`、`yoko`、`scout_knife_combo`、`scout_throw`、`mage_bolt`、`mage_area` ほか2 |
 | front向きの図・先がこちら向き（ほぼ真正面） | `heavy`、`yoko`、`thrust`、`scout_throw`、`mage_bolt`、`healer_buff` ほか1 |
-| up_right向きの図・先が奥向き | `heavy`、`yoko`、`scout_knife_combo`、`scout_throw`、`mage_bolt`、`mage_area` ほか1 |
-| down_left向きの図・先がこちら向き | `heavy`、`yoko`、`scout_knife_combo`、`scout_throw`、`mage_bolt`、`mage_area` ほか1 |
 | up_left向きの図・先が奥向き | `yoko`、`thrust`、`swing_abandon`、`scout_knife_combo`、`scout_throw`、`mage_area` ほか1 |
 | down_right向きの図・先が奥向き | `down_pinned_spread`、`down_pinned_rock`、`down_afterglow`、`down_recover`、`down_tension`、`down_pinned_kick__down_pinned_spread` ほか1 |
 | back向きの図・先が奥向き（ほぼ真正面） | `heavy`、`yoko`、`thrust`、`scout_throw`、`mage_bolt`、`healer_buff` |
@@ -350,48 +387,49 @@
 | up_right向きの図・先がこちら向き | `kesa`、`thrust`、`scout_throw` |
 | left向きの図・先がこちら向き | `kesa`、`yoko`、`mage_area` |
 | down_left向きの図・先が奥向き | `kesa`、`thrust`、`scout_throw` |
-| down_right向きの図・先がこちら向き（ほぼ真正面） | `scout_knife_combo`、`scout_rummage` |
+| down_right向きの図・先がこちら向き（ほぼ真正面） | `scout_knife_combo`、`scout_rummage`、`healer_purify` |
+| up_left向きの図・先が奥向き（ほぼ真正面） | `scout_knife_combo`、`healer_purify` |
 | up_right向きの図・先がこちら向き（ほぼ真正面） | `heavy` |
 | down_left向きの図・先が奥向き（ほぼ真正面） | `heavy` |
 | front向きの図・先が奥向き | `thrust` |
 | back向きの図・先がこちら向き | `thrust` |
-| up_left向きの図・先が奥向き（ほぼ真正面） | `scout_knife_combo` |
 | down_right向きの図・先が奥向き（ほぼ真正面） | `down_tension__down_afterglow` |
 
-### 前腕（23枚）
+### 前腕（24枚）
 
 | 見え方 | 使うモーション |
 |---|---|
-| front向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか32 |
-| front向きの図・先がこちら向き（ほぼ真正面） | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`clinger_peel` ほか10 |
-| down_right向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか7 |
-| back向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか7 |
-| up_right向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか6 |
-| up_left向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか6 |
-| down_left向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか6 |
-| back向きの図・先が奥向き（ほぼ真正面） | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`scout_knife_combo` ほか3 |
+| front向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか41 |
+| front向きの図・先がこちら向き（ほぼ真正面） | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`clinger_peel` ほか13 |
+| back向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか10 |
+| down_right向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか9 |
+| up_right向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか9 |
+| up_left向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか8 |
+| down_left向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか8 |
+| back向きの図・先が奥向き（ほぼ真正面） | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`scout_knife_combo` ほか4 |
+| front向きの図・先が奥向き（ほぼ真正面） | `slash`、`kesa`、`yoko`、`thrust`、`scout_tension`、`scout_tail_grabbed__scout_tension` |
+| front向きの図・先が奥向き | `yoko`、`clinger_tension`、`scout_throw`、`scout_tension`、`stand@scout__scout_tension`、`scout_tail_grabbed__scout_tension` |
+| right向きの図・先がこちら向き | `kiss_tension`、`healer_run_cover`、`stand__kiss_forced`、`clinger_recover__walk_unsteady`、`stand@healer__healer_run_cover`、`healer_run_cover__stand@healer` |
+| right向きの図・先が奥向き | `kiss_tension`、`kiss_recover`、`scout_tail_grabbed`、`stand__kiss_forced`、`clinger_recover__walk_unsteady`、`reach_toward__stand` |
 | down_right向きの図・先がこちら向き（ほぼ真正面） | `heavy`、`swing_abandon`、`scout_knife_combo`、`scout_rummage`、`mage_bolt` |
-| right向きの図・先が奥向き | `kiss_tension`、`kiss_recover`、`stand__kiss_forced`、`clinger_recover__walk_unsteady`、`reach_toward__stand` |
-| front向きの図・先が奥向き（ほぼ真正面） | `slash`、`kesa`、`yoko`、`thrust` |
+| down_right向きの図・先が奥向き | `down_afterglow`、`down_recover`、`scout_throw`、`scout_pack_adjust`、`down_tension__down_afterglow` |
 | back向きの図・先がこちら向き（ほぼ真正面） | `slash`、`kesa`、`yoko`、`thrust` |
 | up_left向きの図・先が奥向き（ほぼ真正面） | `heavy`、`swing_abandon`、`scout_knife_combo`、`mage_bolt` |
-| down_right向きの図・先が奥向き | `down_afterglow`、`down_recover`、`scout_throw`、`down_tension__down_afterglow` |
-| front向きの図・先が奥向き | `yoko`、`clinger_tension`、`scout_throw` |
-| right向きの図・先がこちら向き | `kiss_tension`、`stand__kiss_forced`、`clinger_recover__walk_unsteady` |
+| up_right向きの図・先が奥向き（ほぼ真正面） | `scout_knife_combo`、`mage_area`、`healer_dark_prayer` |
+| right向きの図・先がこちら向き（ほぼ真正面） | `healer_purify`、`stand__kiss_forced`、`clinger_recover__walk_unsteady` |
 | right向きの図・先が奥向き（ほぼ真正面） | `yoko`、`clinger_recover__walk_unsteady` |
 | back向きの図・先がこちら向き | `yoko`、`scout_throw` |
-| up_right向きの図・先が奥向き（ほぼ真正面） | `scout_knife_combo`、`mage_area` |
 | down_left向きの図・先がこちら向き（ほぼ真正面） | `scout_knife_combo`、`mage_area` |
-| right向きの図・先がこちら向き（ほぼ真正面） | `stand__kiss_forced`、`clinger_recover__walk_unsteady` |
 | left向きの図・先がこちら向き（ほぼ真正面） | `yoko` |
 | up_left向きの図・先がこちら向き | `scout_throw` |
+| left向きの図・先が奥向き（ほぼ真正面） | `healer_purify` |
 
 ### 太もも（4枚）
 
 | 見え方 | 使うモーション |
 |---|---|
-| front向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか10 |
-| front向きの図・先がこちら向き（ほぼ真正面） | `heavy`、`thrust`、`sit_recover`、`clinger_recover`、`scout_disarm`、`mage_suppress_tension` ほか3 |
+| front向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか14 |
+| front向きの図・先がこちら向き（ほぼ真正面） | `heavy`、`thrust`、`sit_recover`、`clinger_recover`、`scout_disarm`、`mage_suppress_tension` ほか4 |
 | back向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか1 |
 | back向きの図・先が奥向き（ほぼ真正面） | `heavy`、`thrust` |
 
@@ -399,25 +437,25 @@
 
 | 見え方 | 使うモーション |
 |---|---|
-| front向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`tension_free`、`sit_recover` ほか6 |
-| front向きの図・先が奥向き（ほぼ真正面） | `tension_free`、`sit_afterglow`、`sit_recover`、`clinger_afterglow`、`clinger_recover`、`clinger_tension` ほか6 |
+| front向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`tension_free`、`sit_recover` ほか9 |
+| front向きの図・先が奥向き（ほぼ真正面） | `tension_free`、`sit_afterglow`、`sit_recover`、`clinger_afterglow`、`clinger_recover`、`clinger_tension` ほか9 |
 | back向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko` |
 | down_right向きの図・先がこちら向き（ほぼ真正面） | `down_afterglow`、`down_recover`、`down_tension`、`down_tension__down_afterglow` |
 | down_right向きの図・先が奥向き | `heavy` |
 | up_left向きの図・先がこちら向き | `heavy` |
 | down_right向きの図・先がこちら向き | `down_tension` |
 
-### 足（14枚）
+### 足（15枚）
 
 | 見え方 | 使うモーション |
 |---|---|
-| front向きの図・甲を上から | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか16 |
-| right向きの図・つま先まで伸ばした | `advance`、`retreat`、`down_fall_back`、`down_pinned_kick`、`down_face_down`、`get_up` ほか9 |
-| back向きの図・足裏が見える | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか3 |
+| front向きの図・甲を上から | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか21 |
+| right向きの図・つま先まで伸ばした | `advance`、`retreat`、`down_fall_back`、`down_pinned_kick`、`down_face_down`、`get_up` ほか10 |
+| back向きの図・足裏が見える | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか4 |
 | up_left向きの図・足裏が見える | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか1 |
 | down_right向きの図・つま先まで伸ばした | `advance`、`retreat`、`down_pinned_spread`、`down_pinned_rock`、`down_recover`、`down_tension` ほか1 |
+| front向きの図・つま先まで伸ばした | `advance`、`retreat`、`tension_tiptoe`、`wrap_tension`、`scout_tension`、`healer_tension_refuse` |
 | down_right向きの図・足裏が見える | `down_pinned_rock`、`down_afterglow`、`down_recover`、`down_tension`、`down_tension__down_afterglow` |
-| front向きの図・つま先まで伸ばした | `advance`、`retreat`、`tension_tiptoe`、`wrap_tension` |
 | right向きの図・足裏が見える | `down_pinned_kick`、`down_face_down`、`defeat_collapse` |
 | right向きの図・甲を上から | `down_face_down`、`ankle_grabbed`、`defeat_collapse` |
 | up_right向きの図・つま先まで伸ばした | `advance`、`retreat` |
@@ -425,6 +463,7 @@
 | up_left向きの図・つま先まで伸ばした | `advance`、`retreat` |
 | left向きの図・つま先まで伸ばした | `advance`、`retreat` |
 | down_left向きの図・つま先まで伸ばした | `advance`、`retreat` |
+| up_right向きの図・足裏が見える | `healer_dark_prayer` |
 
 ### 手（形の種類で数える）
 
@@ -443,10 +482,10 @@
   - 背中を大きく反らす頂点
   - 輪で締め付けられる
   - 前屈み・四つん這い・寝た姿勢
-  - 新しい部位を4つ以上同時に使うコマ：142コマ（`motion/part-reuse.json`）
+  - 新しい部位を4つ以上同時に使うコマ：156コマ（`motion/part-reuse.json`）
   - これらは、組み立てた上で一部を描き足す（仕上げる）か、1枚絵にする候補
 - **衣装・髪**：脚を大きく開く、寝る、逆さに近い姿勢では、スカートや髪の形が変わる
   - キャラクターごとに差分が要る（骨格からは数えていない）
-- **比べると**：1枚絵なら新規1938コマ＋部分描き替え60コマ
-  - 部位の組み立てなら、新しい部位の絵115枚＋手3種類×方向＋衣装・髪の差分＋仕上げ
+- **比べると**：1枚絵なら新規2345コマ＋部分描き替え73コマ
+  - 部位の組み立てなら、新しい部位の絵120枚＋手3種類×方向＋衣装・髪の差分＋仕上げ
   - どちらで作るかは、絵の質と手間の兼ね合いで決める

@@ -38,9 +38,9 @@ export const MOTIONS={
  scout_sense:{look:'scout',label:'斥候：気配を察知して身を低くし、辺りをうかがう',loop:false,view:'front',keys:tween([
   [{...STAND,phase:'立つ standing'},1],
   [{...STAND,hipY:179,head:[6,0,0],expr:'o',phase:'気づく stops short, ears up, head lifts'},2],
-  [{...STAND,hipY:192,pitch:12,footL:foot(12,4,{knee:.3}),footR:foot(-12,-6,{knee:.3}),armL:{d:[.4,-.1,.9],e:.6},head:[0,0,40],expr:'line',phase:'うかがう drops low, a hand up (wait); looks one way'},2],
-  [{...STAND,hipY:192,pitch:12,footL:foot(12,4,{knee:.3}),footR:foot(-12,-6,{knee:.3}),armL:{d:[.4,-.1,.9],e:.6},head:[0,0,-40],expr:'line',phase:'見回す and the other'},2],
-  [{...STAND,hipY:190,pitch:10,footL:foot(12,4,{knee:.3}),footR:foot(-12,-6,{knee:.3}),armL:{d:[.2,.4,.9],e:.9},head:[-6,0,0],expr:'line',phase:'指す points to where it is'},2],
+  [{...STAND,hipY:192,pitch:12,footL:foot(8,7,{knee:-.12}),footR:foot(-8,-9,{knee:-.12,lift:4}),armL:{d:[.4,-.1,.9],e:.6},head:[0,0,40],expr:'line',phase:'うかがう drops low - feet close, one ahead, knees forward, the back heel up - a hand up (wait); looks one way'},2],
+  [{...STAND,hipY:192,pitch:12,footL:foot(8,7,{knee:-.12}),footR:foot(-8,-9,{knee:-.12,lift:4}),armL:{d:[.4,-.1,.9],e:.6},head:[0,0,-40],expr:'line',phase:'見回す and the other'},2],
+  [{...STAND,hipY:190,pitch:10,footL:foot(8,7,{knee:-.12}),footR:foot(-8,-9,{knee:-.12,lift:4}),armL:{d:[.2,.4,.9],e:.9},head:[-6,0,0],expr:'line',phase:'指す points to where it is'},2],
   [{...STAND,phase:'立つ'},0]]).map(k=>({...k,ms:110}))},
  scout_disarm:{look:'scout',label:'斥候：片膝をついて罠を外す',loop:true,view:'front',keys:loop(8,120,t=>({...STAND,
   hipY:205,pitch:32,head:[-30,0,6*S(t)],
@@ -100,7 +100,94 @@ export const MOTIONS={
   [{...STAND,armR:{d:[-.28,.6,.5],e:.7},armL:{t:[-6,34,12],p:[1,.4,.4]},prop:STAFF_UP,expr:'line',phase:'構え直す straightens, still covering herself'},0]]).map(k=>({...k,ms:k.phase?.startsWith('拒む')?60:100}))},
  healer_cover:{look:'healer',label:'ヒーラー：前垂れを押さえて胸を隠しながら立つ',loop:true,view:'front',keys:loop(8,140,t=>({...STAND,
   sway:1.5*S(t),pelvis:4*S(t),head:[-8,0,0],armL:{t:[-5,33,12],p:[1,.4,.4]},armR:{d:[-.28,.6,.5],e:.7},prop:STAFF_UP,expr:'line',
-  phase:'an arm across her chest holding the front panels down; as she sways they would lift'}))}
+  phase:'an arm across her chest holding the front panels down; as she sways they would lift'}))},
+ /* ======== scout: more of her own ======== */
+ scout_sidestep:{look:'scout',label:'斥候：低く横へ跳んで身をかわす',loop:false,view:'front',all8:true,keys:tween([
+  [{...LOWGUARD,phase:'構え'},1],
+  [{...LOWGUARD,hipY:191,sway:-6,pitch:12,footL:foot(9,6,{knee:.05}),footR:foot(-12,-8,{knee:.05}),phase:'沈む drops her weight to push off'},1],
+  [{...LOWGUARD,hipY:180,sway:14,torso:-8,footL:foot(22,4,{lift:8,air:1,knee:0}),footR:foot(4,-6,{lift:10,air:1,knee:0}),armL:{d:[.6,.2,.7],e:.9},phase:'跳ぶ springs sideways, low'},1],
+  [{...LOWGUARD,hipY:192,sway:24,pitch:14,footL:foot(34,4,{knee:.1}),footR:foot(14,-8,{knee:.1}),phase:'着地 lands low, the knife still up'},2],
+  [{...LOWGUARD,sway:24,footL:foot(34,8,{knee:.1}),footR:foot(14,-10,{knee:.1}),phase:'構え ready again, a step aside'},0]]).map(k=>({...k,ms:/^跳ぶ/.test(k.phase)?50:80}))},
+ scout_dash_stop:{look:'scout',label:'斥候：身を低くして駆け込み、足を滑らせて止まる',loop:false,view:'right',keys:tween([
+  [{...STAND,hipY:186,pitch:24,rootZ:0,footL:foot(9,18,{lift:4,air:1,knee:.1,up:.4}),footR:foot(-9,-20,{lift:6,point:30}),armR:{d:[-.2,.3,-.9],e:.9},armL:{d:[.2,.5,.8],e:.8},phase:'駆ける a long low stride'},2],
+  [{...STAND,hipY:188,pitch:-6,rootZ:6,footL:foot(9,30,{knee:.05}),footR:foot(-9,4,{knee:.2}),armR:{d:[-.5,.3,.8],e:.9},armL:{d:[.5,.3,.8],e:.9},expr:'o',phase:'滑る the lead foot plants and slides, body leaning back'},2],
+  [{...STAND,hipY:196,pitch:10,rootZ:10,footL:foot(9,32,{knee:.2}),footR:foot(-9,6,{knee:.3}),armR:{d:[-.3,.9,.3],e:.95},armL:{d:[.4,.6,.7],e:.8},phase:'止まる stops low, one hand near the floor'},2],
+  [{...STAND,rootZ:12,footL:foot(10,12,{yaw:-8,knee:-.25}),footR:foot(-10,12,{yaw:-8,knee:-.25}),phase:'立つ standing, feet together under her'},0]]).map(k=>({...k,ms:80}))},
+ scout_tail_grabbed:{look:'scout',label:'斥候：尻尾をつかまれて跳び上がり、手を後ろへやる',loop:false,view:'right',keys:tween([
+  [{...STAND,binds:[{j:'root',to:[0,194,-30]}],phase:'立つ something reaches her tail from behind'},1],
+  [{...STAND,hipY:176,pitch:-12,shrug:4,head:[10,0,0],footL:foot(9,0,{point:30,knee:-.2}),footR:foot(-9,0,{point:30,knee:-.2}),armR:{d:[-.4,.1,.9],e:.6},armL:{d:[.4,.1,.9],e:.6},binds:[{j:'root',to:[0,196,-46]}],expr:'o',phase:'びくっ the tail is seized: she jumps upright onto her toes'},1],
+  [{...STAND,hipY:184,pitch:-8,head:[-4,0,50],armR:{d:[-.3,.6,-.75],e:.95},armL:{d:[.3,.6,-.75],e:.95},binds:[{j:'root',to:[0,196,-50]}],expr:'line',phase:'振り返る looks back over her shoulder, both hands reaching back for it'},2],
+  [{...STAND,hipY:188,pitch:12,head:[-10,0,40],footL:foot(9,4,{knee:-.4}),footR:foot(-9,0,{knee:-.4}),armR:{d:[-.3,.6,-.75],e:.95},armL:{d:[.3,.6,-.75],e:.95},binds:[{j:'root',to:[0,196,-54]}],expr:'shut-line',phase:'すくむ knees give inward; pulling at it'},0]]).map(k=>({...k,ms:k.phase?.startsWith('びくっ')?60:100}))},
+ scout_pack_adjust:{look:'scout',label:'斥候：バックパックの肩ひもを引き上げて背負い直す（待機の仕草）',loop:false,view:'down_right',keys:tween([
+  [{...STAND,phase:'立つ'},2],
+  [{...STAND,hipY:183,armR:{t:[-7,40,4],p:[-1,.3,.5]},armL:{t:[7,40,4],p:[1,.3,.5]},head:[-6,0,0],phase:'つかむ hands on both straps'},2],
+  [{...STAND,hipY:178,shrug:4,pitch:-4,footL:foot(10,0,{lift:4}),footR:foot(-10,0,{lift:4}),armR:{t:[-7,44,4],p:[-1,.3,.5]},armL:{t:[7,44,4],p:[1,.3,.5]},phase:'背負い直す a little hop and a shrug to hitch the pack up'},1],
+  [{...STAND,armR:{t:[-7,38,4],p:[-1,.3,.5]},armL:{t:[7,38,4],p:[1,.3,.5]},expr:'o',phase:'よし settled, a satisfied breath'},2],
+  [{...STAND,phase:'立つ'},0]]).map(k=>({...k,ms:100}))},
+ scout_tension:{look:'scout',label:'斥候：全身がこわばり尻尾が逆立つ、そのあと膝が崩れる',loop:false,view:'front',keys:tween([
+  [{...STAND,armR:{t:[-7,40,4],p:[-1,.3,.5]},armL:{t:[7,40,4],p:[1,.3,.5]},head:[-8,0,0],expr:'line',phase:'こらえる gripping her straps'},2],
+  [{...STAND,hipY:180,pitch:-10,shrug:3,head:[20,0,0],footL:foot(9,0,{point:40,knee:-.25}),footR:foot(-9,0,{point:40,knee:-.25}),armR:{t:[-7,42,4],p:[-1,.3,.5]},armL:{t:[7,42,4],p:[1,.3,.5]},expr:'shut-o',phase:'頂点 peak: up on her toes, the tail straight up and bristling, ears up'},1],
+  [{...STAND,hipY:181,pitch:-7,head:[14,0,6],footL:foot(9,0,{point:30,knee:-.25}),footR:foot(-9,0,{point:30,knee:-.25}),armR:{t:[-7,42,4],p:[-1,.3,.5]},armL:{t:[7,42,4],p:[1,.3,.5]},expr:'shut-o',phase:'震え shudders'},2],
+  [{...STAND,hipY:200,pitch:14,head:[-18,0,0],footL:foot(10,0,{knee:-.5}),footR:foot(-10,0,{knee:-.5}),armR:{d:[-.2,.95,.2],e:.95},armL:{d:[.2,.95,.2],e:.95},expr:'o',phase:'崩れる knees give, the tail and ears drop'},0]]).map(k=>({...k,ms:/^頂点/.test(k.phase)?160:100}))},
+ /* ======== mage: more of her own ======== */
+ mage_barrier:{look:'mage',label:'魔法使い：義腕の手のひらを向けて障壁を張る',loop:false,view:'right',all8:true,keys:tween([
+  [{...WITH_STAFF,phase:'立つ'},1],
+  [{...WITH_STAFF,footL:foot(10,8,{knee:.05}),armL:{d:[.15,-.2,.97],e:.8},phase:'かざす the mechanical palm comes up toward the threat'},1],
+  [{...WITH_STAFF,rootZ:-2,pitch:-4,footL:foot(10,8,{knee:.05}),armL:{d:[.1,-.25,.96],e:.9},phase:'張る the barrier holds; she braces'},3],
+  [{...WITH_STAFF,phase:'解く'},0]]).map(k=>({...k,ms:90}))},
+ mage_overheat:{look:'mage',label:'魔法使い：撃ちすぎて熱をもった義腕を振って冷ます',loop:false,view:'front',keys:tween([
+  [{...WITH_STAFF,armL:{d:[.25,.3,.9],e:.8},head:[-14,0,-10],phase:'見る looks at the hot arm, steam venting from it'},2],
+  [{...WITH_STAFF,armL:{d:[.7,.5,.4],e:.95},torso:-6,head:[-10,0,-14],phase:'振る shakes it out to the side'},1],
+  [{...WITH_STAFF,armL:{d:[.5,.8,.2],e:.95},torso:4,head:[-10,0,-14],phase:'…'},1],
+  [{...WITH_STAFF,armL:{d:[.7,.5,.4],e:.95},torso:-6,head:[-10,0,-14],phase:'振る'},1],
+  [{...WITH_STAFF,armL:{d:[.2,.35,.9],e:.7},head:[-12,0,-6],phase:'握る flexes the metal fingers, one by one'},2],
+  [{...WITH_STAFF,phase:'立つ back to calm'},0]]).map(k=>({...k,ms:90}))},
+ mage_hat_tug:{look:'mage',label:'魔法使い：帽子のつばを引き下げて顔を隠す（照れ・気まずさ）',loop:false,view:'down_right',keys:tween([
+  [{...WITH_STAFF,phase:'立つ'},2],
+  [{...WITH_STAFF,armL:{d:[.25,-.75,.6],e:.62},head:[-8,0,-10],phase:'つば the mechanical hand goes up to the brim'},2],
+  [{...WITH_STAFF,armL:{d:[.2,-.65,.72],e:.6},head:[-24,0,-16],expr:'line',phase:'隠す pulls it down over her eyes, turning a little away'},3],
+  [{...WITH_STAFF,head:[-10,0,-6],expr:'line',phase:'立つ'},0]]).map(k=>({...k,ms:110}))},
+ mage_arms_bound:{look:'mage',label:'魔法使い：両方の義腕を頭の上でまとめて縛られ、魔法を封じられてもがく',loop:true,view:'front',keys:loop(8,110,t=>({...STAND,
+  hipY:181+1.5*Math.abs(S(t)),pelvis:8*S(t),torso:-5*S(t),sway:1.5*S(t),head:[-6,0,18*S(t)],
+  footL:foot(9,0,{yaw:-10,knee:-.3,point:12*Math.max(0,S(t))}),footR:foot(-9,0,{yaw:-10,knee:-.3,point:12*Math.max(0,-S(t))}),
+  armR:{d:[.05,-.97,.1],e:.9},armL:{d:[-.05,-.97,.1],e:.9},binds:[{j:'wrist_right',j2:'wrist_left'},{j:'wrist_right',to:[0,40,6]}],
+  expr:'line',phase:'the metal forearms crossed and bound high over her head; she twists and pulls, keeping her face composed'}))},
+ mage_recover:{look:'mage',label:'魔法使い：片膝から杖を支えに立ち上がり、何事もなかった顔をする',loop:false,view:'front',keys:tween([
+  [{...WITH_STAFF,hipY:210,pitch:14,head:[-18,0,0],footL:foot(10,-30,{lift:-6,point:40,dir:[0,1,.2]}),footR:foot(-10,12,{knee:.1,up:.8}),armL:{t:[2,62,16],p:[1,.5,.3]},armR:{d:[-.25,.3,.9],e:.9},prop:{...STAFF_UP,dir:[0,.95,.1],len:40,back:40},expr:'shut',phase:'片膝 on one knee on the staff (where mage_suppress_tension ends)'},2],
+  [{...WITH_STAFF,hipY:196,pitch:12,head:[-12,0,0],footL:foot(10,-8,{lift:3}),footR:foot(-10,8,{knee:.1}),armL:{d:[.2,.9,.3],e:.9},armR:{d:[-.25,.4,.85],e:.9},prop:{...STAFF_UP,dir:[0,.95,.1],len:40,back:40},expr:'line',phase:'立ち上がる pushes up on the staff'},2],
+  [{...WITH_STAFF,armL:{d:[.25,-.75,.6],e:.62},head:[-14,0,-8],expr:'line',phase:'整える straightens the hat'},2],
+  [{...WITH_STAFF,head:[0,0,0],phase:'立つ composed, as if nothing happened'},0]]).map(k=>({...k,ms:110}))},
+ /* ======== healer: more of her own ======== */
+ healer_kneel_heal:{look:'healer',label:'ヒーラー：倒れた仲間のそばに膝をつき、杖を立てて片手をかざして癒やす',loop:true,view:'down_right',keys:loop(8,150,t=>({...STAND,
+  hipY:206,pitch:18,head:[-24,0,0],shrug:.8*S(t),footL:foot(10,-30,{lift:-6,point:40,dir:[0,1,.2]}),footR:foot(-10,-30,{lift:-6,point:40,dir:[0,1,.2]}),
+  armR:{d:[-.3,.35,.6],e:.72},armL:{d:[.15,.7,.7],e:.85},prop:{...STAFF_UP,len:58,back:20},expr:'shut',phase:'kneeling, the staff upright in her right hand, the left hand held out low over the one she heals, eyes closed'}))},
+ healer_purify:{look:'healer',label:'ヒーラー：杖で床を突き、清めの光を広げる',loop:false,view:'right',all8:true,keys:tween([
+  [{...STAND,armR:{d:[-.28,.6,.5],e:.7},prop:STAFF_UP,phase:'立つ'},1],
+  [{...STAND,hipY:179,pitch:-4,armR:{d:[-.2,-.3,.9],e:.75},prop:STAFF_UP,head:[8,0,0],phase:'持ち上げる lifts the staff a little'},1],
+  [{...STAND,hipY:186,pitch:8,armR:{d:[-.2,.7,.65],e:.85},prop:{...STAFF_UP,dir:[0,.97,.1],len:30,back:48},head:[-10,0,0],expr:'shut',phase:'突く drives its foot to the floor: the light spreads'},1],
+  [{...STAND,hipY:184,pitch:6,armR:{d:[-.2,.7,.65],e:.85},armL:{t:[3,36,11],p:[1,.5,.2]},prop:{...STAFF_UP,dir:[0,.97,.1],len:30,back:48},head:[-12,0,0],expr:'shut',phase:'祈る holds it there, praying'},3],
+  [{...STAND,armR:{d:[-.28,.6,.5],e:.7},prop:STAFF_UP,phase:'立つ'},0]]).map(k=>({...k,ms:/^突く/.test(k.phase)?50:100}))},
+ healer_panel_catch:{look:'healer',label:'ヒーラー：めくれかけた前垂れを慌てて押さえ、顔を赤くして背ける',loop:false,view:'front',keys:tween([
+  [{...STAND,armR:{d:[-.28,.6,.5],e:.7},prop:STAFF_UP,phase:'立つ'},1],
+  [{...STAND,hipY:179,shrug:3,armR:{d:[-.28,.6,.5],e:.7},armL:{d:[.3,.2,.9],e:.6},prop:STAFF_UP,expr:'o',phase:'めくれる the panels flip up: she starts'},1],
+  [{...STAND,hipY:183,pitch:8,torso:18,armR:{d:[-.28,.6,.5],e:.7},armL:{t:[-5,33,12],p:[1,.4,.4]},prop:STAFF_UP,head:[-10,0,-34],expr:'shut-line',phase:'押さえる slaps them down with her arm across her chest, face turned away'},2],
+  [{...STAND,torso:10,armR:{d:[-.28,.6,.5],e:.7},armL:{t:[-5,33,12],p:[1,.4,.4]},prop:STAFF_UP,head:[-6,0,-20],expr:'line',phase:'にらむ a sidelong glare'},0]]).map(k=>({...k,ms:k.phase?.startsWith('押さえる')?60:100}))},
+ healer_run_cover:{look:'healer',label:'ヒーラー：胸を押さえながら走る（揺れを抑えようとする）',loop:true,view:'right',keys:loop(8,80,(t,i)=>{const c=C(t),sn=S(t);return{...STAND,
+  hipY:184-3*Math.abs(sn),pitch:14,rootZ:0,sway:1.5*sn,pelvis:10*sn,head:[-6,0,0],
+  footL:foot(8,16*c,{lift:sn>0?12*sn:0,air:sn>.3,knee:.05,up:.5*Math.max(0,sn)}),footR:foot(-8,-16*c,{lift:sn<0?-12*sn:0,air:sn<-.3,knee:.05,up:.5*Math.max(0,-sn)}),
+  armL:{t:[-5,33,12],p:[1,.4,.4]},armR:{d:[-.25,.55,.35-.4*c],e:.8},prop:{...STAFF_UP,dir:[0,-.93,.35]},expr:'line',phase:'running, one arm clamped across her chest against the bounce, the staff held tilted up in the other hand'}})},
+ healer_dark_prayer:{look:'healer',label:'ヒーラー：人目を避けてひざまずき、ひそかに別の神へ祈る',loop:false,view:'up_right',keys:tween([
+  [{...STAND,armR:{d:[-.28,.6,.5],e:.7},prop:STAFF_UP,phase:'立つ'},2],
+  [{...STAND,armR:{d:[-.28,.6,.5],e:.7},prop:STAFF_UP,head:[-4,0,50],phase:'見回す makes sure no one is looking'},2],
+  [{...STAND,hipY:206,pitch:10,head:[-30,0,0],footL:foot(10,-30,{lift:-6,point:40,dir:[0,1,.2]}),footR:foot(-10,-30,{lift:-6,point:40,dir:[0,1,.2]}),armR:{t:[-2,30,12],p:[-1,.5,.2]},armL:{t:[2,24,12],p:[1,.5,.2]},prop:{...STAFF_UP,dir:[.15,-.95,-.25],len:52,back:24},phase:'祈る kneels, the staff held against her, the hands clasped the other way round, head low, eyes open'},4],
+  [{...STAND,hipY:206,pitch:10,head:[-10,0,-30],footL:foot(10,-30,{lift:-6,point:40,dir:[0,1,.2]}),footR:foot(-10,-30,{lift:-6,point:40,dir:[0,1,.2]}),armR:{t:[-2,30,12],p:[-1,.5,.2]},armL:{t:[2,24,12],p:[1,.5,.2]},prop:{...STAFF_UP,dir:[.15,-.95,-.25],len:52,back:24},expr:'o',phase:'気配 a sound: she glances round, a faint smile gone at once'},2],
+  [{...STAND,armR:{d:[-.28,.6,.5],e:.7},prop:STAFF_UP,phase:'立つ back on her feet, the cleric again'},0]]).map(k=>({...k,ms:120}))},
+ healer_tension_refuse:{look:'healer',label:'ヒーラー：首を横に振って拒みながら全身がこわばり、胸をかばったまま崩れる',loop:false,view:'front',keys:tween([
+  [{...STAND,armL:{t:[-5,33,12],p:[1,.4,.4]},armR:{d:[-.28,.6,.5],e:.7},prop:STAFF_UP,head:[-8,0,25],expr:'line',phase:'拒む shaking her head: no'},1],
+  [{...STAND,armL:{t:[-5,33,12],p:[1,.4,.4]},armR:{d:[-.28,.6,.5],e:.7},prop:STAFF_UP,head:[-8,0,-25],expr:'line',phase:'拒む'},1],
+  [{...STAND,hipY:181,pitch:-12,shrug:3,head:[22,0,0],footL:foot(9,0,{point:40,knee:-.25}),footR:foot(-9,0,{point:40,knee:-.25}),armL:{t:[-5,34,12],p:[1,.4,.4]},armR:{d:[-.4,.5,.7],e:.8},prop:{...STAFF_UP,dir:[.2,-.95,.2]},expr:'shut-line',phase:'頂点 peak: arched, on her toes, still covering herself, lips pressed'},1],
+  [{...STAND,hipY:182,pitch:-8,head:[16,0,6],footL:foot(9,0,{point:30,knee:-.25}),footR:foot(-9,0,{point:30,knee:-.25}),armL:{t:[-5,34,12],p:[1,.4,.4]},armR:{d:[-.4,.5,.7],e:.8},prop:{...STAFF_UP,dir:[.2,-.95,.2]},expr:'shut-line',phase:'震え shudders'},2],
+  [{...SIT,head:[-16,0,-20],armL:{t:[-5,33,12],p:[1,.4,.4]},armR:{d:[-.3,.7,.6],e:.85},prop:{...STAFF_UP,dir:[.3,-.9,.3],len:50,back:20},expr:'line',phase:'崩れる sinks to the floor, arm still across her chest, face turned away'},0]]).map(k=>({...k,ms:/^頂点/.test(k.phase)?160:100}))}
 };
 /* where a prop reaches, in the world (from the hand) */
 function propPoints(J,p,side='right'){const h=J['hand_'+side],d=p.dir==='fore'?norm(sub(h,J['wrist_'+side])):norm(p.dir);return[add(h,mul(d,-(p.back||0))),add(h,mul(d,p.len))]}
@@ -114,7 +201,8 @@ export function library(){
   if(m.loop&&m.keys.length>1){const J0=pose(m.keys[0]),Jn=pose(m.keys[m.keys.length-1]);lag[0]=[-(J0.thorax[0]-Jn.thorax[0])*.6,-(J0.thorax[1]-Jn.thorax[1])*.9]}
   for(const d of DIRECTIONS)poses[name][d]=m.keys.map((k,i)=>{const J=pose(k);if(k.prop){const [a,b]=propPoints(J,k.prop);J.prop_a=a;J.prop_b=b}
    const P=project(J,d);return{direction:d,yaw:YAW[d],motion:name,frame:i,frame_ms:Math.round(k.ms*(k.msScale||1)),phase:k.phase,expr:k.expr,look:m.look,
-    prop:k.prop?{kind:k.prop.kind,from:'prop_a',to:'prop_b'}:undefined,chest_lag:m.look==='healer'?lag[(i-1+lag.length)%lag.length].map(v=>+Math.max(-4,Math.min(4,v)).toFixed(1)):undefined,binds:[],joints:P}});
+    prop:k.prop?{kind:k.prop.kind,from:'prop_a',to:'prop_b'}:undefined,chest_lag:m.look==='healer'?lag[(i-1+lag.length)%lag.length].map(v=>+Math.max(-4,Math.min(4,v)).toFixed(1)):undefined,
+    binds:(k.binds||[]).map((b,bi)=>({joint:b.j,joint2:b.j2,anchor:b.to?'bind'+bi:null,noLoop:b.noLoop?1:undefined})),joints:P}});
   meta[name]={look:m.look,label:m.label,loop:m.loop,view:m.view,all8:!!m.all8,frame_ms:m.keys.map(k=>Math.round(k.ms*(k.msScale||1))),phases:m.keys.map(k=>k.phase)};
  }
  return{schema:'anatomical-eight-direction-motion/1.0',extends:'scene-poses.json (same skeleton, canvas and projection)',

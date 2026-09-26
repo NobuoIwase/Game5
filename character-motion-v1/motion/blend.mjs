@@ -53,7 +53,7 @@ export function blendBinds(A=[],B=[],e,J){const out=[],ka=new Map(A.map(b=>[bkey
    steady rate, restraints carried across (keepA: the first one's stay on as they are) */
 /* a hold she is about to break: lines loosen and draw back from a fifth of the way on; a band stays while the
    joints are together; the rest stays on */
-function loosen(A=[],u,J){return A.flatMap(b=>b.to&&!b.partner?(u<.2?[b]:(u-.2)/.75>=.9?[]:[{...b,to:lerpV(b.to,J[b.j],cl((u-.2)/.75))}]):b.j2?(len(sub(J[b.j],J[b.j2]))<12?[b]:[]):[b])}
+function loosen(A=[],u,J){return A.flatMap(b=>b.to&&!b.partner?(u<.2?[b]:(u-.2)/.75>=1?[]:[{...b,to:lerpV(b.to,J[b.j],cl((u-.2)/.75))}]):b.j2?(len(sub(J[b.j],J[b.j2]))<12?[b]:[]):[b])}
 /* how far the lines of a hold travel as it loosens (over three quarters of the way) */
 export function holdTravel(a){const J=pose(a);let m=0;for(const b of a.binds||[])if(b.to&&!b.partner)m=Math.max(m,len(sub(J[b.j],b.to))/.75);return m}
 /* how far the far end of a restraint line travels from key a to key b (a line that grows or goes back

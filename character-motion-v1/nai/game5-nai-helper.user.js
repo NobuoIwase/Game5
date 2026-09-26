@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Game5 NAI helper
 // @namespace    nobuoiwase-game5
-// @version      1.0
+// @version      1.1
 // @description  Game5 のモーションの元絵を NovelAI で作るための手伝い。ボタン1つで次のコマの下絵とプロンプトを入れる
 // @match        https://novelai.net/*
 // @run-at       document-start
@@ -27,7 +27,7 @@ const SRC='https://nobuoiwase.github.io/Game5/character-motion-v1/nai/';
 const W=unsafeWindow;
 const get=(k,d)=>{try{const v=GM_getValue(k);return v===undefined?d:v}catch(e){return d}},set=(k,v)=>{try{GM_setValue(k,v)}catch(e){}};
 let DATA=null,armed=null,armedImage=null,msg='';
-const st={char:get('char','aria'),done:get('done',{}),words:get('words',{}),charWords:get('charWords',{}),bind:get('bind',''),extraNeg:get('extraNeg',''),
+const st={char:get('char','aria'),done:get('done',{}),words:get('words',{}),charWords:get('charWords',{}),extraNeg:get('extraNeg',''),
  useBase:get('useBase',true),autoSave:get('autoSave',false),strength:get('strength',0.7),pos:get('pos',{})};
 const save=()=>{for(const k of Object.keys(st))set(k,st[k])};
 
@@ -37,8 +37,8 @@ const b64=buf=>{const u=new Uint8Array(buf);let s='';for(let i=0;i<u.length;i+=0
 
 const jobsOf=c=>DATA?DATA.jobs.filter(j=>j.char===c):[];
 function promptOf(job){
- const f=DATA.frames[job.frame],ch=DATA.characters[job.char],bind=(st.bind||DATA.bind_default).trim();
- const parts=[DATA.common,ch.tags,st.charWords[job.char]||'',...f.situations.map(s=>st.words[s]||''),f.prompt.split('{bind}').join(bind),f.note];
+ const f=DATA.frames[job.frame],ch=DATA.characters[job.char];
+ const parts=[DATA.common,ch.tags,st.charWords[job.char]||'',...f.situations.map(s=>st.words[s]||''),f.prompt,f.note];
  return parts.map(x=>(x||'').trim()).filter(Boolean).join(', ');
 }
 const negOf=()=>[DATA.negative,st.extraNeg].map(x=>(x||'').trim()).filter(Boolean).join(', ');
@@ -111,7 +111,6 @@ function draw(){
  const ta=(label,val,onv)=>{const t=h('textarea',{rows:'2',style:'width:100%;box-sizing:border-box;background:#0f151d;color:#e6edf3;border:1px solid #3a4658;border-radius:4px'});t.value=val||'';t.addEventListener('change',e=>{onv(e.target.value);save()});return h('div',{style:'margin:4px 0'},h('div',{},label),t)};
  for(const [k,label] of Object.entries(DATA.situations))det.append(ta(label,st.words[k],v=>st.words[k]=v));
  for(const [k,c] of Object.entries(DATA.characters))det.append(ta('キャラクター：'+c.label,st.charWords[k],v=>st.charWords[k]=v));
- det.append(ta('拘束の見た目（空なら '+DATA.bind_default+'）',st.bind,v=>st.bind=v));
  det.append(ta('除外する言葉の追加',st.extraNeg,v=>st.extraNeg=v));
  const cb=h('input',{type:'checkbox'});cb.checked=st.useBase;cb.addEventListener('change',e=>{st.useBase=e.target.checked;save()});
  const sr=h('input',{type:'number',min:'0.3',max:'0.95',step:'0.05',value:String(st.strength),style:'width:60px'});sr.addEventListener('change',e=>{st.strength=+e.target.value;save()});

@@ -43,4 +43,28 @@
 | `clinger_accept` | 張り付きモンスター受け入れ |
 | `clinger_afterglow` → `clinger_recover` | 非拘束絶頂（張り付き、`clinger_tension`）後の余韻 → 回復（張り付かれたまま） |
 
+## 拘束の種類ごと・ゲーム内の状態ごと（v3 で追加）
+
+ゲームの拘束の見た目（`lewd-v035.js` の `STYLE`）と、押し倒し（`grapple-v026.js` の `HEAVY`）に合わせたもの。
+
+| モーション | 使う場面 |
+|---|---|
+| `grabbed_flinch` | 拘束が始まった瞬間（全種共通） |
+| `down_tension` → `down_afterglow` | 押し倒し中のエステラ（ゲームの `pinnedClimax`）。灰冠の粘魔・絹輪ワーム・水妖・灰冠の従者・石の番兵・女王羽虫 |
+| `engulf_sink` → `engulf_struggle` / `engulf_rock` → `engulf_tension` | 呑み込み（engulf）で押し倒しにならない種：艶沼ナメクジ・鏡面スライム。もがき中 → 特殊攻撃のたび → エステラ |
+| `wrap_squeeze` → `wrap_tension` | 巻きつき（wrap）で押し倒しにならない種：糸繰り蜘蛛・誘い茸・粘花・影の手（罠） |
+| `ankle_grabbed` | 這い寄る手の「足首つかみ」 |
+| `clinger_*` | 吸着羽虫（cling）。3匹目の位置をゲームと同じ陰核の位置（骨格の `groin`）に直した |
+| `spore_inhale` | ルマネ胞子球（spore）、誘い茸の「甘い胞子」、胞子霧の中 |
+| `shiver_hug` | 夢鱗蛾の鱗粉（dust）、漂い霊の冷気（mist） |
+| `gaze_trance` | 凝視の眼（gaze）の拘束、催眠のあとのトランス（`heat-v027.js` の trance） |
+| `bubble_float` | 泡吹き貝（bubble） |
+| `break_free` | 拘束を自力で振りほどいたとき（今の共通の `recover` の代わり） |
+| `edge_pull` | 寸止め後に体が勝手に寄る（`edgePull`） |
+| `daze_sway` / `reach_toward` | 欲求の波が高いときの `daze` / `drift`、魅了の波で手を伸ばす |
+| `swing_abandon`（攻撃モーション） | 魅了した相手を斬れずに攻撃を中断する（`charm-v028.js` の hesitate） |
+| `walk_unsteady` | 拘束・絶頂のあとの余韻の歩き、張り付かれたまま歩く、濡れたまま歩く |
+| `trip_fall` | 疲れて回避でつまずく（`ai-v026.js` の trip） |
+| `defeat_collapse` | 戦闘不能（`defeat`） |
+
 相手の体・張り付く生き物・床から伸びる触手は、ゲーム側で描く。相手の頭の位置は `binds` の `partner`、生き物の位置は `chest_left` / `chest_right` / `belly`。

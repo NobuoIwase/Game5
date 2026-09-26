@@ -3,7 +3,8 @@
 // spine with a pelvis, sky-blue RIGHT limbs and amber LEFT limbs with white knee dots, a
 // dark-blue pauldron mark on the right shoulder, on a dark grid.
 // Also drawn when present: sword and shield (attack references), restraints (violet lines and
-// bands), small creatures clinging to the body (pink); what is behind the trunk stays hidden.
+// bands, coils round the body), small creatures clinging to the body (pink), a mass that has swallowed
+// her legs (translucent pink), a bubble round her (translucent blue); what is behind the trunk stays hidden.
 export const LABEL={front:'正面',down_right:'右斜め前',right:'右',up_right:'右斜め後ろ',back:'後ろ',up_left:'左斜め後ろ',left:'左',down_left:'左斜め前'};
 const C={out:'#182230',right:'#5ab6f0',left:'#ee9d5a',body:'#b6c2cc',pelvis:'#637487',head:'#d2dbe1',knee:'#e1e8ec',pauldron:'#246a9e',hair:'#9fb0bd',
  bind:'#b36be0',bindOut:'#3a1650',creature:'#e07aa8',wing:'rgba(230,240,255,.65)',bg:'#19202a',grid:'#222b37',text:'#c4d2df',sub:'#8797a6',hit:'#3a2430'};
@@ -28,7 +29,7 @@ export function figure(J,binds=[],yaw=0,expr='',memo=null){   // expr: 'shut' cl
  // memo gives it hysteresis: a part that was over the trunk in the last frame stays over it until it is 2.5 px
  // clearly past the edge, and the same the other way, so it does not flicker while it grazes the edge
  const place=(d,w,need=-1.5,id)=>{if(!w)return d;const dd=spineDD(w),th=memo&&id&&id in memo?need+(memo[id]?-2.5:2.5):need,over=dd>th;if(memo&&id)memo[id]=over;
-  return over?TD+1+.01*Math.min(40,Math.max(0,dd)):TD-1-.01*Math.min(40,Math.max(0,-dd))};
+  return over?Math.max(d,TD+1+.01*Math.min(40,Math.max(0,dd))):Math.min(d,TD-1-.01*Math.min(40,Math.max(0,-dd)))};   // (the real depth still orders it against the head and the other limbs)
  const mid=(a,b)=>ml(ad(W(a),W(b)),.5),isArm=/shoulder|elbow|wrist|hand/;
  const line=(a,b,w,col)=>`<line x1="${f(a[0])}" y1="${f(a[1])}" x2="${f(b[0])}" y2="${f(b[1])}" stroke="${C.out}" stroke-width="${w+3}" stroke-linecap="round"/><line x1="${f(a[0])}" y1="${f(a[1])}" x2="${f(b[0])}" y2="${f(b[1])}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`;
  const ell=(p,rx,ry,fill,sw=2)=>`<ellipse cx="${f(p[0])}" cy="${f(p[1])}" rx="${rx}" ry="${ry}" fill="${fill}" stroke="${C.out}" stroke-width="${sw}"/>`;
@@ -80,7 +81,19 @@ export function figure(J,binds=[],yaw=0,expr='',memo=null){   // expr: 'shut' cl
  const loop=id=>{const p=P(id);items.push({d:place(D(id)+.4,W(id)),svg:`<ellipse cx="${f(p[0])}" cy="${f(p[1])}" rx="5.5" ry="3.2" fill="none" stroke="${C.bindOut}" stroke-width="3.5"/><ellipse cx="${f(p[0])}" cy="${f(p[1])}" rx="5.5" ry="3.2" fill="none" stroke="${C.bind}" stroke-width="2"/>`})};
  const creature=id=>{const p=P(id),vis=place(D(id)+.6,ad(W(id),ml(fwd,4)));
   items.push({d:vis,svg:`<ellipse cx="${f(p[0]-5.5)}" cy="${f(p[1]-4)}" rx="5.5" ry="3" fill="${C.wing}" stroke="${C.out}" stroke-width=".8"/><ellipse cx="${f(p[0]+5.5)}" cy="${f(p[1]-4)}" rx="5.5" ry="3" fill="${C.wing}" stroke="${C.out}" stroke-width=".8"/>`+ell(p,5,4,C.creature,1.3)})};
+ // coils round the body (a ring about the spine at a joint: the back half under the trunk, the front half over
+ // it and over arms held at her sides), a mass that has swallowed her to a height, a bubble round her
+ const coil=(id,r)=>{const c=W(id),pts=[];for(let i=0;i<=24;i++){const a=i/24*Math.PI*2;pts.push(ad(c,ad(ml(lx,Math.cos(a)*r),ml(fz,Math.sin(a)*r*.72))))}
+  for(const front of [false,true]){const seg=[];pts.forEach(w=>{const on=dep(w)-dep(c)>=0===front;if(on)seg.push(proj(w));else if(seg.length){draw(seg.splice(0));}});if(seg.length)draw(seg);
+   function draw(q){if(q.length<2)return;const path='M'+q.map(p=>p.map(f).join(',')).join(' L');items.push({d:front?TD+60:TD-1.5,svg:`<path d="${path}" fill="none" stroke="${C.bindOut}" stroke-width="7" stroke-linecap="round"/><path d="${path}" fill="none" stroke="${C.bind}" stroke-width="4.5" stroke-linecap="round"/>`})}}};
+ const engulf=level=>{const r=W('root'),top=level+.18*dep(r),x=P('root')[0],cy=(top+246)/2,ry=(246-top)/2+3;
+  items.push({d:900,svg:`<ellipse cx="${f(x)}" cy="${f(cy)}" rx="40" ry="${f(ry)}" fill="rgba(224,122,168,.5)" stroke="${C.bindOut}" stroke-width="2"/><ellipse cx="${f(x-14)}" cy="${f(top+7)}" rx="9" ry="3" fill="rgba(255,255,255,.45)"/>`})};
+ const bubble=()=>{const ps=Object.values(J).map(j=>j.position),xs=ps.map(p=>p[0]),ys=ps.map(p=>p[1]),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,rr=Math.max(Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys))/2+14;
+  items.push({d:1e3,svg:`<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(rr)}" fill="rgba(170,215,240,.22)" stroke="#9fd2ee" stroke-width="2.5"/><ellipse cx="${f(cx-rr*.45)}" cy="${f(cy-rr*.55)}" rx="${f(rr*.18)}" ry="${f(rr*.08)}" fill="rgba(255,255,255,.6)" transform="rotate(-35 ${f(cx-rr*.45)} ${f(cy-rr*.55)})"/>`})};
  for(const b of binds){
+  if(b.coil){coil(b.joint,b.r||16);continue}
+  if(b.engulf){engulf(b.level);continue}
+  if(b.bubble){bubble();continue}
   if(b.creature){creature(b.joint);continue}
   if(b.partner){const p=P(b.anchor);items.push({d:D(b.anchor),svg:`<ellipse cx="${f(p[0])}" cy="${f(p[1])}" rx="17" ry="20" fill="rgba(179,107,224,.28)" stroke="${C.bind}" stroke-width="2" stroke-dasharray="4 3"/>`});continue}
   if(b.joint2){tube([P(b.joint),P(b.joint2)],(D(b.joint)+D(b.joint2))/2+.3,mid(b.joint,b.joint2));loop(b.joint);loop(b.joint2);continue}

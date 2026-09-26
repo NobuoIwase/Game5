@@ -98,7 +98,16 @@ export const MOTIONS={
   {rootZ:-8,hipY:190,pelvis:22,torso:4,pitch:6,footL:[9,14,6,0,1],footR:[-10,-26,0,50],armR:{d:[-.3,.5,.81],e:.82},tip:-24,armL:{d:[.1,.3,.95],e:.58},shieldN:[0,0,1],ms:70,phase:'引き the lead foot comes back'},
   {...GUARD,ms:90,phase:'構え guard again'}]},
  advance:{label:'構えたまま前進',loop:true,keys:[]},
- retreat:{label:'構えたまま後退',loop:true,keys:[]}
+ retreat:{label:'構えたまま後退',loop:true,keys:[]},
+ /* the swing she cannot finish (a monster she has fallen for): raised, held, lowered, and she looks away */
+ swing_abandon:{label:'振りかぶったまま止まり、剣を下ろして目をそらす',loop:false,hitFrame:null,keys:[
+  {...GUARD,ms:100,phase:'構え guard'},
+  {rootZ:-14,hipY:191,pelvis:40,torso:10,pitch:0,footL:[9,6,0,0],footR:[-10,-26,0,50],armR:{d:[-.25,-.6,.76],e:.75},tip:-88,armL:{d:[.1,.25,.96],e:.7},shieldN:[0,0,1],ms:80,phase:'振り上げ raise'},
+  {rootZ:-12,hipY:188,pelvis:55,torso:20,pitch:-8,footL:[9,8,0,0],footR:[-10,-26,0,50],armR:{d:[-.15,-.95,-.1],e:.7},tip:-150,armL:{d:[.05,.1,.99],e:.92},shieldN:[0,0,1],ms:90,phase:'振りかぶり wind-up'},
+  {rootZ:-12,hipY:188,pelvis:52,torso:18,pitch:-6,footL:[9,8,0,0],footR:[-10,-26,0,50],armR:{d:[-.15,-.95,-.1],e:.7},tip:-150,armL:{d:[.05,.1,.99],e:.92},shieldN:[0,0,1],head:[4,0,0],ms:260,phase:'止まる it stops there: held over her head, trembling'},
+  {rootZ:-12,hipY:190,pelvis:35,torso:8,pitch:4,footL:[9,6,0,0],footR:[-10,-26,0,50],armR:{d:[-.3,.2,.93],e:.8},tip:10,armL:{d:[.1,.5,.86],e:.6},shieldN:[0,0,1],head:[-8,0,-10],ms:110,phase:'下ろす the blade comes down, not a cut'},
+  {rootZ:-12,hipY:190,pelvis:25,torso:4,pitch:8,footL:[9,6,0,0],footR:[-10,-26,0,50],armR:{d:[-.2,.85,.48],e:.95},tip:60,armL:{d:[.1,.6,.8],e:.55},shieldN:[0,0,1],head:[-14,0,-30],ms:220,phase:'目をそらす point down by her knee; she looks away'},
+  {...GUARD,ms:110,phase:'構え guard again'}]}
 };
 /* guarded steps, drawn in place (the game moves her): a "step-drag" - the lead foot steps out
    while the planted rear foot slides back under her (0-3), then the rear foot is picked up and
@@ -158,7 +167,7 @@ export function pose(k0){
   J.face=add(J.head,mul(fw,9));const ec=add(J.head,add(mul(fw,8.5),[0,-1,0]));J.eye_left=add(ec,mul(lat,4));J.eye_right=add(ec,mul(lat,-4))}
  J.crotch=[root[0],root[1]+7,root[2]+1];
  // points on the front of the body (where small creatures cling)
- J.chest_left=trunk(5.5+cs,33,8.5,chest);J.chest_right=trunk(-5.5+cs,33,8.5,chest);J.belly=trunk(cs*.3,7,8,k.pelvis);
+ J.chest_left=trunk(5.5+cs,33,8.5,chest);J.chest_right=trunk(-5.5+cs,33,8.5,chest);J.belly=trunk(cs*.3,7,8,k.pelvis);J.groin=trunk(0,-6,6.5,k.pelvis);
  for(const [side,sg] of [['right',-1],['left',1]]){
   const hip=trunk(8.5*sg,0,0,k.pelvis),f=k['foot'+(side==='right'?'R':'L')],fy=rad(f[3]||0);
   const toe=[-sg*Math.sin(fy)*(side==='right'?1:-1)*0+(side==='right'?-Math.sin(fy):Math.sin(fy)),0,Math.cos(fy)];   // toes turned out to her own side

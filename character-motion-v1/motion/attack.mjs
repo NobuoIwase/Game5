@@ -44,8 +44,8 @@ export const MOTIONS={
   {rootZ:2,hipY:192,pelvis:25,torso:10,pitch:8,footL:[9,24,0,0],footR:[-10,-26,5,50],armR:{d:[-.1,-.95,.2],e:.9},tip:-145,armL:{d:[.25,.35,.9],e:.75},shieldN:[.2,0,.98],ms:50,phase:'着地 lead foot lands - nailed there from now on; the arm comes over, the blade lags behind it'},
   {rootZ:7,hipY:195,pelvis:-10,torso:-12,pitch:20,footL:[9,24,0,0],footR:[-10,-26,6,50],armR:{d:[-.05,-.3,.95],e:1},tip:-58,armL:{d:[.5,.6,.6],e:.7},shieldN:[.5,0,.85],smear:true,ms:40,phase:'振り下ろし the cut (smear): hips ride forward over the planted foot, arm straight, blade catching up'},
   {rootZ:13,hipY:196,pelvis:-25,torso:-15,pitch:26,footL:[9,24,0,0],footR:[-10,-26,7,50],armR:{d:[0,.38,.93],e:1},tip:21,armL:{d:[.55,.75,.35],e:.7},shieldN:[.7,0,.7],ms:90,phase:'命中 impact (hit-stop): the wrist snaps - arm and blade one straight line; front knee deep, rear leg long'},
-  {rootZ:14,hipY:197,pelvis:-32,torso:-20,pitch:30,footL:[9,24,0,0],footR:[-10,-26,7,50],armR:{d:[.12,.62,.78],e:1},tip:48,armL:{d:[.6,.75,.25],e:.7},shieldN:[.8,0,.6],smear:true,ms:80,phase:'振り抜き follow-through: elbow fully straight, the blade runs on down and through'},
-  {rootZ:14,hipY:196,pelvis:-30,torso:-18,pitch:28,footL:[9,24,0,0],footR:[-10,-26,6,50],armR:{d:[.1,.58,.81],e:1},tip:44,armL:{d:[.6,.75,.25],e:.7},shieldN:[.8,0,.6],ms:130,phase:'残心 hold: arm still straight, stays low for a breath'},
+  {rootZ:12,hipY:194,pelvis:-40,torso:-20,pitch:20,footL:[9,24,0,0],footR:[-10,-26,7,50],armR:{d:[.2,.85,.48],e:1},tip:40,armL:{d:[.6,.6,-.5],e:.75},shieldN:[.8,0,-.6],smear:true,ms:80,phase:'振り抜き follow-through: the straight arm carries on right down to her front knee; the blade stays shallower than the arm (the wrist turns up) - cut through, not stuck in'},
+  {rootZ:12,hipY:193,pelvis:-42,torso:-18,pitch:16,footL:[9,24,0,0],footR:[-10,-26,6,50],armR:{d:[.22,.88,.42],e:1},tip:44,armL:{d:[.6,.6,-.5],e:.75},shieldN:[.8,0,-.6],ms:130,phase:'残心 hold: arm long and low, the blade held out level-ish ahead of her knee'},
   {rootZ:2,hipY:193,pelvis:0,torso:0,pitch:12,footL:[9,24,0,0],footR:[-10,-26,2,50],armR:{d:[-.3,.45,.84],e:.85},tip:-15,armL:{d:[.15,.3,.94],e:.6},shieldN:[0,0,1],ms:80,phase:'戻り push back off the front foot (still planted); the blade comes up'},
   {rootZ:-8,hipY:190,pelvis:20,torso:4,pitch:8,footL:[9,12,6,0,1],footR:[-10,-26,0,50],armR:{d:[-.3,.5,.81],e:.82},tip:-24,armL:{d:[.1,.3,.95],e:.58},shieldN:[0,0,1],ms:70,phase:'引き the lead foot comes back'},
   {...GUARD,ms:90,phase:'構え guard again'}]},
@@ -61,6 +61,42 @@ export const MOTIONS={
   {rootZ:0,hipY:195,pelvis:0,torso:0,pitch:16,footL:[9,28,0,0],footR:[-10,-26,2,50],armR:{d:[-.3,.45,.84],e:.85},tip:-15,armL:{d:[.15,.3,.94],e:.6},shieldN:[0,0,1],ms:90,phase:'戻り wrench the blade free, push back'},
   {rootZ:-8,hipY:190,pelvis:20,torso:4,pitch:8,footL:[9,14,6,0,1],footR:[-10,-26,0,50],armR:{d:[-.3,.5,.81],e:.82},tip:-24,armL:{d:[.1,.3,.95],e:.58},shieldN:[0,0,1],ms:80,phase:'引き the lead foot comes back'},
   {...GUARD,ms:110,phase:'構え guard'}]},
+ kesa:{label:'袈裟懸け（右上から左下への斜め斬り）',loop:false,hitFrame:6,keys:[
+  {...GUARD,ms:100,phase:'構え guard'},
+  {rootZ:-14,hipY:191,pelvis:45,torso:15,pitch:0,footL:[9,6,0,0],footR:[-10,-26,0,50],armR:{d:[-.55,-.55,.6],e:.75},plane:'kesa',tip:-95,armL:{d:[.1,.25,.96],e:.7},shieldN:[0,0,1],ms:70,phase:'振り上げ raise to her right shoulder'},
+  {rootZ:-12,hipY:188,pelvis:60,torso:22,pitch:-8,footL:[9,8,5,0,1],footR:[-10,-26,0,50],armR:{d:[-.45,-.85,-.25],e:.72},plane:'kesa',tip:-150,armL:{d:[.05,.1,.99],e:.92},shieldN:[0,0,1],ms:70,phase:'振りかぶり wind-up over the right shoulder, the lead foot lifts'},
+  {rootZ:-6,hipY:186,pelvis:62,torso:24,pitch:-10,footL:[9,16,12,0,1],footR:[-10,-26,3,50],armR:{d:[-.35,-.93,-.1],e:.78},plane:'kesa',tip:-160,armL:{d:[.05,.15,.99],e:.9},shieldN:[0,0,1],ms:80,phase:'溜め cocked: the blade hangs behind her right shoulder'},
+  {rootZ:2,hipY:192,pelvis:25,torso:10,pitch:8,footL:[9,24,0,0],footR:[-10,-26,5,50],armR:{d:[-.45,-.8,.3],e:.92},plane:'kesa',tip:-140,armL:{d:[.25,.35,.9],e:.75},shieldN:[.2,0,.98],ms:50,phase:'着地 lead foot lands and stays; the arm starts down the diagonal, blade lagging'},
+  {rootZ:7,hipY:195,pelvis:-10,torso:-12,pitch:16,footL:[9,24,0,0],footR:[-10,-26,6,50],armR:{d:[-.3,-.35,.9],e:1},plane:'kesa',tip:-55,armL:{d:[.5,.6,.6],e:.7},shieldN:[.5,0,.85],smear:true,ms:40,phase:'斬り下ろし the cut (smear) along the diagonal'},
+  {rootZ:12,hipY:196,pelvis:-28,torso:-15,pitch:18,footL:[9,24,0,0],footR:[-10,-26,7,50],armR:{d:[.15,.35,.92],e:1},plane:'kesa',tip:15,armL:{d:[.55,.7,.2],e:.7},shieldN:[.7,0,.7],ms:90,phase:'命中 impact: wrist snapped, arm and blade in line, cutting down to her left'},
+  {rootZ:12,hipY:195,pelvis:-42,torso:-22,pitch:18,footL:[9,24,0,0],footR:[-10,-26,7,50],armR:{d:[.5,.8,.33],e:1},plane:'kesa',tip:45,armL:{d:[.6,.6,-.5],e:.75},shieldN:[.8,0,-.6],smear:true,ms:80,phase:'振り抜き carried through to below her left hip'},
+  {rootZ:12,hipY:194,pelvis:-44,torso:-20,pitch:15,footL:[9,24,0,0],footR:[-10,-26,6,50],armR:{d:[.55,.8,.25],e:1},plane:'kesa',tip:52,armL:{d:[.6,.6,-.5],e:.75},shieldN:[.8,0,-.6],ms:130,phase:'残心 hold: arm long across to her left, blade low behind'},
+  {rootZ:2,hipY:193,pelvis:0,torso:0,pitch:12,footL:[9,24,0,0],footR:[-10,-26,2,50],armR:{d:[-.3,.45,.84],e:.85},tip:-15,armL:{d:[.15,.3,.94],e:.6},shieldN:[0,0,1],ms:80,phase:'戻り push back off the front foot (still planted); the blade comes up'},
+  {rootZ:-8,hipY:190,pelvis:20,torso:4,pitch:8,footL:[9,12,6,0,1],footR:[-10,-26,0,50],armR:{d:[-.3,.5,.81],e:.82},tip:-24,armL:{d:[.1,.3,.95],e:.58},shieldN:[0,0,1],ms:70,phase:'引き the lead foot comes back'},
+  {...GUARD,ms:90,phase:'構え guard again'}]},
+ yoko:{label:'横一文字（右から左への水平斬り）',loop:false,hitFrame:6,keys:[
+  {...GUARD,ms:100,phase:'構え guard'},
+  {rootZ:-14,hipY:190,pelvis:60,torso:20,pitch:0,footL:[9,6,0,0],footR:[-10,-26,0,50],armR:{d:[-.85,.15,-.3],e:.8},plane:'yoko',tip:-120,armL:{d:[.2,.25,.95],e:.7},shieldN:[0,0,1],ms:70,phase:'引き構え draw the blade to her right side'},
+  {rootZ:-12,hipY:188,pelvis:75,torso:25,pitch:-2,footL:[9,8,5,0,1],footR:[-10,-26,0,50],armR:{d:[-.7,.1,-.7],e:.8},plane:'yoko',tip:-165,armL:{d:[.25,.2,.95],e:.85},shieldN:[0,0,1],ms:70,phase:'振りかぶり wind-up: turned far round, blade behind her at waist height, lead foot lifts'},
+  {rootZ:-6,hipY:187,pelvis:78,torso:26,pitch:-2,footL:[9,16,11,0,1],footR:[-10,-26,3,50],armR:{d:[-.6,.1,-.8],e:.78},plane:'yoko',tip:178,armL:{d:[.25,.2,.95],e:.85},shieldN:[0,0,1],ms:80,phase:'溜め cocked: the blade points straight back'},
+  {rootZ:2,hipY:192,pelvis:40,torso:10,pitch:6,footL:[9,24,0,0],footR:[-10,-26,5,50],armR:{d:[-.9,0,.3],e:.95},plane:'yoko',tip:-130,armL:{d:[.35,.35,.85],e:.75},shieldN:[.3,0,.95],ms:50,phase:'着地 lead foot lands; hips open first, the blade trails round'},
+  {rootZ:7,hipY:194,pelvis:0,torso:-10,pitch:10,footL:[9,24,0,0],footR:[-10,-26,6,50],armR:{d:[-.4,.05,.92],e:1},plane:'yoko',tip:-45,armL:{d:[.5,.5,.6],e:.7},shieldN:[.5,0,.85],smear:true,ms:40,phase:'薙ぎ the sweep (smear): arm straight, level'},
+  {rootZ:12,hipY:195,pelvis:-25,torso:-20,pitch:12,footL:[9,24,0,0],footR:[-10,-26,7,50],armR:{d:[.1,.08,.99],e:1},plane:'yoko',tip:10,armL:{d:[.6,.55,.3],e:.7},shieldN:[.7,0,.7],ms:90,phase:'命中 impact: blade level at her chest, in line with the arm'},
+  {rootZ:10,hipY:194,pelvis:-50,torso:-30,pitch:10,footL:[9,24,0,0],footR:[-10,-26,7,50],armR:{d:[.8,.1,.5],e:1},plane:'yoko',tip:70,armL:{d:[.6,.6,-.5],e:.75},shieldN:[.8,0,-.6],smear:true,ms:80,phase:'振り抜き carried round to her left'},
+  {rootZ:10,hipY:193,pelvis:-55,torso:-30,pitch:8,footL:[9,24,0,0],footR:[-10,-26,6,50],armR:{d:[.85,.15,-.1],e:1},plane:'yoko',tip:100,armL:{d:[.6,.6,-.5],e:.75},shieldN:[.8,0,-.6],ms:130,phase:'残心 hold: arm stretched out to her left, blade behind'},
+  {rootZ:2,hipY:193,pelvis:0,torso:0,pitch:12,footL:[9,24,0,0],footR:[-10,-26,2,50],armR:{d:[-.3,.45,.84],e:.85},tip:-15,armL:{d:[.15,.3,.94],e:.6},shieldN:[0,0,1],ms:80,phase:'戻り push back off the front foot (still planted); the blade comes up'},
+  {rootZ:-8,hipY:190,pelvis:20,torso:4,pitch:8,footL:[9,12,6,0,1],footR:[-10,-26,0,50],armR:{d:[-.3,.5,.81],e:.82},tip:-24,armL:{d:[.1,.3,.95],e:.58},shieldN:[0,0,1],ms:70,phase:'引き the lead foot comes back'},
+  {...GUARD,ms:90,phase:'構え guard again'}]},
+ thrust:{label:'突き',loop:false,hitFrame:4,keys:[
+  {...GUARD,ms:100,phase:'構え guard'},
+  {rootZ:-14,hipY:191,pelvis:50,torso:10,pitch:0,footL:[9,6,0,0],footR:[-10,-26,0,50],armR:{d:[-.45,.6,-.2],e:.55,p:[-.35,.3,-1]},tip:8,armL:{d:[.1,.2,.97],e:.8},shieldN:[0,0,1],ms:90,phase:'引き draw the sword back by her hip, point toward the target, shield covering'},
+  {rootZ:-16,hipY:192,pelvis:55,torso:12,pitch:-2,footL:[9,8,6,0,1],footR:[-10,-26,0,50],armR:{d:[-.45,.55,-.3],e:.48,p:[-.35,.3,-1]},tip:6,armL:{d:[.1,.2,.97],e:.85},shieldN:[0,0,1],ms:70,phase:'溜め coil: weight back, lead foot lifts'},
+  {rootZ:-4,hipY:188,pelvis:20,torso:4,pitch:6,footL:[9,22,10,0,1],footR:[-10,-26,4,50],armR:{d:[-.2,.12,.97],e:.8},tip:4,armL:{d:[.3,.3,.9],e:.8},shieldN:[.3,0,.95],smear:true,ms:50,phase:'踏み込み lunge: the arm drives out ahead of the body'},
+  {rootZ:12,hipY:195,pelvis:-30,torso:-10,pitch:14,footL:[9,30,0,0],footR:[-10,-26,7,50],armR:{d:[-.05,.06,1],e:1},tip:4,armL:{d:[.5,.3,-.8],e:.9},shieldN:[.7,0,-.7],ms:100,phase:'命中 full extension: arm and blade one line, rear leg straight, shield arm thrown back'},
+  {rootZ:12,hipY:195,pelvis:-30,torso:-10,pitch:14,footL:[9,30,0,0],footR:[-10,-26,7,50],armR:{d:[-.05,.06,1],e:1},tip:4,armL:{d:[.5,.3,-.8],e:.9},shieldN:[.7,0,-.7],ms:110,phase:'残心 hold at full stretch'},
+  {rootZ:4,hipY:192,pelvis:20,torso:4,pitch:8,footL:[9,30,0,0],footR:[-10,-26,2,50],armR:{d:[-.45,.6,-.2],e:.55,p:[-.35,.3,-1]},tip:8,armL:{d:[.15,.25,.95],e:.7},shieldN:[0,0,1],ms:80,phase:'引き戻し the blade comes back'},
+  {rootZ:-8,hipY:190,pelvis:22,torso:4,pitch:6,footL:[9,14,6,0,1],footR:[-10,-26,0,50],armR:{d:[-.3,.5,.81],e:.82},tip:-24,armL:{d:[.1,.3,.95],e:.58},shieldN:[0,0,1],ms:70,phase:'引き the lead foot comes back'},
+  {...GUARD,ms:90,phase:'構え guard again'}]},
  advance:{label:'構えたまま前進',loop:true,keys:[]},
  retreat:{label:'構えたまま後退',loop:true,keys:[]}
 };
@@ -91,26 +127,42 @@ function ik3(a,target,l1,l2,pole){
  const x=(l1*l1-l2*l2+m*m)/(2*m),h=Math.sqrt(Math.max(0,l1*l1-x*x));let p=sub(pole,mul(u,dot(pole,u)));p=norm(p);
  return{mid:add(add(a,mul(u,x)),mul(p,h)),end:add(a,d)};
 }
-export function pose(k){
- const J={},root=[0,k.hipY,k.rootZ||0],P=rad(k.pitch),chest=k.pelvis+k.torso;
+/* the cut planes: e1 ahead, e2 the way the stroke comes down/across. tip angles are measured in
+   this plane from her sword shoulder: 0 = ahead, +90 = along e2, -90 = against it (where the
+   stroke starts), 180 = behind her */
+const PLANES={vertical:{e1:[0,0,1],e2:[0,1,0]},kesa:{e1:[0,0,1],e2:[.7071,.7071,0]},yoko:{e1:[0,0,1],e2:[1,0,0]}};
+/* v5 feminine: a narrower track and toes turned out less; she sinks and leans less; the hips
+   sway toward the leg that carries her weight and the chest answers the other way (an S line);
+   knees track a touch inward; narrower shoulders */
+function feminine(k){
+ const q={...k},fz=f=>f&&[f[0]*.7,f[1],f[2],(f[3]||0)*.6,f[4]];
+ q.footL=fz(k.footL);q.footR=fz(k.footR);
+ q.hipY=188+(k.hipY-188)*.82;q.pitch=k.pitch*.8;
+ const w=Math.max(0,Math.min(1,((k.rootZ||0)+12)/26));   // 0 = weight on the rear foot, 1 = on the front
+ q.sway=(k.footL[2]>2||k.footR[2]>6)&&w<.2?0:2.6*w-1.4*(1-w);
+ return q;
+}
+export function pose(k0){
+ const k=feminine(k0);
+ const J={},root=[k.sway||0,k.hipY,k.rootZ||0],P=rad(k.pitch),chest=k.pelvis+k.torso;
  // a point on the trunk: [lateral, rise above the hip joints, forward], turned by yaw then leaned
  const trunk=(l,rise,z,yaw)=>{const [l1,z1]=yawPt(l,z,yaw),z2=z1*Math.cos(P)+rise*Math.sin(P),r2=rise*Math.cos(P)-z1*Math.sin(P);return[root[0]+l1,root[1]-r2,root[2]+z2]};
- J.root=root;J.waist=trunk(0,19.5,0,k.pelvis);J.thorax=trunk(0,36.5,0,chest);J.neck=trunk(0,55.5,0,chest);
+ J.root=root;const cs=-(k.sway||0)*.9;J.waist=trunk(cs*.3,19.5,0,k.pelvis);J.thorax=trunk(cs,36.5,0,chest);J.neck=trunk(cs*.8,55.5,0,chest);   // the chest answers the hips (S line)
  J.head=[J.neck[0],J.neck[1]-L.neckToHead,J.neck[2]+2];            // the head stays level, eyes on the target
  for(const [side,sg] of [['right',-1],['left',1]]){
   const hip=trunk(8.5*sg,0,0,k.pelvis),f=k['foot'+(side==='right'?'R':'L')],fy=rad(f[3]||0);
   const toe=[-sg*Math.sin(fy)*(side==='right'?1:-1)*0+(side==='right'?-Math.sin(fy):Math.sin(fy)),0,Math.cos(fy)];   // toes turned out to her own side
   const onToe=f[2]>0&&f[2]<=8&&!f[4],ankle=[f[0],232-(onToe?Math.min(f[2],4.5):f[2]),f[1]];   // heel up: the ankle rises only as far as the foot allows
   // knees go the way the toes point (and a little outward), never inward across the body
-  const leg=ik3(hip,ankle,L.thigh,L.shin,norm(add(toe,[sg*.2,0,0])));
+  const leg=ik3(hip,ankle,L.thigh,L.shin,norm(add(toe,[-sg*.08,0,0])));   // knees track a touch inward
   J['hip_'+side]=hip;J['knee_'+side]=leg.mid;J['ankle_'+side]=leg.end;
   const lift=f[2]>2?1:0;   // a lifted foot hangs toes-down a little
   // a planted foot whose heel comes up (lift <= 8 on the ground) keeps its toes on the floor
   const ty=onToe?240:leg.end[1]+8-lift*3,tz=onToe?Math.sqrt(Math.max(0,185-(240-leg.end[1])**2)):11;
   J['toe_'+side]=[leg.end[0]+toe[0]*tz,ty,leg.end[2]+toe[2]*tz];
-  const sh=trunk(12.5*sg,41,0,chest),A=k['arm'+(side==='right'?'R':'L')],hv=add(sh,mul(norm(A.d),(L.upper+L.fore-.06)*A.e));
+  const sh=trunk(11.5*sg+cs,41,0,chest),A=k['arm'+(side==='right'?'R':'L')],hv=add(sh,mul(norm(A.d),(L.upper+L.fore-.06)*A.e));
   // elbows point out and down; the sword elbow lifts out to the side when the hand is overhead
-  const over=hv[1]<sh[1]-12;const pole=side==='right'?(over?[-1,-.2,-.6]:[-1,.6,-.3]):[1,.7,-.2];
+  const over=hv[1]<sh[1]-12;const pole=A.p||(side==='right'?(over?[-1,-.2,-.6]:[-1,.6,-.3]):[1,.9,.05]);   // A.p: an elbow direction for this key   // the shield elbow stays close to her side
   const arm=ik3(sh,hv,L.upper,L.fore,pole);
   J['shoulder_'+side]=sh;J['elbow_'+side]=arm.mid;J['wrist_'+side]=arm.end;
   const fa=norm(sub(arm.end,arm.mid));J['hand_'+side]=add(arm.end,mul(fa,L.hand));
@@ -118,10 +170,11 @@ export function pose(k){
  // the blade: the sword forearm turned about the cut's lateral axis by the wrist angle. When a
  // key gives tip (the angle of the tip seen from her right shoulder, side view: 0 = ahead,
  // -90 = straight up, 90 = straight down), the wrist angle is solved to put it there.
- const f=norm(sub(J.wrist_right,J.elbow_right)),ax=[1,0,0],axf=cross(ax,f);
- const bladeAt=w=>{let v=norm(add(add(mul(f,Math.cos(w)),mul(axf,Math.sin(w))),mul(ax,dot(ax,f)*(1-Math.cos(w)))));return norm([v[0]*.4,v[1],v[2]])};
+ const PL=PLANES[k.plane||'vertical'],ax=norm(cross(PL.e2,PL.e1));   // the wrist turns the blade about the plane's normal
+ const f=norm(sub(J.wrist_right,J.elbow_right)),axf=cross(ax,f);
+ const bladeAt=w=>{let v=norm(add(add(mul(f,Math.cos(w)),mul(axf,Math.sin(w))),mul(ax,dot(ax,f)*(1-Math.cos(w)))));return norm(sub(v,mul(ax,dot(v,ax)*.6)))};   // kept mostly in the plane
  let w=rad(k.wrist||0);
- if(k.tip!=null){const sh=J.shoulder_right,want=rad(k.tip);let best=1e9;for(let d=-180;d<=180;d+=.5){const v=bladeAt(rad(d)),t=add(J.hand_right,mul(v,L.sword)),a=Math.atan2(t[1]-sh[1],t[2]-sh[2]),e=Math.abs(Math.atan2(Math.sin(a-want),Math.cos(a-want)));if(e<best){best=e;w=rad(d)}}Object.defineProperty(J,'_wrist',{value:+(w*180/Math.PI).toFixed(1),enumerable:false})}
+ if(k.tip!=null){const sh=J.shoulder_right,want=rad(k.tip);let best=1e9;for(let d=-180;d<=180;d+=.5){const v=bladeAt(rad(d)),t=add(J.hand_right,mul(v,L.sword)),r=sub(t,sh),a=Math.atan2(dot(r,PL.e2),dot(r,PL.e1)),e=Math.abs(Math.atan2(Math.sin(a-want),Math.cos(a-want)));if(e<best){best=e;w=rad(d)}}Object.defineProperty(J,'_wrist',{value:+(w*180/Math.PI).toFixed(1),enumerable:false})}
  const sd=bladeAt(w);   // (the blade is kept in the plane of the cut)
  J.sword_tip=add(J.hand_right,mul(sd,L.sword));
  // the cross-guard: across the blade, flat to the swing
@@ -150,11 +203,12 @@ export function library(){
  const motions={};
  for(const [name,m] of Object.entries(MOTIONS)){
   motions[name]={};
-  for(const d of DIRECTIONS)motions[name][d]=m.keys.map((k,i)=>({direction:d,yaw:YAW[d],motion:name,frame:i,frame_ms:k.ms,root_forward:k.rootZ||0,phase:k.phase,hit:i===m.hitFrame||undefined,smear:k.smear||undefined,joints:project(pose(k),d)}));
+  for(const d of DIRECTIONS)motions[name][d]=m.keys.map((k,i)=>({direction:d,yaw:YAW[d],motion:name,frame:i,frame_ms:k.ms,root_forward:k.rootZ||0,cut_plane:k.plane||'vertical',phase:k.phase,hit:i===m.hitFrame||undefined,smear:k.smear||undefined,joints:project(pose(k),d)}));
  }
  return{schema:'anatomical-eight-direction-motion/1.0',extends:'poses.json (same skeleton, canvas and projection)',canvas:[288,288],origin:'top-left',ground_y:242,centre_x:144,root_forward:'rootZ per frame: forward travel of the hips baked into the frames',
   directions:DIRECTIONS,yaw:YAW,anatomical_sides:{right:'negative world lateral; sword hand',left:'positive world lateral; shield forearm'},
   projection:'x=144+cos(yaw)*lateral+sin(yaw)*forward; y=worldY+0.18*depth; depth=cos(yaw)*forward-sin(yaw)*lateral. Positive depth is nearer.',
+  cut_planes:{vertical:'the blade swings in the upright plane through her and the target (slash, heavy, thrust)',kesa:'the diagonal plane from above her right shoulder down to her left hip',yoko:'the level plane at chest height, right to left'},feminine:'narrower track, less toe-out, shallower sink and lean, hips sway to the weight-bearing leg with the chest answering (S line), knees a touch inward, shield elbow close',
   in_place:false,planted_feet:'right foot fixed through the cut; left foot fixed from landing (slash 4-9, heavy 5-9)',extra_joints:{sword_tip:'end of the blade (hand_right + 54px along the blade)',guard_a:'cross-guard end',guard_b:'cross-guard end',shield:'centre of the shield on the left forearm',shield_r0:'shield rim, 8 points 45deg apart (r0..r7); the face is the plane through them',shield_b0:'back rim of the shield, 8 points (thickness 3.5px)',shield_face:'a point 6px in front of the face of the shield: nearer than shield = the face is toward the viewer',strap_a:'arm strap end (along the left forearm)',strap_b:'arm strap end'},
   motions:Object.fromEntries(Object.entries(MOTIONS).map(([n,m])=>[n,{label:m.label,loop:m.loop,hit_frame:m.hitFrame??null,frame_ms:m.keys.map(k=>k.ms),phases:m.keys.map(k=>k.phase)}])),
   poses:motions};

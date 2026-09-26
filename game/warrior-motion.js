@@ -42,9 +42,9 @@ function bind(){
  // v0.41: she pulls in bursts - a hard wrench every so often, then a moment gathering herself -
  // and the bursts fade as her Nutera rises; her knees press together and rub as it does
  const w=clamp01(1-gr.t/(gr.dur||4)*.5),p=gr.pulse||0,s=gr.side||1,H=g.state?.hero,nu=clamp01((H?.nutera||0)/100),str=w*(1-nu*.85),
-  jk=Math.pow(Math.max(0,Math.sin(t*3.6+(gr.ph??=Math.random()*6))),8)*str,rub=Math.sin(t*5.2)*nu;
- return{kind:'bind',body:(Math.sin(t*7.5)*5*str+Math.sin(t*13)*1.5+jk*14)*s-p*8*s,ar:34+Math.sin(t*8)*12*str+jk*22+p*18,al:-34+Math.sin(t*8.6+1)*12*str-jk*22-p*18,
-  lr:-7+Math.sin(t*11)*3*(1-nu)-nu*5+rub*4,ll:7+Math.sin(t*11+1.7)*3*(1-nu)+nu*5+rub*4,x:Math.sin(t*9)*4*str+jk*6*s,y:2+p*3+nu*2};
+  jk=Math.pow(Math.max(0,Math.sin(t*3.6+(gr.ph??=Math.random()*6))),8)*str,rub=Math.sin(t*2.4)*nu;
+ return{kind:'bind',body:(Math.sin(t*3.4)*3*str+Math.sin(t*6.5)*.8+jk*9)*s-p*6*s,ar:34+Math.sin(t*2.6)*4*str+jk*9+p*10,al:-34+Math.sin(t*2.9+1)*4*str-jk*9-p*10,   // v0.43: arms mostly still (they flapped), moving with the body's wrench
+  lr:-7+Math.sin(t*4.2)*2*(1-nu)-nu*5+rub*2.5,ll:7+Math.sin(t*4.2+1.7)*2*(1-nu)+nu*5+rub*2.5,x:Math.sin(t*3.4)*2*str+jk*4*s,y:2+p*3+nu*2};
 }
 function clamp01(v){return Math.max(0,Math.min(1,v))}
 function clipdraw(c,i,p){if(!i?.ok||!p?.length)return;c.save();path(c,p);c.clip();c.drawImage(i,0,0);c.restore()}

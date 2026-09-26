@@ -11,7 +11,7 @@ const B={
  supportHp:.7,                // support enemies in mixed encounters
  director:{autoMin:8.5,autoMax:12,ringMin:9,ringMax:13,calmRooms:2,calmMul:1.35,enRegen:6},
  // AUTO director intensity (selectable in the UI): interval multiplier and extra aim error in px
- intensity:{easy:{label:'やさしい',interval:9,err:100},normal:{label:'ふつう',interval:7.5,err:70},hard:{label:'きびしい',interval:4,err:40}},
+ intensity:{easy:{label:'やさしい',interval:7,err:100},normal:{label:'ふつう',interval:3.4,err:70},hard:{label:'きびしい',interval:2.2,err:40}},
  snare:{sp:15,bind:1.35},
  xp:[0,0,70,190,360,590,880,1240,1680],   // Lv8 cap, reached around the 6th floor
  sailDecay:3.2,                          // was 1.3: Sail no longer pins at 100%
@@ -29,7 +29,8 @@ const B={
  enemySpMul:.6,                 // SP damage of monster attacks
  // mucus/spore clouds are about Nutera, not pain: most of the old v0.3 poison is gone
  fog:{enemy:{hp:1,poison:1.2,slow:1.0,sp:.9},director:{hp:1,poison:1.6,slow:.8,sp:1.8}},
- poisonDmg:2
+ poisonDmg:2,
+  nuteraGain:.6                 // v0.43: climaxes came about twice as often as in v0.37 once Nutera cooled slowly
 };
 // tools/sim.js can inject overrides to sweep values: {"hero":{"spRegen":7}}
 (function merge(t,o){for(const k in o||{})if(o[k]&&typeof o[k]==='object'&&!Array.isArray(o[k]))merge(t[k]||={},o[k]);else t[k]=o[k]})(B,window.__balanceOverride);
@@ -49,6 +50,7 @@ for(const r of Game5Dungeon.rooms)for(const z of r.zones||[])for(const k of ['sa
 const baseNutera=applyNutera;
 applyNutera=function(h,base,meta={}){
  if(h&&(h.afterEstellaT||0)>0)meta={...meta,mult:(meta.mult||1)*B.afterEstella.nuteraMul};
+ meta={...meta,mult:(meta.mult||1)*(B.nuteraGain??1)};   // v0.43: all Nutera gain, so a climax takes longer to come
  return baseNutera(h,base,meta);
 };
 

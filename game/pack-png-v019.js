@@ -34,11 +34,15 @@ function raster(im,done,k=2){
 const finals=new Set(),getJSON=u=>fetch(u).then(r=>r.ok?r.json():{}).catch(()=>({}));
 const listed=Promise.all([getJSON(F+'index.json'),getJSON(F+'_web/manifest.json')]);
 const has=(j,kind,name)=>(j?.[kind]||[]).some(e=>String(e).replace(/^.*\//,'').replace(/\.png$/,'')===name);
-function final(kind,name,fn){listed.then(([j,web])=>{if(!has(j,kind,name))return;const w=web?.files?.[kind+'/'+name];load(w?`${F}_web/${w.file}`:`${F}${kind}/${name}.png`,fn)})}
+function final(kind,name,fn,fail){listed.then(([j,web])=>{if(!has(j,kind,name))return;const w=web?.files?.[kind+'/'+name],i=load(w?`${F}_web/${w.file}`:`${F}${kind}/${name}.png`,fn);if(fail)i.onerror=fail})}
 function use(svg,kind,name,set,trim){
  const key=kind+'/'+name;
- if(svg)load(svg,im=>raster(im,r=>{if(!finals.has(key))set(r)}));
- final(kind,name,im=>{finals.add(key);trim?raster(im,set,1):set(im)});
+ // v0.43: the reference drawing is only a stand-in for a kind with no delivered picture (or one
+ // whose picture fails to load). It used to be drawn first and replaced when the delivery
+ // arrived, so on a slow connection the monsters showed as the flat SVG drawings for a while.
+ const fallback=()=>{if(svg&&!finals.has(key))load(svg,im=>raster(im,r=>{if(!finals.has(key))set(r)}))};
+ listed.then(([j])=>{if(!has(j,kind,name))fallback()});
+ final(kind,name,im=>{finals.add(key);trim?raster(im,set,1):set(im)},fallback);
 }
 for(const t of TYPES)use(`${S}monster_${t}.svg`,'monsters',t,im=>{if(req)req.monsters[t]=im},true);
 const props=window.Game5Props=Object.assign(window.Game5Props||{},{});

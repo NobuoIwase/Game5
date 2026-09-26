@@ -13,11 +13,13 @@ CAM.z=1;let wantZ=1;
 /* v0.27 dead zone: the view stays still while she moves inside the middle of the screen and
    only follows once she leaves it, so turning round or pacing does not swing the whole
    screen. In a close-up she is simply centred. */
-const DZ={x:.16,y:.14};
+const DZ={x:.16,y:.14},DZZ={x:.1,y:.08};
 function target(h){
  const z=CAM.z,vw=SW/z,vh=SH/z,hy=h.y+(z>1.05?30:28);   // v0.38: she sits higher, clear of the message window along the bottom
- if(z>1.05)return{x:clamp(h.x-vw/2,0,W-vw),y:clamp(hy-vh/2,0,H-vh)};
- let x=CAM.x,y=CAM.y;const cx=x+vw/2,cy=y+vh/2,dx=vw*DZ.x,dy=vh*DZ.y;
+ // v0.43: in a close-up too the view keeps a (smaller) still zone, so her struggling and
+ // small shifts no longer shake the whole screen
+ const Z=z>1.05?DZZ:DZ;
+ let x=CAM.x,y=CAM.y;const cx=x+vw/2,cy=y+vh/2,dx=vw*Z.x,dy=vh*Z.y;
  if(h.x<cx-dx)x=h.x+dx-vw/2;else if(h.x>cx+dx)x=h.x-dx-vw/2;
  if(hy<cy-dy)y=hy+dy-vh/2;else if(hy>cy+dy)y=hy-dy-vh/2;
  return{x:clamp(x,0,W-vw),y:clamp(y,0,H-vh)};
@@ -30,7 +32,7 @@ function follow(dt){
  const t=target(h);
  const jump=!seen||Math.hypot(h.x-seen.x,h.y-seen.y)>260;
  if(jump){CAM.x=clamp(h.x-SW/CAM.z/2,0,W-SW/CAM.z);CAM.y=clamp(h.y-30-SH/CAM.z/2,0,H-SH/CAM.z)}
- else{const k=1-Math.exp(-dt*6);CAM.x+=(t.x-CAM.x)*k;CAM.y+=(t.y-CAM.y)*k}
+ else{const k=1-Math.exp(-dt*(CAM.z>1.05?2.4:6));CAM.x+=(t.x-CAM.x)*k;CAM.y+=(t.y-CAM.y)*k}   // v0.43: a close-up follows gently
  seen={x:h.x,y:h.y};
 }
 const bDraw=draw;

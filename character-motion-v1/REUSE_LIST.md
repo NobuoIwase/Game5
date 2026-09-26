@@ -194,3 +194,211 @@
 | `edge_pull__walk_unsteady` | right | 2 | **2** | 0 | 0 | 0 | ― |
 | `walk_unsteady__stand` | right | 2 | **0** | 2 | 0 | 0 | 0＝stand__walk_unsteady 1、1＝stand__walk_unsteady 0 |
 | `walk_unsteady__trip_fall` | right | 2 | **2** | 0 | 0 | 0 | ― |
+
+## 部位を使い回して組み立てる場合
+
+歩行と同じ組み立て方を考えた場合の見積もり（`node tools/build_part_reuse.mjs`、詳細は `motion/part-reuse.json`）。
+
+**歩行の作り方**（`walk-graphics-handoff/docs/02_ASSEMBLY.md`）
+- 部位を方向ごとに1枚ずつ描く：頭・上半身・下半身・首・上腕・前腕・手・太もも・すね・足（かかと・振り出し・つま先の差分つき）など
+- 関節の間で回転・伸縮して組み立てる
+- 太ももは同じ絵の角度を変えるだけ
+- 左右の腕・脚にも同じ絵を使う
+
+**前提**
+- 各キャラクターを、歩行の素体と同じ部位に分けて、8方向ぶん用意する
+- 左右反転はしない
+- いまの戦士の部位素材（`parts/warrior/`）は腕・脚が1枚ずつで、肘・膝は変形で曲げている
+  - この見積もりの形にするには、上腕・前腕・太もも・すねに分け直す必要がある
+
+**判定のしかた**：依頼する全1635コマについて、部位ごとに見える角度を骨格から計算した。回すだけで済まず、新しい絵が要るのは次の場合。
+
+| 部位 | 新しい絵が要る場合 |
+|---|---|
+| 頭 | 30度より深くうつむく・のけぞる（頭頂やあごの下が見える） |
+| 顔 | 普通の顔以外の表情（目を閉じる・口を開ける・結ぶ）。見える頭の向きごと |
+| 上半身・下半身 | 前屈み・寝た姿勢などで、体を30度より上下から見る（首の側・脚の側から見る） |
+| 上腕・前腕・太もも・すね | こちらや奥へ向いて、見える長さが50%未満（縦に縮めるだけでは形が合わない） |
+| 足 | つま先まで伸ばす／足裏が見える／甲を上から見る |
+
+**結果**
+- **既存の部位だけで組める**：381コマ（23%）
+- **ほかの1254コマ**：次の新しい部位の絵を足せば組める
+- **新しく描く部位の絵**：107枚（うち表情27枚）。1枚描けば、それを使う全コマで使い回せる
+
+### 頭（3枚）
+
+| 見え方 | 使うモーション |
+|---|---|
+| 右・下から（のけぞり・あごの下が見える） | `down_pinned_spread`、`down_pinned_rock`、`down_recover`、`down_tension`、`down_pinned_kick__down_pinned_spread` |
+| 正面・下から（のけぞり・あごの下が見える） | `tension_arch` |
+| 正面・上から（うつむき・頭頂が見える） | `afterglow_slump` |
+
+### 顔（27枚）
+
+| 見え方 | 使うモーション |
+|---|---|
+| 正面・口を結んだ | `arms_behind_squirm`、`arms_behind_wrench`、`elbows_up_strain`、`legs_pulled_open`、`legs_held_open`、`tension_tiptoe` ほか43 |
+| 正面・口を開けた | `hip_rock_spread`、`hip_rock_closed`、`bounce_spread`、`bounce_hung`、`tension_tiptoe`、`tension_arch` ほか32 |
+| 正面・目を閉じて口を開けた | `tension_tiptoe`、`tension_arch`、`afterglow_spread`、`chain_splay`、`tension_free`、`clinger_afterglow` ほか14 |
+| 右・口を開けた | `down_fall_back`、`down_hips_up`、`down_afterglow`、`down_recover`、`kiss_afterglow`、`kiss_recover` ほか14 |
+| 右・口を結んだ | `down_pinned_kick`、`down_pinned_spread`、`down_face_down`、`kiss_recover`、`ankle_grabbed`、`edge_pull` ほか14 |
+| 右・目を閉じた | `down_fall_back`、`down_hips_up`、`get_up`、`kiss_tension`、`kiss_respond`、`down_tension` ほか9 |
+| 正面・目を閉じて口を結んだ | `clinger_peel`、`clinger_tension`、`wrap_squeeze`、`break_free`、`shiver_hug`、`grabbed_flinch__shiver_hug` ほか2 |
+| 右・目を閉じて口を開けた | `down_fall_back`、`kiss_tension`、`down_afterglow`、`edge_pull`、`walk_unsteady`、`defeat_collapse` |
+| 右・目を閉じて口を結んだ | `kiss_forced`、`kiss_tension`、`stand__kiss_forced`、`kiss_forced__kiss_respond`、`kiss_respond__kiss_tension` |
+| 右斜め前・口を結んだ | `held_from_behind`、`spore_inhale`、`grabbed_flinch__spore_inhale`、`spore_inhale__tension_free`、`spore_inhale__stand` |
+| 右・下から・口を結んだ | `down_pinned_spread`、`down_recover`、`down_pinned_kick__down_pinned_spread` |
+| 正面・目を閉じた | `tension_tiptoe`、`tension_arch` |
+| 右・下から・口を開けた | `down_pinned_rock`、`down_tension` |
+| 正面・下から・目を閉じて口を開けた | `tension_arch` |
+| 正面・上から・口を開けた | `afterglow_slump` |
+| 正面・上から・目を閉じて口を開けた | `afterglow_slump` |
+| 右・下から・目を閉じた | `down_pinned_rock` |
+| 左斜め前・口を結んだ | `held_from_behind` |
+| 右・下から・目を閉じて口を結んだ | `down_tension` |
+| 右・下から・目を閉じて口を開けた | `down_tension` |
+| 右斜め前・口を開けた | `walk_unsteady` |
+| 右斜め前・目を閉じて口を開けた | `walk_unsteady` |
+| 左・口を開けた | `walk_unsteady` |
+| 左・目を閉じて口を開けた | `walk_unsteady` |
+| 左斜め前・口を開けた | `walk_unsteady` |
+| 左斜め前・目を閉じて口を開けた | `walk_unsteady` |
+| 右斜め前・目を閉じた | `spore_inhale` |
+
+### 上半身（5枚）
+
+| 見え方 | 使うモーション |
+|---|---|
+| 右・腰の側から | `bent_over`、`down_pinned_spread`、`down_pinned_rock`、`down_afterglow`、`down_recover`、`down_tension` ほか3 |
+| 右斜め後ろ・腰の側から | `bent_over`、`arms_behind_squirm__bent_over` |
+| 正面・腰の側から | `tension_arch` |
+| 正面・首の側から（ほぼ真っすぐ） | `bent_over__arms_behind_squirm` |
+| 正面・首の側から | `bent_over__arms_behind_squirm` |
+
+### 下半身（5枚）
+
+| 見え方 | 使うモーション |
+|---|---|
+| 右・脚の側から | `bent_over`、`down_pinned_spread`、`down_pinned_rock`、`down_afterglow`、`down_recover`、`down_tension` ほか3 |
+| 右斜め後ろ・脚の側から | `bent_over`、`arms_behind_squirm__bent_over` |
+| 正面・脚の側から | `tension_arch` |
+| 正面・腰の上の側から（ほぼ真っすぐ） | `bent_over__arms_behind_squirm` |
+| 正面・腰の上の側から | `bent_over__arms_behind_squirm` |
+
+### 上腕（22枚）
+
+| 見え方 | 使うモーション |
+|---|---|
+| down_right向きの図・先が奥向き | `down_pinned_spread`、`down_pinned_rock`、`down_afterglow`、`down_recover`、`down_tension`、`down_pinned_kick__down_pinned_spread` ほか1 |
+| front向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko`、`swing_abandon`、`spore_inhale__tension_free` |
+| back向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`swing_abandon` |
+| front向きの図・先がこちら向き（ほぼ真正面） | `heavy`、`yoko`、`thrust`、`spore_inhale__tension_free` |
+| back向きの図・先が奥向き（ほぼ真正面） | `heavy`、`yoko`、`thrust` |
+| down_right向きの図・先がこちら向き | `yoko`、`thrust`、`swing_abandon` |
+| up_left向きの図・先が奥向き | `yoko`、`thrust`、`swing_abandon` |
+| up_right向きの図・先が奥向き | `heavy`、`yoko` |
+| down_left向きの図・先がこちら向き | `heavy`、`yoko` |
+| right向きの図・先がこちら向き | `kesa`、`defeat_collapse` |
+| right向きの図・先が奥向き | `kesa`、`yoko` |
+| up_right向きの図・先がこちら向き | `kesa`、`thrust` |
+| left向きの図・先がこちら向き | `kesa`、`yoko` |
+| down_left向きの図・先が奥向き | `kesa`、`thrust` |
+| up_right向きの図・先がこちら向き（ほぼ真正面） | `heavy` |
+| down_left向きの図・先が奥向き（ほぼ真正面） | `heavy` |
+| left向きの図・先が奥向き | `kesa` |
+| right向きの図・先がこちら向き（ほぼ真正面） | `yoko` |
+| left向きの図・先が奥向き（ほぼ真正面） | `yoko` |
+| front向きの図・先が奥向き | `thrust` |
+| back向きの図・先がこちら向き | `thrust` |
+| down_right向きの図・先が奥向き（ほぼ真正面） | `down_tension__down_afterglow` |
+
+### 前腕（20枚）
+
+| 見え方 | 使うモーション |
+|---|---|
+| front向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか20 |
+| front向きの図・先がこちら向き（ほぼ真正面） | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`clinger_peel` ほか4 |
+| up_right向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか2 |
+| back向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか2 |
+| down_left向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか2 |
+| down_right向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか1 |
+| up_left向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか1 |
+| back向きの図・先が奥向き（ほぼ真正面） | `slash`、`heavy`、`kesa`、`yoko`、`thrust` |
+| right向きの図・先が奥向き | `kiss_tension`、`kiss_recover`、`stand__kiss_forced`、`clinger_recover__walk_unsteady`、`reach_toward__stand` |
+| front向きの図・先が奥向き（ほぼ真正面） | `slash`、`kesa`、`yoko`、`thrust` |
+| back向きの図・先がこちら向き（ほぼ真正面） | `slash`、`kesa`、`yoko`、`thrust` |
+| right向きの図・先がこちら向き | `kiss_tension`、`stand__kiss_forced`、`clinger_recover__walk_unsteady` |
+| down_right向きの図・先が奥向き | `down_afterglow`、`down_recover`、`down_tension__down_afterglow` |
+| down_right向きの図・先がこちら向き（ほぼ真正面） | `heavy`、`swing_abandon` |
+| up_left向きの図・先が奥向き（ほぼ真正面） | `heavy`、`swing_abandon` |
+| front向きの図・先が奥向き | `yoko`、`clinger_tension` |
+| right向きの図・先が奥向き（ほぼ真正面） | `yoko`、`clinger_recover__walk_unsteady` |
+| right向きの図・先がこちら向き（ほぼ真正面） | `stand__kiss_forced`、`clinger_recover__walk_unsteady` |
+| back向きの図・先がこちら向き | `yoko` |
+| left向きの図・先がこちら向き（ほぼ真正面） | `yoko` |
+
+### 太もも（4枚）
+
+| 見え方 | 使うモーション |
+|---|---|
+| front向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか8 |
+| back向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか1 |
+| front向きの図・先がこちら向き（ほぼ真正面） | `heavy`、`thrust`、`sit_recover`、`clinger_recover` |
+| back向きの図・先が奥向き（ほぼ真正面） | `heavy`、`thrust` |
+
+### すね（7枚）
+
+| 見え方 | 使うモーション |
+|---|---|
+| front向きの図・先が奥向き | `slash`、`heavy`、`kesa`、`yoko`、`tension_free`、`sit_recover` ほか4 |
+| front向きの図・先が奥向き（ほぼ真正面） | `tension_free`、`sit_afterglow`、`sit_recover`、`clinger_afterglow`、`clinger_recover`、`clinger_tension` ほか1 |
+| back向きの図・先がこちら向き | `slash`、`heavy`、`kesa`、`yoko` |
+| down_right向きの図・先がこちら向き（ほぼ真正面） | `down_afterglow`、`down_recover`、`down_tension`、`down_tension__down_afterglow` |
+| down_right向きの図・先が奥向き | `heavy` |
+| up_left向きの図・先がこちら向き | `heavy` |
+| down_right向きの図・先がこちら向き | `down_tension` |
+
+### 足（14枚）
+
+| 見え方 | 使うモーション |
+|---|---|
+| front向きの図・甲を上から | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか11 |
+| right向きの図・つま先まで伸ばした | `advance`、`retreat`、`down_fall_back`、`down_pinned_kick`、`down_face_down`、`get_up` ほか9 |
+| back向きの図・足裏が見える | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか1 |
+| up_left向きの図・足裏が見える | `slash`、`heavy`、`kesa`、`yoko`、`thrust`、`advance` ほか1 |
+| down_right向きの図・つま先まで伸ばした | `advance`、`retreat`、`down_pinned_spread`、`down_pinned_rock`、`down_recover`、`down_tension` ほか1 |
+| down_right向きの図・足裏が見える | `down_pinned_rock`、`down_afterglow`、`down_recover`、`down_tension`、`down_tension__down_afterglow` |
+| front向きの図・つま先まで伸ばした | `advance`、`retreat`、`tension_tiptoe`、`wrap_tension` |
+| right向きの図・足裏が見える | `down_pinned_kick`、`down_face_down`、`defeat_collapse` |
+| right向きの図・甲を上から | `down_face_down`、`ankle_grabbed`、`defeat_collapse` |
+| up_right向きの図・つま先まで伸ばした | `advance`、`retreat` |
+| back向きの図・つま先まで伸ばした | `advance`、`retreat` |
+| up_left向きの図・つま先まで伸ばした | `advance`、`retreat` |
+| left向きの図・つま先まで伸ばした | `advance`、`retreat` |
+| down_left向きの図・つま先まで伸ばした | `advance`、`retreat` |
+
+### 手（形の種類で数える）
+
+手は骨格に形の情報がないので、キーの内容から種類を数えた。どれも方向ごとに1枚ずつ要る。
+- 力を抜いた手：歩行に既存
+- 剣を握る手：攻撃
+- 開いた手のひら：押す、床や相手に当てる、伸ばす、泡の内側に当てる
+- 体に当てる手：胸・下腹・口を押さえる、自分を抱く
+- 強く握った手：こらえる、力む
+
+新しく描くのは3種類×方向。
+
+### 部位の組み立てで気をつけること
+
+- **大きく形が変わる所**：次の場面は、部位を回すだけでは硬く見えやすい
+  - 背中を大きく反らす頂点
+  - 輪で締め付けられる
+  - 前屈み・四つん這い・寝た姿勢
+  - 新しい部位を4つ以上同時に使うコマ：126コマ（`motion/part-reuse.json`）
+  - これらは、組み立てた上で一部を描き足す（仕上げる）か、1枚絵にする候補
+- **衣装・髪**：脚を大きく開く、寝る、逆さに近い姿勢では、スカートや髪の形が変わる
+  - キャラクターごとに差分が要る（骨格からは数えていない）
+- **比べると**：1枚絵なら新規1279コマ＋部分描き替え52コマ
+  - 部位の組み立てなら、新しい部位の絵107枚＋手3種類×方向＋衣装・髪の差分＋仕上げ
+  - どちらで作るかは、絵の質と手間の兼ね合いで決める

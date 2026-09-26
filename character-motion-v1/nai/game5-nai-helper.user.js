@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Game5 NAI helper
 // @namespace    nobuoiwase-game5
-// @version      1.3
+// @version      1.4
 // @description  Game5 のモーションの元絵を NovelAI で作るための手伝い。ボタン1つで次のコマの下絵とプロンプトを入れる
 // @match        https://novelai.net/*
 // @run-at       document-start
@@ -121,6 +121,14 @@ function draw(){
   det.append(ta(label,st.words[k],v=>st.words[k]=v,'書くこと：'+((DATA.hints||{})[k]||'')+'　／　入るモーション：'+ms.join('、')))}
  for(const [k,c] of Object.entries(DATA.characters))det.append(ta('キャラクター：'+c.label,st.charWords[k],v=>st.charWords[k]=v));
  det.append(ta('除外する言葉の追加',st.extraNeg,v=>st.extraNeg=v));
+ // ChatGPT's answer (nai/chatgpt_request.html): paste the JSON, the fields are filled at once
+ const imp=h('textarea',{rows:'3',placeholder:'ChatGPT が返した JSON をここに貼る',style:'width:100%;box-sizing:border-box;background:#0f151d;color:#e6edf3;border:1px solid #3a4658;border-radius:4px'});
+ det.append(h('div',{style:'margin:8px 0;padding:6px;border:1px solid #b3522f;border-radius:5px'},h('div',{style:'font-weight:700'},'ChatGPT の答えを取り込む'),
+  h('div',{},h('a',{href:SRC+'chatgpt_request.html',target:'_blank',style:'color:#7fb4ea'},'ChatGPT に渡す依頼書を開く')),imp,
+  btn('取り込む',()=>{try{const t=imp.value,j=JSON.parse(t.slice(t.indexOf('{'),t.lastIndexOf('}')+1));let n=0;
+   for(const [key,known] of [['words',DATA.situations],['motionWords',DATA.slots||{}],['charWords',DATA.characters]])
+    for(const [k,v] of Object.entries(j[key]||{}))if(k in known&&typeof v==='string'&&v.trim()){st[key][k]=v.trim();n++}
+   save();note(n+' 個の欄を埋めました');}catch(e){note('取り込めませんでした：'+e.message)}},'#b3522f')));
  const cb=h('input',{type:'checkbox'});cb.checked=st.useBase;cb.addEventListener('change',e=>{st.useBase=e.target.checked;save()});
  const sr=h('input',{type:'number',min:'0.3',max:'0.95',step:'0.05',value:String(st.strength),style:'width:60px'});sr.addEventListener('change',e=>{st.strength=+e.target.value;save()});
  det.append(h('div',{style:'margin:4px 0'},h('label',{},cb,' 下絵を使う（img2img）　強さ '),sr));

@@ -10,7 +10,7 @@
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';import {createRequire} from 'node:module';
 import {execSync} from 'node:child_process';
 import {library as R} from '../motion/restraint.mjs';import {library as S} from '../motion/scenes.mjs';import {library as H} from '../motion/heroines.mjs';
-import {run} from './mannequin_svg.mjs';import {MOTION_JA,SIT_HINT} from './nai_scene_ja.mjs';
+import {run} from './mannequin_svg.mjs';import {MOTION_JA,SIT_HINT,SIT_WHO,MOTION_SLOT,MONSTERS} from './nai_scene_ja.mjs';
 const ROOT=path.join(path.dirname(fileURLToPath(import.meta.url)),'..'),OUT=path.join(ROOT,'nai'),BASE=path.join(OUT,'base'),GUIDE=path.join(OUT,'guide');
 const PLAN=JSON.parse(fs.readFileSync(path.join(ROOT,'motion','plan.json'),'utf8')).frames;
 
@@ -27,7 +27,7 @@ export const SITUATIONS={
  wrap:'胴に巻きつかれる',
  grabbed:'足首・尻尾などをつかまれる、引きずられる',
  trance:'ぼんやりする・催眠・胞子・泡',
- tempt:'誘う姿勢',
+ tempt:'誘う姿勢・体が勝手に寄る',
  endure:'声を出さずに耐える',
  exposure:'前垂れがめくれかける',
  climax:'こわばり・絶頂の頂点',
@@ -36,12 +36,12 @@ export const SITUATIONS={
  defeat:'倒れる・敗北',
 };
 const SIT={
- arms_behind_squirm:'bound',arms_behind_wrench:'bound',elbows_up_strain:'bound',legs_pulled_open:'bound',legs_held_open:'bound',bent_over:'bound',chain_splay:'bound',mage_arms_bound:'bound',
+ arms_behind_squirm:'bound',arms_behind_wrench:'bound',elbows_up_strain:'bound',legs_pulled_open:'bound',legs_held_open:'bound',bent_over:'bound',chain_splay:'climax',mage_arms_bound:'bound',
  hip_rock_spread:'bound_rock',hip_rock_closed:'bound_rock',bounce_spread:'bound_rock',bounce_hung:'bound_rock',
  down_fall_back:'pinned',down_pinned_kick:'pinned',down_pinned_spread:'pinned',down_face_down:'pinned',down_hips_up:'pinned',down_pinned_rock:'pinned_rock',
  held_from_behind:'held',kiss_forced:'kiss',kiss_respond:'kiss',clinger_peel:'clinger',clinger_accept:'clinger',
  engulf_sink:'engulf',engulf_struggle:'engulf',engulf_rock:'engulf',wrap_squeeze:'wrap',
- ankle_grabbed:'grabbed',edge_pull:'grabbed',grabbed_flinch:'grabbed',break_free:'grabbed',scout_tail_grabbed:'grabbed',
+ ankle_grabbed:'grabbed',edge_pull:'tempt',grabbed_flinch:'grabbed',break_free:'grabbed',scout_tail_grabbed:'grabbed',
  walk_unsteady:'trance',gaze_trance:'trance',spore_inhale:'trance',daze_sway:'trance',reach_toward:'trance',bubble_float:'trance',shiver_hug:'trance',
  tempt_pose:'tempt',mage_suppress:'endure',healer_panel_catch:'exposure',
  tension_tiptoe:'climax',tension_arch:'climax',tension_free:'climax',kiss_tension:'climax',clinger_tension:'climax',down_tension:'climax',engulf_tension:'climax',wrap_tension:'climax',
@@ -50,6 +50,10 @@ const SIT={
  recover_spread:'recover',recover_slump:'recover',get_up:'recover',down_recover:'recover',sit_recover:'recover',kiss_recover:'recover',clinger_recover:'recover',
  trip_fall:'defeat',defeat_collapse:'defeat',
 };
+/* the scene a motion comes out of, so what holds her stays in the words through the peak, the afterglow and the recovery */
+const ALSO={tension_tiptoe:'bound',tension_arch:'bound',afterglow_spread:'bound',afterglow_slump:'bound',recover_spread:'bound',recover_slump:'bound',
+ kiss_tension:'kiss',clinger_tension:'clinger',clinger_afterglow:'clinger',clinger_recover:'clinger',
+ down_tension:'pinned',engulf_tension:'engulf',wrap_tension:'wrap',mage_suppress_tension:'endure'};
 /* the heroines' own motions that go to NovelAI with the scenes (the rest stay with ChatGPT) */
 export const HEROINE_NAI=['scout_tail_grabbed','scout_tension','mage_suppress','mage_suppress_tension','mage_arms_bound','healer_panel_catch','healer_tension_refuse'];
 
@@ -114,7 +118,7 @@ for(const [kind,lib] of sets)for(const [m,byDir] of Object.entries(lib.poses)){
   const figs=run(F.map(fr=>({...fr,binds:[]})));   // the base picture shows her pose only, nothing holding her
   const held=run(F);                               // the guide picture: with what holds her, for the user to read
   p.forEach((e,i)=>{if(e.use!=='draw')return;const fr=F[i],id=`${m}__${v}__${i}`,look=meta.look||null,peak=/^頂点/.test(fr.phase||'');
-   const sit=[SIT[m]||'defeat'];if(peak&&sit[0]!=='climax')sit.push('climax');
+   const sit=[...new Set([ALSO[m],SIT[m]||'defeat'].filter(Boolean))];if(peak&&!sit.includes('climax'))sit.push('climax');
    frames.push({id,motion:m,view:v,frame:i,label:meta.label,phase:fr.phase||'',look,chars:look?[look]:Object.keys(CHARACTERS),situations:sit,
     prompt:[VIEW[v],...poseTags(fr),...EXPR(fr.expr,look),...holdTags(fr,look)].join(', '),
     note:noteOf(fr.phase||''),base:`base/${id}.png`,guide:`guide/${id}.png`,
@@ -137,7 +141,7 @@ for(const [id] of guides){await pg.goto('file://'+path.join(tmp,id+'.g.svg'));aw
 await b.close();fs.rmSync(tmp,{recursive:true});
 const jobs=[];for(const c of Object.keys(CHARACTERS))for(const f of frames)if(f.chars.includes(c))jobs.push({char:c,frame:f.id,file:`${c}__${f.id}.png`});
 fs.writeFileSync(path.join(OUT,'jobs.json'),JSON.stringify({version:new Date().toISOString().slice(0,10),size:[1024,1024],common:COMMON,negative:NEGATIVE,
- characters:CHARACTERS,situations:SITUATIONS,hints:SIT_HINT,frames:Object.fromEntries(frames.map(f=>[f.id,f])),jobs},null,1));
+ characters:CHARACTERS,situations:SITUATIONS,hints:SIT_HINT,slots:MOTION_SLOT,frames:Object.fromEntries(frames.map(f=>[f.id,f])),jobs},null,1));
 const per={};for(const j of jobs)per[j.char]=(per[j.char]||0)+1;
 console.log(frames.length,'frames,',jobs.length,'jobs',per);
 
@@ -174,3 +178,76 @@ figcaption{font-size:13px;color:var(--sub)}code{font-size:12px;word-break:break-
 <li>右の絵：NovelAI に送る下絵（姿勢だけ）</li><li>英語：こちらで入れてある言葉（向き・姿勢・顔だけ）</li></ul>
 <p><b>押さえているものの名前は、どこにも入れていない。</b>「押さえ」の所を何にするかを、あなたが「設定」の欄に書く。</p>
 <nav>${toc}</nav>${body}</main></body></html>`);
+
+/* nai/chatgpt_request.html: the request that lets ChatGPT fill the blank fields; its answer (JSON) is pasted into the helper */
+{
+ const ex=frames.find(f=>f.motion==='hip_rock_spread')||frames[0];
+ const tr=(a)=>`<tr>${a.map(x=>`<td>${esc(x)}</td>`).join('')}</tr>`;
+ let sec='';
+ for(const [k,label] of Object.entries(SITUATIONS)){
+  const fs_=frames.filter(f=>f.situations.includes(k));if(!fs_.length)continue;
+  const ms=[...new Set(fs_.map(f=>f.motion))];
+  sec+=`<section><h3><code>${k}</code>　${esc(label)}</h3><p><b>書くこと：</b>${esc(SIT_HINT[k]||'')}</p>${SIT_WHO[k]?`<p><b>ゲームでこれをする魔物：</b>${esc(SIT_WHO[k])}</p>`:''}
+<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr>${ms.map(m=>{const f=fs_.find(x=>x.motion===m),J=f.ja||{};return tr([f.label,J.body,J.arms,J.legs,J.held,J.move])}).join('')}</table></section>`;
+ }
+ const slots=Object.entries(MOTION_SLOT).filter(([m])=>frames.some(f=>f.motion===m));
+ const slotRows=slots.map(([m,w])=>{const f=frames.find(x=>x.motion===m),J=f.ja||{};return tr([m,f.label,w,J.move])}).join('');
+ const tmpl={words:Object.fromEntries(Object.keys(SITUATIONS).filter(k=>frames.some(f=>f.situations.includes(k))).map(k=>[k,''])),
+  motionWords:Object.fromEntries(slots.map(([m])=>[m,''])),charWords:Object.fromEntries(Object.keys(CHARACTERS).map(k=>[k,'']))};
+ fs.writeFileSync(path.join(OUT,'chatgpt_request.html'),`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NovelAI 言葉の依頼</title><style>
+:root{--bg:#f6f7f9;--fg:#1d232b;--sub:#5a6573;--card:#fff;--line:#d9dee5;--acc:#2f6fb3}
+@media (prefers-color-scheme:dark){:root{--bg:#141a22;--fg:#e6edf3;--sub:#9fb0c0;--card:#1b2330;--line:#3a4658;--acc:#7fb4ea}}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.7 system-ui,sans-serif}main{max-width:1000px;margin:0 auto;padding:16px}
+h2{margin-top:32px;border-bottom:2px solid var(--acc)}section{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid var(--line);padding:3px 6px;text-align:left;vertical-align:top}
+.user{background:var(--card);border-left:4px solid #b3522f;padding:8px 12px}pre{background:var(--card);border:1px solid var(--line);padding:10px;overflow:auto;font-size:13px}
+.wrap{overflow-x:auto}
+</style></head><body><main>
+<h1>NovelAI の言葉の依頼（ChatGPT 向け）</h1>
+<div class="user"><b>使い方（ユーザー向け）</b><ol>
+<li>このページを ChatGPT に渡す（ファイルを添付するか、全部コピーして貼る）</li>
+<li>ChatGPT が返した JSON（<code>{</code> から <code>}</code> まで）をコピーする</li>
+<li>NovelAI の右下の枠 →「設定（ユーザー用）」→「ChatGPT の答えを取り込む」に貼って、「取り込む」を押す</li></ol>
+取り込んだあとも、欄は手で直せます。</div>
+
+<h2>1. お願いしたいこと</h2>
+<p>Game5 というブラウザのダンジョンゲームで、ヒロイン4人のモーションの1枚絵を NovelAI（V4.5、精密参照つき）で作っています。
+プロンプトの大部分はこちらで決めてあり、<b>下の「欄」だけが空欄</b>です。欄を英語の言葉で埋めて、最後の「答えの形」の JSON で返してください。</p>
+
+<h2>2. こちらで入れてある言葉（欄には書かない）</h2>
+<ul><li>共通：<code>${esc(COMMON)}</code></li><li>キャラクターの見た目（例：アリア）：<code>${esc(CHARACTERS.aria.tags)}</code></li>
+<li>コマごとの向き・姿勢・表情（例）：<code>${esc(ex.prompt)}</code></li><li>除外：<code>${esc(NEGATIVE)}</code></li></ul>
+<p>送るときの並び：<b>共通 → キャラクターの見た目 → キャラクターの欄 → 場面の種類の欄 → モーションの欄 → 向き・姿勢・表情</b>。
+姿勢は img2img の下絵（姿勢だけのマネキン）でも決めています。</p>
+
+<h2>3. 書き方</h2>
+<ul>
+<li>英語の言葉（NovelAI のタグの書き方）。カンマ区切り。1つの欄は 5〜25 語くらい</li>
+<li><b>押さえているもの・つかむもの・揺らしているものは、必ず「何か・色・形・質感」まで書く</b>。「tentacles」だけだと、色も種類もばらばらの物が出てくるため。下の魔物の表の色の言葉を使う</li>
+<li>欄に書いた言葉は、その欄に入る<b>全部のモーション・全部のコマ</b>に入る。1つのモーションにしか合わない言葉は書かない</li>
+<li>向き・姿勢・キャラクターの見た目・人数は書かない（下絵とぶつかる）</li>
+<li>登場人物は全員大人。子ども、出産・産卵、血・痛み・傷、動物との行為、本物の虫は入れない</li>
+<li>顔は「困っているが、まだ抗っている」方向（眉は寄せたまま、目は崩しきらない）</li>
+<li>書くことがない欄は <code>""</code> のまま</li></ul>
+
+<h2>4. 魔物の見た目（色の言葉はここから）</h2>
+<p>ピンク〜肉色にしてよいのは、表でピンク系の種だけ。ほかは表の色にする。</p>
+<div class="wrap"><table><tr><th>名前</th><th>色</th><th>色の言葉</th></tr>${MONSTERS.map(r=>tr(r)).join('')}</table></div>
+
+<h2>5. 場面の種類の欄（<code>words</code>）</h2>
+<p>表は、その欄に入るモーション。「押さえ」の所を何が押さえているかを、欄に書きます。「ゲームでこれをする魔物」が何種類もある欄は、代表を1つ選んでください。</p>
+${sec}
+
+<h2>6. モーションごとの欄（<code>motionWords</code>）</h2>
+<p>同じ場面の種類の中で、押さえているものがモーションごとに違うものは、こちらに書きます。</p>
+<div class="wrap"><table><tr><th>キー</th><th>モーション</th><th>書くこと</th><th>動き</th></tr>${slotRows}</table></div>
+
+<h2>7. キャラクターの欄（<code>charWords</code>）</h2>
+<p>見た目は2.で入れてあります。足したいもの（例：いつもの表情の癖）があれば書きます。なければ <code>""</code>。</p>
+<ul>${Object.entries(CHARACTERS).map(([k,c])=>`<li><code>${k}</code>：${esc(c.label)}</li>`).join('')}</ul>
+
+<h2>8. 答えの形</h2>
+<p>この形の JSON を、コードブロック1つで返してください。キーは変えないでください。</p>
+<pre>${esc(JSON.stringify(tmpl,null,1))}</pre>
+</main></body></html>`);
+}

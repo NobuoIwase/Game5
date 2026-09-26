@@ -113,11 +113,14 @@ export const MOTIONS={
   phase:'bent right over, hips up and back; the hips sway side to side; looks back over the shoulder'}))}
 };
 
+/* the face drawn in the references (expr): resisting = mouth pressed shut, rocking = mouth open,
+   the peak of a tension = eyes shut and mouth open, then eyes shut, then limp with the mouth open */
+const EXPR=(name,i)=>/^tension_/.test(name)?(i<3?'line':i<9?'shut-o':i<11?'shut':'o'):/^(hip_rock|bounce|bent_over)/.test(name)?'o':'line';
 export function library(){
  const poses={},meta={};
  for(const [name,m] of Object.entries(MOTIONS)){
   poses[name]={};
-  for(const d of DIRECTIONS)poses[name][d]=m.keys.map((k,i)=>{const J=pose(k);return{direction:d,yaw:YAW[d],motion:name,frame:i,frame_ms:k.ms,phase:k.phase,
+  for(const d of DIRECTIONS)poses[name][d]=m.keys.map((k,i)=>{const J=pose(k);return{direction:d,yaw:YAW[d],motion:name,frame:i,frame_ms:k.ms,phase:k.phase,expr:k.expr||EXPR(name,i),
    binds:(k.binds||[]).map((b,bi)=>({joint:b.j,joint2:b.j2,anchor:b.to?'bind'+bi:null,via:b.via?'bindvia'+bi:null,anchor2:b.to2?'bindb'+bi:null})),
    joints:project(Object.assign(J,Object.fromEntries((k.binds||[]).flatMap((b,bi)=>b.to2?[['bindb'+bi,b.to2]]:[]))),d)}});
   meta[name]={label:m.label,loop:m.loop,view:m.view,frame_ms:m.keys.map(k=>k.ms),phases:m.keys.map(k=>k.phase)};
@@ -125,7 +128,7 @@ export function library(){
  return{schema:'anatomical-eight-direction-motion/1.0',extends:'poses.json / attack-poses.json (same skeleton, 288x288 canvas, centre x 144, projection)',
   canvas:[288,288],centre_x:144,ground_y:242,directions:DIRECTIONS,yaw:YAW,
   anatomical_sides:{right:'negative world lateral',left:'positive world lateral'},
-  notes:{view:'the direction the pose is shown in: front (facing the viewer) for all but bent_over, which is shown from behind (up_right = 3/4 from behind reads best; back also works)',
+  notes:{expr:'the face drawn in the references: shut = eyes closed, o = mouth open, line = mouth pressed shut',view:'the direction the pose is shown in: front (facing the viewer) for all but bent_over, which is shown from behind (up_right = 3/4 from behind reads best; back also works)',
    binds:'each frame lists its restraints: joint + joint2 = a band between two joints; joint -> anchor = a restraint pulling that joint toward a point',
    extra_joints:{face:'9px ahead of the head centre: where she looks',eye_left:'eyes',eye_right:'eyes',crotch:'just under the hips (the hips\' path is drawn from it)'}},
   motions:meta,poses};

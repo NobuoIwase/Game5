@@ -2,6 +2,8 @@
 
 作成：Claude（`node tools/build_reuse_list.mjs` で再生成）。機械が読む版は `motion/reuse.json`（コマごとに `use` と `from`）。
 
+作り方の結論（1枚絵と部位の組み立ての振り分け）は `PRODUCTION_PLAN.md`。この一覧はその材料。
+
 ## 考え方
 
 依頼するコマを全部並べ、同じ向きの前のコマと比べた。

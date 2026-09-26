@@ -93,19 +93,15 @@ function poseTags(fr){
 const EXPR=(e,look)=>{const s=(e||'').split('-'),t=[];if(s.includes('shut'))t.push(s.includes('line')?'eyes squeezed shut':'closed eyes');
  if(s.includes('o'))t.push(look==='mage'?'closed mouth, biting lip':'open mouth');else if(s.includes('line'))t.push('closed mouth, clenched teeth');return t};
 const JN={wrist_left:'wrist',wrist_right:'wrist',ankle_left:'ankle',ankle_right:'ankle',knee_left:'knee',knee_right:'knee',root:'waist',thorax:'torso',waist:'waist',neck:'neck',chest_left:'chest',chest_right:'chest',groin:'lower body',crotch:'lower body',belly:'belly',elbow_left:'elbow',elbow_right:'elbow'};
+// what holds her is left out of the words (an unnamed "tentacle" or "rope" comes out in any colour and kind):
+// only what it does to her pose is said. The user's own words per kind of scene can add it, with its look.
 function holdTags(fr,look){
  const t=new Set();
- for(const b of fr.binds||[]){
-  if(b.engulf)t.add('lower body engulfed in a translucent pink slime blob');
-  else if(b.bubble)t.add('inside a large transparent floating bubble');
-  else if(b.partner)t.add('kiss, another head close to her face');
-  else if(b.creature)t.add(`small pink winged creatures clinging to her ${JN[b.joint]||'body'}`);
-  else if(b.coil)t.add(`{bind} coiled around her ${JN[b.joint]||'body'}`);
-  else if(b.joint){const n=look==='scout'&&b.joint==='root'?'tail':JN[b.joint]||'limb';t.add(b.joint2?`${n}s bound together by {bind}`:`${n} held by {bind}`)}
- }
- if(t.size&&[...t].some(x=>x.includes('{bind}')))t.add('restrained');
+ for(const b of fr.binds||[])if(b.joint&&b.joint2&&JN[b.joint])t.add(`${JN[b.joint]}s together`);
  return[...t];
 }
+const HOLDER=/restrain|coil|\bmass\b|bound|bind|tentacl|vine|rope|chain|slime|blob|creature|bubble|partner|monster|kiss|the other\b|\bit\b/i;
+const noteOf=ph=>ph.replace(/^[^\x00-\x7f]\S*\s*/,'').split(/[,;:]/).map(x=>x.trim()).filter(x=>x&&!HOLDER.test(x)).join(', ');
 
 const sets=[['restraint',R()],['scene',S()],['heroine',H()]];
 fs.mkdirSync(BASE,{recursive:true});for(const f of fs.readdirSync(BASE))fs.unlinkSync(path.join(BASE,f));
@@ -114,12 +110,12 @@ for(const [kind,lib] of sets)for(const [m,byDir] of Object.entries(lib.poses)){
  if(kind==='heroine'&&!HEROINE_NAI.includes(m))continue;
  const meta=lib.motions[m];
  for(const [v,F] of Object.entries(byDir)){const p=PLAN[m]?.[v];if(!p)continue;
-  const figs=run(F);
+  const figs=run(F.map(fr=>({...fr,binds:[]})));   // the base picture shows her pose only, nothing holding her
   p.forEach((e,i)=>{if(e.use!=='draw')return;const fr=F[i],id=`${m}__${v}__${i}`,look=meta.look||null,peak=/^頂点/.test(fr.phase||'');
    const sit=[SIT[m]||'defeat'];if(peak&&sit[0]!=='climax')sit.push('climax');
    frames.push({id,motion:m,view:v,frame:i,label:meta.label,phase:fr.phase||'',look,chars:look?[look]:Object.keys(CHARACTERS),situations:sit,
     prompt:[VIEW[v],...poseTags(fr),...EXPR(fr.expr,look),...holdTags(fr,look)].join(', '),
-    note:(fr.phase||'').replace(/^[^\x00-\x7f]\S*\s*/,''),base:`base/${id}.png`});
+    note:noteOf(fr.phase||''),base:`base/${id}.png`});
    // the base picture: the pose only, in skin-like colours so they do not bleed into the picture
    const g=figs[i].replace(/<ellipse [^>]*fill="#0a0f15"\/>/,'').replace(/#5ab6f0|#ee9d5a|#b6c2cc|#d2dbe1|#e1e8ec/gi,'#f2dccd').replace(/#637487|#9fb0bd|#246a9e/gi,'#d8bba8');
    svgs.push([id,`<svg xmlns="http://www.w3.org/2000/svg" viewBox="24 18 240 240" width="1024" height="1024"><rect x="24" y="18" width="240" height="240" fill="#ffffff"/>${g}</svg>`]);
@@ -134,6 +130,6 @@ for(const [id] of svgs){await pg.goto('file://'+path.join(tmp,id+'.svg'));await 
 await b.close();fs.rmSync(tmp,{recursive:true});
 const jobs=[];for(const c of Object.keys(CHARACTERS))for(const f of frames)if(f.chars.includes(c))jobs.push({char:c,frame:f.id,file:`${c}__${f.id}.png`});
 fs.writeFileSync(path.join(OUT,'jobs.json'),JSON.stringify({version:new Date().toISOString().slice(0,10),size:[1024,1024],common:COMMON,negative:NEGATIVE,
- bind_default:'pink tentacles',characters:CHARACTERS,situations:SITUATIONS,frames:Object.fromEntries(frames.map(f=>[f.id,f])),jobs},null,1));
+ characters:CHARACTERS,situations:SITUATIONS,frames:Object.fromEntries(frames.map(f=>[f.id,f])),jobs},null,1));
 const per={};for(const j of jobs)per[j.char]=(per[j.char]||0)+1;
 console.log(frames.length,'frames,',jobs.length,'jobs',per);

@@ -17,7 +17,7 @@ main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;marg
 .hide{display:none}
 </style></head><body>
 <header><h1>Game5 モーション参考資料</h1><p>骨格から描いたマネキン図（青＝本人の右半身、橙＝左半身、紫＝拘束・相手の頭（点線の円）、桃色＝体に張り付く小さな生き物）。図をタップすると大きく開きます。依頼書：<a href="https://github.com/NobuoIwase/Game5/blob/main/character-motion-v1/ATTACK_MOTION_REQUEST.md">攻撃</a> · <a href="https://github.com/NobuoIwase/Game5/blob/main/character-motion-v1/RESTRAINT_MOTION_REQUEST.md">拘束された姿勢</a> · <a href="https://github.com/NobuoIwase/Game5/blob/main/character-motion-v1/SCENE_MOTION_REQUEST.md">床・口づけ・拘束なし・張り付き</a> · <a href="https://github.com/NobuoIwase/Game5/blob/main/character-motion-v1/REUSE_LIST.md">使い回しと新規作成の一覧</a></p></header>
-<nav><div class="in"><button data-f="all" aria-pressed="true">すべて</button><button data-f="attack" aria-pressed="false">攻撃（8）</button><button data-f="restraint" aria-pressed="false">拘束された姿勢（16）</button><button data-f="scene" aria-pressed="false">床・口づけ・拘束なし・張り付き（45）</button><button data-f="heroine" aria-pressed="false">ほかのヒロイン（15）</button><button data-f="join" aria-pressed="false">つなぎ（79）</button></div></nav>
+<nav><div class="in"><button data-f="all" aria-pressed="true">すべて</button><button data-f="attack" aria-pressed="false">攻撃（8）</button><button data-f="restraint" aria-pressed="false">拘束された姿勢（16）</button><button data-f="scene" aria-pressed="false">床・口づけ・拘束なし・張り付き（45）</button><button data-f="heroine" aria-pressed="false">ほかのヒロイン（31）</button><button data-f="join" aria-pressed="false">つなぎ（97）</button></div></nav>
 <main>
 <section data-kind="attack"><h2>攻撃</h2><div class="grid"><article class="card" data-kind="attack"><h3>通常斬り（踏み込み振り下ろし）</h3><p class="meta"><code>slash</code> · 12コマ · 950ms · 1回 · 命中 6コマ目 · 描くのは新規88コマ（残り8は使い回し）</p>
 <a href="attack-v1/slash_preview.svg" target="_blank"><img loading="lazy" src="attack-v1/slash_preview.svg" alt="通常斬り（踏み込み振り下ろし）"></a>
@@ -270,7 +270,55 @@ main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;marg
 <p class="links"><a href="heroine-v1/healer_disgust_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/healer_disgust_keys_front.svg" target="_blank">要所（正面）</a><a href="heroine-v1/healer_disgust_keys_right.svg" target="_blank">要所（真横）</a></p></article>
 <article class="card" data-kind="heroine"><h3>ヒーラー：前垂れを押さえて胸を隠しながら立つ</h3><p class="meta"><code>healer_cover</code> · 8コマ · 1120ms · ループ · 描くのは新規3コマ（残り5は使い回し） · 向き：正面</p>
 <a href="heroine-v1/healer_cover_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/healer_cover_preview.svg" alt="ヒーラー：前垂れを押さえて胸を隠しながら立つ"></a>
-<p class="links"><a href="heroine-v1/healer_cover_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/healer_cover_keys_front.svg" target="_blank">要所（正面）</a><a href="heroine-v1/healer_cover_keys_right.svg" target="_blank">要所（真横）</a></p></article></div></section>
+<p class="links"><a href="heroine-v1/healer_cover_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/healer_cover_keys_front.svg" target="_blank">要所（正面）</a><a href="heroine-v1/healer_cover_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="heroine"><h3>斥候：低く横へ跳んで身をかわす</h3><p class="meta"><code>scout_sidestep</code> · 8コマ · 465ms · 1回 · 描くのは新規56コマ（残り8は使い回し） · 向き：正面</p>
+<a href="heroine-v1/scout_sidestep_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/scout_sidestep_preview.svg" alt="斥候：低く横へ跳んで身をかわす"></a>
+<p class="links"><a href="heroine-v1/scout_sidestep_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/scout_sidestep_keys_front.svg" target="_blank">要所（正面）</a><a href="heroine-v1/scout_sidestep_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="heroine"><h3>斥候：身を低くして駆け込み、足を滑らせて止まる</h3><p class="meta"><code>scout_dash_stop</code> · 10コマ · 559ms · 1回 · 描くのは新規10コマ（残り0は使い回し） · 向き：真横</p>
+<a href="heroine-v1/scout_dash_stop_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/scout_dash_stop_preview.svg" alt="斥候：身を低くして駆け込み、足を滑らせて止まる"></a>
+<p class="links"><a href="heroine-v1/scout_dash_stop_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/scout_dash_stop_keys_right.svg" target="_blank">要所（真横）</a><a href="heroine-v1/scout_dash_stop_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
+<article class="card" data-kind="heroine"><h3>斥候：尻尾をつかまれて跳び上がり、手を後ろへやる</h3><p class="meta"><code>scout_tail_grabbed</code> · 8コマ · 490ms · 1回 · 描くのは新規8コマ（残り0は使い回し） · 向き：真横</p>
+<a href="heroine-v1/scout_tail_grabbed_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/scout_tail_grabbed_preview.svg" alt="斥候：尻尾をつかまれて跳び上がり、手を後ろへやる"></a>
+<p class="links"><a href="heroine-v1/scout_tail_grabbed_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/scout_tail_grabbed_keys_right.svg" target="_blank">要所（真横）</a><a href="heroine-v1/scout_tail_grabbed_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
+<article class="card" data-kind="heroine"><h3>斥候：バックパックの肩ひもを引き上げて背負い直す（待機の仕草）</h3><p class="meta"><code>scout_pack_adjust</code> · 11コマ · 802ms · 1回 · 描くのは新規9コマ（残り2は使い回し） · 向き：斜め前</p>
+<a href="heroine-v1/scout_pack_adjust_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/scout_pack_adjust_preview.svg" alt="斥候：バックパックの肩ひもを引き上げて背負い直す（待機の仕草）"></a>
+<p class="links"><a href="heroine-v1/scout_pack_adjust_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/scout_pack_adjust_keys_down_right.svg" target="_blank">要所（斜め前）</a><a href="heroine-v1/scout_pack_adjust_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="heroine"><h3>斥候：全身がこわばり尻尾が逆立つ、そのあと膝が崩れる</h3><p class="meta"><code>scout_tension</code> · 9コマ · 660ms · 1回 · 描くのは新規9コマ（残り0は使い回し） · 向き：正面</p>
+<a href="heroine-v1/scout_tension_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/scout_tension_preview.svg" alt="斥候：全身がこわばり尻尾が逆立つ、そのあと膝が崩れる"></a>
+<p class="links"><a href="heroine-v1/scout_tension_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/scout_tension_keys_front.svg" target="_blank">要所（正面）</a><a href="heroine-v1/scout_tension_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="heroine"><h3>魔法使い：義腕の手のひらを向けて障壁を張る</h3><p class="meta"><code>mage_barrier</code> · 10コマ · 544ms · 1回 · 描くのは新規64コマ（残り16は使い回し） · 向き：真横</p>
+<a href="heroine-v1/mage_barrier_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/mage_barrier_preview.svg" alt="魔法使い：義腕の手のひらを向けて障壁を張る"></a>
+<p class="links"><a href="heroine-v1/mage_barrier_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/mage_barrier_keys_right.svg" target="_blank">要所（真横）</a><a href="heroine-v1/mage_barrier_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
+<article class="card" data-kind="heroine"><h3>魔法使い：撃ちすぎて熱をもった義腕を振って冷ます</h3><p class="meta"><code>mage_overheat</code> · 12コマ · 720ms · 1回 · 描くのは新規9コマ（残り3は使い回し） · 向き：正面</p>
+<a href="heroine-v1/mage_overheat_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/mage_overheat_preview.svg" alt="魔法使い：撃ちすぎて熱をもった義腕を振って冷ます"></a>
+<p class="links"><a href="heroine-v1/mage_overheat_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/mage_overheat_keys_front.svg" target="_blank">要所（正面）</a><a href="heroine-v1/mage_overheat_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="heroine"><h3>魔法使い：帽子のつばを引き下げて顔を隠す（照れ・気まずさ）</h3><p class="meta"><code>mage_hat_tug</code> · 12コマ · 882ms · 1回 · 描くのは新規10コマ＋部分1（残り1は使い回し） · 向き：斜め前</p>
+<a href="heroine-v1/mage_hat_tug_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/mage_hat_tug_preview.svg" alt="魔法使い：帽子のつばを引き下げて顔を隠す（照れ・気まずさ）"></a>
+<p class="links"><a href="heroine-v1/mage_hat_tug_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/mage_hat_tug_keys_down_right.svg" target="_blank">要所（斜め前）</a><a href="heroine-v1/mage_hat_tug_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="heroine"><h3>魔法使い：両方の義腕を頭の上でまとめて縛られ、魔法を封じられてもがく</h3><p class="meta"><code>mage_arms_bound</code> · 8コマ · 880ms · ループ · 描くのは新規5コマ（残り3は使い回し） · 向き：正面</p>
+<a href="heroine-v1/mage_arms_bound_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/mage_arms_bound_preview.svg" alt="魔法使い：両方の義腕を頭の上でまとめて縛られ、魔法を封じられてもがく"></a>
+<p class="links"><a href="heroine-v1/mage_arms_bound_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/mage_arms_bound_keys_front.svg" target="_blank">要所（正面）</a><a href="heroine-v1/mage_arms_bound_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="heroine"><h3>魔法使い：片膝から杖を支えに立ち上がり、何事もなかった顔をする</h3><p class="meta"><code>mage_recover</code> · 14コマ · 769ms · 1回 · 描くのは新規12コマ（残り2は使い回し） · 向き：正面</p>
+<a href="heroine-v1/mage_recover_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/mage_recover_preview.svg" alt="魔法使い：片膝から杖を支えに立ち上がり、何事もなかった顔をする"></a>
+<p class="links"><a href="heroine-v1/mage_recover_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/mage_recover_keys_front.svg" target="_blank">要所（正面）</a><a href="heroine-v1/mage_recover_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="heroine"><h3>ヒーラー：倒れた仲間のそばに膝をつき、杖を立てて片手をかざして癒やす</h3><p class="meta"><code>healer_kneel_heal</code> · 8コマ · 1200ms · ループ · 描くのは新規3コマ（残り5は使い回し） · 向き：斜め前</p>
+<a href="heroine-v1/healer_kneel_heal_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/healer_kneel_heal_preview.svg" alt="ヒーラー：倒れた仲間のそばに膝をつき、杖を立てて片手をかざして癒やす"></a>
+<p class="links"><a href="heroine-v1/healer_kneel_heal_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/healer_kneel_heal_keys_down_right.svg" target="_blank">要所（斜め前）</a><a href="heroine-v1/healer_kneel_heal_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="heroine"><h3>ヒーラー：杖で床を突き、清めの光を広げる</h3><p class="meta"><code>healer_purify</code> · 13コマ · 681ms · 1回 · 描くのは新規88コマ（残り16は使い回し） · 向き：真横</p>
+<a href="heroine-v1/healer_purify_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/healer_purify_preview.svg" alt="ヒーラー：杖で床を突き、清めの光を広げる"></a>
+<p class="links"><a href="heroine-v1/healer_purify_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/healer_purify_keys_right.svg" target="_blank">要所（真横）</a><a href="heroine-v1/healer_purify_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
+<article class="card" data-kind="heroine"><h3>ヒーラー：めくれかけた前垂れを慌てて押さえ、顔を赤くして背ける</h3><p class="meta"><code>healer_panel_catch</code> · 9コマ · 458ms · 1回 · 描くのは新規8コマ（残り1は使い回し） · 向き：正面</p>
+<a href="heroine-v1/healer_panel_catch_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/healer_panel_catch_preview.svg" alt="ヒーラー：めくれかけた前垂れを慌てて押さえ、顔を赤くして背ける"></a>
+<p class="links"><a href="heroine-v1/healer_panel_catch_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/healer_panel_catch_keys_front.svg" target="_blank">要所（正面）</a><a href="heroine-v1/healer_panel_catch_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="heroine"><h3>ヒーラー：胸を押さえながら走る（揺れを抑えようとする）</h3><p class="meta"><code>healer_run_cover</code> · 8コマ · 640ms · ループ · 描くのは新規8コマ（残り0は使い回し） · 向き：真横</p>
+<a href="heroine-v1/healer_run_cover_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/healer_run_cover_preview.svg" alt="ヒーラー：胸を押さえながら走る（揺れを抑えようとする）"></a>
+<p class="links"><a href="heroine-v1/healer_run_cover_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/healer_run_cover_keys_right.svg" target="_blank">要所（真横）</a><a href="heroine-v1/healer_run_cover_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
+<article class="card" data-kind="heroine"><h3>ヒーラー：人目を避けてひざまずき、ひそかに別の神へ祈る</h3><p class="meta"><code>healer_dark_prayer</code> · 13コマ · 1320ms · 1回 · 描くのは新規3コマ＋部分8（残り2は使い回し） · 向き：斜め後ろ</p>
+<a href="heroine-v1/healer_dark_prayer_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/healer_dark_prayer_preview.svg" alt="ヒーラー：人目を避けてひざまずき、ひそかに別の神へ祈る"></a>
+<p class="links"><a href="heroine-v1/healer_dark_prayer_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/healer_dark_prayer_keys_up_right.svg" target="_blank">要所（斜め後ろ）</a><a href="heroine-v1/healer_dark_prayer_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="heroine"><h3>ヒーラー：首を横に振って拒みながら全身がこわばり、胸をかばったまま崩れる</h3><p class="meta"><code>healer_tension_refuse</code> · 8コマ · 660ms · 1回 · 描くのは新規6コマ＋部分2（残り0は使い回し） · 向き：正面</p>
+<a href="heroine-v1/healer_tension_refuse_preview.svg" target="_blank"><img loading="lazy" src="heroine-v1/healer_tension_refuse_preview.svg" alt="ヒーラー：首を横に振って拒みながら全身がこわばり、胸をかばったまま崩れる"></a>
+<p class="links"><a href="heroine-v1/healer_tension_refuse_sheet.svg" target="_blank">全方向×全コマ</a><a href="heroine-v1/healer_tension_refuse_keys_front.svg" target="_blank">要所（正面）</a><a href="heroine-v1/healer_tension_refuse_keys_right.svg" target="_blank">要所（真横）</a></p></article></div></section>
 <section data-kind="join"><h2>つなぎ（モーションとモーションの間）</h2><p class="meta">前のモーションの終わり → つなぎ → 次のモーションの始まり、を続けて再生しています。ループするモーションには0コマ目で入り、0コマ目で抜けます。</p><div class="grid"><article class="card" data-kind="join"><h3>立ち姿勢 → grabbed_flinch のつなぎ</h3><p class="meta"><code>stand__grabbed_flinch</code> · つなぎ3コマ · 両端のずれ 35.3px · 描くのは新規3コマ（残り0は使い回し）</p>
 <a href="transition-v1/stand__grabbed_flinch_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/stand__grabbed_flinch_preview.svg" alt="立ち姿勢 → grabbed_flinch のつなぎ"></a>
 <p class="links"><a href="transition-v1/stand__grabbed_flinch_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
@@ -484,6 +532,60 @@ main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;marg
 <article class="card" data-kind="join"><h3>mage_suppress_tension → 立ち姿勢 のつなぎ</h3><p class="meta"><code>mage_suppress_tension__stand@mage</code> · つなぎ3コマ · 両端のずれ 39.1px · 描くのは新規3コマ（残り0は使い回し）</p>
 <a href="transition-v1/mage_suppress_tension__stand@mage_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/mage_suppress_tension__stand@mage_preview.svg" alt="mage_suppress_tension → 立ち姿勢 のつなぎ"></a>
 <p class="links"><a href="transition-v1/mage_suppress_tension__stand@mage_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>立ち姿勢 → scout_sidestep のつなぎ</h3><p class="meta"><code>stand@scout__scout_sidestep</code> · つなぎ3コマ · 両端のずれ 34.4px · 描くのは新規3コマ（残り0は使い回し）</p>
+<a href="transition-v1/stand@scout__scout_sidestep_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/stand@scout__scout_sidestep_preview.svg" alt="立ち姿勢 → scout_sidestep のつなぎ"></a>
+<p class="links"><a href="transition-v1/stand@scout__scout_sidestep_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>scout_sidestep → 立ち姿勢 のつなぎ</h3><p class="meta"><code>scout_sidestep__stand@scout</code> · つなぎ4コマ · 両端のずれ 40.2px · 描くのは新規4コマ（残り0は使い回し）</p>
+<a href="transition-v1/scout_sidestep__stand@scout_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/scout_sidestep__stand@scout_preview.svg" alt="scout_sidestep → 立ち姿勢 のつなぎ"></a>
+<p class="links"><a href="transition-v1/scout_sidestep__stand@scout_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>立ち姿勢 → scout_dash_stop のつなぎ</h3><p class="meta"><code>stand@scout__scout_dash_stop</code> · つなぎ4コマ · 両端のずれ 40.8px · 描くのは新規4コマ（残り0は使い回し）</p>
+<a href="transition-v1/stand@scout__scout_dash_stop_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/stand@scout__scout_dash_stop_preview.svg" alt="立ち姿勢 → scout_dash_stop のつなぎ"></a>
+<p class="links"><a href="transition-v1/stand@scout__scout_dash_stop_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
+<article class="card" data-kind="join"><h3>立ち姿勢 → scout_tail_grabbed のつなぎ</h3><p class="meta"><code>stand@scout__scout_tail_grabbed</code> · つなぎ4コマ · 両端のずれ 0px · 描くのは新規1コマ（残り3は使い回し）</p>
+<a href="transition-v1/stand@scout__scout_tail_grabbed_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/stand@scout__scout_tail_grabbed_preview.svg" alt="立ち姿勢 → scout_tail_grabbed のつなぎ"></a>
+<p class="links"><a href="transition-v1/stand@scout__scout_tail_grabbed_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
+<article class="card" data-kind="join"><h3>scout_tail_grabbed → 立ち姿勢 のつなぎ</h3><p class="meta"><code>scout_tail_grabbed__stand@scout</code> · つなぎ8コマ · 両端のずれ 24.4px · 描くのは新規8コマ（残り0は使い回し）</p>
+<a href="transition-v1/scout_tail_grabbed__stand@scout_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/scout_tail_grabbed__stand@scout_preview.svg" alt="scout_tail_grabbed → 立ち姿勢 のつなぎ"></a>
+<p class="links"><a href="transition-v1/scout_tail_grabbed__stand@scout_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
+<article class="card" data-kind="join"><h3>立ち姿勢 → scout_tension のつなぎ</h3><p class="meta"><code>stand@scout__scout_tension</code> · つなぎ3コマ · 両端のずれ 37.6px · 描くのは新規3コマ（残り0は使い回し）</p>
+<a href="transition-v1/stand@scout__scout_tension_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/stand@scout__scout_tension_preview.svg" alt="立ち姿勢 → scout_tension のつなぎ"></a>
+<p class="links"><a href="transition-v1/stand@scout__scout_tension_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>scout_tension → sit_afterglow のつなぎ</h3><p class="meta"><code>scout_tension__sit_afterglow</code> · つなぎ2コマ · 両端のずれ 28.8px · 描くのは新規2コマ（残り0は使い回し）</p>
+<a href="transition-v1/scout_tension__sit_afterglow_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/scout_tension__sit_afterglow_preview.svg" alt="scout_tension → sit_afterglow のつなぎ"></a>
+<p class="links"><a href="transition-v1/scout_tension__sit_afterglow_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>scout_tail_grabbed → scout_tension のつなぎ</h3><p class="meta"><code>scout_tail_grabbed__scout_tension</code> · つなぎ8コマ · 両端のずれ 40.7px · 描くのは新規8コマ（残り0は使い回し）</p>
+<a href="transition-v1/scout_tail_grabbed__scout_tension_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/scout_tail_grabbed__scout_tension_preview.svg" alt="scout_tail_grabbed → scout_tension のつなぎ"></a>
+<p class="links"><a href="transition-v1/scout_tail_grabbed__scout_tension_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>mage_bolt → mage_overheat のつなぎ</h3><p class="meta"><code>mage_bolt__mage_overheat</code> · つなぎ3コマ · 両端のずれ 36.8px · 描くのは新規3コマ（残り0は使い回し）</p>
+<a href="transition-v1/mage_bolt__mage_overheat_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/mage_bolt__mage_overheat_preview.svg" alt="mage_bolt → mage_overheat のつなぎ"></a>
+<p class="links"><a href="transition-v1/mage_bolt__mage_overheat_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>立ち姿勢 → mage_arms_bound のつなぎ</h3><p class="meta"><code>stand@mage__mage_arms_bound</code> · つなぎ18コマ · 両端のずれ 72.5px · 描くのは新規18コマ（残り0は使い回し）</p>
+<a href="transition-v1/stand@mage__mage_arms_bound_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/stand@mage__mage_arms_bound_preview.svg" alt="立ち姿勢 → mage_arms_bound のつなぎ"></a>
+<p class="links"><a href="transition-v1/stand@mage__mage_arms_bound_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>mage_arms_bound → break_free のつなぎ</h3><p class="meta"><code>mage_arms_bound__break_free</code> · つなぎ15コマ · 両端のずれ 72.7px · 描くのは新規15コマ（残り0は使い回し）</p>
+<a href="transition-v1/mage_arms_bound__break_free_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/mage_arms_bound__break_free_preview.svg" alt="mage_arms_bound → break_free のつなぎ"></a>
+<p class="links"><a href="transition-v1/mage_arms_bound__break_free_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>mage_arms_bound → mage_suppress_tension のつなぎ</h3><p class="meta"><code>mage_arms_bound__mage_suppress_tension</code> · つなぎ20コマ · 両端のずれ 69.7px · 描くのは新規19コマ（残り1は使い回し）</p>
+<a href="transition-v1/mage_arms_bound__mage_suppress_tension_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/mage_arms_bound__mage_suppress_tension_preview.svg" alt="mage_arms_bound → mage_suppress_tension のつなぎ"></a>
+<p class="links"><a href="transition-v1/mage_arms_bound__mage_suppress_tension_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>立ち姿勢 → healer_kneel_heal のつなぎ</h3><p class="meta"><code>stand@healer__healer_kneel_heal</code> · つなぎ3コマ · 両端のずれ 39px · 描くのは新規3コマ（残り0は使い回し）</p>
+<a href="transition-v1/stand@healer__healer_kneel_heal_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/stand@healer__healer_kneel_heal_preview.svg" alt="立ち姿勢 → healer_kneel_heal のつなぎ"></a>
+<p class="links"><a href="transition-v1/stand@healer__healer_kneel_heal_keys_down_right.svg" target="_blank">前後を含めた全コマ（斜め前）</a></p></article>
+<article class="card" data-kind="join"><h3>healer_kneel_heal → 立ち姿勢 のつなぎ</h3><p class="meta"><code>healer_kneel_heal__stand@healer</code> · つなぎ3コマ · 両端のずれ 39px · 描くのは新規0コマ＋部分1（残り2は使い回し）</p>
+<a href="transition-v1/healer_kneel_heal__stand@healer_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/healer_kneel_heal__stand@healer_preview.svg" alt="healer_kneel_heal → 立ち姿勢 のつなぎ"></a>
+<p class="links"><a href="transition-v1/healer_kneel_heal__stand@healer_keys_down_right.svg" target="_blank">前後を含めた全コマ（斜め前）</a></p></article>
+<article class="card" data-kind="join"><h3>立ち姿勢 → healer_run_cover のつなぎ</h3><p class="meta"><code>stand@healer__healer_run_cover</code> · つなぎ3コマ · 両端のずれ 36.1px · 描くのは新規3コマ（残り0は使い回し）</p>
+<a href="transition-v1/stand@healer__healer_run_cover_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/stand@healer__healer_run_cover_preview.svg" alt="立ち姿勢 → healer_run_cover のつなぎ"></a>
+<p class="links"><a href="transition-v1/stand@healer__healer_run_cover_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
+<article class="card" data-kind="join"><h3>healer_run_cover → healer_panel_catch のつなぎ</h3><p class="meta"><code>healer_run_cover__healer_panel_catch</code> · つなぎ3コマ · 両端のずれ 36.1px · 描くのは新規3コマ（残り0は使い回し）</p>
+<a href="transition-v1/healer_run_cover__healer_panel_catch_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/healer_run_cover__healer_panel_catch_preview.svg" alt="healer_run_cover → healer_panel_catch のつなぎ"></a>
+<p class="links"><a href="transition-v1/healer_run_cover__healer_panel_catch_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>healer_run_cover → 立ち姿勢 のつなぎ</h3><p class="meta"><code>healer_run_cover__stand@healer</code> · つなぎ3コマ · 両端のずれ 36.1px · 描くのは新規0コマ＋部分1（残り2は使い回し）</p>
+<a href="transition-v1/healer_run_cover__stand@healer_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/healer_run_cover__stand@healer_preview.svg" alt="healer_run_cover → 立ち姿勢 のつなぎ"></a>
+<p class="links"><a href="transition-v1/healer_run_cover__stand@healer_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
+<article class="card" data-kind="join"><h3>healer_tension_refuse → sit_recover のつなぎ</h3><p class="meta"><code>healer_tension_refuse__sit_recover</code> · つなぎ2コマ · 両端のずれ 25.6px · 描くのは新規2コマ（残り0は使い回し）</p>
+<a href="transition-v1/healer_tension_refuse__sit_recover_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/healer_tension_refuse__sit_recover_preview.svg" alt="healer_tension_refuse → sit_recover のつなぎ"></a>
+<p class="links"><a href="transition-v1/healer_tension_refuse__sit_recover_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
 <article class="card" data-kind="join"><h3>立ち姿勢 → healer_pray のつなぎ</h3><p class="meta"><code>stand@healer__healer_pray</code> · つなぎ3コマ · 両端のずれ 36.3px · 描くのは新規3コマ（残り0は使い回し）</p>
 <a href="transition-v1/stand@healer__healer_pray_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/stand@healer__healer_pray_preview.svg" alt="立ち姿勢 → healer_pray のつなぎ"></a>
 <p class="links"><a href="transition-v1/stand@healer__healer_pray_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>

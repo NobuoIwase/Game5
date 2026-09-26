@@ -157,6 +157,8 @@ export function pose(k0){
  {const fw=[Math.sin(hy)*Math.cos(hp),-Math.sin(hp),Math.cos(hy)*Math.cos(hp)],lat=[Math.cos(hy)*Math.cos(hr),Math.sin(hr),-Math.sin(hy)*Math.cos(hr)];
   J.face=add(J.head,mul(fw,9));const ec=add(J.head,add(mul(fw,8.5),[0,-1,0]));J.eye_left=add(ec,mul(lat,4));J.eye_right=add(ec,mul(lat,-4))}
  J.crotch=[root[0],root[1]+7,root[2]+1];
+ // points on the front of the body (where small creatures cling)
+ J.chest_left=trunk(5.5+cs,33,8.5,chest);J.chest_right=trunk(-5.5+cs,33,8.5,chest);J.belly=trunk(cs*.3,7,8,k.pelvis);
  for(const [side,sg] of [['right',-1],['left',1]]){
   const hip=trunk(8.5*sg,0,0,k.pelvis),f=k['foot'+(side==='right'?'R':'L')],fy=rad(f[3]||0);
   const toe=[-sg*Math.sin(fy)*(side==='right'?1:-1)*0+(side==='right'?-Math.sin(fy):Math.sin(fy)),0,Math.cos(fy)];   // toes turned out to her own side
@@ -166,7 +168,7 @@ export function pose(k0){
   const pt=f[5]||0,fp=rad(36+pt),FL=13.6;
   if(pt&&!f[4]&&f[2]<=8){const t0=[f[0]+toe[0]*11,240,f[1]+toe[2]*11];ankle=[t0[0]-toe[0]*FL*Math.cos(fp),240-FL*Math.sin(fp),t0[2]-toe[2]*FL*Math.cos(fp)]}
   // knees go the way the toes point (and a little outward), never inward across the body
-  const ko=f[6]!=null?f[6]:-.08;const leg=ik3(hip,ankle,L.thigh,L.shin,norm(add(toe,[sg*ko,0,0])));   // knees track a touch inward; f[6] sets it (- = knees together, + = splayed out)
+  const ko=f[6]!=null?f[6]:-.08,ku=f[7]||0;const leg=ik3(hip,ankle,L.thigh,L.shin,f[8]?norm([f[8][0]*(side==='right'?-1:1),f[8][1],f[8][2]]):norm(add(toe,[sg*ko,-ku,0])));   // f[8]: the knee's direction given outright ([out, down, forward], mirrored per side)   // f[7]: knees raised (+, lying on the back) or pressed down (-, kneeling)   // knees track a touch inward; f[6] sets it (- = knees together, + = splayed out)
   J['hip_'+side]=hip;J['knee_'+side]=leg.mid;J['ankle_'+side]=leg.end;
   const lift=f[2]>2?1:0;   // a lifted foot hangs toes-down a little
   // a planted foot whose heel comes up (lift <= 8 on the ground) keeps its toes on the floor

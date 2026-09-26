@@ -56,6 +56,13 @@ ChatGPT の仕事は、世界観・区画・魔物の生態・台詞などの**�
 - 日本語を含むファイルは **UTF-8 のまま** 保存する。変換してからアップロードしない
 - 既存のファイルを部分的に書き換えるツールで日本語ファイルを編集しない（v0.16.1 の `ASSET_PACK_v0161.md` と v0.18.1 の README が途中から化けた）
 
+## モーション資料：床・口づけ・拘束なし・張り付きの18種（`character-motion-v1/`、ゲーム本体の変更なし）
+- 新しい汎用モーション18種（`motion/scenes.mjs`、依頼書 `SCENE_MOTION_REQUEST.md`、参考図 `references/scene-v1/`）。押されて倒れる・床で押さえられる（仰向け・うつ伏せ・腰を上げた姿勢）・起き上がる、口づけ3種、拘束なしの立ち姿勢・座り姿勢、後ろから抱きすくめられる、体に張り付く小さな生き物の引き剥がし・こわばり・受け入れ。ゲームでの使い道は `game/RESTRAINT_MOTION_MAP.md`
+- 参考図を、`poses.json` のプレーンキャラに似た無地のマネキン（大きな頭・目と口・胴の板・関節の点）に描き直した。攻撃・拘束の図も同じ見た目に統一
+- 図に表情の目安（閉じた目・開いた口・結んだ口）を追加。骨格データの `expr`。拘束モーションにも付けた
+- 口づけの相手の頭は紫の点線の円、張り付く生き物は羽の付いた桃色の丸で描く（どちらもゲームが描くもので、依頼先には描かせない）
+- 一覧ページに新しい区分を追加
+
 ## モーション資料：一覧ページ、拘束された姿勢の資料 v2（`character-motion-v1/`、ゲーム本体の変更なし）
 - **全モーションの一覧ページ** `character-motion-v1/references/index.html`（`node tools/build_reference_index.mjs` で再生成）。公開URL：https://nobuoiwase.github.io/Game5/character-motion-v1/references/index.html
 - 拘束された姿勢の汎用モーション12種（`motion/restraint.mjs`、依頼書 `RESTRAINT_MOTION_REQUEST.md`）。依頼書は姿勢と部位の動きだけを書き、モーション名も中立的なものにした。ゲームでの使い道は `game/RESTRAINT_MOTION_MAP.md`

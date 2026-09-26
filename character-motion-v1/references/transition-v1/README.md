@@ -15,5 +15,6 @@
 
 検品：
 - `node tools/check_transitions.mjs`：全部の組み合わせで、どの部位も1コマで20pxより大きく跳ばないか
+- `node tools/check_sequences.mjs`：前後のモーションと続けて8方向で再生し、顔の向き・立ち位置・拘束の線の跳び、線の突然の出現・消失、線や部位が胴体の表と裏を行き来しないか
 - `node tools/check_legs.mjs`：脚の交差
 - `node tools/check_occlusion.mjs --hover`：体の後ろの部位が出たり隠れたりしないか

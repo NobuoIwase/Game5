@@ -76,11 +76,12 @@ export function figure(J,binds=[],yaw=0,expr='',memo=null){   // expr: 'shut' cl
   else if(!face&&fr>.35)g+=`<line x1="${f(P('strap_a')[0])}" y1="${f(P('strap_a')[1])}" x2="${f(P('strap_b')[0])}" y2="${f(P('strap_b')[1])}" stroke="#8a6a44" stroke-width="3.5" stroke-linecap="round"/>`;
   items.push({d:D('shield')+(face?.6:-.6),svg:g})}
  // restraints and clinging creatures
- const tube=(pts,d,w)=>{d=place(d,w);const p=pts.map(x=>x.map(f).join(','));const [a,b]=pts,mx=(a[0]+b[0])/2+(b[1]-a[1])*.12,my=(a[1]+b[1])/2-(b[0]-a[0])*.12,path=`M${p[0]} Q${f(mx)},${f(my)} ${p[1]}`;
-  items.push({d,svg:`<path d="${path}" fill="none" stroke="${C.bindOut}" stroke-width="6.5" stroke-linecap="round"/><path d="${path}" fill="none" stroke="${C.bind}" stroke-width="4" stroke-linecap="round"/>`})};
- const loop=id=>{const p=P(id);items.push({d:place(D(id)+.4,W(id)),svg:`<ellipse cx="${f(p[0])}" cy="${f(p[1])}" rx="5.5" ry="3.2" fill="none" stroke="${C.bindOut}" stroke-width="3.5"/><ellipse cx="${f(p[0])}" cy="${f(p[1])}" rx="5.5" ry="3.2" fill="none" stroke="${C.bind}" stroke-width="2"/>`})};
- const creature=id=>{const p=P(id),vis=place(D(id)+.6,ad(W(id),ml(fwd,4)));
-  items.push({d:vis,svg:`<ellipse cx="${f(p[0]-5.5)}" cy="${f(p[1]-4)}" rx="5.5" ry="3" fill="${C.wing}" stroke="${C.out}" stroke-width=".8"/><ellipse cx="${f(p[0]+5.5)}" cy="${f(p[1]-4)}" rx="5.5" ry="3" fill="${C.wing}" stroke="${C.out}" stroke-width=".8"/>`+ell(p,5,4,C.creature,1.3)})};
+ const tube=(pts,d,w,id,memoId)=>{d=place(d,w,-1.5,memoId||id);const p=pts.map(x=>x.map(f).join(','));const [a,b]=pts,mx=(a[0]+b[0])/2+(b[1]-a[1])*.12,my=(a[1]+b[1])/2-(b[0]-a[0])*.12,path=`M${p[0]} Q${f(mx)},${f(my)} ${p[1]}`;
+  items.push({id,w:[w],p:[a,b],d,svg:`<path d="${path}" fill="none" stroke="${C.bindOut}" stroke-width="6.5" stroke-linecap="round"/><path d="${path}" fill="none" stroke="${C.bind}" stroke-width="4" stroke-linecap="round"/>`})};
+ // a loop round a joint goes over or under the trunk with that joint (the same decision, shared through memo)
+ const loop=id=>{const p=P(id),own=/^wrist_/.test(id)?[id,-1.5]:/^knee_/.test(id)?['kneedot_'+id.slice(5),4]:['loop:'+id,-1.5];items.push({id:'loop:'+id,w:[W(id)],p:[p],d:place(D(id)+.4,W(id),own[1],own[0]),svg:`<ellipse cx="${f(p[0])}" cy="${f(p[1])}" rx="5.5" ry="3.2" fill="none" stroke="${C.bindOut}" stroke-width="3.5"/><ellipse cx="${f(p[0])}" cy="${f(p[1])}" rx="5.5" ry="3.2" fill="none" stroke="${C.bind}" stroke-width="2"/>`})};
+ const creature=id=>{const p=P(id),vis=place(D(id)+.6,ad(W(id),ml(fwd,4)),-1.5,'creature:'+id);
+  items.push({id:'creature:'+id,w:[ad(W(id),ml(fwd,4))],p:[p],d:vis,svg:`<ellipse cx="${f(p[0]-5.5)}" cy="${f(p[1]-4)}" rx="5.5" ry="3" fill="${C.wing}" stroke="${C.out}" stroke-width=".8"/><ellipse cx="${f(p[0]+5.5)}" cy="${f(p[1]-4)}" rx="5.5" ry="3" fill="${C.wing}" stroke="${C.out}" stroke-width=".8"/>`+ell(p,5,4,C.creature,1.3)})};
  // coils round the body (a ring about the spine at a joint: the back half under the trunk, the front half over
  // it and over arms held at her sides), a mass that has swallowed her to a height, a bubble round her
  const coil=(id,r)=>{const c=W(id),pts=[];for(let i=0;i<=24;i++){const a=i/24*Math.PI*2;pts.push(ad(c,ad(ml(lx,Math.cos(a)*r),ml(fz,Math.sin(a)*r*.72))))}
@@ -96,8 +97,11 @@ export function figure(J,binds=[],yaw=0,expr='',memo=null){   // expr: 'shut' cl
   if(b.bubble){bubble();continue}
   if(b.creature){creature(b.joint);continue}
   if(b.partner){const p=P(b.anchor);items.push({d:D(b.anchor),svg:`<ellipse cx="${f(p[0])}" cy="${f(p[1])}" rx="17" ry="20" fill="rgba(179,107,224,.28)" stroke="${C.bind}" stroke-width="2" stroke-dasharray="4 3"/>`});continue}
-  if(b.joint2){tube([P(b.joint),P(b.joint2)],(D(b.joint)+D(b.joint2))/2+.3,mid(b.joint,b.joint2));loop(b.joint);loop(b.joint2);continue}
-  if(b.anchor){tube([P(b.anchor),P(b.joint)],D(b.joint)-.2,W(b.joint));if(!b.noLoop)loop(b.joint)}
+  // a band tying two joints together goes over or under the trunk with the first of them (the same decision, shared through memo)
+  if(b.joint2){tube([P(b.joint),P(b.joint2)],(D(b.joint)+D(b.joint2))/2+.3,mid(b.joint,b.joint2),'band:'+b.joint+'-'+b.joint2,/^wrist_/.test(b.joint)?b.joint:null);loop(b.joint);loop(b.joint2);continue}
+  // a line pulling a joint toward a point: over or under the trunk by a point three quarters of the way out (where
+  // the line comes from, so one that is only starting to reach out already lies on its own side)
+  if(b.anchor){tube([P(b.anchor),P(b.joint)],(D(b.joint)+D(b.anchor))/2,ad(ml(W(b.joint),.25),ml(W(b.anchor),.75)),'tube:'+b.joint);if(!b.noLoop)loop(b.joint)}
  }
  items.sort((a,b)=>a.d-b.d);
  figure.items=items;figure.dd=spineDD;

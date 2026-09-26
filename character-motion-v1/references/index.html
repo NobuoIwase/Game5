@@ -17,7 +17,7 @@ main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;marg
 .hide{display:none}
 </style></head><body>
 <header><h1>Game5 モーション参考資料</h1><p>骨格から描いたマネキン図（青＝本人の右半身、橙＝左半身、紫＝拘束・相手の頭（点線の円）、桃色＝体に張り付く小さな生き物）。図をタップすると大きく開きます。依頼書：<a href="https://github.com/NobuoIwase/Game5/blob/main/character-motion-v1/ATTACK_MOTION_REQUEST.md">攻撃</a> · <a href="https://github.com/NobuoIwase/Game5/blob/main/character-motion-v1/RESTRAINT_MOTION_REQUEST.md">拘束された姿勢</a> · <a href="https://github.com/NobuoIwase/Game5/blob/main/character-motion-v1/SCENE_MOTION_REQUEST.md">床・口づけ・拘束なし・張り付き</a></p></header>
-<nav><div class="in"><button data-f="all" aria-pressed="true">すべて</button><button data-f="attack" aria-pressed="false">攻撃（8）</button><button data-f="restraint" aria-pressed="false">拘束された姿勢（16）</button><button data-f="scene" aria-pressed="false">床・口づけ・拘束なし・張り付き（45）</button><button data-f="join" aria-pressed="false">つなぎ（56）</button></div></nav>
+<nav><div class="in"><button data-f="all" aria-pressed="true">すべて</button><button data-f="attack" aria-pressed="false">攻撃（8）</button><button data-f="restraint" aria-pressed="false">拘束された姿勢（16）</button><button data-f="scene" aria-pressed="false">床・口づけ・拘束なし・張り付き（45）</button><button data-f="join" aria-pressed="false">つなぎ（64）</button></div></nav>
 <main>
 <section data-kind="attack"><h2>攻撃</h2><div class="grid"><article class="card" data-kind="attack"><h3>通常斬り（踏み込み振り下ろし）</h3><p class="meta"><code>slash</code> · 12コマ · 950ms · 1回 · 命中 6コマ目</p>
 <a href="attack-v1/slash_preview.svg" target="_blank"><img loading="lazy" src="attack-v1/slash_preview.svg" alt="通常斬り（踏み込み振り下ろし）"></a>
@@ -91,7 +91,7 @@ main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;marg
 <article class="card" data-kind="restraint"><h3>前屈みで手首を床の前に縛られ、腰を左右に揺らす（後ろ・斜め後ろから）</h3><p class="meta"><code>bent_over</code> · 8コマ · 880ms · ループ · 向き：斜め後ろ</p>
 <a href="restraint-v1/bent_over_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/bent_over_preview.svg" alt="前屈みで手首を床の前に縛られ、腰を左右に揺らす（後ろ・斜め後ろから）"></a>
 <p class="links"><a href="restraint-v1/bent_over_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/bent_over_keys_up_right.svg" target="_blank">要所（斜め後ろ）</a><a href="restraint-v1/bent_over_keys_back.svg" target="_blank">要所（後ろ）</a><a href="restraint-v1/bent_over_keys_right.svg" target="_blank">要所（真横）</a></p></article></div></section>
-<section data-kind="scene"><h2>床・口づけ・拘束なし・張り付き</h2><div class="grid"><article class="card" data-kind="scene"><h3>押されて尻もちをつき、仰向けに倒れる</h3><p class="meta"><code>down_fall_back</code> · 16コマ · 799ms · 1回 · 向き：真横</p>
+<section data-kind="scene"><h2>床・口づけ・拘束なし・張り付き</h2><div class="grid"><article class="card" data-kind="scene"><h3>押されて尻もちをつき、仰向けに倒れる</h3><p class="meta"><code>down_fall_back</code> · 19コマ · 802ms · 1回 · 向き：真横</p>
 <a href="scene-v1/down_fall_back_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/down_fall_back_preview.svg" alt="押されて尻もちをつき、仰向けに倒れる"></a>
 <p class="links"><a href="scene-v1/down_fall_back_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/down_fall_back_keys_right.svg" target="_blank">要所（真横）</a><a href="scene-v1/down_fall_back_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
 <article class="card" data-kind="scene"><h3>仰向けで両手首を頭の上に押さえられ、脚をばたつかせる</h3><p class="meta"><code>down_pinned_kick</code> · 8コマ · 800ms · ループ · 向き：真横</p>
@@ -103,19 +103,19 @@ main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;marg
 <article class="card" data-kind="scene"><h3>仰向けで膝を開かれ、体が頭の方へ前後に揺れる</h3><p class="meta"><code>down_pinned_rock</code> · 8コマ · 680ms · ループ · 向き：斜め前</p>
 <a href="scene-v1/down_pinned_rock_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/down_pinned_rock_preview.svg" alt="仰向けで膝を開かれ、体が頭の方へ前後に揺れる"></a>
 <p class="links"><a href="scene-v1/down_pinned_rock_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/down_pinned_rock_keys_down_right.svg" target="_blank">要所（斜め前）</a><a href="scene-v1/down_pinned_rock_keys_right.svg" target="_blank">要所（真横）</a></p></article>
-<article class="card" data-kind="scene"><h3>うつ伏せで押さえられ、脚をばたつかせてもがく</h3><p class="meta"><code>down_face_down</code> · 12コマ · 804ms · ループ · 向き：真横</p>
+<article class="card" data-kind="scene"><h3>うつ伏せで押さえられ、脚をばたつかせてもがく</h3><p class="meta"><code>down_face_down</code> · 16コマ · 800ms · ループ · 向き：真横</p>
 <a href="scene-v1/down_face_down_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/down_face_down_preview.svg" alt="うつ伏せで押さえられ、脚をばたつかせてもがく"></a>
 <p class="links"><a href="scene-v1/down_face_down_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/down_face_down_keys_right.svg" target="_blank">要所（真横）</a><a href="scene-v1/down_face_down_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
 <article class="card" data-kind="scene"><h3>膝をついて胸を床につけ、腰を上げたまま前後に揺れる</h3><p class="meta"><code>down_hips_up</code> · 8コマ · 720ms · ループ · 向き：真横</p>
 <a href="scene-v1/down_hips_up_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/down_hips_up_preview.svg" alt="膝をついて胸を床につけ、腰を上げたまま前後に揺れる"></a>
 <p class="links"><a href="scene-v1/down_hips_up_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/down_hips_up_keys_right.svg" target="_blank">要所（真横）</a><a href="scene-v1/down_hips_up_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
-<article class="card" data-kind="scene"><h3>仰向けから起き上がる</h3><p class="meta"><code>get_up</code> · 17コマ · 990ms · 1回 · 向き：真横</p>
+<article class="card" data-kind="scene"><h3>仰向けから起き上がる</h3><p class="meta"><code>get_up</code> · 19コマ · 990ms · 1回 · 向き：真横</p>
 <a href="scene-v1/get_up_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/get_up_preview.svg" alt="仰向けから起き上がる"></a>
 <p class="links"><a href="scene-v1/get_up_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/get_up_keys_right.svg" target="_blank">要所（真横）</a><a href="scene-v1/get_up_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
 <article class="card" data-kind="scene"><h3>口づけされて押し返そうとする</h3><p class="meta"><code>kiss_forced</code> · 8コマ · 880ms · ループ · 向き：真横</p>
 <a href="scene-v1/kiss_forced_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/kiss_forced_preview.svg" alt="口づけされて押し返そうとする"></a>
 <p class="links"><a href="scene-v1/kiss_forced_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/kiss_forced_keys_right.svg" target="_blank">要所（真横）</a><a href="scene-v1/kiss_forced_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
-<article class="card" data-kind="scene"><h3>口づけされたまま全身がこわばり、膝が崩れる</h3><p class="meta"><code>kiss_tension</code> · 10コマ · 900ms · 1回 · 向き：真横</p>
+<article class="card" data-kind="scene"><h3>口づけされたまま全身がこわばり、膝が崩れる</h3><p class="meta"><code>kiss_tension</code> · 11コマ · 900ms · 1回 · 向き：真横</p>
 <a href="scene-v1/kiss_tension_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/kiss_tension_preview.svg" alt="口づけされたまま全身がこわばり、膝が崩れる"></a>
 <p class="links"><a href="scene-v1/kiss_tension_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/kiss_tension_keys_right.svg" target="_blank">要所（真横）</a><a href="scene-v1/kiss_tension_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
 <article class="card" data-kind="scene"><h3>口づけに応える（爪先立ちで身を寄せる）</h3><p class="meta"><code>kiss_respond</code> · 8コマ · 1040ms · ループ · 向き：真横</p>
@@ -127,7 +127,7 @@ main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;marg
 <article class="card" data-kind="scene"><h3>脚ががに股に開き、膝と腰が小刻みに震える</h3><p class="meta"><code>chain_splay</code> · 8コマ · 440ms · ループ · 向き：正面</p>
 <a href="scene-v1/chain_splay_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/chain_splay_preview.svg" alt="脚ががに股に開き、膝と腰が小刻みに震える"></a>
 <p class="links"><a href="scene-v1/chain_splay_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/chain_splay_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/chain_splay_keys_right.svg" target="_blank">要所（真横）</a></p></article>
-<article class="card" data-kind="scene"><h3>立ったまま全身がこわばり、膝から崩れて座り込む</h3><p class="meta"><code>tension_free</code> · 13コマ · 990ms · 1回 · 向き：正面</p>
+<article class="card" data-kind="scene"><h3>立ったまま全身がこわばり、膝から崩れて座り込む</h3><p class="meta"><code>tension_free</code> · 14コマ · 990ms · 1回 · 向き：正面</p>
 <a href="scene-v1/tension_free_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/tension_free_preview.svg" alt="立ったまま全身がこわばり、膝から崩れて座り込む"></a>
 <p class="links"><a href="scene-v1/tension_free_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/tension_free_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/tension_free_keys_right.svg" target="_blank">要所（真横）</a></p></article>
 <article class="card" data-kind="scene"><h3>女の子座りで肩で息をする</h3><p class="meta"><code>sit_afterglow</code> · 8コマ · 1200ms · ループ · 向き：正面</p>
@@ -145,19 +145,19 @@ main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;marg
 <article class="card" data-kind="scene"><h3>口づけのあと、膝が抜けたままふらつき、肩で息をする（kiss_tension のあと）</h3><p class="meta"><code>kiss_afterglow</code> · 8コマ · 1360ms · ループ · 向き：真横</p>
 <a href="scene-v1/kiss_afterglow_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/kiss_afterglow_preview.svg" alt="口づけのあと、膝が抜けたままふらつき、肩で息をする（kiss_tension のあと）"></a>
 <p class="links"><a href="scene-v1/kiss_afterglow_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/kiss_afterglow_keys_right.svg" target="_blank">要所（真横）</a><a href="scene-v1/kiss_afterglow_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
-<article class="card" data-kind="scene"><h3>我に返って口元をぬぐい、一歩下がる</h3><p class="meta"><code>kiss_recover</code> · 10コマ · 701ms · 1回 · 向き：真横</p>
+<article class="card" data-kind="scene"><h3>我に返って口元をぬぐい、一歩下がる</h3><p class="meta"><code>kiss_recover</code> · 11コマ · 701ms · 1回 · 向き：真横</p>
 <a href="scene-v1/kiss_recover_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/kiss_recover_preview.svg" alt="我に返って口元をぬぐい、一歩下がる"></a>
 <p class="links"><a href="scene-v1/kiss_recover_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/kiss_recover_keys_right.svg" target="_blank">要所（真横）</a><a href="scene-v1/kiss_recover_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
-<article class="card" data-kind="scene"><h3>女の子座りから立ち上がる（tension_free・sit_afterglow のあと）</h3><p class="meta"><code>sit_recover</code> · 12コマ · 1044ms · 1回 · 向き：正面</p>
+<article class="card" data-kind="scene"><h3>女の子座りから立ち上がる（tension_free・sit_afterglow のあと）</h3><p class="meta"><code>sit_recover</code> · 14コマ · 1046ms · 1回 · 向き：正面</p>
 <a href="scene-v1/sit_recover_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/sit_recover_preview.svg" alt="女の子座りから立ち上がる（tension_free・sit_afterglow のあと）"></a>
 <p class="links"><a href="scene-v1/sit_recover_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/sit_recover_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/sit_recover_keys_right.svg" target="_blank">要所（真横）</a></p></article>
 <article class="card" data-kind="scene"><h3>張り付かれたまま座り込み、肩で息をする（clinger_tension のあと）</h3><p class="meta"><code>clinger_afterglow</code> · 8コマ · 1360ms · ループ · 向き：正面</p>
 <a href="scene-v1/clinger_afterglow_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/clinger_afterglow_preview.svg" alt="張り付かれたまま座り込み、肩で息をする（clinger_tension のあと）"></a>
 <p class="links"><a href="scene-v1/clinger_afterglow_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/clinger_afterglow_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/clinger_afterglow_keys_right.svg" target="_blank">要所（真横）</a></p></article>
-<article class="card" data-kind="scene"><h3>張り付かれたまま立ち上がり、胸を押さえる</h3><p class="meta"><code>clinger_recover</code> · 13コマ · 1043ms · 1回 · 向き：正面</p>
+<article class="card" data-kind="scene"><h3>張り付かれたまま立ち上がり、胸を押さえる</h3><p class="meta"><code>clinger_recover</code> · 16コマ · 1048ms · 1回 · 向き：正面</p>
 <a href="scene-v1/clinger_recover_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/clinger_recover_preview.svg" alt="張り付かれたまま立ち上がり、胸を押さえる"></a>
 <p class="links"><a href="scene-v1/clinger_recover_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/clinger_recover_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/clinger_recover_keys_right.svg" target="_blank">要所（真横）</a></p></article>
-<article class="card" data-kind="scene"><h3>胸と脚の付け根の前に張り付いた小さな生き物を引き剥がそうとする</h3><p class="meta"><code>clinger_peel</code> · 20コマ · 803ms · ループ · 向き：正面</p>
+<article class="card" data-kind="scene"><h3>胸と脚の付け根の前に張り付いた小さな生き物を引き剥がそうとする</h3><p class="meta"><code>clinger_peel</code> · 22コマ · 805ms · ループ · 向き：正面</p>
 <a href="scene-v1/clinger_peel_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/clinger_peel_preview.svg" alt="胸と脚の付け根の前に張り付いた小さな生き物を引き剥がそうとする"></a>
 <p class="links"><a href="scene-v1/clinger_peel_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/clinger_peel_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/clinger_peel_keys_right.svg" target="_blank">要所（真横）</a></p></article>
 <article class="card" data-kind="scene"><h3>張り付かれたまま全身がこわばり、座り込む</h3><p class="meta"><code>clinger_tension</code> · 14コマ · 990ms · 1回 · 向き：正面</p>
@@ -166,7 +166,7 @@ main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;marg
 <article class="card" data-kind="scene"><h3>張り付かれたまま振り払うのをやめ、身を任せる</h3><p class="meta"><code>clinger_accept</code> · 8コマ · 1360ms · ループ · 向き：正面</p>
 <a href="scene-v1/clinger_accept_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/clinger_accept_preview.svg" alt="張り付かれたまま振り払うのをやめ、身を任せる"></a>
 <p class="links"><a href="scene-v1/clinger_accept_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/clinger_accept_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/clinger_accept_keys_right.svg" target="_blank">要所（真横）</a></p></article>
-<article class="card" data-kind="scene"><h3>仰向けで押さえられたまま全身がこわばり、腰が浮く</h3><p class="meta"><code>down_tension</code> · 10コマ · 970ms · 1回 · 向き：斜め前</p>
+<article class="card" data-kind="scene"><h3>仰向けで押さえられたまま全身がこわばり、腰が浮く</h3><p class="meta"><code>down_tension</code> · 13コマ · 970ms · 1回 · 向き：斜め前</p>
 <a href="scene-v1/down_tension_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/down_tension_preview.svg" alt="仰向けで押さえられたまま全身がこわばり、腰が浮く"></a>
 <p class="links"><a href="scene-v1/down_tension_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/down_tension_keys_down_right.svg" target="_blank">要所（斜め前）</a><a href="scene-v1/down_tension_keys_right.svg" target="_blank">要所（真横）</a></p></article>
 <article class="card" data-kind="scene"><h3>柔らかい塊に足元から腰まで呑まれていく</h3><p class="meta"><code>engulf_sink</code> · 10コマ · 767ms · 1回 · 向き：正面</p>
@@ -178,7 +178,7 @@ main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;marg
 <article class="card" data-kind="scene"><h3>腰まで呑まれたまま、腰がびくびくと跳ねる</h3><p class="meta"><code>engulf_rock</code> · 8コマ · 720ms · ループ · 向き：正面</p>
 <a href="scene-v1/engulf_rock_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/engulf_rock_preview.svg" alt="腰まで呑まれたまま、腰がびくびくと跳ねる"></a>
 <p class="links"><a href="scene-v1/engulf_rock_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/engulf_rock_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/engulf_rock_keys_right.svg" target="_blank">要所（真横）</a></p></article>
-<article class="card" data-kind="scene"><h3>腰まで呑まれたまま全身がこわばり、前へ崩れる</h3><p class="meta"><code>engulf_tension</code> · 10コマ · 790ms · 1回 · 向き：正面</p>
+<article class="card" data-kind="scene"><h3>腰まで呑まれたまま全身がこわばり、前へ崩れる</h3><p class="meta"><code>engulf_tension</code> · 11コマ · 790ms · 1回 · 向き：正面</p>
 <a href="scene-v1/engulf_tension_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/engulf_tension_preview.svg" alt="腰まで呑まれたまま全身がこわばり、前へ崩れる"></a>
 <p class="links"><a href="scene-v1/engulf_tension_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/engulf_tension_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/engulf_tension_keys_right.svg" target="_blank">要所（真横）</a></p></article>
 <article class="card" data-kind="scene"><h3>腕ごと胴に巻きつかれ、締め付けられるたびに背中が反る</h3><p class="meta"><code>wrap_squeeze</code> · 8コマ · 800ms · ループ · 向き：正面</p>
@@ -187,13 +187,13 @@ main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;marg
 <article class="card" data-kind="scene"><h3>巻きつかれたまま全身がこわばり、脱力する</h3><p class="meta"><code>wrap_tension</code> · 9コマ · 700ms · 1回 · 向き：正面</p>
 <a href="scene-v1/wrap_tension_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/wrap_tension_preview.svg" alt="巻きつかれたまま全身がこわばり、脱力する"></a>
 <p class="links"><a href="scene-v1/wrap_tension_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/wrap_tension_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/wrap_tension_keys_right.svg" target="_blank">要所（真横）</a></p></article>
-<article class="card" data-kind="scene"><h3>足首をつかまれて後ろへ引かれ、よろけて四つん這いになる</h3><p class="meta"><code>ankle_grabbed</code> · 15コマ · 722ms · 1回 · 向き：真横</p>
+<article class="card" data-kind="scene"><h3>足首をつかまれて後ろへ引かれ、よろけて四つん這いになる</h3><p class="meta"><code>ankle_grabbed</code> · 17コマ · 726ms · 1回 · 向き：真横</p>
 <a href="scene-v1/ankle_grabbed_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/ankle_grabbed_preview.svg" alt="足首をつかまれて後ろへ引かれ、よろけて四つん這いになる"></a>
 <p class="links"><a href="scene-v1/ankle_grabbed_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/ankle_grabbed_keys_right.svg" target="_blank">要所（真横）</a><a href="scene-v1/ankle_grabbed_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
-<article class="card" data-kind="scene"><h3>拘束を振りほどき、よろけてから構え直す</h3><p class="meta"><code>break_free</code> · 8コマ · 653ms · 1回 · 向き：正面</p>
+<article class="card" data-kind="scene"><h3>拘束を振りほどき、よろけてから構え直す</h3><p class="meta"><code>break_free</code> · 9コマ · 657ms · 1回 · 向き：正面</p>
 <a href="scene-v1/break_free_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/break_free_preview.svg" alt="拘束を振りほどき、よろけてから構え直す"></a>
 <p class="links"><a href="scene-v1/break_free_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/break_free_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/break_free_keys_right.svg" target="_blank">要所（真横）</a></p></article>
-<article class="card" data-kind="scene"><h3>腰から先に一歩寄ってしまい、はっと引き戻す</h3><p class="meta"><code>edge_pull</code> · 9コマ · 801ms · 1回 · 向き：真横</p>
+<article class="card" data-kind="scene"><h3>腰から先に一歩寄ってしまい、はっと引き戻す</h3><p class="meta"><code>edge_pull</code> · 10コマ · 802ms · 1回 · 向き：真横</p>
 <a href="scene-v1/edge_pull_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/edge_pull_preview.svg" alt="腰から先に一歩寄ってしまい、はっと引き戻す"></a>
 <p class="links"><a href="scene-v1/edge_pull_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/edge_pull_keys_right.svg" target="_blank">要所（真横）</a><a href="scene-v1/edge_pull_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
 <article class="card" data-kind="scene"><h3>膝が震えて内股で歩く（下腹に手を当てて）</h3><p class="meta"><code>walk_unsteady</code> · 8コマ · 960ms · ループ · 向き：真横</p>
@@ -214,112 +214,136 @@ main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;marg
 <article class="card" data-kind="scene"><h3>ぼーっと立ち尽くし、首をかしげてゆらゆら揺れる</h3><p class="meta"><code>daze_sway</code> · 8コマ · 1600ms · ループ · 向き：正面</p>
 <a href="scene-v1/daze_sway_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/daze_sway_preview.svg" alt="ぼーっと立ち尽くし、首をかしげてゆらゆら揺れる"></a>
 <p class="links"><a href="scene-v1/daze_sway_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/daze_sway_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/daze_sway_keys_right.svg" target="_blank">要所（真横）</a></p></article>
-<article class="card" data-kind="scene"><h3>思わず片手を伸ばして一歩寄り、手を胸に引っ込める</h3><p class="meta"><code>reach_toward</code> · 10コマ · 879ms · 1回 · 向き：真横</p>
+<article class="card" data-kind="scene"><h3>思わず片手を伸ばして一歩寄り、手を胸に引っ込める</h3><p class="meta"><code>reach_toward</code> · 11コマ · 880ms · 1回 · 向き：真横</p>
 <a href="scene-v1/reach_toward_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/reach_toward_preview.svg" alt="思わず片手を伸ばして一歩寄り、手を胸に引っ込める"></a>
 <p class="links"><a href="scene-v1/reach_toward_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/reach_toward_keys_right.svg" target="_blank">要所（真横）</a><a href="scene-v1/reach_toward_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
-<article class="card" data-kind="scene"><h3>つまずいて手と膝をつき、起き上がる</h3><p class="meta"><code>trip_fall</code> · 21コマ · 1082ms · 1回 · 向き：真横</p>
+<article class="card" data-kind="scene"><h3>つまずいて手と膝をつき、起き上がる</h3><p class="meta"><code>trip_fall</code> · 23コマ · 1084ms · 1回 · 向き：真横</p>
 <a href="scene-v1/trip_fall_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/trip_fall_preview.svg" alt="つまずいて手と膝をつき、起き上がる"></a>
 <p class="links"><a href="scene-v1/trip_fall_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/trip_fall_keys_right.svg" target="_blank">要所（真横）</a><a href="scene-v1/trip_fall_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
-<article class="card" data-kind="scene"><h3>力尽きて膝から崩れ、うつ伏せに倒れる</h3><p class="meta"><code>defeat_collapse</code> · 13コマ · 882ms · 1回 · 向き：真横</p>
+<article class="card" data-kind="scene"><h3>力尽きて膝から崩れ、うつ伏せに倒れる</h3><p class="meta"><code>defeat_collapse</code> · 14コマ · 881ms · 1回 · 向き：真横</p>
 <a href="scene-v1/defeat_collapse_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/defeat_collapse_preview.svg" alt="力尽きて膝から崩れ、うつ伏せに倒れる"></a>
 <p class="links"><a href="scene-v1/defeat_collapse_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/defeat_collapse_keys_right.svg" target="_blank">要所（真横）</a><a href="scene-v1/defeat_collapse_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
 <article class="card" data-kind="scene"><h3>捕まった瞬間にびくっと跳ね、捕まった所を見下ろす</h3><p class="meta"><code>grabbed_flinch</code> · 6コマ · 480ms · 1回 · 向き：正面</p>
 <a href="scene-v1/grabbed_flinch_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/grabbed_flinch_preview.svg" alt="捕まった瞬間にびくっと跳ね、捕まった所を見下ろす"></a>
 <p class="links"><a href="scene-v1/grabbed_flinch_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/grabbed_flinch_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/grabbed_flinch_keys_right.svg" target="_blank">要所（真横）</a></p></article></div></section>
-<section data-kind="join"><h2>つなぎ（モーションとモーションの間）</h2><p class="meta">前のモーションの終わり → つなぎ → 次のモーションの始まり、を続けて再生しています。ループするモーションには0コマ目で入り、0コマ目で抜けます。</p><div class="grid"><article class="card" data-kind="join"><h3>立ち姿勢 → grabbed_flinch のつなぎ</h3><p class="meta"><code>stand__grabbed_flinch</code> · つなぎ2コマ · 両端のずれ 35.3px</p>
+<section data-kind="join"><h2>つなぎ（モーションとモーションの間）</h2><p class="meta">前のモーションの終わり → つなぎ → 次のモーションの始まり、を続けて再生しています。ループするモーションには0コマ目で入り、0コマ目で抜けます。</p><div class="grid"><article class="card" data-kind="join"><h3>立ち姿勢 → grabbed_flinch のつなぎ</h3><p class="meta"><code>stand__grabbed_flinch</code> · つなぎ3コマ · 両端のずれ 35.3px</p>
 <a href="transition-v1/stand__grabbed_flinch_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/stand__grabbed_flinch_preview.svg" alt="立ち姿勢 → grabbed_flinch のつなぎ"></a>
 <p class="links"><a href="transition-v1/stand__grabbed_flinch_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>立ち姿勢 → down_fall_back のつなぎ</h3><p class="meta"><code>stand__down_fall_back</code> · つなぎ2コマ · 両端のずれ 35.3px</p>
+<article class="card" data-kind="join"><h3>立ち姿勢 → down_fall_back のつなぎ</h3><p class="meta"><code>stand__down_fall_back</code> · つなぎ3コマ · 両端のずれ 35.3px</p>
 <a href="transition-v1/stand__down_fall_back_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/stand__down_fall_back_preview.svg" alt="立ち姿勢 → down_fall_back のつなぎ"></a>
 <p class="links"><a href="transition-v1/stand__down_fall_back_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
-<article class="card" data-kind="join"><h3>立ち姿勢 → kiss_forced のつなぎ</h3><p class="meta"><code>stand__kiss_forced</code> · つなぎ4コマ · 両端のずれ 53.8px</p>
+<article class="card" data-kind="join"><h3>立ち姿勢 → kiss_forced のつなぎ</h3><p class="meta"><code>stand__kiss_forced</code> · つなぎ5コマ · 両端のずれ 53.8px</p>
 <a href="transition-v1/stand__kiss_forced_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/stand__kiss_forced_preview.svg" alt="立ち姿勢 → kiss_forced のつなぎ"></a>
 <p class="links"><a href="transition-v1/stand__kiss_forced_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
 <article class="card" data-kind="join"><h3>立ち姿勢 → tempt_pose のつなぎ</h3><p class="meta"><code>stand__tempt_pose</code> · つなぎ3コマ · 両端のずれ 36.1px</p>
 <a href="transition-v1/stand__tempt_pose_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/stand__tempt_pose_preview.svg" alt="立ち姿勢 → tempt_pose のつなぎ"></a>
 <p class="links"><a href="transition-v1/stand__tempt_pose_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>立ち姿勢 → walk_unsteady のつなぎ</h3><p class="meta"><code>stand__walk_unsteady</code> · つなぎ1コマ · 両端のずれ 21px</p>
+<article class="card" data-kind="join"><h3>立ち姿勢 → walk_unsteady のつなぎ</h3><p class="meta"><code>stand__walk_unsteady</code> · つなぎ2コマ · 両端のずれ 21px</p>
 <a href="transition-v1/stand__walk_unsteady_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/stand__walk_unsteady_preview.svg" alt="立ち姿勢 → walk_unsteady のつなぎ"></a>
 <p class="links"><a href="transition-v1/stand__walk_unsteady_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
-<article class="card" data-kind="join"><h3>立ち姿勢 → chain_splay のつなぎ</h3><p class="meta"><code>stand__chain_splay</code> · つなぎ1コマ · 両端のずれ 23.7px</p>
+<article class="card" data-kind="join"><h3>立ち姿勢 → chain_splay のつなぎ</h3><p class="meta"><code>stand__chain_splay</code> · つなぎ2コマ · 両端のずれ 23.7px</p>
 <a href="transition-v1/stand__chain_splay_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/stand__chain_splay_preview.svg" alt="立ち姿勢 → chain_splay のつなぎ"></a>
 <p class="links"><a href="transition-v1/stand__chain_splay_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>grabbed_flinch → arms_behind_squirm のつなぎ</h3><p class="meta"><code>grabbed_flinch__arms_behind_squirm</code> · つなぎ3コマ · 両端のずれ 44.9px</p>
+<article class="card" data-kind="join"><h3>grabbed_flinch → arms_behind_squirm のつなぎ</h3><p class="meta"><code>grabbed_flinch__arms_behind_squirm</code> · つなぎ13コマ · 両端のずれ 44.9px</p>
 <a href="transition-v1/grabbed_flinch__arms_behind_squirm_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/grabbed_flinch__arms_behind_squirm_preview.svg" alt="grabbed_flinch → arms_behind_squirm のつなぎ"></a>
 <p class="links"><a href="transition-v1/grabbed_flinch__arms_behind_squirm_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>grabbed_flinch → elbows_up_strain のつなぎ</h3><p class="meta"><code>grabbed_flinch__elbows_up_strain</code> · つなぎ4コマ · 両端のずれ 54.1px</p>
+<article class="card" data-kind="join"><h3>grabbed_flinch → elbows_up_strain のつなぎ</h3><p class="meta"><code>grabbed_flinch__elbows_up_strain</code> · つなぎ16コマ · 両端のずれ 54.1px</p>
 <a href="transition-v1/grabbed_flinch__elbows_up_strain_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/grabbed_flinch__elbows_up_strain_preview.svg" alt="grabbed_flinch → elbows_up_strain のつなぎ"></a>
 <p class="links"><a href="transition-v1/grabbed_flinch__elbows_up_strain_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>grabbed_flinch → legs_pulled_open のつなぎ</h3><p class="meta"><code>grabbed_flinch__legs_pulled_open</code> · つなぎ3コマ · 両端のずれ 44.7px</p>
+<article class="card" data-kind="join"><h3>grabbed_flinch → legs_pulled_open のつなぎ</h3><p class="meta"><code>grabbed_flinch__legs_pulled_open</code> · つなぎ4コマ · 両端のずれ 44.7px</p>
 <a href="transition-v1/grabbed_flinch__legs_pulled_open_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/grabbed_flinch__legs_pulled_open_preview.svg" alt="grabbed_flinch → legs_pulled_open のつなぎ"></a>
 <p class="links"><a href="transition-v1/grabbed_flinch__legs_pulled_open_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
 <article class="card" data-kind="join"><h3>grabbed_flinch → wrap_squeeze のつなぎ</h3><p class="meta"><code>grabbed_flinch__wrap_squeeze</code> · つなぎ2コマ · 両端のずれ 29.5px</p>
 <a href="transition-v1/grabbed_flinch__wrap_squeeze_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/grabbed_flinch__wrap_squeeze_preview.svg" alt="grabbed_flinch → wrap_squeeze のつなぎ"></a>
 <p class="links"><a href="transition-v1/grabbed_flinch__wrap_squeeze_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>grabbed_flinch → held_from_behind のつなぎ</h3><p class="meta"><code>grabbed_flinch__held_from_behind</code> · つなぎ2コマ · 両端のずれ 26.9px</p>
+<article class="card" data-kind="join"><h3>grabbed_flinch → held_from_behind のつなぎ</h3><p class="meta"><code>grabbed_flinch__held_from_behind</code> · つなぎ7コマ · 両端のずれ 26.9px</p>
 <a href="transition-v1/grabbed_flinch__held_from_behind_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/grabbed_flinch__held_from_behind_preview.svg" alt="grabbed_flinch → held_from_behind のつなぎ"></a>
 <p class="links"><a href="transition-v1/grabbed_flinch__held_from_behind_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>grabbed_flinch → spore_inhale のつなぎ</h3><p class="meta"><code>grabbed_flinch__spore_inhale</code> · つなぎ5コマ · 両端のずれ 62.2px</p>
+<article class="card" data-kind="join"><h3>grabbed_flinch → spore_inhale のつなぎ</h3><p class="meta"><code>grabbed_flinch__spore_inhale</code> · つなぎ6コマ · 両端のずれ 62.2px</p>
 <a href="transition-v1/grabbed_flinch__spore_inhale_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/grabbed_flinch__spore_inhale_preview.svg" alt="grabbed_flinch → spore_inhale のつなぎ"></a>
 <p class="links"><a href="transition-v1/grabbed_flinch__spore_inhale_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
 <article class="card" data-kind="join"><h3>grabbed_flinch → shiver_hug のつなぎ</h3><p class="meta"><code>grabbed_flinch__shiver_hug</code> · つなぎ3コマ · 両端のずれ 39.7px</p>
 <a href="transition-v1/grabbed_flinch__shiver_hug_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/grabbed_flinch__shiver_hug_preview.svg" alt="grabbed_flinch → shiver_hug のつなぎ"></a>
 <p class="links"><a href="transition-v1/grabbed_flinch__shiver_hug_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>grabbed_flinch → gaze_trance のつなぎ</h3><p class="meta"><code>grabbed_flinch__gaze_trance</code> · つなぎ2コマ · 両端のずれ 31.7px</p>
+<article class="card" data-kind="join"><h3>grabbed_flinch → gaze_trance のつなぎ</h3><p class="meta"><code>grabbed_flinch__gaze_trance</code> · つなぎ3コマ · 両端のずれ 31.7px</p>
 <a href="transition-v1/grabbed_flinch__gaze_trance_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/grabbed_flinch__gaze_trance_preview.svg" alt="grabbed_flinch → gaze_trance のつなぎ"></a>
 <p class="links"><a href="transition-v1/grabbed_flinch__gaze_trance_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>grabbed_flinch → bubble_float のつなぎ</h3><p class="meta"><code>grabbed_flinch__bubble_float</code> · つなぎ3コマ · 両端のずれ 43.6px</p>
+<article class="card" data-kind="join"><h3>grabbed_flinch → bubble_float のつなぎ</h3><p class="meta"><code>grabbed_flinch__bubble_float</code> · つなぎ4コマ · 両端のずれ 43.6px</p>
 <a href="transition-v1/grabbed_flinch__bubble_float_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/grabbed_flinch__bubble_float_preview.svg" alt="grabbed_flinch → bubble_float のつなぎ"></a>
 <p class="links"><a href="transition-v1/grabbed_flinch__bubble_float_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
 <article class="card" data-kind="join"><h3>grabbed_flinch → clinger_peel のつなぎ</h3><p class="meta"><code>grabbed_flinch__clinger_peel</code> · つなぎ2コマ · 両端のずれ 28.2px</p>
 <a href="transition-v1/grabbed_flinch__clinger_peel_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/grabbed_flinch__clinger_peel_preview.svg" alt="grabbed_flinch → clinger_peel のつなぎ"></a>
 <p class="links"><a href="transition-v1/grabbed_flinch__clinger_peel_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>arms_behind_squirm → bent_over のつなぎ</h3><p class="meta"><code>arms_behind_squirm__bent_over</code> · つなぎ5コマ · 両端のずれ 71.1px</p>
+<article class="card" data-kind="join"><h3>arms_behind_squirm → hip_rock_closed のつなぎ</h3><p class="meta"><code>arms_behind_squirm__hip_rock_closed</code> · つなぎ9コマ · 両端のずれ 1.7px</p>
+<a href="transition-v1/arms_behind_squirm__hip_rock_closed_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/arms_behind_squirm__hip_rock_closed_preview.svg" alt="arms_behind_squirm → hip_rock_closed のつなぎ"></a>
+<p class="links"><a href="transition-v1/arms_behind_squirm__hip_rock_closed_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>hip_rock_closed → arms_behind_squirm のつなぎ</h3><p class="meta"><code>hip_rock_closed__arms_behind_squirm</code> · つなぎ9コマ · 両端のずれ 1.7px</p>
+<a href="transition-v1/hip_rock_closed__arms_behind_squirm_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/hip_rock_closed__arms_behind_squirm_preview.svg" alt="hip_rock_closed → arms_behind_squirm のつなぎ"></a>
+<p class="links"><a href="transition-v1/hip_rock_closed__arms_behind_squirm_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>hip_rock_closed → tension_arch のつなぎ</h3><p class="meta"><code>hip_rock_closed__tension_arch</code> · つなぎ9コマ · 両端のずれ 0.4px</p>
+<a href="transition-v1/hip_rock_closed__tension_arch_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/hip_rock_closed__tension_arch_preview.svg" alt="hip_rock_closed → tension_arch のつなぎ"></a>
+<p class="links"><a href="transition-v1/hip_rock_closed__tension_arch_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>arms_behind_squirm → legs_pulled_open のつなぎ</h3><p class="meta"><code>arms_behind_squirm__legs_pulled_open</code> · つなぎ9コマ · 両端のずれ 3.2px</p>
+<a href="transition-v1/arms_behind_squirm__legs_pulled_open_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/arms_behind_squirm__legs_pulled_open_preview.svg" alt="arms_behind_squirm → legs_pulled_open のつなぎ"></a>
+<p class="links"><a href="transition-v1/arms_behind_squirm__legs_pulled_open_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>arms_behind_squirm → bent_over のつなぎ</h3><p class="meta"><code>arms_behind_squirm__bent_over</code> · つなぎ21コマ · 両端のずれ 71.1px</p>
 <a href="transition-v1/arms_behind_squirm__bent_over_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/arms_behind_squirm__bent_over_preview.svg" alt="arms_behind_squirm → bent_over のつなぎ"></a>
 <p class="links"><a href="transition-v1/arms_behind_squirm__bent_over_keys_up_right.svg" target="_blank">前後を含めた全コマ（斜め後ろ）</a></p></article>
-<article class="card" data-kind="join"><h3>bent_over → arms_behind_squirm のつなぎ</h3><p class="meta"><code>bent_over__arms_behind_squirm</code> · つなぎ5コマ · 両端のずれ 71.1px</p>
+<article class="card" data-kind="join"><h3>bent_over → arms_behind_squirm のつなぎ</h3><p class="meta"><code>bent_over__arms_behind_squirm</code> · つなぎ21コマ · 両端のずれ 71.1px</p>
 <a href="transition-v1/bent_over__arms_behind_squirm_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/bent_over__arms_behind_squirm_preview.svg" alt="bent_over → arms_behind_squirm のつなぎ"></a>
 <p class="links"><a href="transition-v1/bent_over__arms_behind_squirm_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>elbows_up_strain → bounce_hung のつなぎ</h3><p class="meta"><code>elbows_up_strain__bounce_hung</code> · つなぎ2コマ · 両端のずれ 24.1px</p>
+<article class="card" data-kind="join"><h3>elbows_up_strain → bounce_hung のつなぎ</h3><p class="meta"><code>elbows_up_strain__bounce_hung</code> · つなぎ6コマ · 両端のずれ 24.1px</p>
 <a href="transition-v1/elbows_up_strain__bounce_hung_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/elbows_up_strain__bounce_hung_preview.svg" alt="elbows_up_strain → bounce_hung のつなぎ"></a>
 <p class="links"><a href="transition-v1/elbows_up_strain__bounce_hung_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>bounce_hung → elbows_up_strain のつなぎ</h3><p class="meta"><code>bounce_hung__elbows_up_strain</code> · つなぎ2コマ · 両端のずれ 24.1px</p>
+<article class="card" data-kind="join"><h3>bounce_hung → elbows_up_strain のつなぎ</h3><p class="meta"><code>bounce_hung__elbows_up_strain</code> · つなぎ6コマ · 両端のずれ 24.1px</p>
 <a href="transition-v1/bounce_hung__elbows_up_strain_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/bounce_hung__elbows_up_strain_preview.svg" alt="bounce_hung → elbows_up_strain のつなぎ"></a>
 <p class="links"><a href="transition-v1/bounce_hung__elbows_up_strain_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>legs_held_open → break_free のつなぎ</h3><p class="meta"><code>legs_held_open__break_free</code> · つなぎ2コマ · 両端のずれ 25.4px</p>
+<article class="card" data-kind="join"><h3>arms_behind_squirm → break_free のつなぎ</h3><p class="meta"><code>arms_behind_squirm__break_free</code> · つなぎ10コマ · 両端のずれ 17.6px</p>
+<a href="transition-v1/arms_behind_squirm__break_free_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/arms_behind_squirm__break_free_preview.svg" alt="arms_behind_squirm → break_free のつなぎ"></a>
+<p class="links"><a href="transition-v1/arms_behind_squirm__break_free_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>legs_held_open → break_free のつなぎ</h3><p class="meta"><code>legs_held_open__break_free</code> · つなぎ5コマ · 両端のずれ 25.4px</p>
 <a href="transition-v1/legs_held_open__break_free_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/legs_held_open__break_free_preview.svg" alt="legs_held_open → break_free のつなぎ"></a>
 <p class="links"><a href="transition-v1/legs_held_open__break_free_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>elbows_up_strain → break_free のつなぎ</h3><p class="meta"><code>elbows_up_strain__break_free</code> · つなぎ4コマ · 両端のずれ 57.8px</p>
+<article class="card" data-kind="join"><h3>elbows_up_strain → break_free のつなぎ</h3><p class="meta"><code>elbows_up_strain__break_free</code> · つなぎ13コマ · 両端のずれ 57.8px</p>
 <a href="transition-v1/elbows_up_strain__break_free_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/elbows_up_strain__break_free_preview.svg" alt="elbows_up_strain → break_free のつなぎ"></a>
 <p class="links"><a href="transition-v1/elbows_up_strain__break_free_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
 <article class="card" data-kind="join"><h3>wrap_tension → break_free のつなぎ</h3><p class="meta"><code>wrap_tension__break_free</code> · つなぎ2コマ · 両端のずれ 28.8px</p>
 <a href="transition-v1/wrap_tension__break_free_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/wrap_tension__break_free_preview.svg" alt="wrap_tension → break_free のつなぎ"></a>
 <p class="links"><a href="transition-v1/wrap_tension__break_free_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
+<article class="card" data-kind="join"><h3>held_from_behind → break_free のつなぎ</h3><p class="meta"><code>held_from_behind__break_free</code> · つなぎ6コマ · 両端のずれ 4px</p>
+<a href="transition-v1/held_from_behind__break_free_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/held_from_behind__break_free_preview.svg" alt="held_from_behind → break_free のつなぎ"></a>
+<p class="links"><a href="transition-v1/held_from_behind__break_free_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
 <article class="card" data-kind="join"><h3>engulf_struggle → break_free のつなぎ</h3><p class="meta"><code>engulf_struggle__break_free</code> · つなぎ2コマ · 両端のずれ 26px</p>
 <a href="transition-v1/engulf_struggle__break_free_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/engulf_struggle__break_free_preview.svg" alt="engulf_struggle → break_free のつなぎ"></a>
 <p class="links"><a href="transition-v1/engulf_struggle__break_free_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>break_free → 立ち姿勢 のつなぎ</h3><p class="meta"><code>break_free__stand</code> · つなぎ2コマ · 両端のずれ 33px</p>
+<article class="card" data-kind="join"><h3>break_free → 立ち姿勢 のつなぎ</h3><p class="meta"><code>break_free__stand</code> · つなぎ3コマ · 両端のずれ 33px</p>
 <a href="transition-v1/break_free__stand_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/break_free__stand_preview.svg" alt="break_free → 立ち姿勢 のつなぎ"></a>
 <p class="links"><a href="transition-v1/break_free__stand_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
 <article class="card" data-kind="join"><h3>break_free → walk_unsteady のつなぎ</h3><p class="meta"><code>break_free__walk_unsteady</code> · つなぎ3コマ · 両端のずれ 37.5px</p>
 <a href="transition-v1/break_free__walk_unsteady_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/break_free__walk_unsteady_preview.svg" alt="break_free → walk_unsteady のつなぎ"></a>
 <p class="links"><a href="transition-v1/break_free__walk_unsteady_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
-<article class="card" data-kind="join"><h3>down_fall_back → down_pinned_kick のつなぎ</h3><p class="meta"><code>down_fall_back__down_pinned_kick</code> · つなぎ1コマ · 両端のずれ 23.7px</p>
+<article class="card" data-kind="join"><h3>down_fall_back → down_pinned_kick のつなぎ</h3><p class="meta"><code>down_fall_back__down_pinned_kick</code> · つなぎ5コマ · 両端のずれ 23.7px</p>
 <a href="transition-v1/down_fall_back__down_pinned_kick_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/down_fall_back__down_pinned_kick_preview.svg" alt="down_fall_back → down_pinned_kick のつなぎ"></a>
 <p class="links"><a href="transition-v1/down_fall_back__down_pinned_kick_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
-<article class="card" data-kind="join"><h3>down_tension → down_afterglow のつなぎ</h3><p class="meta"><code>down_tension__down_afterglow</code> · つなぎ1コマ · 両端のずれ 23.7px</p>
+<article class="card" data-kind="join"><h3>down_pinned_kick → down_pinned_spread のつなぎ</h3><p class="meta"><code>down_pinned_kick__down_pinned_spread</code> · つなぎ7コマ · 両端のずれ 11.7px</p>
+<a href="transition-v1/down_pinned_kick__down_pinned_spread_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/down_pinned_kick__down_pinned_spread_preview.svg" alt="down_pinned_kick → down_pinned_spread のつなぎ"></a>
+<p class="links"><a href="transition-v1/down_pinned_kick__down_pinned_spread_keys_down_right.svg" target="_blank">前後を含めた全コマ（斜め前）</a></p></article>
+<article class="card" data-kind="join"><h3>down_pinned_spread → down_pinned_kick のつなぎ</h3><p class="meta"><code>down_pinned_spread__down_pinned_kick</code> · つなぎ7コマ · 両端のずれ 11.7px</p>
+<a href="transition-v1/down_pinned_spread__down_pinned_kick_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/down_pinned_spread__down_pinned_kick_preview.svg" alt="down_pinned_spread → down_pinned_kick のつなぎ"></a>
+<p class="links"><a href="transition-v1/down_pinned_spread__down_pinned_kick_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
+<article class="card" data-kind="join"><h3>down_tension → down_afterglow のつなぎ</h3><p class="meta"><code>down_tension__down_afterglow</code> · つなぎ6コマ · 両端のずれ 23.7px</p>
 <a href="transition-v1/down_tension__down_afterglow_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/down_tension__down_afterglow_preview.svg" alt="down_tension → down_afterglow のつなぎ"></a>
 <p class="links"><a href="transition-v1/down_tension__down_afterglow_keys_down_right.svg" target="_blank">前後を含めた全コマ（斜め前）</a></p></article>
-<article class="card" data-kind="join"><h3>down_pinned_kick → get_up のつなぎ</h3><p class="meta"><code>down_pinned_kick__get_up</code> · つなぎ1コマ · 両端のずれ 23.7px</p>
+<article class="card" data-kind="join"><h3>down_pinned_kick → get_up のつなぎ</h3><p class="meta"><code>down_pinned_kick__get_up</code> · つなぎ5コマ · 両端のずれ 23.7px</p>
 <a href="transition-v1/down_pinned_kick__get_up_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/down_pinned_kick__get_up_preview.svg" alt="down_pinned_kick → get_up のつなぎ"></a>
 <p class="links"><a href="transition-v1/down_pinned_kick__get_up_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
-<article class="card" data-kind="join"><h3>ankle_grabbed → down_face_down のつなぎ</h3><p class="meta"><code>ankle_grabbed__down_face_down</code> · つなぎ4コマ · 両端のずれ 50.8px</p>
+<article class="card" data-kind="join"><h3>ankle_grabbed → down_face_down のつなぎ</h3><p class="meta"><code>ankle_grabbed__down_face_down</code> · つなぎ9コマ · 両端のずれ 50.8px</p>
 <a href="transition-v1/ankle_grabbed__down_face_down_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/ankle_grabbed__down_face_down_preview.svg" alt="ankle_grabbed → down_face_down のつなぎ"></a>
 <p class="links"><a href="transition-v1/ankle_grabbed__down_face_down_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
-<article class="card" data-kind="join"><h3>down_face_down → down_hips_up のつなぎ</h3><p class="meta"><code>down_face_down__down_hips_up</code> · つなぎ3コマ · 両端のずれ 44.8px</p>
+<article class="card" data-kind="join"><h3>down_face_down → down_hips_up のつなぎ</h3><p class="meta"><code>down_face_down__down_hips_up</code> · つなぎ4コマ · 両端のずれ 44.8px</p>
 <a href="transition-v1/down_face_down__down_hips_up_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/down_face_down__down_hips_up_preview.svg" alt="down_face_down → down_hips_up のつなぎ"></a>
 <p class="links"><a href="transition-v1/down_face_down__down_hips_up_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
-<article class="card" data-kind="join"><h3>down_hips_up → down_face_down のつなぎ</h3><p class="meta"><code>down_hips_up__down_face_down</code> · つなぎ3コマ · 両端のずれ 44.8px</p>
+<article class="card" data-kind="join"><h3>down_hips_up → down_face_down のつなぎ</h3><p class="meta"><code>down_hips_up__down_face_down</code> · つなぎ4コマ · 両端のずれ 44.8px</p>
 <a href="transition-v1/down_hips_up__down_face_down_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/down_hips_up__down_face_down_preview.svg" alt="down_hips_up → down_face_down のつなぎ"></a>
 <p class="links"><a href="transition-v1/down_hips_up__down_face_down_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
 <article class="card" data-kind="join"><h3>kiss_forced → kiss_respond のつなぎ</h3><p class="meta"><code>kiss_forced__kiss_respond</code> · つなぎ2コマ · 両端のずれ 25.1px</p>
@@ -328,70 +352,70 @@ main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;marg
 <article class="card" data-kind="join"><h3>kiss_respond → kiss_tension のつなぎ</h3><p class="meta"><code>kiss_respond__kiss_tension</code> · つなぎ2コマ · 両端のずれ 25.1px</p>
 <a href="transition-v1/kiss_respond__kiss_tension_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/kiss_respond__kiss_tension_preview.svg" alt="kiss_respond → kiss_tension のつなぎ"></a>
 <p class="links"><a href="transition-v1/kiss_respond__kiss_tension_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
-<article class="card" data-kind="join"><h3>tempt_pose → kiss_respond のつなぎ</h3><p class="meta"><code>tempt_pose__kiss_respond</code> · つなぎ6コマ · 両端のずれ 73px</p>
+<article class="card" data-kind="join"><h3>tempt_pose → kiss_respond のつなぎ</h3><p class="meta"><code>tempt_pose__kiss_respond</code> · つなぎ7コマ · 両端のずれ 73px</p>
 <a href="transition-v1/tempt_pose__kiss_respond_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/tempt_pose__kiss_respond_preview.svg" alt="tempt_pose → kiss_respond のつなぎ"></a>
 <p class="links"><a href="transition-v1/tempt_pose__kiss_respond_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
-<article class="card" data-kind="join"><h3>kiss_recover → 立ち姿勢 のつなぎ</h3><p class="meta"><code>kiss_recover__stand</code> · つなぎ2コマ · 両端のずれ 35.3px</p>
+<article class="card" data-kind="join"><h3>kiss_recover → 立ち姿勢 のつなぎ</h3><p class="meta"><code>kiss_recover__stand</code> · つなぎ3コマ · 両端のずれ 35.3px</p>
 <a href="transition-v1/kiss_recover__stand_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/kiss_recover__stand_preview.svg" alt="kiss_recover → 立ち姿勢 のつなぎ"></a>
 <p class="links"><a href="transition-v1/kiss_recover__stand_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
-<article class="card" data-kind="join"><h3>clinger_peel → clinger_accept のつなぎ</h3><p class="meta"><code>clinger_peel__clinger_accept</code> · つなぎ1コマ · 両端のずれ 22.5px</p>
+<article class="card" data-kind="join"><h3>clinger_peel → clinger_accept のつなぎ</h3><p class="meta"><code>clinger_peel__clinger_accept</code> · つなぎ2コマ · 両端のずれ 22.5px</p>
 <a href="transition-v1/clinger_peel__clinger_accept_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/clinger_peel__clinger_accept_preview.svg" alt="clinger_peel → clinger_accept のつなぎ"></a>
 <p class="links"><a href="transition-v1/clinger_peel__clinger_accept_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>clinger_accept → clinger_peel のつなぎ</h3><p class="meta"><code>clinger_accept__clinger_peel</code> · つなぎ1コマ · 両端のずれ 22.5px</p>
+<article class="card" data-kind="join"><h3>clinger_accept → clinger_peel のつなぎ</h3><p class="meta"><code>clinger_accept__clinger_peel</code> · つなぎ2コマ · 両端のずれ 22.5px</p>
 <a href="transition-v1/clinger_accept__clinger_peel_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/clinger_accept__clinger_peel_preview.svg" alt="clinger_accept → clinger_peel のつなぎ"></a>
 <p class="links"><a href="transition-v1/clinger_accept__clinger_peel_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
 <article class="card" data-kind="join"><h3>clinger_peel → clinger_tension のつなぎ</h3><p class="meta"><code>clinger_peel__clinger_tension</code> · つなぎ3コマ · 両端のずれ 38.6px</p>
 <a href="transition-v1/clinger_peel__clinger_tension_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/clinger_peel__clinger_tension_preview.svg" alt="clinger_peel → clinger_tension のつなぎ"></a>
 <p class="links"><a href="transition-v1/clinger_peel__clinger_tension_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>clinger_accept → clinger_tension のつなぎ</h3><p class="meta"><code>clinger_accept__clinger_tension</code> · つなぎ3コマ · 両端のずれ 45.9px</p>
+<article class="card" data-kind="join"><h3>clinger_accept → clinger_tension のつなぎ</h3><p class="meta"><code>clinger_accept__clinger_tension</code> · つなぎ4コマ · 両端のずれ 45.9px</p>
 <a href="transition-v1/clinger_accept__clinger_tension_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/clinger_accept__clinger_tension_preview.svg" alt="clinger_accept → clinger_tension のつなぎ"></a>
 <p class="links"><a href="transition-v1/clinger_accept__clinger_tension_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
 <article class="card" data-kind="join"><h3>clinger_recover → 立ち姿勢 のつなぎ</h3><p class="meta"><code>clinger_recover__stand</code> · つなぎ3コマ · 両端のずれ 38.6px</p>
 <a href="transition-v1/clinger_recover__stand_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/clinger_recover__stand_preview.svg" alt="clinger_recover → 立ち姿勢 のつなぎ"></a>
 <p class="links"><a href="transition-v1/clinger_recover__stand_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>clinger_recover → walk_unsteady のつなぎ</h3><p class="meta"><code>clinger_recover__walk_unsteady</code> · つなぎ3コマ · 両端のずれ 45px</p>
+<article class="card" data-kind="join"><h3>clinger_recover → walk_unsteady のつなぎ</h3><p class="meta"><code>clinger_recover__walk_unsteady</code> · つなぎ4コマ · 両端のずれ 45px</p>
 <a href="transition-v1/clinger_recover__walk_unsteady_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/clinger_recover__walk_unsteady_preview.svg" alt="clinger_recover → walk_unsteady のつなぎ"></a>
 <p class="links"><a href="transition-v1/clinger_recover__walk_unsteady_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
 <article class="card" data-kind="join"><h3>tempt_pose → 立ち姿勢 のつなぎ</h3><p class="meta"><code>tempt_pose__stand</code> · つなぎ3コマ · 両端のずれ 36.1px</p>
 <a href="transition-v1/tempt_pose__stand_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/tempt_pose__stand_preview.svg" alt="tempt_pose → 立ち姿勢 のつなぎ"></a>
 <p class="links"><a href="transition-v1/tempt_pose__stand_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>sit_recover → walk_unsteady のつなぎ</h3><p class="meta"><code>sit_recover__walk_unsteady</code> · つなぎ1コマ · 両端のずれ 21px</p>
+<article class="card" data-kind="join"><h3>sit_recover → walk_unsteady のつなぎ</h3><p class="meta"><code>sit_recover__walk_unsteady</code> · つなぎ2コマ · 両端のずれ 21px</p>
 <a href="transition-v1/sit_recover__walk_unsteady_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/sit_recover__walk_unsteady_preview.svg" alt="sit_recover → walk_unsteady のつなぎ"></a>
 <p class="links"><a href="transition-v1/sit_recover__walk_unsteady_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
-<article class="card" data-kind="join"><h3>chain_splay → sit_afterglow のつなぎ</h3><p class="meta"><code>chain_splay__sit_afterglow</code> · つなぎ3コマ · 両端のずれ 40.9px</p>
+<article class="card" data-kind="join"><h3>chain_splay → sit_afterglow のつなぎ</h3><p class="meta"><code>chain_splay__sit_afterglow</code> · つなぎ4コマ · 両端のずれ 40.9px</p>
 <a href="transition-v1/chain_splay__sit_afterglow_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/chain_splay__sit_afterglow_preview.svg" alt="chain_splay → sit_afterglow のつなぎ"></a>
 <p class="links"><a href="transition-v1/chain_splay__sit_afterglow_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>spore_inhale → tension_free のつなぎ</h3><p class="meta"><code>spore_inhale__tension_free</code> · つなぎ2コマ · 両端のずれ 32.8px</p>
+<article class="card" data-kind="join"><h3>spore_inhale → tension_free のつなぎ</h3><p class="meta"><code>spore_inhale__tension_free</code> · つなぎ3コマ · 両端のずれ 32.8px</p>
 <a href="transition-v1/spore_inhale__tension_free_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/spore_inhale__tension_free_preview.svg" alt="spore_inhale → tension_free のつなぎ"></a>
 <p class="links"><a href="transition-v1/spore_inhale__tension_free_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>shiver_hug → tension_free のつなぎ</h3><p class="meta"><code>shiver_hug__tension_free</code> · つなぎ1コマ · 両端のずれ 20.8px</p>
+<article class="card" data-kind="join"><h3>shiver_hug → tension_free のつなぎ</h3><p class="meta"><code>shiver_hug__tension_free</code> · つなぎ2コマ · 両端のずれ 20.8px</p>
 <a href="transition-v1/shiver_hug__tension_free_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/shiver_hug__tension_free_preview.svg" alt="shiver_hug → tension_free のつなぎ"></a>
 <p class="links"><a href="transition-v1/shiver_hug__tension_free_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
 <article class="card" data-kind="join"><h3>gaze_trance → tension_free のつなぎ</h3><p class="meta"><code>gaze_trance__tension_free</code> · つなぎ3コマ · 両端のずれ 37.6px</p>
 <a href="transition-v1/gaze_trance__tension_free_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/gaze_trance__tension_free_preview.svg" alt="gaze_trance → tension_free のつなぎ"></a>
 <p class="links"><a href="transition-v1/gaze_trance__tension_free_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>spore_inhale → 立ち姿勢 のつなぎ</h3><p class="meta"><code>spore_inhale__stand</code> · つなぎ5コマ · 両端のずれ 64.9px</p>
+<article class="card" data-kind="join"><h3>spore_inhale → 立ち姿勢 のつなぎ</h3><p class="meta"><code>spore_inhale__stand</code> · つなぎ6コマ · 両端のずれ 64.9px</p>
 <a href="transition-v1/spore_inhale__stand_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/spore_inhale__stand_preview.svg" alt="spore_inhale → 立ち姿勢 のつなぎ"></a>
 <p class="links"><a href="transition-v1/spore_inhale__stand_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
 <article class="card" data-kind="join"><h3>shiver_hug → 立ち姿勢 のつなぎ</h3><p class="meta"><code>shiver_hug__stand</code> · つなぎ3コマ · 両端のずれ 37.4px</p>
 <a href="transition-v1/shiver_hug__stand_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/shiver_hug__stand_preview.svg" alt="shiver_hug → 立ち姿勢 のつなぎ"></a>
 <p class="links"><a href="transition-v1/shiver_hug__stand_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
-<article class="card" data-kind="join"><h3>bubble_float → 立ち姿勢 のつなぎ</h3><p class="meta"><code>bubble_float__stand</code> · つなぎ4コマ · 両端のずれ 53.5px</p>
+<article class="card" data-kind="join"><h3>bubble_float → 立ち姿勢 のつなぎ</h3><p class="meta"><code>bubble_float__stand</code> · つなぎ5コマ · 両端のずれ 53.5px</p>
 <a href="transition-v1/bubble_float__stand_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/bubble_float__stand_preview.svg" alt="bubble_float → 立ち姿勢 のつなぎ"></a>
 <p class="links"><a href="transition-v1/bubble_float__stand_keys_front.svg" target="_blank">前後を含めた全コマ（正面）</a></p></article>
 <article class="card" data-kind="join"><h3>reach_toward → 立ち姿勢 のつなぎ</h3><p class="meta"><code>reach_toward__stand</code> · つなぎ3コマ · 両端のずれ 38.1px</p>
 <a href="transition-v1/reach_toward__stand_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/reach_toward__stand_preview.svg" alt="reach_toward → 立ち姿勢 のつなぎ"></a>
 <p class="links"><a href="transition-v1/reach_toward__stand_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
-<article class="card" data-kind="join"><h3>edge_pull → 立ち姿勢 のつなぎ</h3><p class="meta"><code>edge_pull__stand</code> · つなぎ1コマ · 両端のずれ 22.2px</p>
+<article class="card" data-kind="join"><h3>edge_pull → 立ち姿勢 のつなぎ</h3><p class="meta"><code>edge_pull__stand</code> · つなぎ2コマ · 両端のずれ 22.2px</p>
 <a href="transition-v1/edge_pull__stand_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/edge_pull__stand_preview.svg" alt="edge_pull → 立ち姿勢 のつなぎ"></a>
 <p class="links"><a href="transition-v1/edge_pull__stand_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
 <article class="card" data-kind="join"><h3>edge_pull → walk_unsteady のつなぎ</h3><p class="meta"><code>edge_pull__walk_unsteady</code> · つなぎ2コマ · 両端のずれ 27.3px</p>
 <a href="transition-v1/edge_pull__walk_unsteady_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/edge_pull__walk_unsteady_preview.svg" alt="edge_pull → walk_unsteady のつなぎ"></a>
 <p class="links"><a href="transition-v1/edge_pull__walk_unsteady_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
-<article class="card" data-kind="join"><h3>walk_unsteady → 立ち姿勢 のつなぎ</h3><p class="meta"><code>walk_unsteady__stand</code> · つなぎ1コマ · 両端のずれ 21px</p>
+<article class="card" data-kind="join"><h3>walk_unsteady → 立ち姿勢 のつなぎ</h3><p class="meta"><code>walk_unsteady__stand</code> · つなぎ2コマ · 両端のずれ 21px</p>
 <a href="transition-v1/walk_unsteady__stand_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/walk_unsteady__stand_preview.svg" alt="walk_unsteady → 立ち姿勢 のつなぎ"></a>
 <p class="links"><a href="transition-v1/walk_unsteady__stand_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article>
-<article class="card" data-kind="join"><h3>walk_unsteady → trip_fall のつなぎ</h3><p class="meta"><code>walk_unsteady__trip_fall</code> · つなぎ1コマ · 両端のずれ 21px</p>
+<article class="card" data-kind="join"><h3>walk_unsteady → trip_fall のつなぎ</h3><p class="meta"><code>walk_unsteady__trip_fall</code> · つなぎ2コマ · 両端のずれ 21px</p>
 <a href="transition-v1/walk_unsteady__trip_fall_preview.svg" target="_blank"><img loading="lazy" src="transition-v1/walk_unsteady__trip_fall_preview.svg" alt="walk_unsteady → trip_fall のつなぎ"></a>
 <p class="links"><a href="transition-v1/walk_unsteady__trip_fall_keys_right.svg" target="_blank">前後を含めた全コマ（真横）</a></p></article></div></section>
 </main>

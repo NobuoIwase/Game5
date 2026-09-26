@@ -46,7 +46,7 @@ export const MOTIONS={
    phase:'pulls one arm down against the restraint, then the other; hunches and bends the knees while straining, is drawn up onto the toes when the restraint wins'}})},
  /* ---- knees pressed together, pulled apart ---- */
  legs_pulled_open:{label:'閉じた膝を左右へ引き開かれる',loop:false,view:'front',keys:[
-  [10,-.3,-14,181,0,[-10,0,0],0,130,'閉じる knees pressed together, toes turned in'],
+  [10,-.3,-14,181,0,[-10,0,0],.6,130,'閉じる knees pressed together, toes turned in; the restraints reach for her knees'],
   [10,-.3,-16,182,4,[-16,0,0],1,110,'締める restraints close round the knees; she presses them tighter, hunching'],
   [10,-.28,-16,182,4,[-14,4,0],1,90,'耐える holds against it, trembling'],
   [11,-.22,-8,184,3,[-10,-4,0],1,90,'引かれる the knees are pulled apart, the feet slide out'],
@@ -58,7 +58,7 @@ export const MOTIONS={
   [23,.82,46,195,1,[-8,-6,0],1,90,'閉じようとする tries to close them'],
   [23,1.16,48,198,-3,[0,0,0],1,90,'引き戻される yanked wide again'],
   [23,1.1,48,197,-2,[-4,0,0],1,160,'']].map(([w,kn,yw,hy,pt,hd,bd,ms,ph])=>({...BASE,hipY:hy,pitch:pt,
-   footL:foot(w,2,{yaw:yw,knee:kn}),footR:foot(-w,2,{yaw:yw,knee:kn}),head:hd,binds:[WRIST_BAND,...(bd?KNEE_BINDS:[])],ms,phase:ph||'…'}))},
+   footL:foot(w,2,{yaw:yw,knee:kn}),footR:foot(-w,2,{yaw:yw,knee:kn}),head:hd,binds:[WRIST_BAND,...(bd?KNEE_BINDS.map(b=>({...b,to:b.to.map((v,i)=>lerp([Math.sign(b.to[0])*5,212,4][i],v,bd))})):[])],ms,phase:ph||'…'}))},   // bd < 1: the lines are still reaching out
  legs_held_open:{label:'脚を開かれたまま耐える',loop:true,view:'front',keys:loop(8,90,t=>({...BASE,...SPREAD,
   hipY:197+1.2*S(2*t),sway:1.5*S(t),pitch:-2+2*C(t),
   footL:foot(22,2,{yaw:45,knee:1.1+.08*S(t)}),footR:foot(-22,2,{yaw:45,knee:1.1-.08*S(t)}),

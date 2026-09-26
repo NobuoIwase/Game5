@@ -7,19 +7,20 @@
 //   node tools/check_sequences.mjs [--all]
 import {figure} from './mannequin_svg.mjs';
 import {EDGES,LIMIT,joinFrames,frameOf} from '../motion/transitions.mjs';
-import {library as R} from '../motion/restraint.mjs';import {library as S,NEUTRAL} from '../motion/scenes.mjs';
+import {library as R} from '../motion/restraint.mjs';import {library as S,NEUTRAL} from '../motion/scenes.mjs';import {library as H,NEUTRALS} from '../motion/heroines.mjs';
 import {DIRECTIONS} from '../motion/attack.mjs';
-const src={...R().poses,...S().poses},meta={...R().motions,...S().motions};
+const src={...R().poses,...S().poses,...H().poses},meta={...R().motions,...S().motions,...H().motions};
 const JS=['head','face','eye_left','eye_right','thorax','root','knee_left','knee_right','ankle_left','ankle_right','toe_left','toe_right','elbow_left','elbow_right','wrist_left','wrist_right'];
 const inPoly=(p,q)=>{let c=false;for(let i=0,j=q.length-1;i<q.length;j=i++){if((q[i][1]>p[1])!==(q[j][1]>p[1])&&p[0]<(q[j][0]-q[i][0])*(p[1]-q[i][1])/(q[j][1]-q[i][1])+q[i][0])c=!c}return c};
 const overlap=(it,q)=>{const [a,b=a]=it.p;for(let t=.1;t<=.9;t+=.1){const x=[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];if(inPoly(x,q))return true}return false};
 export function sequence(a,b,d){const j=joinFrames(a,b);
- const A=a==='stand'?[frameOf(NEUTRAL,d)]:(()=>{const F=src[a][d];return meta[a].loop?[F[F.length-1],F[0]]:[F[F.length-2],F[F.length-1]].filter(Boolean)})();
- const B=b==='stand'?[frameOf(NEUTRAL,d)]:src[b][d].slice(0,2);const seq=[...A,...j.frames.map(k=>frameOf(k,d)),...B];seq.span=[A.length-1,A.length+j.frames.length];return seq}   // span: the steps that belong to the join
+ const st=m=>m==='stand'?[frameOf(NEUTRAL,d)]:[frameOf({...NEUTRALS[m.slice(6)],look:m.slice(6)},d)];
+ const A=a.startsWith('stand')?st(a):(()=>{const F=src[a][d];return meta[a].loop?[F[F.length-1],F[0]]:[F[F.length-2],F[F.length-1]].filter(Boolean)})();
+ const B=b.startsWith('stand')?st(b):src[b][d].slice(0,2);const seq=[...A,...j.frames.map(k=>frameOf(k,d)),...B];seq.span=[A.length-1,A.length+j.frames.length];return seq}   // span: the steps that belong to the join
 const all=process.argv.includes('--all');let jumps=0,flips=0;
 for(const [a,b] of EDGES){const out=new Set();
- for(const d of DIRECTIONS){const seq=sequence(a,b,d);const memo={};seq.forEach(f=>figure(f.joints,f.binds,f.yaw,f.expr,memo));
-  const st=seq.map(f=>{figure(f.joints,f.binds,f.yaw,f.expr,memo);const it=figure.items,ti=it.findIndex(x=>x.id==='trunk'),q=figure.trunk,o={};
+ for(const d of DIRECTIONS){const seq=sequence(a,b,d);const memo={};seq.forEach(f=>figure(f.joints,f.binds,f.yaw,f.expr,memo,f));
+  const st=seq.map(f=>{figure(f.joints,f.binds,f.yaw,f.expr,memo,f);const it=figure.items,ti=it.findIndex(x=>x.id==='trunk'),q=figure.trunk,o={};
    it.forEach((x,i)=>{if(!x.id||x.id==='trunk'||!x.w)return;const bind=/:/.test(x.id)&&!/^(loop|band):/.test(x.id);   // a loop or a band follows its joint, so it is judged like a limbif(!bind&&!/elbow|wrist|knee|hip|ankle|foot|loop|band/.test(x.id))return;
     const mid=x.w.length>1?(/^shoulder/.test(x.id)?x.w[1]:x.w[0].map((v,k)=>(v+x.w[1][k])/2)):x.w[0];o[x.id]={over:i>ti,ov:overlap(x,q),dd:figure.dd(mid),bind,short:/^tube/.test(x.id)&&Math.hypot(x.p[0][0]-x.p[1][0],x.p[0][1]-x.p[1][1])<12,need:/hip|knee|ankle|foot/.test(x.id)?4:-1.5}});
    return{o,J:f.joints,binds:f.binds}});

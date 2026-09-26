@@ -79,3 +79,5 @@ export function between(a,b,e,{keepA=false,u=e}={}){const Ja=pose(a),Jb=pose(b),
 /* the largest move of a joint between two keys (px; where she stands on the floor does not count) */
 const GAPJ=['head','thorax','root','knee_left','knee_right','ankle_left','ankle_right','toe_left','toe_right','elbow_left','elbow_right','wrist_left','wrist_right'];
 export function keyGap(a,b){const A=pose(a),B=pose(b);let m=0;for(const k of GAPJ)m=Math.max(m,Math.hypot(A[k][0]-A.root[0]-(B[k][0]-B.root[0]),A[k][1]-B[k][1],A[k][2]-A.root[2]-(B[k][2]-B.root[2])));return m}
+
+export {add,sub,mul,norm};

@@ -10,7 +10,7 @@ const C={out:'#182230',right:'#5ab6f0',left:'#ee9d5a',body:'#b6c2cc',pelvis:'#63
  bind:'#b36be0',bindOut:'#3a1650',creature:'#e07aa8',wing:'rgba(230,240,255,.65)',bg:'#19202a',grid:'#222b37',text:'#c4d2df',sub:'#8797a6',hit:'#3a2430'};
 const f=n=>(+n).toFixed(1);
 function hull(pts){pts=pts.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]);const cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]);const lo=[],up=[];for(const p of pts){while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],p)<=0)lo.pop();lo.push(p)}for(const p of pts.reverse()){while(up.length>=2&&cr(up[up.length-2],up[up.length-1],p)<=0)up.pop();up.push(p)}return lo.slice(0,-1).concat(up.slice(0,-1))}
-export function figure(J,binds=[],yaw=0,expr='',memo=null){   // expr: 'shut' closes the eyes; 'o' opens the mouth, 'line' presses it shut
+export function figure(J,binds=[],yaw=0,expr='',memo=null,fr={}){   // fr: the whole frame (look: scout / mage / healer, prop, chest_lag)   // expr: 'shut' closes the eyes; 'o' opens the mouth, 'line' presses it shut
  // memo: carried from frame to frame of one view, so a part at the trunk's edge keeps the side it was on (see place)
  const P=id=>J[id].position,D=id=>J[id].depth,W=id=>J[id].world,items=[];
  const yr=yaw*Math.PI/180,cy=Math.cos(yr),sy=Math.sin(yr),proj=w=>[144+cy*w[0]+sy*w[2],w[1]+.18*(cy*w[2]-sy*w[0])],dep=w=>cy*w[2]-sy*w[0];
@@ -33,13 +33,14 @@ export function figure(J,binds=[],yaw=0,expr='',memo=null){   // expr: 'shut' cl
  const mid=(a,b)=>ml(ad(W(a),W(b)),.5),isArm=/shoulder|elbow|wrist|hand/;
  const line=(a,b,w,col)=>`<line x1="${f(a[0])}" y1="${f(a[1])}" x2="${f(b[0])}" y2="${f(b[1])}" stroke="${C.out}" stroke-width="${w+3}" stroke-linecap="round"/><line x1="${f(a[0])}" y1="${f(a[1])}" x2="${f(b[0])}" y2="${f(b[1])}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`;
  const ell=(p,rx,ry,fill,sw=2)=>`<ellipse cx="${f(p[0])}" cy="${f(p[1])}" rx="${rx}" ry="${ry}" fill="${fill}" stroke="${C.out}" stroke-width="${sw}"/>`;
+ const METAL='#8b6b3e',mech=fr.look==='mage';
  const seg=(a,b,w,col)=>items.push({id:a+'>'+b,w:[W(a),W(b)],p:[P(a),P(b)],d:place((D(a)+D(b))/2,/^shoulder/.test(a)?W(b):mid(a,b),isArm.test(a)?-1.5:4,a+'>'+b),svg:line(P(a),P(b),w,col)});
  for(const s of ['right','left']){const c=C[s];
   seg('hip_'+s,'knee_'+s,9,c);seg('knee_'+s,'ankle_'+s,7,c);
   {const a=P('ankle_'+s);items.push({id:'foot_'+s,w:[W('ankle_'+s),W('toe_'+s)],p:[P('ankle_'+s),P('toe_'+s)],d:place((D('ankle_'+s)+D('toe_'+s))/2,mid('ankle_'+s,'toe_'+s),4,'foot_'+s),svg:line([a[0],a[1]+2],P('toe_'+s),7,c)})}
   items.push({id:'kneedot_'+s,w:[W('knee_'+s)],p:[P('knee_'+s)],d:place(D('knee_'+s),W('knee_'+s),4,'kneedot_'+s)+.02,svg:ell(P('knee_'+s),4,4,C.knee,1.5)});
-  seg('shoulder_'+s,'elbow_'+s,7,c);seg('elbow_'+s,'wrist_'+s,6,c);
-  items.push({id:'wrist_'+s,w:[W('wrist_'+s)],p:[P('wrist_'+s)],d:place(D('wrist_'+s)+.02,W('wrist_'+s),-1.5,'wrist_'+s),svg:ell(P('wrist_'+s),4,5,c,1.5)});
+  seg('shoulder_'+s,'elbow_'+s,7,c);seg('elbow_'+s,'wrist_'+s,mech?7:6,mech?METAL:c);   // the witch's forearms are mechanical
+  items.push({id:'wrist_'+s,w:[W('wrist_'+s)],p:[P('wrist_'+s)],d:place(D('wrist_'+s)+.02,W('wrist_'+s),-1.5,'wrist_'+s),svg:ell(P('wrist_'+s),4,5,mech?METAL:c,1.5)});
  }
  // the trunk, along the spine (so it can also lie down), and the pelvis
  {const t=P('thorax'),r=P('root'),v=[t[0]-r[0],t[1]-r[1]],l=Math.hypot(...v)||1,u=[v[0]/l,v[1]/l],n=[-u[1],u[0]];
@@ -63,6 +64,35 @@ export function figure(J,binds=[],yaw=0,expr='',memo=null){   // expr: 'shut' cl
     g+=`<ellipse cx="${f(e[0])}" cy="${f(e[1])}" rx="1.7" ry="2" fill="${C.out}"/><polygon points="${[n0,n1,n2].map(p=>p.map(f).join(',')).join(' ')}" fill="${C.head}" stroke="${C.out}" stroke-width="1"/>`}
    else{const a=at(-6,-11,6),b=at(-6,11,6),c=at(-8,0,20);g+=`<path d="M${f(a[0])},${f(a[1])} Q${f(c[0])},${f(c[1])} ${f(b[0])},${f(b[1])}" fill="none" stroke="${C.hair}" stroke-width="2"/>`}}
   items.push({d:faces?Math.max(D('head')+1.5,TD+.1):D('head')+1.5,svg:g})}   // over the neck and trunk when she faces the viewer, even with the head thrown back
+ // the other heroines: what marks each of them out, and the staff or knife in her hand
+ {const look=fr.look,hw=W('head'),hd=D('head')+1.5,fz2=fwd,nn=a=>nm(a);
+  const hf=J.face?nm(sb(W('face'),hw)):fz2,hl=J.eye_left?nm(sb(W('eye_left'),W('eye_right'))):lx,hu=nm(cr(hl,hf)),at=(a,b,c)=>proj(ad(ad(ad(hw,ml(hf,a)),ml(hl,b)),ml(hu,c)));
+  const poly=(pts,fill,sw=1.5)=>`<polygon points="${pts.map(p=>p.map(f).join(',')).join(' ')}" fill="${fill}" stroke="${C.out}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+  if(look==='scout'){
+   // big ears on top of the head, a tail behind the hips, the backpack on her back (under the trunk from the front, over it from behind)
+   items.push({d:hd-.05,svg:[1,-1].map(k=>poly([at(-2,k*6,14),at(0,k*15,34),at(-2,k*15,12)],'#efe0b6')+poly([at(-1,k*8,16),at(0,k*14,29),at(-1,k*13,15)],'#f2b7aa',.6)).join('')});
+   const r=W('root'),t0=ad(r,ml(fz2,-6)),t1=ad(ad(r,ml(fz2,-22)),[0,10,0]),t2=ad(ad(r,ml(fz2,-30)),[0,-4,0]),q=[t0,t1,t2].map(proj);
+   items.push({d:place(D('root'),t1,-1.5,'tail'),svg:`<path d="M${q[0].map(f).join(',')} Q${q[1].map(f).join(',')} ${q[2].map(f).join(',')}" fill="none" stroke="${C.out}" stroke-width="11" stroke-linecap="round"/><path d="M${q[0].map(f).join(',')} Q${q[1].map(f).join(',')} ${q[2].map(f).join(',')}" fill="none" stroke="#f3cdbd" stroke-width="8" stroke-linecap="round"/>`});
+   const c=ad(W('thorax'),ml(fz2,-12)),cp=proj(c),wv=Math.max(10,26*Math.hypot(dt(lx,[cy,0,sy]),0)+10*Math.abs(dt(fz2,[cy,0,sy])));
+   items.push({d:place(dep(c),c,-1.5,'pack'),svg:`<rect x="${f(cp[0]-wv/2)}" y="${f(cp[1]-18)}" width="${f(wv)}" height="34" rx="6" fill="#716c3c" stroke="${C.out}" stroke-width="2"/><rect x="${f(cp[0]-wv/2-2)}" y="${f(cp[1]-26)}" width="${f(wv+4)}" height="9" rx="4.5" fill="#7a2e3a" stroke="${C.out}" stroke-width="1.5"/>`});
+  }
+  if(look==='mage'){
+   // the big pointed hat
+   const b=at(-2,0,14),tip=at(-12,4,46);items.push({d:hd+.1,svg:`<ellipse cx="${f(b[0])}" cy="${f(b[1])}" rx="27" ry="7" fill="#2b2b33" stroke="${C.out}" stroke-width="2"/>`+poly([[b[0]-13,b[1]-1],tip,[b[0]+13,b[1]-1]],'#2b2b33',2)+`<circle cx="${f(b[0]+(dt(hl,[cy,0,sy])>=0?9:-9))}" cy="${f(b[1]-5)}" r="3.2" fill="#8a2a5a" stroke="${C.out}" stroke-width="1"/>`});
+  }
+  if(look==='healer'){
+   // long elf ears; the two front panels over her chest, hanging, trailing the body by chest_lag
+   items.push({d:hd-.05,svg:[1,-1].map(k=>poly([at(0,k*9,4),at(-4,k*24,10),at(0,k*9,-2)],'#f0d7c3')).join('')});
+   const lg=fr.chest_lag||[0,0];for(const s of ['left','right']){const c=W('chest_'+s),cp=P('chest_'+s),bx=cp[0]+lg[0],by=cp[1]+lg[1];
+    items.push({d:place(dep(c)+2,ad(c,ml(fz2,4)),-1.5,'panel_'+s),svg:`<ellipse cx="${f(bx)}" cy="${f(by)}" rx="6" ry="5" fill="#dfe4e8" stroke="${C.out}" stroke-width="1"/><rect x="${f(bx-4)}" y="${f(by-3)}" width="8" height="14" rx="2" fill="#f5f1e3" stroke="#b8923a" stroke-width="1.2"/>`})}
+  }
+  if(fr.prop&&J[fr.prop.from]){const a=P(fr.prop.from),b=P(fr.prop.to),m=ml(ad(W(fr.prop.from),W(fr.prop.to)),.5),k=fr.prop.kind;
+   const col=k==='knife'?'#e8eef5':look==='healer'?'#d8b25a':'#6b4a2e',w=k==='knife'?2.5:3.2;
+   let g=`<line x1="${f(a[0])}" y1="${f(a[1])}" x2="${f(b[0])}" y2="${f(b[1])}" stroke="${C.out}" stroke-width="${w+2.5}" stroke-linecap="round"/><line x1="${f(a[0])}" y1="${f(a[1])}" x2="${f(b[0])}" y2="${f(b[1])}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`;
+   if(k==='staff'&&look==='mage')g+=`<circle cx="${f(b[0])}" cy="${f(b[1])}" r="5.5" fill="#9b5bd6" stroke="${C.out}" stroke-width="1.5"/>`;
+   if(k==='staff'&&look==='healer')g+=`<path d="M${f(b[0]-6)},${f(b[1])} H${f(b[0]+6)} M${f(b[0])},${f(b[1]-7)} V${f(b[1]+6)}" stroke="#d8b25a" stroke-width="3" stroke-linecap="round"/><circle cx="${f(b[0])}" cy="${f(b[1])}" r="2.8" fill="#4aa0d8" stroke="${C.out}" stroke-width="1"/>`;
+   items.push({d:place(D('hand_right')+.3,m,-1.5,'prop'),svg:g})}
+ }
  if(J.sword_tip){
   items.push({d:place((D('hand_right')+D('sword_tip'))/2+.5,mid('hand_right','sword_tip')),svg:line(P('hand_right'),P('sword_tip'),2.5,'#e8eef5')});
   if(J.guard_a)items.push({d:D('hand_right')+.55,svg:line(P('guard_a'),P('guard_b'),2,'#8a8f99')});
@@ -108,7 +138,7 @@ export function figure(J,binds=[],yaw=0,expr='',memo=null){   // expr: 'shut' cl
  return `<ellipse cx="${f(P('root')[0])}" cy="242" rx="30" ry="6" fill="#0a0f15"/>`+items.map(i=>i.svg).join('');
 }
 /* the figures of one view in order, each drawn with the memo left by the frame before (primed with one pass) */
-const run=frames=>{const memo={};for(const fr of frames)figure(fr.joints,fr.binds,fr.yaw,fr.expr,memo);return frames.map(fr=>figure(fr.joints,fr.binds,fr.yaw,fr.expr,memo))};
+const run=frames=>{const memo={};for(const fr of frames)figure(fr.joints,fr.binds,fr.yaw,fr.expr,memo,fr);return frames.map(fr=>figure(fr.joints,fr.binds,fr.yaw,fr.expr,memo,fr))};
 const cell=(cw,ch,hl)=>{let g=`<rect width="${cw}" height="${ch}" fill="${hl?C.hit:C.bg}" stroke="#2c3542"/>`;for(let x=24;x<cw;x+=24)g+=`<line x1="${x}" y1="40" x2="${x}" y2="${ch}" stroke="${C.grid}"/>`;for(let y=48;y<ch;y+=24)g+=`<line x1="0" y1="${y}" x2="${cw}" y2="${y}" stroke="${C.grid}"/>`;return g};
 /* sheet: rows = directions, columns = frames */
 export function sheet(lib,m,dirs,{mark}={}){

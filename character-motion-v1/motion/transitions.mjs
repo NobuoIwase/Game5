@@ -11,6 +11,8 @@ import {pose,project,DIRECTIONS,YAW} from './attack.mjs';
 import {between,keyGap,bindTravel,holdTravel} from './blend.mjs';
 import {MOTIONS as RM,library as RL} from './restraint.mjs';
 import {MOTIONS as SM,library as SL,NEUTRAL} from './scenes.mjs';
+import {MOTIONS as HM,library as HL,NEUTRALS} from './heroines.mjs';
+import {add as vadd,sub as vsub,mul as vmul,norm as vnorm} from './blend.mjs';
 export const LIMIT=20;    // px: a joint may move this far from one frame to the next (inside the motions the median step is ~5)
 export const STEP=10;     // px: the average step a join is cut into (its middle, eased, is ~1.5x this)
 export const EDGES=`
@@ -29,25 +31,30 @@ kiss_forced>kiss_tension kiss_forced>kiss_respond kiss_respond>kiss_tension temp
 clinger_peel>clinger_accept clinger_accept>clinger_peel clinger_peel>clinger_tension clinger_accept>clinger_tension clinger_tension>clinger_afterglow clinger_afterglow>clinger_recover clinger_recover>stand clinger_recover>walk_unsteady
 tempt_pose>stand tempt_pose>tension_free tension_free>sit_afterglow sit_afterglow>sit_recover sit_recover>stand sit_recover>walk_unsteady chain_splay>sit_afterglow
 spore_inhale>tension_free shiver_hug>tension_free gaze_trance>tension_free spore_inhale>stand shiver_hug>stand gaze_trance>stand bubble_float>stand gaze_trance>daze_sway
+stand@scout>scout_knife_combo scout_knife_combo>stand@scout stand@scout>scout_throw scout_throw>stand@scout stand@scout>scout_sense scout_sense>stand@scout scout_sense>scout_throw stand@scout>scout_disarm scout_disarm>stand@scout stand@scout>scout_rummage scout_rummage>stand@scout
+stand@mage>mage_bolt mage_bolt>stand@mage stand@mage>mage_area mage_area>stand@mage mage_bolt>mage_channel mage_channel>stand@mage stand@mage>mage_suppress mage_suppress>mage_suppress_tension mage_suppress>stand@mage mage_suppress_tension>stand@mage
+stand@healer>healer_pray healer_pray>stand@healer stand@healer>healer_buff healer_buff>stand@healer stand@healer>healer_hex healer_hex>stand@healer stand@healer>healer_disgust healer_disgust>healer_cover healer_cover>stand@healer
 daze_sway>stand daze_sway>reach_toward reach_toward>stand edge_pull>stand edge_pull>walk_unsteady walk_unsteady>stand walk_unsteady>edge_pull walk_unsteady>trip_fall walk_unsteady>defeat_collapse trip_fall>stand`.trim().split(/\s+/).map(e=>e.split('>'));
 /* the key poses at the two ends of a motion (loops: frame 0 both ways) */
-const LIBS={restraint:RL(),scene:SL()};
+const LIBS={restraint:RL(),scene:SL(),heroine:HL()};
 function info(m){if(m==='stand')return{first:NEUTRAL,last:NEUTRAL,view:'front',expr:''};
- const src=RM[m]?'restraint':'scene',K=(RM[m]||SM[m]).keys,lib=LIBS[src],F=lib.poses[m].front,lp=lib.motions[m].loop;
- return{first:{...K[0],expr:F[0].expr},last:{...K[lp?0:K.length-1],expr:F[lp?0:F.length-1].expr},view:lib.motions[m].view,label:lib.motions[m].label}}
+ if(m.startsWith('stand@')){const L=m.slice(6),k={...NEUTRALS[L],look:L};return{first:k,last:k,view:'front',expr:'',look:L}}
+ const src=RM[m]?'restraint':SM[m]?'scene':'heroine',K=(RM[m]||SM[m]||HM[m]).keys,lib=LIBS[src],F=lib.poses[m].front,lp=lib.motions[m].loop,look=HM[m]?.look;
+ return{first:{...K[0],expr:F[0].expr,look},last:{...K[lp?0:K.length-1],expr:F[lp?0:F.length-1].expr,look},view:lib.motions[m].view,label:lib.motions[m].label,look}}
 export function joinFrames(a,b){const A=info(a),B=info(b),g=keyGap(A.last,B.first);
  const tr=b==='break_free'?holdTravel(A.last)+g:bindTravel(A.last,B.first);   // into break_free: the lines loosen while her arms and legs move, so both count   // restraint lines grow and go back over the join too
  if(Math.max(g,tr)<=LIMIT)return{gap:g,frames:[]};
  const n=Math.ceil(Math.max(g,tr)/STEP)-1,out=[];
- for(let j=1;j<=n;j++){const u=j/(n+1),e=u*u*(3-2*u),q=between(A.last,B.first,e,{keepA:b==='break_free',u});q.ms=70;q.phase=j===1?`つなぎ ${a} → ${b}`:'…';out.push(q)}
+ for(let j=1;j<=n;j++){const u=j/(n+1),e=u*u*(3-2*u),q=between(A.last,B.first,e,{keepA:b==='break_free',u});q.look=A.look||B.look;q.ms=70;q.phase=j===1?`つなぎ ${a} → ${b}`:'…';out.push(q)}
  return{gap:g,frames:out,from:A,to:B}}
 const bindsOut=k=>(k.binds||[]).map((b,bi)=>({joint:b.j,joint2:b.j2,anchor:b.to?'bind'+bi:null,creature:b.creature?1:undefined,partner:b.partner?1:undefined,noLoop:b.noLoop?1:undefined,coil:b.coil?1:undefined,r:b.r,engulf:b.engulf?1:undefined,level:b.level,bubble:b.bubble?1:undefined}));
-export const frameOf=(k,d)=>({direction:d,yaw:YAW[d],frame_ms:k.ms,phase:k.phase,expr:k.expr,binds:bindsOut(k),joints:project(pose(k),d)});
+export const frameOf=(k,d)=>{const J=pose(k);if(k.prop?.kind){const h=J.hand_right,dv=k.prop.dir==='fore'?vnorm(vsub(h,J.wrist_right)):vnorm(k.prop.dir);J.prop_a=vadd(h,vmul(dv,-(k.prop.back||0)));J.prop_b=vadd(h,vmul(dv,k.prop.len))}
+ return{direction:d,yaw:YAW[d],frame_ms:k.ms,phase:k.phase,expr:k.expr,binds:bindsOut(k),look:k.look,prop:k.prop?.kind?{kind:k.prop.kind,from:'prop_a',to:'prop_b'}:undefined,joints:project(J,d)}};
 export function library(){
  const poses={},meta={};
  for(const [a,b] of EDGES){const r=joinFrames(a,b);if(!r.frames.length)continue;const id=`${a}__${b}`;
   poses[id]={};for(const d of DIRECTIONS)poses[id][d]=r.frames.map((k,i)=>({...frameOf(k,d),motion:id,frame:i}));
-  meta[id]={label:`${a==='stand'?'立ち姿勢':a} → ${b==='stand'?'立ち姿勢':b} のつなぎ`,loop:false,from:a,to:b,gap:+r.gap.toFixed(1),view:b==='stand'?(r.from.view||'front'):r.to.view,frame_ms:r.frames.map(k=>k.ms),phases:r.frames.map(k=>k.phase)}}
+  meta[id]={label:`${a.startsWith('stand')?'立ち姿勢':a} → ${b.startsWith('stand')?'立ち姿勢':b} のつなぎ`,loop:false,from:a,to:b,gap:+r.gap.toFixed(1),view:b.startsWith('stand')?(r.from.view||'front'):r.to.view,frame_ms:r.frames.map(k=>k.ms),phases:r.frames.map(k=>k.phase)}}
  return{schema:'anatomical-eight-direction-motion/1.0',extends:'restraint-poses.json / scene-poses.json (same skeleton, canvas and projection)',
   notes:{what:'short joins played between two motions (motions.<id>.from, .to) so nothing jumps; loops are entered and left at their frame 0; "stand" is standing at rest',
    binds:'as in scene-poses.json'},canvas:[288,288],centre_x:144,ground_y:242,directions:DIRECTIONS,yaw:YAW,edges:EDGES.map(e=>e.join('>')),motions:meta,poses};

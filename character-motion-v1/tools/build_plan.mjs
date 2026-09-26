@@ -12,15 +12,16 @@
 //   parts   put together from parts only: in-betweens, joins, the guarded steps, the rest of the loops
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';
 import {library as A,DIRECTIONS} from '../motion/attack.mjs';
-import {library as R} from '../motion/restraint.mjs';import {library as S} from '../motion/scenes.mjs';import {library as T} from '../motion/transitions.mjs';
+import {library as R} from '../motion/restraint.mjs';import {library as S} from '../motion/scenes.mjs';import {library as T} from '../motion/transitions.mjs';import {library as H} from '../motion/heroines.mjs';
 const ROOT=path.join(path.dirname(fileURLToPath(import.meta.url)),'..');
 const RU=JSON.parse(fs.readFileSync(path.join(ROOT,'motion','reuse.json'),'utf8')).frames,PR=JSON.parse(fs.readFileSync(path.join(ROOT,'motion','part-reuse.json'),'utf8')).frames;
 const NEAR=12;   // px on the 288 canvas: a key this close to one already drawn is put together from it
 const ATTACK_KEYS=/^(構え|溜め|命中|振り抜き|頂点|叩きつけ|衝撃|止まる|目をそらす)/;
 const JS=['head','thorax','root','knee_left','knee_right','ankle_left','ankle_right','elbow_left','elbow_right','wrist_left','wrist_right'];
 const far=(F)=>{let b=0,bi=0;F.forEach((f,i)=>{const d=Math.max(...JS.map(k=>Math.hypot(f.joints[k].position[0]-F[0].joints[k].position[0],f.joints[k].position[1]-F[0].joints[k].position[1])));if(d>b){b=d;bi=i}});return bi};
-const SETS=[['attack','攻撃',A(),()=>DIRECTIONS],['restraint','拘束された姿勢',R(),(m,x)=>[x.view]],['scene','床・口づけ・拘束なし・張り付き',S(),(m,x)=>m==='walk_unsteady'?DIRECTIONS:[x.view]],['join','つなぎ',T(),(m,x)=>[x.view]]];
-const plan={},count={same:0,draw:0,finish:0,parts:0},byKind={};
+const SETS=[['attack','攻撃',A(),()=>DIRECTIONS],['restraint','拘束された姿勢',R(),(m,x)=>[x.view]],['scene','床・口づけ・拘束なし・張り付き',S(),(m,x)=>m==='walk_unsteady'?DIRECTIONS:[x.view]],['heroine','ほかのヒロイン',H(),(m,x)=>x.all8?DIRECTIONS:[x.view]],['join','つなぎ',T(),(m,x)=>[x.view]]];
+const plan={},count={same:0,draw:0,finish:0,parts:0},byKind={},owner={};
+const HL=H().motions,ownerOf=(kind,m)=>kind==='attack'?'aria':kind==='heroine'?HL[m].look:kind==='join'?(m.match(/stand@(\w+)/)?.[1]||m.split('__').map(x=>HL[x]?.look).find(Boolean)||'shared'):'shared';
 for(const [kind,label,lib,views] of SETS)for(const [m,byDir] of Object.entries(lib.poses))for(const v of views(m,lib.motions[m])){const F=byDir[v],meta=lib.motions[m];
  const ph=F.map(f=>(f.phase||'').split(' ')[0]),keys=new Set();
  if(kind==='attack'){if(m!=='advance'&&m!=='retreat')ph.forEach((p,i)=>{if(ATTACK_KEYS.test(p)||i===meta.hit_frame||meta.hit_frame!=null&&i===meta.hit_frame+1)keys.add(i)})}
@@ -31,7 +32,7 @@ for(const [kind,label,lib,views] of SETS)for(const [m,byDir] of Object.entries(l
        // peak, holding against it...): those are put together from the drawn one
   const dist=(a,b)=>Math.max(...JS.map(k=>Math.hypot(F[a].joints[k].position[0]-F[b].joints[k].position[0],F[a].joints[k].position[1]-F[b].joints[k].position[1])));
   ph.forEach((p,i)=>{if(!p||p==='…')return;if(/^頂点/.test(p)||[...keys].every(j=>dist(i,j)>NEAR))keys.add(i)})}
- plan[m]??={};plan[m][v]=F.map((f,i)=>{const r=RU[m]?.[v]?.[i],np=(PR[m]?.[v]?.[i]||[]).filter(k=>!k.startsWith('顔')).length;
+ owner[m]=ownerOf(kind,m);plan[m]??={};plan[m][v]=F.map((f,i)=>{const r=RU[m]?.[v]?.[i],np=(PR[m]?.[v]?.[i]||[]).filter(k=>!k.startsWith('顔')).length;
   const use=r?.use==='same'?'same':keys.has(i)?'draw':np>=4?'finish':'parts';count[use]++;(byKind[kind]??={same:0,draw:0,finish:0,parts:0})[use]++;return{frame:i,use,...(use==='same'?{from:r.from}:{})}});
 }
 // the part pictures still needed by the frames that are put together (parts / finish)
@@ -48,6 +49,10 @@ const nJoints=Object.keys(JB).length;
 const nParts=[...need.keys()].length,nFaces=groups['顔']||0;
 fs.writeFileSync(path.join(ROOT,'motion','plan.json'),JSON.stringify({notes:{same:'use the frame in from',draw:'a whole picture',finish:'put together from parts, then touched up',parts:'put together from parts only',joint_pictures:'bent elbows and knees drawn as their own pictures (joint|bend|direction: frames using it)'},part_pictures:[...need.keys()],joint_pictures:JB,frames:plan}));
 const tot=Object.values(count).reduce((a,b)=>a+b,0);
+const CHARS=[['aria','アリア（戦士）'],['scout','斥候（シーフ）'],['mage','魔法使い'],['healer','ヒーラー']];
+const perChar=CHARS.map(([c,label])=>{const k={same:0,draw:0,finish:0,parts:0},pn=new Set();
+ for(const [m,o] of Object.entries(plan)){if(owner[m]!==c&&owner[m]!=='shared')continue;for(const [v,F] of Object.entries(o))F.forEach(e=>{k[e.use]++;if(e.use==='parts'||e.use==='finish')for(const x of PR[m]?.[v]?.[e.frame]||[])pn.add(x)})}
+ return[label,k,pn.size]});
 const kindRows=SETS.map(([k,l])=>{const c=byKind[k];return`| ${l} | ${c.draw} | ${c.finish} | ${c.parts} | ${c.same} | ${c.draw+c.finish+c.parts+c.same} |`}).join('\n');
 const motionRows=SETS.map(([k,l,lib,views])=>`### ${l}\n\n| id | 1枚絵で描くコマ | 組み立て＋描き足し | 部位で組み立て | 同じ絵 |\n|---|---|---|---|---|\n`+Object.keys(lib.poses).map(m=>{const vs=views(m,lib.motions[m]),F=plan[m][vs[0]],pick=u=>F.filter(e=>e.use===u).map(e=>e.frame);
  const n=u=>vs.reduce((a,v)=>a+plan[m][v].filter(e=>e.use===u).length,0),lst=u=>{const p=pick(u);return p.length?`${n(u)}（${vs.length>1?'各方向 ':''}${p.join(', ')}${vs.length>1?' コマ目':''}）`:'0'};
@@ -70,7 +75,20 @@ fs.writeFileSync(path.join(ROOT,'PRODUCTION_PLAN.md'),`# 作り方の計画（1�
 | **部位で組み立て** | 中割り、つなぎ、構えたままの前進・後退、ふらつく歩き、ループの残りのコマ |
 | **同じ絵** | 体も顔もほかのコマと同じ |
 
-## 全体
+## キャラクターごと
+
+拘束・床・口づけ・張り付き・つなぎなどの共通のモーションは、キャラクターごとに描く。1人あたりの量は次のとおり。
+- アリア：剣の攻撃＋共通
+- ほかのヒロイン：自分の技・仕草＋共通
+
+| キャラクター | 1枚絵 | 組み立て＋描き足し | 部位で組み立て | 同じ絵 | 新しい部位の絵 |
+|---|---|---|---|---|---|
+${perChar.map(([l,k,n])=>`| ${l} | ${k.draw} | ${k.finish} | ${k.parts} | ${k.same} | ${n}枚 |`).join('\n')}
+
+- 曲げた肘・膝の絵（${nJoints}枚）と手の形（3種類×方向）も、キャラクターごとに要る
+- 各ヒロインの特徴（背負ったバックパック・尻尾、機械の腕、胸の動きなど）の描き方は \`HEROINE_MOTION_REQUEST.md\`
+
+## 全体（全キャラクターの依頼を重ねずに数えたもの）
 
 全${tot}コマのうち：
 - **1枚絵 ${count.draw}**
@@ -134,4 +152,4 @@ ${kindRows}
 
 ${motionRows}
 `);
-console.log(`plan: draw ${count.draw}, finish ${count.finish}, parts ${count.parts}, same ${count.same} (of ${tot}); part pictures ${nParts} (faces ${nFaces}); joint pictures ${nJoints}; bent frames ${JSON.stringify(bentFrames)}`,JSON.stringify(byKind));
+console.log(perChar.map(([l,k,n])=>`${l}: draw ${k.draw} finish ${k.finish} parts ${k.parts} same ${k.same} parts-pictures ${n}`).join('\n'));console.log(`plan: draw ${count.draw}, finish ${count.finish}, parts ${count.parts}, same ${count.same} (of ${tot}); part pictures ${nParts} (faces ${nFaces}); joint pictures ${nJoints}; bent frames ${JSON.stringify(bentFrames)}`,JSON.stringify(byKind));

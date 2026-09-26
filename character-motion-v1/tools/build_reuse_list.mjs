@@ -11,20 +11,21 @@
 //   new   a picture of its own
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';
 import {library as A,DIRECTIONS} from '../motion/attack.mjs';
-import {library as R} from '../motion/restraint.mjs';import {library as S} from '../motion/scenes.mjs';import {library as T} from '../motion/transitions.mjs';
+import {library as R} from '../motion/restraint.mjs';import {library as S} from '../motion/scenes.mjs';import {library as T} from '../motion/transitions.mjs';import {library as H} from '../motion/heroines.mjs';
 const ROOT=path.join(path.dirname(fileURLToPath(import.meta.url)),'..'),TOL=0.5;
 const BODY=['root','thorax','neck','hip_left','hip_right','knee_left','knee_right','ankle_left','ankle_right','toe_left','toe_right','shoulder_left','shoulder_right','elbow_left','elbow_right','wrist_left','wrist_right','hand_left','hand_right'],
- HEAD=['head','face','eye_left','eye_right'],SWORD=['sword_tip','guard_a','guard_b'];
+ HEAD=['head','face','eye_left','eye_right'],SWORD=['sword_tip','guard_a','guard_b','prop_a','prop_b'];
 const SETS=[['attack','攻撃',A(),()=>DIRECTIONS,'ATTACK_MOTION_REQUEST.md'],['restraint','拘束された姿勢',R(),(m,x)=>[x.view],'RESTRAINT_MOTION_REQUEST.md'],
- ['scene','床・口づけ・拘束なし・張り付き',S(),(m,x)=>m==='walk_unsteady'?DIRECTIONS:[x.view],'SCENE_MOTION_REQUEST.md'],['join','つなぎ',T(),(m,x)=>[x.view],'SCENE_MOTION_REQUEST.md 5章']];
+ ['scene','床・口づけ・拘束なし・張り付き',S(),(m,x)=>m==='walk_unsteady'?DIRECTIONS:[x.view],'SCENE_MOTION_REQUEST.md'],
+ ['heroine','ほかのヒロイン',H(),(m,x)=>x.all8?DIRECTIONS:[x.view],'HEROINE_MOTION_REQUEST.md'],['join','つなぎ',T(),(m,x)=>[x.view],'SCENE_MOTION_REQUEST.md 5章']];
 const d=(a,b,ks)=>Math.max(0,...ks.filter(k=>a.joints[k]&&b.joints[k]).map(k=>Math.hypot(a.joints[k].position[0]-b.joints[k].position[0],a.joints[k].position[1]-b.joints[k].position[1])));
 const seen=[],out={},ORDER=['same','face','head'];
 for(const [kind,,lib,views] of SETS)for(const [m,byDir] of Object.entries(lib.poses))for(const v of views(m,lib.motions[m]))byDir[v].forEach((f,i)=>{
- let hit=null;const armed=kind==='attack';
- for(const y of seen){if(y.v!==v||y.armed!==armed)continue;if(d(f,y.f,BODY)>TOL||armed&&d(f,y.f,SWORD)>TOL)continue;
+ let hit=null;const armed=kind==='attack'||!!f.prop,look=f.look||'';   // only the same heroine, holding the same thing
+ for(const y of seen){if(y.v!==v||y.armed!==armed||y.look!==look)continue;if(d(f,y.f,BODY)>TOL||armed&&d(f,y.f,SWORD)>TOL)continue;
   const t=d(f,y.f,HEAD)>TOL?'head':(f.expr||'')!==(y.f.expr||'')?'face':'same';if(!hit||ORDER.indexOf(t)<ORDER.indexOf(hit.t))hit={y,t};if(t==='same')break}
  const e={kind,motion:m,view:v,frame:i,use:hit?hit.t:'new',...(hit?{from:{motion:hit.y.m,view:v,frame:hit.y.i}}:{})};
- ((out[m]??={})[v]??=[]).push(e);seen.push({m,v,i,f,armed});
+ ((out[m]??={})[v]??=[]).push(e);seen.push({m,v,i,f,armed,look});
 });
 fs.writeFileSync(path.join(ROOT,'motion','reuse.json'),JSON.stringify({notes:{same:'use that frame as it is',face:'that frame with the face redrawn (another expression)',head:'that frame with the head redrawn (turned or tipped)',new:'a picture of its own',
  tolerance:`${TOL}px on the 288 canvas (${TOL*2}px on the 576 frames); restraints, creatures, bubbles and the other's head are the game's to draw and do not count`},frames:out},null,0));
@@ -34,7 +35,7 @@ const rng=a=>{const s=[...a].sort((x,y)=>x-y),r=[];for(let i=0;i<s.length;i++){l
 for(const [kind,label,lib,views,doc] of SETS){const rows=[],sub={new:0,same:0,face:0,head:0};
  for(const m of Object.keys(lib.poses))for(const v of views(m,lib.motions[m])){const F=out[m][v],c={new:0,same:0,face:0,head:0};F.forEach(e=>{c[e.use]++;sub[e.use]++;tot[e.use]++});
   const refs=F.filter(e=>e.use!=='new').map(e=>`${e.frame}${{same:'＝',face:'＝（顔）',head:'＝（頭）'}[e.use]}${e.from.motion===m?'':e.from.motion+' '}${e.from.frame}`);
-  if(kind==='attack'||kind==='scene'&&m==='walk_unsteady'){const vs=views(m,lib.motions[m]);if(v!==vs[0])continue;
+  if(kind==='attack'||kind==='scene'&&m==='walk_unsteady'||kind==='heroine'&&lib.motions[m].all8){const vs=views(m,lib.motions[m]);if(v!==vs[0])continue;
    const all=vs.flatMap(w=>out[m][w]),cc={new:0,same:0,face:0,head:0};all.forEach(e=>cc[e.use]++);
    const ref=w=>out[m][w].filter(e=>e.use!=='new').map(e=>`${e.frame}${{same:'＝',face:'＝（顔）',head:'＝（頭）'}[e.use]}${e.from.motion===m?'':e.from.motion+' '}${e.from.frame}`).join('、');
    const rs=vs.map(ref),one=rs.every(r=>r===rs[0]);
@@ -52,7 +53,8 @@ fs.writeFileSync(path.join(ROOT,'REUSE_LIST.md'),`# 使い回しと新規作成�
 
 依頼するコマを全部並べ、同じ向きの前のコマと比べた。
 - **比べるもの**：本人の体と顔だけ。拘束・張り付く生き物・泡・相手の頭・包む塊・輪はゲームが描くので比べない
-- **比べる範囲**：攻撃は8方向、歩き（\`walk_unsteady\`）も8方向、それ以外は依頼する1方向
+- **比べる範囲**：攻撃・ほかのヒロインの技は8方向、歩き（\`walk_unsteady\`）も8方向、それ以外は依頼する1方向
+- **ヒロインごとに比べる**：同じ姿勢でも、別のヒロインの絵は使い回さない。杖やナイフの位置が違えば別の絵
 - **一致の基準**：関節の位置の差が288pxの図で${TOL}px以内（576pxのコマで${TOL*2}px以内）
 - **左右反転での使い回しはしない**：左向きと右向きは別の絵として描く（\`exports/manifest.json\` の方針）
 

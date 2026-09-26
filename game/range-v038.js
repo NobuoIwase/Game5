@@ -5,7 +5,7 @@
      it hits (a hold or a blow at arm's length is their game); from far off it is slower
    - she knows it: she keeps a monster out of arm's reach when she can, steps in from the edge
      of her reach to strike, and steps back out right after (hit and away) */
-const C={near:140,far:220,castNear:.15,castFar:.15,dmgNear:.2,tooClose:60,away:.35,back:.3};
+const C={near:140,far:220,castNear:.15,castFar:.15,dmgNear:.2,tooClose:60,away:.28,back:.3};
 const alive=()=>window.Game5MultiEnemy?.alive?.()||[];
 const baseStart=startEnemySkill;
 startEnemySkill=function(key,target){
@@ -17,12 +17,19 @@ startEnemySkill=function(key,target){
  return r;
 };
 /* hit and away */
+// v0.44: after a cut she always backs off before the next one (the next cut's step-in brings her
+// back in): no swinging again from where she stands
+const baseSkill=startHeroSkill;
+startHeroSkill=function(slot,reason=''){const h=activeHero?.(),sk=h?.skills?.[slot];
+ if(h&&sk&&['melee','bash','heavy'].includes(sk.kind)&&(h._awayPending||h._awayT>0))return false;
+ return baseSkill(slot,reason)};
 let hadCast=null;
 const baseHero=updateHero;
 updateHero=function(h,dt){
  baseHero(h,dt);
  if(!h)return;
- if(hadCast&&!h.cast&&['melee','bash','heavy'].includes(hadCast.sk?.kind))h._awayT=C.away;
+ if(hadCast&&!h.cast&&['melee','bash','heavy'].includes(hadCast.sk?.kind))h._awayPending=true;
+ if(h._awayPending&&!h._warriorMotion&&!h._mxSkill){h._awayPending=false;h._awayT=C.away}   // v0.44: back off once the follow-through is done
  hadCast=h.cast||null;
  h._awayT=Math.max(0,(h._awayT||0)-dt);h._backT=Math.max(0,(h._backT||0)-dt);
 };
@@ -31,7 +38,10 @@ decideHero=function(h,dt){
  const r=baseDecide(h,dt);
  if(!h||h.dead||h.cast||h.grapple||h.estella?.active||(h.status?.bind||0)>0||state.dungeon?.pending)return r;
  const near=alive().filter(e=>e.aware).sort((a,b)=>Math.hypot(a.x-h.x,a.y-h.y)-Math.hypot(b.x-h.x,b.y-h.y))[0];
- if(!near||r?.kind==='cast'||/回避|防御|構え/.test(r?.label||'')||h.intent?.label==='回避')return r;   // a dodge or a guard comes first
+ if(r?.kind==='cast'||/回避|防御|構え/.test(r?.label||'')||h.intent?.label==='回避')return r;   // a dodge or a guard comes first
+ // v0.44: through the follow-through of a swing she stands her ground (the weight of the cut)
+ if(h._awayPending||(h._warriorMotion&&h._warriorMotion.elapsed>=(h._warriorMotion.hitAt??0))){h.intent={kind:'hold',x:0,y:0,label:'振り抜き'};return h.intent}
+ if(!near)return r;
  if(near.cast&&!(h._awayT>0))return r;                                                         // it is already swinging: her own reading of it decides
  const dx=h.x-near.x,dy=h.y-near.y,d=Math.hypot(dx,dy)||1;
  // v0.40: with several around her, she backs away from all of them at once (the closer, the

@@ -17,8 +17,15 @@ if(n==='climax'||n==='pinnedClimax'||n==='pinned'){let H=window.state?.hero||h,j
  // pinned under a heavy monster: lying, wriggling - weaker as Nutera rises - jolting in a climax
  let wg=(n==='pinned'?(1-nu):.3)*Math.sin(t*8),jj=n==='pinnedClimax'?j:0;
  return[s*(8+10*jj)+wg*4,-s*48+wg*12+s*20*jj,s*36-wg*12-s*20*jj,s*(12+16*gm)+wg*8+tr*4*gm,-s*(10+16*gm)-wg*8-tr*4*gm,(s<0?1:-1)*12,52-6*jj,s*(82-8*jj)]}
+/* v0.44 closing in / backing off with the guard up: short steps from the hips in time with the
+   ground covered (motion-v039.js step phase); leaning in to close, upright with the blade raised
+   higher to back off */
+if(n==='advance'||n==='retreat'){let H=window.state?.hero||h,R=window.__RDY||RDY,ph=(H._stepPh||0)/8*Math.PI*2,st=Math.sin(ph),d=H.dir||'front',
+ sd=d==='right'||d==='left'?1:d==='front'||d==='back'?.3:.65,A=15*sd,adv=n==='advance';
+ return[s*(adv?8:1),s*(R.sh+(adv?6:12)),s*(R.arm+(adv?8:22)),st*A+s*2,-st*A-s*2,0,3+Math.abs(Math.cos(ph))*1.6]}
 if(n==='ready'){let H=window.state?.hero||h,br=Math.sin(t*3.2),R=window.__RDY||RDY,st=Math.sin(t*R.step),f=R.foot*st;   // v0.39: sword held forward and down, not straight out; light footwork
- return[s*(4+br*.6),s*(R.sh+br*2),-s*(R.arm+br*2+(H._awayT>0?8:0)),s*(3+f),-s*(3-f),st*R.sway,3+br*.6+Math.abs(st)*R.bob]}   // v0.34: on guard when a monster is close (sword up, shield forward, knees bent)
+ return[s*(4+br*.6),s*(R.sh+br*2),s*(R.arm+br*2+(H._awayT>0?8:0)),   // v0.44: the blade toward the monster (it pointed away)
+ s*(3+f),-s*(3-f),st*R.sway,3+br*.6+Math.abs(st)*R.bob]}   // v0.34: on guard when a monster is close (sword up, shield forward, knees bent)
 if(n==='dodge')return[-s*11*e,s*22*e,-s*30*e,s*11*Math.sin(p*Math.PI*2),-s*8*Math.sin(p*Math.PI*2),(s<0?1:-1)*8*e,-5*e];
 if(n==='hit')return[s*11*e,-s*28*e,s*30*e,-s*5*e,s*5*e,-5*e,2*e];
 if(n==='stun')return[s*(10+Math.sin(t*5)*1.2),-s*24,s*19,-s*4,s*4,Math.sin(t*5)*.6,4];
@@ -33,7 +40,7 @@ return[sw*.45+s*ti*3+fid*1.5,s*br*am+s*nu*6,-s*br*am*.8-s*nu*4,s*(5*nu+fid*2.5),
 /* v0.39 blending: a new pose is eased into from the last one drawn instead of snapping to it -
    quick for a flinch, a dodge or a convulsion, slower for settling into a stance. Coming out of the
    walk cycle (no rig pose drawn for a moment) she eases in from standing straight. */
-const TAU={hit:.035,dodge:.045,climax:.03,pinnedClimax:.03,bash:.05,guard:.07,defeat:.09,pinned:.1,turn:.06,recover:.12,stun:.12,ready:.13,tempt:.2,idle:.16};
+const TAU={advance:.09,retreat:.09,hit:.035,dodge:.045,climax:.03,pinnedClimax:.03,bash:.05,guard:.07,defeat:.09,pinned:.1,turn:.06,recover:.12,stun:.12,ready:.13,tempt:.2,idle:.16};
 function blend(h,d,a,p){
  const now=performance.now()/1000;let B=h._pb;while(p.length<8)p.push(0);
  if(!B)h._pb=B={v:[0,0,0,0,0,0,0,0],t:now,d};

@@ -46,7 +46,7 @@ const HERO_CFG={
   atk:31,def:24,agi:18,focus:15,
   visionRange:335,visionHalf:.92,hearingRange:430,
   skills:[
-    {name:'斬撃',cost:0,cd:.72,cast:.24,range:78,step:46,stepSpeed:230,kind:'melee',damage:22,unlock:1,desc:'射程78 + 踏込46 / 扇'},
+    {name:'斬撃',cost:0,cd:.72,cast:.34,range:78,step:46,stepSpeed:230,kind:'melee',damage:40,unlock:1,desc:'射程78 + 踏込46 / 扇'},
     {name:'盾撃',cost:4,cd:4.2,cast:.32,range:68,step:42,stepSpeed:220,kind:'bash',damage:16,unlock:2,desc:'中断・気絶'},
     {name:'堅守',cost:3,cd:7.5,cast:.12,range:0,step:0,kind:'guard',unlock:1,desc:'3秒 被害55%減'},
     {name:'破城斬り',cost:9,cd:8.8,cast:.78,range:102,step:58,stepSpeed:245,kind:'heavy',damage:54,unlock:3,desc:'大踏込・中断'}

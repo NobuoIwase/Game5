@@ -10,6 +10,8 @@
 | `hip_rock_spread` / `hip_rock_closed` | 素股（ガニ股／内股で挟む） |
 | `bounce_spread` / `bounce_hung` | 挿入中の上下（ガニ股／腕を吊られて） |
 | `tension_tiptoe` / `tension_arch` | エステラ（絶頂）：爪先を伸ばす／のけぞり |
+| `afterglow_spread` → `recover_spread` | `tension_tiptoe`（絶頂）のあとの余韻 → 回復（脚を開かれた拘束に戻る） |
+| `afterglow_slump` → `recover_slump` | `tension_arch`（のけぞり絶頂）のあとの余韻 → 回復（吊られた拘束に戻る） |
 | `bent_over` | 尻を突き出す前屈みの拘束（後ろ・斜め後ろ向きで表示） |
 
 股の下を通る触手・床から伸びる触手は、ゲーム側で描く（骨格データの `crotch` の点が位置の目安）。
@@ -33,8 +35,12 @@
 | `tension_free` | 非拘束絶頂（立ったまま絶頂して座り込む） |
 | `sit_afterglow` | 絶頂後の余韻・へたり込み |
 | `held_from_behind` | 背後からの抱きつき拘束 |
+| `down_afterglow` → `down_recover` → `get_up` | 押し倒されての絶頂後の余韻 → 回復 → 起き上がり |
+| `kiss_afterglow` → `kiss_recover` | キス絶頂（`kiss_tension`）後の余韻 → 回復 |
+| `sit_afterglow` → `sit_recover` | 非拘束絶頂（`tension_free`）後の余韻 → 回復。連続絶頂（`chain_splay`）の終わりにも使える |
 | `clinger_peel` | 吸液羽虫など張り付きモンスターの引き剥がし（胸の左右・下腹） |
 | `clinger_tension` | 非拘束絶頂（張り付きモンスター） |
 | `clinger_accept` | 張り付きモンスター受け入れ |
+| `clinger_afterglow` → `clinger_recover` | 非拘束絶頂（張り付き、`clinger_tension`）後の余韻 → 回復（張り付かれたまま） |
 
 相手の体・張り付く生き物・床から伸びる触手は、ゲーム側で描く。相手の頭の位置は `binds` の `partner`、生き物の位置は `chest_left` / `chest_right` / `belly`。

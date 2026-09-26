@@ -173,7 +173,10 @@ export function pose(k0){
   const lift=f[2]>2?1:0;   // a lifted foot hangs toes-down a little
   // a planted foot whose heel comes up (lift <= 8 on the ground) keeps its toes on the floor
   const ty=onToe?240:leg.end[1]+8-lift*3,tz=onToe?Math.sqrt(Math.max(0,185-(240-leg.end[1])**2)):11;
-  if(pt){const e=leg.end,gnd=!f[4]&&f[2]<=8;J['toe_'+side]=gnd?[e[0]+toe[0]*FL*Math.cos(fp),240,e[2]+toe[2]*FL*Math.cos(fp)]:[e[0]+toe[0]*FL*Math.cos(fp),e[1]+FL*Math.sin(fp),e[2]+toe[2]*FL*Math.cos(fp)]}
+  // f[9]: the foot's direction given outright ([out, down, forward], mirrored per side), or 'shin' to carry on the
+  // line of the shin (a pointed foot lying face down or kicking up from there)
+  if(f[9]){const e=leg.end,dv=f[9]==='shin'?norm(sub(e,leg.mid)):norm([f[9][0]*(side==='right'?-1:1),f[9][1],f[9][2]]);J['toe_'+side]=add(e,mul(dv,FL))}
+  else if(pt){const e=leg.end,gnd=!f[4]&&f[2]<=8;J['toe_'+side]=gnd?[e[0]+toe[0]*FL*Math.cos(fp),240,e[2]+toe[2]*FL*Math.cos(fp)]:[e[0]+toe[0]*FL*Math.cos(fp),e[1]+FL*Math.sin(fp),e[2]+toe[2]*FL*Math.cos(fp)]}
   else J['toe_'+side]=[leg.end[0]+toe[0]*tz,ty,leg.end[2]+toe[2]*tz];
   const sh=trunk(11.5*sg+cs,41+(k.shrug||0),0,chest),A=k['arm'+(side==='right'?'R':'L')],hv=A.t?trunk(A.t[0],A.t[1],A.t[2],chest):add(sh,mul(norm(A.d),(L.upper+L.fore-.06)*A.e));   // A.t: a hand position on the body (tied behind her back...)
   // elbows point out and down; the sword elbow lifts out to the side when the hand is overhead
@@ -182,6 +185,13 @@ export function pose(k0){
   J['shoulder_'+side]=sh;J['elbow_'+side]=arm.mid;J['wrist_'+side]=arm.end;
   const fa=norm(sub(arm.end,arm.mid));J['hand_'+side]=add(arm.end,mul(fa,L.hand));
  }
+ // knees may touch but never pass each other: if they come closer than 8 px across (her right is -x), each knee
+ // swings outward about its own hip-ankle line (the foot stays where it is) until they clear
+ {const gap=()=>J.knee_left[0]-J.knee_right[0];
+  if(gap()<8){const rot=(side,th)=>{const h=J['hip_'+side],u=norm(sub(J['ankle_'+side],h)),v=sub(J['knee_'+side],h);
+    return add(h,add(add(mul(v,Math.cos(th)),mul(cross(u,v),Math.sin(th))),mul(u,dot(u,v)*(1-Math.cos(th)))))};
+   const kl=J.knee_left,kr=J.knee_right,dirL=rot('left',.05)[0]>rot('left',-.05)[0]?1:-1,dirR=rot('right',.05)[0]<rot('right',-.05)[0]?1:-1;
+   for(let th=.02;th<1.2&&gap()<8;th+=.02){J.knee_left=kl;J.knee_right=kr;J.knee_left=rot('left',dirL*th);J.knee_right=rot('right',dirR*th)}}}
  // the blade: the sword forearm turned about the cut's lateral axis by the wrist angle. When a
  // key gives tip (the angle of the tip seen from her right shoulder, side view: 0 = ahead,
  // -90 = straight up, 90 = straight down), the wrist angle is solved to put it there.

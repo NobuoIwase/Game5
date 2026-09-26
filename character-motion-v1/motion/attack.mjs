@@ -187,7 +187,7 @@ export function pose(k0){
   if(f[9]){const e=leg.end,dv=f[9]==='shin'?norm(sub(e,leg.mid)):norm([f[9][0]*(side==='right'?-1:1),f[9][1],f[9][2]]);J['toe_'+side]=add(e,mul(dv,FL))}
   else if(pt){const e=leg.end,gnd=!f[4]&&f[2]<=8;J['toe_'+side]=gnd?[e[0]+toe[0]*FL*Math.cos(fp),240,e[2]+toe[2]*FL*Math.cos(fp)]:[e[0]+toe[0]*FL*Math.cos(fp),e[1]+FL*Math.sin(fp),e[2]+toe[2]*FL*Math.cos(fp)]}
   else J['toe_'+side]=[leg.end[0]+toe[0]*tz,ty,leg.end[2]+toe[2]*tz];
-  const sh=trunk(11.5*sg+cs,41+(k.shrug||0),0,chest),A=k['arm'+(side==='right'?'R':'L')],hv=A.t?trunk(A.t[0],A.t[1],A.t[2],chest):add(sh,mul(norm(A.d),(L.upper+L.fore-.06)*A.e));   // A.t: a hand position on the body (tied behind her back...)
+  const sh=trunk(11.5*sg+cs,41+(k.shrug||0),0,chest),A=k['arm'+(side==='right'?'R':'L')],hv=A.w?add(root,A.w):A.t?trunk(A.t[0],A.t[1],A.t[2],chest):add(sh,mul(norm(A.d),(L.upper+L.fore-.06)*A.e));   // A.w: the wrist given outright, measured from the root (the joins between motions use it); A.t: a hand position on the body (tied behind her back...)
   // elbows point out and down; the sword elbow lifts out to the side when the hand is overhead
   const over=hv[1]<sh[1]-12;const pole=A.p||(side==='right'?(over?[-1,-.2,-.6]:[-1,.6,-.3]):[1,.9,.05]);   // A.p: an elbow direction for this key   // the shield elbow stays close to her side
   const arm=ik3(sh,hv,L.upper,L.fore,pole);

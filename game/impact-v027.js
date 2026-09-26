@@ -61,7 +61,7 @@ hurtEnemy=function(dmg,opts={}){
  if(!e.grappling&&!e.dash&&e.hp>0){
   const d=C.push[k],blocked=window.Game5Dungeon?.blockedAt;let tx=e.x,ty=e.y;
   for(let s=4;s<=d;s+=4){const nx=e.x+Math.cos(a)*s,ny=e.y+Math.sin(a)*s;if(blocked?.(e,nx,ny))break;tx=nx;ty=ny}
-  if(Math.hypot(tx-e.x,ty-e.y)>3)e.dash={x0:e.x,y0:e.y,x1:tx,y1:ty,t:0,T:.13,ang:a,knock:true};
+  if(Math.hypot(tx-e.x,ty-e.y)>3)e.dash={x0:e.x,y0:e.y,x1:tx,y1:ty,t:0,T:.22,ang:a,knock:true};   // v0.45: .13s read as a jump
  }
  return r;
 };

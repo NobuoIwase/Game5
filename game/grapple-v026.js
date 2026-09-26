@@ -89,7 +89,11 @@ function release(h,why){
  const g=h.grapple;if(!g)return;
  const e=g.e;h.grapple=null;h.status.bind=0;h.bindImmuneT=C.immune;h._lastRelease=why;
  if(e){e.grappling=false;e.actCd=Math.max(e.actCd||0,1.1);
-  if(why==='free'){const a=Math.atan2(e.y-h.y,e.x-h.x);e.dash={x0:e.x,y0:e.y,x1:e.x+Math.cos(a)*70,y1:e.y+Math.sin(a)*70,t:0,T:.18,ang:a};e.stun=Math.max(e.stun||0,.35)}}
+  // v0.45: thrown off - pushed back 50px over half a second (it was 70px in 0.18s, which read as
+  // a warp) and never into a wall
+  if(why==='free'){const a=Math.atan2(e.y-h.y,e.x-h.x),B=window.Game5Dungeon?.blockedAt;let tx=e.x,ty=e.y;
+   for(let s=4;s<=50;s+=4){const nx=e.x+Math.cos(a)*s,ny=e.y+Math.sin(a)*s;if(B?.(e,nx,ny))break;tx=nx;ty=ny}
+   if(Math.hypot(tx-e.x,ty-e.y)>3)e.dash={x0:e.x,y0:e.y,x1:tx,y1:ty,t:0,T:.5,ang:a,knock:true};e.stun=Math.max(e.stun||0,.6)}}
  h._voiceEvent=why==='free'?'free':'released';
  if(why==='free'){addFx('text',h.x,h.y-70,'振りほどいた','#cfe8ff',.9);log('もがき続けて、ようやく振りほどいた。')}
 }
@@ -189,7 +193,7 @@ updateHero=function(h,dt){
  if(e&&!e.dash){const a=Math.atan2(e.y-h.y,e.x-h.x),r=(h.r||18)+(e.r||24)*.55;
   if(g.rooted){const tx=e.x-Math.cos(a)*r,ty=e.y-Math.sin(a)*r*.7;h.x+=(tx-h.x)*Math.min(1,dt*6);h.y+=(ty-h.y)*Math.min(1,dt*6)}   // pulled in to the mushroom
   else if(g.pinned){const sd=e.x>=h.x?1:-1;e.x+=(h.x+sd*(e.r||24)*.95-e.x)*Math.min(1,dt*8);e.y+=(h.y+2-e.y)*Math.min(1,dt*8)}   // over her hips, her head and shoulders free                                   // on top of her
-  else{e.x=h.x+Math.cos(a)*r;e.y=h.y+Math.sin(a)*r*.7}
+  else{const k=Math.min(1,dt*10);e.x+=(h.x+Math.cos(a)*r-e.x)*k;e.y+=(h.y+Math.sin(a)*r*.7-e.y)*k}   // v0.45: slides in (it snapped to her side in one frame)
   e.cast=null;e.decision=g.pinned?'押さえつけている':'捕らえている'}
  // v0.31: while held she is turned three-quarters toward the viewer, so her face shows
  h.dir=e?(e.x<h.x?'down_left':'down_right'):'front';

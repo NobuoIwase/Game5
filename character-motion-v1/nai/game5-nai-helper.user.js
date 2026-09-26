@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Game5 NAI helper
 // @namespace    nobuoiwase-game5
-// @version      1.2
+// @version      1.3
 // @description  Game5 のモーションの元絵を NovelAI で作るための手伝い。ボタン1つで次のコマの下絵とプロンプトを入れる
 // @match        https://novelai.net/*
 // @run-at       document-start
@@ -104,7 +104,7 @@ function draw(){
  root.append(h('div',{},`保存済み ${nd} / ${js.length}`));
  if(armed){const f=DATA.frames[armed.frame];root.append(h('div',{style:'margin:6px 0;padding:6px;background:#0f151d;border-radius:5px'},
   h('div',{style:'font-weight:700'},armed.file),h('div',{},f.label),h('div',{style:'color:#9fb0c0'},`${VJ[f.view]||f.view}から・${f.frame}コマ目${f.step?'：'+f.step:''}`),
-  h('div',{style:'margin-top:4px'},f.ja||''),h('div',{style:'color:#ffd48a'},'押さえられている所：'+(f.held||'')),
+  ...(()=>{const J=f.ja||{};return[['体勢',J.body],['腕',J.arms],['脚',J.legs],['押さえ',J.held],['動き',J.move]].map(([k,v])=>h('div',{style:'margin-top:2px'},h('span',{style:'color:#9fb0c0;display:inline-block;width:3.5em'},k),v||''))})(),
   h('div',{style:'color:#9fb0c0'},'場面の種類：'+f.situations.map(x=>DATA.situations[x]).join(' ＋ ')),
   h('div',{},h('img',{src:SRC+(f.guide||f.base),title:'どこを押さえられているか（読むためだけの絵）',style:'width:120px;height:120px;background:#fff;margin:4px 4px 0 0;border-radius:4px'}),
    h('img',{src:SRC+f.base,title:'送る下絵（姿勢だけ）',style:'width:120px;height:120px;background:#fff;margin-top:4px;border-radius:4px'})),
@@ -118,7 +118,7 @@ function draw(){
  det.append(h('div',{style:'color:#9fb0c0;margin:4px 0'},'場面の種類ごとの言葉。このブラウザにだけ保存され、プロンプト欄には表示されません。送るときに足されます。'));
  for(const [k,label] of Object.entries(DATA.situations)){
   const ms=[...new Set(Object.values(DATA.frames).filter(f=>f.situations.includes(k)).map(f=>f.label))];
-  det.append(ta(label,st.words[k],v=>st.words[k]=v,'書くとよいもの：'+((DATA.hints||{})[k]||'')+'　／　入るモーション：'+ms.join('、')))}
+  det.append(ta(label,st.words[k],v=>st.words[k]=v,'書くこと：'+((DATA.hints||{})[k]||'')+'　／　入るモーション：'+ms.join('、')))}
  for(const [k,c] of Object.entries(DATA.characters))det.append(ta('キャラクター：'+c.label,st.charWords[k],v=>st.charWords[k]=v));
  det.append(ta('除外する言葉の追加',st.extraNeg,v=>st.extraNeg=v));
  const cb=h('input',{type:'checkbox'});cb.checked=st.useBase;cb.addEventListener('change',e=>{st.useBase=e.target.checked;save()});

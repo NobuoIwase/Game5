@@ -17,7 +17,7 @@ main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;marg
 .hide{display:none}
 </style></head><body>
 <header><h1>Game5 モーション参考資料</h1><p>骨格から描いたマネキン図（青＝本人の右半身、橙＝左半身、紫＝拘束・相手の頭（点線の円）、桃色＝体に張り付く小さな生き物）。図をタップすると大きく開きます。依頼書：<a href="https://github.com/NobuoIwase/Game5/blob/main/character-motion-v1/ATTACK_MOTION_REQUEST.md">攻撃</a> · <a href="https://github.com/NobuoIwase/Game5/blob/main/character-motion-v1/RESTRAINT_MOTION_REQUEST.md">拘束された姿勢</a> · <a href="https://github.com/NobuoIwase/Game5/blob/main/character-motion-v1/SCENE_MOTION_REQUEST.md">床・口づけ・拘束なし・張り付き</a></p></header>
-<nav><div class="in"><button data-f="all" aria-pressed="true">すべて</button><button data-f="attack" aria-pressed="false">攻撃（7）</button><button data-f="restraint" aria-pressed="false">拘束された姿勢（12）</button><button data-f="scene" aria-pressed="false">床・口づけ・拘束なし・張り付き（18）</button></div></nav>
+<nav><div class="in"><button data-f="all" aria-pressed="true">すべて</button><button data-f="attack" aria-pressed="false">攻撃（7）</button><button data-f="restraint" aria-pressed="false">拘束された姿勢（16）</button><button data-f="scene" aria-pressed="false">床・口づけ・拘束なし・張り付き（25）</button></div></nav>
 <main>
 <section data-kind="attack"><h2>攻撃</h2><div class="grid"><article class="card" data-kind="attack"><h3>通常斬り（踏み込み振り下ろし）</h3><p class="meta"><code>slash</code> · 12コマ · 950ms · 1回 · 命中 6コマ目</p>
 <a href="attack-v1/slash_preview.svg" target="_blank"><img loading="lazy" src="attack-v1/slash_preview.svg" alt="通常斬り（踏み込み振り下ろし）"></a>
@@ -73,6 +73,18 @@ main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;marg
 <article class="card" data-kind="restraint"><h3>背中を大きく反らせてこわばり、そのあと脱力</h3><p class="meta"><code>tension_arch</code> · 12コマ · 1280ms · 1回 · 向き：正面</p>
 <a href="restraint-v1/tension_arch_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/tension_arch_preview.svg" alt="背中を大きく反らせてこわばり、そのあと脱力"></a>
 <p class="links"><a href="restraint-v1/tension_arch_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/tension_arch_keys_front.svg" target="_blank">要所（正面）</a><a href="restraint-v1/tension_arch_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="restraint"><h3>脚を開かれたまま脱力し、肩で息をする（tension_tiptoe のあと）</h3><p class="meta"><code>afterglow_spread</code> · 8コマ · 1360ms · ループ · 向き：正面</p>
+<a href="restraint-v1/afterglow_spread_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/afterglow_spread_preview.svg" alt="脚を開かれたまま脱力し、肩で息をする（tension_tiptoe のあと）"></a>
+<p class="links"><a href="restraint-v1/afterglow_spread_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/afterglow_spread_keys_front.svg" target="_blank">要所（正面）</a><a href="restraint-v1/afterglow_spread_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="restraint"><h3>脱力から我に返り、脚を閉じようとする</h3><p class="meta"><code>recover_spread</code> · 6コマ · 720ms · 1回 · 向き：正面</p>
+<a href="restraint-v1/recover_spread_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/recover_spread_preview.svg" alt="脱力から我に返り、脚を閉じようとする"></a>
+<p class="links"><a href="restraint-v1/recover_spread_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/recover_spread_keys_front.svg" target="_blank">要所（正面）</a><a href="restraint-v1/recover_spread_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="restraint"><h3>前へ崩れたまま脱力し、肩で息をする（tension_arch のあと）</h3><p class="meta"><code>afterglow_slump</code> · 8コマ · 1360ms · ループ · 向き：正面</p>
+<a href="restraint-v1/afterglow_slump_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/afterglow_slump_preview.svg" alt="前へ崩れたまま脱力し、肩で息をする（tension_arch のあと）"></a>
+<p class="links"><a href="restraint-v1/afterglow_slump_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/afterglow_slump_keys_front.svg" target="_blank">要所（正面）</a><a href="restraint-v1/afterglow_slump_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="restraint"><h3>脱力から我に返り、立ち直る</h3><p class="meta"><code>recover_slump</code> · 5コマ · 630ms · 1回 · 向き：正面</p>
+<a href="restraint-v1/recover_slump_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/recover_slump_preview.svg" alt="脱力から我に返り、立ち直る"></a>
+<p class="links"><a href="restraint-v1/recover_slump_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/recover_slump_keys_front.svg" target="_blank">要所（正面）</a><a href="restraint-v1/recover_slump_keys_right.svg" target="_blank">要所（真横）</a></p></article>
 <article class="card" data-kind="restraint"><h3>前屈みで手首を床の前に縛られ、腰を左右に揺らす（後ろ・斜め後ろから）</h3><p class="meta"><code>bent_over</code> · 8コマ · 880ms · ループ · 向き：斜め後ろ</p>
 <a href="restraint-v1/bent_over_preview.svg" target="_blank"><img loading="lazy" src="restraint-v1/bent_over_preview.svg" alt="前屈みで手首を床の前に縛られ、腰を左右に揺らす（後ろ・斜め後ろから）"></a>
 <p class="links"><a href="restraint-v1/bent_over_sheet.svg" target="_blank">全方向×全コマ</a><a href="restraint-v1/bent_over_keys_up_right.svg" target="_blank">要所（斜め後ろ）</a><a href="restraint-v1/bent_over_keys_back.svg" target="_blank">要所（後ろ）</a><a href="restraint-v1/bent_over_keys_right.svg" target="_blank">要所（真横）</a></p></article></div></section>
@@ -121,7 +133,28 @@ main{max-width:1280px;margin:0 auto;padding:8px 16px 40px}h2{font-size:17px;marg
 <article class="card" data-kind="scene"><h3>後ろから腕ごと胴を抱きすくめられ、もがく</h3><p class="meta"><code>held_from_behind</code> · 8コマ · 880ms · ループ · 向き：正面</p>
 <a href="scene-v1/held_from_behind_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/held_from_behind_preview.svg" alt="後ろから腕ごと胴を抱きすくめられ、もがく"></a>
 <p class="links"><a href="scene-v1/held_from_behind_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/held_from_behind_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/held_from_behind_keys_right.svg" target="_blank">要所（真横）</a></p></article>
-<article class="card" data-kind="scene"><h3>胸と下腹に張り付いた小さな生き物を引き剥がそうとする</h3><p class="meta"><code>clinger_peel</code> · 8コマ · 800ms · ループ · 向き：正面</p>
+<article class="card" data-kind="scene"><h3>仰向けで膝が倒れたまま、肩で息をする</h3><p class="meta"><code>down_afterglow</code> · 8コマ · 1360ms · ループ · 向き：斜め前</p>
+<a href="scene-v1/down_afterglow_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/down_afterglow_preview.svg" alt="仰向けで膝が倒れたまま、肩で息をする"></a>
+<p class="links"><a href="scene-v1/down_afterglow_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/down_afterglow_keys_down_right.svg" target="_blank">要所（斜め前）</a><a href="scene-v1/down_afterglow_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="scene"><h3>仰向けの余韻から膝を閉じて体を起こしかける（そのあと get_up）</h3><p class="meta"><code>down_recover</code> · 5コマ · 550ms · 1回 · 向き：斜め前</p>
+<a href="scene-v1/down_recover_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/down_recover_preview.svg" alt="仰向けの余韻から膝を閉じて体を起こしかける（そのあと get_up）"></a>
+<p class="links"><a href="scene-v1/down_recover_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/down_recover_keys_down_right.svg" target="_blank">要所（斜め前）</a><a href="scene-v1/down_recover_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="scene"><h3>口づけのあと、膝が抜けたままふらつき、肩で息をする（kiss_tension のあと）</h3><p class="meta"><code>kiss_afterglow</code> · 8コマ · 1360ms · ループ · 向き：真横</p>
+<a href="scene-v1/kiss_afterglow_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/kiss_afterglow_preview.svg" alt="口づけのあと、膝が抜けたままふらつき、肩で息をする（kiss_tension のあと）"></a>
+<p class="links"><a href="scene-v1/kiss_afterglow_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/kiss_afterglow_keys_right.svg" target="_blank">要所（真横）</a><a href="scene-v1/kiss_afterglow_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
+<article class="card" data-kind="scene"><h3>我に返って口元をぬぐい、一歩下がる</h3><p class="meta"><code>kiss_recover</code> · 7コマ · 700ms · 1回 · 向き：真横</p>
+<a href="scene-v1/kiss_recover_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/kiss_recover_preview.svg" alt="我に返って口元をぬぐい、一歩下がる"></a>
+<p class="links"><a href="scene-v1/kiss_recover_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/kiss_recover_keys_right.svg" target="_blank">要所（真横）</a><a href="scene-v1/kiss_recover_keys_down_right.svg" target="_blank">要所（斜め前）</a></p></article>
+<article class="card" data-kind="scene"><h3>女の子座りから立ち上がる（tension_free・sit_afterglow のあと）</h3><p class="meta"><code>sit_recover</code> · 11コマ · 1045ms · 1回 · 向き：正面</p>
+<a href="scene-v1/sit_recover_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/sit_recover_preview.svg" alt="女の子座りから立ち上がる（tension_free・sit_afterglow のあと）"></a>
+<p class="links"><a href="scene-v1/sit_recover_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/sit_recover_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/sit_recover_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="scene"><h3>張り付かれたまま座り込み、肩で息をする（clinger_tension のあと）</h3><p class="meta"><code>clinger_afterglow</code> · 8コマ · 1360ms · ループ · 向き：正面</p>
+<a href="scene-v1/clinger_afterglow_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/clinger_afterglow_preview.svg" alt="張り付かれたまま座り込み、肩で息をする（clinger_tension のあと）"></a>
+<p class="links"><a href="scene-v1/clinger_afterglow_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/clinger_afterglow_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/clinger_afterglow_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="scene"><h3>張り付かれたまま立ち上がり、胸を押さえる</h3><p class="meta"><code>clinger_recover</code> · 11コマ · 1045ms · 1回 · 向き：正面</p>
+<a href="scene-v1/clinger_recover_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/clinger_recover_preview.svg" alt="張り付かれたまま立ち上がり、胸を押さえる"></a>
+<p class="links"><a href="scene-v1/clinger_recover_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/clinger_recover_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/clinger_recover_keys_right.svg" target="_blank">要所（真横）</a></p></article>
+<article class="card" data-kind="scene"><h3>胸と下腹に張り付いた小さな生き物を引き剥がそうとする</h3><p class="meta"><code>clinger_peel</code> · 16コマ · 800ms · ループ · 向き：正面</p>
 <a href="scene-v1/clinger_peel_preview.svg" target="_blank"><img loading="lazy" src="scene-v1/clinger_peel_preview.svg" alt="胸と下腹に張り付いた小さな生き物を引き剥がそうとする"></a>
 <p class="links"><a href="scene-v1/clinger_peel_sheet.svg" target="_blank">全方向×全コマ</a><a href="scene-v1/clinger_peel_keys_front.svg" target="_blank">要所（正面）</a><a href="scene-v1/clinger_peel_keys_right.svg" target="_blank">要所（真横）</a></p></article>
 <article class="card" data-kind="scene"><h3>張り付かれたまま全身がこわばり、座り込む</h3><p class="meta"><code>clinger_tension</code> · 11コマ · 990ms · 1回 · 向き：正面</p>

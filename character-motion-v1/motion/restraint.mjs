@@ -104,6 +104,23 @@ export const MOTIONS={
   [1,191,16,-.62,0,[-25,0,0],0,160,'崩れる folds forward, knees buckling in'],
   [0,193,18,-.66,0,[-30,6,0],0,240,'脱力 limp']].map(([rz,hy,pi,kn,pt,hd,sh,ms,ph])=>({...BASE,rootZ:rz,hipY:hy,pitch:pi,shrug:sh,
    footL:foot(10,0,{yaw:-10,knee:Math.max(kn*.45,-.2),point:pt}),footR:foot(-10,0,{yaw:-10,knee:Math.max(kn*.45,-.2),point:pt}),head:hd,binds:[WRIST_BAND,{j:'wrist_right',to:[0,150,-70]}],ms,phase:ph}))},
+ /* ---- after the tension: limp in the restraints, then coming round (each starts where its tension motion ends) ---- */
+ afterglow_spread:{label:'脚を開かれたまま脱力し、肩で息をする（tension_tiptoe のあと）',loop:true,view:'front',keys:loop(8,170,(t,i)=>({...BASE,...SPREAD,
+  hipY:198+.8*S(t)-(i===5?3:0),pitch:12+2*S(t),shrug:1.8*Math.max(0,S(t)),head:[-22+4*S(t-.1),4,0],
+  footL:foot(22,2,{yaw:45,knee:1.15,point:i===5?22:0}),footR:foot(-22,2,{yaw:45,knee:1.15,point:i===5?22:0}),binds:[WRIST_BAND,...KNEE_BINDS],
+  expr:i===5?'shut-o':'o',phase:i===5?'余震 an aftershock: toes point, the body jerks once':'hanging limp in the restraints, head down, shoulders heaving'}))},
+ recover_spread:{label:'脱力から我に返り、脚を閉じようとする',loop:false,view:'front',keys:[
+  [198,1.15,12,[-22,4,0],'o',160,'脱力 limp'],[197,1.13,9,[-14,2,0],'o',120,'…'],[196,1.12,5,[-6,0,0],'line',120,'顔を上げる lifts her head, comes to herself'],
+  [192,.85,2,[-4,0,0],'line',110,'閉じようとする tries to close her knees'],[194,.95,1,[-4,0,0],'line',90,'…'],[196,1.1,0,[-6,0,0],'line',120,'引き戻される held open again']].map(([hy,kn,pi,hd,ex,ms,ph])=>({...BASE,...SPREAD,
+   hipY:hy,pitch:pi,head:hd,footL:foot(22,2,{yaw:45,knee:kn}),footR:foot(-22,2,{yaw:45,knee:kn}),binds:[WRIST_BAND,...KNEE_BINDS],expr:ex,ms,phase:ph}))},
+ afterglow_slump:{label:'前へ崩れたまま脱力し、肩で息をする（tension_arch のあと）',loop:true,view:'front',keys:loop(8,170,(t,i)=>({...BASE,
+  hipY:193+.8*S(t)-(i===5?2:0),pitch:18+2*S(t),shrug:1.8*Math.max(0,S(t)),head:[-30+4*S(t-.1),6,0],
+  footL:foot(10,0,{yaw:-10,knee:-.2,point:i===5?16:0}),footR:foot(-10,0,{yaw:-10,knee:-.2,point:i===5?16:0}),binds:[WRIST_BAND,{j:'wrist_right',to:[0,150,-70]}],
+  expr:i===5?'shut-o':'o',phase:i===5?'余震 an aftershock: a jerk, up on the toes for a moment':'slumped forward, knees in, head hanging, shoulders heaving'}))},
+ recover_slump:{label:'脱力から我に返り、立ち直る',loop:false,view:'front',keys:[
+  [193,18,[-30,6,0],-.2,'o',160,'脱力 limp'],[191,14,[-22,4,0],-.25,'o',120,'…'],[188,9,[-12,0,0],-.3,'line',120,'顔を上げる lifts her head'],
+  [184,4,[-8,0,0],-.33,'line',110,'立ち直る straightens her knees'],[181,0,[-6,0,0],-.35,'line',120,'立つ standing, bound']].map(([hy,pi,hd,kn,ex,ms,ph])=>({...BASE,
+   hipY:hy,pitch:pi,head:hd,footL:foot(9,0,{yaw:-12,knee:kn}),footR:foot(-9,0,{yaw:-12,knee:kn}),binds:[WRIST_BAND,{j:'wrist_right',to:[0,150,-70]}],expr:ex,ms,phase:ph}))},
  /* ---- bent over, shown from behind ---- */
  bent_over:{label:'前屈みで手首を床の前に縛られ、腰を左右に揺らす（後ろ・斜め後ろから）',loop:true,view:'up_right',keys:loop(8,110,t=>({...BASE,
   rootZ:-2*C(t)-4,hipY:180,pitch:72,sway:4*S(t),pelvis:10*S(t),torso:-4*S(t),
@@ -115,7 +132,7 @@ export const MOTIONS={
 
 /* the face drawn in the references (expr): resisting = mouth pressed shut, rocking = mouth open,
    the peak of a tension = eyes shut and mouth open, then eyes shut, then limp with the mouth open */
-const EXPR=(name,i)=>/^tension_/.test(name)?(i<3?'line':i<9?'shut-o':i<11?'shut':'o'):/^(hip_rock|bounce|bent_over)/.test(name)?'o':'line';
+const EXPR=(name,i)=>/^(afterglow|recover)_/.test(name)?'o':/^tension_/.test(name)?(i<3?'line':i<9?'shut-o':i<11?'shut':'o'):/^(hip_rock|bounce|bent_over)/.test(name)?'o':'line';
 export function library(){
  const poses={},meta={};
  for(const [name,m] of Object.entries(MOTIONS)){

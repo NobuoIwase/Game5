@@ -10,8 +10,8 @@
  */
 import {pose,project,DIRECTIONS,YAW} from './attack.mjs';
 const TAU=Math.PI*2,S=t=>Math.sin(TAU*t),C=t=>Math.cos(TAU*t);
-/* foot: [lateral, forward, heel lift (- = lower, lying), toe yaw, in the air, pointed toes, knee out, knee up, knee direction] */
-const foot=(l,z,{lift=0,yaw=0,air=0,point=0,knee=-.08,up=0,dir}={})=>[l,z,lift,yaw,air?1:0,point,knee,up,dir];
+/* foot: [lateral, forward, heel lift (- = lower, lying), toe yaw, in the air, pointed toes, knee out, knee up, knee direction, foot direction ('shin' = along the shin)] */
+const foot=(l,z,{lift=0,yaw=0,air=0,point=0,knee=-.08,up=0,dir,toes}={})=>[l,z,lift,yaw,air?1:0,point,knee,up,dir,toes];
 const BASE={raw:1,noSword:1,noShield:1,rootZ:0,hipY:181,pelvis:0,torso:0,pitch:0,sway:0,head:[0,0,0],
  footL:foot(10,0,{yaw:-8,knee:-.25}),footR:foot(-10,0,{yaw:-8,knee:-.25}),armR:{d:[-.2,.95,.1],e:.95},armL:{d:[.2,.95,.1],e:.95}};
 const loop=(n,ms,f)=>Array.from({length:n},(_,i)=>({...f(i/n,i),ms}));
@@ -19,6 +19,16 @@ const loop=(n,ms,f)=>Array.from({length:n},(_,i)=>({...f(i/n,i),ms}));
 function lerpV(a,b,u){if(typeof a==='number'&&typeof b==='number')return a+(b-a)*u;if(Array.isArray(a)&&Array.isArray(b))return a.map((v,i)=>lerpV(v,b[i]??v,u));
  if(a&&b&&typeof a==='object'&&typeof b==='object'){const o={};for(const k of new Set([...Object.keys(a),...Object.keys(b)]))o[k]=k in a&&k in b?lerpV(a[k],b[k],u):(u<.5?a[k]??b[k]:b[k]??a[k]);return o}return u<.5?a:b}
 function tween(steps){const out=[];steps.forEach(([k,n],i)=>{const nx=steps[i+1]?.[0];for(let j=0;j<(nx?n:1);j++){const u=nx?j/n:0,e=u*u*(3-2*u);const q=nx?lerpV(k,nx,e):{...k};if(j>0){q.phase='…';q.binds=u<.5?k.binds:nx.binds;q.expr=u<.5?k.expr:nx.expr}out.push(q)}});return out}
+/* a loop through key poses with in-betweens: each key's ms is shared out over its frames */
+const loopTween=(keys,n=2)=>{const f=tween([...keys.map(k=>[k,n]),[keys[0],0]]).slice(0,-1);return f.map((q,i)=>({...q,ms:Math.round(keys[Math.floor(i/n)].ms/n)}))};
+/* getting up from sitting with the legs folded out: onto the knees, one foot forward, up */
+const fromSit=(binds,last)=>tween([
+ [{...SIT,head:[-12,6,0],binds,expr:'o',phase:'座る sitting'},2],
+ [{...SIT,pitch:22,head:[-10,0,0],armR:{d:[-.25,.8,.55],e:.95},armL:{d:[.25,.8,.55],e:.95},binds,expr:'o',phase:'手をつく hands to the floor in front'},2],
+ [{...BASE,hipY:205,pitch:8,head:[-8,0,0],footL:foot(10,-34,{lift:-6,point:40,dir:[0,1,.2]}),footR:foot(-10,-34,{lift:-6,point:40,dir:[0,1,.2]}),armR:{d:[-.2,.95,.2],e:.95},armL:{d:[.2,.95,.2],e:.95},binds,phase:'膝立ち up on her knees'},2],
+ [{...BASE,hipY:210,pitch:14,head:[-6,0,0],footL:foot(10,-34,{lift:-6,point:40,dir:[0,1,.2]}),footR:foot(-10,12,{knee:.1,up:.8}),armR:{d:[-.2,.9,.4],e:.9},armL:{d:[.2,.9,.4],e:.9},binds,phase:'片膝 one foot forward'},2],
+ [{...BASE,hipY:194,pitch:12,head:[-6,0,0],footL:foot(10,-8,{lift:3}),footR:foot(-10,8,{knee:.1}),armR:{d:[-.2,.95,.3],e:.9},armL:{d:[.2,.95,.3],e:.9},binds,phase:'立ち上がる rising'},2],
+ [{...BASE,...last,binds,phase:last.phase||'立つ standing'},0]]).map(k=>({...k,ms:k.ms||95}));
 const CREATURES=[{creature:1,j:'chest_left'},{creature:1,j:'chest_right'},{creature:1,j:'belly'}];
 
 /* ---- lying on the back (seen from the side) ---- */
@@ -28,7 +38,7 @@ const ONBACK={...BASE,hipY:233,pitch:-86,head:[88,0,0],
 const WRISTS_OVERHEAD=[{j:'wrist_right',to:[-14,226,-104]},{j:'wrist_left',to:[14,226,-104]}];
 /* ---- face down ---- */
 const PRONE={...BASE,hipY:233,pitch:86,head:[-80,0,0],
- footL:foot(9,-50,{lift:-4,knee:0,up:-1}),footR:foot(-9,-50,{lift:-4,knee:0,up:-1}),
+ footL:foot(9,-54,{lift:-3,knee:0,up:-1,toes:'shin'}),footR:foot(-9,-54,{lift:-3,knee:0,up:-1,toes:'shin'}),
  armR:{d:[-.3,-.3,.9],e:.98},armL:{d:[.3,-.3,.9],e:.98}};
 const WRISTS_AHEAD=[{j:'wrist_right',to:[-14,226,104]},{j:'wrist_left',to:[14,226,104]}];
 /* ---- kneeling, chest down, hips up ---- */
@@ -65,18 +75,18 @@ export const MOTIONS={
   binds:[...WRISTS_OVERHEAD,{j:'knee_left',to:[56,236,26]},{j:'knee_right',to:[-56,236,26]}],expr:S(t)>0?'o':'shut',phase:S(t)>.3?'pushed toward her head':S(t)<-.3?'slides back':'…'}))},
  down_face_down:{label:'うつ伏せで押さえられ、脚をばたつかせてもがく',loop:true,view:'right',keys:loop(8,100,t=>({...PRONE,
   pelvis:8*S(t),sway:2*S(t),head:[-80,0,25*S(t)],
-  footL:foot(9,-50+18*Math.max(0,S(t)),{lift:-4+26*Math.max(0,S(t)),air:S(t)>.2,knee:0,up:-1}),footR:foot(-9,-50+18*Math.max(0,-S(t)),{lift:-4+26*Math.max(0,-S(t)),air:S(t)<-.2,knee:0,up:-1}),
+  footL:foot(9,-54+20*Math.max(0,S(t)),{lift:-3+28*Math.max(0,S(t)),air:S(t)>.2,knee:0,up:-1,toes:'shin'}),footR:foot(-9,-54+20*Math.max(0,-S(t)),{lift:-3+28*Math.max(0,-S(t)),air:S(t)<-.2,knee:0,up:-1,toes:'shin'}),
   binds:WRISTS_AHEAD,expr:'line',phase:'kicks from the knees one leg after the other, hips twisting'}))},
  down_hips_up:{label:'膝をついて胸を床につけ、腰を上げたまま前後に揺れる',loop:true,view:'right',keys:loop(8,90,t=>({...HIPSUP,
   rootZ:4*S(t),hipY:205-1.5*C(t),head:[-40+8*S(t-.1),0,0],
   binds:[{j:'wrist_right',to:[-12,240,80]},{j:'wrist_left',to:[12,240,80]}],expr:S(t)>0?'o':'shut',phase:S(t)>.3?'hips pushed forward':S(t)<-.3?'hips drawn back':'…'}))},
- get_up:{label:'仰向けから起き上がる',loop:false,view:'right',keys:tween([
-  [{...ONBACK,armR:{d:[-.7,.1,-.7],e:.9},armL:{d:[.7,.1,-.7],e:.9},expr:'shut',phase:'仰向け on her back'},2],
-  [{...ONBACK,pitch:-45,head:[20,0,0],armR:{d:[-.5,.8,-.3],e:.9},armL:{d:[.5,.8,-.3],e:.9},phase:'起きる sits up on her elbows and hands'},2],
-  [{...SIT,pitch:10,armR:{d:[-.4,.9,.1],e:.9},armL:{d:[.4,.9,.1],e:.9},phase:'座る sitting, pushing up'},2],
-  [{...STAND,hipY:212,pitch:28,footL:foot(10,-18,{lift:-6,point:40,dir:[0,1,.3]}),footR:foot(-10,10,{knee:.1,up:.8}),armR:{d:[-.2,.9,.4],e:.9},armL:{d:[.2,.9,.4],e:.9},phase:'片膝 one knee up'},2],
-  [{...STAND,hipY:196,pitch:14,footL:foot(10,-6,{lift:3}),footR:foot(-10,6,{knee:.1}),armR:{d:[-.2,.95,.3],e:.9},armL:{d:[.2,.95,.3],e:.9},phase:'立ち上がる rising'},2],
-  [{...STAND,phase:'立つ standing'},0]]).map(k=>({...k,ms:90}))},
+ get_up:{label:'仰向けから起き上がる',loop:false,view:'right',keys:tween([   // the legs stay side by side and only fold and unfold (no sitting with them folded out)
+  [{...ONBACK,rootZ:-14,footL:foot(10,12,{knee:.2,up:1.2}),footR:foot(-10,12,{knee:.2,up:1.2}),armR:{d:[-.7,.1,-.7],e:.9},armL:{d:[.7,.1,-.7],e:.9},expr:'shut',phase:'仰向け on her back, knees up'},2],
+  [{...ONBACK,rootZ:-14,hipY:232,pitch:-55,head:[25,0,0],footL:foot(10,12,{knee:.2,up:1.2}),footR:foot(-10,12,{knee:.2,up:1.2}),armR:{d:[-.45,.75,-.5],e:.9},armL:{d:[.45,.75,-.5],e:.9},phase:'肘をつく up on her elbows'},2],
+  [{...STAND,rootZ:-14,hipY:230,pitch:-15,head:[0,0,0],footL:foot(10,14,{knee:.2,up:1.2}),footR:foot(-10,14,{knee:.2,up:1.2}),armR:{d:[-.35,.85,-.45],e:.95},armL:{d:[.35,.85,-.45],e:.95},phase:'座る sitting, knees up, hands on the floor behind'},2],
+  [{...STAND,rootZ:2,hipY:214,pitch:38,head:[-10,0,0],footL:foot(10,12,{knee:.15,up:.6,lift:3}),footR:foot(-10,12,{knee:.15,up:.6,lift:3}),armR:{d:[-.2,.9,.45],e:.9},armL:{d:[.2,.9,.45],e:.9},phase:'しゃがむ rocks forward onto her feet, hands to the floor in front'},2],
+  [{...STAND,rootZ:8,hipY:198,pitch:18,head:[-4,0,0],footL:foot(10,11,{knee:.05}),footR:foot(-10,11,{knee:.05}),armR:{d:[-.2,.95,.25],e:.95},armL:{d:[.2,.95,.25],e:.95},phase:'立ち上がる rising, hands on her knees'},2],
+  [{...STAND,rootZ:10,footL:foot(10,10,{yaw:-8,knee:-.25}),footR:foot(-10,10,{yaw:-8,knee:-.25}),phase:'立つ standing'},0]]).map(k=>({...k,ms:90}))},
 
  /* ======== kisses (seen from the side; the other's face is the violet line's end) ======== */
  kiss_forced:{label:'口づけされて押し返そうとする',loop:true,view:'right',keys:loop(8,110,t=>({...STAND,
@@ -123,8 +133,32 @@ export const MOTIONS={
   armR:{d:[-.12,.97,.15],e:.92},armL:{d:[.12,.97,.15],e:.92},
   binds:[{j:'elbow_right',j2:'elbow_left'},{j:'shoulder_right',to:[-10,120,-40],noLoop:1},{j:'shoulder_left',to:[10,120,-40],noLoop:1}],expr:'line',phase:'arms pinned to her sides by a hold from behind; twists, kicks one foot then the other, looks back'}))},
 
+ /* ======== after a climax: afterglow (loop) and coming round (once); each starts where its climax motion ends ======== */
+ down_afterglow:{label:'仰向けで膝が倒れたまま、肩で息をする',loop:true,view:'down_right',keys:loop(8,170,(t,i)=>({...ONBACK,
+  shrug:1.8*Math.max(0,S(t)),head:[85,0,22],pelvis:i===5?6:0,
+  footL:foot(12,18,{knee:1.5,up:.4,point:i===5?20:0}),footR:foot(-12,18,{knee:1.5,up:.4,point:i===5?20:0}),
+  armR:{d:[-.7,.1,-.7],e:.9},armL:{d:[.7,.1,-.7],e:.9},expr:i===5?'shut-o':'o',phase:i===5?'余震 an aftershock: the hips jerk, toes point':'on her back, knees fallen open, arms loose, face turned aside, chest heaving'}))},
+ down_recover:{label:'仰向けの余韻から膝を閉じて体を起こしかける（そのあと get_up）',loop:false,view:'down_right',keys:tween([
+  [{...ONBACK,head:[85,0,22],footL:foot(12,18,{knee:1.5,up:.4}),footR:foot(-12,18,{knee:1.5,up:.4}),armR:{d:[-.7,.1,-.7],e:.9},armL:{d:[.7,.1,-.7],e:.9},expr:'o',phase:'余韻 limp'},2],
+  [{...ONBACK,head:[80,0,0],footL:foot(10,16,{knee:.6,up:1}),footR:foot(-10,16,{knee:.6,up:1}),armR:{d:[-.7,.1,-.7],e:.9},armL:{d:[.7,.1,-.7],e:.9},expr:'line',phase:'膝を閉じる draws her knees together'},2],
+  [{...ONBACK,rootZ:-14,footL:foot(10,12,{knee:.2,up:1.2}),footR:foot(-10,12,{knee:.2,up:1.2}),armR:{d:[-.7,.1,-.7],e:.9},armL:{d:[.7,.1,-.7],e:.9},expr:'line',phase:'get_up の最初へ ready to get up (get_up frame 0)'},0]]).map(k=>({...k,ms:110}))},
+ kiss_afterglow:{label:'口づけのあと、膝が抜けたままふらつき、肩で息をする（kiss_tension のあと）',loop:true,view:'right',keys:loop(8,170,(t,i)=>({...STAND,
+  hipY:200+1*S(t),pitch:2+2*S(t),sway:2*S(t/1),head:[-6+4*S(t-.1),6,0],shrug:1.6*Math.max(0,S(t)),
+  footL:foot(10,0,{knee:-.5}),footR:foot(-10,0,{knee:-.5}),armR:{d:[-.15,1,.1],e:.95},armL:{d:[.15,1,.1],e:.95},
+  binds:[{j:'face',to:[0,108,44],partner:1}],expr:'o',phase:'the other has drawn back; knees still weak, swaying, head down, shoulders heaving'}))},
+ kiss_recover:{label:'我に返って口元をぬぐい、一歩下がる',loop:false,view:'right',keys:tween([
+  [{...STAND,hipY:200,pitch:2,head:[-6,6,0],footL:foot(10,0,{knee:-.5}),footR:foot(-10,0,{knee:-.5}),armR:{d:[-.15,1,.1],e:.95},armL:{d:[.15,1,.1],e:.95},binds:[{j:'face',to:[0,108,44],partner:1}],expr:'o',phase:'ふらつく swaying'},2],
+  [{...STAND,hipY:190,pitch:-4,head:[-2,0,0],footL:foot(10,0,{knee:-.3}),footR:foot(-10,0,{knee:-.3}),armR:{d:[-.1,-.55,.82],e:.5},armL:{d:[.15,1,.1],e:.95},binds:[{j:'face',to:[0,108,44],partner:1}],expr:'line',phase:'ぬぐう comes to herself, back of the hand to her mouth'},2],
+  [{...STAND,rootZ:-6,hipY:186,pitch:-8,head:[-4,0,0],footL:foot(10,-2,{knee:-.25}),footR:foot(-10,-14,{knee:-.2}),armR:{d:[-.1,-.55,.82],e:.5},armL:{d:[.3,.5,.8],e:.9},binds:[{j:'face',to:[0,108,44],partner:1}],expr:'line',phase:'下がる steps back, other hand up to keep it off'},2],
+  [{...STAND,rootZ:-10,footL:foot(10,-8,{yaw:-8,knee:-.25}),footR:foot(-10,-12,{yaw:-8,knee:-.25}),armR:{d:[-.3,.3,.9],e:.7},armL:{d:[.3,.3,.9],e:.7},expr:'line',phase:'構え standing, guarded'},0]]).map(k=>({...k,ms:100}))},
+ sit_recover:{label:'女の子座りから立ち上がる（tension_free・sit_afterglow のあと）',loop:false,view:'front',keys:fromSit(undefined,{})},
+ clinger_afterglow:{label:'張り付かれたまま座り込み、肩で息をする（clinger_tension のあと）',loop:true,view:'front',keys:loop(8,170,(t,i)=>({...SIT,
+  pitch:4+3*S(t),shrug:2*Math.max(0,S(t)),head:[-12+3*S(t),6,0],sway:i===5?2:0,
+  armR:i===5?{d:[-.35,.8,.45],e:.9}:{d:[-.05,.8,.6],e:.8},armL:i===5?{d:[.35,.8,.45],e:.9}:{d:[.05,.8,.6],e:.8},
+  binds:CREATURES,expr:i===5?'shut-o':'o',phase:i===5?'余震 an aftershock: jerks, hands fly off her lap':'sitting with legs folded out to the sides, shoulders heaving; they are still on her'}))},
+ clinger_recover:{label:'張り付かれたまま立ち上がり、胸を押さえる',loop:false,view:'front',keys:fromSit(CREATURES,{armR:{t:[5.5,33,12],p:[-1,.6,.2]},armL:{t:[-5.5,33,12],p:[1,.6,.2]},head:[-14,0,0],expr:'line',phase:'立つ standing, hands over them'})},
  /* ======== small creatures clinging to the body (chest and lower belly) ======== */
- clinger_peel:{label:'胸と下腹に張り付いた小さな生き物を引き剥がそうとする',loop:true,view:'front',keys:[
+ clinger_peel:{label:'胸と下腹に張り付いた小さな生き物を引き剥がそうとする',loop:true,view:'front',keys:loopTween([
   [{...STAND,head:[-24,0,0],footL:foot(10,0,{knee:-.3}),footR:foot(-10,0,{knee:-.3}),binds:CREATURES,phase:'気づく looks down at them'},100],
   [{...STAND,head:[-24,0,0],armR:{t:[5.5,33,12],p:[-1,.6,.2]},binds:CREATURES,phase:'つかむ right hand takes the one on the left'},90],
   [{...STAND,head:[-20,0,-10],torso:10,pitch:6,footL:foot(10,0,{knee:-.35,point:12}),footR:foot(-10,0,{knee:-.35}),armR:{t:[16,36,30],p:[-1,.6,0]},binds:[{creature:1,j:'hand_right'},CREATURES[1],CREATURES[2]],expr:'line',phase:'引く pulls it away from her'},110],
@@ -132,7 +166,7 @@ export const MOTIONS={
   [{...STAND,head:[-24,0,0],armL:{t:[-5.5,33,12],p:[1,.6,.2]},binds:CREATURES,phase:'つかむ left hand takes the other one'},90],
   [{...STAND,head:[-20,0,10],torso:-10,pitch:6,footL:foot(10,0,{knee:-.35}),footR:foot(-10,0,{knee:-.35,point:12}),armL:{t:[-16,36,30],p:[1,.6,0]},binds:[CREATURES[0],{creature:1,j:'hand_left'},CREATURES[2]],expr:'line',phase:'引く pulls'},110],
   [{...STAND,head:[-10,0,20],torso:8,armL:{d:[.95,.1,.3],e:.95},binds:CREATURES,expr:'o',phase:'はじかれる snaps back'},90],
-  [{...STAND,hipY:186,pitch:10,head:[-18,0,0],footL:foot(10,0,{knee:-.45}),footR:foot(-10,0,{knee:-.45}),armR:{t:[0,6,11],p:[-1,.4,0]},armL:{t:[0,8,11],p:[1,.4,0]},binds:CREATURES,expr:'shut-line',phase:'すくむ shudders, knees together, hands to her belly'},120]].map(([k,ms])=>({...k,ms}))},
+  [{...STAND,hipY:186,pitch:10,head:[-18,0,0],footL:foot(10,0,{knee:-.45}),footR:foot(-10,0,{knee:-.45}),armR:{t:[0,6,11],p:[-1,.4,0]},armL:{t:[0,8,11],p:[1,.4,0]},binds:CREATURES,expr:'shut-line',phase:'すくむ shudders, knees together, hands to her belly'},120]].map(([k,ms])=>({...k,ms})))},
  clinger_tension:{label:'張り付かれたまま全身がこわばり、座り込む',loop:false,view:'front',keys:tween([
   [{...STAND,armR:{t:[5.5,33,12],p:[-1,.6,.2]},armL:{t:[-5.5,33,12],p:[1,.6,.2]},head:[-14,0,0],binds:CREATURES,expr:'line',phase:'押さえる hands over the ones on her chest'},2],
   [{...STAND,hipY:185,pitch:12,footL:foot(10,0,{knee:-.45,point:14}),footR:foot(-10,0,{knee:-.45,point:14}),armR:{t:[5.5,33,12],p:[-1,.6,.2]},armL:{t:[-5.5,33,12],p:[1,.6,.2]},head:[-20,0,0],binds:CREATURES,expr:'shut-line',phase:'こらえる hunches, knees knock'},2],

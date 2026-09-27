@@ -145,7 +145,7 @@ const CGID={};for(const f of frames)if(!CGID[f.motion])CGID[f.motion]='M'+String
 const CGJ=(m)=>({label:frames.find(f=>f.motion===m).label,...(MOTION_JA[m]||{}),...(CG_MOTION[m]||{})});
 const jobs=[];for(const c of Object.keys(CHARACTERS))for(const f of frames)if(f.chars.includes(c))jobs.push({char:c,frame:f.id,file:`${c}__${f.id}.png`});
 fs.writeFileSync(path.join(OUT,'jobs.json'),JSON.stringify({version:new Date().toISOString().slice(0,10),size:[1024,1024],common:COMMON,negative:NEGATIVE,
- characters:CHARACTERS,situations:SITUATIONS,hints:SIT_HINT,slots:MOTION_SLOT,answerKeys:{words:Object.fromEntries(Object.entries(CG_SIT).map(([k,[a]])=>[a,k])),motionWords:Object.fromEntries(Object.entries(CGID).map(([m,i])=>[i,m]))},frames:Object.fromEntries(frames.map(f=>[f.id,f])),jobs},null,1));
+ characters:CHARACTERS,situations:SITUATIONS,hints:SIT_HINT,slots:MOTION_SLOT,motions:Object.fromEntries(Object.keys(CGID).map(m=>[m,1])),answerKeys:{words:Object.fromEntries(Object.entries(CG_SIT).map(([k,[a]])=>[a,k])),motionWords:Object.fromEntries(Object.entries(CGID).map(([m,i])=>[i,m]))},frames:Object.fromEntries(frames.map(f=>[f.id,f])),jobs},null,1));
 const per={};for(const j of jobs)per[j.char]=(per[j.char]||0)+1;
 console.log(frames.length,'frames,',jobs.length,'jobs',per);
 
@@ -217,10 +217,12 @@ const SHEETS=[];{
    const pics=mf.map(x=>`<img src="cg/${CGID[m]}_${x.view==='front'?'':x.view.replace('_','')+'_'}${x.frame}.png" alt="" width="72" height="72">`).join('');
    return `<tr><td><b>${esc(J.label)}</b><br><code>${CGID[m]}</code></td><td class="pose">${pics}<br>一覧 ${[...new Set(frames.filter(x=>x.motion===m).map(x=>x.sheet))].join('・')}</td>${[J.body,J.arms,J.legs,J.held,J.move].map(x=>`<td>${esc(x||'')}</td>`).join('')}</tr>`}).join('')}</table></div></section>`;
  }
- const slots=Object.entries(MOTION_SLOT).filter(([m])=>frames.some(f=>f.motion===m));
- const slotRows=slots.map(([m,w])=>{const J=CGJ(m);return tr([CGID[m],J.label,w,J.move])}).join('');
+ // every motion has its own field: the ones whose holder differs must be filled, the rest may be
+ const slots=Object.keys(CGID).map(m=>[m,MOTION_SLOT[m]]);
+ const slotRows=slots.map(([m,w])=>{const J=CGJ(m),f=frames.find(x=>x.motion===m);
+  return `<tr><td><code>${CGID[m]}</code></td><td>${esc(J.label)}</td><td>${esc(f.situations.map(k=>CG_SIT[k][0]).join(' + '))}</td><td>${w?`<b>必ず：</b>${esc(w)}`:'任意'}</td><td>${esc(J.held||'')}</td><td>${esc(J.move||'')}</td></tr>`}).join('');
  const tmpl={words:Object.fromEntries(Object.keys(SITUATIONS).filter(k=>frames.some(f=>f.situations.includes(k))).map(k=>[CG_SIT[k][0],''])),
-  motionWords:Object.fromEntries(slots.map(([m])=>[CGID[m],''])),charWords:Object.fromEntries(Object.keys(CHARACTERS).map(k=>[k,'']))};
+  motionWords:Object.fromEntries(slots.map(([m])=>[CGID[m],''])),charWords:Object.fromEntries(Object.keys(CHARACTERS).map(k=>[k,''])),extraNeg:''};
  fs.writeFileSync(path.join(OUT,'chatgpt_request.html'),`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NovelAI 言葉の依頼</title><style>
 :root{--bg:#f6f7f9;--fg:#1d232b;--sub:#5a6573;--card:#fff;--line:#d9dee5;--acc:#2f6fb3}
 @media (prefers-color-scheme:dark){:root{--bg:#141a22;--fg:#e6edf3;--sub:#9fb0c0;--card:#1b2330;--line:#3a4658;--acc:#7fb4ea}}
@@ -267,14 +269,21 @@ table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid 
 ${sec}
 
 <h2>6. モーションごとの欄（<code>motionWords</code>）</h2>
-<p>同じ場面の種類の中で、押さえているものがモーションごとに違うものは、こちらに書きます。</p>
-<div class="wrap"><table><tr><th>キー</th><th>モーション</th><th>書くこと</th><th>動き</th></tr>${slotRows}</table></div>
+<p>全部のモーションに1つずつ欄があります。そのモーションの全コマ（4人とも）にだけ入ります。</p>
+<ul><li><b>必ず</b>と書いたもの：同じ場面の種類でも押さえているものがモーションごとに違うので、ここに「何か・色・形・質感」を書く</li>
+<li><b>任意</b>のもの：そのモーションにだけ合う言葉があれば書く（押さえている場所の細かいところ、そのモーションの顔・体の様子など）。場面の欄と同じ言葉は書かない。なければ <code>""</code></li>
+<li>「場面の欄」は、そのモーションに一緒に入る場面の種類の欄（5.のキー）</li></ul>
+<div class="wrap"><table><tr><th>キー</th><th>モーション</th><th>場面の欄</th><th>書くこと</th><th>押さえ</th><th>動き</th></tr>${slotRows}</table></div>
 
 <h2>7. キャラクターの欄（<code>charWords</code>）</h2>
-<p>見た目は2.で入れてあります。足したいもの（例：いつもの表情の癖）があれば書きます。なければ <code>""</code>。</p>
+<p>見た目は2.で入れてあります。この欄の言葉はそのキャラクターの<b>全部のコマ</b>に入るので、<b>表情や気持ちは書かない</b>（場面の欄で入る）。見た目で足したいもの（小物・髪の癖など）があれば書く。なければ <code>""</code>。</p>
+<p>性格（参考）：アリアは陰気で引っ込み思案。斥候は身軽で勘がいい。魔法使いは無口でクール。ヒーラーは穏やかなエルフの聖職者。</p>
 <ul>${Object.entries(CHARACTERS).map(([k,c])=>`<li><code>${k}</code>：${esc(c.label)}</li>`).join('')}</ul>
 
-<h2>8. 答えの形</h2>
+<h2>8. 除外する言葉の追加（<code>extraNeg</code>）</h2>
+<p>2.の除外に足したい英語の言葉があれば書く（例：出てほしくない物、崩れやすい形）。なければ <code>""</code>。</p>
+
+<h2>9. 答えの形</h2>
 <p>この形の JSON を、コードブロック1つで返してください。キーは変えないでください。</p>
 <pre>${esc(JSON.stringify(tmpl,null,1))}</pre>
 </main></body></html>`);

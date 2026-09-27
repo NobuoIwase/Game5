@@ -20,3 +20,6 @@ aria__defeat_collapse__right__2.png	round3: この衣装で低い姿勢のコマ
 aria__defeat_collapse__right__5.png	round3: この衣装で低い姿勢のコマが続けて安全判定で拒否されたため、同様の姿勢は生成せず保留。個別の生成拒否ではない。
 aria__defeat_collapse__right__9.png	round3: この衣装で低い姿勢のコマが続けて安全判定で拒否されたため、同様の姿勢は生成せず保留。個別の生成拒否ではない。
 aria__defeat_collapse__right__13.png	round3: この衣装で低い姿勢のコマが続けて安全判定で拒否されたため、同様の姿勢は生成せず保留。個別の生成拒否ではない。
+mage__sit_recover__front__5.png	画像生成の出力安全判定で拒否（sexual、request ID b1b2a54c-a38d-4ee1-9529-be150623ef32）。再試行せず。
+mage__sit_recover__front__9.png	同じ衣装の正面膝立ちコマが安全判定で拒否されたため、近い低い姿勢の片膝コマは未試行で見送り。個別の生成拒否ではない。
+mage__ankle_grabbed__right__14.png	画像生成の出力安全判定で拒否（sexual、request ID 319e1c16-7eed-43e1-8b9a-c8916e2ce79e）。再試行せず。

@@ -23,3 +23,6 @@ aria__defeat_collapse__right__13.png	round3: この衣装で低い姿勢のコ�
 mage__sit_recover__front__5.png	画像生成の出力安全判定で拒否（sexual、request ID b1b2a54c-a38d-4ee1-9529-be150623ef32）。再試行せず。
 mage__sit_recover__front__9.png	同じ衣装の正面膝立ちコマが安全判定で拒否されたため、近い低い姿勢の片膝コマは未試行で見送り。個別の生成拒否ではない。
 mage__ankle_grabbed__right__14.png	画像生成の出力安全判定で拒否（sexual、request ID 319e1c16-7eed-43e1-8b9a-c8916e2ce79e）。再試行せず。
+mage__gaze_trance__front__1.png	画像生成の安全判定で拒否（sexual、request fd3bf62c-0b3c-46a2-b468-f946701fac0a）。同内容の再試行は行わずスキップ。
+mage__shiver_hug__front__0.png	画像生成の安全判定で拒否（sexual、request 5642fd1a-1752-4d3d-8bbf-68aed6d3400b）。再試行せずスキップ。
+mage__shiver_hug__front__4.png	同じ衣装・正面の自分を抱いて震える動作で直前コマが安全判定により拒否されたため、類似コマは未生成でスキップ。

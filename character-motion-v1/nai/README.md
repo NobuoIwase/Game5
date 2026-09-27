@@ -20,7 +20,22 @@
 - 1枚絵にしないコマ（中割り・つなぎなど）は、これまでどおり部位の組み立てで作る（`../PRODUCTION_PLAN.md`）
 - 攻撃・技・仕草など、ほかの1枚絵は ChatGPT に頼む
 
-## 仕組み
+## スマホで作る（`game5-nai-batch.user.js`）
+
+ローカルの Claude を使わず、スマホだけで作れる。ユーザーの「NAI Batch Director 2.2.0」をもとに、前のゲームのキャラクター（キルータン量産）を外し、Game5 の部分（🎬）を入れた。
+- 入れ方：`https://nobuoiwase.github.io/Game5/character-motion-v1/nai/game5-nai-batch.user.js` を開いて入れる（`@grant none` なので、Tampermonkey のほか iPhone の Userscripts でも動く）
+- 🎬 の中身
+  1. キャラクターを選ぶ／参照画像（精密参照、最大2枚。黒い余白で 1024×1536・1536×1024・1472×1472 に合わせて保存）
+  2. 下絵（img2img。強さ・ノイズ）
+  3. 言葉（ChatGPT の答えの取り込み・場面の種類ごと・キャラクター・除外。このブラウザにだけ保存）
+  4. コマを見る・1枚だけ試す・送信内容の確認
+  5. 連続生成（まだのコマを、1回に決めた枚数だけ。Anlas の目安を先に出す）
+  6. GitHub へ送る（WebP に縮小して、ブランチ `nai-output` の `character-motion-v1/nai/out/<キャラクター>/` へ。1回のコミットに最大25枚）
+- GitHub のトークンは、Fine-grained personal access token で、リポジトリは Game5 だけ・権限は Contents: Read and write だけ・期限は短めにする。novelai.net のページの保存領域に置かれる
+- もとの連続生成（自由入力）・ギャラリー・ZIP はそのまま残してある
+- パソコンでローカルの Claude がボタンを押すやり方（`game5-nai-helper.user.js`）も、そのまま使える
+
+## 仕組み（パソコン・ローカルの Claude）
 
 1. ローカルの Claude が、手伝いの枠の「次のコマを入れる」を押す
    - まだ保存していない次のコマが選ばれ、その下絵（姿勢だけのマネキン図、`base/`）が読み込まれる

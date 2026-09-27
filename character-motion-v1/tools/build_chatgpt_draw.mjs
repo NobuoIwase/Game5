@@ -22,9 +22,9 @@ const CHARS={
   carry:'右手にナイフ。大きなバックパック（上に丸めた寝袋）を背負う。大きな狐の耳と尻尾',note:''},
  mage:{label:'魔法使い',look:'mage',ref:'art/witch-source.png',sheet:'references/witch-reference.jpg',
   carry:'右手に紫の宝珠の杖。両腕の肘から先は金属の義腕。大きなとんがり帽子',note:''},
- healer:{label:'ヒーラー',look:'healer',ref:'art/sister-source-v7.png',sheet:'references/sister-reference.jpg',
-  carry:'右手に金の十字の杖。長い耳。白い長手袋',
-  note:'衣装は胸の前に下がる前垂れの衣装に替える予定（原画の手直し待ち）。衣装が決まるまでは後回しにする'},
+ healer:{label:'ヒーラー',look:'healer',ref:'art/healer-source-v8.png',sheet:'references/sister-reference.jpg',
+  carry:'右手に金の十字の杖（輪の中に青い宝珠）。エルフの長い耳。長い黒髪（頭に編み込み）で、いつも目を閉じている。白と金の衣装で、胸の前に細い前垂れが2枚下がり、腰から下は長い前垂れと裾。白い長手袋・白い長靴下・白いブーツ',
+  note:''},
 };
 /* which way she faces: blue is her right side in the pose picture */
 const VIEW={

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Game5 NAI helper
 // @namespace    nobuoiwase-game5
-// @version      1.5
+// @version      1.6
 // @description  Game5 のモーションの元絵を NovelAI で作るための手伝い。ボタン1つで次のコマの下絵とプロンプトを入れる
 // @match        https://novelai.net/*
 // @run-at       document-start
@@ -39,7 +39,9 @@ const jobsOf=c=>DATA?DATA.jobs.filter(j=>j.char===c):[];
 function promptOf(job){
  const f=DATA.frames[job.frame],ch=DATA.characters[job.char];
  const parts=[DATA.common,ch.tags,st.charWords[job.char]||'',...f.situations.map(s=>st.words[s]||''),st.motionWords[f.motion]||'',f.prompt,f.note];
- return parts.map(x=>(x||'').trim()).filter(Boolean).join(', ');
+ // the same word from two fields only once (a repeated word weighs more in NovelAI)
+ const seen=new Set();
+ return parts.join(',').split(',').map(x=>x.trim()).filter(x=>{const k=x.toLowerCase().replace(/\s+/g,' ');if(!k||seen.has(k))return false;seen.add(k);return true}).join(', ');
 }
 const negOf=()=>[DATA.negative,st.extraNeg].map(x=>(x||'').trim()).filter(Boolean).join(', ');
 

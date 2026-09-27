@@ -4,3 +4,5 @@ aria__swing_abandon__left__5.png	画像生成ツールが安全判定（sexual�
 aria__yoko__up_right__7.png	画像生成ツールが安全判定（sexual）で拒否。原画どおりの生成を完了できず。
 aria__thrust__up_right__4.png	画像生成ツールが安全判定（sexual）で拒否。原画どおりの生成を完了できず。
 healer__healer_buff__front__0.png	画像生成ツールが安全判定（sexual）で拒否。原画どおりの生成を完了できず。
+healer__healer_buff__left__8.png	画像生成ツールが安全判定（sexual）で拒否。原画どおりの生成を完了できず。
+healer__healer_buff__down_left__0.png	画像生成ツールが安全判定（sexual）で拒否。原画どおりの生成を完了できず。

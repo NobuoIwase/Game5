@@ -44,6 +44,8 @@ CHARS = {
                'model': ['healer_purify:3', 'healer_buff:4', 'healer_purify:9', 'healer_buff:8', 'healer_pray:0']},
 }
 TOL = .17
+# the head sizes searched (ChatGPT often draws the figure smaller in a big move than in the model's guard)
+S_LO, S_HI = .64, 1.24
 
 def load(p): return np.asarray(Image.open(p).convert('RGBA')).astype(np.float32) / 255
 def to_img(a): return Image.fromarray((np.clip(a, 0, 1) * 255).astype(np.uint8))
@@ -90,7 +92,7 @@ class Model:
 
     def match(self, target, f=6):
         I = small(target, f); I3 = I[:, :, :3] * I[:, :, 3:4]; best = None
-        for s in np.arange(.84, 1.21, .03):
+        for s in np.arange(S_LO, S_HI + .001, .03):
             for deg in range(-35, 36, 5):
                 t = small(rot_scale(self.match_t, s, deg), f); w = (t[:, :, 3] > .5).astype(np.float32)
                 if w.sum() < 20 or t.shape[0] >= I.shape[0] or t.shape[1] >= I.shape[1]: continue
@@ -130,7 +132,10 @@ class Model:
         aa = np.asarray(to_img(a).filter(ImageFilter.GaussianBlur(3))).astype(np.float32) / 255
         aa = np.minimum(aa, a); aa[occ] = 0; aa = aa[:, :, None]
         rgb = reg[:, :, :3] * (1 - aa) + t[:, :, :3] * aa; al = np.maximum(reg[:, :, 3:4], aa)
-        out[y:y + a.shape[0], x:x + a.shape[1]] = np.concatenate([rgb, al], 2)
+        new = np.concatenate([rgb, al], 2)
+        sk0 = near(reg, [self.skin], .15) & (reg[:, :, 3] > .5); sk1 = near(new, [self.skin], .15) & (new[:, :, 3] > .5)
+        self.face_kept = float(sk1.sum() / max(1, sk0.sum()))
+        out[y:y + a.shape[0], x:x + a.shape[1]] = new
         return out
 
 def rescale(img, k):
@@ -177,10 +182,16 @@ def main():
                     v, s, deg, x, y = model.match(img)
                     fit = model.fit(img, s, deg, x, y)
                     rec.update(score=round(v, 4), scale=round(s, 3), rot=deg, fit=round(fit, 3))
-                    if fit > .72:
+                    why = []
+                    if fit <= .72: why.append('fit')
+                    if s <= S_LO + .015 or s >= S_HI - .015: why.append('size at the edge of the search')
+                    if not why:
                         res = model.lay_hair(img, s, deg, x, y)
-                        k = float(np.clip(1 / s, .8, 1.25)); res = rescale(res, k); rec.update(done=True, resize=round(k, 3))
-                    else: rec['done'] = False
+                        rec['face_kept'] = round(model.face_kept, 3)
+                        if model.face_kept < .85: why.append('hair over the face'); res = img
+                    if why: rec.update(done=False, why=why)
+                    else:
+                        k = float(np.clip(1 / s, .8, 1.45)); res = rescale(res, k); rec.update(done=True, resize=round(k, 3))
                 elif model is not None: rec.update(done=True, model=True)
                 else: rec['done'] = False
                 report[f['file']] = rec
@@ -198,6 +209,14 @@ def main():
                 W = 8; S = Image.new('RGBA', (W * 202, ((len(tiles) + W - 1) // W) * 214), 'white')
                 for i, t in enumerate(tiles): S.paste(t, ((i % W) * 202, (i // W) * 214))
                 S.save(os.path.join(OUT, 'preview', f'{char}__{view}.png'))
+    for char in {k.split('__')[0] for k in report}:
+        sc = sorted(r['score'] for k, r in report.items() if k.startswith(char + '__') and 'score' in r)
+        if not sc: continue
+        med = sc[len(sc) // 2]
+        for k, r in report.items():
+            if k.startswith(char + '__') and r.get('done') and 'score' in r and r['score'] > 2.2 * med:
+                r.update(done=False, why=['poor match']); src = os.path.join(SRC, char, k)
+                to_img(load(src)).resize((SIZE, SIZE), Image.LANCZOS).save(os.path.join(OUT, char, k.replace('.png', '.webp')), 'WEBP', quality=90, method=6)
     old = {}
     rp = os.path.join(OUT, 'report.json')
     if os.path.exists(rp): old = json.load(open(rp, encoding='utf-8'))

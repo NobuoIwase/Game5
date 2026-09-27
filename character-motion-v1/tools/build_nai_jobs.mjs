@@ -119,7 +119,7 @@ for(const [kind,lib] of sets)for(const [m,byDir] of Object.entries(lib.poses)){
   const held=run(F);                               // the guide picture: with what holds her, for the user to read
   p.forEach((e,i)=>{if(e.use!=='draw')return;const fr=F[i],id=`${m}__${v}__${i}`,look=meta.look||null,peak=/^頂点/.test(fr.phase||'');
    const sit=[...new Set([ALSO[m],SIT[m]||'defeat'].filter(Boolean))];if(peak&&!sit.includes('climax'))sit.push('climax');
-   frames.push({id,motion:m,view:v,frame:i,label:meta.label,phase:fr.phase||'',look,chars:look?[look]:Object.keys(CHARACTERS),situations:sit,
+   frames.push({id,motion:m,kind:SIT[m]||'defeat',view:v,frame:i,label:meta.label,phase:fr.phase||'',look,chars:look?[look]:Object.keys(CHARACTERS),situations:sit,
     prompt:[VIEW[v],...poseTags(fr),...EXPR(fr.expr,look),...holdTags(fr,look)].join(', '),
     note:noteOf(fr.phase||''),base:`base/${id}.png`,guide:`guide/${id}.png`,
     ja:MOTION_JA[m]||null,step:(/^[^\x00-\x7f…]\S*/.exec(fr.phase||'')||[''])[0]});
@@ -179,6 +179,24 @@ figcaption{font-size:13px;color:var(--sub)}code{font-size:12px;word-break:break-
 <p><b>押さえているものの名前は、どこにも入れていない。</b>「押さえ」の所を何にするかを、あなたが「設定」の欄に書く。</p>
 <nav>${toc}</nav>${body}</main></body></html>`);
 
+/* nai/chatgpt_poses_NN.png: every frame's where-held picture on a few labelled sheets, to attach for ChatGPT (it may not read
+   pictures inside an HTML file) */
+const SHEETS=[];{
+ const byKind=Object.keys(SITUATIONS).map(k=>frames.filter(f=>f.kind===k)).filter(a=>a.length);
+ let cur=[];for(const a of byKind){if(cur.length&&cur.length+a.length>30){SHEETS.push(cur);cur=[]}cur=cur.concat(a)}if(cur.length)SHEETS.push(cur);
+ for(const f of fs.readdirSync(OUT))if(/^chatgpt_poses_\d+\.png$/.test(f))fs.unlinkSync(path.join(OUT,f));
+ const VJs={front:'正面',right:'真横',left:'真横',down_right:'斜め前',down_left:'斜め前',up_right:'斜め後ろ',up_left:'斜め後ろ',back:'後ろ'};
+ const b2=await pw.chromium.launch(),p2=await b2.newPage({viewport:{width:1200,height:800}});
+ for(const [n,sh] of SHEETS.entries()){
+  sh.forEach(f=>f.sheet=n+1);
+  const cells=sh.map(f=>`<div class="c"><img src="data:image/png;base64,${fs.readFileSync(path.join(GUIDE,f.id+'.png')).toString('base64')}"><b>${f.motion}</b><span>${VJs[f.view]||f.view}・${f.frame}コマ目</span><span>${f.label.slice(0,24)}</span></div>`).join('');
+  await p2.setContent(`<html><body style="margin:0;background:#fff;font:13px/1.3 sans-serif;width:1200px"><div style="padding:8px 12px;font-size:18px;font-weight:700">ポーズ一覧 ${n+1}/${SHEETS.length}（色の線・塊＝押さえられている所）</div><style>.c{display:inline-flex;flex-direction:column;width:192px;margin:4px;vertical-align:top;border:1px solid #ccc;padding:2px}.c img{width:188px;height:188px}.c b{font-size:12px;word-break:break-all}.c span{font-size:12px;color:#444}</style><div style="padding:0 6px 8px">${cells}</div></body></html>`);
+  await p2.waitForLoadState('load');
+  await p2.screenshot({path:path.join(OUT,`chatgpt_poses_${String(n+1).padStart(2,'0')}.png`),fullPage:true});
+ }
+ await b2.close();
+}
+
 /* nai/chatgpt_request.html: the request that lets ChatGPT fill the blank fields; its answer (JSON) is pasted into the helper */
 {
  const ex=frames.find(f=>f.motion==='hip_rock_spread')||frames[0];
@@ -188,7 +206,9 @@ figcaption{font-size:13px;color:var(--sub)}code{font-size:12px;word-break:break-
   const fs_=frames.filter(f=>f.situations.includes(k));if(!fs_.length)continue;
   const ms=[...new Set(fs_.map(f=>f.motion))];
   sec+=`<section><h3><code>${k}</code>　${esc(label)}</h3><p><b>書くこと：</b>${esc(SIT_HINT[k]||'')}</p>${SIT_WHO[k]?`<p><b>ゲームでこれをする魔物：</b>${esc(SIT_WHO[k])}</p>`:''}
-<table><tr><th>モーション</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr>${ms.map(m=>{const f=fs_.find(x=>x.motion===m),J=f.ja||{};return tr([f.label,J.body,J.arms,J.legs,J.held,J.move])}).join('')}</table></section>`;
+<div class="wrap"><table><tr><th>モーション</th><th>ポーズ（ポーズ一覧の番号）</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr>${ms.map(m=>{const mf=fs_.filter(x=>x.motion===m),f=mf[0],J=f.ja||{};
+   const pics=mf.map(x=>`<img src="${x.guide}" alt="" width="72" height="72">`).join('');
+   return `<tr><td><b>${esc(f.label)}</b><br><code>${m}</code></td><td class="pose">${pics}<br>一覧 ${[...new Set(frames.filter(x=>x.motion===m).map(x=>x.sheet))].join('・')}</td>${[J.body,J.arms,J.legs,J.held,J.move].map(x=>`<td>${esc(x||'')}</td>`).join('')}</tr>`}).join('')}</table></div></section>`;
  }
  const slots=Object.entries(MOTION_SLOT).filter(([m])=>frames.some(f=>f.motion===m));
  const slotRows=slots.map(([m,w])=>{const f=frames.find(x=>x.motion===m),J=f.ja||{};return tr([m,f.label,w,J.move])}).join('');
@@ -201,11 +221,12 @@ body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.7 system-ui,sans-
 h2{margin-top:32px;border-bottom:2px solid var(--acc)}section{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
 table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid var(--line);padding:3px 6px;text-align:left;vertical-align:top}
 .user{background:var(--card);border-left:4px solid #b3522f;padding:8px 12px}pre{background:var(--card);border:1px solid var(--line);padding:10px;overflow:auto;font-size:13px}
-.wrap{overflow-x:auto}
+.wrap{overflow-x:auto}.pose{min-width:160px}.pose img{border:1px solid var(--line);background:#fff;margin:1px}
 </style></head><body><main>
 <h1>NovelAI の言葉の依頼（ChatGPT 向け）</h1>
 <div class="user"><b>使い方（ユーザー向け）</b><ol>
-<li>このページを ChatGPT に渡す（ファイルを添付するか、全部コピーして貼る）</li>
+<li>このページを ChatGPT に渡す（全部コピーして貼るか、ファイルを添付する）</li>
+<li>一緒に<b>ポーズ一覧の画像</b>を添付する：${SHEETS.map((_,n)=>{const f=`chatgpt_poses_${String(n+1).padStart(2,'0')}.png`;return `<a href="${f}" download>${f}</a>`}).join('、')}（ChatGPT はページの中の絵を見られないことがあるため）</li>
 <li>ChatGPT が返した JSON（<code>{</code> から <code>}</code> まで）をコピーする</li>
 <li>NovelAI の右下の枠 →「設定（ユーザー用）」→「ChatGPT の答えを取り込む」に貼って、「取り込む」を押す</li></ol>
 取り込んだあとも、欄は手で直せます。</div>
@@ -235,7 +256,7 @@ table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid 
 <div class="wrap"><table><tr><th>名前</th><th>色</th><th>色の言葉</th></tr>${MONSTERS.map(r=>tr(r)).join('')}</table></div>
 
 <h2>5. 場面の種類の欄（<code>words</code>）</h2>
-<p>表は、その欄に入るモーション。「押さえ」の所を何が押さえているかを、欄に書きます。「ゲームでこれをする魔物」が何種類もある欄は、代表を1つ選んでください。</p>
+<p>表は、その欄に入るモーション。ポーズの絵は、添付の<b>ポーズ一覧</b>の同じ番号の画像にもある（モーションのキーの英字で探す）。色の線・塊が押さえられている所。「押さえ」の所を何が押さえているかを、欄に書きます。「ゲームでこれをする魔物」が何種類もある欄は、代表を1つ選んでください。</p>
 ${sec}
 
 <h2>6. モーションごとの欄（<code>motionWords</code>）</h2>

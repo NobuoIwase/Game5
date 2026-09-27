@@ -1,5 +1,5 @@
 {
- "version": "2026-09-26",
+ "version": "2026-09-27",
  "size": [
   1024,
   1024
@@ -80,6 +80,7 @@
   "arms_behind_squirm__front__0": {
    "id": "arms_behind_squirm__front__0",
    "motion": "arms_behind_squirm",
+   "kind": "bound",
    "view": "front",
    "frame": 0,
    "label": "後ろ手に縛られて身をよじる",
@@ -110,6 +111,7 @@
   "arms_behind_squirm__front__2": {
    "id": "arms_behind_squirm__front__2",
    "motion": "arms_behind_squirm",
+   "kind": "bound",
    "view": "front",
    "frame": 2,
    "label": "後ろ手に縛られて身をよじる",
@@ -140,6 +142,7 @@
   "arms_behind_wrench__front__0": {
    "id": "arms_behind_wrench__front__0",
    "motion": "arms_behind_wrench",
+   "kind": "bound",
    "view": "front",
    "frame": 0,
    "label": "後ろ手に縛られて振りほどこうとする",
@@ -170,6 +173,7 @@
   "arms_behind_wrench__front__5": {
    "id": "arms_behind_wrench__front__5",
    "motion": "arms_behind_wrench",
+   "kind": "bound",
    "view": "front",
    "frame": 5,
    "label": "後ろ手に縛られて振りほどこうとする",
@@ -200,6 +204,7 @@
   "elbows_up_strain__front__0": {
    "id": "elbows_up_strain__front__0",
    "motion": "elbows_up_strain",
+   "kind": "bound",
    "view": "front",
    "frame": 0,
    "label": "両手首を上から吊られ、腕を引き下ろそうと力む",
@@ -230,6 +235,7 @@
   "elbows_up_strain__front__2": {
    "id": "elbows_up_strain__front__2",
    "motion": "elbows_up_strain",
+   "kind": "bound",
    "view": "front",
    "frame": 2,
    "label": "両手首を上から吊られ、腕を引き下ろそうと力む",
@@ -260,6 +266,7 @@
   "legs_pulled_open__front__0": {
    "id": "legs_pulled_open__front__0",
    "motion": "legs_pulled_open",
+   "kind": "bound",
    "view": "front",
    "frame": 0,
    "label": "閉じた膝を左右へ引き開かれる",
@@ -290,6 +297,7 @@
   "legs_pulled_open__front__7": {
    "id": "legs_pulled_open__front__7",
    "motion": "legs_pulled_open",
+   "kind": "bound",
    "view": "front",
    "frame": 7,
    "label": "閉じた膝を左右へ引き開かれる",
@@ -320,6 +328,7 @@
   "legs_held_open__front__0": {
    "id": "legs_held_open__front__0",
    "motion": "legs_held_open",
+   "kind": "bound",
    "view": "front",
    "frame": 0,
    "label": "脚を開かれたまま耐える",
@@ -350,6 +359,7 @@
   "legs_held_open__front__2": {
    "id": "legs_held_open__front__2",
    "motion": "legs_held_open",
+   "kind": "bound",
    "view": "front",
    "frame": 2,
    "label": "脚を開かれたまま耐える",
@@ -380,6 +390,7 @@
   "hip_rock_spread__front__0": {
    "id": "hip_rock_spread__front__0",
    "motion": "hip_rock_spread",
+   "kind": "bound_rock",
    "view": "front",
    "frame": 0,
    "label": "脚を開いた姿勢で腰を前後に揺らす",
@@ -410,6 +421,7 @@
   "hip_rock_spread__front__3": {
    "id": "hip_rock_spread__front__3",
    "motion": "hip_rock_spread",
+   "kind": "bound_rock",
    "view": "front",
    "frame": 3,
    "label": "脚を開いた姿勢で腰を前後に揺らす",
@@ -440,6 +452,7 @@
   "hip_rock_closed__front__0": {
    "id": "hip_rock_closed__front__0",
    "motion": "hip_rock_closed",
+   "kind": "bound_rock",
    "view": "front",
    "frame": 0,
    "label": "膝を閉じた姿勢で腰を小さく前後に揺らす",
@@ -470,6 +483,7 @@
   "hip_rock_closed__front__3": {
    "id": "hip_rock_closed__front__3",
    "motion": "hip_rock_closed",
+   "kind": "bound_rock",
    "view": "front",
    "frame": 3,
    "label": "膝を閉じた姿勢で腰を小さく前後に揺らす",
@@ -500,6 +514,7 @@
   "bounce_spread__front__0": {
    "id": "bounce_spread__front__0",
    "motion": "bounce_spread",
+   "kind": "bound_rock",
    "view": "front",
    "frame": 0,
    "label": "脚を開いた姿勢で上下に揺れる",
@@ -530,6 +545,7 @@
   "bounce_spread__front__4": {
    "id": "bounce_spread__front__4",
    "motion": "bounce_spread",
+   "kind": "bound_rock",
    "view": "front",
    "frame": 4,
    "label": "脚を開いた姿勢で上下に揺れる",
@@ -560,6 +576,7 @@
   "bounce_hung__front__0": {
    "id": "bounce_hung__front__0",
    "motion": "bounce_hung",
+   "kind": "bound_rock",
    "view": "front",
    "frame": 0,
    "label": "手首を吊られたまま上下に揺れる",
@@ -590,6 +607,7 @@
   "bounce_hung__front__4": {
    "id": "bounce_hung__front__4",
    "motion": "bounce_hung",
+   "kind": "bound_rock",
    "view": "front",
    "frame": 4,
    "label": "手首を吊られたまま上下に揺れる",
@@ -620,6 +638,7 @@
   "tension_tiptoe__front__0": {
    "id": "tension_tiptoe__front__0",
    "motion": "tension_tiptoe",
+   "kind": "climax",
    "view": "front",
    "frame": 0,
    "label": "全身がこわばって爪先立ち、そのあと脱力",
@@ -651,6 +670,7 @@
   "tension_tiptoe__front__3": {
    "id": "tension_tiptoe__front__3",
    "motion": "tension_tiptoe",
+   "kind": "climax",
    "view": "front",
    "frame": 3,
    "label": "全身がこわばって爪先立ち、そのあと脱力",
@@ -682,6 +702,7 @@
   "tension_arch__front__0": {
    "id": "tension_arch__front__0",
    "motion": "tension_arch",
+   "kind": "climax",
    "view": "front",
    "frame": 0,
    "label": "背中を大きく反らせてこわばり、そのあと脱力",
@@ -713,6 +734,7 @@
   "tension_arch__front__3": {
    "id": "tension_arch__front__3",
    "motion": "tension_arch",
+   "kind": "climax",
    "view": "front",
    "frame": 3,
    "label": "背中を大きく反らせてこわばり、そのあと脱力",
@@ -744,6 +766,7 @@
   "afterglow_spread__front__0": {
    "id": "afterglow_spread__front__0",
    "motion": "afterglow_spread",
+   "kind": "afterglow",
    "view": "front",
    "frame": 0,
    "label": "脚を開かれたまま脱力し、肩で息をする（tension_tiptoe のあと）",
@@ -775,6 +798,7 @@
   "afterglow_spread__front__5": {
    "id": "afterglow_spread__front__5",
    "motion": "afterglow_spread",
+   "kind": "afterglow",
    "view": "front",
    "frame": 5,
    "label": "脚を開かれたまま脱力し、肩で息をする（tension_tiptoe のあと）",
@@ -806,6 +830,7 @@
   "afterglow_slump__front__0": {
    "id": "afterglow_slump__front__0",
    "motion": "afterglow_slump",
+   "kind": "afterglow",
    "view": "front",
    "frame": 0,
    "label": "前へ崩れたまま脱力し、肩で息をする（tension_arch のあと）",
@@ -837,6 +862,7 @@
   "afterglow_slump__front__5": {
    "id": "afterglow_slump__front__5",
    "motion": "afterglow_slump",
+   "kind": "afterglow",
    "view": "front",
    "frame": 5,
    "label": "前へ崩れたまま脱力し、肩で息をする（tension_arch のあと）",
@@ -868,6 +894,7 @@
   "recover_slump__front__0": {
    "id": "recover_slump__front__0",
    "motion": "recover_slump",
+   "kind": "recover",
    "view": "front",
    "frame": 0,
    "label": "脱力から我に返り、立ち直る",
@@ -899,6 +926,7 @@
   "recover_slump__front__2": {
    "id": "recover_slump__front__2",
    "motion": "recover_slump",
+   "kind": "recover",
    "view": "front",
    "frame": 2,
    "label": "脱力から我に返り、立ち直る",
@@ -930,6 +958,7 @@
   "bent_over__up_right__0": {
    "id": "bent_over__up_right__0",
    "motion": "bent_over",
+   "kind": "bound",
    "view": "up_right",
    "frame": 0,
    "label": "前屈みで手首を床の前に縛られ、腰を左右に揺らす（後ろ・斜め後ろから）",
@@ -960,6 +989,7 @@
   "bent_over__up_right__2": {
    "id": "bent_over__up_right__2",
    "motion": "bent_over",
+   "kind": "bound",
    "view": "up_right",
    "frame": 2,
    "label": "前屈みで手首を床の前に縛られ、腰を左右に揺らす（後ろ・斜め後ろから）",
@@ -990,6 +1020,7 @@
   "down_fall_back__right__0": {
    "id": "down_fall_back__right__0",
    "motion": "down_fall_back",
+   "kind": "pinned",
    "view": "right",
    "frame": 0,
    "label": "押されて尻もちをつき、仰向けに倒れる",
@@ -1020,6 +1051,7 @@
   "down_fall_back__right__2": {
    "id": "down_fall_back__right__2",
    "motion": "down_fall_back",
+   "kind": "pinned",
    "view": "right",
    "frame": 2,
    "label": "押されて尻もちをつき、仰向けに倒れる",
@@ -1050,6 +1082,7 @@
   "down_fall_back__right__8": {
    "id": "down_fall_back__right__8",
    "motion": "down_fall_back",
+   "kind": "pinned",
    "view": "right",
    "frame": 8,
    "label": "押されて尻もちをつき、仰向けに倒れる",
@@ -1080,6 +1113,7 @@
   "down_fall_back__right__12": {
    "id": "down_fall_back__right__12",
    "motion": "down_fall_back",
+   "kind": "pinned",
    "view": "right",
    "frame": 12,
    "label": "押されて尻もちをつき、仰向けに倒れる",
@@ -1110,6 +1144,7 @@
   "down_fall_back__right__17": {
    "id": "down_fall_back__right__17",
    "motion": "down_fall_back",
+   "kind": "pinned",
    "view": "right",
    "frame": 17,
    "label": "押されて尻もちをつき、仰向けに倒れる",
@@ -1140,6 +1175,7 @@
   "down_pinned_kick__right__0": {
    "id": "down_pinned_kick__right__0",
    "motion": "down_pinned_kick",
+   "kind": "pinned",
    "view": "right",
    "frame": 0,
    "label": "仰向けで両手首を頭の上に押さえられ、脚をばたつかせる",
@@ -1170,6 +1206,7 @@
   "down_pinned_kick__right__2": {
    "id": "down_pinned_kick__right__2",
    "motion": "down_pinned_kick",
+   "kind": "pinned",
    "view": "right",
    "frame": 2,
    "label": "仰向けで両手首を頭の上に押さえられ、脚をばたつかせる",
@@ -1200,6 +1237,7 @@
   "down_pinned_spread__down_right__0": {
    "id": "down_pinned_spread__down_right__0",
    "motion": "down_pinned_spread",
+   "kind": "pinned",
    "view": "down_right",
    "frame": 0,
    "label": "仰向けで立てた膝を左右へ開かれ、腰をよじる",
@@ -1230,6 +1268,7 @@
   "down_pinned_spread__down_right__6": {
    "id": "down_pinned_spread__down_right__6",
    "motion": "down_pinned_spread",
+   "kind": "pinned",
    "view": "down_right",
    "frame": 6,
    "label": "仰向けで立てた膝を左右へ開かれ、腰をよじる",
@@ -1260,6 +1299,7 @@
   "down_pinned_rock__down_right__0": {
    "id": "down_pinned_rock__down_right__0",
    "motion": "down_pinned_rock",
+   "kind": "pinned_rock",
    "view": "down_right",
    "frame": 0,
    "label": "仰向けで膝を開かれ、体が頭の方へ前後に揺れる",
@@ -1290,6 +1330,7 @@
   "down_pinned_rock__down_right__3": {
    "id": "down_pinned_rock__down_right__3",
    "motion": "down_pinned_rock",
+   "kind": "pinned_rock",
    "view": "down_right",
    "frame": 3,
    "label": "仰向けで膝を開かれ、体が頭の方へ前後に揺れる",
@@ -1320,6 +1361,7 @@
   "down_face_down__right__0": {
    "id": "down_face_down__right__0",
    "motion": "down_face_down",
+   "kind": "pinned",
    "view": "right",
    "frame": 0,
    "label": "うつ伏せで押さえられ、脚をばたつかせてもがく",
@@ -1350,6 +1392,7 @@
   "down_face_down__right__4": {
    "id": "down_face_down__right__4",
    "motion": "down_face_down",
+   "kind": "pinned",
    "view": "right",
    "frame": 4,
    "label": "うつ伏せで押さえられ、脚をばたつかせてもがく",
@@ -1380,6 +1423,7 @@
   "down_hips_up__right__0": {
    "id": "down_hips_up__right__0",
    "motion": "down_hips_up",
+   "kind": "pinned",
    "view": "right",
    "frame": 0,
    "label": "膝をついて胸を床につけ、腰を上げたまま前後に揺れる",
@@ -1410,6 +1454,7 @@
   "down_hips_up__right__2": {
    "id": "down_hips_up__right__2",
    "motion": "down_hips_up",
+   "kind": "pinned",
    "view": "right",
    "frame": 2,
    "label": "膝をついて胸を床につけ、腰を上げたまま前後に揺れる",
@@ -1440,6 +1485,7 @@
   "get_up__right__0": {
    "id": "get_up__right__0",
    "motion": "get_up",
+   "kind": "recover",
    "view": "right",
    "frame": 0,
    "label": "仰向けから起き上がる",
@@ -1470,6 +1516,7 @@
   "get_up__right__4": {
    "id": "get_up__right__4",
    "motion": "get_up",
+   "kind": "recover",
    "view": "right",
    "frame": 4,
    "label": "仰向けから起き上がる",
@@ -1500,6 +1547,7 @@
   "get_up__right__8": {
    "id": "get_up__right__8",
    "motion": "get_up",
+   "kind": "recover",
    "view": "right",
    "frame": 8,
    "label": "仰向けから起き上がる",
@@ -1530,6 +1578,7 @@
   "get_up__right__13": {
    "id": "get_up__right__13",
    "motion": "get_up",
+   "kind": "recover",
    "view": "right",
    "frame": 13,
    "label": "仰向けから起き上がる",
@@ -1560,6 +1609,7 @@
   "get_up__right__16": {
    "id": "get_up__right__16",
    "motion": "get_up",
+   "kind": "recover",
    "view": "right",
    "frame": 16,
    "label": "仰向けから起き上がる",
@@ -1590,6 +1640,7 @@
   "get_up__right__18": {
    "id": "get_up__right__18",
    "motion": "get_up",
+   "kind": "recover",
    "view": "right",
    "frame": 18,
    "label": "仰向けから起き上がる",
@@ -1620,6 +1671,7 @@
   "kiss_forced__right__0": {
    "id": "kiss_forced__right__0",
    "motion": "kiss_forced",
+   "kind": "kiss",
    "view": "right",
    "frame": 0,
    "label": "口づけされて押し返そうとする",
@@ -1650,6 +1702,7 @@
   "kiss_forced__right__6": {
    "id": "kiss_forced__right__6",
    "motion": "kiss_forced",
+   "kind": "kiss",
    "view": "right",
    "frame": 6,
    "label": "口づけされて押し返そうとする",
@@ -1680,6 +1733,7 @@
   "kiss_tension__right__0": {
    "id": "kiss_tension__right__0",
    "motion": "kiss_tension",
+   "kind": "climax",
    "view": "right",
    "frame": 0,
    "label": "口づけされたまま全身がこわばり、膝が崩れる",
@@ -1711,6 +1765,7 @@
   "kiss_tension__right__3": {
    "id": "kiss_tension__right__3",
    "motion": "kiss_tension",
+   "kind": "climax",
    "view": "right",
    "frame": 3,
    "label": "口づけされたまま全身がこわばり、膝が崩れる",
@@ -1742,6 +1797,7 @@
   "kiss_tension__right__8": {
    "id": "kiss_tension__right__8",
    "motion": "kiss_tension",
+   "kind": "climax",
    "view": "right",
    "frame": 8,
    "label": "口づけされたまま全身がこわばり、膝が崩れる",
@@ -1773,6 +1829,7 @@
   "kiss_respond__right__0": {
    "id": "kiss_respond__right__0",
    "motion": "kiss_respond",
+   "kind": "kiss",
    "view": "right",
    "frame": 0,
    "label": "口づけに応える（爪先立ちで身を寄せる）",
@@ -1803,6 +1860,7 @@
   "kiss_respond__right__6": {
    "id": "kiss_respond__right__6",
    "motion": "kiss_respond",
+   "kind": "kiss",
    "view": "right",
    "frame": 6,
    "label": "口づけに応える（爪先立ちで身を寄せる）",
@@ -1833,6 +1891,7 @@
   "tempt_pose__front__0": {
    "id": "tempt_pose__front__0",
    "motion": "tempt_pose",
+   "kind": "tempt",
    "view": "front",
    "frame": 0,
    "label": "脚を開いて腰を前に出し、ゆっくり揺らす（誘う姿勢）",
@@ -1863,6 +1922,7 @@
   "tempt_pose__front__6": {
    "id": "tempt_pose__front__6",
    "motion": "tempt_pose",
+   "kind": "tempt",
    "view": "front",
    "frame": 6,
    "label": "脚を開いて腰を前に出し、ゆっくり揺らす（誘う姿勢）",
@@ -1893,6 +1953,7 @@
   "chain_splay__front__0": {
    "id": "chain_splay__front__0",
    "motion": "chain_splay",
+   "kind": "climax",
    "view": "front",
    "frame": 0,
    "label": "脚ががに股に開き、膝と腰が小刻みに震える",
@@ -1923,6 +1984,7 @@
   "chain_splay__front__3": {
    "id": "chain_splay__front__3",
    "motion": "chain_splay",
+   "kind": "climax",
    "view": "front",
    "frame": 3,
    "label": "脚ががに股に開き、膝と腰が小刻みに震える",
@@ -1953,6 +2015,7 @@
   "tension_free__front__0": {
    "id": "tension_free__front__0",
    "motion": "tension_free",
+   "kind": "climax",
    "view": "front",
    "frame": 0,
    "label": "立ったまま全身がこわばり、膝から崩れて座り込む",
@@ -1983,6 +2046,7 @@
   "tension_free__front__4": {
    "id": "tension_free__front__4",
    "motion": "tension_free",
+   "kind": "climax",
    "view": "front",
    "frame": 4,
    "label": "立ったまま全身がこわばり、膝から崩れて座り込む",
@@ -2013,6 +2077,7 @@
   "tension_free__front__11": {
    "id": "tension_free__front__11",
    "motion": "tension_free",
+   "kind": "climax",
    "view": "front",
    "frame": 11,
    "label": "立ったまま全身がこわばり、膝から崩れて座り込む",
@@ -2043,6 +2108,7 @@
   "tension_free__front__13": {
    "id": "tension_free__front__13",
    "motion": "tension_free",
+   "kind": "climax",
    "view": "front",
    "frame": 13,
    "label": "立ったまま全身がこわばり、膝から崩れて座り込む",
@@ -2073,6 +2139,7 @@
   "sit_afterglow__front__0": {
    "id": "sit_afterglow__front__0",
    "motion": "sit_afterglow",
+   "kind": "afterglow",
    "view": "front",
    "frame": 0,
    "label": "女の子座りで肩で息をする",
@@ -2103,6 +2170,7 @@
   "held_from_behind__front__0": {
    "id": "held_from_behind__front__0",
    "motion": "held_from_behind",
+   "kind": "held",
    "view": "front",
    "frame": 0,
    "label": "後ろから腕ごと胴を抱きすくめられ、もがく",
@@ -2133,6 +2201,7 @@
   "held_from_behind__front__2": {
    "id": "held_from_behind__front__2",
    "motion": "held_from_behind",
+   "kind": "held",
    "view": "front",
    "frame": 2,
    "label": "後ろから腕ごと胴を抱きすくめられ、もがく",
@@ -2163,6 +2232,7 @@
   "down_afterglow__down_right__0": {
    "id": "down_afterglow__down_right__0",
    "motion": "down_afterglow",
+   "kind": "afterglow",
    "view": "down_right",
    "frame": 0,
    "label": "仰向けで膝が倒れたまま、肩で息をする",
@@ -2193,6 +2263,7 @@
   "down_afterglow__down_right__5": {
    "id": "down_afterglow__down_right__5",
    "motion": "down_afterglow",
+   "kind": "afterglow",
    "view": "down_right",
    "frame": 5,
    "label": "仰向けで膝が倒れたまま、肩で息をする",
@@ -2223,6 +2294,7 @@
   "down_recover__down_right__2": {
    "id": "down_recover__down_right__2",
    "motion": "down_recover",
+   "kind": "recover",
    "view": "down_right",
    "frame": 2,
    "label": "仰向けの余韻から膝を閉じて体を起こしかける（そのあと get_up）",
@@ -2253,6 +2325,7 @@
   "kiss_afterglow__right__0": {
    "id": "kiss_afterglow__right__0",
    "motion": "kiss_afterglow",
+   "kind": "afterglow",
    "view": "right",
    "frame": 0,
    "label": "口づけのあと、膝が抜けたままふらつき、肩で息をする（kiss_tension のあと）",
@@ -2283,6 +2356,7 @@
   "kiss_afterglow__right__5": {
    "id": "kiss_afterglow__right__5",
    "motion": "kiss_afterglow",
+   "kind": "afterglow",
    "view": "right",
    "frame": 5,
    "label": "口づけのあと、膝が抜けたままふらつき、肩で息をする（kiss_tension のあと）",
@@ -2313,6 +2387,7 @@
   "kiss_recover__right__0": {
    "id": "kiss_recover__right__0",
    "motion": "kiss_recover",
+   "kind": "recover",
    "view": "right",
    "frame": 0,
    "label": "我に返って口元をぬぐい、一歩下がる",
@@ -2343,6 +2418,7 @@
   "kiss_recover__right__5": {
    "id": "kiss_recover__right__5",
    "motion": "kiss_recover",
+   "kind": "recover",
    "view": "right",
    "frame": 5,
    "label": "我に返って口元をぬぐい、一歩下がる",
@@ -2373,6 +2449,7 @@
   "kiss_recover__right__8": {
    "id": "kiss_recover__right__8",
    "motion": "kiss_recover",
+   "kind": "recover",
    "view": "right",
    "frame": 8,
    "label": "我に返って口元をぬぐい、一歩下がる",
@@ -2403,6 +2480,7 @@
   "kiss_recover__right__10": {
    "id": "kiss_recover__right__10",
    "motion": "kiss_recover",
+   "kind": "recover",
    "view": "right",
    "frame": 10,
    "label": "我に返って口元をぬぐい、一歩下がる",
@@ -2433,6 +2511,7 @@
   "sit_recover__front__2": {
    "id": "sit_recover__front__2",
    "motion": "sit_recover",
+   "kind": "recover",
    "view": "front",
    "frame": 2,
    "label": "女の子座りから立ち上がる（tension_free・sit_afterglow のあと）",
@@ -2463,6 +2542,7 @@
   "sit_recover__front__5": {
    "id": "sit_recover__front__5",
    "motion": "sit_recover",
+   "kind": "recover",
    "view": "front",
    "frame": 5,
    "label": "女の子座りから立ち上がる（tension_free・sit_afterglow のあと）",
@@ -2493,6 +2573,7 @@
   "sit_recover__front__9": {
    "id": "sit_recover__front__9",
    "motion": "sit_recover",
+   "kind": "recover",
    "view": "front",
    "frame": 9,
    "label": "女の子座りから立ち上がる（tension_free・sit_afterglow のあと）",
@@ -2523,6 +2604,7 @@
   "sit_recover__front__11": {
    "id": "sit_recover__front__11",
    "motion": "sit_recover",
+   "kind": "recover",
    "view": "front",
    "frame": 11,
    "label": "女の子座りから立ち上がる（tension_free・sit_afterglow のあと）",
@@ -2553,6 +2635,7 @@
   "sit_recover__front__13": {
    "id": "sit_recover__front__13",
    "motion": "sit_recover",
+   "kind": "recover",
    "view": "front",
    "frame": 13,
    "label": "女の子座りから立ち上がる（tension_free・sit_afterglow のあと）",
@@ -2583,6 +2666,7 @@
   "clinger_afterglow__front__5": {
    "id": "clinger_afterglow__front__5",
    "motion": "clinger_afterglow",
+   "kind": "afterglow",
    "view": "front",
    "frame": 5,
    "label": "張り付かれたまま座り込み、肩で息をする（clinger_tension のあと）",
@@ -2614,6 +2698,7 @@
   "clinger_recover__front__15": {
    "id": "clinger_recover__front__15",
    "motion": "clinger_recover",
+   "kind": "recover",
    "view": "front",
    "frame": 15,
    "label": "張り付かれたまま立ち上がり、胸を押さえる",
@@ -2645,6 +2730,7 @@
   "clinger_peel__front__0": {
    "id": "clinger_peel__front__0",
    "motion": "clinger_peel",
+   "kind": "clinger",
    "view": "front",
    "frame": 0,
    "label": "胸と脚の付け根の前に張り付いた小さな生き物を引き剥がそうとする",
@@ -2675,6 +2761,7 @@
   "clinger_peel__front__7": {
    "id": "clinger_peel__front__7",
    "motion": "clinger_peel",
+   "kind": "clinger",
    "view": "front",
    "frame": 7,
    "label": "胸と脚の付け根の前に張り付いた小さな生き物を引き剥がそうとする",
@@ -2705,6 +2792,7 @@
   "clinger_peel__front__20": {
    "id": "clinger_peel__front__20",
    "motion": "clinger_peel",
+   "kind": "clinger",
    "view": "front",
    "frame": 20,
    "label": "胸と脚の付け根の前に張り付いた小さな生き物を引き剥がそうとする",
@@ -2735,6 +2823,7 @@
   "clinger_tension__front__4": {
    "id": "clinger_tension__front__4",
    "motion": "clinger_tension",
+   "kind": "climax",
    "view": "front",
    "frame": 4,
    "label": "張り付かれたまま全身がこわばり、座り込む",
@@ -2766,6 +2855,7 @@
   "clinger_accept__front__0": {
    "id": "clinger_accept__front__0",
    "motion": "clinger_accept",
+   "kind": "clinger",
    "view": "front",
    "frame": 0,
    "label": "張り付かれたまま振り払うのをやめ、身を任せる",
@@ -2796,6 +2886,7 @@
   "clinger_accept__front__2": {
    "id": "clinger_accept__front__2",
    "motion": "clinger_accept",
+   "kind": "clinger",
    "view": "front",
    "frame": 2,
    "label": "張り付かれたまま振り払うのをやめ、身を任せる",
@@ -2826,6 +2917,7 @@
   "down_tension__down_right__0": {
    "id": "down_tension__down_right__0",
    "motion": "down_tension",
+   "kind": "climax",
    "view": "down_right",
    "frame": 0,
    "label": "仰向けで押さえられたまま全身がこわばり、腰が浮く",
@@ -2857,6 +2949,7 @@
   "down_tension__down_right__3": {
    "id": "down_tension__down_right__3",
    "motion": "down_tension",
+   "kind": "climax",
    "view": "down_right",
    "frame": 3,
    "label": "仰向けで押さえられたまま全身がこわばり、腰が浮く",
@@ -2888,6 +2981,7 @@
   "down_tension__down_right__12": {
    "id": "down_tension__down_right__12",
    "motion": "down_tension",
+   "kind": "climax",
    "view": "down_right",
    "frame": 12,
    "label": "仰向けで押さえられたまま全身がこわばり、腰が浮く",
@@ -2919,6 +3013,7 @@
   "engulf_sink__front__0": {
    "id": "engulf_sink__front__0",
    "motion": "engulf_sink",
+   "kind": "engulf",
    "view": "front",
    "frame": 0,
    "label": "柔らかい塊に足元から腰まで呑まれていく",
@@ -2949,6 +3044,7 @@
   "engulf_sink__front__3": {
    "id": "engulf_sink__front__3",
    "motion": "engulf_sink",
+   "kind": "engulf",
    "view": "front",
    "frame": 3,
    "label": "柔らかい塊に足元から腰まで呑まれていく",
@@ -2979,6 +3075,7 @@
   "engulf_sink__front__6": {
    "id": "engulf_sink__front__6",
    "motion": "engulf_sink",
+   "kind": "engulf",
    "view": "front",
    "frame": 6,
    "label": "柔らかい塊に足元から腰まで呑まれていく",
@@ -3009,6 +3106,7 @@
   "engulf_struggle__front__0": {
    "id": "engulf_struggle__front__0",
    "motion": "engulf_struggle",
+   "kind": "engulf",
    "view": "front",
    "frame": 0,
    "label": "腰まで呑まれたまま、上体をひねって抜け出そうとする",
@@ -3039,6 +3137,7 @@
   "engulf_struggle__front__6": {
    "id": "engulf_struggle__front__6",
    "motion": "engulf_struggle",
+   "kind": "engulf",
    "view": "front",
    "frame": 6,
    "label": "腰まで呑まれたまま、上体をひねって抜け出そうとする",
@@ -3069,6 +3168,7 @@
   "engulf_rock__front__0": {
    "id": "engulf_rock__front__0",
    "motion": "engulf_rock",
+   "kind": "engulf",
    "view": "front",
    "frame": 0,
    "label": "腰まで呑まれたまま、腰がびくびくと跳ねる",
@@ -3099,6 +3199,7 @@
   "engulf_rock__front__1": {
    "id": "engulf_rock__front__1",
    "motion": "engulf_rock",
+   "kind": "engulf",
    "view": "front",
    "frame": 1,
    "label": "腰まで呑まれたまま、腰がびくびくと跳ねる",
@@ -3129,6 +3230,7 @@
   "engulf_tension__front__0": {
    "id": "engulf_tension__front__0",
    "motion": "engulf_tension",
+   "kind": "climax",
    "view": "front",
    "frame": 0,
    "label": "腰まで呑まれたまま全身がこわばり、前へ崩れる",
@@ -3160,6 +3262,7 @@
   "engulf_tension__front__2": {
    "id": "engulf_tension__front__2",
    "motion": "engulf_tension",
+   "kind": "climax",
    "view": "front",
    "frame": 2,
    "label": "腰まで呑まれたまま全身がこわばり、前へ崩れる",
@@ -3191,6 +3294,7 @@
   "engulf_tension__front__6": {
    "id": "engulf_tension__front__6",
    "motion": "engulf_tension",
+   "kind": "climax",
    "view": "front",
    "frame": 6,
    "label": "腰まで呑まれたまま全身がこわばり、前へ崩れる",
@@ -3222,6 +3326,7 @@
   "engulf_tension__front__10": {
    "id": "engulf_tension__front__10",
    "motion": "engulf_tension",
+   "kind": "climax",
    "view": "front",
    "frame": 10,
    "label": "腰まで呑まれたまま全身がこわばり、前へ崩れる",
@@ -3253,6 +3358,7 @@
   "wrap_squeeze__front__0": {
    "id": "wrap_squeeze__front__0",
    "motion": "wrap_squeeze",
+   "kind": "wrap",
    "view": "front",
    "frame": 0,
    "label": "腕ごと胴に巻きつかれ、締め付けられるたびに背中が反る",
@@ -3283,6 +3389,7 @@
   "wrap_tension__front__0": {
    "id": "wrap_tension__front__0",
    "motion": "wrap_tension",
+   "kind": "climax",
    "view": "front",
    "frame": 0,
    "label": "巻きつかれたまま全身がこわばり、脱力する",
@@ -3314,6 +3421,7 @@
   "wrap_tension__front__2": {
    "id": "wrap_tension__front__2",
    "motion": "wrap_tension",
+   "kind": "climax",
    "view": "front",
    "frame": 2,
    "label": "巻きつかれたまま全身がこわばり、脱力する",
@@ -3345,6 +3453,7 @@
   "wrap_tension__front__8": {
    "id": "wrap_tension__front__8",
    "motion": "wrap_tension",
+   "kind": "climax",
    "view": "front",
    "frame": 8,
    "label": "巻きつかれたまま全身がこわばり、脱力する",
@@ -3376,6 +3485,7 @@
   "ankle_grabbed__right__0": {
    "id": "ankle_grabbed__right__0",
    "motion": "ankle_grabbed",
+   "kind": "grabbed",
    "view": "right",
    "frame": 0,
    "label": "足首をつかまれて後ろへ引かれ、よろけて四つん這いになる",
@@ -3406,6 +3516,7 @@
   "ankle_grabbed__right__4": {
    "id": "ankle_grabbed__right__4",
    "motion": "ankle_grabbed",
+   "kind": "grabbed",
    "view": "right",
    "frame": 4,
    "label": "足首をつかまれて後ろへ引かれ、よろけて四つん這いになる",
@@ -3436,6 +3547,7 @@
   "ankle_grabbed__right__6": {
    "id": "ankle_grabbed__right__6",
    "motion": "ankle_grabbed",
+   "kind": "grabbed",
    "view": "right",
    "frame": 6,
    "label": "足首をつかまれて後ろへ引かれ、よろけて四つん這いになる",
@@ -3466,6 +3578,7 @@
   "ankle_grabbed__right__14": {
    "id": "ankle_grabbed__right__14",
    "motion": "ankle_grabbed",
+   "kind": "grabbed",
    "view": "right",
    "frame": 14,
    "label": "足首をつかまれて後ろへ引かれ、よろけて四つん這いになる",
@@ -3496,6 +3609,7 @@
   "break_free__front__2": {
    "id": "break_free__front__2",
    "motion": "break_free",
+   "kind": "grabbed",
    "view": "front",
    "frame": 2,
    "label": "拘束を振りほどき、よろけてから構え直す",
@@ -3526,6 +3640,7 @@
   "break_free__front__3": {
    "id": "break_free__front__3",
    "motion": "break_free",
+   "kind": "grabbed",
    "view": "front",
    "frame": 3,
    "label": "拘束を振りほどき、よろけてから構え直す",
@@ -3556,6 +3671,7 @@
   "break_free__front__6": {
    "id": "break_free__front__6",
    "motion": "break_free",
+   "kind": "grabbed",
    "view": "front",
    "frame": 6,
    "label": "拘束を振りほどき、よろけてから構え直す",
@@ -3586,6 +3702,7 @@
   "break_free__front__8": {
    "id": "break_free__front__8",
    "motion": "break_free",
+   "kind": "grabbed",
    "view": "front",
    "frame": 8,
    "label": "拘束を振りほどき、よろけてから構え直す",
@@ -3616,6 +3733,7 @@
   "edge_pull__right__0": {
    "id": "edge_pull__right__0",
    "motion": "edge_pull",
+   "kind": "tempt",
    "view": "right",
    "frame": 0,
    "label": "腰から先に一歩寄ってしまい、はっと引き戻す",
@@ -3646,6 +3764,7 @@
   "edge_pull__right__3": {
    "id": "edge_pull__right__3",
    "motion": "edge_pull",
+   "kind": "tempt",
    "view": "right",
    "frame": 3,
    "label": "腰から先に一歩寄ってしまい、はっと引き戻す",
@@ -3676,6 +3795,7 @@
   "edge_pull__right__7": {
    "id": "edge_pull__right__7",
    "motion": "edge_pull",
+   "kind": "tempt",
    "view": "right",
    "frame": 7,
    "label": "腰から先に一歩寄ってしまい、はっと引き戻す",
@@ -3706,6 +3826,7 @@
   "gaze_trance__front__0": {
    "id": "gaze_trance__front__0",
    "motion": "gaze_trance",
+   "kind": "trance",
    "view": "front",
    "frame": 0,
    "label": "見つめられて動けず、棒立ちのまま小さく頷く",
@@ -3736,6 +3857,7 @@
   "gaze_trance__front__1": {
    "id": "gaze_trance__front__1",
    "motion": "gaze_trance",
+   "kind": "trance",
    "view": "front",
    "frame": 1,
    "label": "見つめられて動けず、棒立ちのまま小さく頷く",
@@ -3766,6 +3888,7 @@
   "spore_inhale__front__0": {
    "id": "spore_inhale__front__0",
    "motion": "spore_inhale",
+   "kind": "trance",
    "view": "front",
    "frame": 0,
    "label": "胞子を吸い込み、口を覆って顔をそむけ、膝が内に折れる",
@@ -3796,6 +3919,7 @@
   "spore_inhale__front__2": {
    "id": "spore_inhale__front__2",
    "motion": "spore_inhale",
+   "kind": "trance",
    "view": "front",
    "frame": 2,
    "label": "胞子を吸い込み、口を覆って顔をそむけ、膝が内に折れる",
@@ -3826,6 +3950,7 @@
   "shiver_hug__front__0": {
    "id": "shiver_hug__front__0",
    "motion": "shiver_hug",
+   "kind": "trance",
    "view": "front",
    "frame": 0,
    "label": "自分の体を抱いて小刻みに震え、ときどき跳ねる",
@@ -3856,6 +3981,7 @@
   "shiver_hug__front__4": {
    "id": "shiver_hug__front__4",
    "motion": "shiver_hug",
+   "kind": "trance",
    "view": "front",
    "frame": 4,
    "label": "自分の体を抱いて小刻みに震え、ときどき跳ねる",
@@ -3886,6 +4012,7 @@
   "bubble_float__front__0": {
    "id": "bubble_float__front__0",
    "motion": "bubble_float",
+   "kind": "trance",
    "view": "front",
    "frame": 0,
    "label": "泡に包まれて床から浮き、体を丸めて口をぱくぱくさせる",
@@ -3916,6 +4043,7 @@
   "bubble_float__front__2": {
    "id": "bubble_float__front__2",
    "motion": "bubble_float",
+   "kind": "trance",
    "view": "front",
    "frame": 2,
    "label": "泡に包まれて床から浮き、体を丸めて口をぱくぱくさせる",
@@ -3946,6 +4074,7 @@
   "daze_sway__front__0": {
    "id": "daze_sway__front__0",
    "motion": "daze_sway",
+   "kind": "trance",
    "view": "front",
    "frame": 0,
    "label": "ぼーっと立ち尽くし、首をかしげてゆらゆら揺れる",
@@ -3976,6 +4105,7 @@
   "daze_sway__front__2": {
    "id": "daze_sway__front__2",
    "motion": "daze_sway",
+   "kind": "trance",
    "view": "front",
    "frame": 2,
    "label": "ぼーっと立ち尽くし、首をかしげてゆらゆら揺れる",
@@ -4006,6 +4136,7 @@
   "reach_toward__right__0": {
    "id": "reach_toward__right__0",
    "motion": "reach_toward",
+   "kind": "trance",
    "view": "right",
    "frame": 0,
    "label": "思わず片手を伸ばして一歩寄り、手を胸に引っ込める",
@@ -4036,6 +4167,7 @@
   "reach_toward__right__4": {
    "id": "reach_toward__right__4",
    "motion": "reach_toward",
+   "kind": "trance",
    "view": "right",
    "frame": 4,
    "label": "思わず片手を伸ばして一歩寄り、手を胸に引っ込める",
@@ -4066,6 +4198,7 @@
   "reach_toward__right__8": {
    "id": "reach_toward__right__8",
    "motion": "reach_toward",
+   "kind": "trance",
    "view": "right",
    "frame": 8,
    "label": "思わず片手を伸ばして一歩寄り、手を胸に引っ込める",
@@ -4096,6 +4229,7 @@
   "trip_fall__right__0": {
    "id": "trip_fall__right__0",
    "motion": "trip_fall",
+   "kind": "defeat",
    "view": "right",
    "frame": 0,
    "label": "つまずいて手と膝をつき、起き上がる",
@@ -4126,6 +4260,7 @@
   "trip_fall__right__4": {
    "id": "trip_fall__right__4",
    "motion": "trip_fall",
+   "kind": "defeat",
    "view": "right",
    "frame": 4,
    "label": "つまずいて手と膝をつき、起き上がる",
@@ -4156,6 +4291,7 @@
   "trip_fall__right__11": {
    "id": "trip_fall__right__11",
    "motion": "trip_fall",
+   "kind": "defeat",
    "view": "right",
    "frame": 11,
    "label": "つまずいて手と膝をつき、起き上がる",
@@ -4186,6 +4322,7 @@
   "trip_fall__right__13": {
    "id": "trip_fall__right__13",
    "motion": "trip_fall",
+   "kind": "defeat",
    "view": "right",
    "frame": 13,
    "label": "つまずいて手と膝をつき、起き上がる",
@@ -4216,6 +4353,7 @@
   "trip_fall__right__18": {
    "id": "trip_fall__right__18",
    "motion": "trip_fall",
+   "kind": "defeat",
    "view": "right",
    "frame": 18,
    "label": "つまずいて手と膝をつき、起き上がる",
@@ -4246,6 +4384,7 @@
   "trip_fall__right__20": {
    "id": "trip_fall__right__20",
    "motion": "trip_fall",
+   "kind": "defeat",
    "view": "right",
    "frame": 20,
    "label": "つまずいて手と膝をつき、起き上がる",
@@ -4276,6 +4415,7 @@
   "defeat_collapse__right__0": {
    "id": "defeat_collapse__right__0",
    "motion": "defeat_collapse",
+   "kind": "defeat",
    "view": "right",
    "frame": 0,
    "label": "力尽きて膝から崩れ、うつ伏せに倒れる",
@@ -4306,6 +4446,7 @@
   "defeat_collapse__right__2": {
    "id": "defeat_collapse__right__2",
    "motion": "defeat_collapse",
+   "kind": "defeat",
    "view": "right",
    "frame": 2,
    "label": "力尽きて膝から崩れ、うつ伏せに倒れる",
@@ -4336,6 +4477,7 @@
   "defeat_collapse__right__5": {
    "id": "defeat_collapse__right__5",
    "motion": "defeat_collapse",
+   "kind": "defeat",
    "view": "right",
    "frame": 5,
    "label": "力尽きて膝から崩れ、うつ伏せに倒れる",
@@ -4366,6 +4508,7 @@
   "defeat_collapse__right__9": {
    "id": "defeat_collapse__right__9",
    "motion": "defeat_collapse",
+   "kind": "defeat",
    "view": "right",
    "frame": 9,
    "label": "力尽きて膝から崩れ、うつ伏せに倒れる",
@@ -4396,6 +4539,7 @@
   "defeat_collapse__right__13": {
    "id": "defeat_collapse__right__13",
    "motion": "defeat_collapse",
+   "kind": "defeat",
    "view": "right",
    "frame": 13,
    "label": "力尽きて膝から崩れ、うつ伏せに倒れる",
@@ -4426,6 +4570,7 @@
   "grabbed_flinch__front__0": {
    "id": "grabbed_flinch__front__0",
    "motion": "grabbed_flinch",
+   "kind": "grabbed",
    "view": "front",
    "frame": 0,
    "label": "捕まった瞬間にびくっと跳ね、捕まった所を見下ろす",
@@ -4456,6 +4601,7 @@
   "grabbed_flinch__front__3": {
    "id": "grabbed_flinch__front__3",
    "motion": "grabbed_flinch",
+   "kind": "grabbed",
    "view": "front",
    "frame": 3,
    "label": "捕まった瞬間にびくっと跳ね、捕まった所を見下ろす",
@@ -4486,6 +4632,7 @@
   "mage_suppress__front__0": {
    "id": "mage_suppress__front__0",
    "motion": "mage_suppress",
+   "kind": "endure",
    "view": "front",
    "frame": 0,
    "label": "魔法使い：機械の手で口を押さえ、声を出さずに耐える",
@@ -4513,6 +4660,7 @@
   "mage_suppress__front__5": {
    "id": "mage_suppress__front__5",
    "motion": "mage_suppress",
+   "kind": "endure",
    "view": "front",
    "frame": 5,
    "label": "魔法使い：機械の手で口を押さえ、声を出さずに耐える",
@@ -4540,6 +4688,7 @@
   "mage_suppress_tension__front__0": {
    "id": "mage_suppress_tension__front__0",
    "motion": "mage_suppress_tension",
+   "kind": "climax",
    "view": "front",
    "frame": 0,
    "label": "魔法使い：口を押さえたまま全身がこわばり、杖にすがって片膝をつく",
@@ -4568,6 +4717,7 @@
   "mage_suppress_tension__front__2": {
    "id": "mage_suppress_tension__front__2",
    "motion": "mage_suppress_tension",
+   "kind": "climax",
    "view": "front",
    "frame": 2,
    "label": "魔法使い：口を押さえたまま全身がこわばり、杖にすがって片膝をつく",
@@ -4596,6 +4746,7 @@
   "mage_suppress_tension__front__6": {
    "id": "mage_suppress_tension__front__6",
    "motion": "mage_suppress_tension",
+   "kind": "climax",
    "view": "front",
    "frame": 6,
    "label": "魔法使い：口を押さえたまま全身がこわばり、杖にすがって片膝をつく",
@@ -4624,6 +4775,7 @@
   "scout_tail_grabbed__right__0": {
    "id": "scout_tail_grabbed__right__0",
    "motion": "scout_tail_grabbed",
+   "kind": "grabbed",
    "view": "right",
    "frame": 0,
    "label": "斥候：尻尾をつかまれて跳び上がり、手を後ろへやる",
@@ -4651,6 +4803,7 @@
   "scout_tail_grabbed__right__1": {
    "id": "scout_tail_grabbed__right__1",
    "motion": "scout_tail_grabbed",
+   "kind": "grabbed",
    "view": "right",
    "frame": 1,
    "label": "斥候：尻尾をつかまれて跳び上がり、手を後ろへやる",
@@ -4678,6 +4831,7 @@
   "scout_tail_grabbed__right__5": {
    "id": "scout_tail_grabbed__right__5",
    "motion": "scout_tail_grabbed",
+   "kind": "grabbed",
    "view": "right",
    "frame": 5,
    "label": "斥候：尻尾をつかまれて跳び上がり、手を後ろへやる",
@@ -4705,6 +4859,7 @@
   "scout_tail_grabbed__right__7": {
    "id": "scout_tail_grabbed__right__7",
    "motion": "scout_tail_grabbed",
+   "kind": "grabbed",
    "view": "right",
    "frame": 7,
    "label": "斥候：尻尾をつかまれて跳び上がり、手を後ろへやる",
@@ -4732,6 +4887,7 @@
   "scout_tension__front__0": {
    "id": "scout_tension__front__0",
    "motion": "scout_tension",
+   "kind": "climax",
    "view": "front",
    "frame": 0,
    "label": "斥候：全身がこわばり尻尾が逆立つ、そのあと膝が崩れる",
@@ -4759,6 +4915,7 @@
   "scout_tension__front__2": {
    "id": "scout_tension__front__2",
    "motion": "scout_tension",
+   "kind": "climax",
    "view": "front",
    "frame": 2,
    "label": "斥候：全身がこわばり尻尾が逆立つ、そのあと膝が崩れる",
@@ -4786,6 +4943,7 @@
   "scout_tension__front__8": {
    "id": "scout_tension__front__8",
    "motion": "scout_tension",
+   "kind": "climax",
    "view": "front",
    "frame": 8,
    "label": "斥候：全身がこわばり尻尾が逆立つ、そのあと膝が崩れる",
@@ -4813,6 +4971,7 @@
   "mage_arms_bound__front__0": {
    "id": "mage_arms_bound__front__0",
    "motion": "mage_arms_bound",
+   "kind": "bound",
    "view": "front",
    "frame": 0,
    "label": "魔法使い：両方の義腕を頭の上でまとめて縛られ、魔法を封じられてもがく",
@@ -4840,6 +4999,7 @@
   "mage_arms_bound__front__2": {
    "id": "mage_arms_bound__front__2",
    "motion": "mage_arms_bound",
+   "kind": "bound",
    "view": "front",
    "frame": 2,
    "label": "魔法使い：両方の義腕を頭の上でまとめて縛られ、魔法を封じられてもがく",
@@ -4867,6 +5027,7 @@
   "healer_panel_catch__front__3": {
    "id": "healer_panel_catch__front__3",
    "motion": "healer_panel_catch",
+   "kind": "exposure",
    "view": "front",
    "frame": 3,
    "label": "ヒーラー：めくれかけた前垂れを慌てて押さえ、顔を赤くして背ける",
@@ -4894,6 +5055,7 @@
   "healer_panel_catch__front__6": {
    "id": "healer_panel_catch__front__6",
    "motion": "healer_panel_catch",
+   "kind": "exposure",
    "view": "front",
    "frame": 6,
    "label": "ヒーラー：めくれかけた前垂れを慌てて押さえ、顔を赤くして背ける",
@@ -4921,6 +5083,7 @@
   "healer_tension_refuse__front__0": {
    "id": "healer_tension_refuse__front__0",
    "motion": "healer_tension_refuse",
+   "kind": "climax",
    "view": "front",
    "frame": 0,
    "label": "ヒーラー：首を横に振って拒みながら全身がこわばり、胸をかばったまま崩れる",
@@ -4948,6 +5111,7 @@
   "healer_tension_refuse__front__2": {
    "id": "healer_tension_refuse__front__2",
    "motion": "healer_tension_refuse",
+   "kind": "climax",
    "view": "front",
    "frame": 2,
    "label": "ヒーラー：首を横に振って拒みながら全身がこわばり、胸をかばったまま崩れる",
@@ -4975,6 +5139,7 @@
   "healer_tension_refuse__front__7": {
    "id": "healer_tension_refuse__front__7",
    "motion": "healer_tension_refuse",
+   "kind": "climax",
    "view": "front",
    "frame": 7,
    "label": "ヒーラー：首を横に振って拒みながら全身がこわばり、胸をかばったまま崩れる",

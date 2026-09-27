@@ -66,9 +66,9 @@ button:disabled{opacity:.4}
 <div id="status"></div>
 
 <div class="box">
- <b>名前の付いたファイルをまとめて送る</b>
- <p class="note">ファイル名が <code>aria__slash__front__0.png</code> のようになっている絵を、まとめて選んで送れます（名前が一覧にないものは飛ばします）。</p>
- <input type="file" id="many" accept="image/*" multiple>
+ <b>まとめて送る（ZIP・名前の付いた絵）</b>
+ <p class="note">ChatGPT がくれた ZIP か、ファイル名が <code>aria__slash__front__0.png</code> のようになっている絵を、まとめて選んで送れます。ZIP の中のフォルダは気にしなくてよい。名前が一覧にないものは飛ばします。</p>
+ <input type="file" id="many" accept="image/*,.zip,application/zip" multiple>
 </div>
 
 <div class="list" id="list"></div>
@@ -144,7 +144,22 @@ $('file').onchange=()=>{const f=$('file').files[0];if(!f)return;fileBlob=f;$('fi
 $('send').onclick=async()=>{if(!cur||!fileBlob)return;$('send').disabled=true;say('送っています…');
  try{await put(cur,fileBlob);say('送りました：'+cur.file);const next=frames().find(f=>!O.sent[key(f)]&&(!O.motion||f.motion===O.motion));renderList();if(next)choose(next)}
  catch(e){say('送れませんでした：'+e.message);$('send').disabled=false}};
-$('many').onchange=async()=>{const files=[...$('many').files];$('many').value='';let ok=0,skip=0;
+/* ZIP: stored or deflated entries */
+async function unzip(buf){const dv=new DataView(buf),u8=new Uint8Array(buf),out=[];let e=-1;
+ for(let i=buf.byteLength-22;i>=Math.max(0,buf.byteLength-22-65536);i--)if(dv.getUint32(i,true)===0x06054b50){e=i;break}
+ if(e<0)throw new Error('ZIP ではありません');
+ let off=dv.getUint32(e+16,true);const n=dv.getUint16(e+10,true);
+ for(let k=0;k<n;k++){if(dv.getUint32(off,true)!==0x02014b50)break;
+  const method=dv.getUint16(off+10,true),cs=dv.getUint32(off+20,true),nl=dv.getUint16(off+28,true),xl=dv.getUint16(off+30,true),cl=dv.getUint16(off+32,true),lho=dv.getUint32(off+42,true);
+  const name=new TextDecoder().decode(u8.subarray(off+46,off+46+nl));const st=lho+30+dv.getUint16(lho+26,true)+dv.getUint16(lho+28,true);
+  let data=u8.slice(st,st+cs);
+  if(method===8)data=new Uint8Array(await new Response(new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer());
+  else if(method!==0){off+=46+nl+xl+cl;continue}
+  if(!name.endsWith('/'))out.push(new File([data],name.split('/').pop()));
+  off+=46+nl+xl+cl}
+ return out}
+$('many').onchange=async()=>{let files=[];for(const f of $('many').files){if(/\.zip$/i.test(f.name)){try{files.push(...await unzip(await f.arrayBuffer()))}catch(e){say(f.name+'：'+e.message)}}else files.push(f)}
+ $('many').value='';let ok=0,skip=0;
  for(const file of files){const name=file.name.replace(/\.(png|webp|jpe?g)$/i,'.png');const f=D.frames.find(x=>x.file===name);if(!f){skip++;continue}
   say(`送っています ${ok+1}：${f.file}`);try{await put(f,file);ok++}catch(e){say('送れませんでした：'+e.message);break}}
  renderList();say(`${ok}枚送りました`+(skip?`（名前が一覧にない ${skip}枚は飛ばしました）`:''))};

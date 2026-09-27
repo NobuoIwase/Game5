@@ -62,14 +62,21 @@ table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid 
 <div class="wrap"><table><tr><th>モーション</th><th>ポーズ（ポーズ一覧の番号）</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr><tr><td><b>つまずいて手と膝をつき、起き上がる</b><br><code>M57</code></td><td class="pose"><img src="cg/M57_right_0.png" alt="" width="72" height="72"><img src="cg/M57_right_4.png" alt="" width="72" height="72"><img src="cg/M57_right_11.png" alt="" width="72" height="72"><img src="cg/M57_right_13.png" alt="" width="72" height="72"><img src="cg/M57_right_18.png" alt="" width="72" height="72"><img src="cg/M57_right_20.png" alt="" width="72" height="72"><br>一覧 7</td><td>歩く → 四つん這い → 立つ</td><td>前に出す → 手をつく</td><td>つまずく → 膝をつく</td><td>なし</td><td>つまずいて転ぶ → 顔を上げる → 立ち上がる（真横から見た絵）</td></tr><tr><td><b>力尽きて膝から崩れ、うつ伏せに倒れる</b><br><code>M58</code></td><td class="pose"><img src="cg/M58_right_0.png" alt="" width="72" height="72"><img src="cg/M58_right_2.png" alt="" width="72" height="72"><img src="cg/M58_right_5.png" alt="" width="72" height="72"><img src="cg/M58_right_9.png" alt="" width="72" height="72"><img src="cg/M58_right_13.png" alt="" width="72" height="72"><br>一覧 7</td><td>立つ → 膝立ち → うつ伏せ</td><td>だらりと下げる</td><td>膝から崩れる</td><td>なし</td><td>力尽きて倒れ、動かなくなる（真横から見た絵）</td></tr></table></div></section>
 
 <h2>6. モーションごとの欄（<code>motionWords</code>）</h2>
-<p>同じ場面の種類の中で、押さえているものがモーションごとに違うものは、こちらに書きます。</p>
-<div class="wrap"><table><tr><th>キー</th><th>モーション</th><th>書くこと</th><th>動き</th></tr><tr><td>M48</td><td>足首をつかまれて後ろへ引かれ、よろけて四つん這いになる</td><td>足首をつかむもの（這い寄る手）</td><td>足首をつかまれ後ろへ引かれる → 前のめり → 倒れる（真横から見た絵）</td></tr><tr><td>M62</td><td>斥候：尻尾をつかまれて跳び上がり、手を後ろへやる</td><td>尻尾をつかむもの</td><td>尻尾をつかまれて跳び上がる → 振り返る → 引っぱり返す（真横から見た絵）</td></tr><tr><td>M49</td><td>拘束を振りほどき、よろけてから構え直す</td><td>振りほどく前に縛っていたもの（はじめのコマだけ見える）</td><td>力をためる → 振りほどく → よろける → 構え直す</td></tr><tr><td>M59</td><td>捕まった瞬間にびくっと跳ね、捕まった所を見下ろす</td><td>捕まえたもの（どこか1か所）</td><td>捕まってびくっと跳ねる → 捕まった所を見下ろす</td></tr><tr><td>M51</td><td>見つめられて動けず、棒立ちのまま小さく頷く</td><td>見つめている目（凝視の眼）</td><td>目の前の何かを見つめたまま、ゆっくり頷く。唇が動く</td></tr><tr><td>M52</td><td>胞子を吸い込み、口を覆って顔をそむけ、膝が内に折れる</td><td>胞子（ルマネ胞子球・誘い茸）</td><td>顔をそむける → 吸い込んで咳き込む</td></tr><tr><td>M53</td><td>自分の体を抱いて小刻みに震え、ときどき跳ねる</td><td>鱗粉や冷気（夢鱗蛾・漂い霊）</td><td>肩をすくめて小刻みに震える。ときどき跳ねる</td></tr><tr><td>M54</td><td>泡に包まれて床から浮き、体を丸めて口をぱくぱくさせる</td><td>泡（泡吹き貝）</td><td>口をぱくぱくさせる</td></tr><tr><td>M55</td><td>ぼーっと立ち尽くし、首をかしげてゆらゆら揺れる</td><td>なし（様子だけ）</td><td>ぼーっとして、首を左右にかしげて揺れる</td></tr><tr><td>M56</td><td>思わず片手を伸ばして一歩寄り、手を胸に引っ込める</td><td>手を伸ばす先の何か</td><td>何かに思わず手を伸ばす → はっとして目をそらす（真横から見た絵）</td></tr></table></div>
+<p>全部のモーションに1つずつ欄があります。そのモーションの全コマ（4人とも）にだけ入ります。</p>
+<ul><li><b>必ず</b>と書いたもの：同じ場面の種類でも押さえているものがモーションごとに違うので、ここに「何か・色・形・質感」を書く</li>
+<li><b>任意</b>のもの：そのモーションにだけ合う言葉があれば書く（押さえている場所の細かいところ、そのモーションの顔・体の様子など）。場面の欄と同じ言葉は書かない。なければ <code>""</code></li>
+<li>「場面の欄」は、そのモーションに一緒に入る場面の種類の欄（5.のキー）</li></ul>
+<div class="wrap"><table><tr><th>キー</th><th>モーション</th><th>場面の欄</th><th>書くこと</th><th>押さえ</th><th>動き</th></tr><tr><td><code>M01</code></td><td>後ろ手に縛られて身をよじる</td><td>restrained</td><td>任意</td><td>両手首</td><td>体をよじる。膝を寄せる。かかとを交互に上げる。下を向く</td></tr><tr><td><code>M02</code></td><td>後ろ手に縛られて振りほどこうとする</td><td>restrained</td><td>任意</td><td>両手首</td><td>肩をひねって左右に振りほどこうとする。胸が前に出る</td></tr><tr><td><code>M03</code></td><td>両手首を上から吊られ、腕を引き下ろそうと力む</td><td>restrained</td><td>任意</td><td>両手首（上から吊る）</td><td>腕を引き下ろそうと力む。負けると爪先立ちに引き上げられる</td></tr><tr><td><code>M04</code></td><td>後ろ手で、膝を左右へ引かれる</td><td>restrained</td><td>任意</td><td>両手首・両膝（左右へ引く）</td><td>はじめ膝を寄せる → 最後は膝が外へ開いて腰が落ちる</td></tr><tr><td><code>M05</code></td><td>後ろ手で、膝を左右へ引かれたまま耐える</td><td>restrained</td><td>任意</td><td>両手首・両膝（左右）</td><td>膝が小さく震える</td></tr><tr><td><code>M06</code></td><td>後ろ手で、足を開いて立ったまま体が前後に揺れる</td><td>restrained_sway</td><td>任意</td><td>両手首・両膝（左右）</td><td>体が前後に揺れる</td></tr><tr><td><code>M07</code></td><td>後ろ手で、膝を閉じたまま体が前後に揺れる</td><td>restrained_sway</td><td>任意</td><td>両手首</td><td>体が小さく前後に揺れる。そのたび爪先立ち</td></tr><tr><td><code>M08</code></td><td>後ろ手で、足を開いて立ったまま体が上下に揺れる</td><td>restrained_sway</td><td>任意</td><td>両手首・両膝（左右）</td><td>体が上下に揺れる。上で爪先立ち、下で膝が曲がる</td></tr><tr><td><code>M09</code></td><td>手首を上から吊られたまま体が上下に揺れる</td><td>restrained_sway</td><td>任意</td><td>両手首（上から吊る）・両膝（左右）</td><td>体が上下に揺れる。沈むと腕が伸びきる</td></tr><tr><td><code>M10</code></td><td>全身がこわばって爪先立ち、そのあと力が抜ける</td><td>restrained + stiffen</td><td>任意</td><td>両手首・両膝（左右）</td><td>全身に力が入る → 爪先立ち、脚が突っ張る → 力が抜ける</td></tr><tr><td><code>M11</code></td><td>背中を反らせてこわばり、そのあと力が抜ける</td><td>restrained + stiffen</td><td>任意</td><td>両手首</td><td>背中を反らす → 爪先立ち → 前へ崩れる</td></tr><tr><td><code>M12</code></td><td>力が抜けて、拘束にもたれてうなだれる</td><td>restrained + limp</td><td>任意</td><td>両手首・両膝（左右）</td><td>うなだれて肩で息をする</td></tr><tr><td><code>M13</code></td><td>力が抜けて前へ崩れ、うなだれる</td><td>restrained + limp</td><td>任意</td><td>両手首</td><td>うなだれて肩で息をする</td></tr><tr><td><code>M14</code></td><td>脱力から我に返り、立ち直る</td><td>restrained + come_to</td><td>任意</td><td>両手首</td><td>我に返る → 顔を上げて立ち直る</td></tr><tr><td><code>M15</code></td><td>前屈みで手首を前に縛られ、体を左右に揺らす</td><td>restrained</td><td>任意</td><td>両手首（前の低い所）</td><td>体を左右に揺らす。肩ごしに振り返る（斜め後ろから見た絵）</td></tr><tr><td><code>M16</code></td><td>押されて尻もちをつき、仰向けに倒れる</td><td>floor_hold</td><td>任意</td><td>なし（前から押されるだけ）</td><td>押されてよろける → 尻もち → 仰向けに倒れる</td></tr><tr><td><code>M17</code></td><td>仰向けで両手首を頭の上に押さえられ、脚をばたつかせる</td><td>floor_hold</td><td>任意</td><td>両手首（頭の上の床）</td><td>脚を片方ずつばたつかせる。腰をひねる。顔をそむける</td></tr><tr><td><code>M18</code></td><td>仰向けで手首を押さえられ、立てた膝を左右へ引かれる</td><td>floor_hold</td><td>任意</td><td>両手首（床）・両膝（左右）</td><td>膝を閉じようとして体をよじる</td></tr><tr><td><code>M19</code></td><td>仰向けで押さえられたまま、体が前後に揺れる</td><td>floor_sway</td><td>任意</td><td>両手首（床）・両膝（左右）</td><td>体全体が頭の方へずれては戻る</td></tr><tr><td><code>M20</code></td><td>うつ伏せで押さえられ、脚をばたつかせてもがく</td><td>floor_hold</td><td>任意</td><td>両手首（頭の先の床）</td><td>脚を片方ずつ跳ね上げてもがく。顔は横向き</td></tr><tr><td><code>M21</code></td><td>膝と胸を床について、体が前後に揺れる</td><td>floor_hold</td><td>任意</td><td>両手首（頭の先の床）</td><td>体が前後に揺れる</td></tr><tr><td><code>M22</code></td><td>仰向けから起き上がる</td><td>come_to</td><td>任意</td><td>なし</td><td>起き上がって立つ（真横から見た絵）</td></tr><tr><td><code>M23</code></td><td>顔を寄せられて押し返そうとする</td><td>face_close</td><td>任意</td><td>口元</td><td>両手で相手を押し返す。体をひねる（相手は下絵にない）</td></tr><tr><td><code>M24</code></td><td>顔を寄せられたまま全身がこわばり、膝が崩れる</td><td>face_close + stiffen</td><td>任意</td><td>口元</td><td>全身に力が入る → 両手がぱっと開く → 膝が崩れる</td></tr><tr><td><code>M25</code></td><td>爪先立ちで相手に身を寄せる</td><td>face_close</td><td>任意</td><td>口元</td><td>首をかしげて身を寄せる</td></tr><tr><td><code>M26</code></td><td>片手を胸、片手を太ももに当てて立つポーズ</td><td>drift</td><td>任意</td><td>なし</td><td>体をゆっくり揺らす。首をかしげて見下ろす</td></tr><tr><td><code>M27</code></td><td>膝を外へ開いて震える</td><td>stiffen</td><td>任意</td><td>なし</td><td>膝が小刻みに震える。頭が後ろへ倒れる</td></tr><tr><td><code>M28</code></td><td>立ったまま全身がこわばり、座り込む</td><td>stiffen</td><td>任意</td><td>なし</td><td>こらえる → 反って爪先立ち → 座り込む</td></tr><tr><td><code>M29</code></td><td>脚を左右に折って座り、息を整える</td><td>limp</td><td>任意</td><td>なし</td><td>肩で息をする</td></tr><tr><td><code>M30</code></td><td>後ろから腕ごと胴を抱きすくめられ、もがく</td><td>hug_behind</td><td>任意</td><td>両肩・両肘（後ろから抱えられる）</td><td>身をよじる。足を蹴る。振り返る</td></tr><tr><td><code>M31</code></td><td>仰向けで力が抜け、肩で息をする</td><td>limp</td><td>任意</td><td>なし</td><td>顔を横に向けて息をする</td></tr><tr><td><code>M32</code></td><td>仰向けで我に返り、膝を閉じて体を起こしかける</td><td>come_to</td><td>任意</td><td>なし</td><td>膝を閉じて体を起こしかける</td></tr><tr><td><code>M33</code></td><td>相手が離れたあと、ふらついて息を整える</td><td>limp</td><td>任意</td><td>なし（相手が離れたあと）</td><td>うなだれて肩で息をする</td></tr><tr><td><code>M34</code></td><td>我に返って口元をぬぐい、一歩下がる</td><td>come_to</td><td>任意</td><td>なし</td><td>我に返る → 口をぬぐう → 下がって構える</td></tr><tr><td><code>M35</code></td><td>座り込んだ所から立ち上がる</td><td>come_to</td><td>任意</td><td>なし</td><td>立ち上がる</td></tr><tr><td><code>M36</code></td><td>くっつかれたまま座り込んで息をする</td><td>small_cling + limp</td><td>任意</td><td>体の前（3匹）</td><td>肩で息をする。ときどき跳ねて手が膝から離れる</td></tr><tr><td><code>M37</code></td><td>くっつかれたまま立ち上がる</td><td>small_cling + come_to</td><td>任意</td><td>体の前（3匹）</td><td>立ち上がって胸を押さえる</td></tr><tr><td><code>M38</code></td><td>体の前にくっついた小さな生き物を剥がそうとする</td><td>small_cling</td><td>任意</td><td>体の前（胸の左右とお腹の下、3匹）</td><td>見下ろして気づく → 剥がそうとして弾かれる → すくむ</td></tr><tr><td><code>M39</code></td><td>くっつかれたまま全身がこわばり、座り込む</td><td>small_cling + stiffen</td><td>任意</td><td>体の前（3匹）</td><td>背中が反る → 座り込む</td></tr><tr><td><code>M40</code></td><td>くっつかれたまま、振り払うのをやめる</td><td>small_cling</td><td>任意</td><td>体の前（3匹）</td><td>腕を下ろす。頭を後ろへ倒す。体をゆっくり揺らす</td></tr><tr><td><code>M41</code></td><td>仰向けで押さえられたまま全身がこわばる</td><td>floor_hold + stiffen</td><td>任意</td><td>両手首（床）・両膝（左右）</td><td>全身に力が入る → 背中が反る → 力が抜ける</td></tr><tr><td><code>M42</code></td><td>柔らかい塊に足元から腰まで沈んでいく</td><td>sink</td><td>任意</td><td>足元から太もも（床の塊の中）</td><td>下を見る。片脚を抜こうとするが抜けない</td></tr><tr><td><code>M43</code></td><td>腰まで沈んだまま、上体をひねって抜け出そうとする</td><td>sink</td><td>任意</td><td>腰から下（塊の中）</td><td>上体をひねって抜け出そうとする</td></tr><tr><td><code>M44</code></td><td>腰まで塊に沈んだまま、ときどき体が跳ねる</td><td>sink</td><td>任意</td><td>腰から下（塊の中）</td><td>両手を塊につく。ときどき体がびくっと跳ね、背中が反る</td></tr><tr><td><code>M45</code></td><td>腰まで沈んだまま全身がこわばり、前へ崩れる</td><td>sink + stiffen</td><td>任意</td><td>腰から下（塊の中）</td><td>背中が反る → 塊の上に前へ崩れる</td></tr><tr><td><code>M46</code></td><td>腕ごと胴に巻きつかれ、締めつけられる</td><td>coil</td><td>任意</td><td>胴（胸・お腹・腰に巻きつく）</td><td>締めつけられると背中が反る。緩むと息をつく</td></tr><tr><td><code>M47</code></td><td>巻きつかれたまま全身がこわばり、力が抜ける</td><td>coil + stiffen</td><td>任意</td><td>胴（胸・お腹・腰に巻きつく）</td><td>強く反る → 力が抜けて支えられる</td></tr><tr><td><code>M48</code></td><td>足首をつかまれて後ろへ引かれ、よろけて四つん這いになる</td><td>caught</td><td><b>必ず：</b>足首をつかむもの（這い寄る手）</td><td>左の足首（後ろから）</td><td>足首をつかまれ後ろへ引かれる → 前のめり → 倒れる（真横から見た絵）</td></tr><tr><td><code>M49</code></td><td>拘束を振りほどき、よろけてから構え直す</td><td>caught</td><td><b>必ず：</b>振りほどく前に縛っていたもの（はじめのコマだけ見える）</td><td>はじめだけ</td><td>力をためる → 振りほどく → よろける → 構え直す</td></tr><tr><td><code>M50</code></td><td>ふらっと一歩寄ってしまい、はっとする</td><td>drift</td><td>任意</td><td>なし</td><td>一歩前へ寄ってしまう → はっとして前屈みになる</td></tr><tr><td><code>M51</code></td><td>見つめられて動けず、棒立ちのまま小さく頷く</td><td>daze</td><td><b>必ず：</b>見つめている目（凝視の眼）</td><td>なし</td><td>目の前の何かを見つめたまま、ゆっくり頷く。唇が動く</td></tr><tr><td><code>M52</code></td><td>胞子を吸い込み、口を覆って顔をそむけ、膝が内に折れる</td><td>daze</td><td><b>必ず：</b>胞子（ルマネ胞子球・誘い茸）</td><td>なし</td><td>顔をそむける → 吸い込んで咳き込む</td></tr><tr><td><code>M53</code></td><td>自分の体を抱いて小刻みに震え、ときどき跳ねる</td><td>daze</td><td><b>必ず：</b>鱗粉や冷気（夢鱗蛾・漂い霊）</td><td>なし</td><td>肩をすくめて小刻みに震える。ときどき跳ねる</td></tr><tr><td><code>M54</code></td><td>泡に包まれて床から浮き、体を丸めて口をぱくぱくさせる</td><td>daze</td><td><b>必ず：</b>泡（泡吹き貝）</td><td>全身（泡の中）</td><td>口をぱくぱくさせる</td></tr><tr><td><code>M55</code></td><td>ぼーっと立ち尽くし、首をかしげてゆらゆら揺れる</td><td>daze</td><td><b>必ず：</b>なし（様子だけ）</td><td>なし</td><td>ぼーっとして、首を左右にかしげて揺れる</td></tr><tr><td><code>M56</code></td><td>思わず片手を伸ばして一歩寄り、手を胸に引っ込める</td><td>daze</td><td><b>必ず：</b>手を伸ばす先の何か</td><td>なし</td><td>何かに思わず手を伸ばす → はっとして目をそらす（真横から見た絵）</td></tr><tr><td><code>M57</code></td><td>つまずいて手と膝をつき、起き上がる</td><td>collapse</td><td>任意</td><td>なし</td><td>つまずいて転ぶ → 顔を上げる → 立ち上がる（真横から見た絵）</td></tr><tr><td><code>M58</code></td><td>力尽きて膝から崩れ、うつ伏せに倒れる</td><td>collapse</td><td>任意</td><td>なし</td><td>力尽きて倒れ、動かなくなる（真横から見た絵）</td></tr><tr><td><code>M59</code></td><td>捕まった瞬間にびくっと跳ね、捕まった所を見下ろす</td><td>caught</td><td><b>必ず：</b>捕まえたもの（どこか1か所）</td><td>どこか1か所</td><td>捕まってびくっと跳ねる → 捕まった所を見下ろす</td></tr><tr><td><code>M60</code></td><td>魔法使い：機械の手で口を押さえ、声を出さずに耐える</td><td>hold_voice</td><td>任意</td><td>なし</td><td>声を出さずに耐える。震えを飲み込み、手を強く押し当てる</td></tr><tr><td><code>M61</code></td><td>魔法使い：口を押さえたまま体を丸め、片膝をつく</td><td>hold_voice + stiffen</td><td>任意</td><td>なし</td><td>体を丸めて肩をすくめる → 杖にすがって片膝をつく</td></tr><tr><td><code>M62</code></td><td>斥候：尻尾をつかまれて跳び上がり、手を後ろへやる</td><td>caught</td><td><b>必ず：</b>尻尾をつかむもの</td><td>尻尾（後ろから）</td><td>尻尾をつかまれて跳び上がる → 振り返る → 引っぱり返す（真横から見た絵）</td></tr><tr><td><code>M63</code></td><td>斥候：全身がこわばって尻尾が逆立ち、膝が崩れる</td><td>stiffen</td><td>任意</td><td>なし</td><td>爪先立ち、尻尾と耳が立つ → 膝が崩れ、尻尾と耳が下がる</td></tr><tr><td><code>M64</code></td><td>魔法使い：両方の義腕を頭の上でまとめて縛られ、魔法を封じられてもがく</td><td>restrained</td><td>任意</td><td>両手首（頭の上でまとめる）</td><td>身をよじって引く。顔は平静を保とうとする</td></tr><tr><td><code>M65</code></td><td>ヒーラー：めくれかけた前垂れを押さえ、顔を背ける</td><td>panel_flip</td><td>任意</td><td>なし</td><td>胸の前の前垂れがめくれかける → びくっとして押さえる → 顔を赤くして背ける</td></tr><tr><td><code>M66</code></td><td>ヒーラー：首を振って拒みながらこわばり、崩れる</td><td>stiffen</td><td>任意</td><td>なし</td><td>首を横に振る → 反って爪先立ち、胸の前をかばう → 崩れる</td></tr></table></div>
 
 <h2>7. キャラクターの欄（<code>charWords</code>）</h2>
-<p>見た目は2.で入れてあります。足したいもの（例：いつもの表情の癖）があれば書きます。なければ <code>""</code>。</p>
+<p>見た目は2.で入れてあります。この欄の言葉はそのキャラクターの<b>全部のコマ</b>に入るので、<b>表情や気持ちは書かない</b>（場面の欄で入る）。見た目で足したいもの（小物・髪の癖など）があれば書く。なければ <code>""</code>。</p>
+<p>性格（参考）：アリアは陰気で引っ込み思案。斥候は身軽で勘がいい。魔法使いは無口でクール。ヒーラーは穏やかなエルフの聖職者。</p>
 <ul><li><code>aria</code>：アリア（戦士）</li><li><code>scout</code>：斥候（シーフ）</li><li><code>mage</code>：魔法使い</li><li><code>healer</code>：ヒーラー</li></ul>
 
-<h2>8. 答えの形</h2>
+<h2>8. 除外する言葉の追加（<code>extraNeg</code>）</h2>
+<p>2.の除外に足したい英語の言葉があれば書く（例：出てほしくない物、崩れやすい形）。なければ <code>""</code>。</p>
+
+<h2>9. 答えの形</h2>
 <p>この形の JSON を、コードブロック1つで返してください。キーは変えないでください。</p>
 <pre>{
  &quot;words&quot;: {
@@ -93,22 +100,79 @@ table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid 
   &quot;collapse&quot;: &quot;&quot;
  },
  &quot;motionWords&quot;: {
+  &quot;M01&quot;: &quot;&quot;,
+  &quot;M02&quot;: &quot;&quot;,
+  &quot;M03&quot;: &quot;&quot;,
+  &quot;M04&quot;: &quot;&quot;,
+  &quot;M05&quot;: &quot;&quot;,
+  &quot;M06&quot;: &quot;&quot;,
+  &quot;M07&quot;: &quot;&quot;,
+  &quot;M08&quot;: &quot;&quot;,
+  &quot;M09&quot;: &quot;&quot;,
+  &quot;M10&quot;: &quot;&quot;,
+  &quot;M11&quot;: &quot;&quot;,
+  &quot;M12&quot;: &quot;&quot;,
+  &quot;M13&quot;: &quot;&quot;,
+  &quot;M14&quot;: &quot;&quot;,
+  &quot;M15&quot;: &quot;&quot;,
+  &quot;M16&quot;: &quot;&quot;,
+  &quot;M17&quot;: &quot;&quot;,
+  &quot;M18&quot;: &quot;&quot;,
+  &quot;M19&quot;: &quot;&quot;,
+  &quot;M20&quot;: &quot;&quot;,
+  &quot;M21&quot;: &quot;&quot;,
+  &quot;M22&quot;: &quot;&quot;,
+  &quot;M23&quot;: &quot;&quot;,
+  &quot;M24&quot;: &quot;&quot;,
+  &quot;M25&quot;: &quot;&quot;,
+  &quot;M26&quot;: &quot;&quot;,
+  &quot;M27&quot;: &quot;&quot;,
+  &quot;M28&quot;: &quot;&quot;,
+  &quot;M29&quot;: &quot;&quot;,
+  &quot;M30&quot;: &quot;&quot;,
+  &quot;M31&quot;: &quot;&quot;,
+  &quot;M32&quot;: &quot;&quot;,
+  &quot;M33&quot;: &quot;&quot;,
+  &quot;M34&quot;: &quot;&quot;,
+  &quot;M35&quot;: &quot;&quot;,
+  &quot;M36&quot;: &quot;&quot;,
+  &quot;M37&quot;: &quot;&quot;,
+  &quot;M38&quot;: &quot;&quot;,
+  &quot;M39&quot;: &quot;&quot;,
+  &quot;M40&quot;: &quot;&quot;,
+  &quot;M41&quot;: &quot;&quot;,
+  &quot;M42&quot;: &quot;&quot;,
+  &quot;M43&quot;: &quot;&quot;,
+  &quot;M44&quot;: &quot;&quot;,
+  &quot;M45&quot;: &quot;&quot;,
+  &quot;M46&quot;: &quot;&quot;,
+  &quot;M47&quot;: &quot;&quot;,
   &quot;M48&quot;: &quot;&quot;,
-  &quot;M62&quot;: &quot;&quot;,
   &quot;M49&quot;: &quot;&quot;,
-  &quot;M59&quot;: &quot;&quot;,
+  &quot;M50&quot;: &quot;&quot;,
   &quot;M51&quot;: &quot;&quot;,
   &quot;M52&quot;: &quot;&quot;,
   &quot;M53&quot;: &quot;&quot;,
   &quot;M54&quot;: &quot;&quot;,
   &quot;M55&quot;: &quot;&quot;,
-  &quot;M56&quot;: &quot;&quot;
+  &quot;M56&quot;: &quot;&quot;,
+  &quot;M57&quot;: &quot;&quot;,
+  &quot;M58&quot;: &quot;&quot;,
+  &quot;M59&quot;: &quot;&quot;,
+  &quot;M60&quot;: &quot;&quot;,
+  &quot;M61&quot;: &quot;&quot;,
+  &quot;M62&quot;: &quot;&quot;,
+  &quot;M63&quot;: &quot;&quot;,
+  &quot;M64&quot;: &quot;&quot;,
+  &quot;M65&quot;: &quot;&quot;,
+  &quot;M66&quot;: &quot;&quot;
  },
  &quot;charWords&quot;: {
   &quot;aria&quot;: &quot;&quot;,
   &quot;scout&quot;: &quot;&quot;,
   &quot;mage&quot;: &quot;&quot;,
   &quot;healer&quot;: &quot;&quot;
- }
+ },
+ &quot;extraNeg&quot;: &quot;&quot;
 }</pre>
 </main></body></html>

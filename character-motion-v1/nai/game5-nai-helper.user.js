@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Game5 NAI helper
 // @namespace    nobuoiwase-game5
-// @version      1.6
+// @version      1.7
 // @description  Game5 のモーションの元絵を NovelAI で作るための手伝い。ボタン1つで次のコマの下絵とプロンプトを入れる
 // @match        https://novelai.net/*
 // @run-at       document-start
@@ -128,8 +128,9 @@ function draw(){
  det.append(h('div',{style:'margin:8px 0;padding:6px;border:1px solid #b3522f;border-radius:5px'},h('div',{style:'font-weight:700'},'ChatGPT の答えを取り込む'),
   h('div',{},h('a',{href:SRC+'chatgpt_request.html',target:'_blank',style:'color:#7fb4ea'},'ChatGPT に渡す依頼書を開く')),imp,
   btn('取り込む',()=>{try{const t=imp.value,j=JSON.parse(t.slice(t.indexOf('{'),t.lastIndexOf('}')+1));let n=0;
-   for(const [key,known] of [['words',DATA.situations],['motionWords',DATA.slots||{}],['charWords',DATA.characters]])
+   for(const [key,known] of [['words',DATA.situations],['motionWords',DATA.motions||DATA.slots||{}],['charWords',DATA.characters]])
     for(const [k0,v] of Object.entries(j[key]||{})){const k=((DATA.answerKeys||{})[key]||{})[k0]||k0;if(k in known&&typeof v==='string'&&v.trim()){st[key][k]=v.trim();n++}}
+   if(typeof j.extraNeg==='string'&&j.extraNeg.trim()){st.extraNeg=j.extraNeg.trim();n++}
    save();note(n+' 個の欄を埋めました');}catch(e){note('取り込めませんでした：'+e.message)}},'#b3522f')));
  const cb=h('input',{type:'checkbox'});cb.checked=st.useBase;cb.addEventListener('change',e=>{st.useBase=e.target.checked;save()});
  const sr=h('input',{type:'number',min:'0.3',max:'0.95',step:'0.05',value:String(st.strength),style:'width:60px'});sr.addEventListener('change',e=>{st.strength=+e.target.value;save()});

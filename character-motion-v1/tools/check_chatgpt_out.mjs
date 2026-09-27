@@ -1,13 +1,19 @@
 // Checks the pictures ChatGPT (Astra) put in chatgpt/out/<char>/ before they are committed.
 //   node tools/check_chatgpt_out.mjs [char]
-// Each file must: have a name from chatgpt/jobs.json, be a real PNG, be square and at least 1024 px, have 8-bit RGB or
-// RGBA colour (not a palette, i.e. not reduced to a few colours). It also lists the frames still missing.
+// Two lists: chatgpt/jobs.json (attacks, skills, gestures) and chatgpt/scenes/jobs.json (scenes; frames Astra leaves out
+// are listed in chatgpt/out/skipped.txt, one "<file name><tab><reason>" per line, and go to NovelAI).
+// Each file must: have a name from a list, be a real PNG, be square and at least 1024 px, have 8-bit RGB or RGBA colour
+// (not a palette, i.e. not reduced to a few colours), and not be cut off. It also lists what is still to do.
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';
-const ROOT=path.join(path.dirname(fileURLToPath(import.meta.url)),'..'),OUT=path.join(ROOT,'chatgpt','out');
-const J=JSON.parse(fs.readFileSync(path.join(ROOT,'chatgpt','jobs.json'),'utf8'));
+const ROOT=path.join(path.dirname(fileURLToPath(import.meta.url)),'..'),CG=path.join(ROOT,'chatgpt'),OUT=path.join(CG,'out');
 const only=process.argv[2];
-const want=J.frames.filter(f=>!only||f.char===only),names=new Set(J.frames.map(f=>f.file));
-const bad=[],ok=[];
+const sets=[['1枚絵（攻撃・技・仕草）',path.join(CG,'jobs.json')],['場面',path.join(CG,'scenes','jobs.json')]]
+ .filter(([,p])=>fs.existsSync(p)).map(([n,p])=>[n,JSON.parse(fs.readFileSync(p,'utf8')).frames]);
+const names=new Set(sets.flatMap(([,fr])=>fr.map(f=>f.file)));
+const skipped=new Map();
+if(fs.existsSync(path.join(OUT,'skipped.txt')))for(const line of fs.readFileSync(path.join(OUT,'skipped.txt'),'utf8').split(/\r?\n/)){
+ const [n,...r]=line.split('\t');if(n&&n.trim())skipped.set(n.trim(),r.join(' ').trim())}
+const bad=[],ok=new Set();
 for(const c of fs.existsSync(OUT)?fs.readdirSync(OUT):[]){
  if(only&&c!==only)continue;
  const dir=path.join(OUT,c);if(!fs.statSync(dir).isDirectory())continue;
@@ -24,13 +30,17 @@ for(const c of fs.existsSync(OUT)?fs.readdirSync(OUT):[]){
    else if(type!==2&&type!==6)why.push('色の形式が RGB/RGBA でない');
    if(depth!==8)why.push(`ビット深度 ${depth}`);
    if(!b.includes(Buffer.from('IEND')))why.push('ファイルが途中で切れている');}
-  (why.length?bad:ok).push(why.length?`${c}/${n}: ${why.join('、')}`:`${c}/${n}`);
+  if(why.length)bad.push(`${c}/${n}: ${why.join('、')}`);else ok.add(n);
  }
 }
-const have=new Set(ok.map(x=>x.split('/')[1]));
-const missing=want.filter(f=>!have.has(f.file));
-console.log(`OK ${ok.length}枚 / NG ${bad.length}枚 / まだ ${missing.length}枚（全${want.length}枚）`);
+for(const n of skipped.keys())if(!names.has(n))bad.push(`skipped.txt: ${n}: 名前が一覧にない`);
+for(const [label,fr] of sets){
+ const want=fr.filter(f=>!only||f.char===only);
+ const done=want.filter(f=>ok.has(f.file)).length,skip=want.filter(f=>!ok.has(f.file)&&skipped.has(f.file)).length;
+ const missing=want.filter(f=>!ok.has(f.file)&&!skipped.has(f.file));
+ console.log(`${label}：OK ${done}枚 / 飛ばした ${skip}枚 / まだ ${missing.length}枚（全${want.length}枚）`);
+ const per={};for(const f of missing)per[f.batch]=(per[f.batch]||0)+1;
+ if(missing.length)console.log('  まだの回:',Object.entries(per).map(([b,n])=>`${b}(${n})`).join(' '));
+}
 for(const x of bad)console.log('NG',x);
-const per={};for(const f of missing)per[f.batch]=(per[f.batch]||0)+1;
-if(missing.length)console.log('まだの回:',Object.entries(per).map(([b,n])=>`${b}(${n})`).join(' '));
 process.exit(bad.length?1:0);

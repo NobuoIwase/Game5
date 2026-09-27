@@ -18,3 +18,13 @@
   - ZIP か名前の付いたファイルは、まとめて選んで送れる（名前でどのコマか決まる。ZIP の中のフォルダは無視）
   - GitHub のトークンは Fine-grained personal access token（リポジトリは Game5 だけ、権限は Contents: Read and write だけ、期限は短め）
 - 部位の絵（曲げた肘・膝、手の形、衣装の部位）の依頼は、まだ作っていない
+
+## 場面の絵（2回目。NovelAI に回していたもの）
+
+- `scenes/`：NovelAI で作る予定だった場面のコマ（拘束・床・顔を寄せられる・小さな生き物がくっつく など、165コマ×4人＝603枚）を、同じ形で Astra に頼む一式。作り直しは `node tools/build_chatgpt_scenes.mjs`
+  - Astra には「character-motion-v1/chatgpt/scenes/ASTRA.md を読んで、そのとおりに作業して」と送る（1回目の `ASTRA.md` が終わってから）
+  - 40回（1人10回）。言い方は ChatGPT 向けの控えめなもの（`tools/nai_scene_ja.mjs` の CG_*）。押さえているものの見た目・顔の言葉は `nai/words.json`
+  - 下絵は、そのキャラクターの持ち物（尻尾・帽子・杖・バックパック）入りで、押さえられている所を色の線・塊で描いたもの
+  - 描けない・描かない方がよいコマは飛ばしてよく、`out/skipped.txt` に書き残す。そのコマは NovelAI で作る
+- 出来上がりのファイル名は NovelAI の分と同じ `<キャラクター>__<モーション>__<向き>__<コマ>.png`
+- 検品 `node tools/check_chatgpt_out.mjs` は、1回目と場面の両方の一覧を見る

@@ -10,7 +10,7 @@
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';import {createRequire} from 'node:module';
 import {execSync} from 'node:child_process';
 import {library as R} from '../motion/restraint.mjs';import {library as S} from '../motion/scenes.mjs';import {library as H} from '../motion/heroines.mjs';
-import {run} from './mannequin_svg.mjs';import {MOTION_JA,SIT_HINT,SIT_WHO,MOTION_SLOT,MONSTERS} from './nai_scene_ja.mjs';
+import {run} from './mannequin_svg.mjs';import {MOTION_JA,SIT_HINT,SIT_WHO,MOTION_SLOT,MONSTERS,CG_SIT,CG_HINT,CG_MOTION} from './nai_scene_ja.mjs';
 const ROOT=path.join(path.dirname(fileURLToPath(import.meta.url)),'..'),OUT=path.join(ROOT,'nai'),BASE=path.join(OUT,'base'),GUIDE=path.join(OUT,'guide');
 const PLAN=JSON.parse(fs.readFileSync(path.join(ROOT,'motion','plan.json'),'utf8')).frames;
 
@@ -139,9 +139,11 @@ for(const [id,s] of guides)fs.writeFileSync(path.join(tmp,id+'.g.svg'),s);
 await pg.setViewportSize({width:320,height:320});
 for(const [id] of guides){await pg.goto('file://'+path.join(tmp,id+'.g.svg'));await pg.screenshot({path:path.join(GUIDE,id+'.png')})}
 await b.close();fs.rmSync(tmp,{recursive:true});
+const CGID={};for(const f of frames)if(!CGID[f.motion])CGID[f.motion]='M'+String(Object.keys(CGID).length+1).padStart(2,'0');
+const CGJ=(m)=>({label:frames.find(f=>f.motion===m).label,...(MOTION_JA[m]||{}),...(CG_MOTION[m]||{})});
 const jobs=[];for(const c of Object.keys(CHARACTERS))for(const f of frames)if(f.chars.includes(c))jobs.push({char:c,frame:f.id,file:`${c}__${f.id}.png`});
 fs.writeFileSync(path.join(OUT,'jobs.json'),JSON.stringify({version:new Date().toISOString().slice(0,10),size:[1024,1024],common:COMMON,negative:NEGATIVE,
- characters:CHARACTERS,situations:SITUATIONS,hints:SIT_HINT,slots:MOTION_SLOT,frames:Object.fromEntries(frames.map(f=>[f.id,f])),jobs},null,1));
+ characters:CHARACTERS,situations:SITUATIONS,hints:SIT_HINT,slots:MOTION_SLOT,answerKeys:{words:Object.fromEntries(Object.entries(CG_SIT).map(([k,[a]])=>[a,k])),motionWords:Object.fromEntries(Object.entries(CGID).map(([m,i])=>[i,m]))},frames:Object.fromEntries(frames.map(f=>[f.id,f])),jobs},null,1));
 const per={};for(const j of jobs)per[j.char]=(per[j.char]||0)+1;
 console.log(frames.length,'frames,',jobs.length,'jobs',per);
 
@@ -189,7 +191,7 @@ const SHEETS=[];{
  const b2=await pw.chromium.launch(),p2=await b2.newPage({viewport:{width:1200,height:800}});
  for(const [n,sh] of SHEETS.entries()){
   sh.forEach(f=>f.sheet=n+1);
-  const cells=sh.map(f=>`<div class="c"><img src="data:image/png;base64,${fs.readFileSync(path.join(GUIDE,f.id+'.png')).toString('base64')}"><b>${f.motion}</b><span>${VJs[f.view]||f.view}・${f.frame}コマ目</span><span>${f.label.slice(0,24)}</span></div>`).join('');
+  const cells=sh.map(f=>`<div class="c"><img src="data:image/png;base64,${fs.readFileSync(path.join(GUIDE,f.id+'.png')).toString('base64')}"><b>${CGID[f.motion]}</b><span>${VJs[f.view]||f.view}・${f.frame}コマ目</span><span>${CGJ(f.motion).label.slice(0,26)}</span></div>`).join('');
   await p2.setContent(`<html><body style="margin:0;background:#fff;font:13px/1.3 sans-serif;width:1200px"><div style="padding:8px 12px;font-size:18px;font-weight:700">ポーズ一覧 ${n+1}/${SHEETS.length}（色の線・塊＝押さえられている所）</div><style>.c{display:inline-flex;flex-direction:column;width:192px;margin:4px;vertical-align:top;border:1px solid #ccc;padding:2px}.c img{width:188px;height:188px}.c b{font-size:12px;word-break:break-all}.c span{font-size:12px;color:#444}</style><div style="padding:0 6px 8px">${cells}</div></body></html>`);
   await p2.waitForLoadState('load');
   await p2.screenshot({path:path.join(OUT,`chatgpt_poses_${String(n+1).padStart(2,'0')}.png`),fullPage:true});
@@ -197,23 +199,26 @@ const SHEETS=[];{
  await b2.close();
 }
 
+// the pictures under the request's ids (so the file names say nothing more than the ids)
+{const CG=path.join(OUT,'cg');fs.rmSync(CG,{recursive:true,force:true});fs.mkdirSync(CG);
+ for(const f of frames)fs.copyFileSync(path.join(GUIDE,f.id+'.png'),path.join(CG,`${CGID[f.motion]}_${f.view==='front'?'':f.view.replace('_','')+'_'}${f.frame}.png`))}
 /* nai/chatgpt_request.html: the request that lets ChatGPT fill the blank fields; its answer (JSON) is pasted into the helper */
 {
- const ex=frames.find(f=>f.motion==='hip_rock_spread')||frames[0];
+ const ex=frames.find(f=>f.motion==='arms_behind_wrench')||frames[0];
  const tr=(a)=>`<tr>${a.map(x=>`<td>${esc(x)}</td>`).join('')}</tr>`;
  let sec='';
  for(const [k,label] of Object.entries(SITUATIONS)){
   const fs_=frames.filter(f=>f.situations.includes(k));if(!fs_.length)continue;
   const ms=[...new Set(fs_.map(f=>f.motion))];
-  sec+=`<section><h3><code>${k}</code>　${esc(label)}</h3><p><b>書くこと：</b>${esc(SIT_HINT[k]||'')}</p>${SIT_WHO[k]?`<p><b>ゲームでこれをする魔物：</b>${esc(SIT_WHO[k])}</p>`:''}
-<div class="wrap"><table><tr><th>モーション</th><th>ポーズ（ポーズ一覧の番号）</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr>${ms.map(m=>{const mf=fs_.filter(x=>x.motion===m),f=mf[0],J=f.ja||{};
-   const pics=mf.map(x=>`<img src="${x.guide}" alt="" width="72" height="72">`).join('');
-   return `<tr><td><b>${esc(f.label)}</b><br><code>${m}</code></td><td class="pose">${pics}<br>一覧 ${[...new Set(frames.filter(x=>x.motion===m).map(x=>x.sheet))].join('・')}</td>${[J.body,J.arms,J.legs,J.held,J.move].map(x=>`<td>${esc(x||'')}</td>`).join('')}</tr>`}).join('')}</table></div></section>`;
+  sec+=`<section><h3><code>${CG_SIT[k][0]}</code>　${esc(CG_SIT[k][1])}</h3><p><b>書くこと：</b>${esc(CG_HINT[k]||SIT_HINT[k]||'')}</p>${SIT_WHO[k]?`<p><b>ゲームでこれをする魔物：</b>${esc(SIT_WHO[k])}</p>`:''}
+<div class="wrap"><table><tr><th>モーション</th><th>ポーズ（ポーズ一覧の番号）</th><th>体勢</th><th>腕</th><th>脚</th><th>押さえ</th><th>動き</th></tr>${ms.map(m=>{const mf=fs_.filter(x=>x.motion===m),f=mf[0],J=CGJ(m);
+   const pics=mf.map(x=>`<img src="cg/${CGID[m]}_${x.view==='front'?'':x.view.replace('_','')+'_'}${x.frame}.png" alt="" width="72" height="72">`).join('');
+   return `<tr><td><b>${esc(J.label)}</b><br><code>${CGID[m]}</code></td><td class="pose">${pics}<br>一覧 ${[...new Set(frames.filter(x=>x.motion===m).map(x=>x.sheet))].join('・')}</td>${[J.body,J.arms,J.legs,J.held,J.move].map(x=>`<td>${esc(x||'')}</td>`).join('')}</tr>`}).join('')}</table></div></section>`;
  }
  const slots=Object.entries(MOTION_SLOT).filter(([m])=>frames.some(f=>f.motion===m));
- const slotRows=slots.map(([m,w])=>{const f=frames.find(x=>x.motion===m),J=f.ja||{};return tr([m,f.label,w,J.move])}).join('');
- const tmpl={words:Object.fromEntries(Object.keys(SITUATIONS).filter(k=>frames.some(f=>f.situations.includes(k))).map(k=>[k,''])),
-  motionWords:Object.fromEntries(slots.map(([m])=>[m,''])),charWords:Object.fromEntries(Object.keys(CHARACTERS).map(k=>[k,'']))};
+ const slotRows=slots.map(([m,w])=>{const J=CGJ(m);return tr([CGID[m],J.label,w,J.move])}).join('');
+ const tmpl={words:Object.fromEntries(Object.keys(SITUATIONS).filter(k=>frames.some(f=>f.situations.includes(k))).map(k=>[CG_SIT[k][0],''])),
+  motionWords:Object.fromEntries(slots.map(([m])=>[CGID[m],''])),charWords:Object.fromEntries(Object.keys(CHARACTERS).map(k=>[k,'']))};
  fs.writeFileSync(path.join(OUT,'chatgpt_request.html'),`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NovelAI 言葉の依頼</title><style>
 :root{--bg:#f6f7f9;--fg:#1d232b;--sub:#5a6573;--card:#fff;--line:#d9dee5;--acc:#2f6fb3}
 @media (prefers-color-scheme:dark){:root{--bg:#141a22;--fg:#e6edf3;--sub:#9fb0c0;--card:#1b2330;--line:#3a4658;--acc:#7fb4ea}}
@@ -237,7 +242,7 @@ table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid 
 
 <h2>2. こちらで入れてある言葉（欄には書かない）</h2>
 <ul><li>共通：<code>${esc(COMMON)}</code></li><li>キャラクターの見た目（例：アリア）：<code>${esc(CHARACTERS.aria.tags)}</code></li>
-<li>コマごとの向き・姿勢・表情（例）：<code>${esc(ex.prompt)}</code></li><li>除外：<code>${esc(NEGATIVE)}</code></li></ul>
+<li>コマごとの向き・姿勢・表情（例）：<code>${esc(ex.prompt)}</code></li><li>除外：子ども・文字・枠・手足の崩れ・血・傷などの言葉（こちらで入れてある）</li></ul>
 <p>送るときの並び：<b>共通 → キャラクターの見た目 → キャラクターの欄 → 場面の種類の欄 → モーションの欄 → 向き・姿勢・表情</b>。
 姿勢は img2img の下絵（姿勢だけのマネキン）でも決めています。</p>
 
@@ -247,7 +252,7 @@ table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid 
 <li><b>押さえているもの・つかむもの・揺らしているものは、必ず「何か・色・形・質感」まで書く</b>。「tentacles」だけだと、色も種類もばらばらの物が出てくるため。下の魔物の表の色の言葉を使う</li>
 <li>欄に書いた言葉は、その欄に入る<b>全部のモーション・全部のコマ</b>に入る。1つのモーションにしか合わない言葉は書かない</li>
 <li>向き・姿勢・キャラクターの見た目・人数は書かない（下絵とぶつかる）</li>
-<li>登場人物は全員大人。子ども、出産・産卵、血・痛み・傷、動物との行為、本物の虫は入れない</li>
+<li>登場人物は全員大人。子ども、血・痛み・傷、妊娠・出産、本物の虫は入れない</li>
 <li>顔は「困っているが、まだ抗っている」方向（眉は寄せたまま、目は崩しきらない）</li>
 <li>書くことがない欄は <code>""</code> のまま</li></ul>
 

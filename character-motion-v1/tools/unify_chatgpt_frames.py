@@ -45,7 +45,10 @@ CHARS = {
 }
 TOL = .17
 # the head sizes searched (ChatGPT often draws the figure smaller in a big move than in the model's guard)
-S_LO, S_HI = .64, 1.24
+S_LO, S_HI = .55, 1.6
+# the pose pictures are cut to one square per heroine (tools/build_chatgpt_draw.mjs, build_chatgpt_scenes.mjs):
+# the width of that square in canvas units, to compare the figure's size across the two sets
+POSE_W = {'draw': {'aria': 276, 'scout': 201, 'mage': 230, 'healer': 255}, 'scenes': {'aria': 234, 'healer': 234, 'mage': 275, 'scout': 255}}
 
 def load(p): return np.asarray(Image.open(p).convert('RGBA')).astype(np.float32) / 255
 def to_img(a): return Image.fromarray((np.clip(a, 0, 1) * 255).astype(np.uint8))
@@ -90,9 +93,9 @@ class Model:
         self.hair_t = B.copy(); self.hair_t[:, :, 3] = np.minimum(B[:, :, 3], keep * fade)
         self.head_h = B.shape[0]
 
-    def match(self, target, f=6):
+    def match(self, target, s_lo, s_hi, f=6):
         I = small(target, f); I3 = I[:, :, :3] * I[:, :, 3:4]; best = None
-        for s in np.arange(S_LO, S_HI + .001, .03):
+        for s in np.arange(s_lo, s_hi + .001, .03):
             for deg in range(-35, 36, 5):
                 t = small(rot_scale(self.match_t, s, deg), f); w = (t[:, :, 3] > .5).astype(np.float32)
                 if w.sum() < 20 or t.shape[0] >= I.shape[0] or t.shape[1] >= I.shape[1]: continue
@@ -148,10 +151,15 @@ def rescale(img, k):
     canvas.paste(big, (int(round(cx - cx * k)), int(round(y1 - y1 * k))), big)
     return np.asarray(canvas).astype(np.float32) / 255
 
+def pose_h(f):
+    p = os.path.join(CG, f['pose']) if f.get('set') == 'draw' else os.path.join(CG, 'scenes', f['pose'])
+    a = np.asarray(Image.open(p).convert('RGB')).astype(np.int16); m = (a < 230).any(2)
+    ys = np.where(m.any(1))[0]; return (ys.max() - ys.min()) * POSE_W[f['set']][f['char']] / a.shape[0]
+
 def frames_of():
     out = []
     for p in (os.path.join(CG, 'jobs.json'), os.path.join(CG, 'scenes', 'jobs.json')):
-        if os.path.exists(p): out += json.load(open(p, encoding='utf-8'))['frames']
+        if os.path.exists(p): out += [dict(f, set='scenes' if 'scenes' in p else 'draw') for f in json.load(open(p, encoding='utf-8'))['frames']]
     return out
 
 def main():
@@ -176,19 +184,24 @@ def main():
                 try: model = Model(load(os.path.join(SRC, char, model_f['file'])), cfg)
                 except Exception as e: print(char, view, 'model failed:', e)
             tiles = []
+            if model is not None:
+                mimg = load(os.path.join(SRC, char, model_f['file'])); b = bbox(mimg)
+                model_ratio = (b[3] - b[1]) / pose_h(model_f)
             for f in vf:
                 img = load(os.path.join(SRC, char, f['file'])); res = img; rec = {'view': view}
                 if model is not None and f is not model_f:
-                    v, s, deg, x, y = model.match(img)
+                    b = bbox(img); s_exp = (b[3] - b[1]) / pose_h(f) / model_ratio
+                    rec['s_exp'] = round(float(s_exp), 3)
+                    v, s, deg, x, y = model.match(img, max(S_LO, s_exp * .88), min(S_HI, s_exp * 1.12))
                     fit = model.fit(img, s, deg, x, y)
                     rec.update(score=round(v, 4), scale=round(s, 3), rot=deg, fit=round(fit, 3))
                     why = []
                     if fit <= .72: why.append('fit')
-                    if s <= S_LO + .015 or s >= S_HI - .015: why.append('size at the edge of the search')
+                    if not (S_LO < s_exp < S_HI): why.append('size far from the model')
                     if not why:
                         res = model.lay_hair(img, s, deg, x, y)
                         rec['face_kept'] = round(model.face_kept, 3)
-                        if model.face_kept < .85: why.append('hair over the face'); res = img
+                        if model.face_kept < .93: why.append('hair over the face'); res = img
                     if why: rec.update(done=False, why=why)
                     else:
                         k = float(np.clip(1 / s, .8, 1.45)); res = rescale(res, k); rec.update(done=True, resize=round(k, 3))

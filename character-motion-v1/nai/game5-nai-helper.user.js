@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Game5 NAI helper
 // @namespace    nobuoiwase-game5
-// @version      1.7
+// @version      1.8
 // @description  Game5 のモーションの元絵を NovelAI で作るための手伝い。ボタン1つで次のコマの下絵とプロンプトを入れる
 // @match        https://novelai.net/*
 // @run-at       document-start
@@ -142,5 +142,10 @@ function draw(){
 }
 function mount(){if(root||!document.body)return;root=h('div',{id:'game5-nai-helper'});document.body.append(root);draw()}
 const t=setInterval(()=>{if(document.body){clearInterval(t);mount()}},300);
-xhr(SRC+'jobs.json','json').then(d=>{DATA=typeof d==='string'?JSON.parse(d):d;draw()}).catch(e=>note('一覧を読み込めません：'+e.message));
+xhr(SRC+'jobs.json','json').then(async d=>{DATA=typeof d==='string'?JSON.parse(d):d;
+ // the words kept in the repository (nai/words.json), filled in once when nothing has been written yet
+ if(!get('seeded',false)&&!Object.keys(st.words).length&&!Object.keys(st.motionWords).length){try{let w=await xhr(SRC+'words.json','json');w=typeof w==='string'?JSON.parse(w):w;
+  for(const [key,known] of [['words',DATA.situations],['motionWords',DATA.motions||{}],['charWords',DATA.characters]])for(const [k0,v] of Object.entries(w[key]||{})){const k=((DATA.answerKeys||{})[key]||{})[k0]||k0;if(k in known&&v&&v.trim())st[key][k]=v.trim()}
+  save();set('seeded',true);note('リポジトリの言葉を入れました')}catch(e){}}
+ draw()}).catch(e=>note('一覧を読み込めません：'+e.message));
 })();

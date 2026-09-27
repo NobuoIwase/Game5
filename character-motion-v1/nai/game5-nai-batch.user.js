@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Game5 NAI Batch（スマホで連続生成）
 // @namespace    game5-nai-batch
-// @version      3.0.0
+// @version      3.1.0
 // @description  NAI Batch Director をもとに、Game5 のモーションの元絵（603枚）を NovelAI で連続生成する。下絵の img2img・精密参照・まとめて ZIP・GitHub へ送る。
 // @match        https://novelai.net/*
 // @run-at       document-idle
@@ -1254,6 +1254,7 @@
       if (!res.ok) throw new Error('HTTP ' + res.status);
       GD = await res.json();
       gRender();
+      if (!G.seeded && !Object.keys(G.words).length && !Object.keys(G.motionWords).length) await gSeed(false);
       setStatus(`🎬 コマの一覧を読み込みました（${GD.jobs.length}枚、版 ${GD.version}）。`);
     } catch (e) { setStatus('❌ コマの一覧を読み込めません: ' + e.message); }
   }
@@ -1300,9 +1301,12 @@
 
   /* ---- ChatGPT の答え（chatgpt_request.html）を取り込む ---- */
   function gImport(text) {
+    try { gApply(JSON.parse(text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1))); }
+    catch (e) { setStatus('❌ 取り込めませんでした: ' + e.message); }
+  }
+  function gApply(j) {
     if (!GD) { setStatus('先にコマの一覧を読み込んでください。'); return; }
-    try {
-      const j = JSON.parse(text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1));
+    {
       const K = GD.answerKeys || {}, known = { words: GD.situations, motionWords: GD.motions || GD.slots || {}, charWords: GD.characters };
       let n = 0;
       for (const key of ['words', 'motionWords', 'charWords'])
@@ -1313,7 +1317,17 @@
       if (typeof j.extraNeg === 'string' && j.extraNeg.trim()) { G.extraNeg = j.extraNeg.trim(); n++; }
       gSave(); gRender();
       setStatus(`✅ ${n} 個の欄を埋めました。`);
-    } catch (e) { setStatus('❌ 取り込めませんでした: ' + e.message); }
+    }
+  }
+  // リポジトリに置いた言葉（nai/words.json。ChatGPT の答えの直したもの）。はじめて開いたときは自動で入れる
+  async function gSeed(ask) {
+    if (ask && !confirm('リポジトリの言葉（words.json）で、同じ欄を上書きします。あなたが書き足した言葉も、その欄は置き換わります。よろしいですか？')) return;
+    try {
+      const res = await fetch(G_SRC + 'words.json?t=' + Date.now());
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      gApply(await res.json());
+      G.seeded = true; gSave();
+    } catch (e) { setStatus('❌ リポジトリの言葉を読めません: ' + e.message); }
   }
 
   /* ---- GitHub へ送る（Git Data API。1回のコミットに最大25枚） ---- */
@@ -1478,9 +1492,9 @@
       </details>
 
       <details class="nbd-sub"><summary>③ 言葉（場面の種類ごと・キャラクター・除外）</summary>
-        <div class="g5-note">ChatGPT の答え（JSON）を貼って「取り込む」。あなたの言葉も、ここに直接書けます（このブラウザにだけ保存）。</div>
+        <div class="g5-note">リポジトリの言葉（words.json）は、はじめて開いたときに自動で入ります。ChatGPT の新しい答え（JSON）は、貼って「取り込む」。あなたの言葉も、ここに直接書けます（このブラウザにだけ保存）。</div>
         <textarea id="g5-json" class="nbd-ta" style="min-height:56px" placeholder="ChatGPT が返した JSON をここに貼る"></textarea>
-        <div class="nbd-row"><button class="nbd-btn sm" id="g5-paste">📋 貼り付け</button><button class="nbd-btn sm acc" id="g5-import">取り込む</button></div>
+        <div class="nbd-row"><button class="nbd-btn sm" id="g5-paste">📋 貼り付け</button><button class="nbd-btn sm acc" id="g5-import">取り込む</button><button class="nbd-btn sm" id="g5-seed">リポジトリの言葉を入れ直す</button></div>
         <div id="g5-words"></div>
       </details>
 
@@ -1545,6 +1559,7 @@
     });
     $('#g5-paste').onclick = pasteInto($('#g5-json'));
     $('#g5-import').onclick = () => gImport($('#g5-json').value);
+    $('#g5-seed').onclick = () => gSeed(true);
     $('#g5-prev').onclick = () => { gPreviewIdx--; gRenderPreview(); };
     $('#g5-next').onclick = () => { gPreviewIdx++; gRenderPreview(); };
     $('#g5-nexttodo').onclick = () => { const js = gJobs(); const k = js.findIndex((j, i) => i > gPreviewIdx && !G.done[j.file]); const k2 = k >= 0 ? k : js.findIndex(j => !G.done[j.file]); if (k2 >= 0) { gPreviewIdx = k2; gRenderPreview(); } else setStatus('まだのコマはありません。'); };

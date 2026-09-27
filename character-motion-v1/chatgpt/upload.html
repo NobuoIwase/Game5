@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>1枚絵を GitHub へ送る</title>
+<style>
+:root{--bg:#f6f7f9;--fg:#1d232b;--sub:#5a6573;--card:#fff;--line:#d9dee5;--acc:#2f6fb3;--ok:#2f8f4e;--warn:#b3522f}
+@media (prefers-color-scheme:dark){:root{--bg:#141a22;--fg:#e6edf3;--sub:#9fb0c0;--card:#1b2330;--line:#3a4658;--acc:#7fb4ea;--ok:#6fd08f;--warn:#ff9c7a}}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.6 system-ui,sans-serif}
+main{max-width:760px;margin:0 auto;padding:16px}
+h1{font-size:20px;margin:4px 0 10px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0}
+label{display:block;font-size:13px;color:var(--sub);margin:6px 0 2px}
+input,select{font:inherit;width:100%;box-sizing:border-box;padding:7px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg)}
+input[type=checkbox]{width:auto}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px}
+button{font:inherit;padding:8px 14px;border-radius:6px;border:1px solid var(--acc);background:var(--acc);color:#fff;cursor:pointer}
+button.sub{background:transparent;color:var(--acc)}
+button:disabled{opacity:.4}
+#status{min-height:1.5em;color:var(--acc);font-weight:600;margin:8px 0;word-break:break-word}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px}
+.item{background:var(--card);border:2px solid var(--line);border-radius:6px;padding:3px;cursor:pointer;font-size:11px;word-break:break-all}
+.item img{width:100%;aspect-ratio:1;background:#fff;border-radius:3px;display:block}
+.item.sent{border-color:var(--ok)}.item.sent::after{content:'送った';color:var(--ok);font-weight:700}
+.item.on{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc)}
+.pair{display:flex;gap:8px}.pair div{flex:1;text-align:center;font-size:12px;color:var(--sub)}.pair img{width:100%;aspect-ratio:1;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:4px}
+.note{font-size:13px;color:var(--sub)}
+</style>
+</head>
+<body><main>
+<h1>ChatGPT の1枚絵を GitHub へ送る</h1>
+<p class="note">コマを選び、ChatGPT で作った絵を選んで「送る」。ファイル名は自動で <code>&lt;キャラクター&gt;__&lt;モーション&gt;__&lt;向き&gt;__&lt;コマ&gt;</code> になります。依頼の文と下絵は <a href="index.html">依頼書のページ</a>。</p>
+
+<details class="box" id="setbox"><summary><b>送り先とトークン</b>（最初に1回）</summary>
+ <p class="note">GitHub の「Fine-grained personal access token」を作り、リポジトリは Game5 だけ、権限は Contents: Read and write だけ、期限は短めにしてください。トークンはこのブラウザ（このページのサイト）にだけ保存されます。送った絵は下のブランチに入ります（main には入りません）。</p>
+ <div class="grid">
+  <div><label>持ち主</label><input id="owner"></div>
+  <div><label>リポジトリ</label><input id="repo"></div>
+  <div><label>ブランチ（なければ作る）</label><input id="branch"></div>
+  <div><label>フォルダ</label><input id="dir"></div>
+  <div><label><input type="checkbox" id="webp"> WebP に縮小して送る</label></div>
+  <div><label>高さ（px）</label><input id="size" type="number"></div>
+ </div>
+ <label>トークン</label><input id="token" type="password" placeholder="github_pat_…">
+</details>
+
+<div class="box">
+ <div class="grid">
+  <div><label>キャラクター</label><select id="char"></select></div>
+  <div><label>モーション</label><select id="motion"></select></div>
+ </div>
+ <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+  <button class="sub" id="check">GitHub にある絵を確かめる</button>
+  <button class="sub" id="nextTodo">次のまだのコマ</button>
+ </div>
+ <div id="count" class="note" style="margin-top:6px"></div>
+</div>
+
+<div class="box" id="one">
+ <div id="pick" class="note">下の一覧からコマを選んでください。</div>
+ <div class="pair" style="margin:8px 0"><div><img id="poseImg" alt="">下絵</div><div><img id="fileImg" alt="">送る絵</div></div>
+ <input type="file" id="file" accept="image/*">
+ <div style="margin-top:8px"><button id="send" disabled>このコマとして送る</button></div>
+</div>
+<div id="status"></div>
+
+<div class="box">
+ <b>名前の付いたファイルをまとめて送る</b>
+ <p class="note">ファイル名が <code>aria__slash__front__0.png</code> のようになっている絵を、まとめて選んで送れます（名前が一覧にないものは飛ばします）。</p>
+ <input type="file" id="many" accept="image/*" multiple>
+</div>
+
+<div class="list" id="list"></div>
+
+<script>
+'use strict';
+const LS='g5upload.v1';
+let O;try{O=JSON.parse(localStorage.getItem(LS))||{}}catch(e){O={}}
+O=Object.assign({owner:'NobuoIwase',repo:'Game5',branch:'chatgpt-output',dir:'character-motion-v1/chatgpt/out',token:'',webp:true,size:1024,sent:{},char:'aria',motion:''},O);
+const saveO=()=>{try{localStorage.setItem(LS,JSON.stringify(O))}catch(e){}};
+const $=id=>document.getElementById(id),say=t=>{$('status').textContent=t};
+let D=null,cur=null,fileBlob=null;
+const VJ={front:'正面',down_right:'右斜め前',right:'右向き',up_right:'右斜め後ろ',back:'後ろ',up_left:'左斜め後ろ',left:'左向き',down_left:'左斜め前'};
+
+for(const k of ['owner','repo','branch','dir','size','token']){const el=$(k);el.value=O[k];el.onchange=()=>{O[k]=k==='size'?Number(el.value):el.value.trim();saveO()}}
+$('webp').checked=O.webp;$('webp').onchange=()=>{O.webp=$('webp').checked;saveO()};
+if(!O.token)$('setbox').open=true;
+
+const b64=u8=>{let s='';for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(s)};
+async function shrink(blob){
+ if(!O.webp)return {u8:new Uint8Array(await blob.arrayBuffer()),ext:'.png'};
+ const bmp=await createImageBitmap(blob),k=Math.min(1,(+O.size||1024)/bmp.height);
+ const cv=document.createElement('canvas');cv.width=Math.max(1,Math.round(bmp.width*k));cv.height=Math.max(1,Math.round(bmp.height*k));
+ cv.getContext('2d').drawImage(bmp,0,0,cv.width,cv.height);
+ let out=await new Promise(r=>cv.toBlob(r,'image/webp',0.9)),ext='.webp';
+ if(!out||out.type!=='image/webp'){out=await new Promise(r=>cv.toBlob(r,'image/png'));ext='.png'}
+ return {u8:new Uint8Array(await out.arrayBuffer()),ext};
+}
+async function gh(method,p,body){
+ const res=await fetch(`https://api.github.com/repos/${O.owner}/${O.repo}${p}`,{method,headers:{Authorization:'Bearer '+O.token,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+ if(!res.ok){let t='';try{t=await res.text()}catch(e){}const err=new Error(`GitHub ${res.status} ${t.slice(0,160)}`);err.status=res.status;throw err}
+ return res.status===204?null:res.json();
+}
+let branchOk=false;
+async function ensureBranch(){
+ if(branchOk)return;
+ try{await gh('GET','/git/ref/heads/'+O.branch)}
+ catch(e){if(e.status!==404)throw e;const repo=await gh('GET','');const sha=(await gh('GET','/git/ref/heads/'+repo.default_branch)).object.sha;
+  await gh('POST','/git/refs',{ref:'refs/heads/'+O.branch,sha});say('ブランチ '+O.branch+' を作りました。')}
+ branchOk=true;
+}
+const pathOf=(f,ext)=>`${O.dir.replace(/\/+$/,'')}/${f.char}/${f.file.replace(/\.png$/,'')}${ext}`;
+async function put(f,blob){
+ if(!O.token){$('setbox').open=true;throw new Error('トークンを入れてください')}
+ await ensureBranch();
+ const {u8,ext}=await shrink(blob),p=pathOf(f,ext);
+ let sha;try{sha=(await gh('GET',`/contents/${encodeURI(p)}?ref=${encodeURIComponent(O.branch)}`)).sha}catch(e){if(e.status!==404)throw e}
+ await gh('PUT',`/contents/${encodeURI(p)}`,{message:`ChatGPT: ${f.file}`,content:b64(u8),branch:O.branch,...(sha?{sha}:{})});
+ O.sent[f.id+'@'+f.char]=Date.now();saveO();
+}
+const key=f=>f.id+'@'+f.char;
+const frames=()=>D?D.frames.filter(f=>f.char===O.char):[];
+
+function renderSelects(){
+ $('char').innerHTML='';for(const [k,c] of Object.entries(D.characters)){const o=document.createElement('option');o.value=k;o.textContent=c.label;$('char').appendChild(o)}
+ $('char').value=O.char;
+ const ms=[...new Set(frames().map(f=>f.motion))];
+ $('motion').innerHTML='<option value="">（全部）</option>';for(const m of ms){const f=frames().find(x=>x.motion===m);const o=document.createElement('option');o.value=m;o.textContent=f.label;$('motion').appendChild(o)}
+ $('motion').value=ms.includes(O.motion)?O.motion:'';
+}
+function renderList(){
+ const L=$('list');L.innerHTML='';
+ const fs=frames().filter(f=>!O.motion||f.motion===O.motion);
+ for(const f of fs){const d=document.createElement('div');d.className='item'+(O.sent[key(f)]?' sent':'')+(cur===f?' on':'');
+  d.innerHTML=`<img loading="lazy" src="${f.pose}" alt="">${f.motion}<br>${VJ[f.view]||f.view}・${f.frame}`;d.onclick=()=>choose(f);L.appendChild(d)}
+ const all=frames(),n=all.filter(f=>O.sent[key(f)]).length;
+ $('count').textContent=`${D.characters[O.char].label}：送った ${n} / ${all.length}コマ`+(D.characters[O.char].note?'　※ '+D.characters[O.char].note:'');
+}
+function choose(f){cur=f;fileBlob=null;$('file').value='';$('fileImg').removeAttribute('src');$('send').disabled=true;
+ $('poseImg').src=f.pose;$('pick').textContent=`${f.file}　${f.label}（${VJ[f.view]||f.view}・${f.frame}コマ目${f.step?'：'+f.step:''}）`;renderList();
+ $('one').scrollIntoView({behavior:'smooth',block:'start'})}
+$('file').onchange=()=>{const f=$('file').files[0];if(!f)return;fileBlob=f;$('fileImg').src=URL.createObjectURL(f);$('send').disabled=!cur};
+$('send').onclick=async()=>{if(!cur||!fileBlob)return;$('send').disabled=true;say('送っています…');
+ try{await put(cur,fileBlob);say('送りました：'+cur.file);const next=frames().find(f=>!O.sent[key(f)]&&(!O.motion||f.motion===O.motion));renderList();if(next)choose(next)}
+ catch(e){say('送れませんでした：'+e.message);$('send').disabled=false}};
+$('many').onchange=async()=>{const files=[...$('many').files];$('many').value='';let ok=0,skip=0;
+ for(const file of files){const name=file.name.replace(/\.(png|webp|jpe?g)$/i,'.png');const f=D.frames.find(x=>x.file===name);if(!f){skip++;continue}
+  say(`送っています ${ok+1}：${f.file}`);try{await put(f,file);ok++}catch(e){say('送れませんでした：'+e.message);break}}
+ renderList();say(`${ok}枚送りました`+(skip?`（名前が一覧にない ${skip}枚は飛ばしました）`:''))};
+$('char').onchange=()=>{O.char=$('char').value;O.motion='';saveO();cur=null;renderSelects();renderList()};
+$('motion').onchange=()=>{O.motion=$('motion').value;saveO();renderList()};
+$('nextTodo').onclick=()=>{const f=frames().find(x=>!O.sent[key(x)]&&(!O.motion||x.motion===O.motion));if(f)choose(f);else say('まだのコマはありません。')};
+$('check').onclick=async()=>{if(!O.token){$('setbox').open=true;say('トークンを入れてください');return}
+ try{const list=await gh('GET',`/contents/${encodeURI(O.dir.replace(/\/+$/,'')+'/'+O.char)}?ref=${encodeURIComponent(O.branch)}`);
+  const names=new Set(list.map(x=>x.name.replace(/\.(webp|png)$/,'')));let n=0;
+  for(const f of frames()){if(names.has(f.file.replace(/\.png$/,''))){if(!O.sent[key(f)])O.sent[key(f)]=1;n++}else delete O.sent[key(f)]}
+  saveO();renderList();say(`GitHub に ${n}枚ありました。`)}
+ catch(e){if(e.status===404){for(const f of frames())delete O.sent[key(f)];saveO();renderList();say('まだ1枚もありません。')}else say('確かめられませんでした：'+e.message)}};
+
+fetch('jobs.json?t='+Date.now()).then(r=>r.json()).then(d=>{D=d;if(!D.characters[O.char])O.char='aria';renderSelects();renderList()}).catch(e=>say('一覧を読み込めません：'+e.message));
+</script>
+</main></body></html>

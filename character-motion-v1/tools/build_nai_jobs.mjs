@@ -106,7 +106,9 @@ function holdTags(fr,look){
  return[...t];
 }
 const HOLDER=/restrain|coil|\bmass\b|bound|bind|tentacl|vine|rope|chain|slime|blob|creature|bubble|partner|monster|kiss|the other\b|\bit\b/i;
-const noteOf=ph=>ph.replace(/^[^\x00-\x7f]\S*\s*/,'').split(/[,;:]/).map(x=>x.trim()).filter(x=>x&&!HOLDER.test(x)).join(', ');
+// the headings of a phase (peak, up, down...) are not pose words
+const HEAD=/^(peak|up|down|held|held open|limp|no)$/i;
+const noteOf=ph=>ph.replace(/^[^\x00-\x7f]\S*\s*/,'').split(/[,;:]/).map(x=>x.trim()).filter(x=>x&&!HOLDER.test(x)&&!HEAD.test(x)).join(', ');
 
 const sets=[['restraint',R()],['scene',S()],['heroine',H()]];
 for(const d of [BASE,GUIDE]){fs.mkdirSync(d,{recursive:true});for(const f of fs.readdirSync(d))fs.unlinkSync(path.join(d,f))}

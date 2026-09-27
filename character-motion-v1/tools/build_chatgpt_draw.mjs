@@ -155,7 +155,8 @@ nav a{display:inline-block;margin:2px 12px 2px 0}
 @media (max-width:560px){.card{flex-direction:column}.card img{width:100%}}
 </style></head><body><main>
 <h1>ChatGPT 1枚絵の依頼</h1>
-<div class="box"><b>使い方</b><ol>
+<div class="box"><b>リポジトリを触れる Astra に頼むとき</b>：「character-motion-v1/chatgpt/ASTRA.md を読んで、そのとおりに作業して」と送るだけ。下の手順は要らない（<a href="ASTRA.md">ASTRA.md</a>）。</div>
+<div class="box" style="margin-top:8px"><b>チャットだけで頼むときの使い方</b><ol>
 <li>キャラクターごとに ChatGPT の新しい会話を始め、「最初に1回だけ送る文」を、そのキャラクターの見た目の画像を添付して送る</li>
 <li>「OK」が返ったら、番号順に「文をコピー」→ ChatGPT に貼り、その<b>ポーズ一覧</b>（番号つきの画像）を添付して送る。1回で最大16枚</li>
 <li>できた絵（ZIP か、名前の付いた画像）を、<a href="upload.html">送るページ</a>の「まとめて送る」で選ぶ。ファイル名で、どのコマか自動で決まる</li></ol>

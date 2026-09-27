@@ -2,6 +2,7 @@
 
 作成：Claude（2026-09-27）。作り直しは `node tools/build_chatgpt_draw.mjs`（`build_plan.mjs` と `build_nai_jobs.mjs` のあと）。
 
+- **リポジトリを触れる Astra には、`ASTRA.md` を読ませるだけ**（一覧を読んで描き、`out/<キャラクター>/` に保存し、`node tools/check_chatgpt_out.mjs` で検品して、ブランチ `chatgpt-output` に push する）。下の依頼書・送るページは、チャットだけで頼むとき用
 - 対象：作り方の計画（`../PRODUCTION_PLAN.md`）で1枚絵にするコマのうち、NovelAI で作らないもの。計329コマ
   - アリア：攻撃6種（144コマ）
   - 斥候77・魔法使い55・ヒーラー53：それぞれの技・仕草

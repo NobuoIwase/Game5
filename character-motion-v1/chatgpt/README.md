@@ -34,3 +34,15 @@
 - `retry/`：`chatgpt-output` ブランチにまだないコマだけを、同じ形で頼み直す一式。作り直しは `git fetch origin chatgpt-output && node tools/build_chatgpt_retry.mjs`（そのたびに残りだけになる）
   - Astra には「character-motion-v1/chatgpt/retry/ASTRA.md を読んで、そのとおりに作業して」と送る
   - 2026-09-27 時点：届いた192枚を除く137枚（アリア30・魔法使い54・ヒーラー53）を12回で。アリアは後ろ向き・斜め後ろ向きが飛びやすかったので、その回には後ろ向きの描き方を書き足した
+
+## 3回目（描けなかった絵・描き直し・穏やかな場面）
+
+- `round3/`：`node tools/build_chatgpt_round3.mjs`（`git fetch origin chatgpt-output` のあと）。Astra には「character-motion-v1/chatgpt/round3/ASTRA.md を読んで、そのとおりに作業して」
+  - 前回、安全判定で止まった11枚（`out/skipped.txt`）＋描き直す2枚（アリアが小さかった）＋場面のうち ChatGPT でも描けそうな262枚＝275枚を22回で
+  - ChatGPT に回す場面は `GPT_OK`（つかまれる・ぼんやりする・転ぶ・倒れる・起き上がる・声をこらえる・後ろから抱えられる・足が塊に沈む）。縛られる・揺さぶられる・こわばる・力が抜ける・張り付かれる・巻きつかれる・誘う姿勢・前垂れは NovelAI で作る
+
+## 元データの保管
+
+- 描いた絵の元（1254×1254 の PNG、2026-09-28 時点で 244MB）は、ブランチ `chatgpt-output` に置いたまま残す。**main には入れない**
+- 1回目と2回目が終わった時点の状態は、ブランチ `originals/chatgpt-2026-09-28` として固定する（3回目の最初に Astra が作る。`round3/ASTRA.md`）。あとで `chatgpt-output` が進んでも、この時点の絵を取り出せる
+- ゲームに使うのは、ここから縮めた版（別に作る）

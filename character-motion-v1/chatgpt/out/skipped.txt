@@ -7,3 +7,6 @@ healer__healer_purify__right__6.png	画像生成ツールが安全判定（sexua
 aria__kesa__up_right__6.png	round3: 画像生成ツールが出力を安全判定（sexual）で拒否。
 aria__yoko__up_right__7.png	round3: 同じ衣装の後方視点が安全判定で拒否されたため、同様の露出がある本コマは生成せず保留。個別の生成拒否ではない。
 aria__thrust__up_right__4.png	round3: 同じ衣装の後方視点が安全判定で拒否されたため、同様の露出がある本コマは生成せず保留。個別の生成拒否ではない。
+aria__engulf_struggle__front__0.png	round3: 画像生成ツールが出力を安全判定（sexual）で拒否。
+aria__engulf_struggle__front__6.png	round3: 同じ衣装・腰まで塊に埋まる動作の直前コマが安全判定で拒否されたため、本コマは生成せず保留。個別の生成拒否ではない。
+aria__ankle_grabbed__right__14.png	round3: 画像生成ツールが出力を安全判定（sexual）で拒否。

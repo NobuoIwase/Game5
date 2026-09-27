@@ -1,11 +1,9 @@
-aria__swing_abandon__right__5.png	画像生成ツールが出力を安全判定（sexual）で拒否。原画どおりの生成を完了できず。
-aria__kesa__up_right__6.png	画像生成ツールが安全判定（sexual）で拒否。原画どおりの生成を完了できず。
-aria__swing_abandon__left__5.png	画像生成ツールが安全判定（sexual）で拒否。原画どおりの生成を完了できず。
-aria__yoko__up_right__7.png	画像生成ツールが安全判定（sexual）で拒否。原画どおりの生成を完了できず。
-aria__thrust__up_right__4.png	画像生成ツールが安全判定（sexual）で拒否。原画どおりの生成を完了できず。
 healer__healer_buff__front__0.png	画像生成ツールが安全判定（sexual）で拒否。原画どおりの生成を完了できず。
 healer__healer_buff__left__8.png	画像生成ツールが安全判定（sexual）で拒否。原画どおりの生成を完了できず。
 healer__healer_buff__down_left__0.png	画像生成ツールが安全判定（sexual）で拒否。原画どおりの生成を完了できず。
 healer__healer_purify__down_right__3.png	画像生成ツールが安全判定（sexual）で拒否。原画どおりの生成を完了できず。
 healer__healer_purify__right__3.png	画像生成ツールが安全判定（sexual）で拒否。原画どおりの生成を完了できず。
 healer__healer_purify__right__6.png	画像生成ツールが安全判定（sexual）で拒否。原画どおりの生成を完了できず。
+aria__kesa__up_right__6.png	round3: 画像生成ツールが出力を安全判定（sexual）で拒否。
+aria__yoko__up_right__7.png	round3: 同じ衣装の後方視点が安全判定で拒否されたため、同様の露出がある本コマは生成せず保留。個別の生成拒否ではない。
+aria__thrust__up_right__4.png	round3: 同じ衣装の後方視点が安全判定で拒否されたため、同様の露出がある本コマは生成せず保留。個別の生成拒否ではない。

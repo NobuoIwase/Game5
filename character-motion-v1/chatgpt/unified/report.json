@@ -9,6 +9,7 @@
   "s_exp": 1.122,
   "scale": 0.988,
   "score": 0.0546,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__ankle_grabbed__right__4.png": {
@@ -21,6 +22,7 @@
   "s_exp": 1.141,
   "scale": 1.004,
   "score": 0.0548,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__ankle_grabbed__right__6.png": {
@@ -33,6 +35,7 @@
   "s_exp": 1.147,
   "scale": 1.009,
   "score": 0.0749,
+  "shield": "no face seen",
   "view": "right",
   "why": [
    "poor match"
@@ -48,6 +51,7 @@
   "s_exp": 1.005,
   "scale": 0.944,
   "score": 0.0295,
+  "shield": "not an ellipse (0.50, 0.49)",
   "view": "front"
  },
  "aria__bubble_float__front__0.png": {
@@ -60,6 +64,11 @@
   "s_exp": 0.784,
   "scale": 0.78,
   "score": 0.0356,
+  "shield": {
+   "iou": 0.906,
+   "laid": 5215,
+   "ratio": 0.329
+  },
   "view": "front"
  },
  "aria__bubble_float__front__2.png": {
@@ -72,6 +81,7 @@
   "s_exp": 0.774,
   "scale": 0.861,
   "score": 0.0413,
+  "shield": "not an ellipse (0.73, 0.54)",
   "view": "front"
  },
  "aria__daze_sway__front__0.png": {
@@ -84,6 +94,7 @@
   "s_exp": 1.113,
   "scale": 1.039,
   "score": 0.0336,
+  "shield": "not an ellipse (0.97, 0.27)",
   "view": "front"
  },
  "aria__daze_sway__front__2.png": {
@@ -96,6 +107,7 @@
   "s_exp": 1.022,
   "scale": 0.9,
   "score": 0.0429,
+  "shield": "not an ellipse (0.98, 0.27)",
   "view": "front"
  },
  "aria__defeat_collapse__right__0.png": {
@@ -108,6 +120,7 @@
   "s_exp": 0.966,
   "scale": 0.85,
   "score": 0.0316,
+  "shield": "not an ellipse (0.96, 0.27)",
   "view": "right"
  },
  "aria__down_fall_back__right__0.png": {
@@ -120,6 +133,7 @@
   "s_exp": 1.091,
   "scale": 0.96,
   "score": 0.0354,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__down_fall_back__right__12.png": {
@@ -132,6 +146,7 @@
   "s_exp": 0.94,
   "scale": 0.857,
   "score": 0.0308,
+  "shield": "not an ellipse (0.92, 0.24)",
   "view": "right"
  },
  "aria__down_fall_back__right__17.png": {
@@ -141,6 +156,11 @@
   "s_exp": 1.214,
   "scale": 1.068,
   "score": 0.1753,
+  "shield": {
+   "iou": 0.988,
+   "laid": 5837,
+   "ratio": 0.406
+  },
   "view": "right",
   "why": [
    "fit"
@@ -156,6 +176,7 @@
   "s_exp": 0.94,
   "scale": 0.827,
   "score": 0.0289,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__down_fall_back__right__8.png": {
@@ -168,6 +189,7 @@
   "s_exp": 0.961,
   "scale": 0.845,
   "score": 0.0418,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__edge_pull__right__0.png": {
@@ -180,6 +202,7 @@
   "s_exp": 1.057,
   "scale": 0.93,
   "score": 0.0333,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__edge_pull__right__3.png": {
@@ -192,6 +215,7 @@
   "s_exp": 1.1,
   "scale": 0.998,
   "score": 0.0261,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__edge_pull__right__7.png": {
@@ -204,6 +228,7 @@
   "s_exp": 1.079,
   "scale": 0.95,
   "score": 0.046,
+  "shield": "not an ellipse (0.85, 0.24)",
   "view": "right"
  },
  "aria__engulf_sink__front__0.png": {
@@ -216,6 +241,7 @@
   "s_exp": 1.104,
   "scale": 1.031,
   "score": 0.0482,
+  "shield": "not an ellipse (0.59, 0.37)",
   "view": "front"
  },
  "aria__engulf_sink__front__3.png": {
@@ -228,6 +254,7 @@
   "s_exp": 1.162,
   "scale": 1.023,
   "score": 0.0341,
+  "shield": "not an ellipse (0.92, 0.28)",
   "view": "front"
  },
  "aria__engulf_sink__front__6.png": {
@@ -240,6 +267,7 @@
   "s_exp": 1.096,
   "scale": 0.995,
   "score": 0.0458,
+  "shield": "not an ellipse (0.99, 0.26)",
   "view": "front"
  },
  "aria__gaze_trance__front__0.png": {
@@ -252,6 +280,7 @@
   "s_exp": 0.977,
   "scale": 0.89,
   "score": 0.0643,
+  "shield": "no face seen",
   "view": "front",
   "why": [
    "poor match"
@@ -267,6 +296,7 @@
   "s_exp": 1.046,
   "scale": 0.95,
   "score": 0.0569,
+  "shield": "not an ellipse (0.55, 0.46)",
   "view": "front"
  },
  "aria__get_up__right__0.png": {
@@ -279,6 +309,7 @@
   "s_exp": 1.33,
   "scale": 1.171,
   "score": 0.1409,
+  "shield": "no face seen",
   "view": "right",
   "why": [
    "poor match"
@@ -294,6 +325,7 @@
   "s_exp": 1.21,
   "scale": 1.095,
   "score": 0.0708,
+  "shield": "no face seen",
   "view": "right",
   "why": [
    "poor match"
@@ -309,6 +341,7 @@
   "s_exp": 1.096,
   "scale": 0.964,
   "score": 0.0243,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__get_up__right__18.png": {
@@ -321,6 +354,7 @@
   "s_exp": 1.077,
   "scale": 0.948,
   "score": 0.0376,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__get_up__right__4.png": {
@@ -333,6 +367,7 @@
   "s_exp": 1.055,
   "scale": 0.928,
   "score": 0.0233,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__get_up__right__8.png": {
@@ -345,6 +380,7 @@
   "s_exp": 1.206,
   "scale": 1.122,
   "score": 0.0341,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__grabbed_flinch__front__0.png": {
@@ -357,6 +393,11 @@
   "s_exp": 0.937,
   "scale": 0.914,
   "score": 0.0271,
+  "shield": {
+   "iou": 0.99,
+   "laid": 11726,
+   "ratio": 0.388
+  },
   "view": "front"
  },
  "aria__grabbed_flinch__front__3.png": {
@@ -369,9 +410,19 @@
   "s_exp": 0.924,
   "scale": 0.814,
   "score": 0.047,
+  "shield": {
+   "iou": 0.971,
+   "laid": 6950,
+   "ratio": 0.346
+  },
   "view": "front"
  },
  "aria__heavy__back__1.png": {
+  "blade": {
+   "k": 1.01,
+   "length": 44.7,
+   "pose": 52.1
+  },
   "done": true,
   "face_area": 0.0026,
   "face_kept": 1.0,
@@ -381,9 +432,15 @@
   "s_exp": 1.12,
   "scale": 1.016,
   "score": 0.009,
+  "shield": "no face seen",
   "view": "back"
  },
  "aria__heavy__back__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 54.8,
+   "pose": 51.9
+  },
   "done": false,
   "face_area": 0.0764,
   "face_kept": 1.007,
@@ -393,12 +450,14 @@
   "s_exp": 1.04,
   "scale": 0.915,
   "score": 0.0705,
+  "shield": "no face seen",
   "view": "back",
   "why": [
    "poor match"
   ]
  },
  "aria__heavy__back__6.png": {
+  "blade": "no hilt",
   "done": true,
   "face_area": 0.0089,
   "face_kept": 1.0,
@@ -408,9 +467,11 @@
   "s_exp": 0.988,
   "scale": 0.989,
   "score": 0.0155,
+  "shield": "no face seen",
   "view": "back"
  },
  "aria__heavy__back__7.png": {
+  "blade": "no hilt",
   "done": true,
   "face_area": 0.0033,
   "face_kept": 1.0,
@@ -420,9 +481,15 @@
   "s_exp": 1.003,
   "scale": 1.032,
   "score": 0.0183,
+  "shield": "no face seen",
   "view": "back"
  },
  "aria__heavy__down_left__1.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 48.6,
+   "pose": 53.0
+  },
   "done": true,
   "face_area": 0.1779,
   "face_kept": 0.988,
@@ -432,9 +499,19 @@
   "s_exp": 0.829,
   "scale": 0.729,
   "score": 0.0317,
+  "shield": {
+   "iou": 0.995,
+   "laid": 23940,
+   "ratio": 0.683
+  },
   "view": "down_left"
  },
  "aria__heavy__down_left__3.png": {
+  "blade": {
+   "k": 0.866,
+   "length": 66.7,
+   "pose": 29.1
+  },
   "done": true,
   "face_area": 0.1368,
   "face_kept": 0.983,
@@ -444,9 +521,19 @@
   "s_exp": 0.955,
   "scale": 0.93,
   "score": 0.0356,
+  "shield": {
+   "iou": 0.984,
+   "laid": 28397,
+   "ratio": 0.531
+  },
   "view": "down_left"
  },
  "aria__heavy__down_left__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 54.5,
+   "pose": 56.7
+  },
   "done": true,
   "face_area": 0.128,
   "face_kept": 0.988,
@@ -456,9 +543,19 @@
   "s_exp": 0.996,
   "scale": 1.026,
   "score": 0.0327,
+  "shield": {
+   "iou": 0.986,
+   "laid": 25435,
+   "ratio": 0.396
+  },
   "view": "down_left"
  },
  "aria__heavy__down_left__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 52.3,
+   "pose": 57.0
+  },
   "done": true,
   "face_area": 0.1608,
   "face_kept": 0.994,
@@ -468,9 +565,19 @@
   "s_exp": 1.098,
   "scale": 1.056,
   "score": 0.0435,
+  "shield": {
+   "iou": 0.992,
+   "laid": 33855,
+   "ratio": 0.387
+  },
   "view": "down_left"
  },
  "aria__heavy__down_right__1.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 48.7,
+   "pose": 52.7
+  },
   "done": true,
   "face_area": 0.2028,
   "face_kept": 0.992,
@@ -480,9 +587,19 @@
   "s_exp": 1.049,
   "scale": 1.013,
   "score": 0.0268,
+  "shield": {
+   "iou": 0.983,
+   "laid": 26747,
+   "ratio": 0.431
+  },
   "view": "down_right"
  },
  "aria__heavy__down_right__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 50.7,
+   "pose": 13.5
+  },
   "done": true,
   "face_area": 0.1848,
   "face_kept": 0.989,
@@ -492,9 +609,19 @@
   "s_exp": 0.929,
   "scale": 0.937,
   "score": 0.0507,
+  "shield": {
+   "iou": 0.99,
+   "laid": 20106,
+   "ratio": 0.32
+  },
   "view": "down_right"
  },
  "aria__heavy__down_right__6.png": {
+  "blade": {
+   "k": 0.862,
+   "length": 67.0,
+   "pose": 56.8
+  },
   "done": true,
   "face_area": 0.1472,
   "face_kept": 0.986,
@@ -504,9 +631,19 @@
   "s_exp": 1.068,
   "scale": 0.939,
   "score": 0.0313,
+  "shield": {
+   "iou": 0.909,
+   "laid": 15643,
+   "ratio": 0.303
+  },
   "view": "down_right"
  },
  "aria__heavy__down_right__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 49.7,
+   "pose": 56.5
+  },
   "done": true,
   "face_area": 0.1423,
   "face_kept": 0.989,
@@ -516,9 +653,15 @@
   "s_exp": 1.095,
   "scale": 0.964,
   "score": 0.037,
+  "shield": "not an ellipse (0.90, 0.27)",
   "view": "down_right"
  },
  "aria__heavy__front__1.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 40.0,
+   "pose": 26.1
+  },
   "done": true,
   "face_area": 0.1537,
   "face_kept": 0.994,
@@ -528,9 +671,15 @@
   "s_exp": 0.922,
   "scale": 0.871,
   "score": 0.0266,
+  "shield": {
+   "iou": 0.986,
+   "laid": 17126,
+   "ratio": 0.482
+  },
   "view": "front"
  },
  "aria__heavy__front__3.png": {
+  "blade": "not seen",
   "done": true,
   "face_area": 0.1725,
   "face_kept": 0.99,
@@ -540,9 +689,19 @@
   "s_exp": 1.106,
   "scale": 0.974,
   "score": 0.0302,
+  "shield": {
+   "iou": 0.993,
+   "laid": 24041,
+   "ratio": 0.541
+  },
   "view": "front"
  },
  "aria__heavy__front__6.png": {
+  "blade": {
+   "k": 1.016,
+   "length": 48.3,
+   "pose": 56.6
+  },
   "done": true,
   "face_area": 0.1578,
   "face_kept": 0.995,
@@ -552,9 +711,15 @@
   "s_exp": 1.08,
   "scale": 1.07,
   "score": 0.0235,
+  "shield": "not an ellipse (0.95, 0.29)",
   "view": "front"
  },
  "aria__heavy__front__7.png": {
+  "blade": {
+   "k": 1.021,
+   "length": 48.1,
+   "pose": 56.6
+  },
   "done": true,
   "face_area": 0.1633,
   "face_kept": 0.99,
@@ -564,9 +729,15 @@
   "s_exp": 1.099,
   "scale": 1.087,
   "score": 0.0257,
+  "shield": "not an ellipse (0.96, 0.29)",
   "view": "front"
  },
  "aria__heavy__left__1.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 53.3,
+   "pose": 54.8
+  },
   "done": true,
   "face_area": 0.1582,
   "face_kept": 0.989,
@@ -576,9 +747,11 @@
   "s_exp": 0.958,
   "scale": 0.933,
   "score": 0.0425,
+  "shield": "not an ellipse (0.98, 0.24)",
   "view": "left"
  },
  "aria__heavy__left__3.png": {
+  "blade": "no hilt",
   "done": true,
   "face_area": 0.1728,
   "face_kept": 0.991,
@@ -588,9 +761,15 @@
   "s_exp": 0.99,
   "scale": 0.872,
   "score": 0.0502,
+  "shield": "not an ellipse (0.94, 0.18)",
   "view": "left"
  },
  "aria__heavy__left__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 53.3,
+   "pose": 56.1
+  },
   "done": true,
   "face_area": 0.0908,
   "face_kept": 0.981,
@@ -600,9 +779,19 @@
   "s_exp": 1.049,
   "scale": 0.923,
   "score": 0.0553,
+  "shield": {
+   "iou": 0.986,
+   "laid": 26329,
+   "ratio": 0.52
+  },
   "view": "left"
  },
  "aria__heavy__left__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 50.9,
+   "pose": 55.9
+  },
   "done": true,
   "face_area": 0.1153,
   "face_kept": 0.989,
@@ -612,9 +801,19 @@
   "s_exp": 1.041,
   "scale": 0.916,
   "score": 0.0581,
+  "shield": {
+   "iou": 0.987,
+   "laid": 26037,
+   "ratio": 0.518
+  },
   "view": "left"
  },
  "aria__heavy__right__1.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 55.8,
+   "pose": 53.0
+  },
   "done": true,
   "face_area": 0.0809,
   "face_kept": 0.977,
@@ -624,21 +823,33 @@
   "s_exp": 1.095,
   "scale": 0.964,
   "score": 0.03,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__heavy__right__3.png": {
+  "blade": {
+   "k": 0.901,
+   "length": 64.1,
+   "pose": 42.6
+  },
   "done": false,
   "fit": 0.71,
   "rot": 0,
   "s_exp": 1.034,
   "scale": 0.91,
   "score": 0.0902,
+  "shield": "no face seen",
   "view": "right",
   "why": [
    "fit"
   ]
  },
  "aria__heavy__right__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 52.1,
+   "pose": 51.0
+  },
   "done": true,
   "face_area": 0.0648,
   "face_kept": 0.963,
@@ -648,9 +859,15 @@
   "s_exp": 1.085,
   "scale": 0.955,
   "score": 0.0242,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__heavy__right__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 52.3,
+   "pose": 51.0
+  },
   "done": true,
   "face_area": 0.0698,
   "face_kept": 0.99,
@@ -660,9 +877,11 @@
   "s_exp": 1.092,
   "scale": 0.961,
   "score": 0.0347,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__heavy__up_left__1.png": {
+  "blade": "no hilt",
   "done": true,
   "face_area": 0.0097,
   "face_kept": 1.0,
@@ -672,9 +891,11 @@
   "s_exp": 1.011,
   "scale": 0.949,
   "score": 0.0113,
+  "shield": "no face seen",
   "view": "up_left"
  },
  "aria__heavy__up_left__3.png": {
+  "blade": "no hilt",
   "done": true,
   "face_area": 0.0034,
   "face_kept": 0.972,
@@ -684,9 +905,15 @@
   "s_exp": 0.946,
   "scale": 0.832,
   "score": 0.0152,
+  "shield": "no face seen",
   "view": "up_left"
  },
  "aria__heavy__up_left__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 56.9,
+   "pose": 49.4
+  },
   "done": true,
   "face_area": 0.0038,
   "face_kept": 1.0,
@@ -696,9 +923,15 @@
   "s_exp": 0.883,
   "scale": 0.927,
   "score": 0.013,
+  "shield": "no face seen",
   "view": "up_left"
  },
  "aria__heavy__up_left__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 52.6,
+   "pose": 49.5
+  },
   "done": true,
   "face_area": 0.0031,
   "face_kept": 1.0,
@@ -708,9 +941,15 @@
   "s_exp": 0.971,
   "scale": 0.974,
   "score": 0.015,
+  "shield": "no face seen",
   "view": "up_left"
  },
  "aria__heavy__up_right__1.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 49.4,
+   "pose": 54.8
+  },
   "done": true,
   "face_area": 0.0541,
   "face_kept": 0.997,
@@ -720,9 +959,15 @@
   "s_exp": 1.159,
   "scale": 1.02,
   "score": 0.0438,
+  "shield": "not an ellipse (0.78, 0.35)",
   "view": "up_right"
  },
  "aria__heavy__up_right__3.png": {
+  "blade": {
+   "k": 0.835,
+   "length": 69.2,
+   "pose": 56.4
+  },
   "done": true,
   "face_area": 0.0603,
   "face_kept": 1.0,
@@ -732,9 +977,19 @@
   "s_exp": 1.058,
   "scale": 0.931,
   "score": 0.0283,
+  "shield": {
+   "iou": 0.944,
+   "laid": 15274,
+   "ratio": 0.345
+  },
   "view": "up_right"
  },
  "aria__heavy__up_right__6.png": {
+  "blade": {
+   "k": 1.092,
+   "length": 39.3,
+   "pose": 49.6
+  },
   "done": true,
   "face_area": 0.0,
   "face_kept": 0.0,
@@ -744,9 +999,15 @@
   "s_exp": 1.162,
   "scale": 1.023,
   "score": 0.0166,
+  "shield": "not an ellipse (0.93, 0.28)",
   "view": "up_right"
  },
  "aria__heavy__up_right__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 52.0,
+   "pose": 49.0
+  },
   "done": true,
   "face_area": 0.0,
   "face_kept": 1.0,
@@ -756,6 +1017,11 @@
   "s_exp": 1.165,
   "scale": 1.025,
   "score": 0.0201,
+  "shield": {
+   "iou": 0.938,
+   "laid": 15934,
+   "ratio": 0.391
+  },
   "view": "up_right"
  },
  "aria__held_from_behind__front__0.png": {
@@ -768,6 +1034,7 @@
   "s_exp": 1.064,
   "scale": 1.026,
   "score": 0.0345,
+  "shield": "no face seen",
   "view": "front"
  },
  "aria__held_from_behind__front__2.png": {
@@ -780,12 +1047,18 @@
   "s_exp": 1.102,
   "scale": 0.97,
   "score": 0.0849,
+  "shield": "no face seen",
   "view": "front",
   "why": [
    "poor match"
   ]
  },
  "aria__kesa__back__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 39.8,
+   "pose": 33.1
+  },
   "done": true,
   "face_area": 0.0004,
   "face_kept": 1.0,
@@ -795,9 +1068,19 @@
   "s_exp": 1.031,
   "scale": 0.937,
   "score": 0.0211,
+  "shield": {
+   "iou": 0.947,
+   "laid": 15369,
+   "ratio": 0.318
+  },
   "view": "back"
  },
  "aria__kesa__back__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 24.1,
+   "pose": null
+  },
   "done": true,
   "face_area": 0.0004,
   "face_kept": 1.0,
@@ -807,9 +1090,19 @@
   "s_exp": 0.896,
   "scale": 0.789,
   "score": 0.0206,
+  "shield": {
+   "iou": 0.906,
+   "laid": 9829,
+   "ratio": 0.373
+  },
   "view": "back"
  },
  "aria__kesa__back__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 35.5,
+   "pose": null
+  },
   "done": true,
   "face_area": 0.0003,
   "face_kept": 0.636,
@@ -819,9 +1112,15 @@
   "s_exp": 0.927,
   "scale": 0.875,
   "score": 0.0166,
+  "shield": "not an ellipse (0.96, 0.29)",
   "view": "back"
  },
  "aria__kesa__down_left__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 39.0,
+   "pose": 34.4
+  },
   "done": true,
   "face_area": 0.1209,
   "face_kept": 0.976,
@@ -831,9 +1130,19 @@
   "s_exp": 0.951,
   "scale": 0.957,
   "score": 0.0359,
+  "shield": {
+   "iou": 0.985,
+   "laid": 39498,
+   "ratio": 0.628
+  },
   "view": "down_left"
  },
  "aria__kesa__down_left__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 53.8,
+   "pose": 39.1
+  },
   "done": true,
   "face_area": 0.1406,
   "face_kept": 0.987,
@@ -843,9 +1152,19 @@
   "s_exp": 0.989,
   "scale": 0.991,
   "score": 0.0313,
+  "shield": {
+   "iou": 0.988,
+   "laid": 30736,
+   "ratio": 0.497
+  },
   "view": "down_left"
  },
  "aria__kesa__down_left__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 53.8,
+   "pose": 38.1
+  },
   "done": true,
   "face_area": 0.1254,
   "face_kept": 0.992,
@@ -855,9 +1174,11 @@
   "s_exp": 1.069,
   "scale": 1.031,
   "score": 0.0276,
+  "shield": "not an ellipse (0.95, 0.11)",
   "view": "down_left"
  },
  "aria__kesa__down_right__3.png": {
+  "blade": "not seen",
   "done": true,
   "face_area": 0.1874,
   "face_kept": 0.978,
@@ -867,9 +1188,19 @@
   "s_exp": 0.969,
   "scale": 1.003,
   "score": 0.037,
+  "shield": {
+   "iou": 0.992,
+   "laid": 31297,
+   "ratio": 0.421
+  },
   "view": "down_right"
  },
  "aria__kesa__down_right__6.png": {
+  "blade": {
+   "k": 0.954,
+   "length": 60.5,
+   "pose": 45.7
+  },
   "done": true,
   "face_area": 0.1203,
   "face_kept": 0.968,
@@ -879,9 +1210,15 @@
   "s_exp": 0.98,
   "scale": 0.983,
   "score": 0.0219,
+  "shield": "not an ellipse (0.73, 0.36)",
   "view": "down_right"
  },
  "aria__kesa__down_right__7.png": {
+  "blade": {
+   "k": 0.99,
+   "length": 58.3,
+   "pose": 51.8
+  },
   "done": true,
   "face_area": 0.1194,
   "face_kept": 0.975,
@@ -891,9 +1228,15 @@
   "s_exp": 1.038,
   "scale": 0.973,
   "score": 0.0194,
+  "shield": {
+   "iou": 0.915,
+   "laid": 9747,
+   "ratio": 0.315
+  },
   "view": "down_right"
  },
  "aria__kesa__front__3.png": {
+  "blade": "not seen",
   "done": true,
   "face_area": 0.1517,
   "face_kept": 0.994,
@@ -903,9 +1246,19 @@
   "s_exp": 1.096,
   "scale": 1.085,
   "score": 0.0248,
+  "shield": {
+   "iou": 0.998,
+   "laid": 40218,
+   "ratio": 0.724
+  },
   "view": "front"
  },
  "aria__kesa__front__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 45.2,
+   "pose": 20.5
+  },
   "done": true,
   "face_area": 0.1335,
   "face_kept": 0.995,
@@ -915,9 +1268,19 @@
   "s_exp": 1.159,
   "scale": 1.02,
   "score": 0.0268,
+  "shield": {
+   "iou": 0.988,
+   "laid": 25419,
+   "ratio": 0.403
+  },
   "view": "front"
  },
  "aria__kesa__front__7.png": {
+  "blade": {
+   "k": 0.997,
+   "length": 57.9,
+   "pose": 32.3
+  },
   "done": true,
   "face_area": 0.1485,
   "face_kept": 0.989,
@@ -927,9 +1290,15 @@
   "s_exp": 1.117,
   "scale": 1.073,
   "score": 0.0237,
+  "shield": "no face seen",
   "view": "front"
  },
  "aria__kesa__left__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 52.1,
+   "pose": 45.2
+  },
   "done": true,
   "face_area": 0.1524,
   "face_kept": 0.99,
@@ -939,9 +1308,15 @@
   "s_exp": 0.829,
   "scale": 0.82,
   "score": 0.0412,
+  "shield": "not an ellipse (0.95, 0.21)",
   "view": "left"
  },
  "aria__kesa__left__6.png": {
+  "blade": {
+   "k": 0.972,
+   "length": 59.4,
+   "pose": 55.9
+  },
   "done": true,
   "face_area": 0.1174,
   "face_kept": 0.983,
@@ -951,9 +1326,19 @@
   "s_exp": 0.768,
   "scale": 0.705,
   "score": 0.0284,
+  "shield": {
+   "iou": 0.989,
+   "laid": 16136,
+   "ratio": 0.503
+  },
   "view": "left"
  },
  "aria__kesa__left__7.png": {
+  "blade": {
+   "k": 1.134,
+   "length": 42.1,
+   "pose": 55.1
+  },
   "done": true,
   "face_area": 0.1361,
   "face_kept": 0.988,
@@ -963,9 +1348,19 @@
   "s_exp": 0.989,
   "scale": 0.931,
   "score": 0.0311,
+  "shield": {
+   "iou": 0.986,
+   "laid": 25133,
+   "ratio": 0.459
+  },
   "view": "left"
  },
  "aria__kesa__right__3.png": {
+  "blade": {
+   "k": 0.946,
+   "length": 61.0,
+   "pose": 37.4
+  },
   "done": true,
   "face_area": 0.0767,
   "face_kept": 0.982,
@@ -975,9 +1370,15 @@
   "s_exp": 0.986,
   "scale": 0.868,
   "score": 0.0597,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__kesa__right__6.png": {
+  "blade": {
+   "k": 0.923,
+   "length": 62.6,
+   "pose": 51.8
+  },
   "done": true,
   "face_area": 0.0605,
   "face_kept": 0.975,
@@ -987,9 +1388,15 @@
   "s_exp": 0.83,
   "scale": 0.79,
   "score": 0.0377,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__kesa__right__7.png": {
+  "blade": {
+   "k": 0.961,
+   "length": 60.1,
+   "pose": 48.1
+  },
   "done": true,
   "face_area": 0.0698,
   "face_kept": 0.982,
@@ -999,9 +1406,11 @@
   "s_exp": 0.864,
   "scale": 0.821,
   "score": 0.0195,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__kesa__up_left__3.png": {
+  "blade": "no hilt",
   "done": true,
   "face_area": 0.0035,
   "face_kept": 1.0,
@@ -1011,9 +1420,11 @@
   "s_exp": 0.824,
   "scale": 0.905,
   "score": 0.012,
+  "shield": "no face seen",
   "view": "up_left"
  },
  "aria__kesa__up_left__6.png": {
+  "blade": "no hilt",
   "done": true,
   "face_area": 0.0035,
   "face_kept": 1.0,
@@ -1023,9 +1434,15 @@
   "s_exp": 0.847,
   "scale": 0.866,
   "score": 0.012,
+  "shield": "no face seen",
   "view": "up_left"
  },
  "aria__kesa__up_left__7.png": {
+  "blade": {
+   "k": 1.007,
+   "length": 41.5,
+   "pose": 48.2
+  },
   "done": true,
   "face_area": 0.0052,
   "face_kept": 1.0,
@@ -1035,9 +1452,19 @@
   "s_exp": 0.917,
   "scale": 0.987,
   "score": 0.0127,
+  "shield": {
+   "iou": 0.995,
+   "laid": 39090,
+   "ratio": 0.447
+  },
   "view": "up_left"
  },
  "aria__kesa__up_right__3.png": {
+  "blade": {
+   "k": 1.197,
+   "length": 39.7,
+   "pose": 54.9
+  },
   "done": true,
   "face_area": 0.0003,
   "face_kept": 0.933,
@@ -1047,9 +1474,19 @@
   "s_exp": 1.01,
   "scale": 0.889,
   "score": 0.0172,
+  "shield": {
+   "iou": 0.973,
+   "laid": 12508,
+   "ratio": 0.382
+  },
   "view": "up_right"
  },
  "aria__kesa__up_right__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 25.0,
+   "pose": 21.6
+  },
   "done": true,
   "face_area": 0.0058,
   "face_kept": 1.0,
@@ -1059,6 +1496,11 @@
   "s_exp": 0.933,
   "scale": 0.821,
   "score": 0.0164,
+  "shield": {
+   "iou": 0.963,
+   "laid": 13531,
+   "ratio": 0.338
+  },
   "view": "up_right"
  },
  "aria__kiss_recover__right__0.png": {
@@ -1071,6 +1513,7 @@
   "s_exp": 1.101,
   "scale": 0.999,
   "score": 0.0322,
+  "shield": "not an ellipse (0.94, 0.28)",
   "view": "right"
  },
  "aria__kiss_recover__right__10.png": {
@@ -1083,6 +1526,7 @@
   "s_exp": 1.079,
   "scale": 1.01,
   "score": 0.0342,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__kiss_recover__right__5.png": {
@@ -1095,6 +1539,7 @@
   "s_exp": 1.153,
   "scale": 1.015,
   "score": 0.0424,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__kiss_recover__right__8.png": {
@@ -1107,6 +1552,7 @@
   "s_exp": 1.095,
   "scale": 1.023,
   "score": 0.0297,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__reach_toward__right__0.png": {
@@ -1119,6 +1565,7 @@
   "s_exp": 0.979,
   "scale": 0.861,
   "score": 0.0324,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__reach_toward__right__4.png": {
@@ -1131,6 +1578,11 @@
   "s_exp": 1.028,
   "scale": 0.965,
   "score": 0.0304,
+  "shield": {
+   "iou": 0.979,
+   "laid": 14197,
+   "ratio": 0.394
+  },
   "view": "right"
  },
  "aria__reach_toward__right__8.png": {
@@ -1143,6 +1595,7 @@
   "s_exp": 0.993,
   "scale": 0.904,
   "score": 0.0294,
+  "shield": "not an ellipse (0.93, 0.21)",
   "view": "right"
  },
  "aria__shiver_hug__front__0.png": {
@@ -1155,6 +1608,7 @@
   "s_exp": 1.186,
   "scale": 1.044,
   "score": 0.0667,
+  "shield": "not an ellipse (0.96, 0.20)",
   "view": "front",
   "why": [
    "poor match"
@@ -1170,6 +1624,7 @@
   "s_exp": 1.058,
   "scale": 0.991,
   "score": 0.0359,
+  "shield": "not an ellipse (0.88, 0.23)",
   "view": "front"
  },
  "aria__sit_recover__front__11.png": {
@@ -1182,6 +1637,7 @@
   "s_exp": 1.081,
   "scale": 0.981,
   "score": 0.0305,
+  "shield": "not an ellipse (0.88, 0.17)",
   "view": "front"
  },
  "aria__sit_recover__front__13.png": {
@@ -1194,6 +1650,7 @@
   "s_exp": 0.978,
   "scale": 0.89,
   "score": 0.0173,
+  "shield": "no face seen",
   "view": "front"
  },
  "aria__sit_recover__front__2.png": {
@@ -1206,6 +1663,7 @@
   "s_exp": 0.989,
   "scale": 0.87,
   "score": 0.0225,
+  "shield": "not an ellipse (0.90, 0.26)",
   "view": "front"
  },
  "aria__sit_recover__front__5.png": {
@@ -1218,6 +1676,7 @@
   "s_exp": 1.035,
   "scale": 1.001,
   "score": 0.0261,
+  "shield": "no face seen",
   "view": "front"
  },
  "aria__sit_recover__front__9.png": {
@@ -1230,14 +1689,26 @@
   "s_exp": 1.009,
   "scale": 0.948,
   "score": 0.0282,
+  "shield": "not an ellipse (0.90, 0.19)",
   "view": "front"
  },
  "aria__slash__back__0.png": {
+  "blade": {
+   "k": 0.955,
+   "length": 60.4,
+   "pose": 15.2
+  },
   "done": true,
   "model": true,
+  "shield": "no face seen",
   "view": "back"
  },
  "aria__slash__back__3.png": {
+  "blade": {
+   "k": 0.86,
+   "length": 67.2,
+   "pose": 51.3
+  },
   "done": true,
   "face_area": 0.0,
   "face_kept": 1.0,
@@ -1247,9 +1718,15 @@
   "s_exp": 0.962,
   "scale": 0.846,
   "score": 0.0227,
+  "shield": {
+   "iou": 0.912,
+   "laid": 14797,
+   "ratio": 0.445
+  },
   "view": "back"
  },
  "aria__slash__back__6.png": {
+  "blade": "no hilt",
   "done": true,
   "face_area": 0.0021,
   "face_kept": 1.0,
@@ -1259,9 +1736,15 @@
   "s_exp": 0.988,
   "scale": 0.869,
   "score": 0.0187,
+  "shield": "no face seen",
   "view": "back"
  },
  "aria__slash__back__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 43.3,
+   "pose": null
+  },
   "done": true,
   "face_area": 0.0054,
   "face_kept": 1.0,
@@ -1271,14 +1754,30 @@
   "s_exp": 0.987,
   "scale": 1.018,
   "score": 0.0047,
+  "shield": "not an ellipse (0.88, 0.27)",
   "view": "back"
  },
  "aria__slash__down_left__0.png": {
+  "blade": {
+   "k": 0.98,
+   "length": 58.9,
+   "pose": 45.9
+  },
   "done": true,
   "model": true,
+  "shield": {
+   "iou": 0.991,
+   "laid": 31907,
+   "ratio": 0.529
+  },
   "view": "down_left"
  },
  "aria__slash__down_left__3.png": {
+  "blade": {
+   "k": 0.906,
+   "length": 63.7,
+   "pose": 44.4
+  },
   "done": true,
   "face_area": 0.1457,
   "face_kept": 0.985,
@@ -1288,9 +1787,19 @@
   "s_exp": 1.052,
   "scale": 0.926,
   "score": 0.0233,
+  "shield": {
+   "iou": 0.988,
+   "laid": 36308,
+   "ratio": 0.582
+  },
   "view": "down_left"
  },
  "aria__slash__down_left__6.png": {
+  "blade": {
+   "k": 0.88,
+   "length": 65.6,
+   "pose": 44.9
+  },
   "done": true,
   "face_area": 0.1108,
   "face_kept": 0.996,
@@ -1300,9 +1809,19 @@
   "s_exp": 0.988,
   "scale": 0.959,
   "score": 0.033,
+  "shield": {
+   "iou": 0.994,
+   "laid": 27625,
+   "ratio": 0.579
+  },
   "view": "down_left"
  },
  "aria__slash__down_left__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 47.7,
+   "pose": 44.2
+  },
   "done": true,
   "face_area": 0.1243,
   "face_kept": 0.983,
@@ -1312,14 +1831,30 @@
   "s_exp": 1.04,
   "scale": 0.975,
   "score": 0.02,
+  "shield": "not an ellipse (0.97, 0.16)",
   "view": "down_left"
  },
  "aria__slash__down_right__0.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 53.6,
+   "pose": 51.9
+  },
   "done": true,
   "model": true,
+  "shield": {
+   "iou": 0.982,
+   "laid": 21353,
+   "ratio": 0.363
+  },
   "view": "down_right"
  },
  "aria__slash__down_right__3.png": {
+  "blade": {
+   "k": 0.912,
+   "length": 63.3,
+   "pose": null
+  },
   "done": true,
   "face_area": 0.1801,
   "face_kept": 0.978,
@@ -1329,9 +1864,15 @@
   "s_exp": 1.036,
   "scale": 1.001,
   "score": 0.0279,
+  "shield": "not an ellipse (0.98, 0.30)",
   "view": "down_right"
  },
  "aria__slash__down_right__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 54.5,
+   "pose": 46.2
+  },
   "done": true,
   "face_area": 0.0977,
   "face_kept": 0.977,
@@ -1341,9 +1882,15 @@
   "s_exp": 1.144,
   "scale": 1.097,
   "score": 0.0332,
+  "shield": "not an ellipse (0.76, 0.13)",
   "view": "down_right"
  },
  "aria__slash__down_right__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 56.6,
+   "pose": 49.5
+  },
   "done": true,
   "face_area": 0.1277,
   "face_kept": 0.989,
@@ -1353,14 +1900,30 @@
   "s_exp": 1.002,
   "scale": 0.972,
   "score": 0.0316,
+  "shield": "no face seen",
   "view": "down_right"
  },
  "aria__slash__front__0.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 50.0,
+   "pose": 43.3
+  },
   "done": true,
   "model": true,
+  "shield": {
+   "iou": 0.986,
+   "laid": 20216,
+   "ratio": 0.42
+  },
   "view": "front"
  },
  "aria__slash__front__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 30.9,
+   "pose": null
+  },
   "done": true,
   "face_area": 0.1585,
   "face_kept": 0.992,
@@ -1370,9 +1933,19 @@
   "s_exp": 1.094,
   "scale": 0.993,
   "score": 0.0219,
+  "shield": {
+   "iou": 0.979,
+   "laid": 28061,
+   "ratio": 0.463
+  },
   "view": "front"
  },
  "aria__slash__front__6.png": {
+  "blade": {
+   "k": 0.959,
+   "length": 60.2,
+   "pose": 29.7
+  },
   "done": true,
   "face_area": 0.1432,
   "face_kept": 0.984,
@@ -1382,9 +1955,19 @@
   "s_exp": 1.209,
   "scale": 1.064,
   "score": 0.0291,
+  "shield": {
+   "iou": 0.971,
+   "laid": 21048,
+   "ratio": 0.316
+  },
   "view": "front"
  },
  "aria__slash__front__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 57.0,
+   "pose": 33.0
+  },
   "done": true,
   "face_area": 0.1467,
   "face_kept": 0.985,
@@ -1394,14 +1977,30 @@
   "s_exp": 1.089,
   "scale": 0.959,
   "score": 0.0222,
+  "shield": "no face seen",
   "view": "front"
  },
  "aria__slash__left__0.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 57.2,
+   "pose": 41.0
+  },
   "done": true,
   "model": true,
+  "shield": {
+   "iou": 0.967,
+   "laid": 26046,
+   "ratio": 0.364
+  },
   "view": "left"
  },
  "aria__slash__left__3.png": {
+  "blade": {
+   "k": 0.899,
+   "length": 64.2,
+   "pose": 55.8
+  },
   "done": true,
   "face_area": 0.1581,
   "face_kept": 0.987,
@@ -1411,9 +2010,15 @@
   "s_exp": 0.98,
   "scale": 0.892,
   "score": 0.0408,
+  "shield": "not an ellipse (0.95, 0.14)",
   "view": "left"
  },
  "aria__slash__left__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 55.2,
+   "pose": 56.2
+  },
   "done": true,
   "face_area": 0.1003,
   "face_kept": 0.974,
@@ -1423,9 +2028,19 @@
   "s_exp": 0.759,
   "scale": 0.728,
   "score": 0.0258,
+  "shield": {
+   "iou": 0.985,
+   "laid": 15450,
+   "ratio": 0.449
+  },
   "view": "left"
  },
  "aria__slash__left__7.png": {
+  "blade": {
+   "k": 0.993,
+   "length": 58.2,
+   "pose": 56.2
+  },
   "done": true,
   "face_area": 0.121,
   "face_kept": 0.989,
@@ -1435,14 +2050,30 @@
   "s_exp": 0.794,
   "scale": 0.818,
   "score": 0.0256,
+  "shield": {
+   "iou": 0.993,
+   "laid": 16877,
+   "ratio": 0.447
+  },
   "view": "left"
  },
  "aria__slash__right__0.png": {
+  "blade": {
+   "k": 0.833,
+   "length": 69.3,
+   "pose": 53.1
+  },
   "done": true,
   "model": true,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__slash__right__3.png": {
+  "blade": {
+   "k": 0.91,
+   "length": 63.5,
+   "pose": 43.0
+  },
   "done": true,
   "face_area": 0.0738,
   "face_kept": 0.974,
@@ -1452,9 +2083,15 @@
   "s_exp": 1.09,
   "scale": 0.959,
   "score": 0.043,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__slash__right__6.png": {
+  "blade": {
+   "k": 0.8,
+   "length": 72.2,
+   "pose": 52.0
+  },
   "done": true,
   "face_area": 0.0654,
   "face_kept": 0.975,
@@ -1464,9 +2101,15 @@
   "s_exp": 0.882,
   "scale": 0.806,
   "score": 0.0353,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__slash__right__7.png": {
+  "blade": {
+   "k": 0.993,
+   "length": 58.1,
+   "pose": 50.9
+  },
   "done": true,
   "face_area": 0.0866,
   "face_kept": 0.969,
@@ -1476,14 +2119,26 @@
   "s_exp": 0.97,
   "scale": 0.883,
   "score": 0.0205,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__slash__up_left__0.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 44.2,
+   "pose": 35.4
+  },
   "done": true,
   "model": true,
+  "shield": "no face seen",
   "view": "up_left"
  },
  "aria__slash__up_left__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 53.2,
+   "pose": 49.8
+  },
   "done": true,
   "face_area": 0.0053,
   "face_kept": 1.0,
@@ -1493,9 +2148,15 @@
   "s_exp": 0.886,
   "scale": 0.989,
   "score": 0.0105,
+  "shield": "no face seen",
   "view": "up_left"
  },
  "aria__slash__up_left__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 49.0,
+   "pose": 33.4
+  },
   "done": true,
   "face_area": 0.0048,
   "face_kept": 1.0,
@@ -1505,9 +2166,11 @@
   "s_exp": 0.858,
   "scale": 0.875,
   "score": 0.0119,
+  "shield": "no face seen",
   "view": "up_left"
  },
  "aria__slash__up_left__7.png": {
+  "blade": "no hilt",
   "done": true,
   "face_area": 0.0061,
   "face_kept": 1.0,
@@ -1517,14 +2180,30 @@
   "s_exp": 0.972,
   "scale": 1.065,
   "score": 0.0136,
+  "shield": "no face seen",
   "view": "up_left"
  },
  "aria__slash__up_right__0.png": {
+  "blade": {
+   "k": 0.868,
+   "length": 66.5,
+   "pose": 49.7
+  },
   "done": true,
   "model": true,
+  "shield": {
+   "iou": 0.816,
+   "laid": 6027,
+   "ratio": 0.655
+  },
   "view": "up_right"
  },
  "aria__slash__up_right__3.png": {
+  "blade": {
+   "k": 0.814,
+   "length": 71.0,
+   "pose": 56.5
+  },
   "done": false,
   "face_area": 0.0556,
   "face_kept": 0.998,
@@ -1534,12 +2213,18 @@
   "s_exp": 1.042,
   "scale": 0.917,
   "score": 0.0773,
+  "shield": "no face seen",
   "view": "up_right",
   "why": [
    "poor match"
   ]
  },
  "aria__slash__up_right__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 52.9,
+   "pose": 31.2
+  },
   "done": true,
   "face_area": 0.0,
   "face_kept": 0.0,
@@ -1549,9 +2234,15 @@
   "s_exp": 1.035,
   "scale": 0.911,
   "score": 0.0194,
+  "shield": "no face seen",
   "view": "up_right"
  },
  "aria__slash__up_right__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 52.3,
+   "pose": 28.9
+  },
   "done": true,
   "face_area": 0.0,
   "face_kept": 0.0,
@@ -1561,6 +2252,7 @@
   "s_exp": 1.058,
   "scale": 0.931,
   "score": 0.0203,
+  "shield": "not an ellipse (0.85, 0.17)",
   "view": "up_right"
  },
  "aria__spore_inhale__front__0.png": {
@@ -1573,6 +2265,7 @@
   "s_exp": 1.158,
   "scale": 1.019,
   "score": 0.086,
+  "shield": "not an ellipse (0.95, 0.21)",
   "view": "front",
   "why": [
    "poor match"
@@ -1588,12 +2281,18 @@
   "s_exp": 1.215,
   "scale": 1.069,
   "score": 0.0868,
+  "shield": "not an ellipse (0.61, 0.33)",
   "view": "front",
   "why": [
    "poor match"
   ]
  },
  "aria__swing_abandon__back__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 48.0,
+   "pose": 20.1
+  },
   "done": true,
   "face_area": 0.0019,
   "face_kept": 1.0,
@@ -1603,9 +2302,19 @@
   "s_exp": 1.033,
   "scale": 0.999,
   "score": 0.0221,
+  "shield": {
+   "iou": 0.943,
+   "laid": 11437,
+   "ratio": 0.463
+  },
   "view": "back"
  },
  "aria__swing_abandon__back__5.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 43.1,
+   "pose": 14.0
+  },
   "done": true,
   "face_area": 0.0,
   "face_kept": 0.0,
@@ -1615,9 +2324,19 @@
   "s_exp": 0.971,
   "scale": 0.854,
   "score": 0.0174,
+  "shield": {
+   "iou": 0.923,
+   "laid": 14498,
+   "ratio": 0.437
+  },
   "view": "back"
  },
  "aria__swing_abandon__down_left__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 54.4,
+   "pose": 30.5
+  },
   "done": true,
   "face_area": 0.1255,
   "face_kept": 0.99,
@@ -1627,9 +2346,19 @@
   "s_exp": 1.091,
   "scale": 0.96,
   "score": 0.0505,
+  "shield": {
+   "iou": 0.973,
+   "laid": 18290,
+   "ratio": 0.379
+  },
   "view": "down_left"
  },
  "aria__swing_abandon__down_left__5.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 49.6,
+   "pose": 55.6
+  },
   "done": true,
   "face_area": 0.1734,
   "face_kept": 0.986,
@@ -1639,9 +2368,19 @@
   "s_exp": 1.035,
   "scale": 0.911,
   "score": 0.0335,
+  "shield": {
+   "iou": 0.981,
+   "laid": 18923,
+   "ratio": 0.444
+  },
   "view": "down_left"
  },
  "aria__swing_abandon__down_right__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 48.2,
+   "pose": 17.2
+  },
   "done": true,
   "face_area": 0.1806,
   "face_kept": 0.978,
@@ -1651,9 +2390,19 @@
   "s_exp": 1.01,
   "scale": 1.038,
   "score": 0.0345,
+  "shield": {
+   "iou": 0.998,
+   "laid": 31125,
+   "ratio": 0.447
+  },
   "view": "down_right"
  },
  "aria__swing_abandon__down_right__5.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 52.5,
+   "pose": 56.2
+  },
   "done": true,
   "face_area": 0.1377,
   "face_kept": 0.978,
@@ -1663,9 +2412,15 @@
   "s_exp": 1.046,
   "scale": 1.011,
   "score": 0.0312,
+  "shield": {
+   "iou": 0.979,
+   "laid": 23574,
+   "ratio": 0.398
+  },
   "view": "down_right"
  },
  "aria__swing_abandon__front__3.png": {
+  "blade": "not seen",
   "done": true,
   "face_area": 0.1869,
   "face_kept": 0.988,
@@ -1675,9 +2430,19 @@
   "s_exp": 1.039,
   "scale": 1.035,
   "score": 0.0318,
+  "shield": {
+   "iou": 0.993,
+   "laid": 32178,
+   "ratio": 0.484
+  },
   "view": "front"
  },
  "aria__swing_abandon__front__5.png": {
+  "blade": {
+   "k": 1.182,
+   "length": 39.6,
+   "pose": 54.0
+  },
   "done": true,
   "face_area": 0.1498,
   "face_kept": 0.991,
@@ -1687,9 +2452,19 @@
   "s_exp": 1.015,
   "scale": 0.984,
   "score": 0.0126,
+  "shield": {
+   "iou": 0.981,
+   "laid": 23070,
+   "ratio": 0.531
+  },
   "view": "front"
  },
  "aria__swing_abandon__left__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 56.8,
+   "pose": 53.5
+  },
   "done": true,
   "face_area": 0.1035,
   "face_kept": 0.986,
@@ -1699,9 +2474,19 @@
   "s_exp": 0.8,
   "scale": 0.704,
   "score": 0.0384,
+  "shield": {
+   "iou": 0.984,
+   "laid": 15834,
+   "ratio": 0.446
+  },
   "view": "left"
  },
  "aria__swing_abandon__left__5.png": {
+  "blade": {
+   "k": 1.003,
+   "length": 46.7,
+   "pose": 54.1
+  },
   "done": true,
   "face_area": 0.0732,
   "face_kept": 0.976,
@@ -1711,9 +2496,19 @@
   "s_exp": 1.038,
   "scale": 1.003,
   "score": 0.0467,
+  "shield": {
+   "iou": 0.986,
+   "laid": 36090,
+   "ratio": 0.715
+  },
   "view": "left"
  },
  "aria__swing_abandon__right__3.png": {
+  "blade": {
+   "k": 0.927,
+   "length": 62.3,
+   "pose": 42.2
+  },
   "done": true,
   "face_area": 0.0743,
   "face_kept": 0.967,
@@ -1723,9 +2518,15 @@
   "s_exp": 0.973,
   "scale": 0.886,
   "score": 0.0382,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__swing_abandon__right__5.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 49.1,
+   "pose": 50.9
+  },
   "done": true,
   "face_area": 0.0601,
   "face_kept": 0.98,
@@ -1735,9 +2536,15 @@
   "s_exp": 0.937,
   "scale": 0.824,
   "score": 0.0245,
+  "shield": "not an ellipse (0.95, 0.24)",
   "view": "right"
  },
  "aria__swing_abandon__up_left__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 42.9,
+   "pose": 29.5
+  },
   "done": true,
   "face_area": 0.0023,
   "face_kept": 1.0,
@@ -1747,9 +2554,19 @@
   "s_exp": 0.833,
   "scale": 0.733,
   "score": 0.0152,
+  "shield": {
+   "iou": 0.983,
+   "laid": 15344,
+   "ratio": 0.317
+  },
   "view": "up_left"
  },
  "aria__swing_abandon__up_left__5.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 41.2,
+   "pose": null
+  },
   "done": true,
   "face_area": 0.0,
   "face_kept": 0.0,
@@ -1759,9 +2576,15 @@
   "s_exp": 0.928,
   "scale": 0.816,
   "score": 0.0154,
+  "shield": "not an ellipse (0.96, 0.29)",
   "view": "up_left"
  },
  "aria__swing_abandon__up_right__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 53.6,
+   "pose": 49.4
+  },
   "done": true,
   "face_area": 0.0078,
   "face_kept": 0.966,
@@ -1771,9 +2594,19 @@
   "s_exp": 1.103,
   "scale": 0.97,
   "score": 0.018,
+  "shield": {
+   "iou": 0.948,
+   "laid": 10787,
+   "ratio": 0.341
+  },
   "view": "up_right"
  },
  "aria__swing_abandon__up_right__5.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 52.7,
+   "pose": 44.9
+  },
   "done": true,
   "face_area": 0.0,
   "face_kept": 0.0,
@@ -1783,9 +2616,19 @@
   "s_exp": 0.972,
   "scale": 0.856,
   "score": 0.013,
+  "shield": {
+   "iou": 0.898,
+   "laid": 9028,
+   "ratio": 0.441
+  },
   "view": "up_right"
  },
  "aria__thrust__back__2.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 28.6,
+   "pose": 16.7
+  },
   "done": true,
   "face_area": 0.0,
   "face_kept": 0.0,
@@ -1795,9 +2638,19 @@
   "s_exp": 0.928,
   "scale": 0.817,
   "score": 0.0173,
+  "shield": {
+   "iou": 0.854,
+   "laid": 7762,
+   "ratio": 0.42
+  },
   "view": "back"
  },
  "aria__thrust__back__4.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 35.4,
+   "pose": null
+  },
   "done": true,
   "face_area": 0.0,
   "face_kept": 1.0,
@@ -1807,9 +2660,19 @@
   "s_exp": 0.867,
   "scale": 0.793,
   "score": 0.0196,
+  "shield": {
+   "iou": 0.987,
+   "laid": 10692,
+   "ratio": 0.348
+  },
   "view": "back"
  },
  "aria__thrust__down_left__2.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 50.0,
+   "pose": 14.7
+  },
   "done": true,
   "face_area": 0.1306,
   "face_kept": 0.989,
@@ -1819,9 +2682,19 @@
   "s_exp": 1.02,
   "scale": 0.957,
   "score": 0.033,
+  "shield": {
+   "iou": 0.99,
+   "laid": 37146,
+   "ratio": 0.542
+  },
   "view": "down_left"
  },
  "aria__thrust__down_left__4.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 53.5,
+   "pose": 41.6
+  },
   "done": true,
   "face_area": 0.1305,
   "face_kept": 0.977,
@@ -1831,9 +2704,15 @@
   "s_exp": 0.957,
   "scale": 0.962,
   "score": 0.0216,
+  "shield": "not an ellipse (0.96, 0.18)",
   "view": "down_left"
  },
  "aria__thrust__down_right__2.png": {
+  "blade": {
+   "k": 0.881,
+   "length": 65.5,
+   "pose": 34.3
+  },
   "done": true,
   "face_area": 0.1807,
   "face_kept": 0.989,
@@ -1843,9 +2722,19 @@
   "s_exp": 1.042,
   "scale": 1.097,
   "score": 0.0195,
+  "shield": {
+   "iou": 0.822,
+   "laid": 28885,
+   "ratio": 0.45
+  },
   "view": "down_right"
  },
  "aria__thrust__down_right__4.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 53.1,
+   "pose": 41.6
+  },
   "done": true,
   "face_area": 0.1107,
   "face_kept": 0.98,
@@ -1855,9 +2744,15 @@
   "s_exp": 0.94,
   "scale": 0.977,
   "score": 0.0405,
+  "shield": {
+   "iou": 0.959,
+   "laid": 21080,
+   "ratio": 0.41
+  },
   "view": "down_right"
  },
  "aria__thrust__front__2.png": {
+  "blade": "not seen",
   "done": true,
   "face_area": 0.1645,
   "face_kept": 0.995,
@@ -1867,9 +2762,19 @@
   "s_exp": 1.101,
   "scale": 1.058,
   "score": 0.0265,
+  "shield": {
+   "iou": 0.993,
+   "laid": 32321,
+   "ratio": 0.508
+  },
   "view": "front"
  },
  "aria__thrust__front__4.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 36.6,
+   "pose": 15.6
+  },
   "done": true,
   "face_area": 0.1499,
   "face_kept": 0.996,
@@ -1879,9 +2784,15 @@
   "s_exp": 1.138,
   "scale": 1.091,
   "score": 0.0354,
+  "shield": "no face seen",
   "view": "front"
  },
  "aria__thrust__left__2.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 45.6,
+   "pose": null
+  },
   "done": true,
   "face_area": 0.1685,
   "face_kept": 0.991,
@@ -1891,9 +2802,19 @@
   "s_exp": 0.992,
   "scale": 0.873,
   "score": 0.0436,
+  "shield": {
+   "iou": 0.976,
+   "laid": 18991,
+   "ratio": 0.312
+  },
   "view": "left"
  },
  "aria__thrust__left__4.png": {
+  "blade": {
+   "k": 1.064,
+   "length": 45.4,
+   "pose": 55.8
+  },
   "done": true,
   "face_area": 0.1304,
   "face_kept": 0.983,
@@ -1903,9 +2824,19 @@
   "s_exp": 0.981,
   "scale": 0.954,
   "score": 0.0415,
+  "shield": {
+   "iou": 0.989,
+   "laid": 26187,
+   "ratio": 0.432
+  },
   "view": "left"
  },
  "aria__thrust__right__2.png": {
+  "blade": {
+   "k": 0.832,
+   "length": 69.4,
+   "pose": 55.4
+  },
   "done": true,
   "face_area": 0.0836,
   "face_kept": 0.966,
@@ -1915,9 +2846,15 @@
   "s_exp": 1.094,
   "scale": 1.053,
   "score": 0.0236,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__thrust__right__4.png": {
+  "blade": {
+   "k": 0.91,
+   "length": 63.5,
+   "pose": 52.1
+  },
   "done": true,
   "face_area": 0.0769,
   "face_kept": 0.976,
@@ -1927,9 +2864,11 @@
   "s_exp": 0.831,
   "scale": 0.791,
   "score": 0.0276,
+  "shield": "not an ellipse (0.37, 0.38)",
   "view": "right"
  },
  "aria__thrust__up_left__2.png": {
+  "blade": "not seen",
   "done": true,
   "face_area": 0.0049,
   "face_kept": 1.0,
@@ -1939,9 +2878,15 @@
   "s_exp": 0.875,
   "scale": 0.83,
   "score": 0.0125,
+  "shield": "no face seen",
   "view": "up_left"
  },
  "aria__thrust__up_left__4.png": {
+  "blade": {
+   "k": 0.961,
+   "length": 60.1,
+   "pose": 33.0
+  },
   "done": true,
   "face_area": 0.0073,
   "face_kept": 1.0,
@@ -1951,9 +2896,19 @@
   "s_exp": 0.827,
   "scale": 0.818,
   "score": 0.013,
+  "shield": {
+   "iou": 0.991,
+   "laid": 23262,
+   "ratio": 0.402
+  },
   "view": "up_left"
  },
  "aria__thrust__up_right__2.png": {
+  "blade": {
+   "k": 1.012,
+   "length": 36.5,
+   "pose": 42.6
+  },
   "done": true,
   "face_area": 0.0002,
   "face_kept": 1.0,
@@ -1963,6 +2918,7 @@
   "s_exp": 1.031,
   "scale": 0.907,
   "score": 0.0158,
+  "shield": "no face seen",
   "view": "up_right"
  },
  "aria__trip_fall__right__0.png": {
@@ -1975,6 +2931,7 @@
   "s_exp": 0.99,
   "scale": 0.961,
   "score": 0.0338,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__trip_fall__right__11.png": {
@@ -1987,6 +2944,7 @@
   "s_exp": 1.165,
   "scale": 1.025,
   "score": 0.0626,
+  "shield": "not an ellipse (0.93, 0.19)",
   "view": "right"
  },
  "aria__trip_fall__right__4.png": {
@@ -1999,9 +2957,15 @@
   "s_exp": 0.953,
   "scale": 0.899,
   "score": 0.0287,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__yoko__back__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 21.2,
+   "pose": 23.2
+  },
   "done": true,
   "face_area": 0.0,
   "face_kept": 0.0,
@@ -2011,9 +2975,19 @@
   "s_exp": 0.935,
   "scale": 0.823,
   "score": 0.0198,
+  "shield": {
+   "iou": 0.889,
+   "laid": 9241,
+   "ratio": 0.393
+  },
   "view": "back"
  },
  "aria__yoko__back__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 27.9,
+   "pose": null
+  },
   "done": true,
   "face_area": 0.0001,
   "face_kept": 1.0,
@@ -2023,9 +2997,19 @@
   "s_exp": 0.893,
   "scale": 0.846,
   "score": 0.0161,
+  "shield": {
+   "iou": 0.972,
+   "laid": 9375,
+   "ratio": 0.337
+  },
   "view": "back"
  },
  "aria__yoko__back__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 53.9,
+   "pose": 51.2
+  },
   "done": true,
   "face_area": 0.0004,
   "face_kept": 1.0,
@@ -2035,9 +3019,19 @@
   "s_exp": 0.853,
   "scale": 0.751,
   "score": 0.0197,
+  "shield": {
+   "iou": 0.993,
+   "laid": 10967,
+   "ratio": 0.477
+  },
   "view": "back"
  },
  "aria__yoko__down_left__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 49.3,
+   "pose": 49.2
+  },
   "done": true,
   "face_area": 0.1107,
   "face_kept": 0.989,
@@ -2047,9 +3041,19 @@
   "s_exp": 0.997,
   "scale": 0.997,
   "score": 0.0235,
+  "shield": {
+   "iou": 0.992,
+   "laid": 37822,
+   "ratio": 0.597
+  },
   "view": "down_left"
  },
  "aria__yoko__down_left__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 54.7,
+   "pose": 31.9
+  },
   "done": true,
   "face_area": 0.099,
   "face_kept": 0.994,
@@ -2059,9 +3063,19 @@
   "s_exp": 1.036,
   "scale": 1.002,
   "score": 0.0258,
+  "shield": {
+   "iou": 0.987,
+   "laid": 30719,
+   "ratio": 0.548
+  },
   "view": "down_left"
  },
  "aria__yoko__down_left__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 51.6,
+   "pose": 33.9
+  },
   "done": true,
   "face_area": 0.1267,
   "face_kept": 0.985,
@@ -2071,9 +3085,15 @@
   "s_exp": 1.089,
   "scale": 1.108,
   "score": 0.0278,
+  "shield": "no face seen",
   "view": "down_left"
  },
  "aria__yoko__down_right__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 39.5,
+   "pose": 24.5
+  },
   "done": true,
   "face_area": 0.1827,
   "face_kept": 0.99,
@@ -2083,9 +3103,19 @@
   "s_exp": 0.978,
   "scale": 1.04,
   "score": 0.0207,
+  "shield": {
+   "iou": 0.986,
+   "laid": 26423,
+   "ratio": 0.427
+  },
   "view": "down_right"
  },
  "aria__yoko__down_right__6.png": {
+  "blade": {
+   "k": 0.811,
+   "length": 71.2,
+   "pose": 48.0
+  },
   "done": true,
   "face_area": 0.1187,
   "face_kept": 0.964,
@@ -2095,9 +3125,15 @@
   "s_exp": 0.896,
   "scale": 0.939,
   "score": 0.0324,
+  "shield": "not an ellipse (0.73, 0.40)",
   "view": "down_right"
  },
  "aria__yoko__down_right__7.png": {
+  "blade": {
+   "k": 0.994,
+   "length": 58.1,
+   "pose": 41.0
+  },
   "done": true,
   "face_area": 0.1056,
   "face_kept": 0.981,
@@ -2107,9 +3143,15 @@
   "s_exp": 0.951,
   "scale": 0.927,
   "score": 0.0224,
+  "shield": "no face seen",
   "view": "down_right"
  },
  "aria__yoko__front__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 21.6,
+   "pose": null
+  },
   "done": true,
   "face_area": 0.1472,
   "face_kept": 0.988,
@@ -2119,9 +3161,15 @@
   "s_exp": 1.0,
   "scale": 0.97,
   "score": 0.0259,
+  "shield": {
+   "iou": 0.991,
+   "laid": 26874,
+   "ratio": 0.575
+  },
   "view": "front"
  },
  "aria__yoko__front__6.png": {
+  "blade": "not seen",
   "done": true,
   "face_area": 0.177,
   "face_kept": 0.995,
@@ -2131,9 +3179,19 @@
   "s_exp": 1.068,
   "scale": 1.09,
   "score": 0.031,
+  "shield": {
+   "iou": 0.987,
+   "laid": 22780,
+   "ratio": 0.424
+  },
   "view": "front"
  },
  "aria__yoko__front__7.png": {
+  "blade": {
+   "k": 0.747,
+   "length": 77.3,
+   "pose": 55.1
+  },
   "done": true,
   "face_area": 0.1288,
   "face_kept": 0.981,
@@ -2143,9 +3201,15 @@
   "s_exp": 0.947,
   "scale": 0.893,
   "score": 0.0256,
+  "shield": "no face seen",
   "view": "front"
  },
  "aria__yoko__left__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 53.7,
+   "pose": 51.0
+  },
   "done": true,
   "face_area": 0.1267,
   "face_kept": 0.99,
@@ -2155,9 +3219,15 @@
   "s_exp": 0.949,
   "scale": 0.925,
   "score": 0.0322,
+  "shield": "not an ellipse (0.92, 0.18)",
   "view": "left"
  },
  "aria__yoko__left__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 52.6,
+   "pose": 54.6
+  },
   "done": true,
   "face_area": 0.1031,
   "face_kept": 0.993,
@@ -2167,9 +3237,19 @@
   "s_exp": 0.888,
   "scale": 0.841,
   "score": 0.0223,
+  "shield": {
+   "iou": 0.991,
+   "laid": 20144,
+   "ratio": 0.401
+  },
   "view": "left"
  },
  "aria__yoko__left__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 45.4,
+   "pose": 16.1
+  },
   "done": true,
   "face_area": 0.1061,
   "face_kept": 0.993,
@@ -2179,9 +3259,19 @@
   "s_exp": 1.002,
   "scale": 1.002,
   "score": 0.0289,
+  "shield": {
+   "iou": 0.992,
+   "laid": 20754,
+   "ratio": 0.33
+  },
   "view": "left"
  },
  "aria__yoko__right__3.png": {
+  "blade": {
+   "k": 0.985,
+   "length": 58.6,
+   "pose": 47.9
+  },
   "done": true,
   "face_area": 0.0614,
   "face_kept": 0.979,
@@ -2191,9 +3281,15 @@
   "s_exp": 0.996,
   "scale": 1.056,
   "score": 0.0266,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__yoko__right__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 52.0,
+   "pose": 50.1
+  },
   "done": true,
   "face_area": 0.0671,
   "face_kept": 0.988,
@@ -2203,9 +3299,11 @@
   "s_exp": 1.106,
   "scale": 1.033,
   "score": 0.0376,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__yoko__right__7.png": {
+  "blade": "not seen",
   "done": true,
   "face_area": 0.0709,
   "face_kept": 0.983,
@@ -2215,9 +3313,11 @@
   "s_exp": 1.06,
   "scale": 1.023,
   "score": 0.0423,
+  "shield": "no face seen",
   "view": "right"
  },
  "aria__yoko__up_left__3.png": {
+  "blade": "no hilt",
   "done": true,
   "face_area": 0.0014,
   "face_kept": 1.0,
@@ -2227,9 +3327,15 @@
   "s_exp": 0.839,
   "scale": 0.738,
   "score": 0.0138,
+  "shield": "no face seen",
   "view": "up_left"
  },
  "aria__yoko__up_left__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 57.4,
+   "pose": 42.2
+  },
   "done": true,
   "face_area": 0.0058,
   "face_kept": 1.0,
@@ -2239,9 +3345,19 @@
   "s_exp": 0.686,
   "scale": 0.753,
   "score": 0.0106,
+  "shield": {
+   "iou": 0.945,
+   "laid": 9878,
+   "ratio": 0.418
+  },
   "view": "up_left"
  },
  "aria__yoko__up_left__7.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 55.1,
+   "pose": 46.9
+  },
   "done": true,
   "face_area": 0.0117,
   "face_kept": 1.0,
@@ -2251,9 +3367,19 @@
   "s_exp": 0.762,
   "scale": 0.79,
   "score": 0.012,
+  "shield": {
+   "iou": 0.986,
+   "laid": 17992,
+   "ratio": 0.395
+  },
   "view": "up_left"
  },
  "aria__yoko__up_right__3.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 52.2,
+   "pose": 52.1
+  },
   "done": true,
   "face_area": 0.0,
   "face_kept": 0.0,
@@ -2263,9 +3389,15 @@
   "s_exp": 0.979,
   "scale": 0.891,
   "score": 0.018,
+  "shield": "not an ellipse (0.96, 0.26)",
   "view": "up_right"
  },
  "aria__yoko__up_right__6.png": {
+  "blade": {
+   "k": 1.0,
+   "length": 45.5,
+   "pose": 24.8
+  },
   "done": true,
   "face_area": 0.0,
   "face_kept": 0.0,
@@ -2275,6 +3407,11 @@
   "s_exp": 0.943,
   "scale": 0.83,
   "score": 0.0203,
+  "shield": {
+   "iou": 0.857,
+   "laid": 10307,
+   "ratio": 0.359
+  },
   "view": "up_right"
  },
  "healer__healer_buff__back__0.png": {

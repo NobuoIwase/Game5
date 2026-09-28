@@ -10,6 +10,8 @@ the model (MODEL below); from it this tool carries over to the other frames of t
   - the head of the staff (mage, healer): ChatGPT redraws its prongs / ring / gem differently every time; the head of
     one model frame (PROPS) is laid over the frame's own, found by its gem, turned the way the frame's shaft leaves
     it and sized to the figure. What is left of the old head is taken away, and what is in front of it stays.
+  - Aria's sword and shield: the blade is drawn out or in along itself to the length the pose picture asks for (SWORD),
+    and the face of the shield (the emblem) is the model frame's, stretched onto the frame's ellipse (SHIELD)
   - the size: the frame is scaled so its head is as big as the model's (about the feet), within 0.8-1.25
 A frame whose head cannot be matched with confidence is left as it is (listed in the report).
 The originals are never touched.
@@ -348,6 +350,161 @@ def frames_of():
         if os.path.exists(p): out += [dict(f, set='scenes' if 'scenes' in p else 'draw') for f in json.load(open(p, encoding='utf-8'))['frames']]
     return out
 
+# Aria's sword: ChatGPT draws the blade at about one length whatever the pose, but that length wanders (from 0.7 to 1.3
+# of the usual). The pose picture has the sword too, drawn from the 3D pose, so it tells how long the blade should look
+# (a blade pointing at the viewer looks short). The blade is drawn out or drawn in along itself, from the hilt, to lie
+# between the pose's length and its full length.
+SWORD = {'aria': {'hilt': ['c1a88c', '7d5951', 'a8834f', '5a3d33'],
+                  # the full blade against the pose units (the median of the frames whose pose sword lies flat to the
+                  # picture: 0.963 x 57)
+                  'full': 55.0, 'pose_full': 57.0, 'cal': .963}}
+
+def blade_of(a, minlen):
+    """The longest thin light-grey piece: (length, width, centre, direction, its mask)."""
+    r, g, b, al = a[..., 0], a[..., 1], a[..., 2], a[..., 3]; L = a[..., :3].mean(2)
+    m = (L > .6) & (np.abs(r - b) < .1) & (np.abs(r - g) < .08) & (al > .5)
+    lab, n = ndimage.label(m); best = None
+    for i, sl in enumerate(ndimage.find_objects(lab)):
+        comp = lab[sl] == i + 1; ys, xs = np.where(comp)
+        if len(xs) < 30: continue
+        P = np.c_[xs, ys].astype(float); c = P.mean(0); _, _, vt = np.linalg.svd(P - c, full_matrices=False)
+        proj = (P - c) @ vt[0]; wid = np.abs((P - c) @ vt[1])
+        Ln = proj.max() - proj.min(); W = np.percentile(wid, 90) * 2 + 1
+        if Ln < minlen or Ln / W < 5: continue
+        if best is None or Ln > best[0]:
+            mk = np.zeros(m.shape, bool); mk[sl] = comp
+            best = (Ln, W, c + [sl[1].start, sl[0].start], vt[0], mk)
+    return best
+
+def pose_blade(f):
+    p = load(os.path.join(CG, f['pose'])) if f.get('set') == 'draw' else load(os.path.join(CG, 'scenes', f['pose']))
+    pb = blade_of(p, 15)
+    return None if pb is None else pb[0] * POSE_W[f['set']][f['char']] / p.shape[0]
+
+def lay_blade(f, img, base, rec):
+    """Aria's blade drawn out or in to the length the pose asks for (see SWORD)."""
+    cfg = SWORD.get(f['char'])
+    if not cfg or f.get('set') != 'draw': return base
+    b = bbox(img); H = b[3] - b[1]; u = H / pose_h(f)
+    bl = blade_of(img, .12 * H)
+    if bl is None: rec['blade'] = 'not seen'; return base
+    Ln, W, c, v, mk = bl
+    ys, xs = np.where(mk); t = (xs - c[0]) * v[0] + (ys - c[1]) * v[1]
+    ends = [c + v * t.min(), c + v * t.max()]
+    # the hilt end: the guard / grip / glove colours just past it
+    hilt = near(img, [hx(x) for x in cfg['hilt']], .12) & (img[..., 3] > .5)
+    def hilt_near(e, d):
+        p = e + d * v * .06 * Ln; r = int(.05 * Ln) + 4; x0, y0 = int(p[0]) - r, int(p[1]) - r
+        return hilt[max(0, y0):y0 + 2 * r, max(0, x0):x0 + 2 * r].sum()
+    h0, h1 = hilt_near(ends[0], -1), hilt_near(ends[1], 1)
+    if max(h0, h1) < 20: rec['blade'] = 'no hilt'; return base
+    hp, vv = (ends[0], v) if h0 >= h1 else (ends[1], -v)     # vv: from the hilt towards the tip
+    P = pose_blade(f)
+    lo = cfg['cal'] * P * u * .9 if P else 0
+    hi = cfg['full'] * u * 1.05
+    Lt = float(np.clip(Ln, lo, hi)); k = Lt / Ln
+    rec['blade'] = {'length': round(Ln / u, 1), 'pose': round(P, 1) if P else None, 'k': round(k, 3)}
+    if abs(k - 1) < .06: return base
+    # the blade strip (with its outline), and where it goes
+    strip = ndimage.binary_dilation(mk, iterations=5) & (img[..., 3] > .05)
+    Hh, Ww = strip.shape; yy, xx = np.mgrid[:Hh, :Ww]
+    ta = (xx - hp[0]) * vv[0] + (yy - hp[1]) * vv[1]; tn = (xx - hp[0]) * -vv[1] + (yy - hp[1]) * vv[0]
+    # source of each pixel: along the blade, 1/k as far from the hilt
+    sx = hp[0] + vv[0] * (ta / k) - vv[1] * tn; sy = hp[1] + vv[1] * (ta / k) + vv[0] * tn
+    region = (ta > 0) & (ta < Lt + 8) & (np.abs(tn) < W * 2 + 6)
+    src_in = ndimage.map_coordinates(strip.astype(np.float32), [sy, sx], order=1, mode='constant') > .5
+    new = region & src_in
+    out = base.copy()
+    # what the old blade leaves: the picture next to it, or nothing where it stood over nothing
+    gone = strip & ~new & (ta > 0)
+    if gone.any():
+        keep = ~strip & (img[..., 3] > .5)
+        idx = ndimage.distance_transform_edt(~keep, return_distances=False, return_indices=True)
+        dist = ndimage.distance_transform_edt(~keep)
+        out[gone] = base[idx[0], idx[1]][gone]
+        out[gone & (dist > 5)] = 0
+    for ch in range(4):
+        vals = ndimage.map_coordinates(base[..., ch], [sy, sx], order=1, mode='constant')
+        out[..., ch] = np.where(new, vals, out[..., ch])
+    if k < 1:
+        # scraps of the old tip (its faint outline) left standing alone past the new tip go
+        lane = (ta > Lt - 4) & (ta < Ln + 40) & (np.abs(tn) < W * 2 + 14)
+        lab, n = ndimage.label(out[..., 3] > .02)
+        if n:
+            sizes = ndimage.sum(np.ones_like(lab), lab, range(1, n + 1))
+            ids = np.unique(lab[lane & (lab > 0)]); ids = ids[sizes[ids - 1] < 1500]
+            out[np.isin(lab, ids)] = 0
+    return out
+
+# Aria's shield: the emblem on its face (blue on beige) comes out a different shape every time. The face of the model
+# frame's shield is laid into the frame's: the face is taken as an ellipse, and the model's face (beige and emblem) is
+# stretched from its ellipse to the frame's, upright. Whatever lies over the face in the frame (the sword, a hand,
+# hair) stays on top. The back of the shield (no emblem) is left as it is.
+SHIELD = {'aria': {'model': 'slash:front:0', 'emblem': lambda r, g, b: (b - r > .1) & (b > g) & (b > .3) & (b < .62)}}
+def shield_face(a, test):
+    """The face of the shield: (its mask, centre, 2x2 matrix mapping the unit circle onto it) or None."""
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]; al = a[..., 3] > .5
+    em = test(r, g, b) & al; lab, n = ndimage.label(em)
+    if not n: return None
+    sz = ndimage.sum(em, lab, range(1, n + 1)); i = int(np.argmax(sz))
+    if sz[i] < 400: return None
+    em = lab == i + 1; ys, xs = np.where(em); cx, cy = xs.mean(), ys.mean(); R = 3.2 * np.sqrt(sz[i])
+    L = a[..., :3].mean(2)
+    beige = (r - b > .06) & (r - b < .26) & (r >= g) & (g >= b - .02) & (L > .38) & (L < .86) & al
+    yy, xx = np.mgrid[:a.shape[0], :a.shape[1]]; near_ = np.hypot(xx - cx, yy - cy) < R
+    face = ndimage.binary_closing((beige | em) & near_, iterations=3)
+    lab, _ = ndimage.label(face); ids = lab[em & (lab > 0)]
+    if not len(ids): return None
+    face = ndimage.binary_fill_holes(lab == np.bincount(ids).argmax())
+    ys, xs = np.where(face)
+    if len(xs) < 2000: return None
+    P = np.c_[xs, ys].astype(float); c = P.mean(0); C = np.cov((P - c).T)
+    w, V = np.linalg.eigh(C); ax = 2 * np.sqrt(np.maximum(w, 1e-6))        # a uniform ellipse: var = a^2/4
+    A = V @ np.diag(ax) @ V.T
+    # how well an ellipse fits it
+    inv = np.linalg.inv(A); q = (np.c_[xx.ravel(), yy.ravel()] - c) @ inv.T
+    ell = (np.hypot(q[:, 0], q[:, 1]) < 1).reshape(face.shape)
+    iou = (ell & face).sum() / max(1, (ell | face).sum())
+    return face, c, A, float(iou), float(ax.min() / ax.max())
+
+class Shield:
+    def __init__(self, img, cfg):
+        self.test = cfg['emblem']; sf = shield_face(img, self.test)
+        if sf is None: raise ValueError('no shield face in the model')
+        self.face, self.c, self.A, _, _ = sf; self.img = img
+    def lay(self, img, base, rec):
+        sf = shield_face(img, self.test)
+        if sf is None: rec['shield'] = 'no face seen'; return base
+        face, c, A, iou, ratio = sf
+        if iou < .8 or ratio < .3: rec['shield'] = f'not an ellipse ({iou:.2f}, {ratio:.2f})'; return base
+        # the model's pixel for each pixel of the frame's ellipse (shrunk a little: the rim stays the frame's)
+        H, W = face.shape; x0, y0 = [int(v) for v in np.floor(c - np.abs(A).sum(1) - 4)]; x1, y1 = [int(v) for v in np.ceil(c + np.abs(A).sum(1) + 4)]
+        x0, y0 = max(0, x0), max(0, y0); x1, y1 = min(W, x1), min(H, y1)
+        yy, xx = np.mgrid[y0:y1, x0:x1]; q = np.c_[xx.ravel() - c[0], yy.ravel() - c[1]] @ np.linalg.inv(A).T
+        inside = (np.hypot(q[:, 0], q[:, 1]) < .96).reshape(yy.shape) & face[y0:y1, x0:x1]
+        src = (q @ self.A.T + self.c).reshape(yy.shape + (2,))
+        vals = np.stack([ndimage.map_coordinates(self.img[..., ch], [src[..., 1], src[..., 0]], order=1) for ch in range(4)], -1)
+        okm = ndimage.map_coordinates(self.face.astype(np.float32), [src[..., 1], src[..., 0]], order=1) > .5
+        # over the face in the frame: what is neither beige nor emblem stays (the frame's own face is the mask already,
+        # so a sword or hand across it has cut the mask: fill_holes put it back in, so take it out again)
+        a = img[y0:y1, x0:x1]; r, g, b = a[..., 0], a[..., 1], a[..., 2]; L = a[..., :3].mean(2)
+        own = ((r - b > .04) & (r - b < .3) & (L > .33) & (L < .9)) | self.test(r, g, b)
+        own = ndimage.binary_closing(own, iterations=2)
+        put = inside & okm & own
+        aa = ndimage.gaussian_filter(put.astype(np.float32), 1.0)[..., None] * put[..., None]
+        out = base.copy(); reg = out[y0:y1, x0:x1]
+        out[y0:y1, x0:x1] = reg * (1 - aa) + vals * aa
+        rec['shield'] = {'iou': round(iou, 3), 'ratio': round(ratio, 3), 'laid': int(put.sum())}
+        return out
+
+def shield_of(char, frames):
+    cfg = SHIELD.get(char)
+    if not cfg: return None
+    mo, vw, fn = cfg['model'].split(':')
+    pf = next((f for f in frames if f['char'] == char and f['motion'] == mo and f['view'] == vw and str(f['frame']) == fn), None)
+    if pf is None or not os.path.exists(os.path.join(SRC, char, pf['file'])): return None
+    return Shield(load(os.path.join(SRC, char, pf['file'])), cfg)
+
 STAFF_POOR = .2
 STAFF_POOR_NO_AXIS = .11
 def staff_of(char, frames):
@@ -375,15 +532,20 @@ def lay_staff(st, f, img, base, rec):
     rec['staff'] = {'score': round(v, 4), 'scale': round(s, 3), 'rot': deg, 'axis': prop.ax, 'removed': prop.removed}
     return out
 
+def lay_gear(st, sh, f, img, base, rec):
+    """The things she holds, after the hair: the staff head, the blade's length, the shield's face."""
+    base = lay_blade(f, img, lay_staff(st, f, img, base, rec), rec)
+    return sh.lay(img, base, rec) if sh is not None else base
+
 def main():
     report = {}; os.makedirs(OUT, exist_ok=True)
-    frames = frames_of(); fmap = {f['file']: f for f in frames}; staffs = {}
+    frames = frames_of(); fmap = {f['file']: f for f in frames}; staffs = {}; shields = {}
     for char, cfg in CHARS.items():
         if ONLY and char != ONLY: continue
         os.makedirs(os.path.join(OUT, char), exist_ok=True)
         have = lambda f: os.path.exists(os.path.join(SRC, char, f['file']))
         mine = [f for f in frames if f['char'] == char and have(f)]
-        st = staffs[char] = staff_of(char, frames)
+        st = staffs[char] = staff_of(char, frames); sh = shields[char] = shield_of(char, frames)
         for view in sorted({f['view'] for f in mine}):
             if VIEWS and view not in VIEWS: continue
             vf = [f for f in mine if f['view'] == view and (not MOTIONS or f['motion'] in MOTIONS)]
@@ -416,12 +578,12 @@ def main():
                         res = model.lay_hair(img, s, deg, x, y)
                         rec['face_kept'] = round(model.face_kept, 3); rec['face_area'] = round(model.face_area, 4)
                         if view not in ('back', 'up_left', 'up_right') and model.face_kept < .93: why.append('hair over the face'); tried = res; res = img
-                    if why: rec.update(done=False, why=why); res = lay_staff(st, f, img, res, rec)
+                    if why: rec.update(done=False, why=why); res = lay_gear(st, sh, f, img, res, rec)
                     else:
-                        res = lay_staff(st, f, img, res, rec)
+                        res = lay_gear(st, sh, f, img, res, rec)
                         k = float(np.clip(1 / s, .8, 1.45)); res = rescale(res, k); rec.update(done=True, resize=round(k, 3))
-                elif model is not None: rec.update(done=True, model=True); res = lay_staff(st, f, img, res, rec)
-                else: rec['done'] = False; res = lay_staff(st, f, img, res, rec)
+                elif model is not None: rec.update(done=True, model=True); res = lay_gear(st, sh, f, img, res, rec)
+                else: rec['done'] = False; res = lay_gear(st, sh, f, img, res, rec)
                 report[f['file']] = rec
                 to_img(res).resize((SIZE, SIZE), Image.LANCZOS).save(os.path.join(OUT, char, f['file'].replace('.png', '.webp')), 'WEBP', quality=90, method=6)
                 if PREVIEW:
@@ -444,7 +606,7 @@ def main():
         for k, r in report.items():
             if k.startswith(char + '__') and r.get('done') and 'score' in r and r['score'] > 2.2 * med:
                 r.update(done=False, why=['poor match']); src = load(os.path.join(SRC, char, k))
-                to_img(lay_staff(staffs.get(char), fmap[k], src, src, r)).resize((SIZE, SIZE), Image.LANCZOS).save(os.path.join(OUT, char, k.replace('.png', '.webp')), 'WEBP', quality=90, method=6)
+                to_img(lay_gear(staffs.get(char), shields.get(char), fmap[k], src, src, r)).resize((SIZE, SIZE), Image.LANCZOS).save(os.path.join(OUT, char, k.replace('.png', '.webp')), 'WEBP', quality=90, method=6)
     old = {}
     rp = os.path.join(OUT, 'report.json')
     if os.path.exists(rp): old = json.load(open(rp, encoding='utf-8'))

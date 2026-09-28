@@ -33,3 +33,4 @@ mage__defeat_collapse__right__2.png	同じ衣装の低い姿勢で安全判定�
 mage__defeat_collapse__right__5.png	同じ衣装の低い姿勢で安全判定の拒否が繰り返されているため、膝を曲げる・倒れる類似コマは未生成でスキップ。
 mage__defeat_collapse__right__9.png	同じ衣装の低い姿勢で安全判定の拒否が繰り返されているため、膝を曲げる・倒れる類似コマは未生成でスキップ。
 mage__defeat_collapse__right__13.png	同じ衣装の低い姿勢で安全判定の拒否が繰り返されているため、膝を曲げる・倒れる類似コマは未生成でスキップ。
+mage__grabbed_flinch__front__3.png	画像生成の安全判定で拒否（sexual、request 6c57b03a-7b0b-4155-b820-a76a7ceedfda）。再試行せずスキップ。

@@ -1,0 +1,3089 @@
+{
+ "aria__arms_behind_squirm__front__0.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__9.png",
+  "arm_l": "aria__sit_recover__front__9.png",
+  "leg_r": "aria__gaze_trance__front__1.png",
+  "leg_l": "aria__shiver_hug__front__4.png"
+ },
+ "scout__arms_behind_squirm__front__0.png": {
+  "core": "scout__gaze_trance__front__1.png",
+  "arm_r": "scout__sit_recover__front__9.png",
+  "arm_l": "scout__sit_recover__front__9.png",
+  "leg_r": "scout__scout_sense__front__4.png",
+  "leg_l": "scout__shiver_hug__front__4.png"
+ },
+ "mage__arms_behind_squirm__front__0.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__gaze_trance__front__0.png",
+  "leg_l": "mage__gaze_trance__front__0.png"
+ },
+ "healer__arms_behind_squirm__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__arms_behind_squirm__front__2.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__13.png",
+  "arm_l": "aria__sit_recover__front__5.png",
+  "leg_r": "aria__daze_sway__front__2.png",
+  "leg_l": "aria__gaze_trance__front__1.png"
+ },
+ "scout__arms_behind_squirm__front__2.png": {
+  "core": "scout__gaze_trance__front__1.png",
+  "arm_r": "scout__scout_throw__front__16.png",
+  "arm_l": "scout__sit_recover__front__5.png",
+  "leg_r": "scout__daze_sway__front__2.png",
+  "leg_l": "scout__gaze_trance__front__1.png"
+ },
+ "mage__arms_behind_squirm__front__2.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__13.png",
+  "arm_l": "mage__sit_recover__front__13.png",
+  "leg_r": "mage__mage_area__front__13.png",
+  "leg_l": "mage__gaze_trance__front__0.png"
+ },
+ "healer__arms_behind_squirm__front__2.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__arms_behind_wrench__front__0.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__13.png",
+  "arm_l": "aria__sit_recover__front__5.png",
+  "leg_r": "aria__daze_sway__front__0.png",
+  "leg_l": "aria__shiver_hug__front__4.png"
+ },
+ "scout__arms_behind_wrench__front__0.png": {
+  "core": "scout__gaze_trance__front__1.png",
+  "arm_r": "scout__sit_recover__front__13.png",
+  "arm_l": "scout__sit_recover__front__5.png",
+  "leg_r": "scout__daze_sway__front__0.png",
+  "leg_l": "scout__shiver_hug__front__4.png"
+ },
+ "mage__arms_behind_wrench__front__0.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__13.png",
+  "arm_l": "mage__sit_recover__front__13.png",
+  "leg_r": "mage__mage_area__front__13.png",
+  "leg_l": "mage__mage_recover__front__3.png"
+ },
+ "healer__arms_behind_wrench__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__arms_behind_wrench__front__5.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__13.png",
+  "arm_l": "aria__sit_recover__front__5.png",
+  "leg_r": "aria__daze_sway__front__2.png",
+  "leg_l": "aria__daze_sway__front__0.png"
+ },
+ "scout__arms_behind_wrench__front__5.png": {
+  "core": "scout__gaze_trance__front__1.png",
+  "arm_r": "scout__sit_recover__front__13.png",
+  "arm_l": "scout__sit_recover__front__5.png",
+  "leg_r": "scout__daze_sway__front__2.png",
+  "leg_l": "scout__daze_sway__front__0.png"
+ },
+ "mage__arms_behind_wrench__front__5.png": {
+  "core": "mage__daze_sway__front__2.png",
+  "arm_r": "mage__sit_recover__front__13.png",
+  "arm_l": "mage__sit_recover__front__13.png",
+  "leg_r": "mage__daze_sway__front__2.png",
+  "leg_l": "mage__daze_sway__front__0.png"
+ },
+ "healer__arms_behind_wrench__front__5.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__elbows_up_strain__front__0.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__heavy__front__1.png",
+  "arm_l": "aria__thrust__front__4.png",
+  "leg_r": "aria__gaze_trance__front__1.png",
+  "leg_l": "aria__shiver_hug__front__4.png"
+ },
+ "scout__elbows_up_strain__front__0.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__scout_throw__front__6.png",
+  "arm_l": "scout__scout_throw__front__6.png",
+  "leg_r": "scout__scout_sense__front__8.png",
+  "leg_l": "scout__shiver_hug__front__4.png"
+ },
+ "mage__elbows_up_strain__front__0.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__mage_area__front__5.png",
+  "arm_l": "mage__mage_recover__front__8.png",
+  "leg_r": "mage__gaze_trance__front__0.png",
+  "leg_l": "mage__gaze_trance__front__0.png"
+ },
+ "healer__elbows_up_strain__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__3.png",
+  "arm_l": "healer__healer_pray__front__0.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__elbows_up_strain__front__2.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__yoko__front__3.png",
+  "arm_l": "aria__thrust__front__4.png",
+  "leg_r": "aria__shiver_hug__front__0.png",
+  "leg_l": "aria__daze_sway__front__0.png"
+ },
+ "scout__elbows_up_strain__front__2.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__scout_throw__front__6.png",
+  "arm_l": "scout__scout_throw__front__6.png",
+  "leg_r": "scout__shiver_hug__front__0.png",
+  "leg_l": "scout__daze_sway__front__0.png"
+ },
+ "mage__elbows_up_strain__front__2.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__mage_area__front__5.png",
+  "arm_l": "mage__mage_recover__front__8.png",
+  "leg_r": "mage__mage_suppress__front__5.png",
+  "leg_l": "mage__daze_sway__front__0.png"
+ },
+ "healer__elbows_up_strain__front__2.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_purify__front__3.png",
+  "arm_l": "healer__healer_pray__front__0.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__legs_pulled_open__front__0.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__9.png",
+  "leg_r": "aria__shiver_hug__front__0.png",
+  "leg_l": "aria__shiver_hug__front__0.png"
+ },
+ "scout__legs_pulled_open__front__0.png": {
+  "core": "scout__gaze_trance__front__1.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__9.png",
+  "leg_r": "scout__scout_sense__front__4.png",
+  "leg_l": "scout__shiver_hug__front__0.png"
+ },
+ "mage__legs_pulled_open__front__0.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_suppress__front__5.png",
+  "leg_l": "mage__mage_suppress__front__0.png"
+ },
+ "healer__legs_pulled_open__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__legs_pulled_open__front__7.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__9.png",
+  "arm_l": "aria__sit_recover__front__9.png",
+  "leg_r": "aria__heavy__front__1.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__legs_pulled_open__front__7.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__9.png",
+  "arm_l": "scout__sit_recover__front__9.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__legs_pulled_open__front__7.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__legs_pulled_open__front__7.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__legs_held_open__front__0.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__9.png",
+  "leg_r": "aria__heavy__front__1.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__legs_held_open__front__0.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__9.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__legs_held_open__front__0.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__legs_held_open__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__legs_held_open__front__2.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__9.png",
+  "arm_l": "aria__sit_recover__front__9.png",
+  "leg_r": "aria__heavy__front__1.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__legs_held_open__front__2.png": {
+  "core": "scout__gaze_trance__front__1.png",
+  "arm_r": "scout__sit_recover__front__9.png",
+  "arm_l": "scout__sit_recover__front__9.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__legs_held_open__front__2.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__legs_held_open__front__2.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__hip_rock_spread__front__0.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__9.png",
+  "leg_r": "aria__heavy__front__1.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__hip_rock_spread__front__0.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__9.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__hip_rock_spread__front__0.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__hip_rock_spread__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__hip_rock_spread__front__3.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__9.png",
+  "arm_l": "aria__sit_recover__front__9.png",
+  "leg_r": "aria__heavy__front__1.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__hip_rock_spread__front__3.png": {
+  "core": "scout__gaze_trance__front__1.png",
+  "arm_r": "scout__sit_recover__front__9.png",
+  "arm_l": "scout__sit_recover__front__9.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__hip_rock_spread__front__3.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__hip_rock_spread__front__3.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__hip_rock_closed__front__0.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__9.png",
+  "leg_r": "aria__sit_recover__front__13.png",
+  "leg_l": "aria__sit_recover__front__13.png"
+ },
+ "scout__hip_rock_closed__front__0.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__9.png",
+  "leg_r": "scout__scout_sense__front__0.png",
+  "leg_l": "scout__scout_sense__front__0.png"
+ },
+ "mage__hip_rock_closed__front__0.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_bolt__front__0.png",
+  "leg_l": "mage__mage_bolt__front__0.png"
+ },
+ "healer__hip_rock_closed__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__hip_rock_closed__front__3.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__9.png",
+  "arm_l": "aria__sit_recover__front__9.png",
+  "leg_r": "aria__daze_sway__front__0.png",
+  "leg_l": "aria__daze_sway__front__0.png"
+ },
+ "scout__hip_rock_closed__front__3.png": {
+  "core": "scout__gaze_trance__front__1.png",
+  "arm_r": "scout__sit_recover__front__9.png",
+  "arm_l": "scout__sit_recover__front__9.png",
+  "leg_r": "scout__daze_sway__front__0.png",
+  "leg_l": "scout__daze_sway__front__0.png"
+ },
+ "mage__hip_rock_closed__front__3.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_area__front__13.png",
+  "leg_l": "mage__daze_sway__front__0.png"
+ },
+ "healer__hip_rock_closed__front__3.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__bounce_spread__front__0.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__13.png",
+  "arm_l": "aria__sit_recover__front__5.png",
+  "leg_r": "aria__heavy__front__1.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__bounce_spread__front__0.png": {
+  "core": "scout__gaze_trance__front__1.png",
+  "arm_r": "scout__sit_recover__front__13.png",
+  "arm_l": "scout__sit_recover__front__5.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__bounce_spread__front__0.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__13.png",
+  "arm_l": "mage__sit_recover__front__13.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__bounce_spread__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__bounce_spread__front__4.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__9.png",
+  "leg_r": "aria__heavy__front__1.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__bounce_spread__front__4.png": {
+  "core": "scout__gaze_trance__front__1.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__9.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__bounce_spread__front__4.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__bounce_spread__front__4.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__bounce_hung__front__0.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__heavy__front__1.png",
+  "arm_l": "aria__thrust__front__4.png",
+  "leg_r": "aria__heavy__front__1.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__bounce_hung__front__0.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__scout_throw__front__6.png",
+  "arm_l": "scout__scout_throw__front__13.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__bounce_hung__front__0.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__mage_area__front__5.png",
+  "arm_l": "mage__mage_suppress__front__5.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__bounce_hung__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__3.png",
+  "arm_l": "healer__healer_pray__front__0.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__bounce_hung__front__4.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__heavy__front__1.png",
+  "arm_l": "aria__thrust__front__4.png",
+  "leg_r": "aria__heavy__front__1.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__bounce_hung__front__4.png": {
+  "core": "scout__sit_recover__front__11.png",
+  "arm_r": "scout__scout_throw__front__6.png",
+  "arm_l": "scout__scout_throw__front__13.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__bounce_hung__front__4.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__mage_area__front__5.png",
+  "arm_l": "mage__mage_suppress__front__5.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__bounce_hung__front__4.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_purify__front__3.png",
+  "arm_l": "healer__healer_pray__front__0.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__tension_tiptoe__front__0.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__9.png",
+  "leg_r": "aria__heavy__front__1.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__tension_tiptoe__front__0.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__9.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__tension_tiptoe__front__0.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__tension_tiptoe__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__tension_tiptoe__front__3.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__9.png",
+  "arm_l": "aria__sit_recover__front__9.png",
+  "leg_r": "aria__yoko__front__3.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__tension_tiptoe__front__3.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__9.png",
+  "arm_l": "scout__sit_recover__front__9.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__tension_tiptoe__front__3.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__tension_tiptoe__front__3.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__tension_arch__front__0.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__9.png",
+  "leg_r": "aria__sit_recover__front__13.png",
+  "leg_l": "aria__sit_recover__front__13.png"
+ },
+ "scout__tension_arch__front__0.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__9.png",
+  "leg_r": "scout__scout_sense__front__0.png",
+  "leg_l": "scout__scout_sense__front__0.png"
+ },
+ "mage__tension_arch__front__0.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_bolt__front__0.png",
+  "leg_l": "mage__mage_bolt__front__0.png"
+ },
+ "healer__tension_arch__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_buff__front__8.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__tension_arch__front__3.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__gaze_trance__front__0.png",
+  "arm_l": "aria__gaze_trance__front__0.png",
+  "leg_r": "aria__daze_sway__front__2.png",
+  "leg_l": "aria__daze_sway__front__0.png"
+ },
+ "scout__tension_arch__front__3.png": {
+  "core": "scout__gaze_trance__front__1.png",
+  "arm_r": "scout__gaze_trance__front__0.png",
+  "arm_l": "scout__gaze_trance__front__0.png",
+  "leg_r": "scout__daze_sway__front__2.png",
+  "leg_l": "scout__daze_sway__front__0.png"
+ },
+ "mage__tension_arch__front__3.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__gaze_trance__front__0.png",
+  "arm_l": "mage__gaze_trance__front__0.png",
+  "leg_r": "mage__mage_area__front__13.png",
+  "leg_l": "mage__daze_sway__front__0.png"
+ },
+ "healer__tension_arch__front__3.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__afterglow_spread__front__0.png": {
+  "core": "aria__sit_recover__front__11.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__11.png",
+  "leg_r": "aria__heavy__front__1.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__afterglow_spread__front__0.png": {
+  "core": "scout__sit_recover__front__11.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__11.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__afterglow_spread__front__0.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__afterglow_spread__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__afterglow_spread__front__5.png": {
+  "core": "aria__sit_recover__front__11.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__11.png",
+  "leg_r": "aria__heavy__front__1.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__afterglow_spread__front__5.png": {
+  "core": "scout__sit_recover__front__11.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__11.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__afterglow_spread__front__5.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__afterglow_spread__front__5.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__afterglow_slump__front__0.png": {
+  "core": "aria__sit_recover__front__11.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__11.png",
+  "leg_r": "aria__daze_sway__front__2.png",
+  "leg_l": "aria__daze_sway__front__0.png"
+ },
+ "scout__afterglow_slump__front__0.png": {
+  "core": "scout__sit_recover__front__11.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__11.png",
+  "leg_r": "scout__daze_sway__front__2.png",
+  "leg_l": "scout__daze_sway__front__0.png"
+ },
+ "mage__afterglow_slump__front__0.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_area__front__13.png",
+  "leg_l": "mage__daze_sway__front__0.png"
+ },
+ "healer__afterglow_slump__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__afterglow_slump__front__5.png": {
+  "core": "aria__sit_recover__front__11.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__11.png",
+  "leg_r": "aria__daze_sway__front__2.png",
+  "leg_l": "aria__daze_sway__front__0.png"
+ },
+ "scout__afterglow_slump__front__5.png": {
+  "core": "scout__sit_recover__front__11.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__11.png",
+  "leg_r": "scout__daze_sway__front__2.png",
+  "leg_l": "scout__daze_sway__front__0.png"
+ },
+ "mage__afterglow_slump__front__5.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_area__front__13.png",
+  "leg_l": "mage__daze_sway__front__0.png"
+ },
+ "healer__afterglow_slump__front__5.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__recover_slump__front__0.png": {
+  "core": "aria__sit_recover__front__11.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__11.png",
+  "leg_r": "aria__daze_sway__front__2.png",
+  "leg_l": "aria__daze_sway__front__0.png"
+ },
+ "scout__recover_slump__front__0.png": {
+  "core": "scout__sit_recover__front__11.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__11.png",
+  "leg_r": "scout__daze_sway__front__2.png",
+  "leg_l": "scout__daze_sway__front__0.png"
+ },
+ "mage__recover_slump__front__0.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_area__front__13.png",
+  "leg_l": "mage__daze_sway__front__0.png"
+ },
+ "healer__recover_slump__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__recover_slump__front__2.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__11.png",
+  "leg_r": "aria__daze_sway__front__0.png",
+  "leg_l": "aria__daze_sway__front__0.png"
+ },
+ "scout__recover_slump__front__2.png": {
+  "core": "scout__gaze_trance__front__1.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__11.png",
+  "leg_r": "scout__daze_sway__front__0.png",
+  "leg_l": "scout__daze_sway__front__0.png"
+ },
+ "mage__recover_slump__front__2.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_area__front__13.png",
+  "leg_l": "mage__daze_sway__front__0.png"
+ },
+ "healer__recover_slump__front__2.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__bent_over__up_right__0.png": {
+  "core": "aria__heavy__up_right__6.png",
+  "arm_r": "aria__swing_abandon__up_right__5.png",
+  "arm_l": "aria__slash__up_right__3.png",
+  "leg_r": "aria__yoko__up_right__6.png",
+  "leg_l": "aria__swing_abandon__up_right__3.png"
+ },
+ "scout__bent_over__up_right__0.png": {
+  "core": "scout__scout_sidestep__up_right__5.png",
+  "arm_r": "scout__scout_throw__up_right__16.png",
+  "arm_l": "scout__scout_throw__up_right__16.png",
+  "leg_r": "scout__scout_knife_combo__up_right__11.png",
+  "leg_l": "scout__scout_throw__up_right__16.png"
+ },
+ "mage__bent_over__up_right__0.png": {
+  "core": "mage__mage_area__up_right__13.png",
+  "arm_r": "mage__mage_bolt__up_right__0.png",
+  "arm_l": "mage__mage_bolt__up_right__0.png",
+  "leg_r": "mage__mage_area__up_right__13.png",
+  "leg_l": "mage__mage_barrier__up_right__4.png"
+ },
+ "healer__bent_over__up_right__0.png": {
+  "core": "healer__healer_purify__up_right__3.png",
+  "arm_r": "healer__healer_purify__up_right__9.png",
+  "arm_l": "healer__healer_purify__up_right__3.png",
+  "leg_r": "healer__healer_purify__up_right__9.png",
+  "leg_l": "healer__healer_purify__up_right__3.png"
+ },
+ "aria__bent_over__up_right__2.png": {
+  "core": "aria__heavy__up_right__6.png",
+  "arm_r": "aria__swing_abandon__up_right__5.png",
+  "arm_l": "aria__slash__up_right__3.png",
+  "leg_r": "aria__slash__up_right__7.png",
+  "leg_l": "aria__swing_abandon__up_right__3.png"
+ },
+ "scout__bent_over__up_right__2.png": {
+  "core": "scout__scout_sidestep__up_right__5.png",
+  "arm_r": "scout__scout_throw__up_right__16.png",
+  "arm_l": "scout__scout_throw__up_right__16.png",
+  "leg_r": "scout__scout_knife_combo__up_right__11.png",
+  "leg_l": "scout__scout_throw__up_right__16.png"
+ },
+ "mage__bent_over__up_right__2.png": {
+  "core": "mage__mage_area__up_right__13.png",
+  "arm_r": "mage__mage_bolt__up_right__0.png",
+  "arm_l": "mage__mage_bolt__up_right__0.png",
+  "leg_r": "mage__mage_bolt__up_right__0.png",
+  "leg_l": "mage__mage_barrier__up_right__4.png"
+ },
+ "healer__bent_over__up_right__2.png": {
+  "core": "healer__healer_buff__up_right__8.png",
+  "arm_r": "healer__healer_purify__up_right__9.png",
+  "arm_l": "healer__healer_purify__up_right__3.png",
+  "leg_r": "healer__healer_purify__up_right__3.png",
+  "leg_l": "healer__healer_purify__up_right__3.png"
+ },
+ "healer__down_fall_back__right__0.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__0.png",
+  "arm_l": "healer__healer_buff__right__8.png",
+  "leg_r": "healer__healer_buff__right__0.png",
+  "leg_l": "healer__healer_buff__right__0.png"
+ },
+ "healer__down_fall_back__right__2.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_purify__right__9.png",
+  "arm_l": "healer__healer_buff__right__8.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "healer__down_fall_back__right__8.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "healer__down_fall_back__right__12.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_run_cover__right__4.png",
+  "leg_l": "healer__healer_run_cover__right__0.png"
+ },
+ "healer__down_fall_back__right__17.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__4.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_run_cover__right__4.png",
+  "leg_l": "healer__healer_run_cover__right__0.png"
+ },
+ "aria__down_pinned_kick__right__0.png": {
+  "core": "aria__get_up__right__4.png",
+  "arm_r": "aria__get_up__right__8.png",
+  "arm_l": "aria__thrust__right__4.png",
+  "leg_r": "aria__get_up__right__8.png",
+  "leg_l": "aria__get_up__right__8.png"
+ },
+ "scout__down_pinned_kick__right__0.png": {
+  "core": "scout__get_up__right__4.png",
+  "arm_r": "scout__get_up__right__8.png",
+  "arm_l": "scout__get_up__right__8.png",
+  "leg_r": "scout__get_up__right__8.png",
+  "leg_l": "scout__get_up__right__8.png"
+ },
+ "mage__down_pinned_kick__right__0.png": {
+  "core": "mage__get_up__right__0.png",
+  "arm_r": "mage__get_up__right__8.png",
+  "arm_l": "mage__get_up__right__4.png",
+  "leg_r": "mage__get_up__right__8.png",
+  "leg_l": "mage__get_up__right__8.png"
+ },
+ "healer__down_pinned_kick__right__0.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__4.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_run_cover__right__4.png",
+  "leg_l": "healer__healer_run_cover__right__0.png"
+ },
+ "aria__down_pinned_kick__right__2.png": {
+  "core": "aria__get_up__right__4.png",
+  "arm_r": "aria__get_up__right__8.png",
+  "arm_l": "aria__thrust__right__4.png",
+  "leg_r": "aria__get_up__right__0.png",
+  "leg_l": "aria__heavy__right__7.png"
+ },
+ "scout__down_pinned_kick__right__2.png": {
+  "core": "scout__get_up__right__4.png",
+  "arm_r": "scout__get_up__right__8.png",
+  "arm_l": "scout__get_up__right__8.png",
+  "leg_r": "scout__get_up__right__0.png",
+  "leg_l": "scout__get_up__right__8.png"
+ },
+ "mage__down_pinned_kick__right__2.png": {
+  "core": "mage__get_up__right__0.png",
+  "arm_r": "mage__get_up__right__8.png",
+  "arm_l": "mage__get_up__right__4.png",
+  "leg_r": "mage__get_up__right__0.png",
+  "leg_l": "mage__get_up__right__8.png"
+ },
+ "healer__down_pinned_kick__right__2.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__4.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_run_cover__right__4.png",
+  "leg_l": "healer__healer_run_cover__right__0.png"
+ },
+ "aria__down_pinned_spread__down_right__0.png": {
+  "core": "aria__get_up__right__4.png",
+  "arm_r": "aria__engulf_sink__front__6.png",
+  "arm_l": "aria__defeat_collapse__right__0.png",
+  "leg_r": "aria__get_up__right__4.png",
+  "leg_l": "aria__get_up__right__4.png"
+ },
+ "scout__down_pinned_spread__down_right__0.png": {
+  "core": "scout__scout_throw__down_right__6.png",
+  "arm_r": "scout__scout_throw__down_right__6.png",
+  "arm_l": "scout__scout_throw__down_right__16.png",
+  "leg_r": "scout__scout_sidestep__down_right__3.png",
+  "leg_l": "scout__scout_sidestep__down_right__5.png"
+ },
+ "mage__down_pinned_spread__down_right__0.png": {
+  "core": "mage__mage_area__down_right__5.png",
+  "arm_r": "mage__mage_area__down_right__5.png",
+  "arm_l": "mage__mage_area__down_right__5.png",
+  "leg_r": "mage__mage_area__down_right__13.png",
+  "leg_l": "mage__mage_area__down_right__13.png"
+ },
+ "healer__down_pinned_spread__down_right__0.png": {
+  "core": "healer__healer_buff__down_right__4.png",
+  "arm_r": "healer__healer_buff__down_right__4.png",
+  "arm_l": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_r": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_l": "healer__healer_purify__down_right__6.png"
+ },
+ "aria__down_pinned_spread__down_right__6.png": {
+  "core": "aria__get_up__right__4.png",
+  "arm_r": "aria__engulf_sink__front__6.png",
+  "arm_l": "aria__defeat_collapse__right__0.png",
+  "leg_r": "aria__get_up__right__0.png",
+  "leg_l": "aria__get_up__right__4.png"
+ },
+ "scout__down_pinned_spread__down_right__6.png": {
+  "core": "scout__scout_throw__down_right__6.png",
+  "arm_r": "scout__scout_throw__down_right__6.png",
+  "arm_l": "scout__scout_throw__down_right__16.png",
+  "leg_r": "scout__scout_sidestep__down_right__5.png",
+  "leg_l": "scout__scout_sidestep__down_right__5.png"
+ },
+ "mage__down_pinned_spread__down_right__6.png": {
+  "core": "mage__mage_area__down_right__5.png",
+  "arm_r": "mage__mage_area__down_right__5.png",
+  "arm_l": "mage__mage_area__down_right__5.png",
+  "leg_r": "mage__mage_area__down_right__13.png",
+  "leg_l": "mage__mage_area__down_right__13.png"
+ },
+ "healer__down_pinned_spread__down_right__6.png": {
+  "core": "healer__healer_buff__down_right__4.png",
+  "arm_r": "healer__healer_buff__down_right__4.png",
+  "arm_l": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_r": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_l": "healer__healer_purify__down_right__6.png"
+ },
+ "aria__down_pinned_rock__down_right__0.png": {
+  "core": "aria__get_up__right__4.png",
+  "arm_r": "aria__engulf_sink__front__6.png",
+  "arm_l": "aria__defeat_collapse__right__0.png",
+  "leg_r": "aria__get_up__right__0.png",
+  "leg_l": "aria__get_up__right__8.png"
+ },
+ "scout__down_pinned_rock__down_right__0.png": {
+  "core": "scout__scout_throw__down_right__6.png",
+  "arm_r": "scout__scout_throw__down_right__6.png",
+  "arm_l": "scout__scout_throw__down_right__16.png",
+  "leg_r": "scout__scout_sidestep__down_right__5.png",
+  "leg_l": "scout__scout_sidestep__down_right__5.png"
+ },
+ "mage__down_pinned_rock__down_right__0.png": {
+  "core": "mage__mage_area__down_right__5.png",
+  "arm_r": "mage__mage_area__down_right__5.png",
+  "arm_l": "mage__mage_area__down_right__5.png",
+  "leg_r": "mage__mage_area__down_right__13.png",
+  "leg_l": "mage__mage_area__down_right__13.png"
+ },
+ "healer__down_pinned_rock__down_right__0.png": {
+  "core": "healer__healer_buff__down_right__4.png",
+  "arm_r": "healer__healer_buff__down_right__4.png",
+  "arm_l": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_r": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_l": "healer__healer_purify__down_right__6.png"
+ },
+ "aria__down_pinned_rock__down_right__3.png": {
+  "core": "aria__get_up__right__4.png",
+  "arm_r": "aria__engulf_sink__front__6.png",
+  "arm_l": "aria__defeat_collapse__right__0.png",
+  "leg_r": "aria__get_up__right__0.png",
+  "leg_l": "aria__get_up__right__4.png"
+ },
+ "scout__down_pinned_rock__down_right__3.png": {
+  "core": "scout__scout_throw__down_right__6.png",
+  "arm_r": "scout__scout_throw__down_right__6.png",
+  "arm_l": "scout__scout_throw__down_right__16.png",
+  "leg_r": "scout__scout_sidestep__down_right__5.png",
+  "leg_l": "scout__scout_sidestep__down_right__5.png"
+ },
+ "mage__down_pinned_rock__down_right__3.png": {
+  "core": "mage__mage_area__down_right__5.png",
+  "arm_r": "mage__mage_area__down_right__5.png",
+  "arm_l": "mage__mage_area__down_right__5.png",
+  "leg_r": "mage__mage_area__down_right__13.png",
+  "leg_l": "mage__mage_area__down_right__13.png"
+ },
+ "healer__down_pinned_rock__down_right__3.png": {
+  "core": "healer__healer_buff__down_right__4.png",
+  "arm_r": "healer__healer_buff__down_right__4.png",
+  "arm_l": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_r": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_l": "healer__healer_purify__down_right__6.png"
+ },
+ "aria__down_face_down__right__0.png": {
+  "core": "aria__trip_fall__right__11.png",
+  "arm_r": "aria__yoko__right__7.png",
+  "arm_l": "aria__heavy__right__3.png",
+  "leg_r": "aria__kesa__right__7.png",
+  "leg_l": "aria__ankle_grabbed__right__4.png"
+ },
+ "scout__down_face_down__right__0.png": {
+  "core": "scout__defeat_collapse__right__13.png",
+  "arm_r": "scout__scout_throw__right__13.png",
+  "arm_l": "scout__trip_fall__right__4.png",
+  "leg_r": "scout__defeat_collapse__right__13.png",
+  "leg_l": "scout__defeat_collapse__right__13.png"
+ },
+ "mage__down_face_down__right__0.png": {
+  "core": "mage__trip_fall__right__11.png",
+  "arm_r": "mage__trip_fall__right__4.png",
+  "arm_l": "mage__mage_channel__right__3.png",
+  "leg_r": "mage__trip_fall__right__0.png",
+  "leg_l": "mage__ankle_grabbed__right__6.png"
+ },
+ "healer__down_face_down__right__0.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__8.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_run_cover__right__0.png",
+  "leg_l": "healer__healer_run_cover__right__4.png"
+ },
+ "aria__down_face_down__right__4.png": {
+  "core": "aria__trip_fall__right__11.png",
+  "arm_r": "aria__yoko__right__7.png",
+  "arm_l": "aria__heavy__right__3.png",
+  "leg_r": "aria__kesa__right__7.png",
+  "leg_l": "aria__kiss_recover__right__5.png"
+ },
+ "scout__down_face_down__right__4.png": {
+  "core": "scout__defeat_collapse__right__13.png",
+  "arm_r": "scout__scout_throw__right__13.png",
+  "arm_l": "scout__trip_fall__right__4.png",
+  "leg_r": "scout__defeat_collapse__right__13.png",
+  "leg_l": "scout__defeat_collapse__right__9.png"
+ },
+ "mage__down_face_down__right__4.png": {
+  "core": "mage__trip_fall__right__11.png",
+  "arm_r": "mage__trip_fall__right__4.png",
+  "arm_l": "mage__mage_channel__right__3.png",
+  "leg_r": "mage__trip_fall__right__0.png",
+  "leg_l": "mage__kiss_recover__right__5.png"
+ },
+ "healer__down_face_down__right__4.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__8.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_run_cover__right__0.png",
+  "leg_l": "healer__healer_run_cover__right__4.png"
+ },
+ "aria__down_hips_up__right__0.png": {
+  "core": "aria__trip_fall__right__11.png",
+  "arm_r": "aria__trip_fall__right__4.png",
+  "arm_l": "aria__kiss_recover__right__8.png",
+  "leg_r": "aria__trip_fall__right__11.png",
+  "leg_l": "aria__trip_fall__right__11.png"
+ },
+ "scout__down_hips_up__right__0.png": {
+  "core": "scout__trip_fall__right__11.png",
+  "arm_r": "scout__trip_fall__right__4.png",
+  "arm_l": "scout__kiss_recover__right__8.png",
+  "leg_r": "scout__trip_fall__right__13.png",
+  "leg_l": "scout__trip_fall__right__13.png"
+ },
+ "mage__down_hips_up__right__0.png": {
+  "core": "mage__trip_fall__right__11.png",
+  "arm_r": "mage__trip_fall__right__4.png",
+  "arm_l": "mage__trip_fall__right__4.png",
+  "leg_r": "mage__trip_fall__right__11.png",
+  "leg_l": "mage__trip_fall__right__11.png"
+ },
+ "healer__down_hips_up__right__0.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_purify__right__9.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_run_cover__right__0.png",
+  "leg_l": "healer__healer_run_cover__right__4.png"
+ },
+ "aria__down_hips_up__right__2.png": {
+  "core": "aria__trip_fall__right__11.png",
+  "arm_r": "aria__trip_fall__right__4.png",
+  "arm_l": "aria__kiss_recover__right__8.png",
+  "leg_r": "aria__trip_fall__right__11.png",
+  "leg_l": "aria__trip_fall__right__11.png"
+ },
+ "scout__down_hips_up__right__2.png": {
+  "core": "scout__trip_fall__right__11.png",
+  "arm_r": "scout__trip_fall__right__4.png",
+  "arm_l": "scout__kiss_recover__right__8.png",
+  "leg_r": "scout__trip_fall__right__13.png",
+  "leg_l": "scout__trip_fall__right__13.png"
+ },
+ "mage__down_hips_up__right__2.png": {
+  "core": "mage__trip_fall__right__11.png",
+  "arm_r": "mage__trip_fall__right__4.png",
+  "arm_l": "mage__trip_fall__right__4.png",
+  "leg_r": "mage__trip_fall__right__11.png",
+  "leg_l": "mage__trip_fall__right__11.png"
+ },
+ "healer__down_hips_up__right__2.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_purify__right__9.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_run_cover__right__0.png",
+  "leg_l": "healer__healer_run_cover__right__4.png"
+ },
+ "healer__get_up__right__0.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__4.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_run_cover__right__4.png",
+  "leg_l": "healer__healer_run_cover__right__0.png"
+ },
+ "healer__get_up__right__4.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_run_cover__right__4.png",
+  "leg_l": "healer__healer_run_cover__right__0.png"
+ },
+ "healer__get_up__right__8.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_run_cover__right__4.png",
+  "leg_l": "healer__healer_run_cover__right__0.png"
+ },
+ "healer__get_up__right__13.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_purify__right__9.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "healer__get_up__right__16.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "healer__get_up__right__18.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_buff__right__0.png",
+  "leg_l": "healer__healer_buff__right__0.png"
+ },
+ "aria__kiss_forced__right__0.png": {
+  "core": "aria__get_up__right__18.png",
+  "arm_r": "aria__kiss_recover__right__8.png",
+  "arm_l": "aria__kiss_recover__right__10.png",
+  "leg_r": "aria__get_up__right__18.png",
+  "leg_l": "aria__kiss_recover__right__10.png"
+ },
+ "scout__kiss_forced__right__0.png": {
+  "core": "scout__kiss_recover__right__8.png",
+  "arm_r": "scout__kiss_recover__right__8.png",
+  "arm_l": "scout__kiss_recover__right__10.png",
+  "leg_r": "scout__scout_dash_stop__right__9.png",
+  "leg_l": "scout__kiss_recover__right__10.png"
+ },
+ "mage__kiss_forced__right__0.png": {
+  "core": "mage__trip_fall__right__0.png",
+  "arm_r": "mage__kiss_recover__right__5.png",
+  "arm_l": "mage__kiss_recover__right__10.png",
+  "leg_r": "mage__mage_bolt__right__0.png",
+  "leg_l": "mage__kiss_recover__right__10.png"
+ },
+ "healer__kiss_forced__right__0.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__0.png",
+  "arm_l": "healer__healer_buff__right__8.png",
+  "leg_r": "healer__healer_buff__right__0.png",
+  "leg_l": "healer__healer_buff__right__0.png"
+ },
+ "aria__kiss_forced__right__6.png": {
+  "core": "aria__get_up__right__18.png",
+  "arm_r": "aria__kiss_recover__right__8.png",
+  "arm_l": "aria__trip_fall__right__4.png",
+  "leg_r": "aria__kiss_recover__right__8.png",
+  "leg_l": "aria__kiss_recover__right__10.png"
+ },
+ "scout__kiss_forced__right__6.png": {
+  "core": "scout__kiss_recover__right__8.png",
+  "arm_r": "scout__kiss_recover__right__8.png",
+  "arm_l": "scout__scout_throw__right__6.png",
+  "leg_r": "scout__kiss_recover__right__8.png",
+  "leg_l": "scout__kiss_recover__right__10.png"
+ },
+ "mage__kiss_forced__right__6.png": {
+  "core": "mage__trip_fall__right__0.png",
+  "arm_r": "mage__kiss_recover__right__5.png",
+  "arm_l": "mage__mage_barrier__right__4.png",
+  "leg_r": "mage__mage_area__right__13.png",
+  "leg_l": "mage__kiss_recover__right__10.png"
+ },
+ "healer__kiss_forced__right__6.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__0.png",
+  "arm_l": "healer__healer_buff__right__8.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_buff__right__8.png"
+ },
+ "aria__kiss_tension__right__0.png": {
+  "core": "aria__get_up__right__18.png",
+  "arm_r": "aria__kiss_recover__right__8.png",
+  "arm_l": "aria__kiss_recover__right__10.png",
+  "leg_r": "aria__get_up__right__18.png",
+  "leg_l": "aria__get_up__right__18.png"
+ },
+ "scout__kiss_tension__right__0.png": {
+  "core": "scout__kiss_recover__right__8.png",
+  "arm_r": "scout__kiss_recover__right__8.png",
+  "arm_l": "scout__kiss_recover__right__10.png",
+  "leg_r": "scout__scout_dash_stop__right__9.png",
+  "leg_l": "scout__scout_dash_stop__right__9.png"
+ },
+ "mage__kiss_tension__right__0.png": {
+  "core": "mage__trip_fall__right__0.png",
+  "arm_r": "mage__kiss_recover__right__5.png",
+  "arm_l": "mage__kiss_recover__right__10.png",
+  "leg_r": "mage__mage_bolt__right__0.png",
+  "leg_l": "mage__mage_bolt__right__0.png"
+ },
+ "healer__kiss_tension__right__0.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__0.png",
+  "arm_l": "healer__healer_buff__right__8.png",
+  "leg_r": "healer__healer_buff__right__0.png",
+  "leg_l": "healer__healer_buff__right__0.png"
+ },
+ "aria__kiss_tension__right__3.png": {
+  "core": "aria__get_up__right__18.png",
+  "arm_r": "aria__get_up__right__13.png",
+  "arm_l": "aria__kiss_recover__right__8.png",
+  "leg_r": "aria__kiss_recover__right__8.png",
+  "leg_l": "aria__swing_abandon__right__3.png"
+ },
+ "scout__kiss_tension__right__3.png": {
+  "core": "scout__kiss_recover__right__8.png",
+  "arm_r": "scout__defeat_collapse__right__9.png",
+  "arm_l": "scout__kiss_recover__right__8.png",
+  "leg_r": "scout__kiss_recover__right__8.png",
+  "leg_l": "scout__scout_throw__right__16.png"
+ },
+ "mage__kiss_tension__right__3.png": {
+  "core": "mage__trip_fall__right__0.png",
+  "arm_r": "mage__get_up__right__13.png",
+  "arm_l": "mage__trip_fall__right__4.png",
+  "leg_r": "mage__mage_area__right__13.png",
+  "leg_l": "mage__mage_area__right__13.png"
+ },
+ "healer__kiss_tension__right__3.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_purify__right__9.png",
+  "arm_l": "healer__healer_buff__right__8.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "aria__kiss_tension__right__8.png": {
+  "core": "aria__kiss_recover__right__0.png",
+  "arm_r": "aria__get_up__right__16.png",
+  "arm_l": "aria__get_up__right__16.png",
+  "leg_r": "aria__thrust__right__2.png",
+  "leg_l": "aria__heavy__right__3.png"
+ },
+ "scout__kiss_tension__right__8.png": {
+  "core": "scout__trip_fall__right__0.png",
+  "arm_r": "scout__get_up__right__16.png",
+  "arm_l": "scout__get_up__right__16.png",
+  "leg_r": "scout__scout_dash_stop__right__7.png",
+  "leg_l": "scout__kiss_recover__right__5.png"
+ },
+ "mage__kiss_tension__right__8.png": {
+  "core": "mage__trip_fall__right__0.png",
+  "arm_r": "mage__get_up__right__16.png",
+  "arm_l": "mage__get_up__right__16.png",
+  "leg_r": "mage__get_up__right__16.png",
+  "leg_l": "mage__kiss_recover__right__5.png"
+ },
+ "healer__kiss_tension__right__8.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "aria__kiss_respond__right__0.png": {
+  "core": "aria__get_up__right__18.png",
+  "arm_r": "aria__yoko__right__6.png",
+  "arm_l": "aria__heavy__right__3.png",
+  "leg_r": "aria__kiss_recover__right__8.png",
+  "leg_l": "aria__kiss_recover__right__8.png"
+ },
+ "scout__kiss_respond__right__0.png": {
+  "core": "scout__trip_fall__right__0.png",
+  "arm_r": "scout__scout_throw__right__13.png",
+  "arm_l": "scout__trip_fall__right__4.png",
+  "leg_r": "scout__kiss_recover__right__8.png",
+  "leg_l": "scout__kiss_recover__right__8.png"
+ },
+ "mage__kiss_respond__right__0.png": {
+  "core": "mage__trip_fall__right__0.png",
+  "arm_r": "mage__ankle_grabbed__right__6.png",
+  "arm_l": "mage__mage_area__right__5.png",
+  "leg_r": "mage__mage_area__right__13.png",
+  "leg_l": "mage__kiss_recover__right__8.png"
+ },
+ "healer__kiss_respond__right__0.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__8.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "aria__kiss_respond__right__6.png": {
+  "core": "aria__get_up__right__18.png",
+  "arm_r": "aria__yoko__right__6.png",
+  "arm_l": "aria__heavy__right__3.png",
+  "leg_r": "aria__kiss_recover__right__8.png",
+  "leg_l": "aria__kiss_recover__right__8.png"
+ },
+ "scout__kiss_respond__right__6.png": {
+  "core": "scout__trip_fall__right__0.png",
+  "arm_r": "scout__scout_throw__right__13.png",
+  "arm_l": "scout__trip_fall__right__4.png",
+  "leg_r": "scout__kiss_recover__right__8.png",
+  "leg_l": "scout__kiss_recover__right__8.png"
+ },
+ "mage__kiss_respond__right__6.png": {
+  "core": "mage__trip_fall__right__0.png",
+  "arm_r": "mage__ankle_grabbed__right__6.png",
+  "arm_l": "mage__mage_area__right__5.png",
+  "leg_r": "mage__mage_area__right__13.png",
+  "leg_l": "mage__kiss_recover__right__8.png"
+ },
+ "healer__kiss_respond__right__6.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__8.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "aria__tempt_pose__front__0.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__shiver_hug__front__0.png",
+  "arm_l": "aria__gaze_trance__front__0.png",
+  "leg_r": "aria__yoko__front__6.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__tempt_pose__front__0.png": {
+  "core": "scout__gaze_trance__front__1.png",
+  "arm_r": "scout__shiver_hug__front__0.png",
+  "arm_l": "scout__gaze_trance__front__0.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__tempt_pose__front__0.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__break_free__front__8.png",
+  "arm_l": "mage__gaze_trance__front__0.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__tempt_pose__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_disgust__front__4.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__tempt_pose__front__6.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__shiver_hug__front__0.png",
+  "arm_l": "aria__gaze_trance__front__0.png",
+  "leg_r": "aria__yoko__front__6.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__tempt_pose__front__6.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__shiver_hug__front__0.png",
+  "arm_l": "scout__gaze_trance__front__0.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__tempt_pose__front__6.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__break_free__front__8.png",
+  "arm_l": "mage__gaze_trance__front__0.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__tempt_pose__front__6.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_disgust__front__4.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__chain_splay__front__0.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__sit_recover__front__9.png",
+  "arm_l": "aria__sit_recover__front__11.png",
+  "leg_r": "aria__heavy__front__1.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__chain_splay__front__0.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__9.png",
+  "arm_l": "scout__sit_recover__front__11.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__chain_splay__front__0.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__chain_splay__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__chain_splay__front__3.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__sit_recover__front__9.png",
+  "arm_l": "aria__sit_recover__front__11.png",
+  "leg_r": "aria__heavy__front__1.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__chain_splay__front__3.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__9.png",
+  "arm_l": "scout__sit_recover__front__11.png",
+  "leg_r": "scout__scout_sidestep__front__5.png",
+  "leg_l": "scout__scout_knife_combo__front__6.png"
+ },
+ "mage__chain_splay__front__3.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__mage_area__front__13.png"
+ },
+ "healer__chain_splay__front__3.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__tension_free__front__0.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__shiver_hug__front__0.png",
+  "arm_l": "aria__daze_sway__front__0.png",
+  "leg_r": "aria__sit_recover__front__13.png",
+  "leg_l": "aria__sit_recover__front__13.png"
+ },
+ "scout__tension_free__front__0.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__shiver_hug__front__0.png",
+  "arm_l": "scout__daze_sway__front__0.png",
+  "leg_r": "scout__scout_sense__front__0.png",
+  "leg_l": "scout__scout_sense__front__0.png"
+ },
+ "mage__tension_free__front__0.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__break_free__front__8.png",
+  "arm_l": "mage__daze_sway__front__0.png",
+  "leg_r": "mage__mage_bolt__front__0.png",
+  "leg_l": "mage__mage_bolt__front__0.png"
+ },
+ "healer__tension_free__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_disgust__front__4.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__tension_free__front__4.png": {
+  "core": "aria__daze_sway__front__0.png",
+  "arm_r": "aria__shiver_hug__front__0.png",
+  "arm_l": "aria__gaze_trance__front__0.png",
+  "leg_r": "aria__daze_sway__front__0.png",
+  "leg_l": "aria__daze_sway__front__0.png"
+ },
+ "scout__tension_free__front__4.png": {
+  "core": "scout__gaze_trance__front__1.png",
+  "arm_r": "scout__shiver_hug__front__0.png",
+  "arm_l": "scout__gaze_trance__front__0.png",
+  "leg_r": "scout__daze_sway__front__0.png",
+  "leg_l": "scout__daze_sway__front__0.png"
+ },
+ "mage__tension_free__front__4.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__break_free__front__8.png",
+  "arm_l": "mage__gaze_trance__front__0.png",
+  "leg_r": "mage__daze_sway__front__0.png",
+  "leg_l": "mage__daze_sway__front__0.png"
+ },
+ "healer__tension_free__front__4.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_disgust__front__4.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__tension_free__front__11.png": {
+  "core": "aria__sit_recover__front__11.png",
+  "arm_r": "aria__sit_recover__front__9.png",
+  "arm_l": "aria__sit_recover__front__9.png",
+  "leg_r": "aria__daze_sway__front__2.png",
+  "leg_l": "aria__daze_sway__front__0.png"
+ },
+ "scout__tension_free__front__11.png": {
+  "core": "scout__sit_recover__front__11.png",
+  "arm_r": "scout__sit_recover__front__9.png",
+  "arm_l": "scout__sit_recover__front__9.png",
+  "leg_r": "scout__daze_sway__front__2.png",
+  "leg_l": "scout__held_from_behind__front__2.png"
+ },
+ "mage__tension_free__front__11.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_area__front__13.png",
+  "leg_l": "mage__held_from_behind__front__2.png"
+ },
+ "healer__tension_free__front__11.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__tension_free__front__13.png": {
+  "core": "aria__sit_recover__front__5.png",
+  "arm_r": "aria__slash__front__0.png",
+  "arm_l": "aria__spore_inhale__front__0.png",
+  "leg_r": "aria__sit_recover__front__2.png",
+  "leg_l": "aria__sit_recover__front__2.png"
+ },
+ "scout__tension_free__front__13.png": {
+  "core": "scout__sit_recover__front__5.png",
+  "arm_r": "scout__scout_knife_combo__front__0.png",
+  "arm_l": "scout__scout_sense__front__8.png",
+  "leg_r": "scout__sit_recover__front__2.png",
+  "leg_l": "scout__sit_recover__front__2.png"
+ },
+ "mage__tension_free__front__13.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__mage_bolt__front__0.png",
+  "arm_l": "mage__spore_inhale__front__2.png",
+  "leg_r": "mage__sit_recover__front__2.png",
+  "leg_l": "mage__sit_recover__front__2.png"
+ },
+ "healer__tension_free__front__13.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__sit_afterglow__front__0.png": {
+  "core": "aria__sit_recover__front__5.png",
+  "arm_r": "aria__slash__front__0.png",
+  "arm_l": "aria__spore_inhale__front__0.png",
+  "leg_r": "aria__sit_recover__front__2.png",
+  "leg_l": "aria__sit_recover__front__2.png"
+ },
+ "scout__sit_afterglow__front__0.png": {
+  "core": "scout__sit_recover__front__5.png",
+  "arm_r": "scout__scout_knife_combo__front__0.png",
+  "arm_l": "scout__scout_sense__front__8.png",
+  "leg_r": "scout__sit_recover__front__2.png",
+  "leg_l": "scout__sit_recover__front__2.png"
+ },
+ "mage__sit_afterglow__front__0.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__mage_bolt__front__0.png",
+  "arm_l": "mage__spore_inhale__front__2.png",
+  "leg_r": "mage__sit_recover__front__2.png",
+  "leg_l": "mage__sit_recover__front__2.png"
+ },
+ "healer__sit_afterglow__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "healer__held_from_behind__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_buff__front__8.png",
+  "leg_l": "healer__healer_disgust__front__4.png"
+ },
+ "healer__held_from_behind__front__2.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_buff__front__8.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__down_afterglow__down_right__0.png": {
+  "core": "aria__get_up__right__4.png",
+  "arm_r": "aria__yoko__down_right__3.png",
+  "arm_l": "aria__slash__down_right__0.png",
+  "leg_r": "aria__sit_recover__front__5.png",
+  "leg_l": "aria__get_up__right__13.png"
+ },
+ "scout__down_afterglow__down_right__0.png": {
+  "core": "scout__scout_throw__down_right__6.png",
+  "arm_r": "scout__scout_throw__down_right__6.png",
+  "arm_l": "scout__scout_pack_adjust__down_right__3.png",
+  "leg_r": "scout__scout_sidestep__down_right__5.png",
+  "leg_l": "scout__scout_sidestep__down_right__5.png"
+ },
+ "mage__down_afterglow__down_right__0.png": {
+  "core": "mage__mage_area__down_right__5.png",
+  "arm_r": "mage__mage_area__down_right__5.png",
+  "arm_l": "mage__mage_bolt__down_right__3.png",
+  "leg_r": "mage__mage_area__down_right__13.png",
+  "leg_l": "mage__mage_area__down_right__13.png"
+ },
+ "healer__down_afterglow__down_right__0.png": {
+  "core": "healer__healer_buff__down_right__4.png",
+  "arm_r": "healer__healer_buff__down_right__4.png",
+  "arm_l": "healer__healer_purify__down_right__9.png",
+  "leg_r": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_l": "healer__healer_purify__down_right__6.png"
+ },
+ "aria__down_afterglow__down_right__5.png": {
+  "core": "aria__get_up__right__4.png",
+  "arm_r": "aria__yoko__down_right__3.png",
+  "arm_l": "aria__slash__down_right__0.png",
+  "leg_r": "aria__sit_recover__front__5.png",
+  "leg_l": "aria__get_up__right__13.png"
+ },
+ "scout__down_afterglow__down_right__5.png": {
+  "core": "scout__scout_throw__down_right__6.png",
+  "arm_r": "scout__scout_throw__down_right__6.png",
+  "arm_l": "scout__scout_pack_adjust__down_right__3.png",
+  "leg_r": "scout__scout_sidestep__down_right__5.png",
+  "leg_l": "scout__scout_sidestep__down_right__5.png"
+ },
+ "mage__down_afterglow__down_right__5.png": {
+  "core": "mage__mage_area__down_right__5.png",
+  "arm_r": "mage__mage_area__down_right__5.png",
+  "arm_l": "mage__mage_bolt__down_right__3.png",
+  "leg_r": "mage__mage_area__down_right__13.png",
+  "leg_l": "mage__mage_area__down_right__13.png"
+ },
+ "healer__down_afterglow__down_right__5.png": {
+  "core": "healer__healer_buff__down_right__4.png",
+  "arm_r": "healer__healer_buff__down_right__4.png",
+  "arm_l": "healer__healer_purify__down_right__9.png",
+  "leg_r": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_l": "healer__healer_purify__down_right__6.png"
+ },
+ "aria__down_recover__down_right__2.png": {
+  "core": "aria__get_up__right__4.png",
+  "arm_r": "aria__yoko__down_right__3.png",
+  "arm_l": "aria__slash__down_right__0.png",
+  "leg_r": "aria__get_up__right__0.png",
+  "leg_l": "aria__get_up__right__13.png"
+ },
+ "scout__down_recover__down_right__2.png": {
+  "core": "scout__scout_throw__down_right__6.png",
+  "arm_r": "scout__scout_throw__down_right__6.png",
+  "arm_l": "scout__scout_pack_adjust__down_right__3.png",
+  "leg_r": "scout__scout_sidestep__down_right__3.png",
+  "leg_l": "scout__scout_sidestep__down_right__5.png"
+ },
+ "mage__down_recover__down_right__2.png": {
+  "core": "mage__mage_area__down_right__5.png",
+  "arm_r": "mage__mage_area__down_right__5.png",
+  "arm_l": "mage__mage_bolt__down_right__3.png",
+  "leg_r": "mage__mage_area__down_right__13.png",
+  "leg_l": "mage__mage_area__down_right__13.png"
+ },
+ "healer__down_recover__down_right__2.png": {
+  "core": "healer__healer_buff__down_right__4.png",
+  "arm_r": "healer__healer_buff__down_right__4.png",
+  "arm_l": "healer__healer_purify__down_right__9.png",
+  "leg_r": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_l": "healer__healer_purify__down_right__6.png"
+ },
+ "aria__kiss_afterglow__right__0.png": {
+  "core": "aria__kiss_recover__right__0.png",
+  "arm_r": "aria__kiss_recover__right__0.png",
+  "arm_l": "aria__kiss_recover__right__0.png",
+  "leg_r": "aria__kiss_recover__right__0.png",
+  "leg_l": "aria__kiss_recover__right__0.png"
+ },
+ "scout__kiss_afterglow__right__0.png": {
+  "core": "scout__trip_fall__right__0.png",
+  "arm_r": "scout__kiss_recover__right__0.png",
+  "arm_l": "scout__kiss_recover__right__0.png",
+  "leg_r": "scout__kiss_recover__right__0.png",
+  "leg_l": "scout__kiss_recover__right__0.png"
+ },
+ "mage__kiss_afterglow__right__0.png": {
+  "core": "mage__trip_fall__right__0.png",
+  "arm_r": "mage__kiss_recover__right__0.png",
+  "arm_l": "mage__kiss_recover__right__0.png",
+  "leg_r": "mage__kiss_recover__right__0.png",
+  "leg_l": "mage__kiss_recover__right__0.png"
+ },
+ "healer__kiss_afterglow__right__0.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "aria__kiss_afterglow__right__5.png": {
+  "core": "aria__kiss_recover__right__0.png",
+  "arm_r": "aria__kiss_recover__right__0.png",
+  "arm_l": "aria__kiss_recover__right__0.png",
+  "leg_r": "aria__kiss_recover__right__0.png",
+  "leg_l": "aria__kiss_recover__right__0.png"
+ },
+ "scout__kiss_afterglow__right__5.png": {
+  "core": "scout__trip_fall__right__0.png",
+  "arm_r": "scout__kiss_recover__right__0.png",
+  "arm_l": "scout__kiss_recover__right__5.png",
+  "leg_r": "scout__kiss_recover__right__0.png",
+  "leg_l": "scout__kiss_recover__right__0.png"
+ },
+ "mage__kiss_afterglow__right__5.png": {
+  "core": "mage__trip_fall__right__0.png",
+  "arm_r": "mage__kiss_recover__right__0.png",
+  "arm_l": "mage__kiss_recover__right__5.png",
+  "leg_r": "mage__kiss_recover__right__0.png",
+  "leg_l": "mage__kiss_recover__right__0.png"
+ },
+ "healer__kiss_afterglow__right__5.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "healer__kiss_recover__right__0.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "healer__kiss_recover__right__5.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "healer__kiss_recover__right__8.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__0.png",
+  "arm_l": "healer__healer_buff__right__8.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "healer__kiss_recover__right__10.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__0.png",
+  "arm_l": "healer__healer_buff__right__8.png",
+  "leg_r": "healer__healer_buff__right__0.png",
+  "leg_l": "healer__healer_buff__right__0.png"
+ },
+ "healer__sit_recover__front__2.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "mage__sit_recover__front__5.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__13.png",
+  "arm_l": "mage__sit_recover__front__13.png",
+  "leg_r": "mage__sit_recover__front__2.png",
+  "leg_l": "mage__sit_recover__front__2.png"
+ },
+ "healer__sit_recover__front__5.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "mage__sit_recover__front__9.png": {
+  "core": "mage__sit_recover__front__11.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__sit_recover__front__2.png"
+ },
+ "healer__sit_recover__front__9.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "healer__sit_recover__front__11.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "healer__sit_recover__front__13.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__clinger_afterglow__front__5.png": {
+  "core": "aria__sit_recover__front__5.png",
+  "arm_r": "aria__sit_recover__front__9.png",
+  "arm_l": "aria__sit_recover__front__9.png",
+  "leg_r": "aria__sit_recover__front__2.png",
+  "leg_l": "aria__sit_recover__front__2.png"
+ },
+ "scout__clinger_afterglow__front__5.png": {
+  "core": "scout__sit_recover__front__5.png",
+  "arm_r": "scout__sit_recover__front__9.png",
+  "arm_l": "scout__sit_recover__front__9.png",
+  "leg_r": "scout__sit_recover__front__2.png",
+  "leg_l": "scout__sit_recover__front__2.png"
+ },
+ "mage__clinger_afterglow__front__5.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__sit_recover__front__2.png",
+  "leg_l": "mage__sit_recover__front__2.png"
+ },
+ "healer__clinger_afterglow__front__5.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__clinger_recover__front__15.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__shiver_hug__front__0.png",
+  "arm_l": "aria__shiver_hug__front__0.png",
+  "leg_r": "aria__sit_recover__front__13.png",
+  "leg_l": "aria__sit_recover__front__13.png"
+ },
+ "scout__clinger_recover__front__15.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__shiver_hug__front__0.png",
+  "arm_l": "scout__shiver_hug__front__4.png",
+  "leg_r": "scout__scout_sense__front__0.png",
+  "leg_l": "scout__scout_sense__front__0.png"
+ },
+ "mage__clinger_recover__front__15.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__break_free__front__8.png",
+  "arm_l": "mage__mage_overheat__front__0.png",
+  "leg_r": "mage__mage_bolt__front__0.png",
+  "leg_l": "mage__mage_bolt__front__0.png"
+ },
+ "healer__clinger_recover__front__15.png": {
+  "core": "healer__healer_pray__front__0.png",
+  "arm_r": "healer__healer_disgust__front__4.png",
+  "arm_l": "healer__healer_cover__front__0.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__clinger_peel__front__0.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__sit_recover__front__13.png",
+  "arm_l": "aria__sit_recover__front__13.png",
+  "leg_r": "aria__sit_recover__front__13.png",
+  "leg_l": "aria__sit_recover__front__13.png"
+ },
+ "scout__clinger_peel__front__0.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__13.png",
+  "arm_l": "scout__sit_recover__front__13.png",
+  "leg_r": "scout__scout_sense__front__0.png",
+  "leg_l": "scout__scout_sense__front__0.png"
+ },
+ "mage__clinger_peel__front__0.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__13.png",
+  "arm_l": "mage__sit_recover__front__13.png",
+  "leg_r": "mage__mage_bolt__front__0.png",
+  "leg_l": "mage__mage_bolt__front__0.png"
+ },
+ "healer__clinger_peel__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_buff__front__8.png",
+  "leg_l": "healer__healer_disgust__front__4.png"
+ },
+ "aria__clinger_peel__front__7.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__engulf_sink__front__6.png",
+  "arm_l": "aria__sit_recover__front__13.png",
+  "leg_r": "aria__sit_recover__front__13.png",
+  "leg_l": "aria__sit_recover__front__13.png"
+ },
+ "scout__clinger_peel__front__7.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__scout_knife_combo__front__2.png",
+  "arm_l": "scout__sit_recover__front__13.png",
+  "leg_r": "scout__scout_sense__front__0.png",
+  "leg_l": "scout__scout_sense__front__0.png"
+ },
+ "mage__clinger_peel__front__7.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__break_free__front__3.png",
+  "arm_l": "mage__sit_recover__front__13.png",
+  "leg_r": "mage__mage_bolt__front__0.png",
+  "leg_l": "mage__mage_bolt__front__0.png"
+ },
+ "healer__clinger_peel__front__7.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_buff__front__8.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__clinger_peel__front__20.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__daze_sway__front__0.png",
+  "arm_l": "aria__sit_recover__front__9.png",
+  "leg_r": "aria__daze_sway__front__2.png",
+  "leg_l": "aria__daze_sway__front__0.png"
+ },
+ "scout__clinger_peel__front__20.png": {
+  "core": "scout__gaze_trance__front__1.png",
+  "arm_r": "scout__daze_sway__front__0.png",
+  "arm_l": "scout__sit_recover__front__9.png",
+  "leg_r": "scout__daze_sway__front__2.png",
+  "leg_l": "scout__daze_sway__front__0.png"
+ },
+ "mage__clinger_peel__front__20.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__daze_sway__front__0.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_area__front__13.png",
+  "leg_l": "mage__daze_sway__front__0.png"
+ },
+ "healer__clinger_peel__front__20.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__clinger_tension__front__4.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__9.png",
+  "arm_l": "aria__bubble_float__front__0.png",
+  "leg_r": "aria__daze_sway__front__0.png",
+  "leg_l": "aria__daze_sway__front__0.png"
+ },
+ "scout__clinger_tension__front__4.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__9.png",
+  "arm_l": "scout__bubble_float__front__0.png",
+  "leg_r": "scout__daze_sway__front__0.png",
+  "leg_l": "scout__daze_sway__front__0.png"
+ },
+ "mage__clinger_tension__front__4.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__mage_area__front__13.png",
+  "leg_r": "mage__daze_sway__front__0.png",
+  "leg_l": "mage__daze_sway__front__0.png"
+ },
+ "healer__clinger_tension__front__4.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__clinger_accept__front__0.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__sit_recover__front__2.png",
+  "arm_l": "aria__sit_recover__front__2.png",
+  "leg_r": "aria__slash__front__7.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__clinger_accept__front__0.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__2.png",
+  "arm_l": "scout__sit_recover__front__2.png",
+  "leg_r": "scout__scout_sidestep__front__3.png",
+  "leg_l": "scout__scout_sidestep__front__3.png"
+ },
+ "mage__clinger_accept__front__0.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__2.png",
+  "arm_l": "mage__sit_recover__front__2.png",
+  "leg_r": "mage__sit_recover__front__11.png",
+  "leg_l": "mage__mage_barrier__front__4.png"
+ },
+ "healer__clinger_accept__front__0.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__clinger_accept__front__2.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__sit_recover__front__2.png",
+  "arm_l": "aria__sit_recover__front__2.png",
+  "leg_r": "aria__yoko__front__7.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "scout__clinger_accept__front__2.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__2.png",
+  "arm_l": "scout__sit_recover__front__2.png",
+  "leg_r": "scout__scout_sidestep__front__3.png",
+  "leg_l": "scout__scout_sidestep__front__3.png"
+ },
+ "mage__clinger_accept__front__2.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__2.png",
+  "arm_l": "mage__sit_recover__front__2.png",
+  "leg_r": "mage__sit_recover__front__11.png",
+  "leg_l": "mage__mage_barrier__front__4.png"
+ },
+ "healer__clinger_accept__front__2.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__down_tension__down_right__0.png": {
+  "core": "aria__get_up__right__4.png",
+  "arm_r": "aria__engulf_sink__front__6.png",
+  "arm_l": "aria__defeat_collapse__right__0.png",
+  "leg_r": "aria__get_up__right__0.png",
+  "leg_l": "aria__get_up__right__4.png"
+ },
+ "scout__down_tension__down_right__0.png": {
+  "core": "scout__scout_throw__down_right__6.png",
+  "arm_r": "scout__scout_throw__down_right__6.png",
+  "arm_l": "scout__scout_throw__down_right__16.png",
+  "leg_r": "scout__scout_sidestep__down_right__5.png",
+  "leg_l": "scout__scout_sidestep__down_right__5.png"
+ },
+ "mage__down_tension__down_right__0.png": {
+  "core": "mage__mage_area__down_right__5.png",
+  "arm_r": "mage__mage_area__down_right__5.png",
+  "arm_l": "mage__mage_area__down_right__5.png",
+  "leg_r": "mage__mage_area__down_right__13.png",
+  "leg_l": "mage__mage_area__down_right__13.png"
+ },
+ "healer__down_tension__down_right__0.png": {
+  "core": "healer__healer_buff__down_right__4.png",
+  "arm_r": "healer__healer_buff__down_right__4.png",
+  "arm_l": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_r": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_l": "healer__healer_purify__down_right__6.png"
+ },
+ "aria__down_tension__down_right__3.png": {
+  "core": "aria__heavy__down_right__3.png",
+  "arm_r": "aria__heavy__down_right__1.png",
+  "arm_l": "aria__swing_abandon__down_right__3.png",
+  "leg_r": "aria__heavy__down_right__3.png",
+  "leg_l": "aria__heavy__down_right__1.png"
+ },
+ "scout__down_tension__down_right__3.png": {
+  "core": "scout__scout_throw__down_right__6.png",
+  "arm_r": "scout__scout_throw__down_right__6.png",
+  "arm_l": "scout__scout_throw__down_right__16.png",
+  "leg_r": "scout__scout_sidestep__down_right__3.png",
+  "leg_l": "scout__scout_sidestep__down_right__5.png"
+ },
+ "mage__down_tension__down_right__3.png": {
+  "core": "mage__mage_area__down_right__5.png",
+  "arm_r": "mage__mage_area__down_right__5.png",
+  "arm_l": "mage__mage_area__down_right__5.png",
+  "leg_r": "mage__mage_area__down_right__13.png",
+  "leg_l": "mage__mage_area__down_right__13.png"
+ },
+ "healer__down_tension__down_right__3.png": {
+  "core": "healer__healer_buff__down_right__4.png",
+  "arm_r": "healer__healer_buff__down_right__4.png",
+  "arm_l": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_r": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_l": "healer__healer_purify__down_right__6.png"
+ },
+ "aria__down_tension__down_right__12.png": {
+  "core": "aria__get_up__right__4.png",
+  "arm_r": "aria__engulf_sink__front__6.png",
+  "arm_l": "aria__defeat_collapse__right__0.png",
+  "leg_r": "aria__sit_recover__front__5.png",
+  "leg_l": "aria__get_up__right__13.png"
+ },
+ "scout__down_tension__down_right__12.png": {
+  "core": "scout__scout_throw__down_right__6.png",
+  "arm_r": "scout__scout_throw__down_right__6.png",
+  "arm_l": "scout__scout_throw__down_right__16.png",
+  "leg_r": "scout__scout_sidestep__down_right__5.png",
+  "leg_l": "scout__scout_sidestep__down_right__5.png"
+ },
+ "mage__down_tension__down_right__12.png": {
+  "core": "mage__mage_area__down_right__5.png",
+  "arm_r": "mage__mage_area__down_right__5.png",
+  "arm_l": "mage__mage_area__down_right__5.png",
+  "leg_r": "mage__mage_area__down_right__13.png",
+  "leg_l": "mage__mage_area__down_right__13.png"
+ },
+ "healer__down_tension__down_right__12.png": {
+  "core": "healer__healer_buff__down_right__4.png",
+  "arm_r": "healer__healer_buff__down_right__4.png",
+  "arm_l": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_r": "healer__healer_kneel_heal__down_right__0.png",
+  "leg_l": "healer__healer_purify__down_right__6.png"
+ },
+ "healer__engulf_sink__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "healer__engulf_sink__front__3.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "healer__engulf_sink__front__6.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_buff__front__8.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__engulf_struggle__front__0.png": {
+  "core": "aria__sit_recover__front__11.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__11.png",
+  "leg_r": "aria__sit_recover__front__13.png",
+  "leg_l": "aria__sit_recover__front__13.png"
+ },
+ "healer__engulf_struggle__front__0.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__engulf_struggle__front__6.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__11.png",
+  "leg_r": "aria__sit_recover__front__13.png",
+  "leg_l": "aria__sit_recover__front__13.png"
+ },
+ "healer__engulf_struggle__front__6.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__engulf_rock__front__0.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__11.png",
+  "leg_r": "aria__sit_recover__front__13.png",
+  "leg_l": "aria__sit_recover__front__13.png"
+ },
+ "scout__engulf_rock__front__0.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__11.png",
+  "leg_r": "scout__scout_sense__front__0.png",
+  "leg_l": "scout__scout_sense__front__0.png"
+ },
+ "mage__engulf_rock__front__0.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_bolt__front__0.png",
+  "leg_l": "mage__mage_bolt__front__0.png"
+ },
+ "healer__engulf_rock__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__engulf_rock__front__1.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__11.png",
+  "leg_r": "aria__sit_recover__front__13.png",
+  "leg_l": "aria__sit_recover__front__13.png"
+ },
+ "scout__engulf_rock__front__1.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__11.png",
+  "leg_r": "scout__scout_sense__front__0.png",
+  "leg_l": "scout__scout_sense__front__0.png"
+ },
+ "mage__engulf_rock__front__1.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_bolt__front__0.png",
+  "leg_l": "mage__mage_bolt__front__0.png"
+ },
+ "healer__engulf_rock__front__1.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_buff__front__8.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__engulf_tension__front__0.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__11.png",
+  "leg_r": "aria__sit_recover__front__13.png",
+  "leg_l": "aria__sit_recover__front__13.png"
+ },
+ "scout__engulf_tension__front__0.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__11.png",
+  "leg_r": "scout__scout_sense__front__0.png",
+  "leg_l": "scout__scout_sense__front__0.png"
+ },
+ "mage__engulf_tension__front__0.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_bolt__front__0.png",
+  "leg_l": "mage__mage_bolt__front__0.png"
+ },
+ "healer__engulf_tension__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__engulf_tension__front__2.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__engulf_sink__front__6.png",
+  "arm_l": "aria__slash__front__7.png",
+  "leg_r": "aria__sit_recover__front__13.png",
+  "leg_l": "aria__sit_recover__front__13.png"
+ },
+ "scout__engulf_tension__front__2.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__engulf_sink__front__6.png",
+  "arm_l": "scout__scout_throw__front__13.png",
+  "leg_r": "scout__scout_sense__front__0.png",
+  "leg_l": "scout__scout_sense__front__0.png"
+ },
+ "mage__engulf_tension__front__2.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__engulf_sink__front__6.png",
+  "arm_l": "mage__mage_area__front__5.png",
+  "leg_r": "mage__mage_bolt__front__0.png",
+  "leg_l": "mage__mage_bolt__front__0.png"
+ },
+ "healer__engulf_tension__front__2.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_buff__front__8.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__engulf_tension__front__6.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__heavy__front__3.png",
+  "arm_l": "aria__thrust__front__4.png",
+  "leg_r": "aria__sit_recover__front__13.png",
+  "leg_l": "aria__sit_recover__front__13.png"
+ },
+ "scout__engulf_tension__front__6.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__scout_throw__front__6.png",
+  "arm_l": "scout__scout_throw__front__13.png",
+  "leg_r": "scout__scout_sense__front__0.png",
+  "leg_l": "scout__scout_sense__front__0.png"
+ },
+ "mage__engulf_tension__front__6.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__mage_area__front__5.png",
+  "arm_l": "mage__mage_area__front__5.png",
+  "leg_r": "mage__mage_bolt__front__0.png",
+  "leg_l": "mage__mage_bolt__front__0.png"
+ },
+ "healer__engulf_tension__front__6.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_buff__front__8.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__engulf_tension__front__10.png": {
+  "core": "aria__sit_recover__front__11.png",
+  "arm_r": "aria__sit_recover__front__11.png",
+  "arm_l": "aria__sit_recover__front__11.png",
+  "leg_r": "aria__sit_recover__front__13.png",
+  "leg_l": "aria__sit_recover__front__13.png"
+ },
+ "scout__engulf_tension__front__10.png": {
+  "core": "scout__sit_recover__front__11.png",
+  "arm_r": "scout__sit_recover__front__11.png",
+  "arm_l": "scout__sit_recover__front__11.png",
+  "leg_r": "scout__scout_sense__front__0.png",
+  "leg_l": "scout__scout_sense__front__0.png"
+ },
+ "mage__engulf_tension__front__10.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__mage_bolt__front__0.png",
+  "leg_l": "mage__mage_bolt__front__0.png"
+ },
+ "healer__engulf_tension__front__10.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__wrap_squeeze__front__0.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__13.png",
+  "arm_l": "aria__sit_recover__front__13.png",
+  "leg_r": "aria__gaze_trance__front__1.png",
+  "leg_l": "aria__shiver_hug__front__4.png"
+ },
+ "scout__wrap_squeeze__front__0.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__13.png",
+  "arm_l": "scout__sit_recover__front__13.png",
+  "leg_r": "scout__gaze_trance__front__1.png",
+  "leg_l": "scout__shiver_hug__front__4.png"
+ },
+ "mage__wrap_squeeze__front__0.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__13.png",
+  "arm_l": "mage__sit_recover__front__13.png",
+  "leg_r": "mage__gaze_trance__front__0.png",
+  "leg_l": "mage__gaze_trance__front__0.png"
+ },
+ "healer__wrap_squeeze__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__wrap_tension__front__0.png": {
+  "core": "aria__gaze_trance__front__0.png",
+  "arm_r": "aria__sit_recover__front__13.png",
+  "arm_l": "aria__sit_recover__front__13.png",
+  "leg_r": "aria__sit_recover__front__13.png",
+  "leg_l": "aria__sit_recover__front__13.png"
+ },
+ "scout__wrap_tension__front__0.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__13.png",
+  "arm_l": "scout__sit_recover__front__13.png",
+  "leg_r": "scout__scout_sense__front__0.png",
+  "leg_l": "scout__scout_sense__front__0.png"
+ },
+ "mage__wrap_tension__front__0.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__13.png",
+  "arm_l": "mage__sit_recover__front__13.png",
+  "leg_r": "mage__mage_bolt__front__0.png",
+  "leg_l": "mage__mage_bolt__front__0.png"
+ },
+ "healer__wrap_tension__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "aria__wrap_tension__front__2.png": {
+  "core": "aria__daze_sway__front__0.png",
+  "arm_r": "aria__sit_recover__front__13.png",
+  "arm_l": "aria__sit_recover__front__13.png",
+  "leg_r": "aria__shiver_hug__front__0.png",
+  "leg_l": "aria__shiver_hug__front__0.png"
+ },
+ "scout__wrap_tension__front__2.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__sit_recover__front__13.png",
+  "arm_l": "scout__sit_recover__front__13.png",
+  "leg_r": "scout__shiver_hug__front__0.png",
+  "leg_l": "scout__shiver_hug__front__0.png"
+ },
+ "mage__wrap_tension__front__2.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__13.png",
+  "arm_l": "mage__sit_recover__front__13.png",
+  "leg_r": "mage__mage_suppress__front__5.png",
+  "leg_l": "mage__mage_suppress__front__5.png"
+ },
+ "healer__wrap_tension__front__2.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__wrap_tension__front__8.png": {
+  "core": "aria__sit_recover__front__11.png",
+  "arm_r": "aria__sit_recover__front__13.png",
+  "arm_l": "aria__sit_recover__front__13.png",
+  "leg_r": "aria__daze_sway__front__2.png",
+  "leg_l": "aria__daze_sway__front__0.png"
+ },
+ "scout__wrap_tension__front__8.png": {
+  "core": "scout__sit_recover__front__11.png",
+  "arm_r": "scout__sit_recover__front__13.png",
+  "arm_l": "scout__sit_recover__front__13.png",
+  "leg_r": "scout__daze_sway__front__2.png",
+  "leg_l": "scout__daze_sway__front__0.png"
+ },
+ "mage__wrap_tension__front__8.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__sit_recover__front__13.png",
+  "arm_l": "mage__sit_recover__front__13.png",
+  "leg_r": "mage__mage_area__front__13.png",
+  "leg_l": "mage__daze_sway__front__0.png"
+ },
+ "healer__wrap_tension__front__8.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "healer__ankle_grabbed__right__0.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_buff__right__0.png",
+  "leg_l": "healer__healer_buff__right__0.png"
+ },
+ "healer__ankle_grabbed__right__4.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_purify__right__9.png",
+  "arm_l": "healer__healer_buff__right__8.png",
+  "leg_r": "healer__healer_buff__right__8.png",
+  "leg_l": "healer__healer_run_cover__right__4.png"
+ },
+ "healer__ankle_grabbed__right__6.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__8.png",
+  "arm_l": "healer__healer_buff__right__8.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_run_cover__right__4.png"
+ },
+ "aria__ankle_grabbed__right__14.png": {
+  "core": "aria__trip_fall__right__11.png",
+  "arm_r": "aria__trip_fall__right__11.png",
+  "arm_l": "aria__trip_fall__right__11.png",
+  "leg_r": "aria__trip_fall__right__11.png",
+  "leg_l": "aria__ankle_grabbed__right__4.png"
+ },
+ "mage__ankle_grabbed__right__14.png": {
+  "core": "mage__trip_fall__right__11.png",
+  "arm_r": "mage__trip_fall__right__11.png",
+  "arm_l": "mage__trip_fall__right__11.png",
+  "leg_r": "mage__trip_fall__right__11.png",
+  "leg_l": "mage__ankle_grabbed__right__6.png"
+ },
+ "healer__ankle_grabbed__right__14.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_run_cover__right__4.png"
+ },
+ "healer__break_free__front__2.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__break_free__front__3.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__engulf_sink__front__6.png",
+  "arm_l": "aria__bubble_float__front__0.png",
+  "leg_r": "aria__yoko__front__7.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "healer__break_free__front__3.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_buff__front__8.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "aria__break_free__front__6.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__bubble_float__front__0.png",
+  "arm_l": "aria__bubble_float__front__0.png",
+  "leg_r": "aria__sit_recover__front__11.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "healer__break_free__front__6.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_buff__front__8.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_purify__front__3.png"
+ },
+ "aria__break_free__front__8.png": {
+  "core": "aria__sit_recover__front__13.png",
+  "arm_r": "aria__grabbed_flinch__front__0.png",
+  "arm_l": "aria__slash__front__0.png",
+  "leg_r": "aria__sit_recover__front__11.png",
+  "leg_l": "aria__swing_abandon__front__3.png"
+ },
+ "healer__break_free__front__8.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_disgust__front__4.png",
+  "arm_l": "healer__healer_buff__front__8.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "healer__edge_pull__right__0.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_buff__right__0.png",
+  "leg_l": "healer__healer_buff__right__0.png"
+ },
+ "healer__edge_pull__right__3.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_buff__right__0.png"
+ },
+ "healer__edge_pull__right__7.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_buff__right__0.png",
+  "leg_l": "healer__healer_buff__right__0.png"
+ },
+ "healer__gaze_trance__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "mage__gaze_trance__front__1.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__gaze_trance__front__0.png",
+  "arm_l": "mage__gaze_trance__front__0.png",
+  "leg_r": "mage__gaze_trance__front__0.png",
+  "leg_l": "mage__gaze_trance__front__0.png"
+ },
+ "healer__gaze_trance__front__1.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "healer__spore_inhale__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_buff__front__8.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "healer__spore_inhale__front__2.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_buff__front__8.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "mage__shiver_hug__front__0.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__mage_bolt__front__0.png",
+  "arm_l": "mage__spore_inhale__front__0.png",
+  "leg_r": "mage__mage_suppress__front__0.png",
+  "leg_l": "mage__mage_suppress__front__0.png"
+ },
+ "healer__shiver_hug__front__0.png": {
+  "core": "healer__healer_pray__front__0.png",
+  "arm_r": "healer__healer_pray__front__0.png",
+  "arm_l": "healer__healer_disgust__front__8.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "mage__shiver_hug__front__4.png": {
+  "core": "mage__daze_sway__front__0.png",
+  "arm_r": "mage__mage_bolt__front__0.png",
+  "arm_l": "mage__spore_inhale__front__0.png",
+  "leg_r": "mage__gaze_trance__front__0.png",
+  "leg_l": "mage__gaze_trance__front__0.png"
+ },
+ "healer__shiver_hug__front__4.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_pray__front__0.png",
+  "arm_l": "healer__healer_disgust__front__8.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "healer__bubble_float__front__0.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_buff__front__8.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "healer__bubble_float__front__2.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_buff__front__8.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_disgust__front__4.png",
+  "leg_l": "healer__healer_buff__front__8.png"
+ },
+ "healer__daze_sway__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "healer__daze_sway__front__2.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "healer__reach_toward__right__0.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_buff__right__0.png",
+  "leg_l": "healer__healer_buff__right__0.png"
+ },
+ "healer__reach_toward__right__4.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_purify__right__9.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_buff__right__0.png"
+ },
+ "healer__reach_toward__right__8.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_buff__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_buff__right__0.png",
+  "leg_l": "healer__healer_buff__right__0.png"
+ },
+ "healer__trip_fall__right__0.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_buff__right__8.png",
+  "leg_l": "healer__healer_buff__right__8.png"
+ },
+ "healer__trip_fall__right__4.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_purify__right__9.png",
+  "arm_l": "healer__healer_buff__right__8.png",
+  "leg_r": "healer__healer_run_cover__right__0.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "healer__trip_fall__right__11.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_run_cover__right__0.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "aria__trip_fall__right__13.png": {
+  "core": "aria__trip_fall__right__11.png",
+  "arm_r": "aria__trip_fall__right__11.png",
+  "arm_l": "aria__trip_fall__right__11.png",
+  "leg_r": "aria__trip_fall__right__11.png",
+  "leg_l": "aria__trip_fall__right__11.png"
+ },
+ "mage__trip_fall__right__13.png": {
+  "core": "mage__trip_fall__right__11.png",
+  "arm_r": "mage__trip_fall__right__11.png",
+  "arm_l": "mage__trip_fall__right__11.png",
+  "leg_r": "mage__trip_fall__right__11.png",
+  "leg_l": "mage__trip_fall__right__11.png"
+ },
+ "healer__trip_fall__right__13.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_run_cover__right__0.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "aria__trip_fall__right__18.png": {
+  "core": "aria__trip_fall__right__4.png",
+  "arm_r": "aria__get_up__right__13.png",
+  "arm_l": "aria__get_up__right__13.png",
+  "leg_r": "aria__get_up__right__13.png",
+  "leg_l": "aria__trip_fall__right__11.png"
+ },
+ "mage__trip_fall__right__18.png": {
+  "core": "mage__trip_fall__right__0.png",
+  "arm_r": "mage__get_up__right__13.png",
+  "arm_l": "mage__get_up__right__13.png",
+  "leg_r": "mage__get_up__right__13.png",
+  "leg_l": "mage__trip_fall__right__11.png"
+ },
+ "healer__trip_fall__right__18.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_run_cover__right__4.png"
+ },
+ "aria__trip_fall__right__20.png": {
+  "core": "aria__kiss_recover__right__0.png",
+  "arm_r": "aria__get_up__right__18.png",
+  "arm_l": "aria__get_up__right__18.png",
+  "leg_r": "aria__get_up__right__16.png",
+  "leg_l": "aria__kiss_recover__right__0.png"
+ },
+ "mage__trip_fall__right__20.png": {
+  "core": "mage__trip_fall__right__0.png",
+  "arm_r": "mage__trip_fall__right__0.png",
+  "arm_l": "mage__get_up__right__18.png",
+  "leg_r": "mage__get_up__right__16.png",
+  "leg_l": "mage__kiss_recover__right__0.png"
+ },
+ "healer__trip_fall__right__20.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "healer__defeat_collapse__right__0.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_buff__right__0.png",
+  "leg_l": "healer__healer_buff__right__0.png"
+ },
+ "aria__defeat_collapse__right__2.png": {
+  "core": "aria__trip_fall__right__4.png",
+  "arm_r": "aria__defeat_collapse__right__0.png",
+  "arm_l": "aria__defeat_collapse__right__0.png",
+  "leg_r": "aria__kiss_recover__right__0.png",
+  "leg_l": "aria__kiss_recover__right__0.png"
+ },
+ "mage__defeat_collapse__right__2.png": {
+  "core": "mage__trip_fall__right__0.png",
+  "arm_r": "mage__defeat_collapse__right__0.png",
+  "arm_l": "mage__defeat_collapse__right__0.png",
+  "leg_r": "mage__kiss_recover__right__0.png",
+  "leg_l": "mage__kiss_recover__right__0.png"
+ },
+ "healer__defeat_collapse__right__2.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "aria__defeat_collapse__right__5.png": {
+  "core": "aria__trip_fall__right__4.png",
+  "arm_r": "aria__kiss_recover__right__0.png",
+  "arm_l": "aria__kiss_recover__right__0.png",
+  "leg_r": "aria__trip_fall__right__11.png",
+  "leg_l": "aria__trip_fall__right__11.png"
+ },
+ "mage__defeat_collapse__right__5.png": {
+  "core": "mage__trip_fall__right__4.png",
+  "arm_r": "mage__kiss_recover__right__0.png",
+  "arm_l": "mage__kiss_recover__right__0.png",
+  "leg_r": "mage__trip_fall__right__11.png",
+  "leg_l": "mage__trip_fall__right__11.png"
+ },
+ "healer__defeat_collapse__right__5.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__0.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_run_cover__right__0.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ },
+ "aria__defeat_collapse__right__9.png": {
+  "core": "aria__trip_fall__right__11.png",
+  "arm_r": "aria__get_up__right__13.png",
+  "arm_l": "aria__kiss_recover__right__8.png",
+  "leg_r": "aria__heavy__right__6.png",
+  "leg_l": "aria__trip_fall__right__11.png"
+ },
+ "mage__defeat_collapse__right__9.png": {
+  "core": "mage__trip_fall__right__11.png",
+  "arm_r": "mage__get_up__right__13.png",
+  "arm_l": "mage__get_up__right__13.png",
+  "leg_r": "mage__trip_fall__right__11.png",
+  "leg_l": "mage__trip_fall__right__11.png"
+ },
+ "healer__defeat_collapse__right__9.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_purify__right__9.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_run_cover__right__0.png",
+  "leg_l": "healer__healer_run_cover__right__4.png"
+ },
+ "aria__defeat_collapse__right__13.png": {
+  "core": "aria__trip_fall__right__11.png",
+  "arm_r": "aria__trip_fall__right__4.png",
+  "arm_l": "aria__thrust__right__4.png",
+  "leg_r": "aria__kesa__right__7.png",
+  "leg_l": "aria__ankle_grabbed__right__4.png"
+ },
+ "mage__defeat_collapse__right__13.png": {
+  "core": "mage__trip_fall__right__11.png",
+  "arm_r": "mage__trip_fall__right__4.png",
+  "arm_l": "mage__get_up__right__4.png",
+  "leg_r": "mage__trip_fall__right__0.png",
+  "leg_l": "mage__ankle_grabbed__right__6.png"
+ },
+ "healer__defeat_collapse__right__13.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__4.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_run_cover__right__0.png",
+  "leg_l": "healer__healer_run_cover__right__4.png"
+ },
+ "healer__grabbed_flinch__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_disgust__front__4.png",
+  "arm_l": "healer__healer_buff__front__8.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "mage__grabbed_flinch__front__3.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__mage_recover__front__3.png",
+  "arm_l": "mage__sit_recover__front__11.png",
+  "leg_r": "mage__daze_sway__front__0.png",
+  "leg_l": "mage__daze_sway__front__0.png"
+ },
+ "healer__grabbed_flinch__front__3.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "mage__mage_suppress_tension__front__0.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__mage_suppress__front__0.png",
+  "leg_r": "mage__mage_suppress__front__0.png",
+  "leg_l": "mage__mage_suppress__front__0.png"
+ },
+ "mage__mage_suppress_tension__front__2.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__sit_recover__front__11.png",
+  "arm_l": "mage__mage_recover__front__8.png",
+  "leg_r": "mage__mage_suppress__front__0.png",
+  "leg_l": "mage__mage_suppress__front__5.png"
+ },
+ "mage__mage_suppress_tension__front__6.png": {
+  "core": "mage__sit_recover__front__11.png",
+  "arm_r": "mage__mage_bolt__front__0.png",
+  "arm_l": "mage__mage_suppress__front__5.png",
+  "leg_r": "mage__mage_recover__front__3.png",
+  "leg_l": "mage__sit_recover__front__2.png"
+ },
+ "scout__scout_tension__front__0.png": {
+  "core": "scout__sit_recover__front__13.png",
+  "arm_r": "scout__break_free__front__8.png",
+  "arm_l": "scout__grabbed_flinch__front__0.png",
+  "leg_r": "scout__scout_sense__front__0.png",
+  "leg_l": "scout__scout_sense__front__0.png"
+ },
+ "scout__scout_tension__front__2.png": {
+  "core": "scout__gaze_trance__front__1.png",
+  "arm_r": "scout__break_free__front__8.png",
+  "arm_l": "scout__grabbed_flinch__front__0.png",
+  "leg_r": "scout__scout_sense__front__8.png",
+  "leg_l": "scout__gaze_trance__front__0.png"
+ },
+ "scout__scout_tension__front__8.png": {
+  "core": "scout__sit_recover__front__11.png",
+  "arm_r": "scout__sit_recover__front__5.png",
+  "arm_l": "scout__sit_recover__front__5.png",
+  "leg_r": "scout__daze_sway__front__2.png",
+  "leg_l": "scout__daze_sway__front__0.png"
+ },
+ "mage__mage_arms_bound__front__0.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__spore_inhale__front__0.png",
+  "arm_l": "mage__mage_suppress__front__0.png",
+  "leg_r": "mage__gaze_trance__front__0.png",
+  "leg_l": "mage__gaze_trance__front__0.png"
+ },
+ "mage__mage_arms_bound__front__2.png": {
+  "core": "mage__sit_recover__front__13.png",
+  "arm_r": "mage__spore_inhale__front__0.png",
+  "arm_l": "mage__mage_suppress__front__0.png",
+  "leg_r": "mage__mage_suppress__front__5.png",
+  "leg_l": "mage__daze_sway__front__2.png"
+ },
+ "healer__healer_panel_catch__front__3.png": {
+  "core": "healer__healer_pray__front__0.png",
+  "arm_r": "healer__healer_disgust__front__8.png",
+  "arm_l": "healer__healer_pray__front__0.png",
+  "leg_r": "healer__healer_purify__front__3.png",
+  "leg_l": "healer__healer_purify__front__3.png"
+ },
+ "healer__healer_panel_catch__front__6.png": {
+  "core": "healer__healer_pray__front__0.png",
+  "arm_r": "healer__healer_disgust__front__8.png",
+  "arm_l": "healer__healer_disgust__front__4.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "healer__healer_tension_refuse__front__0.png": {
+  "core": "healer__healer_pray__front__0.png",
+  "arm_r": "healer__healer_disgust__front__8.png",
+  "arm_l": "healer__healer_cover__front__0.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "healer__healer_tension_refuse__front__2.png": {
+  "core": "healer__healer_pray__front__0.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_cover__front__0.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "healer__healer_tension_refuse__front__7.png": {
+  "core": "healer__healer_buff__front__8.png",
+  "arm_r": "healer__healer_purify__front__9.png",
+  "arm_l": "healer__healer_cover__front__0.png",
+  "leg_r": "healer__healer_purify__front__9.png",
+  "leg_l": "healer__healer_purify__front__9.png"
+ },
+ "aria__kesa__up_right__6.png": {
+  "core": "aria__yoko__up_right__6.png",
+  "arm_r": "aria__slash__up_right__6.png",
+  "arm_l": "aria__heavy__up_right__6.png",
+  "leg_r": "aria__slash__up_right__6.png",
+  "leg_l": "aria__slash__up_right__6.png"
+ },
+ "aria__yoko__up_right__7.png": {
+  "core": "aria__slash__up_right__7.png",
+  "arm_r": "aria__heavy__up_right__3.png",
+  "arm_l": "aria__slash__up_right__7.png",
+  "leg_r": "aria__slash__up_right__7.png",
+  "leg_l": "aria__slash__up_right__7.png"
+ },
+ "aria__thrust__up_right__4.png": {
+  "core": "aria__yoko__up_right__6.png",
+  "arm_r": "aria__yoko__up_right__6.png",
+  "arm_l": "aria__slash__up_right__7.png",
+  "leg_r": "aria__yoko__up_right__6.png",
+  "leg_l": "aria__slash__up_right__7.png"
+ },
+ "healer__healer_buff__front__0.png": {
+  "core": "healer__healer_purify__front__3.png",
+  "arm_r": "healer__healer_disgust__front__8.png",
+  "arm_l": "healer__healer_purify__front__3.png",
+  "leg_r": "healer__healer_pray__front__0.png",
+  "leg_l": "healer__healer_pray__front__0.png"
+ },
+ "healer__healer_buff__left__8.png": {
+  "core": "healer__healer_buff__left__0.png",
+  "arm_r": "healer__healer_purify__left__3.png",
+  "arm_l": "healer__healer_buff__left__4.png",
+  "leg_r": "healer__healer_buff__left__0.png",
+  "leg_l": "healer__healer_buff__left__0.png"
+ },
+ "healer__healer_buff__down_left__0.png": {
+  "core": "healer__healer_purify__down_left__3.png",
+  "arm_r": "healer__healer_purify__down_left__9.png",
+  "arm_l": "healer__healer_purify__down_left__3.png",
+  "leg_r": "healer__healer_buff__down_left__4.png",
+  "leg_l": "healer__healer_buff__down_left__4.png"
+ },
+ "healer__healer_purify__down_right__3.png": {
+  "core": "healer__healer_buff__down_right__0.png",
+  "arm_r": "healer__healer_kneel_heal__down_right__0.png",
+  "arm_l": "healer__healer_purify__down_right__6.png",
+  "leg_r": "healer__healer_buff__down_right__8.png",
+  "leg_l": "healer__healer_buff__down_right__0.png"
+ },
+ "healer__healer_purify__right__3.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_run_cover__right__4.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_buff__right__8.png",
+  "leg_l": "healer__healer_buff__right__0.png"
+ },
+ "healer__healer_purify__right__6.png": {
+  "core": "healer__healer_run_cover__right__4.png",
+  "arm_r": "healer__healer_purify__right__9.png",
+  "arm_l": "healer__healer_buff__right__0.png",
+  "leg_r": "healer__healer_purify__right__9.png",
+  "leg_l": "healer__healer_purify__right__9.png"
+ }
+}

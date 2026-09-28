@@ -43,10 +43,19 @@ const ask=f=>{const L=[
  }else if(f.detail)L.push(`動き（英語）：${f.detail}`);
  return L.join('\n');};
 for(const f of frames)f.ask=ask(f);
+// the frame put together from ChatGPT's drawings (tools/assemble/), when there is one: sent as the base picture
+const ASM=path.join(ROOT,'assembled');
+const base=f=>`2Dゲームのキャラクター「${CHARS[f.char].label.replace(/（.*/,'')}」の、アニメーション用の1枚絵を1枚描いてください。
+・添付の「下絵」は、同じキャラクターの絵の部位を切り貼りして、この姿勢に並べたものです。人物・髪型・衣装・色・絵柄・頭身・姿勢・向き・構図はこの下絵のまま変えずに、切り貼りの継ぎ目・ずれ・欠け・はみ出しだけを自然に描き直して、1枚の絵として仕上げてください
+・手足の位置は、添付のポーズの図（マネキン）にも合わせる。図の線・色は描かない${f.set==='scenes'?'。図の色の付いた線・輪・塊は、押さえているものの位置':''}
+・背景は白一色（できれば透明）。足元の影・床・効果線・文字・枠は描かない
+
+`+f.ask.split('\n\n').slice(1).join('\n\n');
+for(const f of frames){const a=path.join(ASM,f.char,f.file.replace('.png','.webp'));if(fs.existsSync(a)){f.asm=`assembled/${f.char}/${f.file.replace('.png','.webp')}`;f.askBase=base(f)}}
 
 fs.mkdirSync(OUT,{recursive:true});
 fs.writeFileSync(path.join(OUT,'jobs.json'),JSON.stringify({version:new Date().toISOString().slice(0,10),drawn:drawn.size,
- frames:frames.map(f=>({file:f.file,char:f.char,motion:f.motion,view:f.view,frame:f.frame,label:f.label,pose:f.img,ask:f.ask}))},null,1));
+ frames:frames.map(f=>({file:f.file,char:f.char,motion:f.motion,view:f.view,frame:f.frame,label:f.label,pose:f.img,ask:f.ask,...(f.asm?{base:f.asm,askBase:f.askBase}:{})}))},null,1));
 
 const per={};for(const f of frames)((per[f.char]=per[f.char]||{})[f.motion]=per[f.char][f.motion]||[]).push(f);
 let body='';
@@ -57,9 +66,9 @@ for(const c of Object.keys(CHARS)){const byM=per[c]||{},n=Object.values(byM).fla
 <h3>キャラクターの画像（毎回1〜2枚添付。まずは全身）</h3><div class="refs">${refs.map(([t,p])=>`<a href="../${p}" download><img loading="lazy" src="../${p}" alt=""><span>${t}</span></a>`).join('')}</div>`;
  for(const [m,list] of Object.entries(byM)){
   body+=`<details class="motion"><summary>${esc(list[0].label)} <small>${list.length}枚</small></summary>`;
-  for(const f of list)body+=`<div class="card" data-file="${f.file}"><a href="../${f.img}" download="${f.file.replace('.png','')}__pose.png"><img loading="lazy" src="../${f.img}" alt="" width="160" height="160"></a><div class="side">
+  for(const f of list)body+=`<div class="card" data-file="${f.file}"><div class="imgs"><a href="../${f.img}" download="${f.file.replace('.png','')}__pose.png"><img loading="lazy" src="../${f.img}" alt="" width="160" height="160"></a>${f.asm?`<a href="../${f.asm}" download="${f.file.replace('.png','')}__base.webp"><img loading="lazy" class="asm" src="../${f.asm}" alt="" width="160" height="160"></a>`:''}</div><div class="side">
 <div class="fn"><label><input type="checkbox" class="done"> できた</label>　<code>${f.file}</code></div>
-<button class="copy">文をコピー</button> <a href="../${f.img}" download="${f.file.replace('.png','')}__pose.png">ポーズの図を保存</a><pre>${esc(f.ask)}</pre></div></div>`;
+<button class="copy">文をコピー</button> <a href="../${f.img}" download="${f.file.replace('.png','')}__pose.png">ポーズの図を保存</a><pre>${esc(f.ask)}</pre>${f.asm?`<details><summary>下絵（組み立てた絵）を添付して頼む</summary><button class="copy">下絵つきの文をコピー</button> <a href="../${f.asm}" download="${f.file.replace('.png','')}__base.webp">下絵を保存</a><pre>${esc(f.askBase)}</pre></details>`:''}</div></div>`;
   body+='</details>';
  }
  body+='</section>';
@@ -74,7 +83,7 @@ h2{margin-top:32px;border-bottom:2px solid var(--acc)}h2 small,summary small{col
 .refs img{width:120px;height:120px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:4px}
 details.motion{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;margin:6px 0}summary{cursor:pointer;font-weight:700}
 .card{display:flex;gap:10px;align-items:flex-start;border-top:1px solid var(--line);padding:8px 0}.card img{flex:0 0 auto;background:#fff;border:1px solid var(--line);border-radius:4px}
-.card.ok{opacity:.45}.side{flex:1;min-width:0}.fn code{font-size:12px;word-break:break-all}
+.card.ok{opacity:.45}.imgs{display:flex;flex-direction:column;gap:4px}.imgs img.asm{background:#e9edf2}.side{flex:1;min-width:0}.fn code{font-size:12px;word-break:break-all}
 pre{white-space:pre-wrap;word-break:break-word;font:13px/1.6 system-ui,sans-serif;margin:6px 0}
 button.copy{font:inherit;padding:4px 12px;border-radius:6px;border:1px solid var(--acc);background:transparent;color:var(--acc);cursor:pointer}
 nav a{display:inline-block;margin:2px 12px 2px 0}#count{color:var(--ok);font-weight:700}
@@ -85,6 +94,7 @@ nav a{display:inline-block;margin:2px 12px 2px 0}#count{color:var(--ok);font-wei
 <li>「文をコピー」で文をコピーして貼り、送る</li>
 <li>できた絵を、表示している名前（<code>アリアなら aria__…png</code>）で保存する。背景を透明にできるなら透明に</li>
 <li>「できた」に印を付ける（このブラウザにだけ残る）</li></ol>
+下に灰色の地の絵があるコマは、ChatGPT の絵の部位を並べ直した「下絵」（<a href="../assembled/index.html">組み立てたコマ</a>）があります。同じ人物のまま姿勢だけ変えてあるので、似ないときは「下絵を添付して頼む」を使ってください。<br>
 押さえているものの見た目などの言葉は ChatGPT 用の控えめなものです。足したい言葉は、貼るときに書き足してください。<br>
 作り直し：<code>git fetch origin chatgpt-output &amp;&amp; node tools/build_grok.mjs</code></div>
 <nav>${Object.keys(CHARS).map(c=>`<a href="#${c}">${esc(CHARS[c].label)}（${Object.values(per[c]||{}).flat().length}）</a>`).join('')}</nav>${body}</main>
@@ -95,8 +105,9 @@ const cnt=()=>{const all=document.querySelectorAll('.card').length,n=document.qu
 for(const c of document.querySelectorAll('.card')){const cb=c.querySelector('.done'),f=c.dataset.file;cb.checked=!!D[f];c.classList.toggle('ok',cb.checked);
  cb.addEventListener('change',()=>{if(cb.checked)D[f]=1;else delete D[f];c.classList.toggle('ok',cb.checked);save();cnt()})}
 cnt();
-document.addEventListener('click',async e=>{const b=e.target.closest('button.copy');if(!b)return;const pre=b.parentElement.querySelector('pre');
+document.addEventListener('click',async e=>{const b=e.target.closest('button.copy');if(!b)return;b.dataset.l=b.dataset.l||b.textContent;
+ let pre=b.nextElementSibling;while(pre&&pre.tagName!=='PRE')pre=pre.nextElementSibling;
  try{await navigator.clipboard.writeText(pre.textContent);b.textContent='コピーしました'}catch(err){const r=document.createRange();r.selectNodeContents(pre);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='選択しました（コピーしてください）'}
- setTimeout(()=>{b.textContent='文をコピー'},2000)});
+ setTimeout(()=>{b.textContent=b.dataset.l},2000)});
 </script></body></html>`);
 console.log('frames',frames.length,Object.fromEntries(Object.entries(per).map(([c,m])=>[c,Object.values(m).flat().length])));

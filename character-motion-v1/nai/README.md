@@ -23,6 +23,7 @@
 ## スマホで作る（`game5-nai-batch.user.js`）
 
 ローカルの Claude を使わず、スマホだけで作れる。ユーザーの「NAI Batch Director 2.2.0」をもとに、前のゲームのキャラクター（キルータン量産）を外し、Game5 の部分（🎬）を入れた。
+- 参照画像（精密参照）：`ref/<キャラクター>-body.png`（全身、1024×1536）と `ref/<キャラクター>-face.png`（顔のアップ、1472×1472）。8方向の絵の正面から白い背景で作ったもの（`python3 tools/build_nai_refs.py`）。透明な背景の絵をそのまま入れると、黒い余白で背景が黒くなるため
 - 入れ方：`https://nobuoiwase.github.io/Game5/character-motion-v1/nai/game5-nai-batch.user.js` を開いて入れる（`@grant none` なので、Tampermonkey のほか iPhone の Userscripts でも動く）
 - 🎬 の中身
   1. キャラクターを選ぶ／参照画像（精密参照、最大2枚。黒い余白で 1024×1536・1536×1024・1472×1472 に合わせて保存）

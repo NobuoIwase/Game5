@@ -23,7 +23,7 @@
 ## スマホで作る（`game5-nai-batch.user.js`）
 
 ローカルの Claude を使わず、スマホだけで作れる。ユーザーの「NAI Batch Director 2.2.0」をもとに、前のゲームのキャラクター（キルータン量産）を外し、Game5 の部分（🎬）を入れた。
-- 参照画像（精密参照）：`ref/<キャラクター>-body.png`（全身、1024×1536）と `ref/<キャラクター>-face.png`（顔のアップ、1472×1472）。8方向の絵の正面から白い背景で作ったもの（`python3 tools/build_nai_refs.py`）。透明な背景の絵をそのまま入れると、黒い余白で背景が黒くなるため
+- 参照画像（精密参照）：`ref/<キャラクター>-body.png`（全身、1024×1536。aria・scout・mage・healer）と `ref/<キャラクター>-face.png`（顔のアップ、1472×1472）。8方向の絵の正面から白い背景で作ったもの（`python3 tools/build_nai_refs.py`）。透明な背景の絵をそのまま入れると、黒い余白で背景が黒くなるため
 - 入れ方：`https://nobuoiwase.github.io/Game5/character-motion-v1/nai/game5-nai-batch.user.js` を開いて入れる（`@grant none` なので、Tampermonkey のほか iPhone の Userscripts でも動く）
 - 🎬 の中身
   1. キャラクターを選ぶ／参照画像（精密参照、最大2枚。黒い余白で 1024×1536・1536×1024・1472×1472 に合わせて保存）
@@ -130,11 +130,11 @@
 
 ## 残りだけ作る（ChatGPT で描けた分を飛ばす）
 
-ChatGPT（Astra）が描けたコマは NovelAI で作り直さなくてよい。`remaining.json` に、飛ばすコマ・足すコマ・保留をまとめてある。作り直しは `git fetch origin chatgpt-output && python3 tools/build_nai_remaining.py`（ChatGPT の絵が増えたら、そのたびに）。
+ChatGPT（Astra）が描けたコマは NovelAI で作り直さなくてよい。`remaining.json` に、飛ばすコマ・足すコマ（・保留があれば保留）をまとめてある。作り直しは `git fetch origin chatgpt-output && python3 tools/build_nai_remaining.py`（ChatGPT の絵が増えたら、そのたびに）。
 
 - スマホ（`game5-nai-batch.user.js` 3.2）・パソコン（`game5-nai-helper.user.js` 1.9）とも、「残りだけ」にチェックが入っていると（最初から入っている）：
   - ChatGPT で描けたコマ（2026-09-28 時点で171枚）を一覧から外す
-  - ChatGPT が安全判定で描けなかった1枚絵（アリアの斜め後ろからの攻撃3枚：袈裟懸け・横一文字・突き）を足す。下絵は ChatGPT 用のポーズの図（剣・盾入り）を 1024px にしたもの
+  - ChatGPT が安全判定で描けなかった1枚絵9枚（アリアの斜め後ろからの攻撃3枚：袈裟懸け・横一文字・突き、ヒーラーの技6枚：補助・浄化）を足す。下絵は ChatGPT 用のポーズの図（剣・盾・杖入り）を 1024px にしたもの
   - チェックを外すと、前と同じ全部の一覧
-- 残り（2026-09-28）：アリア98・斥候85・魔法使い101
-- **ヒーラーは保留**：ChatGPT が3回目で、ヒーラーの全コマを「参照画像の幼く見える造形と露出の強い衣装の組み合わせ」を理由に描かなかった。NovelAI でも、見た目の基準を大人に見えるもの（体型・顔つき）に替えるまでは作らない（一覧に出ない）。替えたら `tools/build_nai_remaining.py` の `HOLD` を空にして作り直す
+- 残り（2026-09-28）：アリア98・斥候85・魔法使い101・ヒーラー157（ヒーラーは ChatGPT が1枚も描かなかったので全151枚＋描けなかった技の1枚絵6枚）
+- ヒーラーは、ChatGPT が3回目で描かなかったため一時保留にしていたが、ほかの3人と同じ頭身の大人の女性（エルフ）なので保留を外した。どのコマにも `adult, mature female` が入り、`child, loli, young` は除外に入っている

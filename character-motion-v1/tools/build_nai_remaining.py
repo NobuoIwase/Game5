@@ -15,9 +15,9 @@ from PIL import Image
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 NAI = os.path.join(ROOT, 'nai'); CG = os.path.join(ROOT, 'chatgpt')
 
-# Held: the healer. ChatGPT declined every frame of hers in round 3 because the reference reads as young in a
-# revealing outfit; NovelAI is not given her frames until her look reads clearly adult (a new reference picture).
-HOLD = {'healer': 'ヒーラーは保留中：いまの見た目の基準（幼く見える造形と露出の強い衣装）のままでは作らない。大人に見える基準の絵に替えてから、この保留を外す'}
+# Held characters, with the reason (none now: the healer, held for a while because ChatGPT declined her frames, is a
+# grown woman like the others; every prompt carries "adult, mature female" and excludes child / loli / young)
+HOLD = {}
 
 VIEW = {'front': 'from front, facing viewer', 'down_right': 'three-quarter view, facing to the right',
         'right': 'from side, profile, facing right', 'up_right': 'from behind, back, three-quarter back view, facing away to the right',
@@ -28,7 +28,9 @@ MOVE = {'kesa': 'holding sword, sword swing, diagonal slash, round shield, fight
         'yoko': 'holding sword, horizontal slash, follow-through, round shield, fighting stance, legs apart',
         'thrust': 'holding sword, thrusting, lunge, arm extended, round shield, legs apart',
         'slash': 'holding sword, sword swing, slashing, round shield, fighting stance',
-        'heavy': 'holding sword, overhead swing, jumping slash, round shield'}
+        'heavy': 'holding sword, overhead swing, jumping slash, round shield',
+        'healer_buff': 'holding staff, raising staff, casting spell, magic',
+        'healer_purify': 'holding staff, staff planted on the ground, casting spell, magic'}
 
 def git(*a): return subprocess.check_output(['git', *a], cwd=ROOT).decode()
 

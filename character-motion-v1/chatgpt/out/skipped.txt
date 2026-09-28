@@ -26,3 +26,10 @@ mage__ankle_grabbed__right__14.png	画像生成の出力安全判定で拒否（
 mage__gaze_trance__front__1.png	画像生成の安全判定で拒否（sexual、request fd3bf62c-0b3c-46a2-b468-f946701fac0a）。同内容の再試行は行わずスキップ。
 mage__shiver_hug__front__0.png	画像生成の安全判定で拒否（sexual、request 5642fd1a-1752-4d3d-8bbf-68aed6d3400b）。再試行せずスキップ。
 mage__shiver_hug__front__4.png	同じ衣装・正面の自分を抱いて震える動作で直前コマが安全判定により拒否されたため、類似コマは未生成でスキップ。
+mage__trip_fall__right__13.png	画像生成の安全判定で拒否（sexual、request d6bd2029-eaa6-47c8-b29e-732c86b31807）。再試行せずスキップ。
+mage__trip_fall__right__18.png	同じ衣装の低い姿勢で安全判定の拒否が繰り返されているため、膝を曲げる・倒れる類似コマは未生成でスキップ。
+mage__trip_fall__right__20.png	同じ衣装の低い姿勢で安全判定の拒否が繰り返されているため、膝を曲げる・倒れる類似コマは未生成でスキップ。
+mage__defeat_collapse__right__2.png	同じ衣装の低い姿勢で安全判定の拒否が繰り返されているため、膝を曲げる・倒れる類似コマは未生成でスキップ。
+mage__defeat_collapse__right__5.png	同じ衣装の低い姿勢で安全判定の拒否が繰り返されているため、膝を曲げる・倒れる類似コマは未生成でスキップ。
+mage__defeat_collapse__right__9.png	同じ衣装の低い姿勢で安全判定の拒否が繰り返されているため、膝を曲げる・倒れる類似コマは未生成でスキップ。
+mage__defeat_collapse__right__13.png	同じ衣装の低い姿勢で安全判定の拒否が繰り返されているため、膝を曲げる・倒れる類似コマは未生成でスキップ。

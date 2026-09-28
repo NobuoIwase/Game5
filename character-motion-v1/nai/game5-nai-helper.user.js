@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Game5 NAI helper
 // @namespace    nobuoiwase-game5
-// @version      1.8
+// @version      1.9
 // @description  Game5 のモーションの元絵を NovelAI で作るための手伝い。ボタン1つで次のコマの下絵とプロンプトを入れる
 // @match        https://novelai.net/*
 // @run-at       document-start
@@ -26,16 +26,21 @@
 const SRC='https://nobuoiwase.github.io/Game5/character-motion-v1/nai/';
 const W=unsafeWindow;
 const get=(k,d)=>{try{const v=GM_getValue(k);return v===undefined?d:v}catch(e){return d}},set=(k,v)=>{try{GM_setValue(k,v)}catch(e){}};
-let DATA=null,armed=null,armedImage=null,msg='';
+let DATA=null,REST=null,armed=null,armedImage=null,msg='';
 const st={char:get('char','aria'),done:get('done',{}),words:get('words',{}),charWords:get('charWords',{}),motionWords:get('motionWords',{}),extraNeg:get('extraNeg',''),
- useBase:get('useBase',true),autoSave:get('autoSave',false),strength:get('strength',0.7),pos:get('pos',{})};
+ useBase:get('useBase',true),onlyRest:get('onlyRest',true),autoSave:get('autoSave',false),strength:get('strength',0.7),pos:get('pos',{})};
 const save=()=>{for(const k of Object.keys(st))set(k,st[k])};
 
 function xhr(url,type){return new Promise((ok,ng)=>GM_xmlhttpRequest({method:'GET',url:url+(url.includes('?')?'&':'?')+'t='+Date.now(),responseType:type,
  onload:r=>r.status===200?ok(r.response):ng(new Error(url+' '+r.status)),onerror:()=>ng(new Error(url))}))}
 const b64=buf=>{const u=new Uint8Array(buf);let s='';for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s)};
 
-const jobsOf=c=>DATA?DATA.jobs.filter(j=>j.char===c):[];
+// 残りだけ (nai/remaining.json, tools/build_nai_remaining.py): the frames ChatGPT drew are left out, the whole pictures
+// it could not draw are added; a held character has no frames
+const holdOf=c=>(REST&&REST.hold&&REST.hold[c])||'';
+const jobsOf=c=>{if(!DATA||holdOf(c))return[];let js=DATA.jobs;
+ if(REST&&st.onlyRest){const sk=new Set(REST.skip);js=js.filter(j=>!sk.has(j.file)).concat(REST.jobs)}
+ return js.filter(j=>j.char===c)};
 function promptOf(job){
  const f=DATA.frames[job.frame],ch=DATA.characters[job.char];
  const parts=[DATA.common,ch.tags,st.charWords[job.char]||'',...f.situations.map(s=>st.words[s]||''),st.motionWords[f.motion]||'',f.prompt,f.note];
@@ -79,7 +84,7 @@ function note(t){msg=t;draw()}
 function nextJob(from){const js=jobsOf(st.char);if(!js.length)return null;const i0=from==null?(st.pos[st.char]??-1):from;
  for(let k=1;k<=js.length;k++){const j=js[(i0+k)%js.length];if(!st.done[j.file])return j}return null}
 async function arm(job){
- armed=job;armedImage=null;if(!job){note('このキャラクターのコマはすべて保存済みです');return}
+ armed=job;armedImage=null;if(!job){note(holdOf(st.char)?'⏸ '+holdOf(st.char):'このキャラクターのコマはすべて保存済みです');return}
  st.pos[st.char]=jobsOf(st.char).indexOf(job);save();note('下絵を読み込み中…');
  try{armedImage=b64(await xhr(SRC+DATA.frames[job.frame].base,'arraybuffer'));note('準備できました。生成ボタンを押してください')}catch(e){note('下絵を読み込めません：'+e.message)}
 }
@@ -103,7 +108,10 @@ function draw(){
  for(const [k,c] of Object.entries(DATA.characters)){const o=h('option',{value:k},c.label);if(k===st.char)o.selected=true;sel.append(o)}
  root.append(sel);
  const js=jobsOf(st.char),nd=js.filter(j=>st.done[j.file]).length;
- root.append(h('div',{},`保存済み ${nd} / ${js.length}`));
+ if(holdOf(st.char))root.append(h('div',{style:'color:#ffd48a'},'⏸ '+holdOf(st.char)));
+ else root.append(h('div',{},`保存済み ${nd} / ${js.length}`+(REST&&st.onlyRest?'（残りだけ）':'')));
+ if(REST){const rc=h('input',{type:'checkbox'});rc.checked=st.onlyRest;rc.addEventListener('change',e=>{st.onlyRest=e.target.checked;armed=null;save();draw()});
+  root.append(h('div',{},h('label',{},rc,` 残りだけ（ChatGPT で描けた ${REST.skip.length}枚を飛ばし、描けなかった1枚絵 ${REST.jobs.length}枚を足す）`)))}
  if(armed){const f=DATA.frames[armed.frame];root.append(h('div',{style:'margin:6px 0;padding:6px;background:#0f151d;border-radius:5px'},
   h('div',{style:'font-weight:700'},armed.file),h('div',{},f.label),h('div',{style:'color:#9fb0c0'},`${VJ[f.view]||f.view}から・${f.frame}コマ目${f.step?'：'+f.step:''}`),
   ...(()=>{const J=f.ja||{};return[['体勢',J.body],['腕',J.arms],['脚',J.legs],['押さえ',J.held],['動き',J.move]].map(([k,v])=>h('div',{style:'margin-top:2px'},h('span',{style:'color:#9fb0c0;display:inline-block;width:3.5em'},k),v||''))})(),
@@ -143,6 +151,7 @@ function draw(){
 function mount(){if(root||!document.body)return;root=h('div',{id:'game5-nai-helper'});document.body.append(root);draw()}
 const t=setInterval(()=>{if(document.body){clearInterval(t);mount()}},300);
 xhr(SRC+'jobs.json','json').then(async d=>{DATA=typeof d==='string'?JSON.parse(d):d;
+ try{let r=await xhr(SRC+'remaining.json','json');REST=typeof r==='string'?JSON.parse(r):r;Object.assign(DATA.frames,REST.frames||{})}catch(e){REST=null}
  // the words kept in the repository (nai/words.json), filled in once when nothing has been written yet
  if(!get('seeded',false)&&!Object.keys(st.words).length&&!Object.keys(st.motionWords).length){try{let w=await xhr(SRC+'words.json','json');w=typeof w==='string'?JSON.parse(w):w;
   for(const [key,known] of [['words',DATA.situations],['motionWords',DATA.motions||{}],['charWords',DATA.characters]])for(const [k0,v] of Object.entries(w[key]||{})){const k=((DATA.answerKeys||{})[key]||{})[k0]||k0;if(k in known&&v&&v.trim())st[key][k]=v.trim()}

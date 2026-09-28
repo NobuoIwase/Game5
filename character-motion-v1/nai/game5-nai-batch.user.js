@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Game5 NAI Batch（スマホで連続生成）
 // @namespace    game5-nai-batch
-// @version      3.1.0
-// @description  NAI Batch Director をもとに、Game5 のモーションの元絵（603枚）を NovelAI で連続生成する。下絵の img2img・精密参照・まとめて ZIP・GitHub へ送る。
+// @version      3.2.0
+// @description  NAI Batch Director をもとに、Game5 のモーションの元絵を NovelAI で連続生成する（ChatGPT で描けた分を飛ばして残りだけも可）。下絵の img2img・精密参照・まとめて ZIP・GitHub へ送る。
 // @match        https://novelai.net/*
 // @run-at       document-idle
 // @grant        none
@@ -1171,9 +1171,10 @@
   G.words = G.words || {}; G.motionWords = G.motionWords || {}; G.charWords = G.charWords || {}; G.extraNeg = G.extraNeg || '';
   G.done = G.done || {}; G.up = G.up || {}; G.char = G.char || 'aria';
   G.opt = Object.assign({ useBase: true, strength: 0.7, noise: 0, refMode: 'character&style', refStrength: 1, refFidelity: 1, limit: 20,
-    ghOwner: 'NobuoIwase', ghRepo: 'Game5', ghBranch: 'nai-output', ghDir: 'character-motion-v1/nai/out', ghToken: '', upSize: 1024, upWebp: true }, G.opt || {});
+    ghOwner: 'NobuoIwase', ghRepo: 'Game5', ghBranch: 'nai-output', ghDir: 'character-motion-v1/nai/out', ghToken: '', upSize: 1024, upWebp: true, onlyRest: true }, G.opt || {});
   const gSave = () => { try { localStorage.setItem(G_LS, JSON.stringify(G)); } catch (e) { setStatus('⚠ 保存できませんでした（容量不足の可能性）'); } };
   let GD = null;          // jobs.json
+  let RD = null;          // remaining.json（ChatGPT で描けたコマ・足すコマ・保留）
   const baseCache = {};   // 下絵の base64
 
   /* ---- 参照画像（IndexedDB。キャラクターごとに最大2枚） ---- */
@@ -1244,7 +1245,14 @@
     }
     return pl;
   }
-  const gJobs = () => GD ? GD.jobs.filter(j => j.char === G.char) : [];
+  // 残りだけ：ChatGPT で描けたコマ（RD.skip）を飛ばし、ChatGPT が描けなかった1枚絵（RD.jobs）を足す。保留のキャラクターは出さない
+  const gHold = () => (RD && RD.hold && RD.hold[G.char]) || '';
+  const gJobs = () => {
+    if (!GD || gHold()) return [];
+    let js = GD.jobs;
+    if (RD && G.opt.onlyRest) { const sk = new Set(RD.skip); js = js.filter(j => !sk.has(j.file)).concat(RD.jobs); }
+    return js.filter(j => j.char === G.char);
+  };
   const gTodo = () => gJobs().filter(j => !G.done[j.file]);
 
   async function gLoad() {
@@ -1253,9 +1261,14 @@
       const res = await fetch(G_SRC + 'jobs.json?t=' + Date.now());
       if (!res.ok) throw new Error('HTTP ' + res.status);
       GD = await res.json();
+      RD = null;
+      try {
+        const r2 = await fetch(G_SRC + 'remaining.json?t=' + Date.now());
+        if (r2.ok) { RD = await r2.json(); Object.assign(GD.frames, RD.frames || {}); }
+      } catch (e) { /* なくても全部の一覧で動く */ }
       gRender();
       if (!G.seeded && !Object.keys(G.words).length && !Object.keys(G.motionWords).length) await gSeed(false);
-      setStatus(`🎬 コマの一覧を読み込みました（${GD.jobs.length}枚、版 ${GD.version}）。`);
+      setStatus(`🎬 コマの一覧を読み込みました（${GD.jobs.length}枚、版 ${GD.version}）` + (RD ? `。ChatGPT で描けた ${RD.skip.length}枚・足す ${RD.jobs.length}枚（${RD.from}）` : '') + '。');
     } catch (e) { setStatus('❌ コマの一覧を読み込めません: ' + e.message); }
   }
 
@@ -1265,6 +1278,7 @@
     const token = getToken();
     if (!token) { setStatus('❌ トークン未検出。設定欄を確認してください。'); return; }
     const refs = (await refGet(G.char)).map(r => r.b64);
+    if (gHold()) { setStatus('⏸ ' + gHold()); return; }
     const list = one ? [one] : gTodo().slice(0, Math.max(1, +G.opt.limit || 20));
     if (!list.length) { setStatus('このキャラクターのコマはすべて作り終えています。'); return; }
     const label = GD.characters[G.char].label;
@@ -1390,8 +1404,9 @@
   let gPreviewIdx = 0;
   function gRenderCount() {
     const el = $('#g5-count'); if (!el || !GD) return;
+    if (gHold()) { el.textContent = '⏸ ' + gHold(); return; }
     const js = gJobs(), nd = js.filter(j => G.done[j.file]).length, nu = js.filter(j => G.up[j.file]).length;
-    el.textContent = `作った ${nd} / ${js.length}枚　GitHub に送った ${nu}枚`;
+    el.textContent = `作った ${nd} / ${js.length}枚　GitHub に送った ${nu}枚` + (RD && G.opt.onlyRest ? '（残りだけ）' : '');
   }
   async function gRenderRefs() {
     const box = $('#g5-refs'); if (!box) return;
@@ -1459,7 +1474,7 @@
     const sec = document.createElement('details');
     sec.className = 'nbd-set'; sec.open = true;
     sec.innerHTML = `
-      <summary>🎬 Game5 モーションの元絵（603枚）</summary>
+      <summary>🎬 Game5 モーションの元絵</summary>
       <div class="g5-note">どのコマを作るか・下絵・姿勢の言葉はリポジトリから読みます。あなたが書く言葉はこのブラウザにだけ保存されます。
         <a href="${G_SRC}scenes.html" target="_blank" style="color:#9cc4ff">場面の説明</a>・<a href="${G_SRC}chatgpt_request.html" target="_blank" style="color:#9cc4ff">ChatGPT への依頼書</a></div>
       <div class="nbd-row">
@@ -1467,6 +1482,7 @@
         <button class="nbd-btn sm" id="g5-reload">↻ 一覧を読み直す</button>
       </div>
       <div id="g5-count" style="font-size:13px;color:#F5F3C2;margin-bottom:6px"></div>
+      <div style="font-size:13px;margin-bottom:6px"><label><input type="checkbox" id="g5-rest"> 残りだけ（ChatGPT で描けたコマを飛ばし、ChatGPT が描けなかった1枚絵を足す）</label></div>
 
       <details class="nbd-sub" open><summary>① 参照画像（精密参照・このキャラクター）</summary>
         <div class="g5-note">全身の画像と顔のアップを入れる（最大2枚）。黒い余白で NovelAI の決まった大きさに合わせてから保存します。1枚につき、生成1回ごとに 5 Anlas かかります。キャラクターを替えたら、そのキャラクターの画像を入れてください。</div>
@@ -1540,6 +1556,7 @@
       else { el.value = G.opt[key]; el.onchange = () => { G.opt[key] = kind === 'num' ? Number(el.value) : el.value; gSave(); }; }
     };
     bindG('#g5-refmode', 'refMode'); bindG('#g5-refstr', 'refStrength', 'num'); bindG('#g5-reffid', 'refFidelity', 'num');
+    bindG('#g5-rest', 'onlyRest', 'check'); $('#g5-rest').addEventListener('change', () => { gPreviewIdx = 0; gRender(); });
     bindG('#g5-usebase', 'useBase', 'check'); bindG('#g5-str', 'strength', 'num'); bindG('#g5-noise', 'noise', 'num');
     bindG('#g5-limit', 'limit', 'num');
     bindG('#g5-gho', 'ghOwner'); bindG('#g5-ghr', 'ghRepo'); bindG('#g5-ghb', 'ghBranch'); bindG('#g5-ghd', 'ghDir');

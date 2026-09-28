@@ -1,0 +1,41 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ChatGPT 部位組み立ての試し</title><style>
+:root{--bg:#f6f7f9;--fg:#1d232b;--card:#fff;--line:#d9dee5;--acc:#2f6fb3}@media (prefers-color-scheme:dark){:root{--bg:#141a22;--fg:#e6edf3;--card:#1b2330;--line:#3a4658;--acc:#7fb4ea}}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.7 system-ui,sans-serif}main{max-width:900px;margin:0 auto;padding:16px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:10px 0}pre{white-space:pre-wrap;word-break:break-word;font:14px/1.6 system-ui,sans-serif}
+button{font:inherit;padding:6px 14px;border-radius:6px;border:1px solid var(--acc);background:transparent;color:var(--acc)}a.dl{display:inline-block;padding:6px 14px;border-radius:6px;background:var(--acc);color:#fff;text-decoration:none}
+</style></head><body><main><h1>ChatGPT に部位の組み立てを頼む（試し・5モーション）</h1>
+<div class="box"><ol><li><a class="dl" href="parts_test.zip" download>parts_test.zip を保存</a>（ポーズの図・描いてあるキーのコマ・関節の位置・キャラクターの画像）</li>
+<li>ChatGPT（コードを実行できるモード）に ZIP を添付し、下の文を貼って送る</li><li>返ってきた ZIP のコマと動く絵を見る</li></ol><ul><li><b>後ろから腕ごと胴を抱きすくめられ、もがく</b>　<code>aria__held_from_behind__front</code>（8コマ、描いてあるキー 3枚）</li><li><b>袈裟懸け（右上から左下への斜め斬り）</b>　<code>aria__kesa__right</code>（12コマ、描いてあるキー 5枚）</li><li><b>機械の腕を向けて魔力の弾を放つ</b>　<code>mage__mage_bolt__front</code>（12コマ、描いてあるキー 4枚）</li><li><b>足首をつかまれて後ろへ引かれ、よろけて四つん這いになる</b>　<code>scout__ankle_grabbed__right</code>（17コマ、描いてあるキー 4枚）</li><li><b>ナイフを投げる</b>　<code>scout__scout_throw__right</code>（19コマ、描いてあるキー 4枚）</li></ul></div>
+<div class="box"><button id="c">文をコピー</button><pre id="t">2Dゲームのキャラクターのアニメーションを、添付の ZIP の中にある「すでに描いてある絵」から作ってください。新しく絵を一から描くのではなく、描いてある絵を切り抜いて組み合わせ、足りないコマを作る作業です。Python（画像処理）を使って進めてください。
+
+■ ZIP の中身
+・&lt;キャラクター&gt;__&lt;モーション&gt;__&lt;向き&gt;/ フォルダが5つ。それぞれ1つのモーション
+　- pose/NN.png：全コマのポーズの図（マネキン、512×512）。青＝キャラクター本人の右半身、橙＝左半身、灰色＝胴と頭。色の付いた線・輪は、押さえているものの位置
+　- keys/NN.png：すでに描いてあるコマ（キーのコマ、512×512、背景透明）。このキャラクターの絵はこれがすべての手本
+　- motion.json：
+　　frames[i].joints＝コマ i の関節の位置（pose の画像と同じ座標。[x, y, 奥行き]、奥行きが大きいほど手前）
+　　frames[i].ms＝コマ i の表示時間、loop＝くり返すか
+　　keys[&quot;NN&quot;]＝キーのコマ NN の絵の中での関節の位置（自動で見つけたもの。多少ずれていることがある）
+・ref/：キャラクターの全身と顔の絵（見た目の確認用）
+
+■ やってほしいこと（モーションごとに）
+1. キーのコマは、そのまま使う
+2. キーがないコマを作る：
+　・そのコマのポーズに近いキーのコマを選び、腕（上腕・前腕と手）、脚（太もも・すねと足）、胴と頭と髪、持ち物（剣・盾・杖・ナイフ）を切り抜く
+　・keys の関節の位置を目安に、各部位を回転・移動して、そのコマの joints の位置に合わせて置く。重なり順は奥行きで決める（長い髪は胴より後ろ）
+　・部位の境目（肩・肘・股・膝）は、切り口の線やすき間が見えないように、少し重ねてなじませる。腕のあった場所が空いたら、周りの色で自然に埋める
+　・どうしても合わないところだけ、画像生成で描き足してよい。その場合もキーのコマと同じ絵柄・同じ人物・同じ衣装で、描き足した範囲は小さく
+3. 全コマで、キャラクターの大きさと足元の高さをそろえる（キーのコマに合わせる）
+4. 各コマを 512×512・背景透明の PNG で保存。ファイル名は &lt;フォルダ名&gt;__NN.png（NN はコマ番号2桁）
+5. 確認用に、各モーションを frames[i].ms の間隔でつないだアニメーション GIF（白背景）も作る
+
+■ 返してほしいもの
+・全コマの PNG と GIF を1つの ZIP にまとめて
+・モーションごとに、どのコマをどのキーから作ったか、うまくいかなかったコマはどれか、を短く
+
+■ 守ること
+・キャラクターの見た目（顔・髪型・衣装・色・頭身）はキーのコマから変えない
+・肌の露出を増やさない。衣装はキーのコマのまま
+・影・床・背景・文字は入れない
+</pre></div></main>
+<script>document.getElementById('c').onclick=async e=>{try{await navigator.clipboard.writeText(document.getElementById('t').textContent);e.target.textContent='コピーしました'}catch(err){const r=document.createRange();r.selectNodeContents(document.getElementById('t'));getSelection().removeAllRanges();getSelection().addRange(r);e.target.textContent='選択しました'}}</script></body></html>

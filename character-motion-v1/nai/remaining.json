@@ -174,9 +174,7 @@
   "scout__trip_fall__right__20.png",
   "scout__trip_fall__right__4.png"
  ],
- "hold": {
-  "healer": "ヒーラーは保留中：いまの見た目の基準（幼く見える造形と露出の強い衣装）のままでは作らない。大人に見える基準の絵に替えてから、この保留を外す"
- },
+ "hold": {},
  "frames": {
   "kesa__up_right__6": {
    "id": "kesa__up_right__6",
@@ -246,6 +244,144 @@
     "move": "ChatGPT が安全判定で描けなかった1枚絵"
    },
    "step": "命中"
+  },
+  "healer_buff__front__0": {
+   "id": "healer_buff__front__0",
+   "motion": "healer_buff",
+   "kind": "attack",
+   "view": "front",
+   "frame": 0,
+   "label": "杖を掲げてから仲間へ向け、加護を与える",
+   "look": null,
+   "chars": [
+    "healer"
+   ],
+   "situations": [],
+   "prompt": "from front, facing viewer, holding staff, raising staff, casting spell, magic, dynamic pose",
+   "note": "",
+   "base": "base/healer_buff__front__0.png",
+   "guide": "base/healer_buff__front__0.png",
+   "ja": {
+    "body": "杖を掲げてから仲間へ向け、加護を与える（12コマのうち1コマ目・立つ）",
+    "held": "",
+    "move": "ChatGPT が安全判定で描けなかった1枚絵"
+   },
+   "step": "立つ"
+  },
+  "healer_buff__left__8": {
+   "id": "healer_buff__left__8",
+   "motion": "healer_buff",
+   "kind": "attack",
+   "view": "left",
+   "frame": 8,
+   "label": "杖を掲げてから仲間へ向け、加護を与える",
+   "look": null,
+   "chars": [
+    "healer"
+   ],
+   "situations": [],
+   "prompt": "from side, profile, facing left, holding staff, raising staff, casting spell, magic, dynamic pose",
+   "note": "the staff pointed at the one she blesses",
+   "base": "base/healer_buff__left__8.png",
+   "guide": "base/healer_buff__left__8.png",
+   "ja": {
+    "body": "杖を掲げてから仲間へ向け、加護を与える（12コマのうち9コマ目・授ける）",
+    "held": "",
+    "move": "ChatGPT が安全判定で描けなかった1枚絵"
+   },
+   "step": "授ける"
+  },
+  "healer_buff__down_left__0": {
+   "id": "healer_buff__down_left__0",
+   "motion": "healer_buff",
+   "kind": "attack",
+   "view": "down_left",
+   "frame": 0,
+   "label": "杖を掲げてから仲間へ向け、加護を与える",
+   "look": null,
+   "chars": [
+    "healer"
+   ],
+   "situations": [],
+   "prompt": "three-quarter view, facing to the left, holding staff, raising staff, casting spell, magic, dynamic pose",
+   "note": "",
+   "base": "base/healer_buff__down_left__0.png",
+   "guide": "base/healer_buff__down_left__0.png",
+   "ja": {
+    "body": "杖を掲げてから仲間へ向け、加護を与える（12コマのうち1コマ目・立つ）",
+    "held": "",
+    "move": "ChatGPT が安全判定で描けなかった1枚絵"
+   },
+   "step": "立つ"
+  },
+  "healer_purify__down_right__3": {
+   "id": "healer_purify__down_right__3",
+   "motion": "healer_purify",
+   "kind": "attack",
+   "view": "down_right",
+   "frame": 3,
+   "label": "杖で床を突き、清めの光を広げる",
+   "look": null,
+   "chars": [
+    "healer"
+   ],
+   "situations": [],
+   "prompt": "three-quarter view, facing to the right, holding staff, staff planted on the ground, casting spell, magic, dynamic pose",
+   "note": "lifts the staff a little",
+   "base": "base/healer_purify__down_right__3.png",
+   "guide": "base/healer_purify__down_right__3.png",
+   "ja": {
+    "body": "杖で床を突き、清めの光を広げる（13コマのうち4コマ目・持ち上げる）",
+    "held": "",
+    "move": "ChatGPT が安全判定で描けなかった1枚絵"
+   },
+   "step": "持ち上げる"
+  },
+  "healer_purify__right__3": {
+   "id": "healer_purify__right__3",
+   "motion": "healer_purify",
+   "kind": "attack",
+   "view": "right",
+   "frame": 3,
+   "label": "杖で床を突き、清めの光を広げる",
+   "look": null,
+   "chars": [
+    "healer"
+   ],
+   "situations": [],
+   "prompt": "from side, profile, facing right, holding staff, staff planted on the ground, casting spell, magic, dynamic pose",
+   "note": "lifts the staff a little",
+   "base": "base/healer_purify__right__3.png",
+   "guide": "base/healer_purify__right__3.png",
+   "ja": {
+    "body": "杖で床を突き、清めの光を広げる（13コマのうち4コマ目・持ち上げる）",
+    "held": "",
+    "move": "ChatGPT が安全判定で描けなかった1枚絵"
+   },
+   "step": "持ち上げる"
+  },
+  "healer_purify__right__6": {
+   "id": "healer_purify__right__6",
+   "motion": "healer_purify",
+   "kind": "attack",
+   "view": "right",
+   "frame": 6,
+   "label": "杖で床を突き、清めの光を広げる",
+   "look": null,
+   "chars": [
+    "healer"
+   ],
+   "situations": [],
+   "prompt": "from side, profile, facing right, holding staff, staff planted on the ground, casting spell, magic, dynamic pose",
+   "note": "drives its foot to the floor: the light spreads",
+   "base": "base/healer_purify__right__6.png",
+   "guide": "base/healer_purify__right__6.png",
+   "ja": {
+    "body": "杖で床を突き、清めの光を広げる（13コマのうち7コマ目・突く）",
+    "held": "",
+    "move": "ChatGPT が安全判定で描けなかった1枚絵"
+   },
+   "step": "突く"
   }
  },
  "jobs": [
@@ -263,6 +399,36 @@
    "char": "aria",
    "frame": "thrust__up_right__4",
    "file": "aria__thrust__up_right__4.png"
+  },
+  {
+   "char": "healer",
+   "frame": "healer_buff__front__0",
+   "file": "healer__healer_buff__front__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "healer_buff__left__8",
+   "file": "healer__healer_buff__left__8.png"
+  },
+  {
+   "char": "healer",
+   "frame": "healer_buff__down_left__0",
+   "file": "healer__healer_buff__down_left__0.png"
+  },
+  {
+   "char": "healer",
+   "frame": "healer_purify__down_right__3",
+   "file": "healer__healer_purify__down_right__3.png"
+  },
+  {
+   "char": "healer",
+   "frame": "healer_purify__right__3",
+   "file": "healer__healer_purify__right__3.png"
+  },
+  {
+   "char": "healer",
+   "frame": "healer_purify__right__6",
+   "file": "healer__healer_purify__right__6.png"
   }
  ]
 }

@@ -6,7 +6,6 @@ The front view is the top-left of the 2 x 4 sheet. From it:
   nai/ref/<char>-body.png  the whole figure, on white, 1024 x 1536 (NovelAI's portrait size, so nothing is padded)
   nai/ref/<char>-face.png  the head, on white, 1472 x 1472
 On white, not transparent: the phone script pads with black, and a transparent picture would come out on black.
-The healer is left out while she is held (see tools/build_nai_remaining.py).
 """
 import os
 import numpy as np
@@ -14,7 +13,8 @@ from PIL import Image
 from scipy import ndimage
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
-SHEETS = {'aria': 'art/warrior-source.png', 'scout': 'art/scout-source.png', 'mage': 'art/witch-source.png'}
+SHEETS = {'aria': 'art/warrior-source.png', 'scout': 'art/scout-source.png', 'mage': 'art/witch-source.png',
+          'healer': 'art/healer-source-v8.png'}
 OUT = os.path.join(ROOT, 'nai', 'ref')
 
 def on_white(im):

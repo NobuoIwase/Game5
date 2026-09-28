@@ -30,6 +30,8 @@ Astra はこのファイルを読み、下の数を実際のファイルで確�
 
 ## Grok に渡すもの
 
+- **Grok 用のページ：`grok/index.html`**（https://nobuoiwase.github.io/Game5/character-motion-v1/grok/index.html 、作り直しは `git fetch origin chatgpt-output && node tools/build_grok.mjs`）。1コマずつ、添付する画像と貼る文と保存名がある
+
 - 見た目の基準：参照画像 `nai/ref/<キャラ>-body.png`・`-face.png`（白背景）と8方向の絵 `art/warrior-source.png`・`scout-source.png`・`witch-source.png`・`healer-source-v8.png`
 - 似せる手本：同じキャラの `chatgpt/unified/<キャラ>/` の絵（同じ向きのもの）
 - 姿勢：そのコマの `base`（ポーズの図。青＝本人の右半身、橙＝左半身。図の線や色は描かない）

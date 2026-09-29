@@ -14,7 +14,29 @@ var G = (typeof G !== "undefined") ? G : {};
     soiled:  { name: "汚濁",     note: "粘液の匂いが抜けない",                         fee: 6 },
     hollow:  { name: "魔力枯渇", note: "変身の光が弱い。次の潜行は魔力が少ない",       fee: 10 },
     sigil:   { name: "淫紋",     note: "下腹に紋が薄く残っている。次の潜行は熱が入りやすい", fee: 14 },
+    // ---- Game2・Game4 の状態異常 ----
+    sensitive:  { name: "過敏",       note: "肌が触れるだけで反応する。服の擦れにも耐えている。次の潜行は敏感化2から", fee: 8 },
+    throb:      { name: "疼き",       note: "痒みと熱が抜けない。次の潜行の始めは、ずっと疼いている", fee: 8, ongoing: true },
+    omazuke:    { name: "おあずけ",   note: "許しの出ないまま溜まった熱が残っている。次の潜行の1階を出るまで達せない。そのあと全部来る", fee: 16, ongoing: true },
+    charm:      { name: "魅了",       note: "特定の相手に見惚れた感覚が抜けない。その相手を撃てず、目で追ってしまう", fee: 12 },
+    attached:   { name: "付着体",     note: "身体に貼りついたものが外れていない。報告のあいだも動いている", fee: 14, ongoing: true },
+    exposure:   { name: "装束損壊",   note: "装束が用を成していない。次の潜行は替えの衣装から（見られやすい）", fee: 5 },
+    paralysis:  { name: "麻痺",       note: "痺れが残り、得物を握る手に力が入らない", fee: 6 },
+    exhaustion: { name: "疲弊",       note: "極度の消耗。声に張りがない。気力が戻りきらない", fee: 6 },
+    mindTaint:  { name: "思考汚染",   note: "淫らな想念が湧き、暗示が通りやすい（惑に弱い）", fee: 10 },
+    addict:     { name: "中毒",       note: "咳き茸の粉が忘れられない。茸を見ると、自分から寄っていく", fee: 12 },
+    hairTrigger:{ name: "暗示の引き金", note: "解けた暗示の底に鉤が残っている。前触れなく無様な発作が出る（深層処置）", fee: 30, kink: true },
+    rewired:    { name: "常識改変",   note: "ワルドーの『敬礼』を正式な挨拶だと信じ込んでいる。本人は疑わない（深層処置）", fee: 30, kink: true },
+    defeatBrand:{ name: "敗北洗脳",   note: "『この相手には勝てない』と刷り込まれた。その種に本気を出せない（深層処置）", fee: 30, kink: true },
   };
+  // 状態異常の表示名（魅了は向き先つき）
+  function ailmentName(a) {
+    const A = AILMENTS[a.id]; if (!A) return a.id;
+    if (a.id === "charm" && a.to) return A.name + "（" + Object.keys(a.to).map(k => G.MONSTERS[k].name + ["", "Ⅰ", "Ⅱ", "Ⅲ"][a.to[k]]).join("・") + "）";
+    if (a.id === "attached" && a.list) return A.name + "（" + a.list.join("・") + "）";
+    if (a.id === "defeatBrand" && a.to) return A.name + "（" + G.MONSTERS[a.to].name + "）";
+    return A.name;
+  }
 
   const SHOP = {
     freeSlot: { name: "デッキの自由枠 +1",   costs: [6, 12, 18], note: "ダンジョンごとのデッキに、好きな魔物・罠を1つ多く入れられる" },
@@ -50,6 +72,9 @@ var G = (typeof G !== "undefined") ? G : {};
     goblin: "ゴブリンの巣穴", slime: "スライムの溜まり場", roper: "ローパーの園", hanging_vine: "垂れ蔦の回廊", puppet_hand: "傀儡手の工房",
     gulper_worm: "ワームの坑道", mimic: "ミミックの宝物庫", mind_roper: "囁きの底", gazer: "凝視の塔", moth: "灯蛾の塔", imp: "小淫魔の館",
     peeper: "覗き子の書庫", mirror_slime: "鏡粘体の間", slug: "大湿殻の沼", jellyfish: "水母の地底湖", lure_cap: "茸の洞", fluff: "綿毛の野",
+    inma: "寸止めの館", muma_queen: "夢魔の宮", futago: "双子の小部屋", waldo_grunt: "ワルドーの詰所", waldo_officer: "ワルドーの司令室", drone_capture: "ドローン工廠",
+    drone_tickle: "ドローン工廠", drone_camera: "記録室", karte: "開発棟", shibire: "胞子の野", sekitake: "咳き茸の洞", suiyou: "水妖の沼", kabeguchi: "肉の回廊",
+    inyoku: "淫翼の巣", hoshibami: "星喰みの磯", tentacle_lord: "触手の主の坑",
     nikubana: "肉花の庭", dakitake: "抱き茸の森", kouryuu: "媚香の淀み", tsukite: "憑き手の礼拝堂", shousha: "照射の回廊", banjin: "沈んだ祭殿", medama: "目玉の天窓",
   };
   function placeName(dungeon, species) { return species ? (DEN_NAME[species] || G.MONSTERS[species].name + "の巣") : G.DUNGEONS[dungeon].name; }
@@ -67,7 +92,16 @@ var G = (typeof G !== "undefined") ? G : {};
       decks, autoDirector: false, speed: 1,
       history: [], reportMem: {}, lastPosture: null, caughtDay: -9, silentAccepted: false,
       requests: null, pick: null, rec: null, log: [],
+      traits: {}, counts: {}, waldo: { rescues: 0, converted: 0 }, carry: {},
     };
+  }
+  // 古いセーブに、後から足した項目を補う（v2 のまま）
+  function upgradeSave(s) {
+    if (!s) return s;
+    s.traits = s.traits || {}; s.counts = s.counts || {}; s.waldo = s.waldo || { rescues: 0, converted: 0 }; s.carry = s.carry || {};
+    for (const k in G.DUNGEONS) if (!s.decks[k]) { const dg = G.DUNGEONS[k]; s.decks[k] = [dg.free.find(x => G.MONSTERS[x].type === "削"), "trap:" + dg.traps[0]]; }
+    s.ailments = (s.ailments || []).filter(a => AILMENTS[a.id]);
+    return s;
   }
 
   /* ================================================================ 朝：依頼 */
@@ -152,6 +186,9 @@ var G = (typeof G !== "undefined") ? G : {};
   function startDive(s) {
     const p = s.pick;
     const has = id => s.ailments.some(a => a.id === id);
+    const ail = id => s.ailments.find(a => a.id === id);
+    // 迷宮の法則：入口で決まる。無い日もある（ワルドーの支部には無い）
+    const law = p.dungeon !== "waldo" && U.chance(0.45) ? U.pick(Object.keys(G.LAWS)) : null;
     const run = {
       day: s.day, dungeon: p.dungeon, stated: p.stated, realType: G.DUNGEONS[p.dungeon].type, forged: p.forged,
       real: p.real, paper: p.paper, caution: p.caution || 1, forgeSize: p.forgeSize || 0,
@@ -160,9 +197,16 @@ var G = (typeof G !== "undefined") ? G : {};
       autoDirector: s.autoDirector, save: s, recall: false, floor: 1, mismatch: 0,
       h: {
         hp: Math.round(G.HIKARI.hpMax * (1 - s.fatigue / 250)), mp: G.HIKARI.mpMax, magic: has("hollow") ? 60 : G.HIKARI.magicMax,
-        will: Math.round(100 - s.fatigue / 5), arousal: has("heat") ? 30 : 0, pleasure: 0, climax: 0, form: "magica", kit: Object.assign({}, p.kit),
+        will: Math.round(100 - s.fatigue / 5 - (has("exhaustion") ? 20 : 0)), arousal: has("heat") ? 30 : 0, pleasure: 0, climax: 0, form: "magica", kit: Object.assign({}, p.kit),
         sigil: has("sigil") ? 1 : 0,
+        // 前の潜行から持ち越した状態
+        sens: has("sensitive") ? 2 : 0, sensBase: has("sensitive") ? 1 : 0, ache: has("throb") ? 40 : 0, numb: has("paralysis") ? 20 : 0,
+        omazuke: has("omazuke") ? { over: (s.carry.omazuke || 40), floor: 1 } : null,
+        charm: Object.assign({}, (ail("charm") || {}).to || {}), attach: (s.carry.attach || []).slice(),
+        exposure: has("exposure"), addict: has("addict"), trigger: has("hairTrigger"), rewired: has("rewired"), taint: has("mindTaint"),
+        brand: (ail("defeatBrand") || {}).to || null, brain: 0,
       },
+      law,
       budgetBonus: s.upgrades.budget * 2,
     };
     s.phase = "dive";
@@ -177,6 +221,7 @@ var G = (typeof G !== "undefined") ? G : {};
   function afterFloor(run, w) {
     if (w.outcome === "down") { run.floor++; return "next"; }
     run.outcome = w.outcome === "cleared" ? "cleared" : w.outcome;
+    run.defeatBy = w.defeatBy || null;
     run.floorReached = run.floor;
     return "end";
   }
@@ -200,6 +245,42 @@ var G = (typeof G !== "undefined") ? G : {};
     if (ev.filter(e => e.type === "蕩" && (e.kind === "arouse" || e.kind === "hold")).length >= 4) add("soiled");
     if (run.h.form === "civilian") add("hollow");
     if (run.h.sigil >= 1) add("sigil");      // 刻まれた紋は、処置するまで残る
+    const H = run.h, n = k => ev.filter(e => e.kind === k).length;
+    if ((H.sens || 0) >= 3) add("sensitive");
+    if (H.ache > 0 || ev.some(e => e.trap === "itch")) add("throb");
+    const over = ((H.omazuke || {}).over || 0) + ((H.deny || {}).over || 0) + ((H.kinOver || {}).over || 0);
+    if (H.omazuke || over > 20) { add("omazuke"); s.carry.omazuke = Math.round(over + 30); } else if (!s.ailments.some(a => a.id === "omazuke")) s.carry.omazuke = 0;
+    if (H.charm && Object.values(H.charm).some(v => v > 0)) { add("charm"); s.ailments.find(a => a.id === "charm").to = Object.assign({}, H.charm); }
+    if (H.attach && H.attach.length) { add("attached"); s.carry.attach = H.attach.slice(); s.ailments.find(a => a.id === "attached").list = H.attach.map(id => ({ orb: "震え珠", suit: "纏い衣", hoshibami: "星喰み", sucker: "吸盤" })[id]); } else s.carry.attach = [];
+    if (H.exposure) add("exposure");
+    if (n("numb") >= 2) add("paralysis");
+    if (run.outcome === "defeat" && s.fatigue >= 45) add("exhaustion");      // 連日の敗北で
+    if (H.taint || n("trance") >= 8) add("mindTaint");
+    if (H.addict) add("addict");
+    if (H.trigger) add("hairTrigger");
+    if (H.rewired) add("rewired");
+    // 敗北洗脳：同じ種に二度負けると
+    if (run.outcome === "defeat" && run.defeatBy && G.MONSTERS[run.defeatBy]) {
+      s.counts["lost:" + run.defeatBy] = (s.counts["lost:" + run.defeatBy] || 0) + 1;
+      if (s.counts["lost:" + run.defeatBy] >= 2 && !s.ailments.some(a => a.id === "defeatBrand")) { add("defeatBrand"); s.ailments.find(a => a.id === "defeatBrand").to = run.defeatBy; }
+    }
+    // 性癖：行動の積み重ねで身につき、消えない
+    const MACH = ["ratchet", "karte", "exam", "capture", "pod", "drone_capture", "drone_tickle", "belt", "gate", "armor"], IMP = ["imp", "futago", "inma", "muma_queen"];
+    const cnt = {
+      defeat: run.outcome === "defeat" ? 1 : 0, hold: n("hold"), edge: n("edge") + n("deny") + n("vow"), climax: climaxes,
+      watched: n("filmed") + n("salute") + ev.filter(e => e.trap === "pillory").length, drain: n("drain"), sniff: n("sniff"), sigil: n("sigil") + n("rune"),
+      hypno: ev.filter(e => e.hidden).length, drawn: n("drawn"), tickle: ev.filter(e => e.kind === "hold" && (e.mon === "drone_tickle" || e.mon === "tickle")).length,
+      engulf: ev.filter(e => e.kind === "hold" && e.type === "蕩").length, machine: ev.filter(e => e.kind === "hold" && MACH.includes(e.mon)).length,
+      imp: ev.filter(e => (e.kind === "charm" || e.kind === "deny" || e.kind === "beg") && IMP.includes(e.mon)).length,
+    };
+    const gained = [];
+    for (const k in cnt) s.counts[k] = (s.counts[k] || 0) + cnt[k];
+    for (const [id, T] of Object.entries(G.TRAITS)) {
+      const c = s.counts[T.count] || 0, cur = s.traits[id] || 0;
+      let st = 0; for (let i = 0; i < 3; i++) if (c >= T.need[i]) st = i + 1;
+      if (st > cur) { s.traits[id] = st; gained.push({ id, stage: st }); }
+    }
+    run.traitsGained = gained;
     // 報酬
     const req = s.pick.req;
     let funds = run.outcome === "cleared" ? req.reward : run.outcome === "defeat" ? 0 : Math.round(req.reward * run.floorReached / 12);
@@ -224,7 +305,8 @@ var G = (typeof G !== "undefined") ? G : {};
     const rec = {
       day: s.day, dungeon: run.dungeon, dungeonName: run.dungeonName || G.DUNGEONS[run.dungeon].name, stated: run.stated, realType: run.realType, forged: run.forged,
       outcome: run.outcome, floorReached: run.floorReached, events: ev, night: run.night, mismatch: run.mismatch || 0,
-      h: { hp: run.h.hp, arousal: run.h.arousal, form: run.h.form, climax: climaxes }, ailments: s.ailments.map(a => a.id),
+      h: { hp: run.h.hp, arousal: run.h.arousal, form: run.h.form, climax: climaxes, attach: (run.h.attach || []).slice(), rewired: !!run.h.rewired }, ailments: s.ailments.map(a => a.id),
+      law: run.law || null, traitsGained: run.traitsGained || [], converted: !!run.converted,
       gain: { body: +bodyGain.toFixed(1), mind: +mindGain.toFixed(1), funds, dark, sus: +sus.toFixed(1) },
     };
     rec.report = G.Report.build(rec, s);
@@ -269,6 +351,8 @@ var G = (typeof G !== "undefined") ? G : {};
       if (!a || s.funds < a.fee) continue;
       s.funds -= a.fee;
       s.ailments = s.ailments.filter(x => x.id !== id);
+      if (id === "attached") s.carry.attach = [];
+      if (id === "omazuke") s.carry.omazuke = 0;
     }
   }
   function endDay(s) {
@@ -291,6 +375,6 @@ var G = (typeof G !== "undefined") ? G : {};
 
   function taintStage(s) { return s.taint >= 100 ? 4 : s.taint >= 70 ? 3 : s.taint >= 42 ? 2 : s.taint >= 18 ? 1 : 0; }
 
-  G.Game = { placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, buy, taintStage };
+  G.Game = { upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, buy, taintStage };
 })();
 if (typeof module !== "undefined") module.exports = G;

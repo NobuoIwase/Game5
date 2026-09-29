@@ -11,9 +11,11 @@ p{color:var(--sub);margin:0 0 8px}.row{display:flex;flex-wrap:wrap;gap:10px}
 .t{display:inline-block;border-radius:4px;padding:0 6px;font-size:12px;margin-left:4px}
 .惑{background:#5b3d8c}.蕩{background:#8c3d63}.絡{background:#3d6b8c}.削{background:#2f7a7a}
 </style></head><body>
-<h1>新作の素材</h1><p>ひかり（素の姿・変身後、4方向。歩きのコマは使わず、1枚の絵を滑らせて動かす）と、初版の魔物21体。</p>
+<h1>新作の素材</h1><p>ひかり（素の姿・変身後、4方向。歩きのコマは使わず、1枚の絵を滑らせて動かす）と、魔物・罠の絵。</p>
 <h2>ひかり</h2><div class="row" id="hk"></div>
 <h2>魔物</h2><div id="mon"></div>
+<h2>罠</h2><div id="trap"></div>
+<script src="../js/data.js"></script>
 <script>
 const DIRS=['front','left','right','back'],JP={front:'前',left:'左',right:'右',back:'後ろ'};
 // 歩きのコマ送りはしない（崩れるため）。各向きの真ん中の1枚を、向いている方へ滑らせるだけ。
@@ -28,4 +30,7 @@ for(const [n,label] of [['hikari_civilian','素の姿'],['hikari_magica','変身
 fetch('monsters/roster.json').then(r=>r.json()).then(({monsters})=>{const box=document.getElementById('mon');
  for(const t of ['惑','蕩','絡','削']){const h=document.createElement('h2');h.innerHTML=`<span class="t ${t}">${t}</span>`;box.append(h);const row=document.createElement('div');row.className='row';box.append(row);
   for(const m of monsters.filter(m=>m.type===t))row.insertAdjacentHTML('beforeend',`<div class="c"><img src="monsters/${m.id}.${m.art==='game4'?'png':'svg'}" alt=""><b>${m.name}</b><small>${m.from}・${{game4:'Game4の絵',new:'新規',game5:'Game5の絵'}[m.art]}</small></div>`)}});
+const tb=document.getElementById('trap');
+for(const t of ['惑','蕩','絡','削']){const h=document.createElement('h2');h.innerHTML=`<span class="t ${t}">${t}</span>`;tb.append(h);const row=document.createElement('div');row.className='row';tb.append(row);
+ for(const [k,d] of Object.entries(G.TRAPS).filter(([k,d])=>d.type===t))row.insertAdjacentHTML('beforeend',`<div class="c"><img src="traps/${k}.${k==='web'||k==='tower'?'png':'svg'}" alt=""><b>${d.name}</b><small>${k==='web'||k==='tower'?'Game4の絵':'新規'}</small></div>`)}
 </script></body></html>

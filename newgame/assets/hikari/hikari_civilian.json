@@ -1,0 +1,19 @@
+{
+ "name": "hikari_civilian",
+ "frameW": 181,
+ "frameH": 263,
+ "rows": [
+  "front",
+  "left",
+  "right",
+  "back"
+ ],
+ "cols": 3,
+ "walk": [
+  0,
+  1,
+  2,
+  1
+ ],
+ "source": "ChatGPT Image 2026年9月30日 03_45_25.png"
+}

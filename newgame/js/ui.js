@@ -23,18 +23,11 @@
   function cardName(c) { const ci = G.Field.cardInfo(c); return ci.d ? ci.d.name : c; }
   function cardArt(c) {
     const ci = G.Field.cardInfo(c);
-    if (ci.trap) return `<div class="ic" style="color:${G.Render.TYPE_COLOR[ci.d.type]}">${({ bell: "鈴", mirror: "鏡", decoy: "燭", glue: "粘", vent: "香", urn: "甕", vine: "蔦", rope: "縄", shrine: "祠", basin: "水" })[ci.id] || "罠"}</div>`;
+    if (ci.trap) return `<div class="ic" style="color:${G.Render.TYPE_COLOR[ci.d.type]}">${({ bell: "鈴", mirror: "鏡", decoy: "燭", glue: "粘", vent: "香", urn: "甕", vine: "蔦", rope: "縄", shrine: "祠", basin: "水", pillory: "晒", tease: "焦", belt: "帯" })[ci.id] || "罠"}</div>`;
     return `<img src="assets/monsters/${ci.d.art}" alt="">`;
   }
   const TIER_NAME = ["抵抗", "綻び", "心は拒み、体は応える", "待ってしまう"];
   const TAINT_NAME = ["澄んでいる", "ざわついている", "澱みはじめた", "倒錯が日常になった", "すっかり澱んだ"];
-  const RECEPTION = [
-    ["おはようございます、監査官。今日もひかりさんの依頼、お願いしますね", "ひかりさん、今朝も一番乗りでしたよ。元気ですよね、あの子"],
-    ["……最近、酒場で妙な噂が回ってるんです。報告書の写しが、どこからか漏れてるとか", "監査記録の閲覧、なぜか希望者が増えてるんですよね"],
-    ["監査記録の閲覧希望、今週もう五人目です。……みんな、何を読みに来てるんでしょうね", "掲示板の依頼、最近は妙に『湿った』ものが多くて"],
-    ["新しい規則で、報告の場に立会人が付けられるようになりました。……希望者、多いですよ", "ひかりさんの記録、写しが三冊目になりました"],
-    ["ここも、ずいぶん変わりましたね。……わたしも、慣れてしまいました", "今日も、みんな報告を楽しみにしてますよ。……監査官も、でしょう？"],
-  ];
 
   function topbar() {
     const tier = G.tier(S.body, S.mind);
@@ -74,96 +67,175 @@
     guild();
   }
 
-  /* ================================================================ ギルド（朝） */
-  function guild() {
+  /* ================================================================ 監査官室 */
+  const LV_NAME = { 1: "低い", 2: "並", 3: "高い" }, SC_NAME = { 1: "小規模", 2: "中規模", 3: "大規模" };
+  // 部屋の絵（背景は CSS で描く）。ひかりは扉（右）から入って、机の前に立つ
+  function officeHTML(extra) {
+    return `<div class="office" id="office">
+      <div class="o-window"><i></i><i></i></div><div class="o-shelf"></div><div class="o-door"></div>
+      <img class="o-hikari out" id="oh" src="assets/hikari/hikari_civilian_front_1.png" alt="">
+      <div class="o-desk"><span class="o-paper"></span><span class="o-paper p2"></span><span class="o-lamp"></span></div>
+      <div class="o-dialog hidden" id="dlg"><span class="o-name" id="dn"></span><p id="dt"></p><span class="o-next">▼</span></div>
+      ${extra || ""}</div>`;
+  }
+  function hikariIn(src) { const el = document.getElementById("oh"); if (!el) return; if (src) el.src = src; requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove("out"))); }
+  function hikariOut(done) { const el = document.getElementById("oh"); if (!el) return done && done(); el.src = "assets/hikari/hikari_civilian_right_1.png"; el.classList.add("leave"); setTimeout(() => done && done(), 900); }
+  // 会話を一行ずつ（押すと次へ）
+  function vn(lines, done) {
+    const dlg = document.getElementById("dlg"), dn = document.getElementById("dn"), dt = document.getElementById("dt");
+    let i = 0;
+    const show = () => {
+      if (i >= lines.length) { dlg.classList.add("hidden"); dlg.onclick = null; return done && done(); }
+      const l = lines[i++];
+      dlg.classList.remove("hidden");
+      dn.textContent = l.who === "h" ? "ひかり" : l.who === "a" ? "監査官" : "";
+      dn.style.display = l.who === "n" ? "none" : "";
+      dt.textContent = l.text; dt.className = l.who === "n" ? "narr" : "";
+    };
+    dlg.onclick = show; show();
+  }
+  function officeTalk() {
+    const T = G.Text, out = [];
+    const last = S.history[S.history.length - 1];
+    if (last && last.outcome === "defeat") out.push(T.office("talk.afterDefeat"));
+    if (S.ailments.some(a => a.id === "heat")) out.push(T.office("talk.heat"));
+    if (S.suspicion >= 45) out.push(T.office("talk.suspicious"));
+    if (GM.taintStage(S) >= 2 && U.chance(0.6)) out.push(T.office("talk.taint"));
+    if (G.tier(S.body, S.mind) >= 2 && U.chance(0.6)) out.push(T.office("talk.fallen"));
+    out.push(T.office(S.trust >= 70 ? "talk.trustHigh" : S.trust < 35 ? "talk.trustLow" : "talk.base"));
+    return out.slice(0, 2);
+  }
+
+  function guild() { return office(); }
+  function office() {
     if (S.pendingEvent === "confront") return confrontScreen();
-    if (S.pendingEvent === "silent") { S.pendingEvent = null; save(); modal(`<p>ひかりは何か言いたげに、依頼書と監査官の顔を見比べた。</p><p>「……ううん。なんでもないです」</p><p class="sub">疑いはある。けれど、もう口に出す気はないらしい。</p><div class="row"><button class="primary" id="ok">そうか</button></div>`, b => b.querySelector("#ok").onclick = closeModal); }
     const tier = G.tier(S.body, S.mind);
-    const st = GM.taintStage(S);
     const ail = S.ailments.map(a => `<span class="tag">${GM.AILMENTS[a.id].name}</span>`).join("") || `<span class="dim">なし</span>`;
-    app.innerHTML = topbar() + `
-      <div class="panel guild-face"><img src="assets/hikari/hikari_civilian_front_1.png" alt="">
-        <div><div class="sub">受付嬢</div><div>「${esc(U.pick(RECEPTION[st]))}」</div></div></div>
-      <div class="panel">
+    app.innerHTML = topbar() + officeHTML() + `
+      <div class="panel" id="status">
         <b>星野 ひかり</b> <span class="sub">大学生。本業は魔法少女ルミナ（正体を知るのは監査官だけ）</span>
         ${meter("肉体", S.body, 100, "#ff7fb0")}${meter("精神", S.mind, 100, "#b48cff")}${meter("信頼", S.trust, 100, "#8fe0a0")}${meter("疲労", S.fatigue, 100, "#f2d27a")}
         <div class="sub">堕ち：${TIER_NAME[tier]} ／ 状態異常：${ail}</div>
       </div>
-      <div class="grid2">
-        <button class="primary" id="req">依頼を割り当てる</button>
+      <div class="grid2 hidden" id="menu">
+        <button class="primary" id="req">依頼を選ぶ</button>
         <button id="deck">デッキを組む</button>
         <button id="shop">裏の取引（澱晶 ${S.dark}）</button>
         <button id="hist">これまでの記録</button>
       </div>
-      <div class="panel sub">オート指揮：<button id="auto">${S.autoDirector ? "入" : "切"}</button>　潜行中に魔物や罠を自動で差し向けます（自分で置くこともできます）</div>
-      <p class="dim" style="font-size:12px">ひかりの弱点：素で<b>惑</b>に強い。変身中は<b>絡</b>にも強い。変身が解けると一気に崩れる。</p>`;
+      <div class="panel sub hidden" id="menu2">オート指揮：<button id="auto">${S.autoDirector ? "入" : "切"}</button>　潜行中に魔物や罠を自動で差し向ける（自分で置くこともできる）
+        <br><span class="dim">ひかりの弱点：素で惑に強い。変身中は絡にも強い。変身が解けると一気に崩れる。</span></div>`;
+    const showMenu = () => { document.getElementById("menu").classList.remove("hidden"); document.getElementById("menu2").classList.remove("hidden"); };
     on("#req", "click", requestScreen);
-    on("#deck", "click", deckScreen);
+    on("#deck", "click", () => deckScreen(null, office));
     on("#shop", "click", shopScreen);
     on("#hist", "click", historyScreen);
-    on("#auto", "click", () => { S.autoDirector = !S.autoDirector; save(); guild(); });
-  }
-
-  function confrontScreen() {
-    app.innerHTML = topbar() + `<div class="panel">
-      <p>受付の奥、人のいない書庫で、ひかりが待っていた。</p>
-      <p>「……監査官さん。最近の依頼書、おかしくないですか。書いてあることと、中身が、ずっと違う」</p>
-      <p>「偶然、じゃないですよね。……あたし、そこまで鈍くないです」</p>
-      <p class="sub">確信されている。裏の力を使って、彼女を「矯正」するしかない。<br>澱晶はすべて失うが、ひかりの信頼は最大に戻り、違和感は消える。</p>
-      <button class="danger" id="fix">矯正する（澱晶 ${S.dark} をすべて使う）</button></div>`;
-    on("#fix", "click", () => {
-      GM.resolveConfront(S); save();
-      modal(`<p>淡い光が書庫を満たし、やがて消えた。</p><p>「……あれ？ あたし、何の話、してましたっけ」</p><p>「ごめんなさい、疲れてるのかな。……明日の依頼、よろしくお願いしますね、監査官さん」</p><div class="row"><button class="primary" id="ok">ギルドへ</button></div>`, b => b.querySelector("#ok").onclick = () => { closeModal(); guild(); });
+    on("#auto", "click", e => { S.autoDirector = !S.autoDirector; save(); e.currentTarget.textContent = S.autoDirector ? "入" : "切"; });
+    if (S.greeted === S.day) { hikariIn(); document.getElementById("dlg").classList.add("hidden"); return showMenu(); }
+    const T = G.Text;
+    const lines = [{ who: "n", text: T.office("knock") }];
+    vn(lines, () => {
+      hikariIn();
+      setTimeout(() => {
+        const talk = [{ who: "h", text: T.office("enter") }].concat(officeTalk().map(t => ({ who: "h", text: t })));
+        if (S.pendingEvent === "silent") { S.pendingEvent = null; talk.push({ who: "h", text: "……監査官さん。ううん、なんでもないです" }, { who: "n", text: "（疑いはある。けれど、もう口に出す気はないらしい）" }); }
+        vn(talk, () => { S.greeted = S.day; save(); showMenu(); });
+      }, 650);
     });
   }
 
-  /* ================================================================ 依頼 */
+  function confrontScreen() {
+    app.innerHTML = topbar() + officeHTML();
+    hikariIn();
+    vn([
+      { who: "n", text: "扉を閉めるなり、ひかりは真っすぐにこちらを見た。" },
+      { who: "h", text: "……監査官さん。最近の依頼書、おかしくないですか。書いてあることと、中身が、ずっと違う" },
+      { who: "h", text: "偶然、じゃないですよね。……あたし、そこまで鈍くないです" },
+      { who: "n", text: "確信されている。裏の力で「矯正」するしかない。澱晶はすべて失うが、信頼は最大に戻り、違和感は消える。" },
+    ], () => {
+      app.insertAdjacentHTML("beforeend", `<div class="row"><button class="danger" id="fix">矯正する（澱晶 ${S.dark} をすべて使う）</button></div>`);
+      on("#fix", "click", () => {
+        GM.resolveConfront(S); save();
+        document.getElementById("fix").remove();
+        vn([{ who: "n", text: "淡い光が部屋を満たし、やがて消えた。" }, { who: "h", text: "……あれ？ あたし、何の話、してましたっけ" }, { who: "h", text: "ごめんなさい、疲れてるのかな。……今日の依頼、よろしくお願いしますね" }], () => { S.greeted = S.day; save(); office(); });
+      });
+    });
+  }
+
+  /* ================================================================ 依頼を選び、書き換える */
   function requestScreen() {
-    let sel = 0, stated = null, dest = null;
+    let sel = 0, paper = null, dest = null;
     const draw = () => {
       const r = S.requests[sel];
-      const dests = Object.keys(G.DUNGEONS);
-      const st = stated || r.stated, de = dest || r.dungeon;
-      const real = G.DUNGEONS[de].type, P = G.PREP[st];
-      const forged = st !== real || de !== r.dungeon;
-      app.innerHTML = topbar() + `<h1>依頼を割り当てる</h1>
-        <p class="sub">ひかりの希望する依頼の中から選ぶ。依頼書の文面（系統）は書き換えられる。${S.upgrades.swapDest ? "行き先のすり替えもできる。" : ""}</p>
-        <div class="grid2">${S.requests.map((q, i) => `<div class="card ${i === sel ? "sel" : ""}" data-i="${i}">
-          <b>${esc(q.title)}</b><div class="sub">${G.DUNGEONS[q.dungeon].name} ${tag(q.stated)}　報酬 ◈${q.reward}</div></div>`).join("")}</div>
+      paper = paper || Object.assign({}, r.real);
+      const de = dest || r.dungeon;
+      const size = GM.forgeSize(r.real, paper, de !== r.dungeon);
+      const title = GM.requestTitle(paper), stType = G.MONSTERS[paper.main].type, P = G.PREP[stType];
+      const lv = paper.level + (paper.boss ? 1 : 0);
+      const kitTxt = lv <= 1 ? "少なめ（楽な相手だと思っている）" : lv === 2 ? "いつもどおり" : "多め（手強い相手だと思っている）";
+      const mains = GM.MAINS.map(k => `<option value="${k}" ${k === paper.main ? "selected" : ""}>${G.MONSTERS[k].name}（${G.MONSTERS[k].type}）</option>`).join("");
+      const btn = (cls, val, cur, label) => `<button class="${cls}" data-v="${val}" style="${val === cur ? "border-color:var(--pink);background:#4a2640" : ""}">${label}</button>`;
+      app.innerHTML = topbar() + `<h1>依頼書</h1>
+        <p class="sub">ひかりの希望する依頼。机の上の一枚を選び、中身を書き換えてから渡す。</p>
+        <div class="grid2">${S.requests.map((q, i) => `<div class="card paper ${i === sel ? "sel" : ""}" data-i="${i}">
+          <b>${esc(q.title)}</b><div class="sub">${G.DUNGEONS[q.dungeon].name}・報酬 ◈${q.reward}</div>
+          <div class="sub">脅威度 ${LV_NAME[q.real.level]}・${SC_NAME[q.real.scale]}${q.real.boss ? "・長あり" : ""}</div></div>`).join("")}</div>
         <div class="panel">
-          <div>依頼書に書く系統：${G.TYPES.map(t => `<button class="st" data-t="${t}" style="${t === st ? "border-color:var(--pink)" : ""}">${t}</button>`).join(" ")}</div>
-          ${S.upgrades.swapDest ? `<div style="margin-top:8px">実際の行き先：${dests.map(k => `<button class="de" data-k="${k}" style="${k === de ? "border-color:var(--pink)" : ""}">${G.DUNGEONS[k].name}</button>`).join(" ")}</div>` : ""}
-          <p style="margin-top:10px">依頼書：<b>${esc(r.title)}</b>（${tag(st)}）　実際：<b>${G.DUNGEONS[de].name}</b>（${tag(real)}）${forged ? ` <span class="tag" style="color:var(--red)">偽装</span>` : ""}</p>
-          <p class="sub">ひかりは依頼書を見て<b>${P.name}</b>を用意してくる。${esc(P.note)}</p>
-          ${forged ? `<p class="sub">偽装は、違和感として少しずつ積もる。確信されると矯正が必要になる（今の違和感 ${Math.round(S.suspicion)}/100）。</p>` : ""}
-          <div class="row"><button class="primary" id="go">この内容で渡す</button><button id="back">戻る</button></div>
+          <h2 style="margin-top:0">書き換える</h2>
+          <div class="col">
+            <label>主な魔物　<select id="main">${mains}</select></label>
+            <div>規模　${[1, 2, 3].map(v => btn("sc", v, paper.scale, SC_NAME[v])).join(" ")}</div>
+            <div>脅威度　${[1, 2, 3].map(v => btn("lv", v, paper.level, LV_NAME[v])).join(" ")}</div>
+            <div>長　${btn("bs", 1, paper.boss ? 1 : 0, "書く")} ${btn("bs", 0, paper.boss ? 1 : 0, "書かない")}</div>
+            ${S.upgrades.swapDest ? `<div>実際の行き先　${Object.keys(G.DUNGEONS).map(k => btn("de", k, de, G.DUNGEONS[k].name)).join(" ")}</div>` : ""}
+          </div>
+          <div class="paper-preview"><div class="sub">ひかりに渡す依頼書</div><b>${esc(title)}</b>
+            <div class="sub">${G.DUNGEONS[de].name}（実際）・書いた系統 ${tag(stType)}</div></div>
+          <p class="sub">ひかりは<b>${P.name}</b>を用意してくる（${esc(P.note)}）。持ち物は${kitTxt}。</p>
+          ${size ? `<p class="sub">偽装の大きさ <b style="color:var(--red)">${size}</b>。食い違いを見るほど違和感が積もる（今 ${Math.round(S.suspicion)}/100）。</p>` : `<p class="sub">書き換えていない（正直な依頼書）。</p>`}
+          <div class="row"><button class="primary" id="go">この依頼書を渡す</button><button id="reset">元に戻す</button><button id="back">戻る</button></div>
         </div>`;
-      on(".card", "click", e => { sel = +e.currentTarget.dataset.i; stated = null; dest = null; draw(); });
-      on(".st", "click", e => { stated = e.currentTarget.dataset.t; draw(); });
-      on(".de", "click", e => { dest = e.currentTarget.dataset.k; draw(); });
-      on("#back", "click", guild);
-      on("#go", "click", () => { GM.assign(S, sel, st, de); GM.prep(S); save(); prepScreen(); });
+      on(".paper", "click", e => { sel = +e.currentTarget.dataset.i; paper = null; dest = null; draw(); });
+      on("#main", "change", e => { paper.main = e.target.value; draw(); });
+      on(".sc", "click", e => { paper.scale = +e.currentTarget.dataset.v; draw(); });
+      on(".lv", "click", e => { paper.level = +e.currentTarget.dataset.v; draw(); });
+      on(".bs", "click", e => { paper.boss = e.currentTarget.dataset.v === "1"; draw(); });
+      on(".de", "click", e => { dest = e.currentTarget.dataset.v; draw(); });
+      on("#reset", "click", () => { paper = null; dest = null; draw(); });
+      on("#back", "click", office);
+      on("#go", "click", () => { GM.assign(S, sel, paper, de); GM.prep(S); save(); handover(); });
     };
     draw();
   }
 
-  function prepScreen() {
+  // 手渡し → 読む → 準備の話 → 見送り
+  function handover() {
     const p = S.pick;
-    if (!p || !p.kit) { S.phase = "guild"; return guild(); }
-    const P = G.PREP[p.stated], deck = GM.deckFor(S, p.dungeon);
-    app.innerHTML = topbar() + `<h1>出立前</h1>
-      <div class="panel">
-        <p>依頼書を読み込んだひかりは、市場に寄って支度を整えた。</p>
-        <p>「${esc(p.stated)}の迷宮なら、これで大丈夫。……${esc(P.name)}、よし」</p>
-        <p class="sub">持ち物：${P.name}、星の雫×${p.kit.star}、治癒の軟膏×${p.kit.salve}、気付け薬×${p.kit.smelling}</p>
-        <p class="sub">行き先：${G.DUNGEONS[p.dungeon].name}（${tag(G.DUNGEONS[p.dungeon].type)}）　全${G.DUNGEONS[p.dungeon].floors}階</p>
-      </div>
-      <div class="panel"><b>このダンジョンのデッキ</b><div class="cards" style="margin-top:6px">${deck.map(c => `<div class="cbtn">${cardArt(c)}${esc(cardName(c))}<div class="cost">${G.Field.cardInfo(c).d.cost}</div></div>`).join("")}</div>
-        <p class="sub">潜行中、ひかりに見られていない所へ置ける。階ごとにコストの上限、同時に出せる数、カードごとの待ち時間がある。</p></div>
-      <div class="row"><button class="primary" id="go">潜行を始める</button><button id="deck">デッキを組む</button></div>`;
-    on("#go", "click", startDive);
-    on("#deck", "click", () => deckScreen(p.dungeon, prepScreen));
+    if (!p || !p.kit) { S.phase = "guild"; return office(); }
+    const P = G.PREP[p.stated], T = G.Text;
+    app.innerHTML = topbar() + officeHTML() + `<div class="row hidden" id="hv"><button class="primary" id="go">見送る（潜行へ）</button><button id="deck">デッキを組む</button></div>
+      <p class="sub hidden" id="hvn">行き先：${G.DUNGEONS[p.dungeon].name}（実際）　持ち物：${P.name}、星の雫×${p.kit.star}、治癒の軟膏×${p.kit.salve}、気付け薬×${p.kit.smelling}</p>`;
+    hikariIn();
+    const lv = p.paper.level, readKey = p.paper.boss ? "read.boss" : lv === 1 ? "read.easy" : lv === 3 ? "read.hard" : "read.normal";
+    const ctx = { title: p.title, mon: G.MONSTERS[p.paper.main].name, prep: P.name, type: p.stated };
+    vn([
+      { who: "a", text: U.pick(["今日はこれを頼む。", "この依頼を。", "今日の分だ。"]) },
+      { who: "n", text: `監査官は依頼書を差し出した。「${p.title}」` },
+      { who: "h", text: T.office(readKey, ctx) },
+      { who: "h", text: T.office("prep", ctx) },
+    ], () => {
+      document.getElementById("hv").classList.remove("hidden");
+      document.getElementById("hvn").classList.remove("hidden");
+      on("#deck", "click", () => deckScreen(p.dungeon, handover));
+      on("#go", "click", () => {
+        document.getElementById("hv").classList.add("hidden");
+        vn([{ who: "h", text: T.office(S.trust < 35 ? "byeLow" : "bye") }], () => hikariOut(() => {
+          vn([{ who: "n", text: "扉が閉まる。……水晶に、迷宮の入口が映った。" }], startDive);
+        }));
+      });
+    });
   }
+  function prepScreen() { return handover(); }
 
   /* ================================================================ 潜行 */
   function startDive() {
@@ -173,14 +245,15 @@
     newFloor();
     app.innerHTML = `<div class="dive">
       <div class="topbar" id="dtop"></div>
-      <div class="stage" id="stage"><canvas id="cv"></canvas><div class="overlay hidden" id="ov"></div></div>
+      <div class="stage" id="stage"><canvas id="cv"></canvas><div class="overlay hidden" id="ov"></div>
+        <div class="msgwin" id="msgwin"><p></p><p></p><p></p></div></div>
       <div class="hud" id="hud"></div>
       <div class="row">
         <button id="spd">×${dive.speed}</button><button id="pause">一時停止</button><button id="auto">オート ${S.autoDirector ? "入" : "切"}</button>
         <button id="whole">全体</button><button id="recall" class="danger">帰還を勧告</button>
       </div>
       <div class="cards" id="cards"></div>
-      <div class="log" id="log"></div></div>`;
+      <div class="log hidden" id="log"></div></div>`;
     const cv = document.getElementById("cv");
     const resize = () => { const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = r.width * dpr; cv.height = r.height * dpr; };
     resize(); window.onresize = resize;
@@ -213,6 +286,7 @@
     dive.cam.x = dive.w.run.h.x; dive.cam.y = dive.w.run.h.y;
     dive.trans = 1.1;
     dive.logN = 0;
+    dive.msgN = 0; dive.msgLines = dive.msgLines || [];
   }
 
   function loop(now) {
@@ -256,8 +330,18 @@
         `<div class="sub">絶頂 ${h.climax}　星の雫 ${h.kit.star}・軟膏 ${h.kit.salve}・気付け ${h.kit.smelling}${h.bound ? "　<b style='color:var(--pink)'>拘束中</b>" : ""}${h.trance > 0 ? "　<b style='color:var(--violet)'>惑い</b>" : ""}</div>`;
       drawCards(true);
     }
+    // メッセージ窓（ドラクエ風）：新しい行を1文字ずつ。古い2行は薄く
+    const mw = document.getElementById("msgwin");
+    if (mw) {
+      while (dive.msgN < w.msgs.length) { dive.msgLines.push({ text: w.msgs[dive.msgN++].text, shown: 0 }); if (dive.msgLines.length > 3) dive.msgLines.shift(); }
+      const L = dive.msgLines, now = performance.now(), dtm = Math.min(0.1, (now - (dive.msgT || now)) / 1000); dive.msgT = now;
+      for (let i = 0; i < L.length; i++) if (L[i].shown < L[i].text.length) { L[i].shown = Math.min(L[i].text.length, L[i].shown + (i < L.length - 1 ? 160 : 40) * dtm); break; }
+      const html = L.map((l, i) => `<span class="${i < L.length - 1 ? "old" : ""}">${esc(l.text.slice(0, Math.ceil(l.shown)))}</span>`);
+      const ps = mw.children;
+      for (let i = 0; i < 3; i++) { const v = html[i] || ""; if (ps[i].innerHTML !== v) ps[i].innerHTML = v; }
+    }
     const log = document.getElementById("log");
-    if (log && w.log.length !== dive.logN) {
+    if (log && !log.classList.contains("hidden") && w.log.length !== dive.logN) {
       dive.logN = w.log.length;
       log.innerHTML = w.log.slice(-12).map(l => `<div class="${l.cls}">${w.floorNo}階 ${esc(l.text)}</div>`).join("");
       log.scrollTop = log.scrollHeight;
@@ -297,6 +381,7 @@
     G.Field.startNight(dive.w);
     dive.whole = false;
     const log = document.getElementById("log");
+    log.classList.remove("hidden");
     const btns = document.querySelector(".dive .row");
     btns.innerHTML = `<button class="primary" id="nx">次の場面</button><button id="skip">朝まで飛ばす</button><span class="sub">夜のコスト ${G.BAL.nightBudget}。カードを選んで地図を押すと、呼び足せる</span>`;
     log.style.maxHeight = "220px";
@@ -319,10 +404,22 @@
     dive.ending = true;
     cancelAnimationFrame(dive.raf);
     window.onresize = null;
+    const outcome = dive.run.outcome;
     GM.finishDive(S, dive.run);
     dive = null;
     save();
-    reportScreen();
+    returnScene(outcome);
+  }
+  // 帰還：監査官室に戻ってくる
+  function returnScene(outcome) {
+    app.innerHTML = topbar() + officeHTML();
+    const T = G.Text;
+    const back = T.office("back." + (outcome || "retreat"));
+    const first = outcome === "defeat" ? [{ who: "n", text: back }] : [{ who: "n", text: T.office("knock") }];
+    vn(first, () => {
+      hikariIn(S.rec && S.rec.h.form === "civilian" ? "assets/hikari/hikari_civilian_front_1.png" : "assets/hikari/hikari_civilian_front_1.png");
+      setTimeout(() => vn(outcome === "defeat" ? [] : [{ who: "h", text: back }], () => reportScreen()), 650);
+    });
   }
 
   /* ================================================================ 報告 */
@@ -333,7 +430,9 @@
     const lines = rec.report;
     const who = { h: "ひかり", a: "監査官", n: "" };
     const draw = () => {
-      app.innerHTML = topbar() + `<h1>口頭報告</h1>
+      app.innerHTML = topbar() + `<div class="office small"><div class="o-window"><i></i><i></i></div><div class="o-shelf"></div><div class="o-door"></div>
+          <img class="o-hikari" src="assets/hikari/hikari_civilian_front_1.png" alt=""><div class="o-desk"><span class="o-paper"></span><span class="o-lamp"></span></div></div>
+        <h1>口頭報告</h1>
         <p class="sub">${esc(rec.dungeonName)}・${rec.floorReached}階まで・${({ cleared: "踏破", retreat: "撤退", ordered: "勧告で帰還", defeat: "敗北→翌日救出" })[rec.outcome]}　今日の話し方：${esc(rec.postureName)}</p>
         <div id="talk">${lines.slice(0, shown).map((l, i) => `<div class="speech ${l.who}">${l.who !== "n" ? `<span class="who">${who[l.who]}</span>` : ""}${esc(l.text)}
           ${l.probe && !l.probed ? `<br><button class="probe" data-i="${i}">追及する</button>` : ""}${l.probed ? `<div class="speech a" style="margin-top:6px"><span class="who">監査官</span>${esc(l.probe.q)}</div><div class="speech h"><span class="who">ひかり</span>${esc(l.probe.a)}</div>` : ""}</div>`).join("")}</div>
@@ -457,6 +556,6 @@
   G.debug = { get dive() { return dive; }, get save() { return S; } };
   G.Render.preload();
   S = load();
-  if (S && S.v !== 1) S = null;
+  if (S && S.v !== 2) S = null;          // 古いセーブ（依頼書の形が違う）は使わない
   title();
 })();

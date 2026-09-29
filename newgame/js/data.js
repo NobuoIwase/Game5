@@ -79,19 +79,23 @@ var G = (typeof G !== "undefined") ? G : {};
     rope:   { name: "爪車の縄",   type: "絡", effect: "rope",   radius: 0.9, detect: 0.25, cost: 3, ct: 10, rearm: 14, desc: "張られた縄が引かれ、腕ごと縛られる" },
     shrine: { name: "偽りの祠",   type: "削", effect: "shrine", radius: 1.2, detect: 0.1,  cost: 2, ct: 12, rearm: 20, lure: true, desc: "休めそうに見える。休むと魔力を吸われる" },
     basin:  { name: "清めの手水", type: "削", effect: "basin",  radius: 1.0, detect: 0.1,  cost: 2, ct: 12, rearm: 20, lure: true, desc: "清めの水に見える。触れると変身の力が抜ける" },
+    // Game2 の部屋型の罠（部屋の真ん中に据える大仕掛け）
+    pillory: { name: "晒し台",     type: "絡", effect: "pillory", radius: 1.1, detect: 0.2, cost: 4, ct: 14, rearm: 30, big: true, desc: "踏み込むと首と手首を固定される。物音で魔物が集まってくる" },
+    tease:   { name: "焦らしの台", type: "蕩", effect: "tease",   radius: 1.1, detect: 0.2, cost: 4, ct: 14, rearm: 30, big: true, desc: "寝台に縫い留め、熱だけを溜めさせる。果てさせてはくれない" },
+    belt:    { name: "送り帯",     type: "絡", effect: "belt",    radius: 1.0, detect: 0.25, cost: 3, ct: 12, rearm: 18, big: true, desc: "床の帯が動き出し、捕らえた者を罠の奥へ運んでいく" },
   };
 
   /* ---- ダンジョン ---- 固定枠4＋自由枠（候補から選ぶ）。削はどこでも自由枠に入れられる */
   const DRAIN = ["drain_roper", "ghost_head", "pot", "wisp"];
   G.DUNGEONS = {
     mist: { name: "霧鏡の回廊", type: "惑", floors: 10, pal: { floor: "#3a3548", floor2: "#342f42", wall: "#1c1826", edge: "#5a4e74", fog: "#8a7cc0" },
-            fixed: ["gazer", "mind_roper", "moth", "mirror_slime"], free: ["imp", "peeper", ...DRAIN], traps: ["bell", "mirror", "decoy", "shrine", "basin"],
+            fixed: ["gazer", "mind_roper", "moth", "mirror_slime"], free: ["imp", "peeper", ...DRAIN], traps: ["bell", "mirror", "decoy", "shrine", "basin", "pillory", "belt"],
             desc: "鏡と霧の遺跡。見たものを信じるほど深く迷う" },
     mire: { name: "蜜溜まりの湿窟", type: "蕩", floors: 10, pal: { floor: "#43323a", floor2: "#3b2c33", wall: "#1e1418", edge: "#7a4a5c", fog: "#c07a98" },
-            fixed: ["slime", "slug", "jellyfish", "lure_cap"], free: ["fluff", ...DRAIN], traps: ["glue", "vent", "urn", "shrine", "basin"],
+            fixed: ["slime", "slug", "jellyfish", "lure_cap"], free: ["fluff", ...DRAIN], traps: ["glue", "vent", "urn", "shrine", "basin", "tease", "belt"],
             desc: "甘い湿気の籠もる洞窟。息をするだけで熱がこもる" },
     vine: { name: "絡繰りの蔦森", type: "絡", floors: 10, pal: { floor: "#323d34", floor2: "#2c362e", wall: "#141c16", edge: "#4a6a52", fog: "#7ab08a" },
-            fixed: ["roper", "hanging_vine", "puppet_hand", "gulper_worm"], free: ["goblin", "mimic", ...DRAIN], traps: ["vine", "rope", "glue", "shrine", "basin"],
+            fixed: ["roper", "hanging_vine", "puppet_hand", "gulper_worm"], free: ["goblin", "mimic", ...DRAIN], traps: ["vine", "rope", "glue", "shrine", "basin", "pillory", "belt"],
             desc: "蔦に呑まれた古い砦。道も壁も、ゆっくり動く" },
   };
 
@@ -117,8 +121,12 @@ var G = (typeof G !== "undefined") ? G : {};
     },
     hpMax: 100, mpMax: 60, magicMax: 100, willMax: 100,
     spd: { magica: 2.9, civilian: 2.3 },
-    shot: { dmg: 11, cost: 4, cd: 0.55, speed: 9, range: 7 },
-    burst: { dmg: 16, cost: 14, radius: 2.3, magic: 6 },   // シャイン・バスター
+    shot: { dmg: 9, cost: 7, cd: 0.8, cast: 0.3, speed: 8, range: 6.5 },   // ルミナ・ショット（遠距離・消費大）
+    melee: { dmg: 11, cost: 1, cd: 0.65, cast: 0.16, range: 1.35, arc: 1.25 },  // ルミナ・ストライク（杖で打つ・消費小）
+    burst: { dmg: 14, cost: 18, cd: 5, cast: 0.7, radius: 2.3, magic: 3 },   // シャイン・バスター
+    mpRegen: 1.8, mpRest: 5.5,
+    noTransform: 25,                                       // 変身が解けてから、また変身できるまで（秒）
+    transformCast: 1.6,                                    // 星の雫で変身し直すのにかかる時間
     kit: { star: 2, salve: 2, smelling: 1 },               // 星の雫・治癒の軟膏・気付け
   };
 
@@ -128,7 +136,7 @@ var G = (typeof G !== "undefined") ? G : {};
     nightBudget: 10,                      // 観測フェーズで使えるコスト
     nightBeats: 6,
     freeSlots: 2,
-    passiveMagicDrain: 0.08,              // 変身を保つだけで減る魔力（毎秒）
+    passiveMagicDrain: 0.04,              // 変身を保つだけで減る魔力（毎秒）
   };
 })();
 if (typeof module !== "undefined") module.exports = G;

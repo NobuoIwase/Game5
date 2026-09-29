@@ -14,7 +14,8 @@ const out = vm.runInContext(`(function(){
     const ri = U.ri(0, s.requests.length - 1), r = s.requests[ri];
     // 半分くらいは書き換える（ひかりの弱い蕩へ送る、など）
     const forge = U.chance(0.5);
-    G.Game.assign(s, ri, forge ? U.pick(G.TYPES.filter(t => t !== G.DUNGEONS[r.dungeon].type)) : null, null);
+    // 半分くらいは書き換える（規模と脅威度を低く、長を消す、ときどき魔物ごと別物に）
+    G.Game.assign(s, ri, forge ? { level: 1, scale: 1, boss: false, main: U.chance(0.4) ? U.pick(G.Game.MAINS) : r.real.main } : null, null);
     if (forge) stats.forged++;
     G.Game.prep(s);
     const run = G.Game.startDive(s);

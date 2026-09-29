@@ -106,6 +106,11 @@
     return out.slice(0, 2);
   }
 
+  function kitText(kit) { return Object.keys(GM.ITEMS).filter(k => kit[k] > 0).map(k => `${GM.ITEMS[k].name}×${kit[k]}`).join("、") || "なし"; }
+  function equipHTML(form, prepName) {
+    const eq = G.HIKARI.equip[form] || [];
+    return `<div class="sub" style="margin-top:4px">装備：${eq.map(esc).join("／")}${prepName ? `／<b>${esc(prepName)}</b>` : ""}</div>`;
+  }
   function guild() { return office(); }
   function office() {
     if (S.pendingEvent === "confront") return confrontScreen();
@@ -116,6 +121,7 @@
         <b>星野 ひかり</b> <span class="sub">大学生。本業は魔法少女ルミナ（正体を知るのは監査官だけ）</span>
         ${meter("肉体", S.body, 100, "#ff7fb0")}${meter("精神", S.mind, 100, "#b48cff")}${meter("信頼", S.trust, 100, "#8fe0a0")}${meter("疲労", S.fatigue, 100, "#f2d27a")}
         <div class="sub">堕ち：${TIER_NAME[tier]} ／ 状態異常：${ail}</div>
+        ${equipHTML("civilian")}
       </div>
       <div class="grid2 hidden" id="menu">
         <button class="primary" id="req">依頼を選ぶ</button>
@@ -178,7 +184,7 @@
       app.innerHTML = topbar() + `<h1>依頼書</h1>
         <p class="sub">ひかりの希望する依頼。机の上の一枚を選び、中身を書き換えてから渡す。</p>
         <div class="grid2">${S.requests.map((q, i) => `<div class="card paper ${i === sel ? "sel" : ""}" data-i="${i}">
-          <b>${esc(q.title)}</b><div class="sub">${G.DUNGEONS[q.dungeon].name}・報酬 ◈${q.reward}</div>
+          <b>${esc(q.title)}</b><div class="sub">${esc(q.place || G.DUNGEONS[q.dungeon].name)}・報酬 ◈${q.reward}</div>
           <div class="sub">脅威度 ${LV_NAME[q.real.level]}・${SC_NAME[q.real.scale]}${q.real.boss ? "・長あり" : ""}</div></div>`).join("")}</div>
         <div class="panel">
           <h2 style="margin-top:0">書き換える</h2>
@@ -191,7 +197,7 @@
           </div>
           <div class="paper-preview"><div class="sub">ひかりに渡す依頼書</div><b>${esc(title)}</b>
             <div class="sub">${G.DUNGEONS[de].name}（実際）・書いた系統 ${tag(stType)}</div></div>
-          <p class="sub">ひかりは<b>${P.name}</b>を用意してくる（${esc(P.note)}）。持ち物は${kitTxt}。</p>
+          <p class="sub">ひかりは<b>${P.name}</b>を用意してくる（${esc(P.note)}）。持ち物は${kitTxt}。${stType === "惑" ? "気付け薬を多めに。" : stType === "蕩" ? "熱冷ましを買い込む。" : "縄抜けの小刀を忍ばせる。"}</p>
           ${size ? `<p class="sub">偽装の大きさ <b style="color:var(--red)">${size}</b>。食い違いを見るほど違和感が積もる（今 ${Math.round(S.suspicion)}/100）。</p>` : `<p class="sub">書き換えていない（正直な依頼書）。</p>`}
           <div class="row"><button class="primary" id="go">この依頼書を渡す</button><button id="reset">元に戻す</button><button id="back">戻る</button></div>
         </div>`;
@@ -214,7 +220,7 @@
     if (!p || !p.kit) { S.phase = "guild"; return office(); }
     const P = G.PREP[p.stated], T = G.Text;
     app.innerHTML = topbar() + officeHTML() + `<div class="row hidden" id="hv"><button class="primary" id="go">見送る（潜行へ）</button><button id="deck">デッキを組む</button></div>
-      <p class="sub hidden" id="hvn">行き先：${G.DUNGEONS[p.dungeon].name}（実際）　持ち物：${P.name}、星の雫×${p.kit.star}、治癒の軟膏×${p.kit.salve}、気付け薬×${p.kit.smelling}</p>`;
+      <p class="sub hidden" id="hvn">行き先：${G.DUNGEONS[p.dungeon].name}（実際）　持ち物：${P.name}、${kitText(p.kit)}（◈${p.kitCost || 0}）</p>`;
     hikariIn();
     const lv = p.paper.level, readKey = p.paper.boss ? "read.boss" : lv === 1 ? "read.easy" : lv === 3 ? "read.hard" : "read.normal";
     const ctx = { title: p.title, mon: G.MONSTERS[p.paper.main].name, prep: P.name, type: p.stated };
@@ -310,7 +316,7 @@
     }
     G.Render.draw(cv.getContext("2d"), w, dive.cam, { hover: dive.hover, card: dive.card, night: !!dive.night });
     const ov = document.getElementById("ov");
-    if (dive.trans > 0) { ov.classList.remove("hidden"); ov.textContent = `${G.DUNGEONS[dive.run.dungeon].name}　${w.floorNo}階`; }
+    if (dive.trans > 0) { ov.classList.remove("hidden"); ov.textContent = `${dive.run.dungeonName || G.DUNGEONS[dive.run.dungeon].name}　${w.floorNo}階`; }
     else ov.classList.add("hidden");
     drawHud();
     if (w.outcome && !w.scene && !dive.sceneOpen && !dive.night && !dive.ending) endFloor();
@@ -321,14 +327,14 @@
   function drawHud() {
     const w = dive.w, h = w.run.h;
     const top = document.getElementById("dtop");
-    if (top) top.innerHTML = `<span><b>${w.floorNo}</b>/${w.dg.floors}階</span><span>${esc(w.dg.name)} ${tag(w.dg.type)}</span><span>依頼書 ${tag(dive.run.stated)}</span>
+    if (top) top.innerHTML = `<span><b>${w.floorNo}</b>/${w.dg.floors}階</span><span>${esc(dive.run.dungeonName || w.dg.name)} ${tag(w.dg.type)}</span><span>依頼書 ${tag(dive.run.stated)}</span>
       <span>${h.form === "magica" ? "<b style='color:var(--pink)'>ルミナ</b>" : "<b>素の姿</b>"}</span><span>コスト <b>${w.dir.spent}/${w.dir.cap}</b></span><span>呼んだ数 <b>${w.dir.live}/${dive.run.maxLive}</b></span>`;
     const hud = document.getElementById("hud");
     if (hud && (!dive.hudT || performance.now() - dive.hudT > 120)) {
       dive.hudT = performance.now();
       hud.innerHTML = meter("体力", h.hp, 100, "#8fe0a0") + meter("MP", h.mp, 60, "#6fc2ff") + meter("魔力", h.magic, 100, "#ffd6f0") +
         meter("気力", h.will, 100, "#f2d27a") + meter("発情", h.arousal, 100, "#ff7fb0") + meter("快感", Math.min(100, h.pleasure), 100, "#ff4f9a") +
-        `<div class="sub">絶頂 ${h.climax}　星の雫 ${h.kit.star}・軟膏 ${h.kit.salve}・気付け ${h.kit.smelling}${h.bound ? "　<b style='color:var(--pink)'>拘束中</b>" : ""}${h.trance > 0 ? "　<b style='color:var(--violet)'>惑い</b>" : ""}</div>`;
+        `<div class="sub">絶頂 ${h.climax}　持ち物：${kitText(h.kit)}</div>` + equipHTML(h.form, G.PREP[dive.run.stated] && G.PREP[dive.run.stated].name);
       const chips = document.getElementById("chips");
       if (chips) {
         const st = G.Field.statusList(w);

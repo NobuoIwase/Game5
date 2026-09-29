@@ -22,6 +22,16 @@ var G = (typeof G !== "undefined") ? G : {};
     swapDest: { name: "行き先のすり替え",     costs: [4],         note: "依頼書はそのままに、実際の行き先だけを別のダンジョンへ差し替えられる" },
   };
 
+  /* ---- 持ち込み品（市場で買う。潜行中にひかりが自分の判断で使う） ---- */
+  const ITEMS = {
+    star:     { name: "星の雫",       price: 6, note: "魔力を戻し、変身し直せる" },
+    salve:    { name: "治癒の軟膏",   price: 3, note: "体力を戻す" },
+    smelling: { name: "気付け薬",     price: 3, note: "気力を戻し、惑いを払う" },
+    ether:    { name: "魔力の水薬",   price: 4, note: "MP を戻す" },
+    cool:     { name: "熱冷まし",     price: 4, note: "火照りを鎮める" },
+    knife:    { name: "縄抜けの小刀", price: 5, note: "捕まった時、拘束を切って抜けやすくする" },
+  };
+
   /* ---- 依頼書の中身：主な魔物・規模・脅威度・長の有無。これを書き換えて渡す ---- */
   const SCALE = { 1: "小さな群れ", 2: "群れ", 3: "大群" };
   const LEVEL = { 1: "弱い", 2: "", 3: "手練れの" };
@@ -34,6 +44,13 @@ var G = (typeof G !== "undefined") ? G : {};
     if (c.boss) return `${mon}の長が率いる、${LEVEL[c.level]}${SCALE[c.scale]}の${c.verb}`;
     return `${LEVEL[c.level]}${mon}の${SCALE[c.scale]}の${c.verb}`;
   }
+  // 種族特化のダンジョンの名前（たまに出る。その種が七割を占める）
+  const DEN_NAME = {
+    goblin: "ゴブリンの巣穴", slime: "スライムの溜まり場", roper: "ローパーの園", hanging_vine: "垂れ蔦の回廊", puppet_hand: "傀儡手の工房",
+    gulper_worm: "ワームの坑道", mimic: "ミミックの宝物庫", mind_roper: "囁きの底", gazer: "凝視の塔", moth: "灯蛾の塔", imp: "小淫魔の館",
+    peeper: "覗き子の書庫", mirror_slime: "鏡粘体の間", slug: "大湿殻の沼", jellyfish: "水母の地底湖", lure_cap: "茸の洞", fluff: "綿毛の野",
+  };
+  function placeName(dungeon, species) { return species ? (DEN_NAME[species] || G.MONSTERS[species].name + "の巣") : G.DUNGEONS[dungeon].name; }
   // 依頼書に書ける主な魔物（削は主役にしない）
   const MAINS = Object.keys(G.MONSTERS).filter(k => G.MONSTERS[k].type !== "削");
 
@@ -58,7 +75,8 @@ var G = (typeof G !== "undefined") ? G : {};
     for (const k of U.shuffle(keys)) {
       const dg = G.DUNGEONS[k];
       const real = { main: U.pick(dg.fixed.concat(dg.free.filter(x => G.MONSTERS[x].type !== "削"))), level: U.ri(1, 3), scale: U.ri(1, 3), boss: U.chance(0.35 + s.day * 0.005), verb: U.pick(VERB) };
-      out.push({ id: s.day + ":" + k, dungeon: k, real, title: requestTitle(real), stated: G.MONSTERS[real.main].type,
+      if (U.chance(0.25)) real.species = real.main;          // ときどき種族特化
+      out.push({ id: s.day + ":" + k, dungeon: k, real, place: placeName(k, real.species), title: requestTitle(real), stated: G.MONSTERS[real.main].type,
                  reward: 26 + real.level * 8 + real.scale * 4 + (real.boss ? 14 : 0) });
     }
     return out;
@@ -98,13 +116,21 @@ var G = (typeof G !== "undefined") ? G : {};
   /* ================================================================ 準備（ひかりが依頼書を見て整える） */
   function prep(s) {
     const p = s.pick;
-    // 依頼書の脅威度を見て、持っていく量を決める（楽そうなら少なめ）
+    // 万全の準備：依頼書の脅威度で量を、書かれた系統で中身を決める（楽そうなら少なめ）
     const lv = p.paper.level + (p.paper.boss ? 1 : 0);
-    const kit = lv <= 1 ? { star: 1, salve: 1, smelling: 0 } : lv === 2 ? Object.assign({}, G.HIKARI.kit) : { star: 2, salve: 3, smelling: 2 };
-    const cost = kit.star * 5 + kit.salve * 3 + kit.smelling * 3;
-    if (s.funds < cost) { kit.star = 1; kit.salve = 1; kit.smelling = 0; }
+    const n = lv <= 1 ? 1 : lv === 2 ? 2 : 3;
+    const kit = { star: Math.max(1, n - 1), salve: n, smelling: n >= 2 ? 1 : 0, ether: n, cool: 0, knife: 0 };
+    if (p.stated === "惑") kit.smelling += 1;          // 惑わされたら、気付け薬で覚ます
+    if (p.stated === "蕩") kit.cool += n;              // 火照りは、熱冷ましで鎮める
+    if (p.stated === "絡") kit.knife += Math.max(1, n - 1);   // 捕まったら、小刀で切る
+    if (p.paper.boss) { kit.salve += 1; kit.star += 1; }
+    const priceOf = k => Object.keys(k).reduce((a, x) => a + k[x] * ITEMS[x].price, 0);
+    // 資金が足りなければ、優先度の低いものから削る
+    for (const x of ["cool", "knife", "smelling", "ether", "salve", "star"]) while (priceOf(kit) > s.funds && kit[x] > (x === "star" || x === "salve" ? 1 : 0)) kit[x]--;
+    const cost = priceOf(kit);
+    p.kitCost = cost;
     p.caution = [0, 0.75, 1, 1.2][p.paper.level] * (p.paper.boss ? 1.1 : 1) * (p.paper.scale === 1 ? 0.9 : 1);
-    s.funds = Math.max(0, s.funds - Math.min(s.funds, kit.star * 5 + kit.salve * 3 + kit.smelling * 3));
+    s.funds = Math.max(0, s.funds - Math.min(s.funds, cost));
     p.kit = kit;
     p.prepItem = G.PREP[p.stated];
     return p;
@@ -127,6 +153,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const run = {
       day: s.day, dungeon: p.dungeon, stated: p.stated, realType: G.DUNGEONS[p.dungeon].type, forged: p.forged,
       real: p.real, paper: p.paper, caution: p.caution || 1, forgeSize: p.forgeSize || 0,
+      dungeonName: p.dungeon === p.req.dungeon ? p.req.place : placeName(p.dungeon, null),
       events: [], night: [], deck: deckFor(s, p.dungeon), maxLive: G.BAL.maxLive + s.upgrades.live,
       autoDirector: s.autoDirector, save: s, recall: false, floor: 1, mismatch: 0,
       h: {
@@ -191,7 +218,7 @@ var G = (typeof G !== "undefined") ? G : {};
     s.suspicion = U.clamp(s.suspicion + sus, 0, 100);
     s.fatigue = U.clamp(s.fatigue + (run.outcome === "defeat" ? 40 : 25), 0, 100);
     const rec = {
-      day: s.day, dungeon: run.dungeon, dungeonName: G.DUNGEONS[run.dungeon].name, stated: run.stated, realType: run.realType, forged: run.forged,
+      day: s.day, dungeon: run.dungeon, dungeonName: run.dungeonName || G.DUNGEONS[run.dungeon].name, stated: run.stated, realType: run.realType, forged: run.forged,
       outcome: run.outcome, floorReached: run.floorReached, events: ev, night: run.night, mismatch: run.mismatch || 0,
       h: { hp: run.h.hp, arousal: run.h.arousal, form: run.h.form, climax: climaxes }, ailments: s.ailments.map(a => a.id),
       gain: { body: +bodyGain.toFixed(1), mind: +mindGain.toFixed(1), funds, dark, sus: +sus.toFixed(1) },
@@ -260,6 +287,6 @@ var G = (typeof G !== "undefined") ? G : {};
 
   function taintStage(s) { return s.taint >= 100 ? 4 : s.taint >= 70 ? 3 : s.taint >= 42 ? 2 : s.taint >= 18 ? 1 : 0; }
 
-  G.Game = { AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, buy, taintStage };
+  G.Game = { placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, buy, taintStage };
 })();
 if (typeof module !== "undefined") module.exports = G;

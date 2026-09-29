@@ -118,15 +118,15 @@ var G = (typeof G !== "undefined") ? G : {};
   /* ---- ダンジョン ---- 固定枠4＋自由枠（候補から選ぶ）。削はどこでも自由枠に入れられる */
   const DRAIN = ["drain_roper", "ghost_head", "pot", "wisp"];
   G.DUNGEONS = {
-    mist: { name: "霧鏡の回廊", type: "惑", floors: 10, pal: { floor: "#3a3548", floor2: "#342f42", wall: "#1c1826", edge: "#5a4e74", fog: "#8a7cc0" },
+    mist: { name: "霧鏡の回廊", type: "惑", floors: 10, pal: { floor: "#3a3548", floor2: "#342f42", wall: "#0e0b14", wallTop: "#6a6080", edge: "#5a4e74", fog: "#8a7cc0" },
             fixed: ["gazer", "mind_roper", "moth", "mirror_slime"], free: ["imp", "peeper", ...DRAIN], traps: ["bell", "mirror", "decoy", "shrine", "basin", "pillory", "belt"],
             rooms: ["mirror_hall", "hypno_bell", "twin_shadow", "dreamwalk", "fungal_bed", "purify", "caliper", "pillory"],
             desc: "鏡と霧の遺跡。見たものを信じるほど深く迷う" },
-    mire: { name: "蜜溜まりの湿窟", type: "蕩", floors: 10, pal: { floor: "#43323a", floor2: "#3b2c33", wall: "#1e1418", edge: "#7a4a5c", fog: "#c07a98" },
+    mire: { name: "蜜溜まりの湿窟", type: "蕩", floors: 10, pal: { floor: "#43323a", floor2: "#3b2c33", wall: "#100a0c", wallTop: "#7a5a64", edge: "#7a4a5c", fog: "#c07a98" },
             fixed: ["slime", "slug", "jellyfish", "lure_cap"], free: ["fluff", ...DRAIN], traps: ["glue", "vent", "urn", "shrine", "basin", "tease", "belt"],
             rooms: ["foam_cell", "mist_hall", "gel_urn", "tease_rack", "hot_spring", "purify", "fungal_bed", "feed_belt"],
             desc: "甘い湿気の籠もる洞窟。息をするだけで熱がこもる" },
-    vine: { name: "絡繰りの蔦森", type: "絡", floors: 10, pal: { floor: "#323d34", floor2: "#2c362e", wall: "#141c16", edge: "#4a6a52", fog: "#7ab08a" },
+    vine: { name: "絡繰りの蔦森", type: "絡", floors: 10, pal: { floor: "#323d34", floor2: "#2c362e", wall: "#0a0e0b", wallTop: "#5e6a5c", edge: "#4a6a52", fog: "#7ab08a" },
             fixed: ["roper", "hanging_vine", "puppet_hand", "gulper_worm"], free: ["goblin", "mimic", ...DRAIN], traps: ["vine", "rope", "glue", "shrine", "basin", "pillory", "belt"],
             rooms: ["vine_hall", "kote_swarm", "tent_pit", "idle_cell", "caliper", "feed_belt", "pillory", "fungal_bed", "purify"],
             desc: "蔦に呑まれた古い砦。道も壁も、ゆっくり動く" },
@@ -162,7 +162,12 @@ var G = (typeof G !== "undefined") ? G : {};
     mpRegen: 1.8, mpRest: 5.5,
     noTransform: 25,                                       // 変身が解けてから、また変身できるまで（秒）
     transformCast: 1.6,                                    // 星の雫で変身し直すのにかかる時間
-    kit: { star: 2, salve: 2, smelling: 1 },               // 星の雫・治癒の軟膏・気付け
+    kit: { star: 2, salve: 2, smelling: 1, ether: 2, cool: 0, knife: 0 },
+    // 装備（今はフレーバー。変身中と素の姿で入れ替わる）
+    equip: {
+      magica:   ["星杖「スターライト・ロッド」", "魔法衣装（白と菫）", "変身のコンパクト", "相棒の妖精（プラム）"],
+      civilian: ["セーラー服", "変身のコンパクト", "相棒の妖精（プラム・鞄の中）"],
+    },
   };
 
   G.BAL = {

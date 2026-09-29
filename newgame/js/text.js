@@ -19,7 +19,7 @@ var G = (typeof G !== "undefined") ? G : {};
     return s;
   }
 
-  const ITEM = { star: "星の雫", salve: "治癒の軟膏", smelling: "気付け薬" };
+  const ITEM = { star: "星の雫", salve: "治癒の軟膏", smelling: "気付け薬", ether: "魔力の水薬", cool: "熱冷まし", knife: "縄抜けの小刀" };
 
   /* ---- 吹き出し（ひかりの独り言）。form で変身中と素の姿を分けられる ---- */
   const BUBBLE = {

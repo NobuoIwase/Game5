@@ -81,7 +81,22 @@ var G = (typeof G !== "undefined") ? G : {};
       } else { ctx.fillStyle = (tx + ty) % 2 ? pal.floor : pal.floor2; ctx.fillRect(X(tx), Y(ty), S + 1, S + 1); }
       if (trapRoom(tx, ty)) { ctx.fillStyle = "rgba(160,40,80,0.10)"; ctx.fillRect(X(tx), Y(ty), S + 1, S + 1); }
     }
-    // 壁：床に面した壁は、正面（壁の顔）を描く
+    // 壁：上面は石積み（床より明るい灰）で塗り、床との境に縁を引く。床に面した壁は、正面（壁の顔）も描く
+    for (let ty = y0; ty < y1; ty++) for (let tx = x0; tx < x1; tx++) {
+      if (map.t[ty * map.W + tx] !== 1) continue;
+      const nearFloor = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, 1], [1, -1], [-1, -1]].some(([dx, dy]) => { const nx = tx + dx, ny = ty + dy; return nx >= 0 && ny >= 0 && nx < map.W && ny < map.H && map.t[ny * map.W + nx] !== 1; });
+      if (!nearFloor) continue;
+      ctx.fillStyle = pal.wallTop || "#5a5264"; ctx.fillRect(X(tx), Y(ty), S + 1, S + 1);
+      ctx.fillStyle = "rgba(0,0,0,0.22)";
+      const off = (ty % 2) * 0.5;
+      for (let k = 0; k < 2; k++) { ctx.fillRect(X(tx), Y(ty + k * 0.5), S + 1, 1.5); ctx.fillRect(X(tx + ((k * 0.5 + off) % 1)), Y(ty + k * 0.5), 1.5, S * 0.5); }
+      ctx.fillStyle = "rgba(255,255,255,0.10)"; ctx.fillRect(X(tx), Y(ty), S + 1, 2);
+      for (const [dx, dy, x, y, w_, h_] of [[1, 0, 1, 0, 0, 1], [-1, 0, 0, 0, 0, 1], [0, 1, 0, 1, 1, 0], [0, -1, 0, 0, 1, 0]]) {
+        const nx = tx + dx, ny = ty + dy;
+        if (nx < 0 || ny < 0 || nx >= map.W || ny >= map.H || map.t[ny * map.W + nx] === 1) continue;
+        ctx.fillStyle = "rgba(230,220,255,0.35)"; ctx.fillRect(X(tx + x) - (dx === 1 ? 2 : 0), Y(ty + y) - (dy === 1 ? 2 : 0), w_ ? S + 1 : 2, h_ ? S + 1 : 2);
+      }
+    }
     for (let ty = y0; ty < y1; ty++) for (let tx = x0; tx < x1; tx++) {
       if (map.t[ty * map.W + tx] !== 1) continue;
       if (ty + 1 < map.H && map.t[(ty + 1) * map.W + tx] !== 1) {
@@ -102,7 +117,7 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     // ひかりが見ていない所を少し暗く
     if (!ui.night) {
-      ctx.fillStyle = "rgba(8,6,14,0.3)";
+      ctx.fillStyle = "rgba(8,6,14,0.2)";
       for (let ty = y0; ty < y1; ty++) for (let tx = x0; tx < x1; tx++) if (map.t[ty * map.W + tx] !== 1 && !map.seen[ty * map.W + tx]) ctx.fillRect(X(tx), Y(ty), S + 1, S + 1);
     }
     // 小物
@@ -169,7 +184,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (lightCv.width !== cv.width || lightCv.height !== cv.height) { lightCv.width = cv.width; lightCv.height = cv.height; }
     const lc = lightCv.getContext("2d");
     lc.globalCompositeOperation = "source-over"; lc.clearRect(0, 0, cv.width, cv.height);
-    lc.fillStyle = ui.night ? "rgba(6,3,12,0.62)" : "rgba(6,3,12,0.48)"; lc.fillRect(0, 0, cv.width, cv.height);
+    lc.fillStyle = ui.night ? "rgba(6,3,12,0.58)" : "rgba(6,3,12,0.4)"; lc.fillRect(0, 0, cv.width, cv.height);
     lc.globalCompositeOperation = "destination-out";
     const hole = (x, y, r, a) => { const g = lc.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, `rgba(0,0,0,${a})`); g.addColorStop(1, "rgba(0,0,0,0)"); lc.fillStyle = g; lc.beginPath(); lc.arc(x, y, r, 0, 7); lc.fill(); };
     hole(X(h.x), Y(h.y) - S * 0.5, S * (h.form === "magica" ? 5.5 : 4.2), 1);

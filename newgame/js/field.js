@@ -51,7 +51,7 @@ var G = (typeof G !== "undefined") ? G : {};
     });
     map.seen = new Uint8Array(map.W * map.H);
     populate(w);
-    msg(w, "floor", { floor: floorNo, dg: dg.name });
+    msg(w, "floor", { floor: floorNo, dg: run.dungeonName || dg.name });
     if (w.trapFloor) msg(w, "trapFloor", {});
     say(w, "floorIn", { floor: floorNo });
     return w;
@@ -65,7 +65,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const scale = [0, 0.75, 1, 1.4][real.scale || 2];
     const nMon = Math.round((3 + Math.floor(f / 2.5) + (U.chance(0.5) ? 1 : 0)) * scale);
     for (let i = 0; i < nMon; i++) {
-      const id = real.main && U.chance(0.45) ? real.main : U.pick(pool), p = M.randomFloor(map, far);
+      const id = real.main && U.chance(real.species ? 0.7 : 0.45) ? real.main : U.pick(pool), p = M.randomFloor(map, far);
       if (p) spawnMonster(w, id, p.x, p.y, false);
     }
     // 長（ボス）：最下層の転移陣の手前に
@@ -361,6 +361,7 @@ var G = (typeof G !== "undefined") ? G : {};
     h.arousal = Math.min(100, h.arousal + 3 * p * k * dt);
     h.pleasure += 8.5 * p * k * (1 + h.arousal / 90) * tf.pleasure * dt;
     for (const id of b.by) { const m = w.monsters.find(x => x.id === id); if (m && m.d.atk.drain) drainMagic(w, m.d.atk.drain * dt, m); }
+    if (h.kit.knife > 0 && b.t > 0.8 && !b.knifed && b.type === "絡") { b.knifed = true; h.kit.knife--; b.struggle += 0.6; msg(w, "item", { item: "縄抜けの小刀" }); record(w, { kind: "item", item: "knife", sev: 0 }); }
     if (h.form === "magica" && h.cdFlash <= 0 && h.mp >= G.HIKARI.flash.cost && h.trance <= 0 && !b.wait && (b.by.length >= 2 || (b.t > 1.2 && pressure(w, h.x, h.y, 2.4).n >= 3))) { flash(w); return; }
     const prep = G.PREP[w.run.stated];
     let rate = (0.2 + h.will / 260) * (h.form === "magica" ? 1.25 : 0.7) * tf.struggle / Math.max(0.5, k * p) * (b.slowStruggle || 1);
@@ -612,7 +613,12 @@ var G = (typeof G !== "undefined") ? G : {};
     const caution = run.caution || 1;         // 依頼書の脅威度で変わる用心深さ
     // 道具
     if (h.hp < 38 && h.kit.salve > 0) { h.kit.salve--; h.hp = Math.min(S.hpMax, h.hp + 35); say(w, "useSalve", {}); msg(w, "item", { item: "治癒の軟膏" }); record(w, { kind: "item", item: "salve", sev: 0 }); }
-    if (h.will < 32 && h.kit.smelling > 0) { h.kit.smelling--; h.will = Math.min(100, h.will + 30); msg(w, "item", { item: "気付け薬" }); record(w, { kind: "item", item: "smelling", sev: 0 }); }
+    const use = (k, fn) => { h.kit[k]--; fn(); msg(w, "item", { item: G.Game.ITEMS[k].name }); record(w, { kind: "item", item: k, sev: 0 }); };
+    if ((h.will < 32 || h.trance > 1.2) && h.kit.smelling > 0) use("smelling", () => { h.will = Math.min(100, h.will + 30); h.trance = Math.min(h.trance, 0.2); });
+    // MP：戦いの最中に切れそうなら水薬。静かなら、使わずに息を整える
+    if (h.form === "magica" && h.kit.ether > 0 && h.mp < 14 && threats(w).some(o => o.d < 6)) use("ether", () => { h.mp = Math.min(G.HIKARI.mpMax, h.mp + 30); });
+    // 火照り：自分で気づけている分だけ（鎮心の香が効いていると気づけない）
+    if (h.kit.cool > 0 && perceivedArousal(w) > 55) use("cool", () => { h.arousal = Math.max(0, h.arousal - 35); h.pleasure = Math.max(0, h.pleasure - 20); });
     const ts = threats(w), near = ts.filter(o => o.d < 4.2);
     // 変身し直し：解けてからしばらくは無理。安全な時に、時間をかけて
     if (h.form === "civilian" && h.kit.star > 0 && (h.noTransform || 0) <= 0 && !ts.some(o => o.d < 4.5) && !h.cast) {
@@ -680,7 +686,8 @@ var G = (typeof G !== "undefined") ? G : {};
         // 近接：MP が少ない時、相手が攻撃のあとの隙を見せている時、触手の短い相手には踏み込んで打つ
         const A2 = m.d.atk, reachy = (A2.kind === "grab" && (A2.range || 1) > 1.4) || A2.kind === "drain" || (A2.kind === "aura" && !A2.burst);
         const opening = !m.cast && (m.cd > 0.35 || m.stun > 0);
-        const wantMelee = seenNow && (h.mp < S.shot.cost * 2 || (opening && !reachy) || (m.d.spd === 0 && !reachy));
+        const saving = h.mp < G.HIKARI.mpMax * 0.5;          // MP を切らさないように
+        const wantMelee = seenNow && ((saving && !reachy) || h.mp < S.shot.cost * 2 || (opening && !reachy) || (m.d.spd === 0 && !reachy));
         if (wantMelee && h.mp >= S.melee.cost) {
           if (d <= S.melee.range + m.d.r * 0.5 && h.cdMelee <= 0) { tryCast(w, m, "melee"); return; }
           if (d < 4 && h.cdMelee <= 0.3) { goToward(w, m.x, m.y, 1.15, "踏み込む", m); return; }
@@ -704,7 +711,8 @@ var G = (typeof G !== "undefined") ? G : {};
           const sneak = !m.alert && m.d.spd > 0;
           goToward(w, m.x, m.y, sneak ? 0.5 : 0.9, sneak ? "忍び寄る" : "接近", m); return;
         }
-        if (h.mp >= S.shot.cost && h.cdShot <= 0) { tryCast(w, m, "shot"); return; }
+        if (h.mp >= S.shot.cost && h.cdShot <= 0 && (!saving || reachy || m.d.atk.kind === "shot")) { tryCast(w, m, "shot"); return; }
+        if (saving && !reachy && h.cdMelee <= 0.3 && d < 4.5) { goToward(w, m.x, m.y, 1.1, "踏み込む", m); return; }
         // 撃てない間は、足を止めて見据える。相手が寄ってくる時だけ、一歩ずつ下がる
         if (d < 3.4 && m.d.spd > 0) { const a = U.angle(m.x, m.y, h.x, h.y); setIntent(h, Math.cos(a), Math.sin(a), 0.5, "間合い", m); }
         else { h.intent = null; h.label = "構え"; h.face = { x: m.x, y: m.y, t: 0.4 }; }
@@ -717,7 +725,7 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     h.state = "explore";
     // MP が足りない：物陰で整える／偽りの祠で休む
-    if (h.form === "magica" && h.mp < 18 && !near.length) {
+    if (h.form === "magica" && h.mp < 30 && !ts.some(o => o.d < 7)) {
       const shrine = w.traps.find(tr => tr.kind === "shrine" && tr.armed && !tr.found && U.dist(h.x, h.y, tr.x, tr.y) < 9);
       if (shrine) { goToward(w, shrine.x, shrine.y, 0.8, "祠へ"); return; }
       h.rest = 2.2; h.intent = null; h.label = "息を整える"; say(w, "rest", {}); msg(w, "rest", {}, 12); return;
@@ -764,8 +772,8 @@ var G = (typeof G !== "undefined") ? G : {};
   function openChest(w, c) {
     const h = w.run.h;
     c.open = true;
-    const it = U.pick(["star", "salve", "smelling"]); h.kit[it]++;
-    say(w, "chest", { item: it }); msg(w, "chest", { item: G.Text.ITEM[it] });
+    const it = U.pick(["star", "salve", "smelling", "ether", "ether", "cool"]); h.kit[it] = (h.kit[it] || 0) + 1;
+    say(w, "chest", { item: it }); msg(w, "chest", { item: G.Game.ITEMS[it].name });
     record(w, { kind: "chest", item: it, sev: 0 });
   }
   function coverWithView(w, tx, ty) {

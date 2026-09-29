@@ -247,6 +247,7 @@
       <div class="topbar" id="dtop"></div>
       <div class="stage" id="stage"><canvas id="cv"></canvas><div class="overlay hidden" id="ov"></div>
         <div class="msgwin" id="msgwin"><p></p><p></p><p></p></div></div>
+      <div class="chips" id="chips"></div>
       <div class="hud" id="hud"></div>
       <div class="row">
         <button id="spd">×${dive.speed}</button><button id="pause">一時停止</button><button id="auto">オート ${S.autoDirector ? "入" : "切"}</button>
@@ -328,6 +329,11 @@
       hud.innerHTML = meter("体力", h.hp, 100, "#8fe0a0") + meter("MP", h.mp, 60, "#6fc2ff") + meter("魔力", h.magic, 100, "#ffd6f0") +
         meter("気力", h.will, 100, "#f2d27a") + meter("発情", h.arousal, 100, "#ff7fb0") + meter("快感", Math.min(100, h.pleasure), 100, "#ff4f9a") +
         `<div class="sub">絶頂 ${h.climax}　星の雫 ${h.kit.star}・軟膏 ${h.kit.salve}・気付け ${h.kit.smelling}${h.bound ? "　<b style='color:var(--pink)'>拘束中</b>" : ""}${h.trance > 0 ? "　<b style='color:var(--violet)'>惑い</b>" : ""}</div>`;
+      const chips = document.getElementById("chips");
+      if (chips) {
+        const st = G.Field.statusList(w);
+        chips.innerHTML = st.length ? st.map(c => `<span class="chip ${c.cls}">${esc(c.name)}${c.t != null ? `<i>${c.t.toFixed(1)}</i>` : ""}</span>`).join("") : `<span class="chip dim">異常なし</span>`;
+      }
       drawCards(true);
     }
     // メッセージ窓（ドラクエ風）：新しい行を1文字ずつ。古い2行は薄く

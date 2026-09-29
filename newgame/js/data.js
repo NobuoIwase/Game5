@@ -83,6 +83,36 @@ var G = (typeof G !== "undefined") ? G : {};
     pillory: { name: "晒し台",     type: "絡", effect: "pillory", radius: 1.1, detect: 0.2, cost: 4, ct: 14, rearm: 30, big: true, desc: "踏み込むと首と手首を固定される。物音で魔物が集まってくる" },
     tease:   { name: "焦らしの台", type: "蕩", effect: "tease",   radius: 1.1, detect: 0.2, cost: 4, ct: 14, rearm: 30, big: true, desc: "寝台に縫い留め、熱だけを溜めさせる。果てさせてはくれない" },
     belt:    { name: "送り帯",     type: "絡", effect: "belt",    radius: 1.0, detect: 0.25, cost: 3, ct: 12, rearm: 18, big: true, desc: "床の帯が動き出し、捕らえた者を罠の奥へ運んでいく" },
+    gate:    { name: "採寸門",     type: "絡", effect: "gate",    radius: 1.0, detect: 0.2, cost: 4, ct: 14, rearm: 30, big: true, desc: "真鍮の腕が伸び、受け台へ押し当てて全身を測る" },
+    cuffs:   { name: "壁の環",     type: "絡", effect: "cuffs",   radius: 1.0, detect: 0.15, cost: 4, ct: 14, rearm: 30, big: true, desc: "扉が落ち、壁の鉄環が手首を留める。そして、何かが来るのを待たせる" },
+    bed:     { name: "偽りの褥",   type: "惑", effect: "bed",     radius: 1.0, detect: 0.08, cost: 3, ct: 14, rearm: 40, big: true, lure: true, desc: "乾いた寝台。『少しだけ』と横になった者を、深く眠らせる" },
+    spring:  { name: "乳白の湯",   type: "蕩", effect: "spring",  radius: 1.2, detect: 0.08, cost: 3, ct: 14, rearm: 40, big: true, lure: true, desc: "白く濁った湯。汚れを落としに浸かった者を、湯そのものが抱き込む" },
+  };
+
+  /* ---- 罠部屋（Game2 の「区画まるごとが一つの仕掛け」をなぞる） ----
+   * 部屋ごとに仕掛けが一つ。その部屋に合う魔物が眠って潜み、踏み込むと一斉に目を覚ます。
+   * center: 部屋の真ん中に据える罠 / traps: 部屋に散らす罠 / den: 潜んでいる魔物 [種, 数]
+   * seal: 踏み込むと扉が閉まる秒数 / aura: 部屋にいる間ずっと効く [系統, 強さ] / from: 深さ（この階から出る）
+   */
+  G.TRAP_ROOMS = {
+    vine_hall:   { name: "縛蔦の間",   type: "絡", from: 1, center: "vine", den: [["hanging_vine", 5]], desc: "幾房もの蔦が垂れ下がる。下を通ろうとした瞬間、四肢へ巻きつく" },
+    kote_swarm:  { name: "小手の群れ", type: "絡", from: 2, den: [["puppet_hand", 6]], desc: "床一面に、小さな手が息を潜めている" },
+    tent_pit:    { name: "触腕の坑",   type: "絡", from: 4, center: "rope", den: [["roper", 2], ["gulper_worm", 1]], seal: 6, desc: "床の坑から、太い触腕が這い出してくる" },
+    idle_cell:   { name: "不作為の間", type: "絡", from: 1, center: "cuffs", den: [["goblin", 2]], seal: 12, wake: 4, desc: "扉が落ち、手首が壁に留められる。何が来るかは、待つしかない" },
+    caliper:     { name: "採寸門",     type: "絡", from: 1, center: "gate", den: [["puppet_hand", 2]], desc: "回廊を塞ぐ真鍮の門。人型に凹んだ受け台がある" },
+    feed_belt:   { name: "送り帯",     type: "絡", from: 3, center: "belt", traps: ["belt", "glue"], den: [["pot", 1]], desc: "床の帯が、奥の壺へ向かって流れている" },
+    pillory:     { name: "晒し台",     type: "絡", from: 2, center: "pillory", den: [["goblin", 3]], wake: 3, desc: "部屋の真ん中に、首と手首を挟む板。物音がすれば、見物が集まる" },
+    foam_cell:   { name: "泡沫の檻",   type: "蕩", from: 2, den: [["slime", 3]], seal: 8, aura: ["蕩", 0.35], desc: "扉が閉まると、床から温い泡が湧き上がる" },
+    mist_hall:   { name: "霧の広間",   type: "蕩", from: 1, den: [["lure_cap", 2], ["fluff", 3]], aura: ["蕩", 0.5], desc: "甘い霧が立ち込める。吸うほど、体が火照る" },
+    gel_urn:     { name: "甘露の甕",   type: "蕩", from: 5, center: "urn", den: [["slime", 2], ["jellyfish", 2]], desc: "大甕から、蜜のような粘りが溢れている" },
+    tease_rack:  { name: "焦らしの台", type: "蕩", from: 2, center: "tease", den: [["peeper", 2]], desc: "寝台と、それを見下ろす無数の目" },
+    hot_spring:  { name: "乳白の湯",   type: "蕩", from: 4, center: "spring", den: [["slime", 2]], desc: "白く濁った湯が湧いている。休めそうに見える" },
+    fungal_bed:  { name: "偽りの褥",   type: "惑", from: 3, center: "bed", den: [["lure_cap", 2]], desc: "埃ひとつない小部屋に、寝台が一つ" },
+    purify:      { name: "清めの手水", type: "削", from: 1, center: "basin", den: [["ghost_head", 2]], desc: "澄んだ水盤。身を清めれば、熱も引きそうに見える" },
+    mirror_hall: { name: "幻影の鏡廊", type: "惑", from: 3, traps: ["mirror", "mirror"], den: [["mirror_slime", 2]], desc: "壁一面の鏡に、自分が何人も映る" },
+    hypno_bell:  { name: "催眠の鈴",   type: "惑", from: 4, traps: ["bell", "bell", "bell"], den: [["mind_roper", 1]], desc: "天井から無数の鈴が下がっている" },
+    twin_shadow: { name: "双影の燭",   type: "惑", from: 2, traps: ["decoy", "decoy"], den: [["gazer", 2]], desc: "燭台の火が揺れるたび、影が二つに増える" },
+    dreamwalk:   { name: "夢渡り",     type: "惑", from: 4, den: [["imp", 2], ["moth", 2]], aura: ["惑", 0.4], desc: "足を踏み入れると、夢と現の境が薄くなる" },
   };
 
   /* ---- ダンジョン ---- 固定枠4＋自由枠（候補から選ぶ）。削はどこでも自由枠に入れられる */
@@ -90,12 +120,15 @@ var G = (typeof G !== "undefined") ? G : {};
   G.DUNGEONS = {
     mist: { name: "霧鏡の回廊", type: "惑", floors: 10, pal: { floor: "#3a3548", floor2: "#342f42", wall: "#1c1826", edge: "#5a4e74", fog: "#8a7cc0" },
             fixed: ["gazer", "mind_roper", "moth", "mirror_slime"], free: ["imp", "peeper", ...DRAIN], traps: ["bell", "mirror", "decoy", "shrine", "basin", "pillory", "belt"],
+            rooms: ["mirror_hall", "hypno_bell", "twin_shadow", "dreamwalk", "fungal_bed", "purify", "caliper", "pillory"],
             desc: "鏡と霧の遺跡。見たものを信じるほど深く迷う" },
     mire: { name: "蜜溜まりの湿窟", type: "蕩", floors: 10, pal: { floor: "#43323a", floor2: "#3b2c33", wall: "#1e1418", edge: "#7a4a5c", fog: "#c07a98" },
             fixed: ["slime", "slug", "jellyfish", "lure_cap"], free: ["fluff", ...DRAIN], traps: ["glue", "vent", "urn", "shrine", "basin", "tease", "belt"],
+            rooms: ["foam_cell", "mist_hall", "gel_urn", "tease_rack", "hot_spring", "purify", "fungal_bed", "feed_belt"],
             desc: "甘い湿気の籠もる洞窟。息をするだけで熱がこもる" },
     vine: { name: "絡繰りの蔦森", type: "絡", floors: 10, pal: { floor: "#323d34", floor2: "#2c362e", wall: "#141c16", edge: "#4a6a52", fog: "#7ab08a" },
             fixed: ["roper", "hanging_vine", "puppet_hand", "gulper_worm"], free: ["goblin", "mimic", ...DRAIN], traps: ["vine", "rope", "glue", "shrine", "basin", "pillory", "belt"],
+            rooms: ["vine_hall", "kote_swarm", "tent_pit", "idle_cell", "caliper", "feed_belt", "pillory", "fungal_bed", "purify"],
             desc: "蔦に呑まれた古い砦。道も壁も、ゆっくり動く" },
   };
 
@@ -124,6 +157,8 @@ var G = (typeof G !== "undefined") ? G : {};
     shot: { dmg: 9, cost: 7, cd: 0.8, cast: 0.3, speed: 8, range: 6.5 },   // ルミナ・ショット（遠距離・消費大）
     melee: { dmg: 11, cost: 1, cd: 0.65, cast: 0.16, range: 1.35, arc: 1.25 },  // ルミナ・ストライク（杖で打つ・消費小）
     burst: { dmg: 14, cost: 18, cd: 5, cast: 0.7, radius: 2.3, magic: 3 },   // シャイン・バスター
+    flash: { cost: 12, cd: 14, radius: 2.3, push: 1.3, stun: 1.2 },   // ルミナ・フラッシュ（囲まれた・二か所以上掴まれた時に弾き飛ばす）
+    breakout: { cd: 5, dist: 2.8 },                                    // 囲まれたら、空いている方へ突き抜ける
     mpRegen: 1.8, mpRest: 5.5,
     noTransform: 25,                                       // 変身が解けてから、また変身できるまで（秒）
     transformCast: 1.6,                                    // 星の雫で変身し直すのにかかる時間

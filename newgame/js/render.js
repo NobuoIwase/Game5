@@ -183,6 +183,12 @@ var G = (typeof G !== "undefined") ? G : {};
     // 漂う光の粒
     for (const m of motes) { ctx.fillStyle = `rgba(${pal.fog === "#8a7cc0" ? "200,180,255" : pal.fog === "#c07a98" ? "255,180,210" : "190,255,200"},${m.a * (0.6 + 0.4 * Math.sin(m.t * 2))})`; ctx.fillRect(X(m.x), Y(m.y), 2, 2); }
     ctx.globalCompositeOperation = "source-over";
+    // 催眠中は画面の縁が紫に染まる
+    if (h.trance > 0 && !ui.night) {
+      const g = ctx.createRadialGradient(cv.width / 2, cv.height / 2, Math.min(cv.width, cv.height) * 0.3, cv.width / 2, cv.height / 2, Math.max(cv.width, cv.height) * 0.7);
+      g.addColorStop(0, "rgba(120,60,200,0)"); g.addColorStop(1, `rgba(120,60,200,${Math.min(0.45, 0.2 + h.trance * 0.08)})`);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, cv.width, cv.height);
+    }
     // 吹き出しは明かりの上に
     if (h.bubble && !ui.night) drawBubble(ctx, h, X(h.x), Y(h.y), S);
     // 置き場所の見本
@@ -266,16 +272,27 @@ var G = (typeof G !== "undefined") ? G : {};
     const H = S * 1.9;
     // 傾き：進む方へ少し、急に止まった時は少しのけぞる。打たれた時は押される
     const sp = G.HIKARI.spd[h.form], lx = U.clamp((h.vx || 0) / sp, -1, 1);
-    h._lean = (h._lean || 0) + (lx * 0.07 - (h.brakeT > 0 ? Math.sign(h._leanDir || 0) * 0.09 * h.brakeT / 0.18 : 0) - (h._lean || 0)) * 0.2;
+    h._lean = (h._lean || 0) + (lx * 0.035 - (h.brakeT > 0 ? Math.sign(h._leanDir || 0) * 0.06 * h.brakeT / 0.18 : 0) - (h._lean || 0)) * 0.25;
     if (Math.abs(lx) > 0.2) h._leanDir = Math.sign(lx);
     const shake = h.bound ? Math.sin(w.t * 30) * S * 0.04 : 0;
+    // 歩み：進んだ距離に合わせて、一歩ごとに小さく上下する（足が地面を踏む）
+    h._stepPh = (h._stepPh || 0) + (h.moved || 0) / 0.42;
+    const step = Math.hypot(h.vx || 0, h.vy || 0) > 0.3 ? Math.abs(Math.sin(h._stepPh * Math.PI)) : 0;
     ctx.save();
-    ctx.translate(x + shake, y + S * 0.35);
+    ctx.translate(x + shake, y + S * 0.35 - step * S * 0.06);
+    ctx.scale(1 + step * 0.015, 1 - step * 0.015);
     ctx.rotate(h._lean || 0);
     if (ok(im)) { const k = H / im.naturalHeight, iw = im.naturalWidth * k; ctx.drawImage(im, -iw / 2, -H, iw, H); }   // 縦横比はそのまま
     else { ctx.fillStyle = "#ffd0e8"; ctx.fillRect(-S * 0.3, -S * 1.3, S * 0.6, S * 1.3); }
     ctx.restore();
-    if (h.trance > 0) { ctx.strokeStyle = "rgba(190,150,255,0.8)"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(x, y - H + S * 0.2, S * 0.25, w.t * 5, w.t * 5 + 4.5); ctx.stroke(); }
+    if (h.trance > 0) {                             // 催眠・惑い：頭のまわりの渦と、名前
+      const hy = y - H + S * 0.15;
+      ctx.strokeStyle = "rgba(200,160,255,0.9)"; ctx.lineWidth = 2.5;
+      for (let k = 0; k < 2; k++) { ctx.beginPath(); ctx.arc(x, hy, S * (0.28 + k * 0.16), w.t * (5 - k * 2) + k, w.t * (5 - k * 2) + k + 4.2); ctx.stroke(); }
+      ctx.fillStyle = "rgba(60,30,100,0.85)"; roundRect(ctx, x - S * 0.55, hy - S * 0.95, S * 1.1, S * 0.42, 6); ctx.fill();
+      ctx.fillStyle = "#e8d8ff"; ctx.font = `bold ${Math.round(S * 0.28)}px sans-serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText((h.sleep > 0 ? "眠り" : h.hypno || "惑い") + " " + h.trance.toFixed(1), x, hy - S * 0.74);
+    }
     if (h.arousal > 40) { ctx.fillStyle = `rgba(255,120,170,${Math.min(0.9, h.arousal / 110)})`; ctx.font = `${Math.round(S * 0.35)}px sans-serif`; ctx.textAlign = "center"; ctx.fillText("♡", x + S * 0.45, y - H + S * 0.3 + Math.sin(w.t * 4) * 3); }
     if (h.bound) { const b = h.bound; ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S, 5); ctx.fillStyle = "#fff0a0"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S * Math.min(1, b.struggle), 5); }
     if (h.cast && h.cast.kind === "transform") { ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S, 5); ctx.fillStyle = "#ffd6f0"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S * (1 - h.cast.t / G.HIKARI.transformCast), 5); }

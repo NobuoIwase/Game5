@@ -73,31 +73,59 @@ var G = (typeof G !== "undefined") ? G : {};
       const p = M.randomFloor(map, (x, y) => U.dist(x, y, map.down.x, map.down.y) < 4 && U.dist(x, y, map.down.x, map.down.y) > 1.5) || M.randomFloor(map, far);
       if (p) { const b = spawnMonster(w, real.main, p.x, p.y, false); makeBoss(b); }
     }
-    // 罠：通路に散らすものに加えて、罠部屋（部屋ひとつに罠をまとめる）。ときどき階まるごと罠の階
-    const small = dg.traps.filter(t => !G.TRAPS[t].big && !G.TRAPS[t].lure), big = dg.traps.filter(t => G.TRAPS[t].big);
-    const lures = dg.traps.filter(t => G.TRAPS[t].lure);    // 偽りの祠・清めの手水は、1階に1つまで
+    // 罠部屋（Game2 の区画）：部屋まるごとが一つの仕掛け。合う魔物が眠って潜む。ときどき階まるごと罠部屋の「罠の階」
+    const small = dg.traps.filter(t => !G.TRAPS[t].big && !G.TRAPS[t].lure);
+    const lures = dg.traps.filter(t => G.TRAPS[t].lure);
     const startRoom = map.rooms.find(r => Math.abs(r.cx + 0.5 - map.up.x) < 1 && Math.abs(r.cy + 0.5 - map.up.y) < 1);
-    const cand = U.shuffle(map.rooms.filter(r => r !== startRoom && r.w * r.h >= 20));
-    w.trapFloor = f > 1 && U.chance(0.18 + f * 0.02);
-    const nRooms = w.trapFloor ? cand.length : Math.min(cand.length, f >= 4 ? 2 : 1);
+    const downRoom = map.rooms.find(r => map.down.x >= r.x && map.down.x < r.x + r.w && map.down.y >= r.y && map.down.y < r.y + r.h);
+    const cand = U.shuffle(map.rooms.filter(r => r !== startRoom && r !== downRoom && r.w * r.h >= 16));
+    w.trapFloor = f > 1 && U.chance(0.12 + f * 0.02);
+    const nRooms = w.trapFloor ? cand.length : Math.min(cand.length, f >= 5 ? 2 : 1);
+    const rpool = (dg.rooms || []).filter(k => G.TRAP_ROOMS[k].from <= f);
+    // 種族特化の依頼なら、その種が潜む部屋を選びやすく
+    const favored = real.species ? rpool.filter(k => G.TRAP_ROOMS[k].den.some(d => d[0] === real.species)) : [];
     w.trapRooms = [];
     for (const r of cand.slice(0, nRooms)) {
-      w.trapRooms.push(r);
-      if (big.length && U.chance(w.trapFloor ? 0.55 : 0.7)) spawnTrap(w, U.pick(big), r.cx + 0.5, r.cy + 0.5);
-      const n = U.ri(2, 4);
-      for (let i = 0; i < n; i++) {
-        const x = U.ri(r.x, r.x + r.w - 1) + 0.5, y = U.ri(r.y, r.y + r.h - 1) + 0.5;
-        if (M.walkable(map, x, y) && far(x, y) && !w.traps.some(t => U.dist(t.x, t.y, x, y) < 1.2)) spawnTrap(w, U.pick(small), x, y);
-      }
+      const key = favored.length && U.chance(0.6) ? U.pick(favored) : U.pick(rpool);
+      if (!key) break;
+      makeTrapRoom(w, r, key);
     }
     const nTrap = 1 + Math.floor(f / 4) + (U.chance(0.5) ? 1 : 0);
     for (let i = 0; i < nTrap; i++) {
-      const id = U.pick(small), p = M.randomFloor(map, far);
+      const id = U.pick(small), p = M.randomFloor(map, (x, y) => far(x, y) && !roomAt(w, x, y));
       if (p) spawnTrap(w, id, p.x, p.y);
     }
-    if (lures.length && U.chance(0.55)) { const p = M.randomFloor(map, far); if (p) spawnTrap(w, U.pick(lures), p.x, p.y); }
-    if (w.trapFloor) w.monsters.splice(0, Math.floor(w.monsters.length * 0.4));   // 罠の階は魔物が少なめ
+    if (lures.length && U.chance(0.4)) { const p = M.randomFloor(map, far); if (p) spawnTrap(w, U.pick(lures), p.x, p.y); }
+    if (w.trapFloor) w.monsters.splice(0, Math.floor(w.monsters.length * 0.5));   // 罠の階は、通路の魔物は少なめ（部屋に潜んでいる）
     if (U.chance(0.6)) { const p = M.randomFloor(map, far); if (p) w.chests.push({ id: w.nextId++, x: p.x, y: p.y, open: false }); }
+  }
+
+  // 罠部屋を一つ作る：真ん中の仕掛け、散らした罠、眠って潜む魔物
+  function makeTrapRoom(w, r, key) {
+    const T = G.TRAP_ROOMS[key], map = w.map;
+    const room = { key, T, r, x: r.x, y: r.y, w: r.w, h: r.h, cx: r.cx, cy: r.cy, active: false, members: [] };
+    w.trapRooms.push(room);
+    const inRoom = () => { for (let k = 0; k < 30; k++) { const x = U.ri(r.x, r.x + r.w - 1) + 0.5, y = U.ri(r.y, r.y + r.h - 1) + 0.5; if (M.walkable(map, x, y) && !w.traps.some(t => U.dist(t.x, t.y, x, y) < 1.1)) return { x, y }; } return null; };
+    if (T.center) { const tr = spawnTrap(w, T.center, r.cx + 0.5, r.cy + 0.5); tr.room = room; }
+    for (const t of T.traps || []) { const p = inRoom(); if (p) spawnTrap(w, t, p.x, p.y).room = room; }
+    for (const [id, n] of T.den) for (let i = 0; i < n; i++) {
+      const p = inRoom(); if (!p) continue;
+      const m = spawnMonster(w, id, p.x, p.y, false);
+      m.dormant = true; m.room = room; room.members.push(m);
+    }
+    return room;
+  }
+  // 罠部屋に踏み込んだ：扉が閉まり、潜んでいた魔物が目を覚ます
+  function enterTrapRoom(w, room) {
+    const h = w.run.h, T = room.T;
+    room.active = true; room.t = 0;
+    record(w, { kind: "trapRoom", room: room.key, roomName: T.name, type: T.type, sev: 1 });
+    msg(w, "trapRoomIn", { room: T.name });
+    say(w, "trapRoom", {});
+    if (T.seal) { w.sealed = { room, t: T.seal }; msg(w, "sealed", {}); }
+    const wake = () => { for (const m of room.members) if (m.hp > 0) { m.dormant = false; alertMon(w, m, 1); } if (room.members.length) msg(w, "denWake", { room: T.name }); };
+    if (T.wake) room.wakeT = T.wake; else wake();
+    room.wake = wake;
   }
 
   function makeBoss(m) {
@@ -229,11 +257,13 @@ var G = (typeof G !== "undefined") ? G : {};
     if (type === "惑") {
       const was = h.trance > 0;
       h.trance = Math.max(h.trance, 1.3 * power * k);
+      h.tranceSrc = name; h.tranceMax = Math.max(h.trance, h.tranceMax && was ? h.tranceMax : 0);
+      h.hypno = how === "lure" ? "魅了" : (src && ["mind_roper", "gazer", "bell"].includes(src.kind)) || power * k >= 0.9 ? "催眠" : "惑い";
       h.arousal = Math.min(100, h.arousal + 3 * power * k);
       if (how === "lure" && src) h.lureTo = { x: src.x, y: src.y };
       record(w, { kind: "trance", type, mon: src && src.kind, monName: name, sev, hidden: k * power > 1.2 && U.chance(0.45) });
       fx(w, { kind: "ring", x: h.x, y: h.y, color: "#b890ff", life: 0.8 });
-      if (!was) { msg(w, how === "lure" ? "lured" : "trance", { mon: name }, 2); if (!h.bubble || h.bubble.t < 1) say(w, "trance", { mon: name }); }
+      if (!was) { msg(w, how === "lure" ? "lured" : h.hypno === "催眠" ? "hypno" : "trance", { mon: name }, 2); if (!h.bubble || h.bubble.t < 1) say(w, "trance", { mon: name }); }
     } else if (type === "蕩") {
       h.arousal = Math.min(100, h.arousal + 8 * power * k);
       h.pleasure += 4 * power * k * (1 + h.arousal / 100) * tf.pleasure;
@@ -286,6 +316,7 @@ var G = (typeof G !== "undefined") ? G : {};
   /* ---- 捕まる・振りほどく ---- */
   function grab(w, src, power, type) {
     const h = w.run.h;
+    if (h.ifr > 0 && src.d && src.d.spd !== undefined) return false;
     if (h.bound) {
       if (h.bound.by.length >= 3 || h.bound.by.includes(src.id)) return false;
       h.bound.by.push(src.id); h.bound.power += power;
@@ -330,8 +361,9 @@ var G = (typeof G !== "undefined") ? G : {};
     h.arousal = Math.min(100, h.arousal + 3 * p * k * dt);
     h.pleasure += 8.5 * p * k * (1 + h.arousal / 90) * tf.pleasure * dt;
     for (const id of b.by) { const m = w.monsters.find(x => x.id === id); if (m && m.d.atk.drain) drainMagic(w, m.d.atk.drain * dt, m); }
+    if (h.form === "magica" && h.cdFlash <= 0 && h.mp >= G.HIKARI.flash.cost && h.trance <= 0 && !b.wait && (b.by.length >= 2 || (b.t > 1.2 && pressure(w, h.x, h.y, 2.4).n >= 3))) { flash(w); return; }
     const prep = G.PREP[w.run.stated];
-    let rate = (0.2 + h.will / 260) * (h.form === "magica" ? 1.25 : 0.7) * tf.struggle / Math.max(0.5, k * p);
+    let rate = (0.2 + h.will / 260) * (h.form === "magica" ? 1.25 : 0.7) * tf.struggle / Math.max(0.5, k * p) * (b.slowStruggle || 1);
     if (prep && prep.slow && b.type === "絡") rate *= 0.8;
     rate *= 1 + knowledge(w, b.src.kind) * 0.35;        // 知っている相手ほど、抜け方が分かる
     b.struggle += rate * dt;
@@ -339,7 +371,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (b.edge) { h.pleasure = Math.min(h.pleasure, 96); h.will = Math.max(0, h.will - 2.2 * dt); if (b.t > 2 && U.chance(dt * 0.6)) msg(w, "edge", {}, 3); }
     if (b.pillory) { h.watched = 0.4; h.arousal = Math.min(100, h.arousal + 1.2 * dt); }
     checkClimax(w, b.src);
-    if (b.t > 3.2 && !b.sceneShown && !b.pillory && !b.edge) { b.sceneShown = true; openScene(w, "hold", b.src); }
+    if (b.t > 3.2 && !b.sceneShown && !b.pillory && !b.edge && !b.slowStruggle) { b.sceneShown = true; openScene(w, "hold", b.src); }
     if (b.struggle >= 1) release(w, true);
     else if (h.will <= 0 || h.hp <= 0) defeat(w, b.src);
   }
@@ -374,7 +406,7 @@ var G = (typeof G !== "undefined") ? G : {};
     for (const m of w.monsters) {
       if (m.hp <= 0) continue;
       const d = U.dist(h.x, h.y, m.x, m.y);
-      if (m.hidden && d > 1.4) continue;
+      if ((m.hidden || m.dormant) && d > 1.4) continue;
       const inCone = d < 1.8 || Math.abs(U.angDiff(h.a, U.angle(h.x, h.y, m.x, m.y))) <= fov / 2;
       const seen = d <= range && inCone && M.los(map, h.x, h.y, m.x, m.y);
       const heard = !seen && d < 3.4 && m.d.spd > 0 && Math.hypot(m.vx, m.vy) > 0.2;
@@ -503,6 +535,53 @@ var G = (typeof G !== "undefined") ? G : {};
     return best;
   }
 
+  /* ================================================================ 囲まれた時（Game4 の考え方） */
+  // 近くの起きている魔物の数と圧力
+  function pressure(w, x, y, r) {
+    let n = 0, p = 0;
+    for (const m of w.monsters) {
+      if (m.hp <= 0 || m.dormant || m.holding || m.d.spd <= 0 && m.d.atk.kind !== "grab") continue;
+      const d = U.dist(m.x, m.y, x, y);
+      if (d < r) { n++; p += (r - d) / r; }
+    }
+    return { n, p };
+  }
+  // ルミナ・フラッシュ：拘束を弾き、まわりを押し返して怯ませる
+  function flash(w) {
+    const h = w.run.h, F = G.HIKARI.flash;
+    h.mp -= F.cost; h.cdFlash = F.cd; h.ifr = 0.8;
+    if (h.bound) release(w, true);
+    for (const m of w.monsters) {
+      if (m.hp <= 0 || U.dist(m.x, m.y, h.x, h.y) > F.radius) continue;
+      if (m.d.spd > 0) knock(w, m, U.angle(h.x, h.y, m.x, m.y), F.push);
+      m.stun = Math.max(m.stun, F.stun); m.cast = null; m.dash = null; m.holding = false;
+    }
+    h.bubble = { text: "ルミナ・フラッシュ！", t: 1.4 };
+    msg(w, "flash", {});
+    fx(w, { kind: "burst", x: h.x, y: h.y, color: "#fff8d0", r: F.radius, life: 0.7 });
+    record(w, { kind: "flash", sev: 0 });
+  }
+  // 空いている方へ突き抜ける（12方向を調べ、行き先のまわりの魔物が一番少ない所）
+  function breakout(w) {
+    const h = w.run.h, B = G.HIKARI.breakout;
+    const here = pressure(w, h.x, h.y, 3).n;
+    let best = null, bs = 1e9;
+    for (let k = 0; k < 12; k++) {
+      const a = k * Math.PI / 6, d = B.dist;
+      const x = h.x + Math.cos(a) * d, y = h.y + Math.sin(a) * d;
+      if (!free(w.map, x, y, HR) || !clearPath(w.map, h, x, y, HR)) continue;
+      const pr = pressure(w, x, y, 3), sc = pr.n + pressure(w, x, y, 1.2).n * 2;
+      if (sc < bs) { bs = sc; best = { x, y }; }
+    }
+    h.cdBreak = B.cd;
+    if (!best || bs >= here) return false;
+    h.dashT = 0.4; h.ifr = 0.5; h.cast = null;
+    setIntent(h, best.x - h.x, best.y - h.y, 2.1, "突破");
+    say(w, "breakout", {}); msg(w, "breakout", {});
+    record(w, { kind: "breakout", sev: 0 });
+    return true;
+  }
+
   /* ================================================================ ひかり：考える */
   function hikariSpeed(w) {
     const h = w.run.h, prep = G.PREP[w.run.stated];
@@ -542,6 +621,17 @@ var G = (typeof G !== "undefined") ? G : {};
       say(w, "retransform", {}); msg(w, "transformStart", {});
       return;
     }
+    // 囲まれた：空いている方へ突き抜ける。抜けられなければ光で弾く（素の姿なら、怯えて逃げ道を探す）
+    const pr = pressure(w, h.x, h.y, 2.4);
+    h.surrounded = pr.n >= 3 || pr.p >= 1.3;
+    if (h.surrounded) {
+      if (!h.wasSurrounded) { say(w, h.form === "magica" ? "surrounded" : "surroundedCiv", {}); msg(w, "surrounded", {}); }
+      if (h.form === "magica" && h.cdFlash <= 0 && h.mp >= G.HIKARI.flash.cost && h.trance <= 0 && pr.n >= 4) { flash(w); h.wasSurrounded = true; return; }
+      if (h.cdBreak <= 0 && breakout(w)) { h.wasSurrounded = true; return; }
+      if (h.form === "magica" && h.cdFlash <= 0 && h.mp >= G.HIKARI.flash.cost && h.trance <= 0) { flash(w); h.wasSurrounded = true; return; }
+      if (h.form === "civilian") h.will = Math.max(0, h.will - 0.6);
+    }
+    h.wasSurrounded = h.surrounded;
     // 危険を避ける（最優先）
     const u = urgent(w);
     if (u) {
@@ -615,11 +705,9 @@ var G = (typeof G !== "undefined") ? G : {};
           goToward(w, m.x, m.y, sneak ? 0.5 : 0.9, sneak ? "忍び寄る" : "接近", m); return;
         }
         if (h.mp >= S.shot.cost && h.cdShot <= 0) { tryCast(w, m, "shot"); return; }
-        // 撃てない間は、横に動いて的を絞らせない
-        h.strafeT -= 0.12; if (h.strafeT <= 0) { h.strafe *= -1; h.strafeT = U.rf(1.2, 2.4); }
-        const a = U.angle(h.x, h.y, m.x, m.y) + h.strafe * Math.PI / 2;
-        const want = (d - 4) * 0.4;
-        setIntent(h, Math.cos(a) + Math.cos(a - h.strafe * Math.PI / 2) * want, Math.sin(a) + Math.sin(a - h.strafe * Math.PI / 2) * want, 0.45, "様子見", m);
+        // 撃てない間は、足を止めて見据える。相手が寄ってくる時だけ、一歩ずつ下がる
+        if (d < 3.4 && m.d.spd > 0) { const a = U.angle(m.x, m.y, h.x, h.y); setIntent(h, Math.cos(a), Math.sin(a), 0.5, "間合い", m); }
+        else { h.intent = null; h.label = "構え"; h.face = { x: m.x, y: m.y, t: 0.4 }; }
         if (h.mp < S.shot.cost) msg(w, "lowMp", {}, 10);
         return;
       }
@@ -635,12 +723,17 @@ var G = (typeof G !== "undefined") ? G : {};
       h.rest = 2.2; h.intent = null; h.label = "息を整える"; say(w, "rest", {}); msg(w, "rest", {}, 12); return;
     }
     if (pa > 42) {
-      const basin = w.traps.find(tr => tr.kind === "basin" && tr.armed && !tr.found && U.dist(h.x, h.y, tr.x, tr.y) < 9);
-      if (basin) { goToward(w, basin.x, basin.y, 0.8, "手水へ"); return; }
+      const basin = w.traps.find(tr => (tr.kind === "basin" || tr.kind === "spring") && tr.armed && !tr.found && U.dist(h.x, h.y, tr.x, tr.y) < 9 && M.los(map, h.x, h.y, tr.x, tr.y));
+      if (basin) { goToward(w, basin.x, basin.y, 0.8, tr_label(basin)); return; }
+    }
+    if (h.hp < 70 || h.will < 60) {
+      const bed = w.traps.find(tr => tr.kind === "bed" && tr.armed && !tr.found && U.dist(h.x, h.y, tr.x, tr.y) < 9 && M.los(map, h.x, h.y, tr.x, tr.y));
+      if (bed) { goToward(w, bed.x, bed.y, 0.8, "寝台へ"); if (U.chance(0.1)) say(w, "bedLure", {}); return; }
     }
     explore(w);
   }
 
+  function tr_label(tr) { return tr.kind === "spring" ? "湯へ" : "手水へ"; }
   function explore(w) {
     const h = w.run.h, map = w.map;
     const downSeen = map.seen[Math.floor(map.down.y) * map.W + Math.floor(map.down.x)];
@@ -824,8 +917,11 @@ var G = (typeof G !== "undefined") ? G : {};
     const it = h.intent;
     let tvx = 0, tvy = 0;
     if (it) { const l = Math.hypot(it.x, it.y) || 1; tvx = it.x / l * max * it.spd; tvy = it.y / l * max * it.spd; }
-    const acc = h.dashT > 0 ? 16 : 8;
+    // 地に足：踏み出しは速く、止まる時はもっと速く（ふわっと滑らない）
+    const stopping = Math.hypot(tvx, tvy) < Math.hypot(h.vx, h.vy) * 0.7;
+    const acc = h.dashT > 0 ? 20 : stopping ? 18 : 12;
     h.vx += (tvx - h.vx) * Math.min(1, dt * acc); h.vy += (tvy - h.vy) * Math.min(1, dt * acc);
+    if (!it && Math.hypot(h.vx, h.vy) < 0.15) { h.vx = 0; h.vy = 0; }
     // 殴られた勢い
     if (h.kb > 0) { h.kb = Math.max(0, h.kb - dt); h.vx += Math.cos(h.kbA) * 6 * dt * 10 * h.kb; h.vy += Math.sin(h.kbA) * 6 * dt * 10 * h.kb; }
     move(w, h, h.vx, h.vy, dt, HR);
@@ -887,6 +983,7 @@ var G = (typeof G !== "undefined") ? G : {};
   function updateMonster(w, m, dt) {
     const h = w.run.h, d = m.d, A = d.atk;
     if (m.hp <= 0) return;
+    if (m.dormant) { if (U.dist(m.x, m.y, h.x, h.y) < 1.4) { m.dormant = false; alertMon(w, m, 1); } else return; }
     const px = m.x, py = m.y;
     m.flash = Math.max(0, m.flash - dt); m.cd = Math.max(0, m.cd - dt);
     m.hop = Math.max(0, m.hop - dt); m.rcl = Math.max(0, m.rcl - dt); m.lunge = Math.max(0, m.lunge - dt);
@@ -1042,6 +1139,10 @@ var G = (typeof G !== "undefined") ? G : {};
       const p = M.randomFloor(w.map, (x, y) => U.dist(x, y, h.x, h.y) > 4 && U.dist(x, y, h.x, h.y) < 9 && w.traps.some(t => U.dist(t.x, t.y, x, y) < 2.5 && t !== tr)) || M.randomFloor(w.map, (x, y) => U.dist(x, y, h.x, h.y) > 4);
       if (p) { h.convey = { x: p.x, y: p.y, t: 3.5 }; h.cast = null; say(w, "belt", {}); }
     }
+    else if (e === "gate") { if (grab(w, src, 0.8, "絡")) { h.bound.slowStruggle = 0.55; openScene(w, "gate", src); } ev.sev = 2; }
+    else if (e === "cuffs") { if (grab(w, src, 0.5, "絡")) { h.bound.slowStruggle = 0.4; h.bound.wait = true; openScene(w, "cuffs", src); } ev.sev = 2; }
+    else if (e === "bed") { h.rest = 0; h.trance = Math.max(h.trance, 5.5); h.sleep = 5.5; drainMagic(w, 8, src); record(w, { kind: "trance", type: "惑", mon: "bed", monName: tr.d.name, sev: 2, hidden: true }); msg(w, "sleep", {}); openScene(w, "bed", src); ev.sev = 2; if (tr.room && tr.room.wake) tr.room.wake(); }
+    else if (e === "spring") { if (grab(w, src, 0.9, "蕩")) { h.bound.edge = false; openScene(w, "spring", src); } h.arousal = Math.min(100, h.arousal + 10); ev.sev = 2; if (tr.room && tr.room.wake) tr.room.wake(); }
     else if (e === "basin") { drainMagic(w, 16 * mult(w, "削"), src); h.arousal = Math.max(0, h.arousal - 15); say(w, "basin", {}); ev.sev = 2; }
     if (rearm) { tr.armed = false; tr.rearm = tr.d.rearm; }
   }
@@ -1140,8 +1241,10 @@ var G = (typeof G !== "undefined") ? G : {};
     w.t += dt; h.floorT += dt;
     for (const k in w.dir.ct) w.dir.ct[k] = Math.max(0, w.dir.ct[k] - dt);
     h.cdShot = Math.max(0, h.cdShot - dt); h.cdBurst = Math.max(0, h.cdBurst - dt); h.cdShove = Math.max(0, h.cdShove - dt); h.cdMelee = Math.max(0, (h.cdMelee || 0) - dt);
+    h.cdFlash = Math.max(0, (h.cdFlash || 0) - dt); h.cdBreak = Math.max(0, (h.cdBreak || 0) - dt); h.ifr = Math.max(0, (h.ifr || 0) - dt);
     h.slow = Math.max(0, h.slow - dt); h.glue = Math.max(0, h.glue - dt);
-    if (h.trance > 0) { h.trance -= dt; if (h.trance <= 0) msg(w, "tranceOut", {}, 3); }
+    if (h.trance > 0) { h.trance -= dt; if (h.trance <= 0) { msg(w, h.sleep > 0 ? "wake" : "tranceOut", {}, 3); h.hypno = null; } }
+    if (h.sleep > 0) h.sleep -= dt;
     h.watched = Math.max(0, (h.watched || 0) - dt);
     if (h.bubble) { h.bubble.t -= dt; if (h.bubble.t <= 0) h.bubble = null; }
     if (h.decoy) { h.decoy.t -= dt; if (h.decoy.t <= 0) h.decoy = null; }
@@ -1159,7 +1262,23 @@ var G = (typeof G !== "undefined") ? G : {};
     if (!h.bound) h.will = Math.min(100, h.will + 0.6 * dt * (1 - h.arousal / 150));
     perceive(w);
     const rm = roomAt(w, h.x, h.y);
-    if (rm && rm !== h.room) { h.room = rm; if (w.trapRooms && w.trapRooms.includes(rm) && !rm.warned) { rm.warned = true; msg(w, "trapRoom", {}); say(w, "trapRoom", {}); } }
+    if (rm !== h.room) {
+      h.room = rm;
+      const tr = rm && (w.trapRooms || []).find(t => t.r === rm);
+      if (tr && !tr.active && Math.hypot(h.x - (rm.cx + 0.5), h.y - (rm.cy + 0.5)) < Math.max(rm.w, rm.h)) enterTrapRoom(w, tr);
+    }
+    for (const tr of w.trapRooms || []) {
+      if (!tr.active) continue;
+      tr.t += dt;
+      if (tr.wakeT > 0) { tr.wakeT -= dt; if (tr.wakeT <= 0 && tr.wake) tr.wake(); }
+      if (tr.T.aura && h.room === tr.r && !w.outcome) { tr.auraT = (tr.auraT || 0) + dt; if (tr.auraT > 1.3) { tr.auraT = 0; applyEffect(w, tr.T.aura[0], tr.T.aura[1], { d: { name: tr.T.name, type: tr.T.aura[0] }, kind: tr.key, x: h.x, y: h.y }); } }
+    }
+    if (w.sealed) {                               // 扉が閉まっている：部屋から出られない
+      w.sealed.t -= dt;
+      const r = w.sealed.room.r;
+      h.x = U.clamp(h.x, r.x + 0.32, r.x + r.w - 0.32); h.y = U.clamp(h.y, r.y + 0.32, r.y + r.h - 0.32);
+      if (w.sealed.t <= 0) { w.sealed = null; msg(w, "unsealed", {}); }
+    }
     updateHikari(w, dt);
     for (const m of w.monsters) updateMonster(w, m, dt);
     w.monsters = w.monsters.filter(m => m.hp > 0);
@@ -1196,6 +1315,27 @@ var G = (typeof G !== "undefined") ? G : {};
     return beat;
   }
 
-  G.Field = { createWorld, step, place, canPlace, cardInfo, startNight, nightBeat, spawnMonster, mult };
+  // ひかりの今の状態（ステータス欄のチップ）。{ name, t（残り秒）, cls }
+  function statusList(w) {
+    const h = w.run.h, out = [], prep = G.PREP[w.run.stated];
+    const add = (name, t, cls) => out.push({ name, t: t > 0 ? t : null, cls });
+    if (h.bound) add(h.bound.pillory ? "晒し台" : h.bound.edge ? "焦らし" : h.bound.wait ? "壁の環" : h.bound.slowStruggle ? "採寸中" : "拘束", null, "pink");
+    if (h.sleep > 0) add("眠り", h.sleep, "violet");
+    else if (h.trance > 0) add(h.hypno || "惑い", h.trance, "violet");
+    if (h.glue > 0) add("足止め", h.glue, "gold");
+    if (h.slow > 0) add("鈍足", h.slow, "gold");
+    if (h.convey) add("運ばれ中", h.convey.t, "gold");
+    if (h.watched > 0) add("視線", null, "pink");
+    if (h.arousal >= 70) add("発情（強）", null, "pink"); else if (h.arousal >= 40) add("発情", null, "pink");
+    if (h.form === "civilian") add((h.noTransform || 0) > 0 ? "変身不可" : "素の姿", h.noTransform > 0 ? h.noTransform : null, "red");
+    if (h.cast && h.cast.kind === "transform") add("変身詠唱", h.cast.t, "violet");
+    if (h.mislead > 0) add("幻に迷う", h.mislead, "violet");
+    if (w.sealed) add("閉じ込め", w.sealed.t, "red");
+    if (h.surrounded) add("包囲", null, "red");
+    if (prep) add(prep.name + "（" + (prep.numb ? "熱に鈍い" : prep.slow ? "動きが重い" : "暗示に弱い") + "）", null, "dim");
+    for (const a of w.run.save.ailments || []) { const A = G.Game && G.Game.AILMENTS[a.id]; if (A) add(A.name, null, "dim"); }
+    return out;
+  }
+  G.Field = { statusList, createWorld, step, place, canPlace, cardInfo, startNight, nightBeat, spawnMonster, mult };
 })();
 if (typeof module !== "undefined") module.exports = G;

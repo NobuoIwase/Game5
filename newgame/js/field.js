@@ -658,7 +658,7 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     // 撤退
     const pa = perceivedArousal(w);
-    const wantRetreat = run.recall || h.hp < 26 * caution || pa > 88 || (h.form === "civilian" && h.kit.star === 0 && h.hp < 60 * caution) || h.will < 18;
+    const wantRetreat = run.recall || h.hp < 26 * caution || (h.form === "civilian" && h.kit.star === 0 && h.hp < 60 * caution) || h.will < 18;
     if (wantRetreat && h.state !== "retreat") {
       h.state = "retreat";
       say(w, run.recall ? "recall" : "retreat", {}); msg(w, "retreat", {});

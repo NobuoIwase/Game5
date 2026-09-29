@@ -43,9 +43,9 @@ var G = (typeof G !== "undefined") ? G : {};
     goblin:       { name: "ゴブリン",         type: "絡", art: "goblin.png",       hp: 20, spd: 2.0, r: 0.4, sight: 6, fov: 200, behavior: "wander", cost: 3, ct: 8, pack: 2,
                     atk: { kind: "grab", range: 0.8, windup: 0.5, cd: 2.2, power: 0.9 }, desc: "群れで来て、押さえ込む" },
     mind_roper:   { name: "マインドローパー", type: "惑", art: "mind_roper.svg",   hp: 45, spd: 0.7, r: 0.55, sight: 6, fov: 360, behavior: "lurk", cost: 4, ct: 10,
-                    atk: { kind: "shot", range: 5, windup: 1.0, cd: 3.4, power: 1.1, proj: "psy", alsoGrab: 1.7 }, desc: "頭の中へ直接囁き、動きを止めてから絡める" },
+                    atk: { kind: "shot", range: 4.5, windup: 1.0, cd: 3.4, power: 1.1, fan: 0.4, alsoGrab: 1.7 }, desc: "囁きの波を扇状に放ち、動きを止めてから絡める" },
     gazer:        { name: "催眠のゲイズ",     type: "惑", art: "gazer.png",        hp: 28, spd: 1.0, r: 0.45, sight: 7, fov: 120, behavior: "float", cost: 3, ct: 9,
-                    atk: { kind: "shot", range: 6, windup: 1.1, cd: 3.6, power: 1.2, proj: "beam" }, desc: "見つめた相手を呆けさせる" },
+                    atk: { kind: "shot", range: 5, windup: 1.1, cd: 3.6, power: 1.2, fan: 0.55 }, desc: "目から光の扇を放ち、浴びた相手を呆けさせる" },
     moth:         { name: "灯蛾",             type: "惑", art: "moth.png",         hp: 14, spd: 2.0, r: 0.4, sight: 6, fov: 360, behavior: "float", cost: 2, ct: 6,
                     atk: { kind: "aura", range: 1.9, power: 0.9 }, desc: "鱗粉で頭をぼんやりさせる" },
     imp:          { name: "小淫魔",           type: "惑", art: "imp.png",          hp: 24, spd: 2.4, r: 0.4, sight: 7, fov: 240, behavior: "wander", cost: 4, ct: 10, flee: true,
@@ -85,7 +85,7 @@ var G = (typeof G !== "undefined") ? G : {};
     belt:    { name: "送り帯",     type: "絡", effect: "belt",    radius: 1.0, detect: 0.25, cost: 3, ct: 12, rearm: 18, big: true, desc: "床の帯が動き出し、捕らえた者を罠の奥へ運んでいく" },
     gate:    { name: "採寸門",     type: "絡", effect: "gate",    radius: 1.0, detect: 0.2, cost: 4, ct: 14, rearm: 30, big: true, desc: "真鍮の腕が伸び、受け台へ押し当てて全身を測る" },
     cuffs:   { name: "壁の環",     type: "絡", effect: "cuffs",   radius: 1.0, detect: 0.15, cost: 4, ct: 14, rearm: 30, big: true, desc: "扉が落ち、壁の鉄環が手首を留める。そして、何かが来るのを待たせる" },
-    bed:     { name: "偽りの褥",   type: "惑", effect: "bed",     radius: 1.0, detect: 0.08, cost: 3, ct: 14, rearm: 40, big: true, lure: true, desc: "乾いた寝台。『少しだけ』と横になった者を、深く眠らせる" },
+    bed:     { name: "偽りの褥",   type: "惑", effect: "bed",     radius: 1.3, detect: 0.08, cost: 3, ct: 14, rearm: 40, big: true, desc: "乾いた寝台。傍を通る者に甘い香を吹きかけ、催眠で眠らせる" },
     spring:  { name: "乳白の湯",   type: "蕩", effect: "spring",  radius: 1.2, detect: 0.08, cost: 3, ct: 14, rearm: 40, big: true, lure: true, desc: "白く濁った湯。汚れを落としに浸かった者を、湯そのものが抱き込む" },
   };
 

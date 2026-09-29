@@ -175,6 +175,7 @@ var G = (typeof G !== "undefined") ? G : {};
       if (f.kind === "ring") { ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(cx, cy, S * (f.r || 0.9) * (0.4 + k), 0, 7); ctx.stroke(); }
       else if (f.kind === "burst") { ctx.beginPath(); ctx.arc(cx, cy, S * (f.r || 1.2) * (0.3 + k), 0, 7); ctx.fill(); }
       else if (f.kind === "hit" || f.kind === "pop") { ctx.beginPath(); ctx.arc(cx, cy, S * 0.3 * (1 + k), 0, 7); ctx.fill(); }
+      else if (f.kind === "fan") { const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, S * f.r); g.addColorStop(0, "rgba(235,215,255,0.85)"); g.addColorStop(1, "rgba(180,140,255,0)"); ctx.save(); ctx.globalAlpha = 1 - k; ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, S * f.r * (0.6 + 0.4 * Math.min(1, k * 4)), f.a - f.arc, f.a + f.arc); ctx.closePath(); ctx.fill(); ctx.restore(); }
       else if (f.kind === "slash") { ctx.lineWidth = S * 0.12 * (1 - k) + 1; ctx.beginPath(); ctx.arc(cx - Math.cos(f.a) * S * 0.7, cy - Math.sin(f.a) * S * 0.7, S * 1.1, f.a - 0.7 + k * 0.4, f.a + 0.7 + k * 0.4); ctx.stroke(); }
       else if (f.kind === "summon") { ctx.lineWidth = 2; for (let r = 0; r < 3; r++) { ctx.beginPath(); ctx.arc(cx, cy, S * (0.2 + r * 0.25) * (1 - k * 0.5), 0, 7); ctx.stroke(); } }
       ctx.globalAlpha = 1;
@@ -199,9 +200,9 @@ var G = (typeof G !== "undefined") ? G : {};
     for (const m of motes) { ctx.fillStyle = `rgba(${pal.fog === "#8a7cc0" ? "200,180,255" : pal.fog === "#c07a98" ? "255,180,210" : "190,255,200"},${m.a * (0.6 + 0.4 * Math.sin(m.t * 2))})`; ctx.fillRect(X(m.x), Y(m.y), 2, 2); }
     ctx.globalCompositeOperation = "source-over";
     // 催眠中は画面の縁が紫に染まる
-    if (h.trance > 0 && !ui.night) {
+    if ((h.trance > 0 || h.hyp > 20) && !ui.night) {
       const g = ctx.createRadialGradient(cv.width / 2, cv.height / 2, Math.min(cv.width, cv.height) * 0.3, cv.width / 2, cv.height / 2, Math.max(cv.width, cv.height) * 0.7);
-      g.addColorStop(0, "rgba(120,60,200,0)"); g.addColorStop(1, `rgba(120,60,200,${Math.min(0.45, 0.2 + h.trance * 0.08)})`);
+      g.addColorStop(0, "rgba(120,60,200,0)"); g.addColorStop(1, `rgba(120,60,200,${Math.min(0.5, 0.12 + (h.hyp || 0) / 300 + (h.trance > 0 ? 0.12 : 0))})`);
       ctx.fillStyle = g; ctx.fillRect(0, 0, cv.width, cv.height);
     }
     // 吹き出しは明かりの上に
@@ -239,7 +240,11 @@ var G = (typeof G !== "undefined") ? G : {};
     if (m.cast) {
       const k = 1 - m.cast.t / Math.max(0.2, m.cast.total);
       ctx.strokeStyle = "rgba(255,80,110,0.85)"; ctx.lineWidth = 3;
-      if (m.cast.kind === "shot" || m.cast.kind === "pounce") {
+      if (m.cast.kind === "shot" && d.atk.fan) {   // 光の扇の予兆：扇形がじわじわ満ちる
+        const a = U.angle(m.x, m.y, m.cast.tx, m.cast.ty), R = d.atk.range * S;
+        ctx.save(); ctx.globalAlpha = 0.12 + k * 0.3; ctx.fillStyle = "#c8a0ff"; ctx.beginPath(); ctx.moveTo(x, y); ctx.arc(x, y, R * k, a - d.atk.fan, a + d.atk.fan); ctx.closePath(); ctx.fill();
+        ctx.globalAlpha = 0.5; ctx.strokeStyle = "#e8d0ff"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x, y); ctx.arc(x, y, R, a - d.atk.fan, a + d.atk.fan); ctx.closePath(); ctx.stroke(); ctx.restore();
+      } else if (m.cast.kind === "shot" || m.cast.kind === "pounce") {
         const a = U.angle(m.x, m.y, m.cast.tx, m.cast.ty), len = (m.cast.kind === "pounce" ? 2.6 : d.atk.range) * S;
         ctx.globalAlpha = 0.25 + k * 0.5; ctx.lineWidth = S * (m.cast.kind === "pounce" ? 0.7 : 0.35);
         ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(a) * len, y + Math.sin(a) * len); ctx.stroke(); ctx.globalAlpha = 1;
@@ -300,13 +305,13 @@ var G = (typeof G !== "undefined") ? G : {};
     if (ok(im)) { const k = H / im.naturalHeight, iw = im.naturalWidth * k; ctx.drawImage(im, -iw / 2, -H, iw, H); }   // 縦横比はそのまま
     else { ctx.fillStyle = "#ffd0e8"; ctx.fillRect(-S * 0.3, -S * 1.3, S * 0.6, S * 1.3); }
     ctx.restore();
-    if (h.trance > 0) {                             // 催眠・惑い：頭のまわりの渦と、名前
+    if (h.trance > 0 || h.hyp > 0) {                // 催眠・惑い：頭のまわりの渦と、名前（催眠度）
       const hy = y - H + S * 0.15;
       ctx.strokeStyle = "rgba(200,160,255,0.9)"; ctx.lineWidth = 2.5;
       for (let k = 0; k < 2; k++) { ctx.beginPath(); ctx.arc(x, hy, S * (0.28 + k * 0.16), w.t * (5 - k * 2) + k, w.t * (5 - k * 2) + k + 4.2); ctx.stroke(); }
       ctx.fillStyle = "rgba(60,30,100,0.85)"; roundRect(ctx, x - S * 0.55, hy - S * 0.95, S * 1.1, S * 0.42, 6); ctx.fill();
       ctx.fillStyle = "#e8d8ff"; ctx.font = `bold ${Math.round(S * 0.28)}px sans-serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.fillText((h.sleep > 0 ? "眠り" : h.hypno || "惑い") + " " + h.trance.toFixed(1), x, hy - S * 0.74);
+      ctx.fillText((h.sleep > 0 ? "眠り" : h.hypno || "惑い") + " " + Math.ceil(h.hyp || 0) + "%", x, hy - S * 0.74);
     }
     if (h.arousal > 40) { ctx.fillStyle = `rgba(255,120,170,${Math.min(0.9, h.arousal / 110)})`; ctx.font = `${Math.round(S * 0.35)}px sans-serif`; ctx.textAlign = "center"; ctx.fillText("♡", x + S * 0.45, y - H + S * 0.3 + Math.sin(w.t * 4) * 3); }
     if (h.bound) { const b = h.bound; ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S, 5); ctx.fillStyle = "#fff0a0"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S * Math.min(1, b.struggle), 5); }

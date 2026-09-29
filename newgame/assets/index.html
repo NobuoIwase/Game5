@@ -5,23 +5,27 @@ body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.6 "Noto Sans JP",
 h1{font-size:18px;margin:0 0 4px}h2{font-size:15px;margin:22px 0 8px;border-bottom:1px solid var(--line);padding-bottom:4px}
 p{color:var(--sub);margin:0 0 8px}.row{display:flex;flex-wrap:wrap;gap:10px}
 .c{background:var(--card);border-radius:8px;padding:8px;text-align:center;width:132px}
-.c canvas,.c img{width:116px;height:116px;image-rendering:auto}.c b{display:block;font-size:13px}.c small{color:var(--sub)}
+.c img{width:116px;height:116px;object-fit:contain}
+.stage{width:116px;height:132px;overflow:hidden;position:relative;margin:0 auto}
+.stage img{position:absolute;left:50%;bottom:0;height:120px;width:auto;object-fit:initial;transform:translateX(-50%)}.c b{display:block;font-size:13px}.c small{color:var(--sub)}
 .t{display:inline-block;border-radius:4px;padding:0 6px;font-size:12px;margin-left:4px}
 .惑{background:#5b3d8c}.蕩{background:#8c3d63}.絡{background:#3d6b8c}.削{background:#2f7a7a}
 </style></head><body>
-<h1>新作の素材</h1><p>ひかりの歩き（素の姿・変身後、4方向×3コマ）と、初版の魔物21体。</p>
+<h1>新作の素材</h1><p>ひかり（素の姿・変身後、4方向。歩きのコマは使わず、1枚の絵を滑らせて動かす）と、初版の魔物21体。</p>
 <h2>ひかり</h2><div class="row" id="hk"></div>
 <h2>魔物</h2><div id="mon"></div>
 <script>
 const DIRS=['front','left','right','back'],JP={front:'前',left:'左',right:'右',back:'後ろ'};
+// 歩きのコマ送りはしない（崩れるため）。各向きの真ん中の1枚を、向いている方へ滑らせるだけ。
+const MOVE={front:[0,1],back:[0,-1],left:[-1,0],right:[1,0]};
 for(const [n,label] of [['hikari_civilian','素の姿'],['hikari_magica','変身後']])for(const d of DIRS){
- const c=document.createElement('div');c.className='c';const cv=document.createElement('canvas');cv.width=240;cv.height=280;c.append(cv);
- c.insertAdjacentHTML('beforeend',`<b>${label}</b><small>${JP[d]}</small>`);document.getElementById('hk').append(c);
- const ims=[0,1,2].map(i=>{const im=new Image();im.src=`hikari/${n}_${d}_${i}.png`;return im});
- let k=0;const seq=[0,1,2,1];setInterval(()=>{const im=ims[seq[k++%4]];const g=cv.getContext('2d');g.clearRect(0,0,240,280);
-  if(im.complete&&im.naturalWidth){const s=Math.min(240/im.naturalWidth,280/im.naturalHeight);g.drawImage(im,(240-im.naturalWidth*s)/2,280-im.naturalHeight*s,im.naturalWidth*s,im.naturalHeight*s)}},180);
+ const c=document.createElement('div');c.className='c';
+ c.innerHTML=`<div class="stage"><img src="hikari/${n}_${d}_1.png" alt=""></div><b>${label}</b><small>${JP[d]}</small>`;
+ document.getElementById('hk').append(c);
+ const im=c.querySelector('img'),[mx,my]=MOVE[d];let t=0;
+ setInterval(()=>{t+=0.05;const k=Math.sin(t)*14;im.style.transform=`translate(calc(-50% + ${mx*k}px), ${my*k*0.5}px)`},40);
 }
 fetch('monsters/roster.json').then(r=>r.json()).then(({monsters})=>{const box=document.getElementById('mon');
  for(const t of ['惑','蕩','絡','削']){const h=document.createElement('h2');h.innerHTML=`<span class="t ${t}">${t}</span>`;box.append(h);const row=document.createElement('div');row.className='row';box.append(row);
-  for(const m of monsters.filter(m=>m.type===t))row.insertAdjacentHTML('beforeend',`<div class="c"><img src="monsters/${m.id}.svg" alt=""><b>${m.name}</b><small>${m.from}${m.art==='new'?'・新規':''}</small></div>`)}});
+  for(const m of monsters.filter(m=>m.type===t))row.insertAdjacentHTML('beforeend',`<div class="c"><img src="monsters/${m.id}.${m.art==='game4'?'png':'svg'}" alt=""><b>${m.name}</b><small>${m.from}・${{game4:'Game4の絵',new:'新規',game5:'Game5の絵'}[m.art]}</small></div>`)}});
 </script></body></html>

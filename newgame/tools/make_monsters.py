@@ -1,6 +1,6 @@
 """新作の魔物SVG（Game5 の asset-refs/sprites と同じ作法：256×256・柔らかいグラデーション・濃い縁取り）。
 
-新しく描く11体をここで出力する。Game5 に既にある10体は sprites/ から写すだけ（copy_existing）。
+新しく描く5体をここで出力する。Game5 の見本から写す3体は sprites/ からコピーする。残りは Game4 の絵（trim_game4.py）。
 使い方: python3 newgame/tools/make_monsters.py
 """
 import json, shutil
@@ -65,8 +65,6 @@ def roper(kind):
     for y in (178, 198):  # 胴の節
         body += f'<path d="M{86 if y==178 else 82} {y} C110 {y+8} 146 {y+8} {170 if y==178 else 174} {y}" fill="none" stroke="{P["d"]}" stroke-width="2.5" opacity=".45"/>'
     body += '<ellipse cx="108" cy="114" rx="12" ry="7" fill="#fff" opacity=".35" transform="rotate(-25 108 114)"/>'
-    body += eyes(128, 142, 17, 9, P["o"])
-    body += f'<path d="M116 164 C122 170 134 170 140 164" fill="none" stroke="{P["o"]}" stroke-width="3" stroke-linecap="round"/>'
     tips = [(38, 80), (122, 26), (136, 24), (218, 82)]
     for x, y in tips:
         body += f'<circle cx="{x}" cy="{y}" r="7" fill="{P["tip"]}" stroke="{P["o"]}" stroke-width="3"/>'
@@ -247,15 +245,15 @@ def pot():
     return svg(defs, body)
 
 
+# Game4 に絵がある種（小淫魔・ゴブリン・綿毛・覗き子・触手壺・ゴーストなど）は Game4 の絵を使う
+# （export_game4_monsters.js → trim_game4.py）。ここで描くのは Game4 にも無い5体だけ。
+# imp()・ghost_head()・goblin()・fluff()・peeper()・pot() は、Game4 の絵に差し替える前の下書き。
 NEW = {
     "roper": roper("roper"), "mind_roper": roper("mind_roper"), "drain_roper": roper("drain_roper"),
-    "hanging_vine": hanging_vine(), "jellyfish": jellyfish(), "imp": imp(), "ghost_head": ghost_head(),
-    "goblin": goblin(), "fluff": fluff(), "peeper": peeper(), "pot": pot(),
+    "hanging_vine": hanging_vine(), "jellyfish": jellyfish(),
 }
 # Game5 の見本（game/asset-refs/sprites）から写す分：新作での id → 元のファイル名
 EXISTING = {
-    "slime": "monster_gel", "slug": "monster_slug", "moth": "monster_moth", "gazer": "monster_gazer",
-    "lure_cap": "monster_lure_cap", "puppet_hand": "monster_creeping_hand", "gulper_worm": "monster_worm",
     "mimic": "prop_mimic", "mirror_slime": "monster_mirror_slime", "wisp": "monster_wisp",
 }
 

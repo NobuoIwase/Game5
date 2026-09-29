@@ -23,7 +23,7 @@
   function cardName(c) { const ci = G.Field.cardInfo(c); return ci.d ? ci.d.name : c; }
   function cardArt(c) {
     const ci = G.Field.cardInfo(c);
-    if (ci.trap) return `<div class="ic" style="color:${G.Render.TYPE_COLOR[ci.d.type]}">${({ bell: "鈴", mirror: "鏡", decoy: "燭", glue: "粘", vent: "香", urn: "甕", vine: "蔦", rope: "縄", shrine: "祠", basin: "水", pillory: "晒", tease: "焦", belt: "帯" })[ci.id] || "罠"}</div>`;
+    if (ci.trap) return `<img src="assets/traps/${ci.id}.${ci.id === "web" || ci.id === "tower" ? "png" : "svg"}" alt="" style="border-bottom:2px solid ${G.Render.TYPE_COLOR[ci.d.type]}">`;
     return `<img src="assets/monsters/${ci.d.art}" alt="">`;
   }
   const TIER_NAME = ["抵抗", "綻び", "心は拒み、体は応える", "待ってしまう"];
@@ -50,7 +50,7 @@
       </div>
       <p class="sub" style="margin-top:16px">あなたはギルドの監査官。そして裏では、ダンジョンを操る側の手先。<br>依頼を割り当て、依頼書を書き換え、魔物と罠を差し向ける。帰ってきた彼女の報告を聞き、書類の嘘を暴く。</p>
     </div>`;
-    on("#cont", "click", () => { S = load(); route(); });
+    on("#cont", "click", () => { S = GM.upgradeSave(load()); route(); });
     on("#new", "click", () => { if (has && !confirm("今のセーブを消して最初から始めますか？")) return; S = GM.newSave(); GM.morning(S); save(); route(); });
   }
 
@@ -99,6 +99,9 @@
     const last = S.history[S.history.length - 1];
     if (last && last.outcome === "defeat") out.push(T.office("talk.afterDefeat"));
     if (S.ailments.some(a => a.id === "heat")) out.push(T.office("talk.heat"));
+    // 残っている状態異常が、朝の会話に出る（どれか一つ）
+    const ailTalk = ["rewired", "attached", "omazuke", "charm", "throb", "sensitive", "addict", "hairTrigger", "exposure"].filter(id => S.ailments.some(a => a.id === id));
+    if (ailTalk.length) out.unshift(T.office("talk.ail_" + U.pick(ailTalk)));
     if (S.suspicion >= 45) out.push(T.office("talk.suspicious"));
     if (GM.taintStage(S) >= 2 && U.chance(0.6)) out.push(T.office("talk.taint"));
     if (G.tier(S.body, S.mind) >= 2 && U.chance(0.6)) out.push(T.office("talk.fallen"));
@@ -115,12 +118,14 @@
   function office() {
     if (S.pendingEvent === "confront") return confrontScreen();
     const tier = G.tier(S.body, S.mind);
-    const ail = S.ailments.map(a => `<span class="tag">${GM.AILMENTS[a.id].name}</span>`).join("") || `<span class="dim">なし</span>`;
+    const ail = S.ailments.map(a => `<span class="tag">${esc(GM.ailmentName(a))}</span>`).join("") || `<span class="dim">なし</span>`;
+    const tr = Object.keys(S.traits || {}).filter(k => S.traits[k] && G.TRAITS[k]).map(k => `<span class="tag" title="${esc(G.TRAITS[k].desc)}">${G.TRAITS[k].name}・${G.TRAIT_STAGE[S.traits[k]]}</span>`).join("") || `<span class="dim">まだ無い</span>`;
     app.innerHTML = topbar() + officeHTML() + `
       <div class="panel" id="status">
         <b>星野 ひかり</b> <span class="sub">大学生。本業は魔法少女ルミナ（正体を知るのは監査官だけ）</span>
         ${meter("肉体", S.body, 100, "#ff7fb0")}${meter("精神", S.mind, 100, "#b48cff")}${meter("信頼", S.trust, 100, "#8fe0a0")}${meter("疲労", S.fatigue, 100, "#f2d27a")}
         <div class="sub">堕ち：${TIER_NAME[tier]} ／ 状態異常：${ail}</div>
+        <div class="sub">身についた性癖（通常の処置では抜けない）：${tr}</div>
         ${equipHTML("civilian")}
       </div>
       <div class="grid2 hidden" id="menu">
@@ -505,7 +510,7 @@
       const g = S.rec ? S.rec.gain : null;
       app.innerHTML = topbar() + `<h1>処置と一日の終わり</h1>
         ${g ? `<div class="panel sub">今日の変化：肉体 +${g.body}　精神 +${g.mind}　ギルド資金 ${g.funds >= 0 ? "+" : ""}${g.funds}　澱晶 +${g.dark}${S.rec.forged ? `　違和感 +${g.sus}` : ""}</div>` : ""}
-        <div class="panel">${S.ailments.length ? S.ailments.map(a => { const A = GM.AILMENTS[a.id]; return `<label class="doc-line"><input type="checkbox" data-id="${a.id}" ${sel.has(a.id) ? "checked" : ""}> <span><b>${A.name}</b>　◈${A.fee}<br><span class="sub">${A.note}</span></span></label>`; }).join("") : `<p class="sub">状態異常はない。</p>`}
+        <div class="panel">${S.ailments.length ? S.ailments.map(a => { const A = GM.AILMENTS[a.id]; return `<label class="doc-line"><input type="checkbox" data-id="${a.id}" ${sel.has(a.id) ? "checked" : ""}> <span><b>${esc(GM.ailmentName(a))}</b>${A.kink ? "（深層処置）" : ""}　◈${A.fee}<br><span class="sub">${A.note}</span></span></label>`; }).join("") : `<p class="sub">状態異常はない。</p>`}
           <p class="sub">処置しないで残すと、次の潜行に響き、ギルドの空気も少し澱む。</p></div>
         <div class="row"><button class="primary" id="ok">${sel.size ? `処置して（◈${fee}）` : "このまま"}翌日へ</button></div>`;
       on("input[type=checkbox]", "change", e => { e.target.checked ? sel.add(e.target.dataset.id) : sel.delete(e.target.dataset.id); draw(); });
@@ -569,5 +574,6 @@
   G.Render.preload();
   S = load();
   if (S && S.v !== 2) S = null;          // 古いセーブ（依頼書の形が違う）は使わない
+  if (S) GM.upgradeSave(S);             // 後から足した項目を補う
   title();
 })();

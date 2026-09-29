@@ -12,11 +12,15 @@ var G = (typeof G !== "undefined") ? G : {};
   const ok = i => i && i.complete && i.naturalWidth > 0;
   function preload() {
     for (const k in G.MONSTERS) img("assets/monsters/" + G.MONSTERS[k].art);
+    for (const k in G.TRAPS) img(trapArt(k));
     for (const f of ["civilian", "magica"]) for (const d of ["front", "back", "left", "right"]) img(`assets/hikari/hikari_${f}_${d}_1.png`);
     for (const k in G.DUNGEONS) img(`assets/env/floor_${k}.png`);
     for (const n of ["dungeon.png", "chest_closed.webp", "chest_open.webp", "stairs_open.webp", "pool.webp"]) img("assets/env/" + n);
   }
-  const TRAP_ICON = { bell: "鈴", mirror: "鏡", decoy: "燭", glue: "粘", vent: "香", urn: "甕", vine: "蔦", rope: "縄", shrine: "祠", basin: "水", pillory: "晒", tease: "焦", belt: "帯" };
+  // 罠の絵：淫糸の巣と囁きの塔は Game4 の絵（PNG）、ほかは tools/make_art.py の SVG
+  function trapArt(k) { return "assets/traps/" + k + (k === "web" || k === "tower" ? ".png" : ".svg"); }
+  const TRAP_ICON = { bell: "鈴", mirror: "鏡", decoy: "燭", glue: "粘", vent: "香", urn: "甕", vine: "蔦", rope: "縄", shrine: "祠", basin: "水", pillory: "晒", tease: "焦", belt: "帯",
+                      gate: "門", cuffs: "環", bed: "褥", spring: "湯", slime_drop: "落", bud: "蕾", root: "根", cocoon: "繭", ratchet: "枠", altar: "紋", shadow: "影", tower: "塔" };
   const TYPE_COLOR = { "惑": "#b48cff", "蕩": "#ff7fb0", "絡": "#6fc2ff", "削": "#63e0d6" };
   const hash = (x, y, k) => { let h = (x * 374761393 + y * 668265263 + (k || 0) * 2246822519) >>> 0; h = (h ^ (h >>> 13)) * 1274126177 >>> 0; return (h ^ (h >>> 16)) >>> 0; };
 
@@ -135,16 +139,33 @@ var G = (typeof G !== "undefined") ? G : {};
     if (map.portal && !map.last) drawPortal(ctx, X(map.down.x + 0.9), Y(map.down.y), S * 0.6, w.t);
     // 宝箱
     for (const c of w.chests) drawChest(ctx, X(c.x), Y(c.y), S, c.open);
+    // 媚薬の靄（床に溜まって揺れる）
+    for (const c of w.clouds || []) {
+      const k = c.t / c.life, a = Math.min(1, c.t / 0.5) * (1 - Math.max(0, k - 0.7) / 0.3);
+      const R = c.r * S * (0.85 + 0.15 * Math.sin(w.t * 2 + c.x));
+      const g = ctx.createRadialGradient(X(c.x), Y(c.y), 0, X(c.x), Y(c.y), R);
+      g.addColorStop(0, `rgba(255,140,200,${0.32 * a})`); g.addColorStop(1, "rgba(255,140,200,0)");
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(X(c.x), Y(c.y), R, 0, 7); ctx.fill();
+    }
     // 罠（指揮者には全部見えている。ひかりが見つけた罠は縁取り）
     for (const tr of w.traps) {
       const cx = X(tr.x), cy = Y(tr.y), big = tr.d.big;
       ctx.globalAlpha = tr.armed ? 0.92 : 0.35;
       if (tr.active > 0) { ctx.fillStyle = "rgba(255,150,200,0.18)"; ctx.beginPath(); ctx.arc(cx, cy, tr.d.radius * S, 0, 7); ctx.fill(); }
       if (big) { ctx.strokeStyle = "rgba(255,120,160,0.35)"; ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.arc(cx, cy, tr.d.radius * S, 0, 7); ctx.stroke(); ctx.setLineDash([]); }
-      ctx.fillStyle = "rgba(20,14,24,0.75)"; ctx.beginPath(); ctx.arc(cx, cy, S * (big ? 0.42 : 0.3), 0, 7); ctx.fill();
-      ctx.strokeStyle = tr.found ? "#fff3a0" : TYPE_COLOR[tr.d.type]; ctx.lineWidth = tr.found ? 2.5 : 1.5; ctx.stroke();
-      ctx.fillStyle = TYPE_COLOR[tr.d.type]; ctx.font = `bold ${Math.round(S * (big ? 0.4 : 0.32))}px sans-serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.fillText(TRAP_ICON[tr.kind] || "罠", cx, cy + 1);
+      if (tr.d.emit) { ctx.strokeStyle = "rgba(200,160,255,0.28)"; ctx.setLineDash([2, 5]); ctx.beginPath(); ctx.arc(cx, cy, tr.d.radius * S, 0, 7); ctx.stroke(); ctx.setLineDash([]); }
+      const ti = img(trapArt(tr.kind));
+      // 床の輪：系統の色。ひかりが見つけた罠は黄色
+      ctx.strokeStyle = tr.found ? "#fff3a0" : TYPE_COLOR[tr.d.type]; ctx.lineWidth = tr.found ? 2.5 : 1.5;
+      ctx.beginPath(); ctx.ellipse(cx, cy + S * 0.28, S * (big ? 0.6 : 0.42), S * (big ? 0.2 : 0.14), 0, 0, 7); ctx.stroke();
+      if (ok(ti)) {
+        const sz = S * (big ? 1.45 : 1.05);
+        ctx.drawImage(ti, cx - sz / 2, cy + S * 0.36 - sz, sz, sz);
+      } else {
+        ctx.fillStyle = "rgba(20,14,24,0.75)"; ctx.beginPath(); ctx.arc(cx, cy, S * (big ? 0.42 : 0.3), 0, 7); ctx.fill();
+        ctx.fillStyle = TYPE_COLOR[tr.d.type]; ctx.font = `bold ${Math.round(S * (big ? 0.4 : 0.32))}px sans-serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.fillText(TRAP_ICON[tr.kind] || "罠", cx, cy + 1);
+      }
       ctx.globalAlpha = 1;
     }
     // ひかりの視界
@@ -160,7 +181,7 @@ var G = (typeof G !== "undefined") ? G : {};
     for (const e of ents) e.h ? drawHikari(ctx, w, X(h.x), Y(h.y), S, ui) : drawMonster(ctx, w, e.m, X(e.m.x), Y(e.m.y), S);
     // 弾
     for (const p of w.projs) {
-      const c = p.owner === "h" ? "#fff3b0" : ({ mucus: "#ff9ad0", psy: "#c8a0ff", beam: "#e0b0ff", cold: "#9ff4ff" }[p.kind] || "#fff");
+      const c = p.owner === "h" ? "#fff3b0" : ({ mucus: "#ff9ad0", psy: "#c8a0ff", beam: "#f4c8ff", cold: "#9ff4ff", sigil: "#ff5fa8" }[p.kind] || "#fff");
       ctx.fillStyle = c; ctx.shadowColor = c; ctx.shadowBlur = 12;
       ctx.beginPath(); ctx.arc(X(p.x), Y(p.y), Math.max(3, p.r * S), 0, 7); ctx.fill();
       ctx.globalAlpha = 0.35; ctx.beginPath(); ctx.arc(X(p.x - p.vx * 0.03), Y(p.y - p.vy * 0.03), Math.max(2, p.r * S * 0.8), 0, 7); ctx.fill(); ctx.globalAlpha = 1;
@@ -177,6 +198,7 @@ var G = (typeof G !== "undefined") ? G : {};
       else if (f.kind === "hit" || f.kind === "pop") { ctx.beginPath(); ctx.arc(cx, cy, S * 0.3 * (1 + k), 0, 7); ctx.fill(); }
       else if (f.kind === "fan") { const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, S * f.r); g.addColorStop(0, "rgba(235,215,255,0.85)"); g.addColorStop(1, "rgba(180,140,255,0)"); ctx.save(); ctx.globalAlpha = 1 - k; ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, S * f.r * (0.6 + 0.4 * Math.min(1, k * 4)), f.a - f.arc, f.a + f.arc); ctx.closePath(); ctx.fill(); ctx.restore(); }
       else if (f.kind === "slash") { ctx.lineWidth = S * 0.12 * (1 - k) + 1; ctx.beginPath(); ctx.arc(cx - Math.cos(f.a) * S * 0.7, cy - Math.sin(f.a) * S * 0.7, S * 1.1, f.a - 0.7 + k * 0.4, f.a + 0.7 + k * 0.4); ctx.stroke(); }
+      else if (f.kind === "flashCam") { ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(cx, cy, S * 0.6 * (1 - k * 0.5), 0, 7); ctx.fill(); }
       else if (f.kind === "summon") { ctx.lineWidth = 2; for (let r = 0; r < 3; r++) { ctx.beginPath(); ctx.arc(cx, cy, S * (0.2 + r * 0.25) * (1 - k * 0.5), 0, 7); ctx.stroke(); } }
       ctx.globalAlpha = 1;
     }
@@ -197,7 +219,7 @@ var G = (typeof G !== "undefined") ? G : {};
     ctx.globalCompositeOperation = "lighter";
     for (const d of dec) if (d.kind === "torch") { const g = ctx.createRadialGradient(X(d.x), Y(d.y) - S * 0.5, 0, X(d.x), Y(d.y) - S * 0.5, S * 2.2); g.addColorStop(0, "rgba(255,160,70,0.22)"); g.addColorStop(1, "rgba(255,160,70,0)"); ctx.fillStyle = g; ctx.fillRect(X(d.x) - S * 2.2, Y(d.y) - S * 2.7, S * 4.4, S * 4.4); }
     // 漂う光の粒
-    for (const m of motes) { ctx.fillStyle = `rgba(${pal.fog === "#8a7cc0" ? "200,180,255" : pal.fog === "#c07a98" ? "255,180,210" : "190,255,200"},${m.a * (0.6 + 0.4 * Math.sin(m.t * 2))})`; ctx.fillRect(X(m.x), Y(m.y), 2, 2); }
+    for (const m of motes) { ctx.fillStyle = `rgba(${pal.fog === "#8a7cc0" ? "200,180,255" : pal.fog === "#c07a98" ? "255,180,210" : pal.fog === "#7a90c0" ? "170,200,255" : "190,255,200"},${m.a * (0.6 + 0.4 * Math.sin(m.t * 2))})`; ctx.fillRect(X(m.x), Y(m.y), 2, 2); }
     ctx.globalCompositeOperation = "source-over";
     // 催眠中は画面の縁が紫に染まる
     if ((h.trance > 0 || h.hyp > 20) && !ui.night) {
@@ -314,6 +336,17 @@ var G = (typeof G !== "undefined") ? G : {};
       ctx.fillText((h.sleep > 0 ? "眠り" : h.hypno || "惑い") + " " + Math.ceil(h.hyp || 0) + "%", x, hy - S * 0.74);
     }
     if (h.arousal > 40) { ctx.fillStyle = `rgba(255,120,170,${Math.min(0.9, h.arousal / 110)})`; ctx.font = `${Math.round(S * 0.35)}px sans-serif`; ctx.textAlign = "center"; ctx.fillText("♡", x + S * 0.45, y - H + S * 0.3 + Math.sin(w.t * 4) * 3); }
+    if (h.sigil) {                                   // 淫紋：下腹の小さな紋（深さで濃く）
+      ctx.strokeStyle = `rgba(255,95,168,${0.35 + h.sigil * 0.2})`; ctx.lineWidth = 1.5;
+      const cy = y - H * 0.42; ctx.beginPath(); ctx.moveTo(x, cy - S * 0.1); ctx.bezierCurveTo(x - S * 0.16, cy - S * 0.2, x - S * 0.2, cy + S * 0.02, x, cy + S * 0.1); ctx.bezierCurveTo(x + S * 0.2, cy + S * 0.02, x + S * 0.16, cy - S * 0.2, x, cy - S * 0.1); ctx.stroke();
+    }
+    if (h.deny || h.omazuke || w.run.law === "kinzetsu") {   // 栓をされている：頭上に小さな錠
+      const bx = x + S * 0.42, by = y - H + S * 0.05;
+      ctx.fillStyle = "rgba(90,20,60,0.85)"; roundRect(ctx, bx - S * 0.2, by - S * 0.16, S * 0.4, S * 0.32, 5); ctx.fill();
+      ctx.fillStyle = "#ffb3d6"; ctx.font = `bold ${Math.round(S * 0.24)}px sans-serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("禁", bx, by + 1);
+    }
+    for (let i = 0; i < (h.attach || []).length; i++) { ctx.fillStyle = "rgba(255,110,170,0.85)"; ctx.beginPath(); ctx.arc(x - S * 0.12 + i * S * 0.09, y - H * 0.58, S * 0.05 + Math.sin(w.t * 9 + i) * S * 0.01, 0, 7); ctx.fill(); }
+    if (h.possess) { ctx.fillStyle = `rgba(230,236,255,${0.45 + 0.25 * Math.sin(w.t * 6)})`; ctx.beginPath(); ctx.arc(x - S * 0.22, y - H * 0.55, S * 0.12, 0, 7); ctx.fill(); }
     if (h.bound) { const b = h.bound; ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S, 5); ctx.fillStyle = "#fff0a0"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S * Math.min(1, b.struggle), 5); }
     if (h.cast && h.cast.kind === "transform") { ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S, 5); ctx.fillStyle = "#ffd6f0"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S * (1 - h.cast.t / G.HIKARI.transformCast), 5); }
   }

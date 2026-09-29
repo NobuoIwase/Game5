@@ -62,6 +62,75 @@ var G = (typeof G !== "undefined") ? G : {};
                     atk: { kind: "drain", range: 2.6, power: 1.3, legGrab: 1.0 }, desc: "近づいた者の力を吸い込み、脚を絡める" },
     wisp:         { name: "漂い霊",           type: "削", art: "wisp.svg",         hp: 12, spd: 2.2, r: 0.35, sight: 7, fov: 360, behavior: "float", cost: 2, ct: 6,
                     atk: { kind: "shot", range: 5, windup: 0.7, cd: 2.6, power: 1.0, proj: "cold" }, desc: "冷たい火を投げる。当たると魔力が凍える" },
+
+    // ---- Game4 から移した魔物（絵も Game4 の描画コードで描き出したもの） ----
+    // breath: 近くにいるだけで甘い息（蕩）。発情が強いと、ふらりと花の方へ寄ってしまう
+    nikubana:     { name: "肉花",             type: "蕩", art: "nikubana.png",     hp: 48, spd: 0,   r: 0.55, sight: 3.5, fov: 360, behavior: "static", cost: 3, ct: 10,
+                    atk: { kind: "grab", range: 1.5, windup: 0.5, cd: 3.2, power: 1.1, breath: { range: 3.2, power: 0.35 } }, desc: "道端に据わって待つ肉の花。甘い息で誘い、寄ってきた脚を花びらで食む" },
+    dakitake:     { name: "抱き茸",           type: "蕩", art: "dakitake.png",     hp: 55, spd: 0,   r: 0.6, sight: 2.2, fov: 360, behavior: "static", cost: 4, ct: 11,
+                    atk: { kind: "grab", range: 1.25, windup: 0.9, cd: 3.6, power: 1.2 }, desc: "人の背丈ほどの柔らかい茸。傘をかぶせて閉じ込め、温かい襞で撫でつづける" },
+    // cloud: 漂った跡に媚薬の靄を残す。倒すと大きく弾けて靄になる
+    kouryuu:      { name: "媚香玉",           type: "蕩", art: "kouryuu.png",      hp: 16, spd: 0.9, r: 0.4, sight: 5, fov: 360, behavior: "float", cost: 3, ct: 8,
+                    atk: { kind: "aura", range: 1.0, power: 0.6, cloud: { every: 2.4, r: 1.1, life: 6, power: 0.4 }, popCloud: { r: 1.8, life: 7, power: 0.5 } }, desc: "桃色の靄を吐きながら漂う玉。通った跡がそのまま甘い霧になる。倒すと弾けて広がる" },
+    // possess: 腕に憑く。憑かれている間は光弾が撃てず（自分の胸を撃つことになる）、その手に撫でられつづける。果てると離れる
+    tsukite:      { name: "憑き手",           type: "惑", art: "tsukite.png",      hp: 14, spd: 2.0, r: 0.35, sight: 6, fov: 300, behavior: "float", cost: 3, ct: 9,
+                    atk: { kind: "possess", range: 0.9, windup: 0.45, cd: 3, power: 1.0, dur: 9 }, desc: "夜気が手の形に凝ったもの。袖から入り込んで腕に憑き、その腕で本人を撫でさせる" },
+    // surge: 当たると、準備を待たずに快感が跳ね上がる
+    shousha:      { name: "照射触手",         type: "蕩", art: "shousha.png",      hp: 30, spd: 0.5, r: 0.45, sight: 7, fov: 200, behavior: "lurk", cost: 5, ct: 12,
+                    atk: { kind: "shot", range: 6, windup: 1.0, cd: 6.5, power: 0.8, proj: "beam", surge: 40 }, desc: "先端に水晶の眼を持つ細い触手。細い光条に撃たれた身体は、準備を待たずに上り詰める。撃った後はしばらく眼を閉じる" },
+    // spread: 扇に何発か撃つ／sigil: 当たるたびに淫紋が一つ深くなる（その潜行のあいだ蕩が効きやすい）
+    banjin:       { name: "遺跡の番人",       type: "蕩", art: "banjin.png",       hp: 60, spd: 0,   r: 0.55, sight: 6.5, fov: 360, behavior: "static", cost: 4, ct: 12,
+                    atk: { kind: "shot", range: 5.5, windup: 1.2, cd: 4.2, power: 0.6, proj: "sigil", spread: 3, sigil: 1 }, desc: "祈るように膝をつく石像。額の紋が光ると、淫紋の光弾を扇に三つ放つ。当たるたび、下腹に紋が刻まれる" },
+    // film: 見られているあいだに達すると、その姿が記録に残る
+    medama:       { name: "覗き目玉",         type: "惑", art: "medama.png",       hp: 18, spd: 1.3, r: 0.4, sight: 7, fov: 360, behavior: "float", cost: 2, ct: 7,
+                    atk: { kind: "aura", range: 5.5, power: 0.9, gaze: true, film: true }, desc: "瞼のない眼が翼で浮いている。近づかず、離れず、ただ見ている。見られながら達した姿は、記録に残る" },
+    // ---- 淫魔（Game4 の絵／Game2 の双子） ----
+    // deny: 絶頂を禁じる（快感は溜まるのに、あと少しで止まる。解けた時に溜まった分が来る）／command: 近くの魔物を急かす
+    inma:         { name: "寸止めの淫魔",     type: "惑", art: "inma.png",         hp: 32, spd: 1.6, r: 0.45, sight: 7, fov: 360, behavior: "float", cost: 5, ct: 12, flee: true, command: 4,
+                    atk: { kind: "deny", range: 5, windup: 0.9, cd: 9, power: 0.6, dur: 8 }, desc: "指先ひとつで快感に栓をする淫魔。自分では責めない。近くの魔物を急かし、溢れた分を身体に溜めさせてから、栓を抜く" },
+    // omazuke: 寸前まで引き上げて止める。三度止められると、ひかりはねだってしまう。そこで初めて許しが出る／summon: 小淫魔を呼ぶ
+    muma_queen:   { name: "夢魔の女王",       type: "惑", art: "muma_queen.png",   hp: 90, spd: 0.8, r: 0.6, sight: 7, fov: 360, behavior: "float", cost: 8, ct: 20, command: 5, summon: { kind: "imp", every: 14, max: 3 },
+                    atk: { kind: "omazuke", range: 4.5, windup: 1.2, cd: 7, power: 0.8 }, desc: "淫魔たちの女王。栓はしない。責めを一瞬だけ止めて、寸前で引き戻す。三度目で、彼女のほうからねだらせる" },
+    // pair: 必ず二体で出る／whisper: 両側から囁く（触れない責め）。二体とも近いと強い
+    futago:       { name: "双子の小淫魔",     type: "惑", art: "futago.svg",       hp: 12, spd: 2.2, r: 0.35, sight: 7, fov: 360, behavior: "float", cost: 4, ct: 10, pair: true, flee: true,
+                    atk: { kind: "aura", range: 2.2, power: 0.7, whisper: true }, desc: "瓜二つの小さな淫魔。触れない。左右から耳元で、別々のことを囁きつづける" },
+    // ---- ワルドー（Game2：ひかりの宿敵。催眠と洗脳で人を戦闘員に変える組織） ----
+    // musk: 近くにいると雄の臭い。発情していると、つい嗅いでしまう
+    waldo_grunt:  { name: "ワルドー戦闘員",   type: "絡", art: "waldo_grunt.svg",  hp: 16, spd: 2.1, r: 0.4, sight: 6, fov: 200, behavior: "wander", cost: 3, ct: 7, pack: 3, musk: 1.6, waldo: true,
+                    atk: { kind: "grab", range: 0.8, windup: 0.5, cd: 2.2, power: 0.8 }, desc: "全身タイツの戦闘員。数で押さえ込み、捕らえて同じ戦闘員にしようとする" },
+    // brain: 当たると洗脳が進む（100で戦闘員化）
+    waldo_officer:{ name: "ワルドー幹部",     type: "惑", art: "waldo_officer.svg", hp: 60, spd: 1.4, r: 0.45, sight: 7, fov: 220, behavior: "lurk", cost: 6, ct: 16, command: 5, waldo: true,
+                    atk: { kind: "shot", range: 5, windup: 1.1, cd: 4.0, power: 1.0, fan: 0.45, brain: 14, alsoGrab: 1.0 }, desc: "マントに組織の紋章。掌から催眠の波を扇に放つ。戦闘員を急かし、抗う者ほど良い戦闘員になると笑う" },
+    // wire: 遠くからワイヤーで吊り上げる
+    drone_capture:{ name: "捕縛ドローン",     type: "絡", art: "drone_capture.svg", hp: 14, spd: 1.8, r: 0.35, sight: 7, fov: 360, behavior: "float", cost: 3, ct: 8, waldo: true,
+                    atk: { kind: "grab", range: 2.4, windup: 0.9, cd: 5.0, power: 0.55, wire: true }, desc: "ワイヤーの射出口を並べた球体。手首と足首を取り、宙に吊り上げる" },
+    // tickle: くすぐり。気力がどんどん削れる
+    drone_tickle: { name: "くすぐり機ドローン", type: "蕩", art: "drone_tickle.svg", hp: 16, spd: 1.6, r: 0.4, sight: 6, fov: 360, behavior: "float", cost: 3, ct: 9, waldo: true,
+                    atk: { kind: "grab", range: 1.0, windup: 0.6, cd: 3.6, power: 0.5, tickle: true, brief: 5 }, desc: "羽根ブラシと細筆のアーム。『痛イコトハ、一切シナイ』" },
+    drone_camera: { name: "記録ドローン",     type: "惑", art: "drone_camera.svg", hp: 12, spd: 1.5, r: 0.35, sight: 7, fov: 360, behavior: "float", cost: 2, ct: 7, waldo: true,
+                    atk: { kind: "aura", range: 5.5, power: 0.8, gaze: true, film: true }, desc: "赤いランプのレンズ。まばたきもせず、全部を記録する" },
+    // develop: 捕まっている間、少しずつ敏感にされる。装束も剥がされる
+    karte:        { name: "性感開発機〈カルテ〉", type: "蕩", art: "karte.svg",     hp: 70, spd: 0,   r: 0.6, sight: 3, fov: 360, behavior: "static", cost: 5, ct: 14, waldo: true,
+                    atk: { kind: "grab", range: 1.6, windup: 1.0, cd: 4.0, power: 1.0, develop: true }, desc: "多関節のアームと青いレンズ。『検体ヲ確認。適性検査ヲ開始シマス』" },
+    // ---- Game4・Game2 の魔物 ----
+    // numb: 触れると痺れる（攻撃が遅く、足がもたつく）
+    shibire:      { name: "痺れ浮遊子",       type: "蕩", art: "shibire.svg",      hp: 8,  spd: 1.0, r: 0.35, sight: 5, fov: 360, behavior: "float", cost: 1, ct: 5,
+                    atk: { kind: "aura", range: 0.9, power: 0.4, numb: 5 }, desc: "半透明の傘の胞子。触れると微弱な痺れを流す。痛くはないが、指先がもたつく" },
+    // spore: 吸うと「ハイ」。抜けたあとに「中毒」が残り、茸を見ると寄っていってしまう
+    sekitake:     { name: "咳き茸",           type: "蕩", art: "sekitake.png",     hp: 12, spd: 0,   r: 0.4, sight: 2, fov: 360, behavior: "static", cost: 2, ct: 7,
+                    atk: { kind: "aura", range: 1.3, power: 0.5, spore: true }, desc: "膝ほどの茸。近くで暴れると傘が破れて粉が上がる。吸った身体は、次から自分で寄っていく" },
+    suiyou:       { name: "水妖",             type: "絡", art: "suiyou.png",       hp: 26, spd: 1.2, r: 0.45, sight: 3, fov: 360, behavior: "lurk", cost: 3, ct: 9, hidden: true,
+                    atk: { kind: "grab", range: 1.4, windup: 0.4, cd: 3.0, power: 0.9 }, desc: "水たまりの下に潜む。水そのものが腕になって脚に絡む。冷たいのに、絡まれた所だけ熱い" },
+    kabeguchi:    { name: "肉壁の口",         type: "蕩", art: "kabeguchi.png",    hp: 40, spd: 0,   r: 0.5, sight: 1.4, fov: 360, behavior: "static", cost: 3, ct: 10, hidden: true,
+                    atk: { kind: "grab", range: 1.0, windup: 0.2, cd: 3.5, power: 1.3 }, desc: "肉の床に開いた口。気づかずに踏み込んだ脚を吸って、離さない" },
+    // brief: 抱きついて数秒で離れる／sens: 翼の粉で敏感になる
+    inyoku:       { name: "淫翼",             type: "蕩", art: "inyoku.png",       hp: 10, spd: 2.6, r: 0.35, sight: 7, fov: 360, behavior: "float", cost: 2, ct: 6,
+                    atk: { kind: "grab", range: 0.9, windup: 0.4, cd: 3.0, power: 0.6, brief: 2.5, sens: 1 }, desc: "桃色の翼の小さな飛行種。急降下して腕に抱きつき、数秒で舞い戻る。翼の粉が肌を敏感にする" },
+    // attach: 身体に貼りつく（付着体）。自分からは剥がれない
+    hoshibami:    { name: "星喰み",           type: "蕩", art: "hoshibami.svg",    hp: 8,  spd: 1.2, r: 0.3, sight: 5, fov: 360, behavior: "float", cost: 2, ct: 8,
+                    atk: { kind: "attach", range: 0.8, windup: 0.4, cd: 3, power: 1.0, as: "hoshibami" }, desc: "星の形の小さな軟体。服の中へ滑り込み、胸の先に貼りついて吸いつづける" },
+    tentacle_lord:{ name: "触手の主",         type: "絡", art: "tentacle_lord.svg", hp: 120, spd: 0.4, r: 0.7, sight: 6, fov: 360, behavior: "lurk", cost: 7, ct: 20,
+                    atk: { kind: "grab", range: 2.4, windup: 0.9, cd: 3.0, power: 1.6, alsoGrab: 3.0 }, desc: "触腕の群れの主。一本に捕まれば、残りが順番に取りついてくる" },
   };
 
   /* ---- 罠（置いてある物） ----
@@ -87,6 +156,43 @@ var G = (typeof G !== "undefined") ? G : {};
     cuffs:   { name: "壁の環",     type: "絡", effect: "cuffs",   radius: 1.0, detect: 0.15, cost: 4, ct: 14, rearm: 30, big: true, desc: "扉が落ち、壁の鉄環が手首を留める。そして、何かが来るのを待たせる" },
     bed:     { name: "偽りの褥",   type: "惑", effect: "bed",     radius: 1.3, detect: 0.08, cost: 3, ct: 14, rearm: 40, big: true, desc: "乾いた寝台。傍を通る者に甘い香を吹きかけ、催眠で眠らせる" },
     spring:  { name: "乳白の湯",   type: "蕩", effect: "spring",  radius: 1.2, detect: 0.08, cost: 3, ct: 14, rearm: 40, big: true, lure: true, desc: "白く濁った湯。汚れを落としに浸かった者を、湯そのものが抱き込む" },
+    // Game2 の罠をさらに移したもの
+    slime_drop: { name: "粘体落とし", type: "蕩", effect: "slimeDrop", radius: 0.9, detect: 0.2,  cost: 3, ct: 10, rearm: 22, desc: "天井の継ぎ目が開き、重い粘体が真上から落ちてくる" },
+    bud:     { name: "吊花の蕾",   type: "蕩", effect: "bud",     radius: 1.0, detect: 0.25, cost: 3, ct: 12, rearm: 24, big: true, desc: "天井から下がる蕾。足音に首をもたげ、蔓で足首を取って逆さに吊り、蜜を垂らす" },
+    root:    { name: "蝕根の床",   type: "絡", effect: "root",    radius: 1.0, detect: 0.12, cost: 4, ct: 14, rearm: 30, big: true, desc: "床の継ぎ目から細い根が這い出し、腰から下を床下へ引き込む。上からは、下で何が起きているか見えない" },
+    cocoon:  { name: "白繭",       type: "絡", effect: "cocoon",  radius: 1.1, detect: 0.2,  cost: 4, ct: 14, rearm: 34, big: true, desc: "白い菌糸が身体を包み、温かい繭に閉じ込める。小刀では切れない。中は湿って、熱がゆっくり溜まる" },
+    ratchet: { name: "爪車の枠",   type: "絡", effect: "ratchet", radius: 1.0, detect: 0.18, cost: 4, ct: 14, rearm: 34, big: true, desc: "鉄の枠が俯せに抱え込む。もがくたび歯車が一つ鳴り、戻る歯は一つもない。決まった時間で開く" },
+    altar:   { name: "淫紋の祭壇", type: "蕩", effect: "altar",   radius: 1.3, detect: 0.15, cost: 4, ct: 16, rearm: 40, big: true, desc: "黒い炎が影を引き、祭壇の紋を影伝いに下腹へ写す。踏ん張って押し返そうとするほど、深く焼き付く" },
+    shadow:  { name: "影腕の燭",   type: "絡", effect: "shadow",  radius: 1.2, detect: 0.15, cost: 4, ct: 14, rearm: 30, big: true, desc: "四方の燭台が灯り、足元の影から腕が生える。腕は時とともに増え、光弾はすり抜ける" },
+    // Game4 の設置物
+    tower:   { name: "囁きの塔",   type: "惑", effect: "tower",   radius: 3.6, detect: 0.5,  cost: 3, ct: 12, rearm: 10, emit: true, desc: "細い石の塔。間をおいて囁きの波を放ち、近くにいる者の頭を痺れさせ、塔の方へ歩かせる" },
+    // ---- Game2 の罠をさらに（呪装・幻影・拘束具・機械・放置） ----
+    echo_gate: { name: "復唱の門",   type: "惑", effect: "echo",    radius: 1.0, detect: 0.2,  cost: 3, ct: 12, rearm: 30, big: true, desc: "門をくぐるには、刻まれた文句を声に出して読まねばならない。読んだ言葉は、頭の底に鉤を残す" },
+    lull_voice:{ name: "微睡の声",   type: "惑", effect: "lull",    radius: 3.0, detect: 0.3,  cost: 3, ct: 12, rearm: 12, emit: true, desc: "どこからか子守唄のような声。聞いているうちに瞼が重くなり、足が遅くなる" },
+    armor:     { name: "うつろの鎧", type: "絡", effect: "armor",   radius: 1.0, detect: 0.2,  cost: 4, ct: 14, rearm: 30, big: true, desc: "空の鎧が立っている。近づくと前が開き、中へ閉じ込める。内側は柔らかく、手も杖も動かせない" },
+    stasis:    { name: "静止の帳",   type: "惑", effect: "stasis",  radius: 1.2, detect: 0.12, cost: 4, ct: 16, rearm: 36, big: true, desc: "薄い帳をくぐった瞬間、身体の時間だけが止まる。止まっている間も、感覚だけは積もっていく" },
+    vow:       { name: "誓いの祭壇", type: "惑", effect: "vow",     radius: 1.2, detect: 0.15, cost: 4, ct: 16, rearm: 60, big: true, desc: "誓いを立てさせる祭壇。『この階を出るまで、達しない』。溜まった分は、階を出た瞬間にまとめて返ってくる" },
+    saddle:    { name: "鞍の渡り",   type: "蕩", effect: "saddle",  radius: 1.0, detect: 0.25, cost: 3, ct: 12, rearm: 24, big: true, desc: "奈落に一本だけ渡された、瘤の並ぶ梁。跨って渡るしかない。梁のほうが動く" },
+    itch:      { name: "掻痒の檻",   type: "蕩", effect: "itch",    radius: 1.0, detect: 0.2,  cost: 4, ct: 14, rearm: 30, big: true, desc: "閉じ込めた者に痒みの粉を吹く檻。手は届かない。出たあとも、疼きが残る" },
+    tickle:    { name: "くすぐりの廊", type: "蕩", effect: "tickle", radius: 0.9, detect: 0.3,  cost: 2, ct: 8,  rearm: 12, desc: "壁から羽根の腕が伸びる通路。笑いを堪えるうちに、息も気力も削られる" },
+    aphro_wall:{ name: "媚壁",       type: "蕩", effect: "aphro",   radius: 1.8, detect: 0.3,  cost: 3, ct: 10, rearm: 8, emit: true, desc: "湿った壁から甘い汗が滲む。そばにいるだけで、肌が敏感になっていく" },
+    exam:      { name: "診察台",     type: "絡", effect: "exam",    radius: 1.0, detect: 0.2,  cost: 4, ct: 14, rearm: 30, big: true, desc: "白い台と、器具の並んだ盆。寝かせた者を固定し、どこが弱いかを一つずつ確かめる" },
+    net:       { name: "投網",       type: "絡", effect: "net",     radius: 0.9, detect: 0.35, cost: 2, ct: 7,  rearm: 14, desc: "天井から網が落ちてくる。絡まった手足をほどくのに、手間取る" },
+    pitfall:   { name: "落とし穴",   type: "絡", effect: "pit",     radius: 0.8, detect: 0.3,  cost: 2, ct: 8,  rearm: 18, desc: "腰まで嵌まる穴。底は柔らかく、上がろうとするほど沈む。物音で魔物が寄ってくる" },
+    toybox:    { name: "装具箱",     type: "蕩", effect: "toybox",  radius: 0.9, detect: 0.1,  cost: 3, ct: 12, rearm: 40, lure: true, desc: "金具の光る宝箱。開けると中身が跳び、肌に貼りつく。震える珠は、自分では外せない" },
+    suit:      { name: "纏い衣",     type: "惑", effect: "suit",    radius: 0.9, detect: 0.1,  cost: 3, ct: 12, rearm: 40, lure: true, desc: "上等な防具に見える衣。着た者には『良い装備』としか思えない。内側で、ずっと動いている" },
+    curtain:   { name: "垂帳の触手", type: "絡", effect: "curtain", radius: 1.0, detect: 0.3,  cost: 2, ct: 8,  rearm: 10, desc: "通路を塞ぐ触手の簾。くぐり抜けるあいだ、全身を撫でられる。ときどき一本が離さない" },
+    sucker:    { name: "吸盤の壁",   type: "絡", effect: "sucker",  radius: 1.0, detect: 0.25, cost: 2, ct: 9,  rearm: 16, desc: "壁一面の吸盤。すれ違いざまに、服の上から吸いついて剥がれない" },
+    honey:     { name: "蜜溜まり",   type: "蕩", effect: "honey",   radius: 1.1, detect: 0.3,  cost: 2, ct: 8,  rearm: 10, desc: "床に溜まった琥珀色の蜜。踏み込めば膝まで捕まり、甘い熱が脚から上ってくる" },
+    whisper_ring:{ name: "囁き茸の輪", type: "惑", effect: "wring", radius: 1.4, detect: 0.25, cost: 3, ct: 10, rearm: 20, desc: "茸の輪の真ん中に立つと、足元から囁きが上ってくる。聞いた言葉が、自分の考えのように思えてくる" },
+    // ---- ワルドーの装置 ----
+    hypno_ray: { name: "催眠照射機", type: "惑", effect: "hray",    radius: 3.4, detect: 0.5,  cost: 4, ct: 14, rearm: 10, emit: true, desc: "部屋の四隅から渦を巻く光。浴びるたび思考の縁が溶け、洗脳が進む" },
+    furnace:   { name: "精気吸収炉", type: "削", effect: "furnace", radius: 2.6, detect: 0.5,  cost: 4, ct: 14, rearm: 8, emit: true, desc: "脈打つ炉。近くの者から魔力を吸い上げる。吸われる感触が、なぜか甘い" },
+    pod:       { name: "戦闘員化ポッド", type: "惑", effect: "pod",  radius: 1.0, detect: 0.2,  cost: 5, ct: 18, rearm: 40, big: true, desc: "人型のポッド。吸い込んだ者の名前を塗り替え、戦闘員として登録する" },
+    capture:   { name: "捕縛アーム", type: "絡", effect: "capture", radius: 1.1, detect: 0.2,  cost: 4, ct: 14, rearm: 30, big: true, desc: "床の紋様から機械の腕。手首・足首・腰を取り、大の字に固定して戦闘員に引き渡す" },
+    // ---- Game4 の設置物 ----
+    web:       { name: "淫糸の巣",   type: "絡", effect: "web",     radius: 1.0, detect: 0.3,  cost: 2, ct: 9,  rearm: 16, desc: "床から壁へ張られた糸。触れた四肢を、空いている分だけ全部つなぎ留める" },
+    rune:      { name: "淫紋の敷石", type: "蕩", effect: "rune",    radius: 0.8, detect: 0.2,  cost: 2, ct: 9,  rearm: 20, desc: "踏むと灯る紋の石。灯した分だけ、下腹の紋が濃くなる" },
   };
 
   /* ---- 罠部屋（Game2 の「区画まるごとが一つの仕掛け」をなぞる） ----
@@ -113,23 +219,68 @@ var G = (typeof G !== "undefined") ? G : {};
     hypno_bell:  { name: "催眠の鈴",   type: "惑", from: 4, traps: ["bell", "bell", "bell"], den: [["mind_roper", 1]], desc: "天井から無数の鈴が下がっている" },
     twin_shadow: { name: "双影の燭",   type: "惑", from: 2, traps: ["decoy", "decoy"], den: [["gazer", 2]], desc: "燭台の火が揺れるたび、影が二つに増える" },
     dreamwalk:   { name: "夢渡り",     type: "惑", from: 4, den: [["imp", 2], ["moth", 2]], aura: ["惑", 0.4], desc: "足を踏み入れると、夢と現の境が薄くなる" },
+    // ---- Game2・Game4 から移した罠部屋 ----
+    slime_ceil:  { name: "粘体落としの間", type: "蕩", from: 2, traps: ["slime_drop", "slime_drop", "slime_drop"], den: [["slime", 2]], desc: "天井の石に、継ぎ目がやけに多い。床には乾ききらない水たまり" },
+    bud_hall:    { name: "吊花の廊",   type: "蕩", from: 3, center: "bud", traps: ["bud"], den: [["nikubana", 1], ["fluff", 2]], desc: "天井いっぱいに、白い蕾が隙間なく下がっている" },
+    flower_bed:  { name: "肉花の庭",   type: "蕩", from: 2, den: [["nikubana", 3]], aura: ["蕩", 0.3], desc: "道の端に、人ひとりが収まるほどの花が咲いている。襲ってはこない。ただ、口を開けて待っている" },
+    incense_pool:{ name: "媚香の淀み", type: "蕩", from: 3, den: [["kouryuu", 3]], seal: 6, aura: ["蕩", 0.35], desc: "桃色の靄が床に溜まり、膝の高さで揺れている" },
+    hug_grove:   { name: "抱き茸の森", type: "蕩", from: 4, den: [["dakitake", 2], ["lure_cap", 1]], aura: ["蕩", 0.25], desc: "人の背丈ほどの茸が、柔らかく傘を揺らしている" },
+    beam_hall:   { name: "照射の回廊", type: "蕩", from: 5, den: [["shousha", 2], ["peeper", 2]], desc: "壁の穴から、水晶の眼をもつ細い触手が覗いている。見物の目も" },
+    seal_altar:  { name: "淫紋の祭壇", type: "蕩", from: 6, center: "altar", den: [["banjin", 2]], wake: 3, desc: "突き当たりに黒い石の祭壇。左右の燭台が、踏み込むのと同時に灯る" },
+    root_floor:  { name: "蝕根の床",   type: "絡", from: 3, center: "root", den: [["puppet_hand", 2], ["tsukite", 1]], desc: "床石の継ぎ目から、髪の毛ほどの根が数えきれないほど出ている" },
+    cocoon_room: { name: "白繭の室",   type: "絡", from: 5, center: "cocoon", den: [["dakitake", 1]], seal: 8, aura: ["蕩", 0.25], desc: "壁も床も天井も、白い菌糸に厚く覆われた丸い小室。空気が生温く、湿っている" },
+    ratchet_room:{ name: "爪車",       type: "絡", from: 5, center: "ratchet", den: [["goblin", 2]], wake: 5, desc: "何もない小部屋。床に一本、細い溝が端から端まで走っている" },
+    shadow_hall: { name: "影腕の広間", type: "絡", from: 4, center: "shadow", den: [["tsukite", 2]], seal: 7, desc: "円い広間。壁の四方に燭台が一基ずつ据えてある" },
+    whisper:     { name: "囁きの塔",   type: "惑", from: 3, center: "tower", den: [["gazer", 1], ["medama", 2]], desc: "部屋の真ん中に、細い石の塔が立っている。耳の奥が、ずっとくすぐったい" },
+    // ---- 淫魔 ----
+    imp_nest:    { name: "嗤いの巣",   type: "惑", from: 3, den: [["futago", 1], ["imp", 2]], aura: ["惑", 0.3], desc: "壁の窪みという窪みから、くすくす笑う声がする" },
+    edge_parlor: { name: "寸止めの間", type: "惑", from: 4, center: "vow", den: [["inma", 1], ["jellyfish", 1]], seal: 8, desc: "甘い香の焚かれた小部屋。壁の祭壇に、読めない誓いの文句が刻まれている" },
+    dream_throne:{ name: "夢魔の玉座", type: "惑", from: 7, den: [["muma_queen", 1], ["imp", 2]], seal: 10, aura: ["蕩", 0.3], desc: "繭を積んだ玉座。頬杖をついた女王が、退屈そうにこちらを見下ろしている" },
+    // ---- Game2 の罠部屋 ----
+    echo_hall:   { name: "復唱の門",   type: "惑", from: 3, center: "echo_gate", den: [["peeper", 2]], desc: "回廊を塞ぐ門。扉には文句が刻まれ、読み上げないと開かない" },
+    stasis_room: { name: "静止の帳",   type: "惑", from: 5, center: "stasis", den: [["tsukite", 1], ["puppet_hand", 2]], desc: "天井から薄い帳が幾重にも下がっている。帳の向こうの空気が、動いていない" },
+    armor_hall:  { name: "うつろの鎧", type: "絡", from: 4, center: "armor", traps: ["armor"], den: [["puppet_hand", 2]], desc: "空の鎧が壁際に並ぶ。兜の奥は暗く、どれも前が少しだけ開いている" },
+    itch_cell:   { name: "掻痒の檻",   type: "蕩", from: 3, center: "itch", den: [["shibire", 3]], seal: 6, desc: "部屋の真ん中に吊られた檻。床に、細かな粉が積もっている" },
+    saddle_pit:  { name: "鞍の渡り",   type: "蕩", from: 4, center: "saddle", den: [["inyoku", 2]], desc: "床の真ん中が奈落。向こう岸へは、瘤の並んだ梁が一本だけ" },
+    tickle_hall: { name: "くすぐりの廊", type: "蕩", from: 2, traps: ["tickle", "tickle", "tickle"], den: [["fluff", 2]], desc: "壁一面に羽根の腕が畳まれている。空気がかすかに、くすぐったい" },
+    sucker_hall: { name: "吸盤の壁",   type: "絡", from: 2, traps: ["sucker", "sucker", "curtain"], den: [["hoshibami", 2]], desc: "左右の壁が、吸盤でびっしり覆われた通路" },
+    honey_cave:  { name: "蜜溜まりの間", type: "蕩", from: 2, traps: ["honey", "honey"], den: [["nikubana", 1], ["kabeguchi", 1]], aura: ["蕩", 0.25], desc: "床のあちこちに琥珀色の蜜。甘い匂いで、喉が渇く" },
+    box_room:    { name: "装具の蔵",   type: "蕩", from: 3, traps: ["toybox", "suit"], den: [["mimic", 1]], desc: "宝箱と、上等な衣が掛けられた衣桁。どれも手招きしているように見える" },
+    web_hall:    { name: "淫糸の巣",   type: "絡", from: 3, traps: ["web", "web", "web"], den: [["puppet_hand", 2]], desc: "天井から床まで、細い糸が縦横に張られている" },
+    rune_road:   { name: "淫紋の敷石", type: "蕩", from: 4, traps: ["rune", "rune", "rune", "rune"], den: [["banjin", 1]], desc: "床石の一枚ずつに、薄く紋が彫られている。どこを踏んでも、灯りそうだ" },
+    mouth_floor: { name: "肉の床",     type: "蕩", from: 5, den: [["kabeguchi", 3]], aura: ["蕩", 0.25], desc: "石だったはずの床が、ところどころ柔らかい。踏むと、温かい" },
+    lord_den:    { name: "触手の主の坑", type: "絡", from: 7, den: [["tentacle_lord", 1], ["roper", 1]], seal: 8, desc: "坑の底で、太い触腕の束がゆっくりと脈打っている" },
+    pond:        { name: "水妖の沼",   type: "絡", from: 3, den: [["suiyou", 3]], desc: "床が浅い水に沈んでいる。水面が、ときどき人の腕の形に盛り上がる" },
+    spore_field: { name: "胞子の花畑", type: "蕩", from: 3, den: [["sekitake", 3], ["shibire", 2]], aura: ["蕩", 0.2], desc: "膝ほどの茸がびっしり。歩くたびに、粉が舞う" },
+    // ---- ワルドーの支部 ----
+    w_intake:    { name: "受付と採寸", type: "絡", from: 2, center: "capture", den: [["waldo_grunt", 2]], wake: 3, desc: "白い床に、人の形の枠が描かれている。壁に『素体受付』の札" },
+    w_ray_room:  { name: "催眠照射室", type: "惑", from: 2, center: "hypno_ray", den: [["drone_camera", 2]], seal: 7, desc: "四隅にレンズ付きの装置。床の中央だけ、光が集まるように磨かれている" },
+    w_furnace:   { name: "精気吸収炉", type: "削", from: 3, center: "furnace", den: [["waldo_grunt", 2]], desc: "部屋の中央で、炉が心臓のように脈打っている" },
+    w_lab:       { name: "開発室",     type: "蕩", from: 3, center: "exam", den: [["karte", 1], ["drone_tickle", 1]], seal: 8, desc: "白い台と器具の盆。壁の書類棚に、検体の記録がずらりと並ぶ" },
+    w_pod_hall:  { name: "戦闘員化ポッド", type: "惑", from: 5, center: "pod", traps: ["pod"], den: [["waldo_grunt", 3]], wake: 4, desc: "人型のポッドが壁際にずらりと並ぶ。一つが、ひとりでに開いた" },
+    w_command:   { name: "幹部室",     type: "惑", from: 6, den: [["waldo_officer", 1], ["waldo_grunt", 2], ["drone_capture", 1]], seal: 8, desc: "組織の紋章の掛かった部屋。机の上に、ルミナの写真と『回収予定』の書類" },
+    w_drone_bay: { name: "ドローン格納庫", type: "絡", from: 2, den: [["drone_capture", 2], ["drone_tickle", 1], ["drone_camera", 1]], desc: "天井の棚に、球体の機械が並んで眠っている" },
   };
 
   /* ---- ダンジョン ---- 固定枠4＋自由枠（候補から選ぶ）。削はどこでも自由枠に入れられる */
   const DRAIN = ["drain_roper", "ghost_head", "pot", "wisp"];
   G.DUNGEONS = {
     mist: { name: "霧鏡の回廊", type: "惑", floors: 10, pal: { floor: "#3a3548", floor2: "#342f42", wall: "#0e0b14", wallTop: "#6a6080", edge: "#5a4e74", fog: "#8a7cc0" },
-            fixed: ["gazer", "mind_roper", "moth", "mirror_slime"], free: ["imp", "peeper", ...DRAIN], traps: ["bell", "mirror", "decoy", "shrine", "basin", "pillory", "belt"],
-            rooms: ["mirror_hall", "hypno_bell", "twin_shadow", "dreamwalk", "fungal_bed", "purify", "caliper", "pillory"],
+            fixed: ["gazer", "mind_roper", "moth", "mirror_slime"], free: ["imp", "peeper", "tsukite", "medama", "inma", "futago", "muma_queen", "shibire", ...DRAIN], traps: ["bell", "mirror", "decoy", "shrine", "basin", "pillory", "belt", "tower", "shadow", "echo_gate", "lull_voice", "stasis", "vow", "whisper_ring", "suit", "rune"],
+            rooms: ["mirror_hall", "hypno_bell", "twin_shadow", "dreamwalk", "fungal_bed", "purify", "caliper", "pillory", "whisper", "shadow_hall", "imp_nest", "edge_parlor", "dream_throne", "echo_hall", "stasis_room", "box_room"],
             desc: "鏡と霧の遺跡。見たものを信じるほど深く迷う" },
     mire: { name: "蜜溜まりの湿窟", type: "蕩", floors: 10, pal: { floor: "#43323a", floor2: "#3b2c33", wall: "#100a0c", wallTop: "#7a5a64", edge: "#7a4a5c", fog: "#c07a98" },
-            fixed: ["slime", "slug", "jellyfish", "lure_cap"], free: ["fluff", ...DRAIN], traps: ["glue", "vent", "urn", "shrine", "basin", "tease", "belt"],
-            rooms: ["foam_cell", "mist_hall", "gel_urn", "tease_rack", "hot_spring", "purify", "fungal_bed", "feed_belt"],
+            fixed: ["slime", "slug", "jellyfish", "lure_cap"], free: ["fluff", "nikubana", "dakitake", "kouryuu", "shousha", "banjin", "sekitake", "kabeguchi", "inyoku", "hoshibami", "inma", ...DRAIN], traps: ["glue", "vent", "urn", "shrine", "basin", "tease", "belt", "slime_drop", "bud", "altar", "saddle", "itch", "tickle", "aphro_wall", "toybox", "honey", "rune", "vow"],
+            rooms: ["foam_cell", "mist_hall", "gel_urn", "tease_rack", "hot_spring", "purify", "fungal_bed", "feed_belt", "slime_ceil", "bud_hall", "flower_bed", "incense_pool", "hug_grove", "beam_hall", "seal_altar", "cocoon_room", "itch_cell", "saddle_pit", "tickle_hall", "honey_cave", "rune_road", "mouth_floor", "spore_field", "edge_parlor"],
             desc: "甘い湿気の籠もる洞窟。息をするだけで熱がこもる" },
     vine: { name: "絡繰りの蔦森", type: "絡", floors: 10, pal: { floor: "#323d34", floor2: "#2c362e", wall: "#0a0e0b", wallTop: "#5e6a5c", edge: "#4a6a52", fog: "#7ab08a" },
-            fixed: ["roper", "hanging_vine", "puppet_hand", "gulper_worm"], free: ["goblin", "mimic", ...DRAIN], traps: ["vine", "rope", "glue", "shrine", "basin", "pillory", "belt"],
-            rooms: ["vine_hall", "kote_swarm", "tent_pit", "idle_cell", "caliper", "feed_belt", "pillory", "fungal_bed", "purify"],
+            fixed: ["roper", "hanging_vine", "puppet_hand", "gulper_worm"], free: ["goblin", "mimic", "nikubana", "tsukite", "suiyou", "hoshibami", "tentacle_lord", "kabeguchi", ...DRAIN], traps: ["vine", "rope", "glue", "shrine", "basin", "pillory", "belt", "root", "cocoon", "ratchet", "shadow", "armor", "net", "pitfall", "curtain", "sucker", "web", "exam"],
+            rooms: ["vine_hall", "kote_swarm", "tent_pit", "idle_cell", "caliper", "feed_belt", "pillory", "fungal_bed", "purify", "root_floor", "cocoon_room", "ratchet_room", "shadow_hall", "flower_bed", "armor_hall", "sucker_hall", "web_hall", "lord_den", "pond", "mouth_floor"],
             desc: "蔦に呑まれた古い砦。道も壁も、ゆっくり動く" },
+    waldo: { name: "ワルドーの支部", type: "惑", floors: 10, pal: { floor: "#2e3240", floor2: "#282b38", wall: "#0a0b10", wallTop: "#565c74", edge: "#4c5a7a", fog: "#7a90c0" },
+            fixed: ["waldo_grunt", "waldo_officer", "drone_capture", "drone_camera"], free: ["drone_tickle", "karte", "inma", "tsukite", ...DRAIN], traps: ["hypno_ray", "capture", "net", "pitfall", "exam", "furnace", "pod", "stasis", "echo_gate", "suit"],
+            rooms: ["w_intake", "w_ray_room", "w_furnace", "w_lab", "w_pod_hall", "w_command", "w_drone_bay", "echo_hall", "stasis_room", "box_room"],
+            desc: "催眠と洗脳で人を戦闘員に変える組織の支部。ひかりを狙っている" },
   };
 
   /* ---- ひかりの準備の品（依頼書に書かれた系統を見て、対策して来る） ----
@@ -169,6 +320,39 @@ var G = (typeof G !== "undefined") ? G : {};
       civilian: ["セーラー服", "変身のコンパクト", "相棒の妖精（プラム・鞄の中）"],
     },
   };
+
+  /* ---- 迷宮の法則（Game2）：潜行の入口で決まり、潜行全体に効く。無い日もある ---- */
+  G.LAWS = {
+    shumoku:   { name: "衆目の法則", note: "触れるより『見られる』。視線の熱が増し、見られながら達した姿は記録に残る" },
+    juntaku:   { name: "潤沢の法則", note: "空気そのものが媚薬。入った時点で、もう効いている" },
+    kinzetsu:  { name: "禁絶の法則", note: "この迷宮の中では達することが許されない。溜まった分は、門を出た瞬間に全部返ってくる" },
+    seishi:    { name: "静止の法則", note: "捕らえて、何もしない。拘束が長く、時間そのものが責めになる" },
+    boukyaku:  { name: "忘却の法則", note: "されたという事実ごと奪う。本人は『何も無かった』と信じて帰る" },
+    eibin:     { name: "鋭敏の法則", note: "階を降りるたび、肌の感覚だけが研ぎ澄まされていく" },
+    hakudatsu: { name: "剥奪の法則", note: "階を降りるごとに装束が失われていく" },
+    kokuin:    { name: "刻印の法則", note: "入口で淫紋を刻まれる。潜るほど、紋が効いてくる" },
+  };
+
+  /* ---- 性癖（Game2・Game4）：行動の積み重ねで身につき、消えない。段階 1〜3 ----
+   * count: 数える事柄（game.js の finishDive で数える）／need: 段階ごとの必要数
+   * どれも戦力を減らさない（Game4 の考え）：その場面の快感の入りが増え、代わりに同じ責めへの慣れ（振りほどき）も増える */
+  G.TRAITS = {
+    loser:      { name: "負け癖",       count: "defeat",  need: [2, 4, 7],   ctx: "bound",   desc: "組み伏せられた時、抗うより先に息が抜けるようになった" },
+    bindhabit:  { name: "拘束癖",       count: "hold",    need: [8, 20, 40], ctx: "bound",   desc: "手足を塞がれた形を、身体が覚えてしまった" },
+    edgeweak:   { name: "焦らし弱",     count: "edge",    need: [3, 7, 14],  ctx: "edge",    desc: "栓をされている間の宙吊りに、身体が期待を覚えた" },
+    squirthabit:{ name: "決壊癖",       count: "climax",  need: [6, 15, 30], ctx: "climax",  desc: "一度決壊すると、止め方が分からなくなった" },
+    publicHeat: { name: "見られ熱",     count: "watched", need: [3, 7, 14],  ctx: "watched", desc: "視線が肌に触れているように感じる" },
+    drainBliss: { name: "吸われ悦び",   count: "drain",   need: [6, 15, 30], ctx: "drain",   desc: "吸い出される感触が、失う感覚ではなく預ける感覚になった" },
+    musk:       { name: "雄臭への発情", count: "sniff",   need: [2, 5, 10],  ctx: "musk",    desc: "雄の臭いと発情が結びついた。嗅ぐだけで、身体が先に支度をする" },
+    sigilJoy:   { name: "紋を灯す悦び", count: "sigil",   need: [2, 5, 10],  ctx: "sigil",   desc: "紋が灯る感触を、身体が先に憶えた" },
+    hypnoObey:  { name: "忘れる従順",   count: "hypno",   need: [2, 5, 10],  ctx: "hypno",   desc: "覚えていないことには抗えない。抗う理由の方が、先に流れていく" },
+    waitfall:   { name: "待ち堕ち癖",   count: "drawn",   need: [2, 5, 10],  ctx: "drawn",   desc: "待っているものに、自分から近づいてしまう" },
+    ticklish:   { name: "弱擽過敏",     count: "tickle",  need: [2, 5, 10],  ctx: "tickle",  desc: "笑いを堪えることが、そのまま熱に変わるようになった" },
+    engulfCalm: { name: "丸呑まれ安堵", count: "engulf",  need: [4, 10, 20], ctx: "engulf",  desc: "包み込まれると、抗うより先に息が落ち着く" },
+    rhythmSub:  { name: "律動従属",     count: "machine", need: [3, 8, 16],  ctx: "machine", desc: "機械の一定の拍子に、身体が合わせてしまう" },
+    impLove:    { name: "淫魔好き",     count: "imp",     need: [3, 8, 16],  ctx: "imp",     desc: "淫魔の甘い声を聞くと、胸が勝手に跳ねる" },
+  };
+  G.TRAIT_STAGE = ["", "芽生え", "癖", "刷り込み"];
 
   G.BAL = {
     floorCost(f) { return 6 + f; },       // 階ごとのコストの上限

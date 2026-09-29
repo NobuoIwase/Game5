@@ -147,6 +147,55 @@
    "type": "削",
    "from": "Game5",
    "art": "game5"
+  },
+  {
+   "id": "nikubana",
+   "name": "肉花",
+   "type": "蕩",
+   "from": "Game4",
+   "art": "game4"
+  },
+  {
+   "id": "dakitake",
+   "name": "抱き茸",
+   "type": "蕩",
+   "from": "Game4",
+   "art": "game4"
+  },
+  {
+   "id": "kouryuu",
+   "name": "媚香玉",
+   "type": "蕩",
+   "from": "Game4",
+   "art": "game4"
+  },
+  {
+   "id": "shousha",
+   "name": "照射触手",
+   "type": "蕩",
+   "from": "Game4",
+   "art": "game4"
+  },
+  {
+   "id": "banjin",
+   "name": "遺跡の番人",
+   "type": "蕩",
+   "from": "Game4",
+   "art": "game4"
+  },
+  {
+   "id": "tsukite",
+   "name": "憑き手",
+   "type": "惑",
+   "from": "Game4",
+   "art": "game4"
+  },
+  {
+   "id": "medama",
+   "name": "覗き目玉",
+   "type": "惑",
+   "from": "Game4",
+   "art": "game4"
   }
  ]
 }

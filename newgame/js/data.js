@@ -62,6 +62,28 @@ var G = (typeof G !== "undefined") ? G : {};
                     atk: { kind: "drain", range: 2.6, power: 1.3, legGrab: 1.0 }, desc: "近づいた者の力を吸い込み、脚を絡める" },
     wisp:         { name: "漂い霊",           type: "削", art: "wisp.svg",         hp: 12, spd: 2.2, r: 0.35, sight: 7, fov: 360, behavior: "float", cost: 2, ct: 6,
                     atk: { kind: "shot", range: 5, windup: 0.7, cd: 2.6, power: 1.0, proj: "cold" }, desc: "冷たい火を投げる。当たると魔力が凍える" },
+
+    // ---- Game4 から移した魔物（絵も Game4 の描画コードで描き出したもの） ----
+    // breath: 近くにいるだけで甘い息（蕩）。発情が強いと、ふらりと花の方へ寄ってしまう
+    nikubana:     { name: "肉花",             type: "蕩", art: "nikubana.png",     hp: 48, spd: 0,   r: 0.55, sight: 3.5, fov: 360, behavior: "static", cost: 3, ct: 10,
+                    atk: { kind: "grab", range: 1.5, windup: 0.5, cd: 3.2, power: 1.1, breath: { range: 3.2, power: 0.35 } }, desc: "道端に据わって待つ肉の花。甘い息で誘い、寄ってきた脚を花びらで食む" },
+    dakitake:     { name: "抱き茸",           type: "蕩", art: "dakitake.png",     hp: 55, spd: 0,   r: 0.6, sight: 2.2, fov: 360, behavior: "static", cost: 4, ct: 11,
+                    atk: { kind: "grab", range: 1.25, windup: 0.9, cd: 3.6, power: 1.2 }, desc: "人の背丈ほどの柔らかい茸。傘をかぶせて閉じ込め、温かい襞で撫でつづける" },
+    // cloud: 漂った跡に媚薬の靄を残す。倒すと大きく弾けて靄になる
+    kouryuu:      { name: "媚香玉",           type: "蕩", art: "kouryuu.png",      hp: 16, spd: 0.9, r: 0.4, sight: 5, fov: 360, behavior: "float", cost: 3, ct: 8,
+                    atk: { kind: "aura", range: 1.0, power: 0.6, cloud: { every: 2.4, r: 1.1, life: 6, power: 0.4 }, popCloud: { r: 1.8, life: 7, power: 0.5 } }, desc: "桃色の靄を吐きながら漂う玉。通った跡がそのまま甘い霧になる。倒すと弾けて広がる" },
+    // possess: 腕に憑く。憑かれている間は光弾が撃てず（自分の胸を撃つことになる）、その手に撫でられつづける。果てると離れる
+    tsukite:      { name: "憑き手",           type: "惑", art: "tsukite.png",      hp: 14, spd: 2.0, r: 0.35, sight: 6, fov: 300, behavior: "float", cost: 3, ct: 9,
+                    atk: { kind: "possess", range: 0.9, windup: 0.45, cd: 3, power: 1.0, dur: 9 }, desc: "夜気が手の形に凝ったもの。袖から入り込んで腕に憑き、その腕で本人を撫でさせる" },
+    // surge: 当たると、準備を待たずに快感が跳ね上がる
+    shousha:      { name: "照射触手",         type: "蕩", art: "shousha.png",      hp: 30, spd: 0.5, r: 0.45, sight: 7, fov: 200, behavior: "lurk", cost: 5, ct: 12,
+                    atk: { kind: "shot", range: 6, windup: 1.0, cd: 6.5, power: 0.8, proj: "beam", surge: 40 }, desc: "先端に水晶の眼を持つ細い触手。細い光条に撃たれた身体は、準備を待たずに上り詰める。撃った後はしばらく眼を閉じる" },
+    // spread: 扇に何発か撃つ／sigil: 当たるたびに淫紋が一つ深くなる（その潜行のあいだ蕩が効きやすい）
+    banjin:       { name: "遺跡の番人",       type: "蕩", art: "banjin.png",       hp: 60, spd: 0,   r: 0.55, sight: 6.5, fov: 360, behavior: "static", cost: 4, ct: 12,
+                    atk: { kind: "shot", range: 5.5, windup: 1.2, cd: 4.2, power: 0.6, proj: "sigil", spread: 3, sigil: 1 }, desc: "祈るように膝をつく石像。額の紋が光ると、淫紋の光弾を扇に三つ放つ。当たるたび、下腹に紋が刻まれる" },
+    // film: 見られているあいだに達すると、その姿が記録に残る
+    medama:       { name: "覗き目玉",         type: "惑", art: "medama.png",       hp: 18, spd: 1.3, r: 0.4, sight: 7, fov: 360, behavior: "float", cost: 2, ct: 7,
+                    atk: { kind: "aura", range: 5.5, power: 0.9, gaze: true, film: true }, desc: "瞼のない眼が翼で浮いている。近づかず、離れず、ただ見ている。見られながら達した姿は、記録に残る" },
   };
 
   /* ---- 罠（置いてある物） ----
@@ -87,6 +109,16 @@ var G = (typeof G !== "undefined") ? G : {};
     cuffs:   { name: "壁の環",     type: "絡", effect: "cuffs",   radius: 1.0, detect: 0.15, cost: 4, ct: 14, rearm: 30, big: true, desc: "扉が落ち、壁の鉄環が手首を留める。そして、何かが来るのを待たせる" },
     bed:     { name: "偽りの褥",   type: "惑", effect: "bed",     radius: 1.3, detect: 0.08, cost: 3, ct: 14, rearm: 40, big: true, desc: "乾いた寝台。傍を通る者に甘い香を吹きかけ、催眠で眠らせる" },
     spring:  { name: "乳白の湯",   type: "蕩", effect: "spring",  radius: 1.2, detect: 0.08, cost: 3, ct: 14, rearm: 40, big: true, lure: true, desc: "白く濁った湯。汚れを落としに浸かった者を、湯そのものが抱き込む" },
+    // Game2 の罠をさらに移したもの
+    slime_drop: { name: "粘体落とし", type: "蕩", effect: "slimeDrop", radius: 0.9, detect: 0.2,  cost: 3, ct: 10, rearm: 22, desc: "天井の継ぎ目が開き、重い粘体が真上から落ちてくる" },
+    bud:     { name: "吊花の蕾",   type: "蕩", effect: "bud",     radius: 1.0, detect: 0.25, cost: 3, ct: 12, rearm: 24, big: true, desc: "天井から下がる蕾。足音に首をもたげ、蔓で足首を取って逆さに吊り、蜜を垂らす" },
+    root:    { name: "蝕根の床",   type: "絡", effect: "root",    radius: 1.0, detect: 0.12, cost: 4, ct: 14, rearm: 30, big: true, desc: "床の継ぎ目から細い根が這い出し、腰から下を床下へ引き込む。上からは、下で何が起きているか見えない" },
+    cocoon:  { name: "白繭",       type: "絡", effect: "cocoon",  radius: 1.1, detect: 0.2,  cost: 4, ct: 14, rearm: 34, big: true, desc: "白い菌糸が身体を包み、温かい繭に閉じ込める。小刀では切れない。中は湿って、熱がゆっくり溜まる" },
+    ratchet: { name: "爪車の枠",   type: "絡", effect: "ratchet", radius: 1.0, detect: 0.18, cost: 4, ct: 14, rearm: 34, big: true, desc: "鉄の枠が俯せに抱え込む。もがくたび歯車が一つ鳴り、戻る歯は一つもない。決まった時間で開く" },
+    altar:   { name: "淫紋の祭壇", type: "蕩", effect: "altar",   radius: 1.3, detect: 0.15, cost: 4, ct: 16, rearm: 40, big: true, desc: "黒い炎が影を引き、祭壇の紋を影伝いに下腹へ写す。踏ん張って押し返そうとするほど、深く焼き付く" },
+    shadow:  { name: "影腕の燭",   type: "絡", effect: "shadow",  radius: 1.2, detect: 0.15, cost: 4, ct: 14, rearm: 30, big: true, desc: "四方の燭台が灯り、足元の影から腕が生える。腕は時とともに増え、光弾はすり抜ける" },
+    // Game4 の設置物
+    tower:   { name: "囁きの塔",   type: "惑", effect: "tower",   radius: 3.6, detect: 0.5,  cost: 3, ct: 12, rearm: 10, emit: true, desc: "細い石の塔。間をおいて囁きの波を放ち、近くにいる者の頭を痺れさせ、塔の方へ歩かせる" },
   };
 
   /* ---- 罠部屋（Game2 の「区画まるごとが一つの仕掛け」をなぞる） ----
@@ -113,22 +145,35 @@ var G = (typeof G !== "undefined") ? G : {};
     hypno_bell:  { name: "催眠の鈴",   type: "惑", from: 4, traps: ["bell", "bell", "bell"], den: [["mind_roper", 1]], desc: "天井から無数の鈴が下がっている" },
     twin_shadow: { name: "双影の燭",   type: "惑", from: 2, traps: ["decoy", "decoy"], den: [["gazer", 2]], desc: "燭台の火が揺れるたび、影が二つに増える" },
     dreamwalk:   { name: "夢渡り",     type: "惑", from: 4, den: [["imp", 2], ["moth", 2]], aura: ["惑", 0.4], desc: "足を踏み入れると、夢と現の境が薄くなる" },
+    // ---- Game2・Game4 から移した罠部屋 ----
+    slime_ceil:  { name: "粘体落としの間", type: "蕩", from: 2, traps: ["slime_drop", "slime_drop", "slime_drop"], den: [["slime", 2]], desc: "天井の石に、継ぎ目がやけに多い。床には乾ききらない水たまり" },
+    bud_hall:    { name: "吊花の廊",   type: "蕩", from: 3, center: "bud", traps: ["bud"], den: [["nikubana", 1], ["fluff", 2]], desc: "天井いっぱいに、白い蕾が隙間なく下がっている" },
+    flower_bed:  { name: "肉花の庭",   type: "蕩", from: 2, den: [["nikubana", 3]], aura: ["蕩", 0.3], desc: "道の端に、人ひとりが収まるほどの花が咲いている。襲ってはこない。ただ、口を開けて待っている" },
+    incense_pool:{ name: "媚香の淀み", type: "蕩", from: 3, den: [["kouryuu", 3]], seal: 6, aura: ["蕩", 0.35], desc: "桃色の靄が床に溜まり、膝の高さで揺れている" },
+    hug_grove:   { name: "抱き茸の森", type: "蕩", from: 4, den: [["dakitake", 2], ["lure_cap", 1]], aura: ["蕩", 0.25], desc: "人の背丈ほどの茸が、柔らかく傘を揺らしている" },
+    beam_hall:   { name: "照射の回廊", type: "蕩", from: 5, den: [["shousha", 2], ["peeper", 2]], desc: "壁の穴から、水晶の眼をもつ細い触手が覗いている。見物の目も" },
+    seal_altar:  { name: "淫紋の祭壇", type: "蕩", from: 6, center: "altar", den: [["banjin", 2]], wake: 3, desc: "突き当たりに黒い石の祭壇。左右の燭台が、踏み込むのと同時に灯る" },
+    root_floor:  { name: "蝕根の床",   type: "絡", from: 3, center: "root", den: [["puppet_hand", 2], ["tsukite", 1]], desc: "床石の継ぎ目から、髪の毛ほどの根が数えきれないほど出ている" },
+    cocoon_room: { name: "白繭の室",   type: "絡", from: 5, center: "cocoon", den: [["dakitake", 1]], seal: 8, aura: ["蕩", 0.25], desc: "壁も床も天井も、白い菌糸に厚く覆われた丸い小室。空気が生温く、湿っている" },
+    ratchet_room:{ name: "爪車",       type: "絡", from: 5, center: "ratchet", den: [["goblin", 2]], wake: 5, desc: "何もない小部屋。床に一本、細い溝が端から端まで走っている" },
+    shadow_hall: { name: "影腕の広間", type: "絡", from: 4, center: "shadow", den: [["tsukite", 2]], seal: 7, desc: "円い広間。壁の四方に燭台が一基ずつ据えてある" },
+    whisper:     { name: "囁きの塔",   type: "惑", from: 3, center: "tower", den: [["gazer", 1], ["medama", 2]], desc: "部屋の真ん中に、細い石の塔が立っている。耳の奥が、ずっとくすぐったい" },
   };
 
   /* ---- ダンジョン ---- 固定枠4＋自由枠（候補から選ぶ）。削はどこでも自由枠に入れられる */
   const DRAIN = ["drain_roper", "ghost_head", "pot", "wisp"];
   G.DUNGEONS = {
     mist: { name: "霧鏡の回廊", type: "惑", floors: 10, pal: { floor: "#3a3548", floor2: "#342f42", wall: "#0e0b14", wallTop: "#6a6080", edge: "#5a4e74", fog: "#8a7cc0" },
-            fixed: ["gazer", "mind_roper", "moth", "mirror_slime"], free: ["imp", "peeper", ...DRAIN], traps: ["bell", "mirror", "decoy", "shrine", "basin", "pillory", "belt"],
-            rooms: ["mirror_hall", "hypno_bell", "twin_shadow", "dreamwalk", "fungal_bed", "purify", "caliper", "pillory"],
+            fixed: ["gazer", "mind_roper", "moth", "mirror_slime"], free: ["imp", "peeper", "tsukite", "medama", ...DRAIN], traps: ["bell", "mirror", "decoy", "shrine", "basin", "pillory", "belt", "tower", "shadow"],
+            rooms: ["mirror_hall", "hypno_bell", "twin_shadow", "dreamwalk", "fungal_bed", "purify", "caliper", "pillory", "whisper", "shadow_hall"],
             desc: "鏡と霧の遺跡。見たものを信じるほど深く迷う" },
     mire: { name: "蜜溜まりの湿窟", type: "蕩", floors: 10, pal: { floor: "#43323a", floor2: "#3b2c33", wall: "#100a0c", wallTop: "#7a5a64", edge: "#7a4a5c", fog: "#c07a98" },
-            fixed: ["slime", "slug", "jellyfish", "lure_cap"], free: ["fluff", ...DRAIN], traps: ["glue", "vent", "urn", "shrine", "basin", "tease", "belt"],
-            rooms: ["foam_cell", "mist_hall", "gel_urn", "tease_rack", "hot_spring", "purify", "fungal_bed", "feed_belt"],
+            fixed: ["slime", "slug", "jellyfish", "lure_cap"], free: ["fluff", "nikubana", "dakitake", "kouryuu", "shousha", "banjin", ...DRAIN], traps: ["glue", "vent", "urn", "shrine", "basin", "tease", "belt", "slime_drop", "bud", "altar"],
+            rooms: ["foam_cell", "mist_hall", "gel_urn", "tease_rack", "hot_spring", "purify", "fungal_bed", "feed_belt", "slime_ceil", "bud_hall", "flower_bed", "incense_pool", "hug_grove", "beam_hall", "seal_altar", "cocoon_room"],
             desc: "甘い湿気の籠もる洞窟。息をするだけで熱がこもる" },
     vine: { name: "絡繰りの蔦森", type: "絡", floors: 10, pal: { floor: "#323d34", floor2: "#2c362e", wall: "#0a0e0b", wallTop: "#5e6a5c", edge: "#4a6a52", fog: "#7ab08a" },
-            fixed: ["roper", "hanging_vine", "puppet_hand", "gulper_worm"], free: ["goblin", "mimic", ...DRAIN], traps: ["vine", "rope", "glue", "shrine", "basin", "pillory", "belt"],
-            rooms: ["vine_hall", "kote_swarm", "tent_pit", "idle_cell", "caliper", "feed_belt", "pillory", "fungal_bed", "purify"],
+            fixed: ["roper", "hanging_vine", "puppet_hand", "gulper_worm"], free: ["goblin", "mimic", "nikubana", "tsukite", ...DRAIN], traps: ["vine", "rope", "glue", "shrine", "basin", "pillory", "belt", "root", "cocoon", "ratchet", "shadow"],
+            rooms: ["vine_hall", "kote_swarm", "tent_pit", "idle_cell", "caliper", "feed_belt", "pillory", "fungal_bed", "purify", "root_floor", "cocoon_room", "ratchet_room", "shadow_hall", "flower_bed"],
             desc: "蔦に呑まれた古い砦。道も壁も、ゆっくり動く" },
   };
 

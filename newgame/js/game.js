@@ -13,6 +13,7 @@ var G = (typeof G !== "undefined") ? G : {};
     haze:    { name: "催眠残滓", note: "思い出せない時間がある。惑に掛かりやすい",     fee: 12 },
     soiled:  { name: "汚濁",     note: "粘液の匂いが抜けない",                         fee: 6 },
     hollow:  { name: "魔力枯渇", note: "変身の光が弱い。次の潜行は魔力が少ない",       fee: 10 },
+    sigil:   { name: "淫紋",     note: "下腹に紋が薄く残っている。次の潜行は熱が入りやすい", fee: 14 },
   };
 
   const SHOP = {
@@ -49,6 +50,7 @@ var G = (typeof G !== "undefined") ? G : {};
     goblin: "ゴブリンの巣穴", slime: "スライムの溜まり場", roper: "ローパーの園", hanging_vine: "垂れ蔦の回廊", puppet_hand: "傀儡手の工房",
     gulper_worm: "ワームの坑道", mimic: "ミミックの宝物庫", mind_roper: "囁きの底", gazer: "凝視の塔", moth: "灯蛾の塔", imp: "小淫魔の館",
     peeper: "覗き子の書庫", mirror_slime: "鏡粘体の間", slug: "大湿殻の沼", jellyfish: "水母の地底湖", lure_cap: "茸の洞", fluff: "綿毛の野",
+    nikubana: "肉花の庭", dakitake: "抱き茸の森", kouryuu: "媚香の淀み", tsukite: "憑き手の礼拝堂", shousha: "照射の回廊", banjin: "沈んだ祭殿", medama: "目玉の天窓",
   };
   function placeName(dungeon, species) { return species ? (DEN_NAME[species] || G.MONSTERS[species].name + "の巣") : G.DUNGEONS[dungeon].name; }
   // 依頼書に書ける主な魔物（削は主役にしない）
@@ -159,6 +161,7 @@ var G = (typeof G !== "undefined") ? G : {};
       h: {
         hp: Math.round(G.HIKARI.hpMax * (1 - s.fatigue / 250)), mp: G.HIKARI.mpMax, magic: has("hollow") ? 60 : G.HIKARI.magicMax,
         will: Math.round(100 - s.fatigue / 5), arousal: has("heat") ? 30 : 0, pleasure: 0, climax: 0, form: "magica", kit: Object.assign({}, p.kit),
+        sigil: has("sigil") ? 1 : 0,
       },
       budgetBonus: s.upgrades.budget * 2,
     };
@@ -196,6 +199,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (ev.some(e => e.kind === "trance" && e.hidden)) add("haze");
     if (ev.filter(e => e.type === "蕩" && (e.kind === "arouse" || e.kind === "hold")).length >= 4) add("soiled");
     if (run.h.form === "civilian") add("hollow");
+    if (run.h.sigil >= 1) add("sigil");      // 刻まれた紋は、処置するまで残る
     // 報酬
     const req = s.pick.req;
     let funds = run.outcome === "cleared" ? req.reward : run.outcome === "defeat" ? 0 : Math.round(req.reward * run.floorReached / 12);

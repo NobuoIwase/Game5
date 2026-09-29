@@ -31,16 +31,50 @@ var G = (typeof G !== "undefined") ? G : {};
              "{mon}のせいで、ふわふわして、狙いが定まりませんでした"],
     drain: ["{mon}に魔力を吸われました", "{mon}のそばで、魔力がどんどん抜けていきました", "{mon}に、変身の力を削られました"],
     untransform: ["魔力が尽きて、変身が解けました", "変身が、解けちゃいました", "ルミナでいられなくなりました", "光が保たなくて、素の姿に戻りました"],
+    possess: ["{mon}に、腕を取られました", "{mon}が袖から入ってきて……自分の手で、触らされてました", "しばらく、自分の腕が自分のじゃなくなってました。{mon}のせいで"],
+    sigil: ["下腹に、紋を刻まれました", "{mon}のせいで、お腹に、紋が", "……紋、です。お腹の、下のほうに"],
+    filmed: ["{mon}に……見られてる前で、達しちゃいました", "{mon}が、ずっと見てて。……その、いちばん見られたくないところを", "{mon}の前で、……はい。見られました"],
+  };
+  // 魔物・罠ごとの言い表し方（「種:件の種類」）。あれば半分くらいの確率でこちらを使う
+  const WHAT_KIND = {
+    "nikubana:hold": ["道の端の{mon}に……自分から、近づいちゃって。花びらに、脚を食まれました", "{mon}に、腰まで包まれて……しばらく、揺すられてました", "{mon}の中にいました。……自分で、入ったみたいなものです"],
+    "nikubana:arouse": ["{mon}の息が甘くて、ずっと頭がぽーっとしてました", "{mon}のそばを通るたびに、体が熱くなって"],
+    "dakitake:hold": ["{mon}の傘の下に、閉じ込められました", "{mon}に上からかぶさられて、襞で、ずっと撫でられてました"],
+    "kouryuu:arouse": ["{mon}の靄を、吸っちゃいました", "{mon}が通った跡の霧で、体がずっと熱くて", "ピンクの靄の中を、何度か通っちゃいました"],
+    "tsukite:possess": ["{mon}に、腕を取られました。……自分の手で、その、触らされて", "袖から{mon}が入ってきて。……撃てないんです、自分の胸だから"],
+    "shousha:arouse": ["{mon}の光に撃たれて……いきなり、体が跳ね上がりました", "{mon}の光条、避けきれなくて。……準備も、なにも、なかったのに"],
+    "banjin:arouse": ["{mon}の光弾を、何発か浴びました", "{mon}の光弾が、お腹に当たって"],
+    "banjin:sigil": ["{mon}の光弾で、お腹に紋を刻まれました", "{mon}に……下腹へ、紋を"],
+    "altar:sigil": ["{trap}で、紋を写されました。押し返そうとしたんですけど", "祭壇の紋を、下腹に……。踏ん張ったのに、踏ん張った分だけ、深く"],
+    "medama:filmed": ["{mon}の前で、……その。見られながら、でした", "{mon}に、いちばん見られたくない瞬間を、見られました"],
+    "slime_drop:trap": ["天井から粘体が降ってきて、まともに浴びました。服、溶けました", "{trap}で、頭から粘体をかぶりました"],
+    "bud:hold": ["{mon}に足を取られて、逆さに吊られました", "{mon}で逆さ吊りにされて、蜜を……浴びつづけました"],
+    "root:hold": ["{mon}で、腰から下を床下に引き込まれました", "床の根っこに、下半身だけ持っていかれて……下で何されてたか、見えなかったです"],
+    "cocoon:hold": ["{mon}に、閉じ込められました。繭の中に", "白い糸に包まれて、繭の中で、しばらく"],
+    "ratchet:hold": ["{mon}に、俯せで固定されました。……動くと、進むやつで", "{mon}で、枠が開くまで、ずっと"],
+    "shadow:hold": ["{mon}の、自分の影から出た腕に、押さえ込まれました", "影の腕に捕まって……光弾が、すり抜けるんです"],
+    "tower:trap": ["{trap}の囁きで、頭がぼんやりしました", "{trap}の近くで、何度か意識が遠くなりました"],
+    "goblin:hold": ["{mon}たちに囲まれて、押さえ込まれました", "{mon}に……数で、負けました", "{mon}の群れに、組み伏せられました"],
+    "slime:hold": ["{mon}の中に、しばらく包まれてました", "{mon}に呑まれて、服の中まで入られました"],
+    "mimic:hold": ["宝箱が{mon}で……引きずり込まれました", "{mon}に、上半身ごと箱の中へ"],
+    "gulper_worm:hold": ["{mon}に、脚から呑まれかけました", "{mon}に、膝まで呑まれました"],
   };
   // 監査官が読み上げるときの言い方
   const WHAT_A = {
     hold: "{mon}による拘束、{dur}", trap: "罠「{trap}」の作動", arouse: "{mon}による催淫", trance: "{mon}による惑い",
     drain: "{mon}による魔力の吸収", untransform: "変身の解除",
+    possess: "{mon}による腕の憑依、{dur}", sigil: "{mon}による淫紋の刻印", filmed: "{mon}の視線下での絶頂",
   };
   const CLIMAX = { 1: ["……最後、力が抜けちゃって", "……一回、頭が真っ白になりました", "……それで、その、達しちゃいました", "……一回だけ、堪えきれなくて"],
                    n: ["……{n}回、頭が真っ白になりました", "……数えてたのは{n}回まで、です", "……{n}回。途中から、堪えるふりだけしてました", "……{n}回です。……数え間違いじゃ、ないです"] };
   const DOWNPLAY = ["{mon}にちょっと掴まれたけど、すぐ振りほどきました", "{mon}とすれ違いざまに、軽く触られたくらいです", "{mon}？ ……ああ、何もなかったです。避けました",
                     "{mon}に一瞬捕まったけど、ほんとに一瞬で", "{mon}はいましたけど、遠くから撃って終わりです"];
+  // 件の種類ごとの嘘（無い種類は DOWNPLAY／DOWNPLAY_TRAP）
+  const DOWNPLAY_KIND = {
+    sigil: ["{mon}で紋を写されそうになったけど、魔力で全部弾き返しました。何も残ってません", "{mon}？ 壊してきました。転写は、受けてないです"],
+    possess: ["{mon}が袖に入りかけたけど、すぐ払いました", "{mon}？ 袖、締めてたので平気でした"],
+    filmed: ["{mon}はいましたけど、見てただけです。何も", "{mon}がいたのは知ってます。……それだけです"],
+  };
   const DOWNPLAY_TRAP = ["{trap}は、見つけたので避けました", "{trap}にちょっと引っかかったけど、すぐ抜けました", "{trap}？ 何ともなかったです"];
 
   // 話し方の型。h: ひかり / a: 監査官 / h2: 続き。{what} {whatA} {tail} {floor} {mon} {n}
@@ -154,6 +188,9 @@ var G = (typeof G !== "undefined") ? G : {};
     civilian: ["（変身は解けたままだ。私服の袖を、何度も引っ張っている）"],
     tired: ["（声に張りがない。消耗が色濃い）", "（椅子に沈むように座っている）"],
     night: ["（救出から半日。まだ目の焦点が、ときどき合わない）", "（毛布を肩に掛けたまま、報告の席に着いた）"],
+    sigil: ["（ときどき、下腹のあたりを服の上から押さえている。本人は気づいていないようだ）", "（座り直すたびに、スカートの前を手で整えている）",
+            "（臍の下に、手のひらを当てたまま座っている）", "（何かを確かめるように、一度だけ腹に目を落とした）",
+            "（腰の位置が落ち着かず、何度か座り直した）", "（袖口で、うっすら汗ばんだ額を拭っている）"],
     fine: ["（背筋は伸びている。問いが核心へ寄るたび、指先がスカートの裾を握る）", "（いつもの明るさで入ってきたが、目だけが笑っていない）",
            "（報告書を胸の前に抱えている。書き直した跡が多い）", "（椅子に浅く腰掛け、足先を小さく揺らしている）"],
   };
@@ -186,6 +223,17 @@ var G = (typeof G !== "undefined") ? G : {};
         const same = out.find(u => u.kind === "trap" && u.trap === e.trap && u.floor === e.floor);
         if (same) { same.n = (same.n || 1) + 1; continue; }
         out.push({ kind: "trap", floor: e.floor, t: e.t, trap: e.trap, trapName: e.trapName, type: e.type, sev: e.sev, dur: 0, climax: 0 });
+      } else if (e.kind === "possess") {
+        out.push({ kind: "possess", floor: e.floor, t: e.t, mon: e.mon, monName: e.monName, type: "惑", sev: 2, dur: e.dur || 5, climax: 0 });
+      } else if (e.kind === "sigil") {
+        // 淫紋は、潜行全体で一件（最後の深さ）
+        const first = out.find(x => x.kind === "sigil");
+        if (first) { first.lv = e.lv; first.sev = Math.max(first.sev, e.sev); first.n++; continue; }
+        out.push({ kind: "sigil", floor: e.floor, t: e.t, mon: e.mon, monName: e.monName, trapName: e.monName, type: "蕩", sev: e.sev, lv: e.lv, n: 1, climax: 0 });
+      } else if (e.kind === "filmed") {
+        const same = out.find(x => x.kind === "filmed");
+        if (same) { same.n++; continue; }
+        out.push({ kind: "filmed", floor: e.floor, t: e.t, mon: e.mon, monName: e.monName, type: "惑", sev: 3, n: 1, climax: 0 });
       } else if (e.kind === "untransform") {
         // 変身が解けたのは、最初の1回を一件にして回数を数える
         const first = out.find(x => x.kind === "untransform");
@@ -229,7 +277,9 @@ var G = (typeof G !== "undefined") ? G : {};
 
   function what(u, day, mem) {
     let key = u.kind === "hold" ? "hold_" + (u.type === "蕩" ? "蕩" : "絡") : u.kind === "trap" ? "trap_" + u.type : u.kind;
-    const arr = WHAT[key] || WHAT.arouse;
+    const kk = (u.kind === "trap" ? u.trap : u.mon) + ":" + u.kind;
+    if (WHAT_KIND[kk] && U.chance(0.55)) key = kk;
+    const arr = WHAT_KIND[key] || WHAT[key] || WHAT.arouse;
     let s = U.fill(freshPick(mem, day, "what:" + key, arr, 2), { mon: u.monName, trap: u.trapName, floor: u.floor });
     if (u.climax) s += "。" + U.fill(freshPick(mem, day, "cl" + (u.climax > 1 ? "n" : "1"), u.climax > 1 ? CLIMAX.n : CLIMAX[1], 2), { n: u.climax });
     return s;
@@ -291,6 +341,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const noteKey = rec.outcome === "defeat" ? "night" : rec.h.form === "civilian" ? "civilian" : rec.h.arousal > 45 ? "aroused" : rec.h.hp < 45 ? "tired" : "fine";
     push("n", freshPick(mem, day, "note:" + noteKey, STATE_NOTE[noteKey], 3));
     if (noteKey !== "aroused" && rec.h.arousal > 55) push("n", freshPick(mem, day, "note:aroused", STATE_NOTE.aroused, 3));
+    if (rec.ailments && rec.ailments.includes("sigil") && U.chance(0.4)) push("n", freshPick(mem, day, "note:sigil", STATE_NOTE.sigil, 5));
 
     push("a", freshPick(mem, day, "aud:open", AUD.open, 3));
     // 書き出し：姿勢の一言＋結果
@@ -310,7 +361,7 @@ var G = (typeof G !== "undefined") ? G : {};
       const ctx = { floor: u.floor, mon: u.monName || u.trapName || "", dur: durText(u.dur), n: u.climax || u.n || 1 };
       if (u.truth === "false") {
         // 嘘：軽く言う
-        const t = U.fill(u.kind === "trap" ? freshPick(mem, day, "downT", DOWNPLAY_TRAP, 2) : freshPick(mem, day, "down", DOWNPLAY, 2), Object.assign({ trap: u.trapName }, ctx));
+        const t = U.fill(DOWNPLAY_KIND[u.kind] ? freshPick(mem, day, "downK:" + u.kind, DOWNPLAY_KIND[u.kind], 2) : u.kind === "trap" ? freshPick(mem, day, "downT", DOWNPLAY_TRAP, 2) : freshPick(mem, day, "down", DOWNPLAY, 2), Object.assign({ trap: u.trapName }, ctx));
         push("h", `${u.floor}階は……${t}`, { unit: u, lie: true, probe: { q: U.fill(freshPick(mem, day, "aud:probe", AUD.probeLie, 2), ctx), a: U.pick(["……それだけ、です。本当に", "……っ。そう、書いてあるなら、そうなんじゃないですか", "……記録のほうが、間違ってるんだと思います"]) } });
         return;
       }
@@ -332,7 +383,7 @@ var G = (typeof G !== "undefined") ? G : {};
       const fillc = Object.assign({}, ctx, {
         what: wtxt, trap: u.trapName || "",
         whatA: U.fill(WHAT_A[u.kind] || WHAT_A.arouse, { mon: u.monName || "", trap: u.trapName || "", dur: durText(u.dur) }) + (u.kind === "untransform" && u.n > 1 ? `（${u.n}回）` : ""),
-        tail: u.kind === "hold" ? (u.climax ? "" : durText(u.dur) + "くらいで抜けました。") : (u.kind === "untransform" && u.n > 1 ? `……${u.n}回、です。` : ""),
+        tail: u.kind === "hold" ? (u.climax ? "" : durText(u.dur) + "くらいで抜けました。") : u.kind === "possess" ? (u.climax ? "" : durText(u.dur) + "くらいで離れました。") : u.kind === "sigil" && u.lv > 1 ? ["", "", "……二重に、刻まれてます。", "……三重、です。"][u.lv] : (u.kind === "untransform" && u.n > 1 ? `……${u.n}回、です。` : ""),
       });
       let htext = tpl.h ? U.fill(tpl.h, fillc) : null;
       if (htext && stamLeft > 0 && u.shame >= 2) { htext = stammer(htext); stamLeft--; }
@@ -381,6 +432,14 @@ var G = (typeof G !== "undefined") ? G : {};
       trance: ["{floor}階：{mon}のせいで少しぼーっとした。"],
       drain: ["{floor}階：{mon}に魔力を吸われた。"],
       untransform: ["{floor}階：魔力切れで変身が解けた。そこからは素の姿で動いた。"],
+      possess: ["{floor}階：{mon}に腕を取られた。しばらく、自分の手が言うことを聞かなかった。", "{floor}階：{mon}が袖から入り込んだ。光弾は撃てなかった（自分に当たるので）。"],
+      sigil: ["{floor}階：下腹に紋を刻まれた。まだ、薄く残ってる。", "{floor}階：{mon}で、淫紋。解呪の手続きをお願いします。"],
+      filmed: ["{floor}階：{mon}に見られている前で、達した。", "{floor}階：{mon}がいた。……見られた。"],
+    },
+    falseKind: {
+      sigil: ["{floor}階：{mon}で呪いの転写。魔力の壁で丸ごと弾き返した。紋様は受けていない。", "{floor}階：{mon}を破壊した。問題なし。"],
+      possess: ["{floor}階：{mon}が袖口から入ろうとしたが、払った。", "{floor}階：{mon}を見かけた。袖を締めて通過。"],
+      filmed: ["{floor}階：{mon}がいた。見ているだけで害はない。"],
     },
     falseTrap: ["{floor}階：{trap}を見つけたので避けた。", "{floor}階：{trap}があったけど、何ともなかった。"],
     false: ["{floor}階：{mon}とすれ違った。特に問題なし。", "{floor}階：{mon}に一瞬つかまれたけど、すぐ振りほどいた。", "{floor}階：{mon}がいたので避けて通った。"],
@@ -398,7 +457,7 @@ var G = (typeof G !== "undefined") ? G : {};
       for (const u of rec.units.filter(x => x.floor === f)) {
         const ctx = { floor: f, mon: u.monName || u.trapName || "", trap: u.trapName, dur: durText(u.dur), n: u.climax || 1 };
         if (u.truth === "missing") out.push({ text: U.fill(freshPick(mem, day, "doc:miss", DOC.missing, 1), ctx), kind: "missing", unit: u });
-        else if (u.truth === "false") out.push({ text: U.fill(u.kind === "trap" ? freshPick(mem, day, "doc:falseT", DOC.falseTrap, 1) : freshPick(mem, day, "doc:false", DOC.false, 1), ctx), kind: "false", unit: u });
+        else if (u.truth === "false") out.push({ text: U.fill(DOC.falseKind[u.kind] ? freshPick(mem, day, "doc:falseK:" + u.kind, DOC.falseKind[u.kind], 1) : u.kind === "trap" ? freshPick(mem, day, "doc:falseT", DOC.falseTrap, 1) : freshPick(mem, day, "doc:false", DOC.false, 1), ctx), kind: "false", unit: u });
         else {
           const key = u.kind === "hold" ? (u.climax ? "holdC" : "hold") : u.kind;
           const arr = DOC.honest[key] || DOC.honest.arouse;
@@ -425,6 +484,11 @@ var G = (typeof G !== "undefined") ? G : {};
       else if (e.kind === "untransform") out.push(`${e.floor}階 ${e.t}秒：変身解除`);
       else if (e.kind === "trance" && e.hidden) out.push(`${e.floor}階 ${e.t}秒：${who}の惑い（本人の記憶に残らない深さ）`);
       else if (e.kind === "defeat") out.push(`${e.floor}階 ${e.t}秒：行動不能`);
+      else if (e.kind === "possess") out.push(`${e.floor}階 ${e.t}秒：${who}が腕に憑依（${durText(e.dur)}）`);
+      else if (e.kind === "sigil") out.push(`${e.floor}階 ${e.t}秒：淫紋の刻印 Lv${e.lv}（${who}）`);
+      else if (e.kind === "filmed") out.push(`${e.floor}階 ${e.t}秒：${who}が絶頂の姿を記録`);
+      else if (e.kind === "surge") out.push(`${e.floor}階 ${e.t}秒：${who}の照射が命中`);
+      else if (e.kind === "drawn") out.push(`${e.floor}階 ${e.t}秒：${who}の息に引き寄せられる`);
     }
     if (rec.night && rec.night.length) {
       rec.night.forEach((b, i) => out.push(`夜 ${i + 1}：${b.monName || "何か"}${b.climax ? "・絶頂" : ""}`));

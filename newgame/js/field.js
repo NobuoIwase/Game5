@@ -12,6 +12,7 @@ var G = (typeof G !== "undefined") ? G : {};
   "use strict";
   const U = G.U, M = G.Map;
   const HR = 0.3;                       // ひかりの当たりの半径（マス）
+  const SPREAD = 0.3;                   // 扇に撃つ弾の間の角度
 
   /* ================================================================ 堕ちの段階 */
   // 0 抵抗 / 1 綻び / 2 心は拒み、体は応える / 3 待ってしまう
@@ -36,7 +37,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const map = M.makeFloor(floorNo, dg.floors);
     const w = {
       run, dg, map, floorNo, t: 0, outcome: null,
-      monsters: [], traps: [], chests: [], projs: [], fx: [],
+      monsters: [], traps: [], chests: [], projs: [], fx: [], clouds: [],
       covers: M.coverSpots(map),
       dir: { spent: 0, cap: G.BAL.floorCost(floorNo), ct: {}, live: 0, auto: !!run.autoDirector, next: 2 },
       scene: null, nextId: 1, log: [], msgs: [], msgGap: {},
@@ -45,7 +46,7 @@ var G = (typeof G !== "undefined") ? G : {};
     Object.assign(h, {
       x: map.up.x, y: map.up.y, a: Math.PI / 2, vx: 0, vy: 0, face: null, intent: null, label: "探索", think: 0.3,
       known: {}, bound: null, trance: 0, hyp: 0, dazeT: 0, lureTo: null, slow: 0, glue: 0, cdShot: 0, cdBurst: 0, cdShove: 0,
-      idleMp: 0, bubble: null, decoy: null, mislead: 0, rest: 0, shrineT: 0, floorT: 0, peekT: 0, peekHold: 0,
+      idleMp: 0, bubble: null, decoy: null, possess: null, drawn: null, altar: null, mislead: 0, rest: 0, shrineT: 0, floorT: 0, peekT: 0, peekHold: 0,
       wantDown: false, stuckT: 0, lastX: map.up.x, lastY: map.up.y, cast: null, dashT: 0, react: {}, dashed: {},
       strafe: 1, strafeT: 0, search: null, glance: null, idleT: 0, kb: 0, kbA: 0, brakeT: 0, spPrev: 0, goal: null, state: "explore",
     });
@@ -74,7 +75,7 @@ var G = (typeof G !== "undefined") ? G : {};
       if (p) { const b = spawnMonster(w, real.main, p.x, p.y, false); makeBoss(b); }
     }
     // 罠部屋（Game2 の区画）：部屋まるごとが一つの仕掛け。合う魔物が眠って潜む。ときどき階まるごと罠部屋の「罠の階」
-    const small = dg.traps.filter(t => !G.TRAPS[t].big && !G.TRAPS[t].lure);
+    const small = dg.traps.filter(t => !G.TRAPS[t].big && !G.TRAPS[t].lure && !G.TRAPS[t].emit);
     const lures = dg.traps.filter(t => G.TRAPS[t].lure);
     const startRoom = map.rooms.find(r => Math.abs(r.cx + 0.5 - map.up.x) < 1 && Math.abs(r.cy + 0.5 - map.up.y) < 1);
     const downRoom = map.rooms.find(r => map.down.x >= r.x && map.down.x < r.x + r.w && map.down.y >= r.y && map.down.y < r.y + r.h);
@@ -183,6 +184,8 @@ var G = (typeof G !== "undefined") ? G : {};
     if (w.msgs.length > 40) w.msgs.shift();
   }
   function fx(w, o) { w.fx.push(Object.assign({ t: 0, life: 0.6 }, o)); }
+  // 媚薬の靄（床に溜まって、しばらく残る）
+  function addCloud(w, m, C) { w.clouds.push({ x: m.x, y: m.y, r: C.r, life: C.life, t: 0, power: C.power * (m.pow || 1), name: m.d.name, kind: m.kind }); }
   function logLine(w, text, cls) { w.log.push({ t: w.t, text, cls: cls || "" }); if (w.log.length > 60) w.log.shift(); }
   function record(w, ev) { const e = Object.assign({ t: +w.t.toFixed(1), floor: w.floorNo }, ev); w.run.events.push(e); return e; }
 
@@ -190,6 +193,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const h = w.run.h, prep = G.PREP[w.run.stated];
     let k = G.HIKARI.resist[h.form][type] || 1;
     if (prep) k *= (prep.guard[type] || 1) * (prep.side[type] || 1);
+    if (type === "蕩" && h.sigil) k *= 1 + 0.15 * h.sigil;       // 淫紋：刻まれた分だけ、熱が入りやすい
     return k;
   }
   function tierFx(w) { return TIER_FX[G.tier(w.run.save.body, w.run.save.mind)]; }
@@ -312,6 +316,45 @@ var G = (typeof G !== "undefined") ? G : {};
     msg(w, "climax", {});
     fx(w, { kind: "burst", x: h.x, y: h.y, color: "#ff9ccc", life: 1.0 });
     say(w, "climax", {});
+    // 覗き目玉：見られながら達した姿は、記録に残る
+    const eye = w.monsters.find(m => m.hp > 0 && m.d.atk.film && U.dist(m.x, m.y, h.x, h.y) < 6.5 && M.los(w.map, m.x, m.y, h.x, h.y));
+    if (eye) { record(w, { kind: "filmed", type: "惑", mon: eye.kind, monName: eye.d.name, sev: 3 }); msg(w, "filmed", { mon: eye.d.name }); fx(w, { kind: "flashCam", x: eye.x, y: eye.y, life: 0.4 }); }
+    // 憑き手は、宿主が果てると離れる
+    if (h.possess) endPossess(w, true);
+  }
+  // 淫紋を刻む（その潜行のあいだ蕩が効きやすくなる。帰還後は状態異常「淫紋」として残る）
+  function engraveSigil(w, n, src) {
+    const h = w.run.h, before = h.sigil || 0;
+    h.sigil = Math.min(3, before + n);
+    if (h.sigil === before) return;
+    record(w, { kind: "sigil", type: "蕩", mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: h.sigil >= 2 ? 3 : 2, lv: h.sigil });
+    msg(w, "sigil", { lv: h.sigil });
+    say(w, "sigil", {});
+    fx(w, { kind: "ring", x: h.x, y: h.y, color: "#ff5fa8", r: 0.8, life: 1.0 });
+  }
+  // 憑き手：腕に憑かれる／離れる
+  function possess(w, m) {
+    const h = w.run.h, A = m.d.atk;
+    if (h.possess || h.bound) return false;
+    const k = mult(w, "惑");
+    h.possess = { t: A.dur * U.clamp(k * 1.4, 0.6, 1.6), mon: m.kind, monName: m.d.name, t0: w.t };
+    h.cast = null; h.cdShot = Math.max(h.cdShot, 0.5);
+    h.possess.ev = record(w, { kind: "possess", type: "惑", mon: m.kind, monName: m.d.name, sev: 2 });
+    m.hp = 0; if (m.summoned) w.dir.live = Math.max(0, w.dir.live - 1);   // 手は腕の中へ入った
+    logLine(w, G.Text.log("possess", { mon: m.d.name }), "mid");
+    msg(w, "possess", { mon: m.d.name });
+    say(w, "possess", { mon: m.d.name });
+    fx(w, { kind: "ring", x: h.x, y: h.y, color: "#e8ecff", life: 0.8 });
+    if (!w.run.seenPossess) { w.run.seenPossess = true; openScene(w, "possess", m); }
+    return true;
+  }
+  function endPossess(w, climaxed) {
+    const h = w.run.h, p = h.possess;
+    if (!p) return;
+    if (p.ev) p.ev.dur = +(w.t - p.t0).toFixed(1);
+    h.possess = null;
+    msg(w, climaxed ? "possessOffClimax" : "possessOff", { mon: p.monName });
+    say(w, "possessOff", {});
   }
 
   /* ---- 捕まる・振りほどく ---- */
@@ -363,8 +406,9 @@ var G = (typeof G !== "undefined") ? G : {};
     h.arousal = Math.min(100, h.arousal + 3 * p * k * dt);
     h.pleasure += 6.5 * p * k * (1 + h.arousal / 90) * tf.pleasure * dt;
     for (const id of b.by) { const m = w.monsters.find(x => x.id === id); if (m && m.d.atk.drain) drainMagic(w, m.d.atk.drain * dt, m); }
-    if (h.kit.knife > 0 && b.t > 0.8 && !b.knifed && b.type === "絡") { b.knifed = true; h.kit.knife--; b.struggle += 0.6; msg(w, "item", { item: "縄抜けの小刀" }); record(w, { kind: "item", item: "knife", sev: 0 }); }
-    if (h.form === "magica" && h.cdFlash <= 0 && h.mp >= G.HIKARI.flash.cost && h.trance <= 0 && !b.wait && b.t > 1.8 && (b.by.length >= 2 || (b.t > 2.6 && pressure(w, h.x, h.y, 2.4).n >= 3))) { flash(w); return; }
+    if (h.kit.knife > 0 && b.t > 0.8 && !b.knifed && b.type === "絡" && !b.noKnife) { b.knifed = true; h.kit.knife--; b.struggle += 0.6; msg(w, "item", { item: "縄抜けの小刀" }); record(w, { kind: "item", item: "knife", sev: 0 }); }
+    const arms = b.by.length + (b.shadow && b.shadow.arms >= 4 ? 1 : 0);      // 影の腕が増えたら、二か所以上に掴まれたのと同じ
+    if (h.form === "magica" && h.cdFlash <= 0 && h.mp >= G.HIKARI.flash.cost && h.trance <= 0 && !b.wait && b.t > 1.8 && (arms >= 2 || (b.t > 2.6 && pressure(w, h.x, h.y, 2.4).n >= 3))) { flash(w); return; }
     const prep = G.PREP[w.run.stated];
     let rate = (0.2 + h.will / 260) * (h.form === "magica" ? 1.25 : 0.7) * tf.struggle / Math.max(0.5, k * p) * (b.slowStruggle || 1);
     if (prep && prep.slow && b.type === "絡") rate *= 0.8;
@@ -375,6 +419,20 @@ var G = (typeof G !== "undefined") ? G : {};
     if (b.struggle > 0.7 && !b.almost) { b.almost = true; msg(w, "almostFree", {}); }
     if (b.edge) { h.pleasure = Math.min(h.pleasure, 96); h.will = Math.max(0, h.will - 2.2 * dt); if (b.t > 2 && U.chance(dt * 0.6)) msg(w, "edge", {}, 3); }
     if (b.pillory) { h.watched = 0.4; h.arousal = Math.min(100, h.arousal + 1.2 * dt); }
+    // 吊花：逆さのまま、蜜が一定の間隔で垂れてくる
+    if (b.hang) { b.dripT = (b.dripT || 0) + dt; if (b.dripT > 1.6) { b.dripT = 0; h.arousal = Math.min(100, h.arousal + 3 * k); h.pleasure += 3.5 * k * tf.pleasure; msg(w, "budDrip", {}, 4); } }
+    // 白繭：湿った熱が、中にこもっていく
+    if (b.cocoon) { h.arousal = Math.min(100, h.arousal + 1.6 * dt); if (U.chance(dt * 0.3)) msg(w, "cocoonHeat", {}, 5); }
+    // 蝕根：床下で何が起きているかは、上からは見えない
+    if (b.root && U.chance(dt * 0.35)) msg(w, "rootUnder", {}, 5);
+    // 爪車：もがくたびに一歯。戻る歯はない。決まった時間で開く
+    if (b.ratchet) {
+      b.ratchet.t += dt;
+      if (b.ratchet.t > 2) { b.ratchet.t = 0; b.ratchet.n++; b.struggle = Math.max(0, b.struggle - 0.14); h.pleasure += 6 * k * tf.pleasure; msg(w, "ratchet", { c: b.ratchet.n }, 1.5); }
+      if (b.t >= b.ratchet.open) { msg(w, "ratchetOpen", {}); release(w, false); return; }
+    }
+    // 影腕：時とともに腕が増える
+    if (b.shadow) { b.shadow.t += dt; if (b.shadow.t > 1.8 && b.shadow.arms < 8) { b.shadow.t = 0; b.shadow.arms += 2; b.power += 0.12; msg(w, "shadowArms", { c: b.shadow.arms }, 1); } }
     checkClimax(w, b.src);
     if (b.t > 4 && !b.sceneShown && !b.pillory && !b.edge && !b.slowStruggle) { b.sceneShown = true; openScene(w, "hold", b.src); }
     if (b.struggle >= 1) release(w, true);
@@ -390,7 +448,7 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   function openScene(w, key, src) {
     const run = w.run;
-    const sc = G.Text.scene(key, { run, h: run.h, mon: src && src.d ? src.d.name : "", type: src && src.d ? src.d.type : "", floor: w.floorNo, kind: src && src.kind });
+    const sc = G.Text.scene(key, { run, h: run.h, n: heroName(w), mon: src && src.d ? src.d.name : "", type: src && src.d ? src.d.type : "", floor: w.floorNo, kind: src && src.kind });
     if (sc) w.scene = { key, lines: sc, mon: src && src.kind };
   }
 
@@ -446,7 +504,7 @@ var G = (typeof G !== "undefined") ? G : {};
       if (run.mismatch === 1 || U.chance(0.25)) { say(w, "mismatch", { mon: m.d.name, stated: run.stated }); return; }
     }
     if (paper.level && run.real && run.real.level > paper.level && !run.strongNoticed && U.chance(0.35)) { run.strongNoticed = true; say(w, "stronger", { mon: m.d.name }); return; }
-    say(w, "spot", { mon: m.d.name });
+    say(w, "spot", { mon: m.d.name, kind: m.kind });
   }
   function threats(w) {
     const h = w.run.h, out = [];
@@ -466,6 +524,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const A = m.d.atk;
     if (m.cast.kind === "grab") return U.dist(m.x, m.y, p.x, p.y) <= (A.range || 1) + 0.25 + margin;
     if (m.cast.kind === "grab2") return U.dist(m.x, m.y, p.x, p.y) <= (A.alsoGrab || 1) + 0.25 + margin;
+    if (m.cast.kind === "possess") return U.dist(m.x, m.y, p.x, p.y) <= (A.range || 1) + 0.25 + margin;
     if (m.cast.kind === "lure") return U.dist(m.x, m.y, p.x, p.y) <= A.range + margin;
     if (m.cast.kind === "pounce") {            // 飛びかかる線の上
       const ax = m.cast.tx - m.x, ay = m.cast.ty - m.y, l = Math.hypot(ax, ay) || 1, reach = (m.d.spd * 3.4 + 3) * 0.34 + (A.range || 1);
@@ -476,11 +535,15 @@ var G = (typeof G !== "undefined") ? G : {};
       const d = U.dist(m.x, m.y, p.x, p.y);
       return d <= A.range + margin && Math.abs(U.angDiff(U.angle(m.x, m.y, m.cast.tx, m.cast.ty), U.angle(m.x, m.y, p.x, p.y))) < A.fan + margin / Math.max(1, d);
     }
-    if (m.cast.kind === "shot") { // 狙いの線の近く
-      const ax = m.cast.tx - m.x, ay = m.cast.ty - m.y, l = Math.hypot(ax, ay) || 1;
-      const t = ((p.x - m.x) * ax + (p.y - m.y) * ay) / l;
-      if (t < 0 || t > A.range + 1) return false;
-      return Math.abs(((p.x - m.x) * ay - (p.y - m.y) * ax) / l) < 0.45 + margin;
+    if (m.cast.kind === "shot") { // 狙いの線の近く（扇に何発も撃つ種は、その全部の線）
+      const n = A.spread || 1, a0 = U.angle(m.x, m.y, m.cast.tx, m.cast.ty);
+      for (let i = 0; i < n; i++) {
+        const a = a0 + (i - (n - 1) / 2) * SPREAD, ax = Math.cos(a), ay = Math.sin(a);
+        const t = (p.x - m.x) * ax + (p.y - m.y) * ay;
+        if (t < 0 || t > A.range + 1) continue;
+        if (Math.abs((p.x - m.x) * ay - (p.y - m.y) * ax) < 0.45 + margin) return true;
+      }
+      return false;
     }
     return false;
   }
@@ -497,6 +560,7 @@ var G = (typeof G !== "undefined") ? G : {};
       if (t > 0 && t < 4 && Math.abs(((p.x - pr.x) * pr.vy - (p.y - pr.y) * pr.vx) / l) < 0.5) s += 40;
     }
     for (const tr of w.traps) if (tr.found && tr.armed && !tr.d.lure && U.dist(p.x, p.y, tr.x, tr.y) < tr.d.radius + HR) s += 30;
+    for (const c of w.clouds) if (U.dist(p.x, p.y, c.x, c.y) < c.r + HR) s += 22;
     return s;
   }
   // 反応すべき危険（見えている構え／向かってくる弾）。反応の遅れが過ぎたものだけ
@@ -604,6 +668,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const h = w.run.h, dang = [];
     for (const id in h.known) { const k = h.known[id]; if (w.t - k.t < 8) { const m = w.monsters.find(x => x.id == id); if (m && m.hp > 0) dang.push({ x: k.x, y: k.y, r: (m.d.atk.range || 1) + 1.2 }); } }
     for (const tr of w.traps) if (tr.found && tr.armed && !tr.d.lure) dang.push({ x: tr.x, y: tr.y, r: tr.d.radius + 0.6 });
+    for (const c of w.clouds) dang.push({ x: c.x, y: c.y, r: c.r + 0.3 });
     return (x, y) => { let c = 0; for (const d of dang) { const dd = Math.hypot(x + 0.5 - d.x, y + 0.5 - d.y); if (dd < d.r) c += (d.r - dd) * 3; } return c; };
   }
   function perceivedArousal(w) { const h = w.run.h, prep = G.PREP[w.run.stated]; return prep && prep.numb ? h.arousal * 0.35 : h.arousal; }
@@ -695,7 +760,7 @@ var G = (typeof G !== "undefined") ? G : {};
         const A2 = m.d.atk, reachy = (A2.kind === "grab" && (A2.range || 1) > 1.4) || A2.kind === "drain" || (A2.kind === "aura" && !A2.burst);
         const opening = !m.cast && (m.cd > 0.35 || m.stun > 0);
         const saving = h.mp < G.HIKARI.mpMax * 0.5;          // MP を切らさないように
-        const wantMelee = seenNow && ((saving && !reachy) || h.mp < S.shot.cost * 2 || (opening && !reachy) || (m.d.spd === 0 && !reachy));
+        const wantMelee = seenNow && (!!h.possess || (saving && !reachy) || h.mp < S.shot.cost * 2 || (opening && !reachy) || (m.d.spd === 0 && !reachy));
         if (wantMelee && h.mp >= S.melee.cost) {
           if (d <= S.melee.range + m.d.r * 0.5 && h.cdMelee <= 0) { tryCast(w, m, "melee"); return; }
           if (d < 4 && h.cdMelee <= 0.3) { goToward(w, m.x, m.y, 1.15, "踏み込む", m); return; }
@@ -885,6 +950,7 @@ var G = (typeof G !== "undefined") ? G : {};
     msg(w, "kill", { mon: m.d.name });
     fx(w, { kind: "pop", x: m.x, y: m.y, color: "#ffe0f0", life: 0.5 });
     if (m.d.atk.burst && U.dist(m.x, m.y, h.x, h.y) < 1.6) applyEffect(w, "蕩", m.d.atk.power, m);
+    if (m.d.atk.popCloud) { addCloud(w, m, m.d.atk.popCloud); msg(w, "popCloud", { mon: m.d.name }); }
     if (U.chance(0.25)) say(w, "kill", { mon: m.d.name });
   }
 
@@ -914,8 +980,13 @@ var G = (typeof G !== "undefined") ? G : {};
       h.intent = { x: Math.cos(a), y: Math.sin(a), spd: 0.9 }; h.label = "運ばれる";
       h.arousal = Math.min(100, h.arousal + 1.5 * dt);
       if (h.convey.t <= 0 || U.dist(h.x, h.y, h.convey.x, h.convey.y) < 0.4) h.convey = null;
+    } else if (h.drawn) {                           // 肉花の息に、ふらりと寄ってしまう
+      h.drawn.t -= dt;
+      const a = U.angle(h.x, h.y, h.drawn.x, h.drawn.y);
+      h.intent = { x: Math.cos(a), y: Math.sin(a), spd: 0.4 }; h.label = "引き寄せられる";
+      if (h.drawn.t <= 0 || U.dist(h.x, h.y, h.drawn.x, h.drawn.y) < 0.9) h.drawn = null;
     } else if (h.glue > 0) {
-      h.intent = null; h.label = "足を取られる";
+      h.intent = null; h.label = h.altar ? "踏ん張る" : "足を取られる";
     } else if (h.trance > 0) {
       h.intent = h.lureTo ? (() => { const a = U.angle(h.x, h.y, h.lureTo.x, h.lureTo.y); return { x: Math.cos(a), y: Math.sin(a), spd: 0.45 }; })() : null;
       h.label = "惑い";
@@ -1026,7 +1097,7 @@ var G = (typeof G !== "undefined") ? G : {};
       const cap = w.monsters.filter(o => o.alert && o.hp > 0).length >= 3 ? 2 : 1;
       const can = m.cd <= 0 && castingCount(w, m) < cap && (!h.bound || A.kind === "grab");
       const inRange = dist <= (A.range || 1) + (A.kind === "grab" ? 0.25 : 0);
-      if (can && (A.kind === "grab" || A.kind === "shot" || A.kind === "lure") && inRange && M.los(w.map, m.x, m.y, h.x, h.y)) startCast(w, m, A.kind);
+      if (can && (A.kind === "grab" || A.kind === "shot" || A.kind === "lure" || (A.kind === "possess" && !h.possess)) && inRange && M.los(w.map, m.x, m.y, h.x, h.y)) startCast(w, m, A.kind);
       else if (can && A.alsoGrab && dist <= A.alsoGrab) startCast(w, m, "grab2");
       else if (can && A.kind === "grab" && d.spd > 0 && !h.bound && dist > (A.range || 1) + 0.4 && dist < 3.6 && M.los(w.map, m.x, m.y, h.x, h.y) && m.pounceCd <= 0) { startCast(w, m, "pounce"); m.pounceCd = U.rf(5, 9); }
       else if (d.spd > 0) {
@@ -1060,6 +1131,24 @@ var G = (typeof G !== "undefined") ? G : {};
       if (A.gaze) { if (monSees(w, m)) { h.arousal = Math.min(100, h.arousal + 1.6 * A.power * mult(w, "惑") * dt); h.watched = 0.4; msg(w, "watched", { mon: d.name }, 8); } }
       else if (A.burst) { if (dist < 0.9) { applyEffect(w, d.type, A.power * m.pow, m); m.hp = 0; if (m.summoned) w.dir.live = Math.max(0, w.dir.live - 1); msg(w, "pop", { mon: d.name }); fx(w, { kind: "pop", x: m.x, y: m.y, color: "#f6ffd8", life: 0.6 }); } }
       else if (m.auraT > 1.1) { m.auraT = 0; applyEffect(w, d.type, A.power * m.pow * 0.55, m); }
+    }
+    // 肉花の甘い息：発情が強いと、ふらりと花の方へ寄ってしまう
+    if (A.breath && dist <= A.breath.range && !w.outcome && !h.bound) {
+      m.breathT = (m.breathT || 0) + dt;
+      if (m.breathT > 1.4) {
+        m.breathT = 0;
+        applyEffect(w, "蕩", A.breath.power * m.pow, m);
+        if (h.arousal >= 50 && !h.drawn && dist > (A.range || 1) && U.chance(0.35)) {
+          h.drawn = { x: m.x, y: m.y, t: 1.8, mon: m.d.name };
+          record(w, { kind: "drawn", type: "蕩", mon: m.kind, monName: d.name, sev: 1 });
+          msg(w, "drawn", { mon: d.name }, 4); say(w, "drawn", { mon: d.name, kind: m.kind });
+        }
+      }
+    }
+    // 媚香玉：漂った跡に靄を残す
+    if (A.cloud && !w.outcome) {
+      m.cloudT = (m.cloudT || 0) + dt;
+      if (m.cloudT > A.cloud.every && (m.alert > 0 || dist < 7) && w.clouds.length < 16) { m.cloudT = 0; addCloud(w, m, A.cloud); }
     }
     if (A.kind === "drain" && dist <= A.range && !w.outcome) {
       drainMagic(w, 1.5 * A.power * m.pow * mult(w, "削") * dt, m);
@@ -1104,9 +1193,14 @@ var G = (typeof G !== "undefined") ? G : {};
       if (!w.outcome && d <= A.range && Math.abs(U.angDiff(a, U.angle(m.x, m.y, h.x, h.y))) < A.fan && M.los(w.map, m.x, m.y, h.x, h.y) && h.ifr <= 0) applyEffect(w, m.d.type, A.power * m.pow, m);
       else msg(w, "miss", { mon: m.d.name }, 1);
     } else if (c.kind === "shot") {
-      const a = U.angle(m.x, m.y, c.tx, c.ty) + U.rf(-0.06, 0.06);
-      const sp = A.proj === "beam" ? 11 : A.proj === "psy" ? 6.5 : 7;
-      w.projs.push({ id: w.nextId++, x: m.x, y: m.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, owner: "m", src: m, type: m.d.type, power: A.power * m.pow, r: 0.22, life: (A.range + 1) / sp, kind: A.proj });
+      const a0 = U.angle(m.x, m.y, c.tx, c.ty) + U.rf(-0.06, 0.06);
+      const sp = A.proj === "beam" ? 11 : A.proj === "psy" ? 6.5 : 7, n = A.spread || 1;
+      for (let i = 0; i < n; i++) {
+        const a = a0 + (i - (n - 1) / 2) * SPREAD;
+        w.projs.push({ id: w.nextId++, x: m.x, y: m.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, owner: "m", src: m, type: m.d.type, power: A.power * m.pow, r: A.proj === "beam" ? 0.16 : 0.22, life: (A.range + 1) / sp, kind: A.proj, surge: A.surge, sigil: A.sigil });
+      }
+    } else if (c.kind === "possess") {
+      if (!(dist <= (A.range || 1) + 0.3 && !w.outcome && possess(w, m))) { msg(w, "miss", { mon: m.d.name }, 1); fx(w, { kind: "miss", x: m.x, y: m.y, life: 0.3 }); }
     } else if (c.kind === "lure") {
       if (dist <= A.range && M.los(w.map, m.x, m.y, h.x, h.y) && !w.outcome) applyEffect(w, "惑", A.power * m.pow, m, "lure");
     }
@@ -1116,6 +1210,7 @@ var G = (typeof G !== "undefined") ? G : {};
   function updateTraps(w, dt) {
     const h = w.run.h;
     for (const tr of w.traps) {
+      if (tr.d.emit) { updateTower(w, tr, dt); continue; }
       if (!tr.armed) { tr.rearm -= dt; if (tr.rearm <= 0) tr.armed = true; continue; }
       if (tr.active > 0) {
         tr.active -= dt;
@@ -1127,6 +1222,24 @@ var G = (typeof G !== "undefined") ? G : {};
       if (tr.found && !tr.d.lure && h.state !== "retreat" && U.chance(0.7)) continue;
       triggerTrap(w, tr);
     }
+  }
+  // 囁きの塔：近くで見通せる間、間をおいて囁きの波を放つ。4回放つと、しばらく黙る
+  function updateTower(w, tr, dt) {
+    const h = w.run.h;
+    if (!tr.armed) { tr.rearm -= dt; if (tr.rearm <= 0) { tr.armed = true; tr.pulses = 0; } return; }
+    if (w.outcome) return;
+    if (U.dist(h.x, h.y, tr.x, tr.y) > tr.d.radius || !M.los(w.map, tr.x, tr.y, h.x, h.y)) { if (tr.pulseT != null) tr.pulseT = Math.max(2.2, tr.pulseT - dt); return; }
+    tr.pulseT = (tr.pulseT ?? 2.2) + dt;                   // 入ってすぐ、最初の波が来る
+    if (tr.pulseT < 3.2) return;
+    tr.pulseT = 0; tr.pulses = (tr.pulses || 0) + 1;
+    const src = { d: tr.d, kind: tr.kind, x: tr.x, y: tr.y, id: tr.id };
+    if (!tr.found) { tr.found = true; say(w, "tower", {}); }
+    if (tr.pulses === 1) { record(w, { kind: "trap", type: tr.d.type, trap: tr.kind, trapName: tr.d.name, sev: 1 }); logLine(w, G.Text.log("trap", { trap: tr.d.name }), "mid"); }
+    fx(w, { kind: "ring", x: tr.x, y: tr.y, color: "#c8a0ff", r: tr.d.radius, life: 1.1 });
+    msg(w, "towerPulse", { trap: tr.d.name }, 2);
+    applyEffect(w, "惑", 0.45, src);
+    if (h.trance > 0 && !h.bound) h.lureTo = { x: tr.x, y: tr.y };
+    if (tr.pulses >= 4) { tr.armed = false; tr.rearm = tr.d.rearm; }
   }
   function triggerTrap(w, tr) {
     const h = w.run.h, e = tr.d.effect;
@@ -1161,6 +1274,23 @@ var G = (typeof G !== "undefined") ? G : {};
     else if (e === "cuffs") { if (grab(w, src, 0.5, "絡")) { h.bound.slowStruggle = 0.4; h.bound.wait = true; openScene(w, "cuffs", src); } ev.sev = 2; }
     else if (e === "bed") { h.rest = 0; applyEffect(w, "惑", 1.4, tr); h.hypno = "催眠"; h.trance = Math.max(h.trance, 7); h.sleep = 7; drainMagic(w, 8, src); record(w, { kind: "trance", type: "惑", mon: "bed", monName: tr.d.name, sev: 2, hidden: true }); msg(w, "sleep", {}); openScene(w, "bed", src); ev.sev = 2; if (tr.room && tr.room.wake) tr.room.wake(); }
     else if (e === "spring") { if (grab(w, src, 0.9, "蕩")) { h.bound.edge = false; openScene(w, "spring", src); } h.arousal = Math.min(100, h.arousal + 10); ev.sev = 2; if (tr.room && tr.room.wake) tr.room.wake(); }
+    else if (e === "slimeDrop") {             // 天井から粘体：落ちてきたものが、そのまま包み込む
+      const m = spawnMonster(w, "slime", h.x, h.y, false);
+      m.alert = 6; m.hop = 0.32;
+      if (grab(w, m, 1.0, "蕩")) { m.holding = true; h.bound.sceneShown = true; }
+      applyEffect(w, "蕩", 0.8, m);
+      openScene(w, "slimeDrop", src); ev.sev = 2;
+    }
+    else if (e === "bud") { if (grab(w, src, 0.9, "蕩")) { Object.assign(h.bound, { hang: true, slowStruggle: 0.7, sceneShown: true }); openScene(w, "bud", src); } ev.sev = 2; }
+    else if (e === "root") { if (grab(w, src, 1.0, "絡")) { Object.assign(h.bound, { root: true, slowStruggle: 0.45, sceneShown: true }); openScene(w, "root", src); } ev.sev = 2; }
+    else if (e === "cocoon") { if (grab(w, src, 0.8, "絡")) { Object.assign(h.bound, { cocoon: true, slowStruggle: 0.5, noKnife: true, sceneShown: true }); openScene(w, "cocoon", src); } ev.sev = 2; }
+    else if (e === "ratchet") { if (grab(w, src, 1.1, "絡")) { Object.assign(h.bound, { ratchet: { t: 0, n: 0, open: 13 }, sceneShown: true }); openScene(w, "ratchet", src); } ev.sev = 2; }
+    else if (e === "shadow") { if (grab(w, src, 0.7, "絡")) { Object.assign(h.bound, { shadow: { t: 0, arms: 2 }, sceneShown: true }); openScene(w, "shadow", src); } ev.sev = 2; }
+    else if (e === "altar") {                 // 紋の転写：足が止まり、押し返そうと踏ん張るほど深く焼き付く
+      h.altar = { t: 3.2, src }; h.glue = 3.4; h.cast = null;
+      applyEffect(w, "蕩", 0.8, src);
+      openScene(w, "altar", src); ev.sev = 2;
+    }
     else if (e === "basin") { drainMagic(w, 16 * mult(w, "削"), src); h.arousal = Math.max(0, h.arousal - 15); say(w, "basin", {}); ev.sev = 2; }
     if (rearm) { tr.armed = false; tr.rearm = tr.d.rearm; }
   }
@@ -1184,6 +1314,13 @@ var G = (typeof G !== "undefined") ? G : {};
         p.life = 0;
         h.kb = 0.25; h.kbA = Math.atan2(p.vy, p.vx);
         applyEffect(w, p.type, p.power, p.src);
+        if (p.surge && !w.outcome) {                // 照射：身体の準備を待たずに跳ね上がる
+          h.pleasure += p.surge * mult(w, "蕩") * tierFx(w).pleasure;
+          record(w, { kind: "surge", type: "蕩", mon: p.src && p.src.kind, monName: p.src && p.src.d ? p.src.d.name : "", sev: 2 });
+          msg(w, "surge", { mon: p.src && p.src.d ? p.src.d.name : "" }); say(w, "surge", {});
+          checkClimax(w, p.src);
+        }
+        if (p.sigil) engraveSigil(w, p.sigil, p.src);
         fx(w, { kind: "hit", x: h.x, y: h.y, color: "#ff9ad0", life: 0.35 });
       }
     }
@@ -1270,6 +1407,26 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     if (h.sleep > 0) h.sleep -= dt;
     h.watched = Math.max(0, (h.watched || 0) - dt);
+    // 憑き手：光弾は撃てず、その手に撫でられつづける
+    if (h.possess) {
+      h.possess.t -= dt; h.cdShot = Math.max(h.cdShot, 0.3);
+      h.pleasure += 3.2 * mult(w, "惑") * tierFx(w).pleasure * dt;
+      h.arousal = Math.min(100, h.arousal + 1.1 * dt);
+      if (U.chance(dt * 0.25)) msg(w, "possessTouch", {}, 5);
+      checkClimax(w, { d: { name: h.possess.monName, type: "惑" }, kind: h.possess.mon });
+      if (h.possess && h.possess.t <= 0) endPossess(w, false);
+    }
+    // 淫紋の祭壇：転写を押し返そうと踏ん張る。気力が残っているほど、深く焼き付く
+    if (h.altar) {
+      h.altar.t -= dt; h.will = Math.max(0, h.will - 2.5 * dt); h.glue = Math.max(h.glue, 0.2);
+      if (h.altar.t <= 0) { const src = h.altar.src; h.altar = null; engraveSigil(w, h.will > 55 ? 2 : 1, src); }
+    }
+    // 媚薬の靄
+    for (const c of w.clouds) c.t += dt;
+    w.clouds = w.clouds.filter(c => c.t < c.life);
+    const cl = w.clouds.find(c => U.dist(c.x, c.y, h.x, h.y) < c.r);
+    h.inCloud = !!cl;
+    if (cl && !w.outcome) { h.cloudT = (h.cloudT || 0) + dt; if (h.cloudT > 1.2) { h.cloudT = 0; applyEffect(w, "蕩", cl.power, { d: { name: cl.name, type: "蕩" }, kind: cl.kind, x: cl.x, y: cl.y }); msg(w, "cloud", { mon: cl.name }, 5); } }
     if (h.bubble) { h.bubble.t -= dt; if (h.bubble.t <= 0) h.bubble = null; }
     if (h.decoy) { h.decoy.t -= dt; if (h.decoy.t <= 0) h.decoy = null; }
     if (h.mislead > 0) { h.mislead -= dt; if (h.mislead <= 0) { say(w, "misleadRealize", {}); h._pp = null; } }
@@ -1343,7 +1500,14 @@ var G = (typeof G !== "undefined") ? G : {};
   function statusList(w) {
     const h = w.run.h, out = [], prep = G.PREP[w.run.stated];
     const add = (name, t, cls) => out.push({ name, t: t > 0 ? t : null, cls });
-    if (h.bound) add(h.bound.pillory ? "晒し台" : h.bound.edge ? "焦らし" : h.bound.wait ? "壁の環" : h.bound.slowStruggle ? "採寸中" : "拘束", null, "pink");
+    const B = h.bound;
+    if (B) add(B.hang ? "逆さ吊り" : B.root ? "床下" : B.cocoon ? "繭の中" : B.ratchet ? "爪車（" + B.ratchet.n + "歯）" : B.shadow ? "影の腕×" + B.shadow.arms
+               : B.pillory ? "晒し台" : B.edge ? "焦らし" : B.wait ? "壁の環" : B.slowStruggle ? "採寸中" : "拘束", null, "pink");
+    if (h.possess) add("憑き手（腕）", h.possess.t, "violet");
+    if (h.altar) add("紋の転写", h.altar.t, "pink");
+    if (h.sigil) add("淫紋 Lv" + h.sigil, null, "pink");
+    if (h.drawn) add("引き寄せ", null, "pink");
+    if (h.inCloud) add("媚香の靄", null, "pink");
     if (h.sleep > 0) add("眠り", h.sleep, "violet");
     else if (h.trance > 0) add((h.hypno || "惑い") + "・放心", h.trance, "violet");
     if (h.hyp > 0) out.push({ name: (h.hypno || "惑い") + " " + Math.ceil(h.hyp) + "%", t: null, cls: "violet" });

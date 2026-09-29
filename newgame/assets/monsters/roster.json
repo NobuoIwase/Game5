@@ -1,26 +1,152 @@
 {
- "note": "初版の魔物。type は三すくみ（惑・蕩・絡）と、魔力を削る『削』。from は元のゲーム、art は new（新作用に描いた）か game5（Game5 の見本 SVG を流用）",
+ "note": "初版の魔物。type は三すくみ（惑・蕩・絡）と、魔力を削る『削』。from は元のゲーム。art は絵の出どころ：game4＝Game4 の描画コードで描き出した PNG、new＝新作用に描いた SVG、game5＝Game5 の見本 SVG",
  "monsters": [
-  {"id":"slime",        "name":"スライム",         "type":"蕩", "from":"Game2", "art":"game5"},
-  {"id":"slug",         "name":"大湿殻",           "type":"蕩", "from":"Game2", "art":"game5"},
-  {"id":"jellyfish",    "name":"浮遊水母",         "type":"蕩", "from":"Game2", "art":"new"},
-  {"id":"lure_cap",     "name":"媚芯茸",           "type":"蕩", "from":"Game2", "art":"game5"},
-  {"id":"fluff",        "name":"綿毛",             "type":"蕩", "from":"Game4", "art":"new"},
-  {"id":"roper",        "name":"ローパー",         "type":"絡", "from":"Game2", "art":"new"},
-  {"id":"hanging_vine", "name":"垂れ蔦",           "type":"絡", "from":"Game2", "art":"new"},
-  {"id":"puppet_hand",  "name":"傀儡手",           "type":"絡", "from":"Game2", "art":"game5"},
-  {"id":"gulper_worm",  "name":"丸呑みワーム",     "type":"絡", "from":"Game2", "art":"game5"},
-  {"id":"mimic",        "name":"ミミック",         "type":"絡", "from":"Game2", "art":"game5"},
-  {"id":"goblin",       "name":"ゴブリン",         "type":"絡", "from":"Game2", "art":"new"},
-  {"id":"mind_roper",   "name":"マインドローパー", "type":"惑", "from":"Game2", "art":"new"},
-  {"id":"gazer",        "name":"催眠のゲイズ",     "type":"惑", "from":"Game2", "art":"game5"},
-  {"id":"moth",         "name":"灯蛾",             "type":"惑", "from":"Game2", "art":"game5"},
-  {"id":"imp",          "name":"小淫魔",           "type":"惑", "from":"Game2", "art":"new"},
-  {"id":"peeper",       "name":"覗き子",           "type":"惑", "from":"Game4", "art":"new"},
-  {"id":"mirror_slime", "name":"鏡面スライム",         "type":"惑", "from":"Game5", "art":"game5"},
-  {"id":"drain_roper",  "name":"ドレインローパー", "type":"削", "from":"Game2", "art":"new"},
-  {"id":"ghost_head",   "name":"ゴーストヘッド",   "type":"削", "from":"Game2", "art":"new"},
-  {"id":"pot",          "name":"触手壺",           "type":"削", "from":"Game4", "art":"new"},
-  {"id":"wisp",         "name":"漂い霊",           "type":"削", "from":"Game5", "art":"game5"}
+  {
+   "id": "slime",
+   "name": "スライム",
+   "type": "蕩",
+   "from": "Game2",
+   "art": "game4"
+  },
+  {
+   "id": "slug",
+   "name": "大湿殻",
+   "type": "蕩",
+   "from": "Game2",
+   "art": "game4"
+  },
+  {
+   "id": "jellyfish",
+   "name": "浮遊水母",
+   "type": "蕩",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "lure_cap",
+   "name": "媚芯茸",
+   "type": "蕩",
+   "from": "Game2",
+   "art": "game4"
+  },
+  {
+   "id": "fluff",
+   "name": "綿毛",
+   "type": "蕩",
+   "from": "Game4",
+   "art": "game4"
+  },
+  {
+   "id": "roper",
+   "name": "ローパー",
+   "type": "絡",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "hanging_vine",
+   "name": "垂れ蔦",
+   "type": "絡",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "puppet_hand",
+   "name": "傀儡手",
+   "type": "絡",
+   "from": "Game2",
+   "art": "game4"
+  },
+  {
+   "id": "gulper_worm",
+   "name": "丸呑みワーム",
+   "type": "絡",
+   "from": "Game2",
+   "art": "game4"
+  },
+  {
+   "id": "mimic",
+   "name": "ミミック",
+   "type": "絡",
+   "from": "Game2",
+   "art": "game5"
+  },
+  {
+   "id": "goblin",
+   "name": "ゴブリン",
+   "type": "絡",
+   "from": "Game2",
+   "art": "game4"
+  },
+  {
+   "id": "mind_roper",
+   "name": "マインドローパー",
+   "type": "惑",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "gazer",
+   "name": "催眠のゲイズ",
+   "type": "惑",
+   "from": "Game2",
+   "art": "game4"
+  },
+  {
+   "id": "moth",
+   "name": "灯蛾",
+   "type": "惑",
+   "from": "Game2",
+   "art": "game4"
+  },
+  {
+   "id": "imp",
+   "name": "小淫魔",
+   "type": "惑",
+   "from": "Game2",
+   "art": "game4"
+  },
+  {
+   "id": "peeper",
+   "name": "覗き子",
+   "type": "惑",
+   "from": "Game4",
+   "art": "game4"
+  },
+  {
+   "id": "mirror_slime",
+   "name": "鏡面スライム",
+   "type": "惑",
+   "from": "Game5",
+   "art": "game5"
+  },
+  {
+   "id": "drain_roper",
+   "name": "ドレインローパー",
+   "type": "削",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "ghost_head",
+   "name": "ゴーストヘッド",
+   "type": "削",
+   "from": "Game2",
+   "art": "game4"
+  },
+  {
+   "id": "pot",
+   "name": "触手壺",
+   "type": "削",
+   "from": "Game4",
+   "art": "game4"
+  },
+  {
+   "id": "wisp",
+   "name": "漂い霊",
+   "type": "削",
+   "from": "Game5",
+   "art": "game5"
+  }
  ]
 }

@@ -52,5 +52,9 @@ Game2 の報告・監査と潜行の中身、Game5 のリアルタイム探索�
 - 初版は受付嬢から話を聞く程度
 
 ## 素材（`assets/`、一覧は `assets/index.html`）
-- ひかりの歩き：ChatGPT のスプライトシートを切り分けたもの（素の姿・変身後、4方向×3コマ）。`tools/cut_sprites.py`
-- 魔物21体：Game2 を中心に、Game4・Game5 から数体。11体は新しく描いた SVG、10体は Game5 の見本 SVG を流用。`tools/make_monsters.py`、一覧 `assets/monsters/roster.json`
+- ひかり：ChatGPT のスプライトシートを切り分けたもの（素の姿・変身後、4方向）。`tools/cut_sprites.py`
+  - **歩きのコマ送りはしない**（崩れるため）。各向き1枚の絵を、そのまま滑らせて動かす。縦横比は変えない
+- 魔物21体（一覧 `assets/monsters/roster.json`）
+  - **Game4 に絵がある13体は Game4 の絵**：Game4 の描画コードで描き出して整えた PNG（`tools/export_game4_monsters.js` → `tools/trim_game4.py`）。小淫魔は Game4 の絵の画像そのもの
+  - Game4 に無い5体（ローパー3種・垂れ蔦・浮遊水母）は新しく描いた SVG（`tools/make_monsters.py`）。**ローパーに顔は付けない**
+  - 残り3体（ミミック・鏡面スライム・漂い霊）は Game5 の見本 SVG

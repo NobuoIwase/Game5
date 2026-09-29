@@ -44,7 +44,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const h = run.h;
     Object.assign(h, {
       x: map.up.x, y: map.up.y, a: Math.PI / 2, vx: 0, vy: 0, face: null, intent: null, label: "探索", think: 0.3,
-      known: {}, bound: null, trance: 0, lureTo: null, slow: 0, glue: 0, cdShot: 0, cdBurst: 0, cdShove: 0,
+      known: {}, bound: null, trance: 0, hyp: 0, dazeT: 0, lureTo: null, slow: 0, glue: 0, cdShot: 0, cdBurst: 0, cdShove: 0,
       idleMp: 0, bubble: null, decoy: null, mislead: 0, rest: 0, shrineT: 0, floorT: 0, peekT: 0, peekHold: 0,
       wantDown: false, stuckT: 0, lastX: map.up.x, lastY: map.up.y, cast: null, dashT: 0, react: {}, dashed: {},
       strafe: 1, strafeT: 0, search: null, glance: null, idleT: 0, kb: 0, kbA: 0, brakeT: 0, spPrev: 0, goal: null, state: "explore",
@@ -256,18 +256,19 @@ var G = (typeof G !== "undefined") ? G : {};
     const sev = k * power >= 1.6 ? 2 : 1;
     if (type === "惑") {
       const was = h.trance > 0;
-      h.trance = Math.max(h.trance, 1.3 * power * k);
+      h.hyp = Math.min(100, (h.hyp || 0) + 26 * power * k);          // 催眠度：一気に上がり、なかなか抜けない
+      h.trance = Math.max(h.trance, (1.6 + h.hyp / 40) * power * k);
       h.tranceSrc = name; h.tranceMax = Math.max(h.trance, h.tranceMax && was ? h.tranceMax : 0);
-      h.hypno = how === "lure" ? "魅了" : (src && ["mind_roper", "gazer", "bell"].includes(src.kind)) || power * k >= 0.9 ? "催眠" : "惑い";
-      h.arousal = Math.min(100, h.arousal + 3 * power * k);
+      h.hypno = how === "lure" ? "魅了" : (src && ["mind_roper", "gazer", "bell"].includes(src.kind)) || power * k >= 0.9 || h.hyp >= 50 ? "催眠" : "惑い";
+      h.arousal = Math.min(100, h.arousal + 6 * power * k);
       if (how === "lure" && src) h.lureTo = { x: src.x, y: src.y };
       record(w, { kind: "trance", type, mon: src && src.kind, monName: name, sev, hidden: k * power > 1.2 && U.chance(0.45) });
       fx(w, { kind: "ring", x: h.x, y: h.y, color: "#b890ff", life: 0.8 });
       if (!was) { msg(w, how === "lure" ? "lured" : h.hypno === "催眠" ? "hypno" : "trance", { mon: name }, 2); if (!h.bubble || h.bubble.t < 1) say(w, "trance", { mon: name }); }
     } else if (type === "蕩") {
-      h.arousal = Math.min(100, h.arousal + 8 * power * k);
-      h.pleasure += 4 * power * k * (1 + h.arousal / 100) * tf.pleasure;
-      h.slow = Math.max(h.slow, 1.2 * power);
+      h.arousal = Math.min(100, h.arousal + 15 * power * k);
+      h.pleasure += 5 * power * k * (1 + h.arousal / 100) * tf.pleasure;
+      h.slow = Math.max(h.slow, 4 * power);
       record(w, { kind: "arouse", type, mon: src && src.kind, monName: name, sev });
       fx(w, { kind: "ring", x: h.x, y: h.y, color: "#ff8ab8", life: 0.8 });
       msg(w, "arouse", { mon: name }, 3);
@@ -345,6 +346,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (broke) { say(w, "breakFree", {}); msg(w, "free", {}); fx(w, { kind: "burst", x: h.x, y: h.y, color: "#fff2a8", life: 0.6 }); }
     h.bound = null;
     h.trance = Math.max(h.trance, 0.3);
+    h.think = Math.max(h.think || 0, broke ? 0.9 : 0.6); h.label = "息を整える";   // 抜けた直後は、よろめいて立て直す
   }
   function knock(w, m, a, dist) {
     const nx = m.x + Math.cos(a) * dist, ny = m.y + Math.sin(a) * dist;
@@ -357,22 +359,24 @@ var G = (typeof G !== "undefined") ? G : {};
     if (!b.by.length) { release(w, false); return; }
     const k = mult(w, b.type), p = b.power;
     h.hp = Math.max(0, h.hp - 1.2 * p * dt);
-    h.will = Math.max(0, h.will - 4.5 * p * k * tf.will * dt);
+    h.will = Math.max(0, h.will - 3.0 * p * k * tf.will * dt);      // 拘束は長く見せる分、一秒あたりは緩め
     h.arousal = Math.min(100, h.arousal + 3 * p * k * dt);
-    h.pleasure += 8.5 * p * k * (1 + h.arousal / 90) * tf.pleasure * dt;
+    h.pleasure += 6.5 * p * k * (1 + h.arousal / 90) * tf.pleasure * dt;
     for (const id of b.by) { const m = w.monsters.find(x => x.id === id); if (m && m.d.atk.drain) drainMagic(w, m.d.atk.drain * dt, m); }
     if (h.kit.knife > 0 && b.t > 0.8 && !b.knifed && b.type === "絡") { b.knifed = true; h.kit.knife--; b.struggle += 0.6; msg(w, "item", { item: "縄抜けの小刀" }); record(w, { kind: "item", item: "knife", sev: 0 }); }
-    if (h.form === "magica" && h.cdFlash <= 0 && h.mp >= G.HIKARI.flash.cost && h.trance <= 0 && !b.wait && (b.by.length >= 2 || (b.t > 1.2 && pressure(w, h.x, h.y, 2.4).n >= 3))) { flash(w); return; }
+    if (h.form === "magica" && h.cdFlash <= 0 && h.mp >= G.HIKARI.flash.cost && h.trance <= 0 && !b.wait && b.t > 1.8 && (b.by.length >= 2 || (b.t > 2.6 && pressure(w, h.x, h.y, 2.4).n >= 3))) { flash(w); return; }
     const prep = G.PREP[w.run.stated];
     let rate = (0.2 + h.will / 260) * (h.form === "magica" ? 1.25 : 0.7) * tf.struggle / Math.max(0.5, k * p) * (b.slowStruggle || 1);
     if (prep && prep.slow && b.type === "絡") rate *= 0.8;
     rate *= 1 + knowledge(w, b.src.kind) * 0.35;        // 知っている相手ほど、抜け方が分かる
-    b.struggle += rate * dt;
+    if (b.t < 2.4) rate *= 0.25;                           // 捕まった直後は、まず何もできない
+    b.struggle += rate * 0.5 * dt;
     if (U.chance(dt * 0.8)) msg(w, "struggle", {}, 2.5);
+    if (b.struggle > 0.7 && !b.almost) { b.almost = true; msg(w, "almostFree", {}); }
     if (b.edge) { h.pleasure = Math.min(h.pleasure, 96); h.will = Math.max(0, h.will - 2.2 * dt); if (b.t > 2 && U.chance(dt * 0.6)) msg(w, "edge", {}, 3); }
     if (b.pillory) { h.watched = 0.4; h.arousal = Math.min(100, h.arousal + 1.2 * dt); }
     checkClimax(w, b.src);
-    if (b.t > 3.2 && !b.sceneShown && !b.pillory && !b.edge && !b.slowStruggle) { b.sceneShown = true; openScene(w, "hold", b.src); }
+    if (b.t > 4 && !b.sceneShown && !b.pillory && !b.edge && !b.slowStruggle) { b.sceneShown = true; openScene(w, "hold", b.src); }
     if (b.struggle >= 1) release(w, true);
     else if (h.will <= 0 || h.hp <= 0) defeat(w, b.src);
   }
@@ -468,6 +472,10 @@ var G = (typeof G !== "undefined") ? G : {};
       const t = ((p.x - m.x) * ax + (p.y - m.y) * ay) / l;
       return t > -0.3 && t < reach && Math.abs(((p.x - m.x) * ay - (p.y - m.y) * ax) / l) < (A.range || 1) * 0.6 + 0.35 + margin;
     }
+    if (m.cast.kind === "shot" && A.fan) {   // 光の扇：向いた方の扇形
+      const d = U.dist(m.x, m.y, p.x, p.y);
+      return d <= A.range + margin && Math.abs(U.angDiff(U.angle(m.x, m.y, m.cast.tx, m.cast.ty), U.angle(m.x, m.y, p.x, p.y))) < A.fan + margin / Math.max(1, d);
+    }
     if (m.cast.kind === "shot") { // 狙いの線の近く
       const ax = m.cast.tx - m.x, ay = m.cast.ty - m.y, l = Math.hypot(ax, ay) || 1;
       const t = ((p.x - m.x) * ax + (p.y - m.y) * ay) / l;
@@ -501,7 +509,7 @@ var G = (typeof G !== "undefined") ? G : {};
       if (!seeIt) continue;
       const key = "c" + m.cast.id;
       if (!h.react[key]) {
-        let d = 0.36 - knowledge(w, m.kind) * 0.12 + (h.trance > 0 ? 0.25 : 0) + h.arousal / 320 + U.rf(-0.05, 0.09);
+        let d = 0.36 - knowledge(w, m.kind) * 0.12 + (h.trance > 0 ? 0.25 : 0) + (h.hyp || 0) / 300 + h.arousal / 320 + U.rf(-0.05, 0.09);
         d = U.clamp(d, 0.06, 0.8);
         h.react[key] = { at: w.t - U.clamp(m.cast.total - m.cast.t, 0, 0.3), d };
       }
@@ -514,7 +522,7 @@ var G = (typeof G !== "undefined") ? G : {};
       const along = (dx * p.vx + dy * p.vy) / l, off = Math.abs((dx * p.vy - dy * p.vx) / l);
       if (along <= 0 || off > 0.55 || along / l > 0.7) continue;
       const key = "p" + (p.id || 0);
-      if (!h.react[key]) h.react[key] = { at: w.t, d: U.clamp(0.14 + h.arousal / 400 + (h.trance > 0 ? 0.2 : 0), 0.08, 0.5) };
+      if (!h.react[key]) h.react[key] = { at: w.t, d: U.clamp(0.14 + h.arousal / 400 + (h.hyp || 0) / 400 + (h.trance > 0 ? 0.2 : 0), 0.08, 0.5) };
       const r = h.react[key];
       if (w.t - r.at >= r.d && (!best || along / l < best.t)) best = { t: along / l, key };
     }
@@ -614,7 +622,7 @@ var G = (typeof G !== "undefined") ? G : {};
     // 道具
     if (h.hp < 38 && h.kit.salve > 0) { h.kit.salve--; h.hp = Math.min(S.hpMax, h.hp + 35); say(w, "useSalve", {}); msg(w, "item", { item: "治癒の軟膏" }); record(w, { kind: "item", item: "salve", sev: 0 }); }
     const use = (k, fn) => { h.kit[k]--; fn(); msg(w, "item", { item: G.Game.ITEMS[k].name }); record(w, { kind: "item", item: k, sev: 0 }); };
-    if ((h.will < 32 || h.trance > 1.2) && h.kit.smelling > 0) use("smelling", () => { h.will = Math.min(100, h.will + 30); h.trance = Math.min(h.trance, 0.2); });
+    if ((h.will < 32 || h.trance > 1.2 || h.hyp > 55) && h.kit.smelling > 0) use("smelling", () => { h.will = Math.min(100, h.will + 30); h.trance = Math.min(h.trance, 0.2); h.hyp = Math.max(0, h.hyp - 50); if (h.hyp <= 0 && h.sleep <= 0) h.hypno = null; });
     // MP：戦いの最中に切れそうなら水薬。静かなら、使わずに息を整える
     if (h.form === "magica" && h.kit.ether > 0 && h.mp < 14 && threats(w).some(o => o.d < 6)) use("ether", () => { h.mp = Math.min(G.HIKARI.mpMax, h.mp + 30); });
     // 火照り：自分で気づけている分だけ（鎮心の香が効いていると気づけない）
@@ -734,10 +742,6 @@ var G = (typeof G !== "undefined") ? G : {};
       const basin = w.traps.find(tr => (tr.kind === "basin" || tr.kind === "spring") && tr.armed && !tr.found && U.dist(h.x, h.y, tr.x, tr.y) < 9 && M.los(map, h.x, h.y, tr.x, tr.y));
       if (basin) { goToward(w, basin.x, basin.y, 0.8, tr_label(basin)); return; }
     }
-    if (h.hp < 70 || h.will < 60) {
-      const bed = w.traps.find(tr => tr.kind === "bed" && tr.armed && !tr.found && U.dist(h.x, h.y, tr.x, tr.y) < 9 && M.los(map, h.x, h.y, tr.x, tr.y));
-      if (bed) { goToward(w, bed.x, bed.y, 0.8, "寝台へ"); if (U.chance(0.1)) say(w, "bedLure", {}); return; }
-    }
     explore(w);
   }
 
@@ -837,7 +841,7 @@ var G = (typeof G !== "undefined") ? G : {};
     } else {
       const lead = U.dist(h.x, h.y, tgt.x, tgt.y) / S.shot.speed;
       const tx = tgt.x + (tgt.vx || 0) * lead, ty = tgt.y + (tgt.vy || 0) * lead;
-      const spread = (h.arousal / 100) * 0.45 + (h.trance > 0 ? 0.3 : 0) + 0.04;
+      const spread = (h.arousal / 100) * 0.45 + (h.hyp || 0) / 100 * 0.3 + (h.trance > 0 ? 0.3 : 0) + 0.04;
       const a = U.angle(h.x, h.y, tx, ty) + U.rf(-spread, spread);
       w.projs.push({ id: w.nextId++, x: h.x + Math.cos(a) * 0.4, y: h.y + Math.sin(a) * 0.4, vx: Math.cos(a) * S.shot.speed, vy: Math.sin(a) * S.shot.speed, owner: "h", dmg: S.shot.dmg, r: 0.18, life: S.shot.range / S.shot.speed, kind: "star" });
       h.mp -= S.shot.cost; h.cdShot = S.shot.cd; h.idleMp = 0;
@@ -1093,6 +1097,12 @@ var G = (typeof G !== "undefined") ? G : {};
         if (grab(w, m, A.power * m.pow, m.d.type === "蕩" ? "蕩" : "絡")) m.holding = true;
         if (m.d.type === "蕩") applyEffect(w, "蕩", A.power * m.pow * 0.6, m);
       } else { msg(w, "miss", { mon: m.d.name }, 1); fx(w, { kind: "miss", x: m.x, y: m.y, life: 0.3 }); }
+    } else if (c.kind === "shot" && A.fan) {   // 光の扇：弾ではなく、一瞬で届く
+      const a = U.angle(m.x, m.y, c.tx, c.ty);
+      fx(w, { kind: "fan", x: m.x, y: m.y, a, arc: A.fan, r: A.range, color: "#d8b8ff", life: 0.55 });
+      const d = U.dist(m.x, m.y, h.x, h.y);
+      if (!w.outcome && d <= A.range && Math.abs(U.angDiff(a, U.angle(m.x, m.y, h.x, h.y))) < A.fan && M.los(w.map, m.x, m.y, h.x, h.y) && h.ifr <= 0) applyEffect(w, m.d.type, A.power * m.pow, m);
+      else msg(w, "miss", { mon: m.d.name }, 1);
     } else if (c.kind === "shot") {
       const a = U.angle(m.x, m.y, c.tx, c.ty) + U.rf(-0.06, 0.06);
       const sp = A.proj === "beam" ? 11 : A.proj === "psy" ? 6.5 : 7;
@@ -1149,7 +1159,7 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     else if (e === "gate") { if (grab(w, src, 0.8, "絡")) { h.bound.slowStruggle = 0.55; openScene(w, "gate", src); } ev.sev = 2; }
     else if (e === "cuffs") { if (grab(w, src, 0.5, "絡")) { h.bound.slowStruggle = 0.4; h.bound.wait = true; openScene(w, "cuffs", src); } ev.sev = 2; }
-    else if (e === "bed") { h.rest = 0; h.trance = Math.max(h.trance, 5.5); h.sleep = 5.5; drainMagic(w, 8, src); record(w, { kind: "trance", type: "惑", mon: "bed", monName: tr.d.name, sev: 2, hidden: true }); msg(w, "sleep", {}); openScene(w, "bed", src); ev.sev = 2; if (tr.room && tr.room.wake) tr.room.wake(); }
+    else if (e === "bed") { h.rest = 0; applyEffect(w, "惑", 1.4, tr); h.hypno = "催眠"; h.trance = Math.max(h.trance, 7); h.sleep = 7; drainMagic(w, 8, src); record(w, { kind: "trance", type: "惑", mon: "bed", monName: tr.d.name, sev: 2, hidden: true }); msg(w, "sleep", {}); openScene(w, "bed", src); ev.sev = 2; if (tr.room && tr.room.wake) tr.room.wake(); }
     else if (e === "spring") { if (grab(w, src, 0.9, "蕩")) { h.bound.edge = false; openScene(w, "spring", src); } h.arousal = Math.min(100, h.arousal + 10); ev.sev = 2; if (tr.room && tr.room.wake) tr.room.wake(); }
     else if (e === "basin") { drainMagic(w, 16 * mult(w, "削"), src); h.arousal = Math.max(0, h.arousal - 15); say(w, "basin", {}); ev.sev = 2; }
     if (rearm) { tr.armed = false; tr.rearm = tr.d.rearm; }
@@ -1251,7 +1261,13 @@ var G = (typeof G !== "undefined") ? G : {};
     h.cdShot = Math.max(0, h.cdShot - dt); h.cdBurst = Math.max(0, h.cdBurst - dt); h.cdShove = Math.max(0, h.cdShove - dt); h.cdMelee = Math.max(0, (h.cdMelee || 0) - dt);
     h.cdFlash = Math.max(0, (h.cdFlash || 0) - dt); h.cdBreak = Math.max(0, (h.cdBreak || 0) - dt); h.ifr = Math.max(0, (h.ifr || 0) - dt);
     h.slow = Math.max(0, h.slow - dt); h.glue = Math.max(0, h.glue - dt);
-    if (h.trance > 0) { h.trance -= dt; if (h.trance <= 0) { msg(w, h.sleep > 0 ? "wake" : "tranceOut", {}, 3); h.hypno = null; } }
+    if (h.trance > 0) { h.trance -= dt; if (h.trance <= 0) { msg(w, h.sleep > 0 ? "wake" : "tranceOut", {}, 3); if (h.hyp <= 0) h.hypno = null; } }
+    if (h.hyp > 0) {
+      h.hyp = Math.max(0, h.hyp - 0.35 * dt);
+      if (h.hyp <= 0 && h.trance <= 0) { h.hypno = null; msg(w, "hypOut", {}, 3); }
+      h.dazeT -= dt;
+      if (h.trance <= 0 && !h.bound && h.dazeT <= 0) { h.dazeT = 1; if (U.chance(h.hyp / 420)) { h.trance = 0.8 + h.hyp / 50; msg(w, "daze", {}, 6); } }
+    }
     if (h.sleep > 0) h.sleep -= dt;
     h.watched = Math.max(0, (h.watched || 0) - dt);
     if (h.bubble) { h.bubble.t -= dt; if (h.bubble.t <= 0) h.bubble = null; }
@@ -1265,9 +1281,9 @@ var G = (typeof G !== "undefined") ? G : {};
       if (h.magic <= 0) untransform(w, null);
       if (h.idleMp > 1.5) h.mp = Math.min(G.HIKARI.mpMax, h.mp + (h.rest > 0 ? G.HIKARI.mpRest : G.HIKARI.mpRegen) * dt);
     }
-    h.arousal = Math.max(0, h.arousal - (h.bound ? 0 : 0.35) * dt);
-    h.pleasure = Math.max(0, h.pleasure - (h.bound ? 0 : 1.2) * dt);
-    if (!h.bound) h.will = Math.min(100, h.will + 0.6 * dt * (1 - h.arousal / 150));
+    h.arousal = Math.max(0, h.arousal - (h.bound ? 0 : 0.12) * dt);
+    h.pleasure = Math.max(0, h.pleasure - (h.bound ? 0 : 0.6) * dt);
+    if (!h.bound) h.will = Math.min(100, h.will + 0.6 * dt * (1 - h.arousal / 150) * (1 - (h.hyp || 0) / 110));
     perceive(w);
     const rm = roomAt(w, h.x, h.y);
     if (rm !== h.room) {
@@ -1329,7 +1345,8 @@ var G = (typeof G !== "undefined") ? G : {};
     const add = (name, t, cls) => out.push({ name, t: t > 0 ? t : null, cls });
     if (h.bound) add(h.bound.pillory ? "晒し台" : h.bound.edge ? "焦らし" : h.bound.wait ? "壁の環" : h.bound.slowStruggle ? "採寸中" : "拘束", null, "pink");
     if (h.sleep > 0) add("眠り", h.sleep, "violet");
-    else if (h.trance > 0) add(h.hypno || "惑い", h.trance, "violet");
+    else if (h.trance > 0) add((h.hypno || "惑い") + "・放心", h.trance, "violet");
+    if (h.hyp > 0) out.push({ name: (h.hypno || "惑い") + " " + Math.ceil(h.hyp) + "%", t: null, cls: "violet" });
     if (h.glue > 0) add("足止め", h.glue, "gold");
     if (h.slow > 0) add("鈍足", h.slow, "gold");
     if (h.convey) add("運ばれ中", h.convey.t, "gold");

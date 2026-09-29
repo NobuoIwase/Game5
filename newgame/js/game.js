@@ -22,18 +22,27 @@ var G = (typeof G !== "undefined") ? G : {};
     swapDest: { name: "行き先のすり替え",     costs: [4],         note: "依頼書はそのままに、実際の行き先だけを別のダンジョンへ差し替えられる" },
   };
 
-  const REQUEST_TITLE = {
-    mist: ["霧鏡の回廊の調査", "回廊の鏡の破壊", "行方不明者の捜索（霧鏡の回廊）"],
-    mire: ["湿窟の水源の浄化", "蜜溜まりの湿窟の地図作り", "薬草の採取（蜜溜まりの湿窟）"],
-    vine: ["蔦森の砦の探索", "絡繰りの蔦森の魔物討伐", "古い砦の遺物回収（絡繰りの蔦森）"],
-  };
+  /* ---- 依頼書の中身：主な魔物・規模・脅威度・長の有無。これを書き換えて渡す ---- */
+  const SCALE = { 1: "小さな群れ", 2: "群れ", 3: "大群" };
+  const LEVEL = { 1: "弱い", 2: "", 3: "手練れの" };
+  const LEVEL_NAME = { 1: "低い", 2: "並", 3: "高い" };
+  const SCALE_NAME = { 1: "小規模", 2: "中規模", 3: "大規模" };
+  const VERB = ["討伐", "駆除", "調査", "掃討"];
+  function requestTitle(c) {
+    const mon = G.MONSTERS[c.main].name;
+    // 例：「弱いスライムの小さな群れの駆除」「ゴブリンの長が率いる、手練れの大群の討伐」
+    if (c.boss) return `${mon}の長が率いる、${LEVEL[c.level]}${SCALE[c.scale]}の${c.verb}`;
+    return `${LEVEL[c.level]}${mon}の${SCALE[c.scale]}の${c.verb}`;
+  }
+  // 依頼書に書ける主な魔物（削は主役にしない）
+  const MAINS = Object.keys(G.MONSTERS).filter(k => G.MONSTERS[k].type !== "削");
 
   /* ================================================================ 新しいゲーム */
   function newSave() {
     const decks = {};
     for (const k in G.DUNGEONS) { const dg = G.DUNGEONS[k]; decks[k] = [dg.free.find(x => G.MONSTERS[x].type === "削"), "trap:" + dg.traps[0]]; }
     return {
-      v: 1, day: 1, phase: "guild",
+      v: 2, day: 1, phase: "guild",
       funds: 60, dark: 0, taint: 0, trust: 50, suspicion: 0, body: 0, mind: 0, fatigue: 0,
       ailments: [], upgrades: { freeSlot: 0, live: 0, budget: 0, swapDest: 0 },
       decks, autoDirector: false, speed: 1,
@@ -48,7 +57,9 @@ var G = (typeof G !== "undefined") ? G : {};
     const out = [];
     for (const k of U.shuffle(keys)) {
       const dg = G.DUNGEONS[k];
-      out.push({ id: s.day + ":" + k, title: U.pick(REQUEST_TITLE[k]), dungeon: k, stated: dg.type, reward: U.ri(34, 48) });
+      const real = { main: U.pick(dg.fixed.concat(dg.free.filter(x => G.MONSTERS[x].type !== "削"))), level: U.ri(1, 3), scale: U.ri(1, 3), boss: U.chance(0.35 + s.day * 0.005), verb: U.pick(VERB) };
+      out.push({ id: s.day + ":" + k, dungeon: k, real, title: requestTitle(real), stated: G.MONSTERS[real.main].type,
+                 reward: 26 + real.level * 8 + real.scale * 4 + (real.boss ? 14 : 0) });
     }
     return out;
   }
@@ -69,11 +80,17 @@ var G = (typeof G !== "undefined") ? G : {};
     s.dark = 0; s.trust = 100; s.suspicion = 0; s.pendingEvent = null;
   }
 
-  // 依頼を割り当てる。stated＝依頼書に書く系統、dest＝実際の行き先
-  function assign(s, reqIdx, stated, dest) {
+  // 依頼を割り当てる。paper＝依頼書に書く中身（主な魔物・規模・脅威度・長）、dest＝実際の行き先（すり替え）
+  function forgeSize(real, paper, destChanged) {
+    return (paper.main !== real.main ? 2 : 0) + Math.abs(paper.level - real.level) + Math.abs(paper.scale - real.scale) + (real.boss && !paper.boss ? 2 : 0) + (destChanged ? 2 : 0);
+  }
+  function assign(s, reqIdx, paper, dest) {
     const r = s.requests[reqIdx];
-    const real = dest || r.dungeon;
-    s.pick = { req: r, stated: stated || r.stated, dungeon: real, forged: (stated && stated !== G.DUNGEONS[real].type) || real !== r.dungeon };
+    const real = Object.assign({}, r.real);
+    paper = Object.assign({}, r.real, paper || {});
+    const dungeon = dest || r.dungeon;
+    const size = forgeSize(real, paper, dungeon !== r.dungeon);
+    s.pick = { req: r, real, paper, title: requestTitle(paper), stated: G.MONSTERS[paper.main].type, dungeon, forged: size > 0, forgeSize: size };
     s.phase = "prep";
     return s.pick;
   }
@@ -81,9 +98,12 @@ var G = (typeof G !== "undefined") ? G : {};
   /* ================================================================ 準備（ひかりが依頼書を見て整える） */
   function prep(s) {
     const p = s.pick;
-    const kit = Object.assign({}, G.HIKARI.kit);
+    // 依頼書の脅威度を見て、持っていく量を決める（楽そうなら少なめ）
+    const lv = p.paper.level + (p.paper.boss ? 1 : 0);
+    const kit = lv <= 1 ? { star: 1, salve: 1, smelling: 0 } : lv === 2 ? Object.assign({}, G.HIKARI.kit) : { star: 2, salve: 3, smelling: 2 };
     const cost = kit.star * 5 + kit.salve * 3 + kit.smelling * 3;
     if (s.funds < cost) { kit.star = 1; kit.salve = 1; kit.smelling = 0; }
+    p.caution = [0, 0.75, 1, 1.2][p.paper.level] * (p.paper.boss ? 1.1 : 1) * (p.paper.scale === 1 ? 0.9 : 1);
     s.funds = Math.max(0, s.funds - Math.min(s.funds, kit.star * 5 + kit.salve * 3 + kit.smelling * 3));
     p.kit = kit;
     p.prepItem = G.PREP[p.stated];
@@ -106,6 +126,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const has = id => s.ailments.some(a => a.id === id);
     const run = {
       day: s.day, dungeon: p.dungeon, stated: p.stated, realType: G.DUNGEONS[p.dungeon].type, forged: p.forged,
+      real: p.real, paper: p.paper, caution: p.caution || 1, forgeSize: p.forgeSize || 0,
       events: [], night: [], deck: deckFor(s, p.dungeon), maxLive: G.BAL.maxLive + s.upgrades.live,
       autoDirector: s.autoDirector, save: s, recall: false, floor: 1, mismatch: 0,
       h: {
@@ -160,7 +181,12 @@ var G = (typeof G !== "undefined") ? G : {};
     // 違和感（依頼書と中身の食い違い）
     // 見かけた「話と違う魔物」の種類の数で決める（同じ種を何度見ても1）
     const odd = new Set(ev.filter(e => e.kind === "spot" && e.type !== run.stated && e.type !== "削").map(e => e.mon)).size;
-    let sus = run.forged ? 3 + Math.min(odd, 6) * 2.2 : -4;
+    let sus = -4;
+    if (run.forged) {
+      sus = 2 + Math.min(odd, 6) * 1.6 + run.forgeSize * 1.2;
+      if (run.strongNoticed) sus += (run.real.level - run.paper.level) * 3;
+      if (run.bossSeen && !run.paper.boss) sus += 8;           // 書いていない長に出くわした
+    }
     sus *= [1, 0.85, 0.6, 0.3][G.tier(s.body, s.mind)];
     s.suspicion = U.clamp(s.suspicion + sus, 0, 100);
     s.fatigue = U.clamp(s.fatigue + (run.outcome === "defeat" ? 40 : 25), 0, 100);
@@ -175,7 +201,7 @@ var G = (typeof G !== "undefined") ? G : {};
     rec.monitor = G.Report.monitorLog(rec);
     s.rec = rec;
     s.phase = "report";
-    s.history.push({ day: s.day, dungeon: run.dungeon, stated: run.stated, outcome: run.outcome, floor: run.floorReached, climax: climaxes, posture: rec.postureName, forged: run.forged });
+    s.history.push({ day: s.day, dungeon: run.dungeon, stated: run.stated, outcome: run.outcome, floor: run.floorReached, climax: climaxes, posture: rec.postureName, forged: run.forged, title: s.pick.title, realTitle: s.pick.req.title });
     if (s.history.length > 60) s.history.shift();
     return rec;
   }
@@ -234,6 +260,6 @@ var G = (typeof G !== "undefined") ? G : {};
 
   function taintStage(s) { return s.taint >= 100 ? 4 : s.taint >= 70 ? 3 : s.taint >= 42 ? 2 : s.taint >= 18 ? 1 : 0; }
 
-  G.Game = { AILMENTS, SHOP, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, buy, taintStage };
+  G.Game = { AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, buy, taintStage };
 })();
 if (typeof module !== "undefined") module.exports = G;

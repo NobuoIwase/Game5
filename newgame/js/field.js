@@ -705,7 +705,7 @@ var G = (typeof G !== "undefined") ? G : {};
     h.bound.ev = e;
     logLine(w, G.Text.log("hold", { mon: src.d.name }), "mid");
     msg(w, "grab", { mon: src.d.name });
-    say(w, "held", { mon: src.d.name });
+    if (src.kind && expectation(w, src.kind) > 0.35) say(w, "anticipateGrab", { mon: src.d.name }); else say(w, "held", { mon: src.d.name });
     return true;
   }
   // 群れで来る種：一体が捕まえると、仲間を呼ぶ

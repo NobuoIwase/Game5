@@ -32,7 +32,7 @@ for(let i=0;i<500;i++){
 await p.waitForTimeout(800);
 // 口頭報告：窓を押して進める。選択肢が出たら、最初の一回だけ「追及する」
 let probed=false;
-for(let i=0;i<120;i++){
+for(let i=0;i<400;i++){
   if(await p.$('#todoc')&&await p.$('#rdone:not(.hidden)')) break;
   const ch=await p.$$('#dlgc:not(.hidden) button');
   if(ch.length){ await ch[probed?ch.length-1:0].click(); if(!probed){probed=true;await p.screenshot({path:SP+'v6_report.png',fullPage:true});} }

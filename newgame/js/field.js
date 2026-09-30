@@ -225,6 +225,13 @@ var G = (typeof G !== "undefined") ? G : {};
     const t = G.Text.voice(m.kind, key); if (!t) return;
     m.sayT = w.t; m.bubble = { text: t, t: 2.4 };
   }
+  // 魔物の攻撃が当たった：身体のどこに何が起きたか
+  function hitDesc(w, m, gap) {
+    if (!m || !m.kind || w.t - (m.hitT ?? -99) < (gap || 4)) return;
+    const r = G.Text.monHit(m.kind, { n: heroName(w) }); if (!r) return;
+    m.hitT = w.t; pushMsg(w, r.text, "hit");
+    const h = w.run.h; fx(w, { kind: "sfx", text: r.fx, x: h.x + U.rf(-0.4, 0.4), y: h.y - 1.1, life: 1.0, color: "#e8c8ff" });
+  }
   function actMsg(w, key, ctx) { pushMsg(w, G.Text.actMsg(key, Object.assign({ n: heroName(w) }, ctx || {})), key); }
   function actBub(w, key) { const t = G.Text.actBubble(key); if (t) w.run.h.bubble = { text: t, t: 2.2 }; }
   // 媚薬の靄（床に溜まって、しばらく残る）
@@ -1605,21 +1612,24 @@ var G = (typeof G !== "undefined") ? G : {};
     // 近くにいるだけで効くもの
     if (A.kind === "aura" && dist <= A.range && !w.outcome) {
       m.auraT = (m.auraT || 0) + dt;
-      if (A.gaze && !A.gazeCharm) { if (monSees(w, m)) { h.arousal = Math.min(100, h.arousal + 1.6 * A.power * mult(w, "惑") * dt); h.watched = 0.4; msg(w, "watched", { mon: d.name }, 8); } }
-      else if (A.burst) { if (dist < 0.9) { applyEffect(w, d.type, A.power * m.pow, m); m.hp = 0; if (m.summoned) w.dir.live = Math.max(0, w.dir.live - 1); msg(w, "pop", { mon: d.name }); fx(w, { kind: "pop", x: m.x, y: m.y, color: "#f6ffd8", life: 0.6 }); } }
+      if (A.gaze && !A.gazeCharm) { if (monSees(w, m)) { h.arousal = Math.min(100, h.arousal + 1.6 * A.power * mult(w, "惑") * dt); h.watched = 0.4; msg(w, "watched", { mon: d.name }, 8); hitDesc(w, m, 12); } }
+      else if (A.burst) { if (dist < 0.9) { applyEffect(w, d.type, A.power * m.pow, m); hitDesc(w, m, 1); m.hp = 0; if (m.summoned) w.dir.live = Math.max(0, w.dir.live - 1); msg(w, "pop", { mon: d.name }); fx(w, { kind: "pop", x: m.x, y: m.y, color: "#f6ffd8", life: 0.6 }); } }
       else if (m.auraT > 1.1) {
         m.auraT = 0;
         if (A.whisper) {                           // 双子：左右から囁く。二体とも近いほど強い
+          hitDesc(w, m, 8);
           const n = w.monsters.filter(o => o.hp > 0 && o.kind === m.kind && U.dist(o.x, o.y, h.x, h.y) <= A.range).length;
           applyEffect(w, "惑", A.power * m.pow * 0.4 * n, m);
           h.will = Math.max(0, h.will - 2.2 * n); h.pleasure += 2.2 * n * intake(w, m);
           msg(w, n >= 2 ? "whisper2" : "whisper", { mon: d.name }, 5);
           if (n >= 2 && U.chance(0.3)) addCharm(w, m, 15);
         } else if (A.numb) {                       // 痺れ：攻撃が遅く、足がもたつく
+          hitDesc(w, m, 8);
           applyEffect(w, "蕩", A.power * m.pow * 0.5, m);
           if (!(h.numb > 0)) { msg(w, "numb", { mon: d.name }, 3); record(w, { kind: "numb", sev: 1, mon: m.kind, monName: d.name }); }
           h.numb = Math.max(h.numb || 0, A.numb);
         } else if (A.spore) {                      // 咳き茸：吸うとハイ。何度も吸うと、中毒になる
+          hitDesc(w, m, 8);
           applyEffect(w, "蕩", A.power * m.pow * 0.55, m);
           h.high = 6; h.sporeN = (h.sporeN || 0) + 1;
           msg(w, "spore", { mon: d.name }, 4);
@@ -1627,6 +1637,7 @@ var G = (typeof G !== "undefined") ? G : {};
         } else if (A.tipTease) {                   // 先嬲り：先だけ。行き着かない
           if (h.futa) { h.tipTease = 1.3; addCum(w, 7, m); msg(w, "tipTease", { mon: d.name }, 5); if (w.t - (h.tipT ?? -99) > 8) { h.tipT = w.t; record(w, { kind: "tipTease", type: "蕩", mon: m.kind, monName: d.name, sev: 2 }); say(w, "tipTease", {}); } } else applyEffect(w, "蕩", A.power * 0.5, m);
         } else if (A.sermon) {                     // 説法：聞くほど、心の壁が薄くなる
+          hitDesc(w, m, 10);
           applyEffect(w, "惑", A.power * m.pow * 0.45, m); msg(w, "sermon", { mon: d.name }, 6);
           m.sermonN = (m.sermonN || 0) + 1; if (m.sermonN % 7 === 0 && h.will < 70) addCrack(w, 1, m);
         } else if (A.broadcast) {                  // 実況：捕まった姿、達した瞬間を中継する
@@ -1637,12 +1648,13 @@ var G = (typeof G !== "undefined") ? G : {};
         } else if (A.mock) {                       // 嘲り：捕まっている姿を罵る。罵られるほど、なぜか好きになる
           if (h.bound) { h.will = Math.max(0, h.will - 3); msg(w, "mock", { mon: d.name }, 5); monSay(w, m, "mock", 0.6); record(w, { kind: "mock", type: "惑", mon: m.kind, monName: d.name, sev: 2 }); if (U.chance(0.3)) addCharm(w, m, 10); }
         } else if (A.gazeCharm) {                  // 教祖：見つめられるほど惹かれる。惹かれていると、祈ってしまう
+          hitDesc(w, m, 10);
           if (monSees(w, m)) {
             applyEffect(w, "惑", A.power * m.pow * 0.4, m); h.watched = 1;
             m.gazeN = (m.gazeN || 0) + 1; if (m.gazeN % 3 === 0) addCharm(w, m, 6);
             if ((h.charm && h.charm[m.kind] || 0) >= 2 && h.arousal >= 35 && !(h.pray > 0) && !h.bound) pray(w, m, 2.6);
           }
-        } else applyEffect(w, d.type, A.power * m.pow * 0.55 * (A.gaze && w.run.law === "shumoku" ? 1.6 : 1), m);
+        } else { applyEffect(w, d.type, A.power * m.pow * 0.55 * (A.gaze && w.run.law === "shumoku" ? 1.6 : 1), m); hitDesc(w, m, 7); }
       }
     }
     // 指揮：近くの魔物を急かす（淫魔・ワルドー幹部）
@@ -1666,6 +1678,7 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     // 肉花の甘い息：発情が強いと、ふらりと花の方へ寄ってしまう
     if (A.breath && dist <= A.breath.range && !w.outcome && !h.bound) {
+      hitDesc(w, m, 9);
       m.breathT = (m.breathT || 0) + dt;
       if (m.breathT > 1.4) {
         m.breathT = 0;
@@ -1686,7 +1699,7 @@ var G = (typeof G !== "undefined") ? G : {};
       drainMagic(w, 1.5 * A.power * m.pow * mult(w, "削") * dt, m);
       h.mp = Math.max(0, h.mp - 1.2 * A.power * dt);
       m.drainT = (m.drainT || 0) + dt;
-      if (m.drainT > 2) { m.drainT = 0; record(w, { kind: "drain", type: "削", mon: m.kind, monName: d.name, sev: 1 }); msg(w, "drain", { mon: d.name }, 4); }
+      if (m.drainT > 2) { m.drainT = 0; record(w, { kind: "drain", type: "削", mon: m.kind, monName: d.name, sev: 1 }); msg(w, "drain", { mon: d.name }, 4); hitDesc(w, m, 8); }
       if (A.legGrab && dist < A.legGrab && m.cd <= 0 && !h.bound) { m.cd = 4; if (grab(w, m, 0.6 * m.pow, "絡")) m.holding = true; }
     }
     m.mvx = (m.x - px) / Math.max(dt, 1e-3); m.mvy = (m.y - py) / Math.max(dt, 1e-3);
@@ -1723,7 +1736,7 @@ var G = (typeof G !== "undefined") ? G : {};
       const a = U.angle(m.x, m.y, c.tx, c.ty);
       fx(w, { kind: "fan", x: m.x, y: m.y, a, arc: A.fan, r: A.range, color: "#d8b8ff", life: 0.55 });
       const d = U.dist(m.x, m.y, h.x, h.y);
-      if (!w.outcome && d <= A.range && Math.abs(U.angDiff(a, U.angle(m.x, m.y, h.x, h.y))) < A.fan && M.los(w.map, m.x, m.y, h.x, h.y) && h.ifr <= 0) { applyEffect(w, m.d.type, A.power * m.pow, m); if (A.brain) { addBrain(w, A.brain, m); msg(w, "brain", { c: Math.round(h.brain || 0) }, 2); } }
+      if (!w.outcome && d <= A.range && Math.abs(U.angDiff(a, U.angle(m.x, m.y, h.x, h.y))) < A.fan && M.los(w.map, m.x, m.y, h.x, h.y) && h.ifr <= 0) { applyEffect(w, m.d.type, A.power * m.pow, m); hitDesc(w, m, 3); if (A.brain) { addBrain(w, A.brain, m); msg(w, "brain", { c: Math.round(h.brain || 0) }, 2); } }
       else msg(w, "miss", { mon: m.d.name }, 1);
     } else if (c.kind === "shot") {
       const a0 = U.angle(m.x, m.y, c.tx, c.ty) + U.rf(-0.06, 0.06);
@@ -1763,7 +1776,7 @@ var G = (typeof G !== "undefined") ? G : {};
     } else if (c.kind === "possess") {
       if (!(dist <= (A.range || 1) + 0.3 && !w.outcome && possess(w, m))) { msg(w, "miss", { mon: m.d.name }, 1); fx(w, { kind: "miss", x: m.x, y: m.y, life: 0.3 }); }
     } else if (c.kind === "lure") {
-      if (dist <= A.range && M.los(w.map, m.x, m.y, h.x, h.y) && !w.outcome) { applyEffect(w, "惑", A.power * m.pow, m, "lure"); if (U.chance(0.35)) addCharm(w, m); }
+      if (dist <= A.range && M.los(w.map, m.x, m.y, h.x, h.y) && !w.outcome) { applyEffect(w, "惑", A.power * m.pow, m, "lure"); hitDesc(w, m, 5); if (U.chance(0.35)) addCharm(w, m); }
     }
   }
 
@@ -1822,6 +1835,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const ev = record(w, { kind: "trap", type: tr.d.type, trap: tr.kind, trapName: tr.d.name, sev: 1 });
     logLine(w, G.Text.log("trap", { trap: tr.d.name }), "mid");
     msg(w, "trap", { trap: tr.d.name });
+    pushMsg(w, G.Text.trapHit(tr.d.effect, { n: heroName(w), trap: tr.d.name }), "trapHit");     // 身体に何が起きたか
     fx(w, { kind: "ring", x: tr.x, y: tr.y, color: "#ffd27a", r: tr.d.radius, life: 0.9 });
     const src = { d: tr.d, kind: tr.kind, x: tr.x, y: tr.y, id: tr.id };
     let rearm = true;
@@ -1940,7 +1954,7 @@ var G = (typeof G !== "undefined") ? G : {};
       } else if (p.life > 0 && !w.outcome && U.dist(p.x, p.y, h.x, h.y) < HR + p.r) {
         p.life = 0;
         h.kb = 0.25; h.kbA = Math.atan2(p.vy, p.vx);
-        applyEffect(w, p.type, p.power, p.src);
+        applyEffect(w, p.type, p.power, p.src); hitDesc(w, p.src, 3);
         if (p.surge && !w.outcome) {                // 照射：身体の準備を待たずに跳ね上がる
           h.pleasure += p.surge * mult(w, "蕩") * tierFx(w).pleasure;
           record(w, { kind: "surge", type: "蕩", mon: p.src && p.src.kind, monName: p.src && p.src.d ? p.src.d.name : "", sev: 2 });

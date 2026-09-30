@@ -174,7 +174,7 @@ select { font: inherit; color: var(--tx); background: var(--panel2); border: 1px
 .lv-g i { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(0deg, #ff4f9a, #ffb3d6); transition: height 0.3s; }
 .lv-g span { position: absolute; left: 12px; bottom: 0; font-size: 10px; color: #ffb3d6; writing-mode: vertical-rl; white-space: nowrap; }
 .lv-feed { position: absolute; right: 2%; bottom: 3%; width: 57%; max-width: 560px; max-height: 64%; display: flex; flex-direction: column; justify-content: flex-end; gap: 3px; overflow: hidden; }
-.lv-feed .fl { background: rgba(12,6,16,0.84); border-left: 3px solid #8a6fb0; border-radius: 4px; padding: 3px 7px; font-size: 13px; line-height: 1.45; color: #eee6f4; animation: lvIn 0.35s ease-out; }
+.lv-feed .fl { background: rgba(12,6,16,0.84); border-left: 3px solid #8a6fb0; border-radius: 4px; padding: 3px 7px; font-size: 14px; line-height: 1.45; color: #eee6f4; animation: lvIn 0.35s ease-out; }
 .lv-feed .fl:nth-last-child(n+4) { opacity: 0.55; } .lv-feed .fl:nth-last-child(n+6) { opacity: 0.35; }
 .lv-feed .fl.line { border-left-color: #f2d27a; background: rgba(36,28,12,0.86); color: #fff4d6; }
 .lv-feed .fl.mon { border-left-color: #9fd3ff; color: #d6ecff; font-size: 12px; }
@@ -227,3 +227,10 @@ select { font: inherit; color: var(--tx); background: var(--panel2); border: 1px
 .lv-hearts b:nth-child(1) { left: 10%; } .lv-hearts b:nth-child(2) { left: 55%; animation-delay: 0.7s; font-size: 12px; } .lv-hearts b:nth-child(3) { left: 85%; animation-delay: 1.4s; font-size: 14px; }
 @keyframes lvHeart { 0% { transform: translateY(0) scale(0.6); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(-60px) scale(1.1); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .lv-hold img, .lv-hearts b { animation: none !important; } }
+.lv-say { position: absolute; left: 4%; top: -4%; max-width: 150%; width: max-content; max-width: min(260px, 92vw); background: #fff8fc; color: #3a1830; border: 2px solid #ff9ccc; border-radius: 12px; padding: 4px 9px; font-size: 13px; line-height: 1.45; box-shadow: 0 2px 10px rgba(0,0,0,0.5); z-index: 2; }
+.lv-say::after { content: ""; position: absolute; left: 34%; bottom: -9px; border: 8px solid transparent; border-top-color: #ff9ccc; border-bottom: 0; }
+.lv-say.hidden { display: none; }
+.lv-say.pop { animation: lvPop 0.25s ease-out; }
+.lv-say.cx { background: #ffe0ef; border-color: #ff4f9a; font-weight: bold; }
+@keyframes lvPop { from { transform: scale(0.85); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (max-width: 520px) { .lv-say { font-size: 11.5px; max-width: 200px; } }

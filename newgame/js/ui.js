@@ -296,7 +296,7 @@
       <div class="topbar" id="dtop"></div>
       <div class="stage" id="stage"><canvas id="cv"></canvas><div class="overlay hidden" id="ov"></div>
         <div class="msgwin" id="msgwin"><p></p><p></p><p></p></div>
-        <div class="live hidden" id="live"><div class="lv-fig" id="lvfig"><div class="lv-hold" id="lvh"></div><img id="lvimg" alt=""><i class="lv-blush"></i><i class="lv-drops"></i><i class="lv-hearts"><b>♡</b><b>♡</b><b>♡</b></i></div>
+        <div class="live hidden" id="live"><div class="lv-fig" id="lvfig"><div class="lv-hold" id="lvh"></div><img id="lvimg" alt=""><i class="lv-blush"></i><i class="lv-drops"></i><i class="lv-hearts"><b>♡</b><b>♡</b><b>♡</b></i><div class="lv-say hidden" id="lvsay"></div></div>
           <div class="lv-g"><i id="lvg"></i><span>快感</span></div><b class="lv-cn" id="lvc"></b><div class="lv-feed" id="lvf"></div><button class="lv-skip" id="lvskip">▶▶</button></div>
         <div class="cxcut hidden" id="cxcut"><b>絶　頂</b><span id="cxn"></span></div></div>
       <div class="chips" id="chips"></div>
@@ -364,7 +364,7 @@
       dive.zoom = (dive.zoom || base) + (want - (dive.zoom || base)) * Math.min(1, dt * 3); dive.cam.scale = dive.zoom;
       dive.cam.x += (w.run.h.x - dive.cam.x) * Math.min(1, dt * 4); dive.cam.y += (w.run.h.y + (dive.liveOn ? cv.height * 0.12 / dive.cam.scale : 0) - dive.cam.y) * Math.min(1, dt * 4);   // 実況の間は、ひかりを上へ寄せる
     }
-    G.Render.draw(cv.getContext("2d"), w, dive.cam, { hover: dive.hover, card: dive.card, night: !!dive.night });
+    G.Render.draw(cv.getContext("2d"), w, dive.cam, { hover: dive.hover, card: dive.card, night: !!dive.night, liveSay: !!dive.liveOn });
     const ov = document.getElementById("ov");
     if (dive.trans > 0) { ov.classList.remove("hidden"); ov.textContent = `${dive.run.dungeonName || G.DUNGEONS[dive.run.dungeon].name}　${w.floorNo}階`; }
     else ov.classList.add("hidden");
@@ -490,6 +490,10 @@
     const hb0 = dive.w && dive.w.run.h;
     dive.lnext = now + liveGap(l.cls) * (hb0 && !hb0.bound && !dive.night && !LIVE_KEEP.test(l.cls) ? 0.5 : 1);
     dive.liveUntil = now + 3600 + liveGap(l.cls);
+    if (/(^| )(line|build)( |$)/.test(l.cls) && !/scene/.test(l.cls)) {   // ひかりの声：立ち絵の吹き出しにも
+      const sb = document.getElementById("lvsay");
+      if (sb) { sb.textContent = l.text.replace(/^「|」$/g, ""); sb.classList.remove("hidden", "pop"); void sb.offsetWidth; sb.classList.add("pop"); sb.classList.toggle("cx", /cx/.test(l.cls)); clearTimeout(dive.sayTm); dive.sayTm = setTimeout(() => sb.classList.add("hidden"), 2600); }
+    }
     if (/grab/.test(l.cls)) { const st = document.getElementById("stage"); st.classList.remove("grabbed"); void st.offsetWidth; st.classList.add("grabbed"); }   // 捕まった瞬間：縁が赤く締まる
     if (/gauge cx/.test(l.cls)) {                       // 決壊：画面が弾ける
       dive.cxUntil = now + 1600;

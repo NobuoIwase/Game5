@@ -105,3 +105,44 @@ select { font: inherit; color: var(--tx); background: var(--panel2); border: 1px
 .chip i { font-style: normal; margin-left: 4px; opacity: .75; font-size: 11px; }
 .chip.pink { border-color: #8a3f60; color: #ffb0d0; } .chip.violet { border-color: #6a4aa0; color: #d4bcff; background: #2e2342; }
 .chip.gold { border-color: #7a6a30; color: #f2d27a; } .chip.red { border-color: #8a3a50; color: #ff8a9a; } .chip.dim { color: var(--sub); }
+
+/* ---- 会話の選択肢（監査官室の窓の中） ---- */
+.o-choices { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.o-choices button { padding: 5px 14px; font-size: 13px; }
+.office { height: 330px; }
+@media (max-width: 520px) { .office { height: 280px; } }
+
+/* ---- 報告書（書類） ---- */
+.docsheet { position: relative; background: #f3ecdc; color: #2a2228; border-radius: 4px; padding: 18px 22px 22px; margin: 10px 0;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45), inset 0 0 40px rgba(160,130,80,0.18); font-family: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif; }
+.docsheet::before { content: ""; position: absolute; inset: 8px; border: 1px solid #b8a888; pointer-events: none; }
+.ds-head { display: flex; justify-content: space-between; font-size: 12px; color: #6a5a50; }
+.ds-title { text-align: center; font-size: 22px; letter-spacing: 0.2em; margin: 8px 0 12px; font-weight: 700; }
+.ds-meta { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 10px; }
+.ds-meta th { width: 4.5em; background: #e6dcc4; font-weight: 600; text-align: center; }
+.ds-meta th, .ds-meta td { border: 1px solid #a89878; padding: 3px 8px; }
+.ds-sec { font-weight: 700; border-bottom: 2px solid #6a5a50; margin: 12px 0 4px; font-size: 14px; }
+.docsheet .doc-line { border-bottom: 1px solid #d0c4a8; color: #2a2228; padding: 7px 4px; font-family: "Klee One", "Yu Mincho", serif; background: repeating-linear-gradient(transparent 0 26px, rgba(120,100,70,0.08) 26px 27px); }
+.docsheet .doc-line:hover { background-color: rgba(200,150,120,0.12); }
+.docsheet .doc-line.flag { background-color: rgba(220,60,70,0.12); }
+.docsheet .doc-line.fixed { color: #4a4040; cursor: default; }
+.ds-n { width: 1.8em; color: #8a7a68; flex: 0 0 auto; } .ds-t { flex: 1; }
+.docsheet .mark { color: #c0303a; font-weight: 700; width: 1.6em; border: 2px solid transparent; border-radius: 50%; text-align: center; }
+.docsheet .doc-line.flag .mark { border-color: #c0303a; }
+.ds-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: 13px; }
+.ds-sign { font-size: 16px; position: relative; padding-right: 44px; }
+.hanko { position: absolute; right: 0; top: -8px; width: 36px; height: 36px; border: 2px solid #c0303a; border-radius: 50%; color: #c0303a; font-style: normal; font-size: 11px; display: flex; align-items: center; justify-content: center; transform: rotate(-8deg); opacity: 0.85; }
+.ds-stamp { position: absolute; right: 26px; top: 50px; color: #c0303a; border: 3px double #c0303a; padding: 2px 10px; font-size: 20px; transform: rotate(10deg); opacity: 0.8; }
+
+/* ---- ひかりの手帳 ---- */
+.notebook { background: #fdf6f0; color: #3a2a34; border-radius: 6px; padding: 12px 16px 12px 34px; margin: 10px 0; position: relative;
+  font-family: "Klee One", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif; line-height: 28px;
+  background-image: linear-gradient(90deg, transparent 22px, rgba(255,120,160,0.45) 22px 23px, transparent 23px), repeating-linear-gradient(transparent 0 27px, rgba(120,150,200,0.25) 27px 28px);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.4); }
+.notebook p { margin: 0; }
+.nb-date { color: #b05a80; font-size: 13px; border-bottom: 1px dashed #e0b0c8; margin-bottom: 4px; }
+.nb-head { display: flex; align-items: center; gap: 6px; } .nb-head img { width: 40px; height: 40px; object-fit: contain; }
+.nb-st { margin-left: auto; font-size: 11px; color: #8a7080; }
+.nb-mon { font-size: 13px; line-height: 24px; background-size: auto, 100% 24px; }
+.nb-hot { box-shadow: 0 3px 10px rgba(0,0,0,0.4), inset 0 0 0 2px rgba(255,120,170,0.35); }
+.notebook .tag { color: #5a3a50; background: #f0e0ea; }

@@ -19,6 +19,8 @@
     if (bind) bind(box);
   }
   function closeModal() { document.getElementById("modal").classList.add("hidden"); }
+  // 同じ画面を描き直す時は、スクロール位置を保つ（選んだ瞬間に上まで飛ばない）
+  function keep(fn) { let first = true; return (...a) => { const y = window.scrollY; fn(...a); if (first) { first = false; window.scrollTo(0, 0); } else window.scrollTo(0, y); }; }
   function on(sel, ev, fn, root) { (root || app).querySelectorAll(sel).forEach(el => el.addEventListener(ev, fn)); }
   function cardName(c) { const ci = G.Field.cardInfo(c); return ci.d ? ci.d.name : c; }
   function cardArt(c) {
@@ -75,22 +77,37 @@
       <div class="o-window"><i></i><i></i></div><div class="o-shelf"></div><div class="o-door"></div>
       <img class="o-hikari out" id="oh" src="assets/hikari/hikari_civilian_front_1.png" alt="">
       <div class="o-desk"><span class="o-paper"></span><span class="o-paper p2"></span><span class="o-lamp"></span></div>
-      <div class="o-dialog hidden" id="dlg"><span class="o-name" id="dn"></span><p id="dt"></p><span class="o-next">▼</span></div>
+      <div class="o-dialog hidden" id="dlg"><span class="o-name" id="dn"></span><p id="dt"></p><div class="o-choices hidden" id="dlgc"></div><span class="o-next" id="dnx">▼</span></div>
       ${extra || ""}</div>`;
   }
   function hikariIn(src) { const el = document.getElementById("oh"); if (!el) return; if (src) el.src = src; requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove("out"))); }
   function hikariOut(done) { const el = document.getElementById("oh"); if (!el) return done && done(); el.src = "assets/hikari/hikari_civilian_right_1.png"; el.classList.add("leave"); setTimeout(() => done && done(), 900); }
   // 会話を一行ずつ（押すと次へ）
+  // 選択肢つき：l.choices = [{ label, fn }]。fn が返した行を、その場に差し込んで続ける
+  // l.onShow：その行が出た時に呼ぶ（書き起こしなど）
   function vn(lines, done) {
-    const dlg = document.getElementById("dlg"), dn = document.getElementById("dn"), dt = document.getElementById("dt");
-    let i = 0;
+    const dlg = document.getElementById("dlg"), dn = document.getElementById("dn"), dt = document.getElementById("dt"), dc = document.getElementById("dlgc"), nx = document.getElementById("dnx");
+    lines = lines.slice();
+    let i = 0, waiting = false;
     const show = () => {
+      if (waiting) return;
       if (i >= lines.length) { dlg.classList.add("hidden"); dlg.onclick = null; return done && done(); }
       const l = lines[i++];
       dlg.classList.remove("hidden");
       dn.textContent = l.who === "h" ? "ひかり" : l.who === "a" ? "監査官" : "";
       dn.style.display = l.who === "n" ? "none" : "";
       dt.textContent = l.text; dt.className = l.who === "n" ? "narr" : "";
+      if (l.onShow) l.onShow(l);
+      if (dc) { dc.innerHTML = ""; dc.classList.add("hidden"); }
+      if (l.choices && dc) {
+        waiting = true; if (nx) nx.style.visibility = "hidden";
+        dc.classList.remove("hidden");
+        l.choices.forEach(c => {
+          const b = document.createElement("button"); b.textContent = c.label; if (c.cls) b.className = c.cls;
+          b.onclick = ev => { ev.stopPropagation(); waiting = false; if (nx) nx.style.visibility = ""; dc.classList.add("hidden"); const add = c.fn ? c.fn() : null; if (add && add.length) lines.splice(i, 0, ...add); show(); };
+          dc.appendChild(b);
+        });
+      } else if (nx) nx.style.visibility = "";
     };
     dlg.onclick = show; show();
   }
@@ -123,6 +140,7 @@
     app.innerHTML = topbar() + officeHTML() + `
       <div class="panel" id="status">
         <b>星野 ひかり</b> <span class="sub">大学生。本業は魔法少女ルミナ（正体を知るのは監査官だけ）</span>
+        <div class="sub">ルミナ Lv<b>${S.lv}</b>　次まで ${G.GROWTH.xpNeed(S.lv) - S.xp}　技 ${S.equip.length}/${G.GROWTH.slots(S.lv)}（覚えた ${Object.keys(S.skills).length}/${Object.keys(G.SKILLS).length}）</div>
         ${meter("肉体", S.body, 100, "#ff7fb0")}${meter("精神", S.mind, 100, "#b48cff")}${meter("信頼", S.trust, 100, "#8fe0a0")}${meter("疲労", S.fatigue, 100, "#f2d27a")}
         <div class="sub">堕ち：${TIER_NAME[tier]} ／ 状態異常：${ail}</div>
         <div class="sub">身についた性癖（通常の処置では抜けない）：${tr}</div>
@@ -133,6 +151,8 @@
         <button id="deck">デッキを組む</button>
         <button id="shop">裏の取引（澱晶 ${S.dark}）</button>
         <button id="hist">これまでの記録</button>
+        <button id="skill">ルミナの技</button>
+        <button id="diary">ひかりの手帳</button>
       </div>
       <div class="panel sub hidden" id="menu2">オート指揮：<button id="auto">${S.autoDirector ? "入" : "切"}</button>　潜行中に魔物や罠を自動で差し向ける（自分で置くこともできる）
         <br><span class="dim">ひかりの弱点：素で惑に強い。変身中は絡にも強い。変身が解けると一気に崩れる。</span></div>`;
@@ -141,6 +161,8 @@
     on("#deck", "click", () => deckScreen(null, office));
     on("#shop", "click", shopScreen);
     on("#hist", "click", historyScreen);
+    on("#skill", "click", skillScreen);
+    on("#diary", "click", () => diaryScreen());
     on("#auto", "click", e => { S.autoDirector = !S.autoDirector; save(); e.currentTarget.textContent = S.autoDirector ? "入" : "切"; });
     if (S.greeted === S.day) { hikariIn(); document.getElementById("dlg").classList.add("hidden"); return showMenu(); }
     const T = G.Text;
@@ -176,7 +198,7 @@
   /* ================================================================ 依頼を選び、書き換える */
   function requestScreen() {
     let sel = 0, paper = null, dest = null;
-    const draw = () => {
+    const draw = keep(() => {
       const r = S.requests[sel];
       paper = paper || Object.assign({}, r.real);
       const de = dest || r.dungeon;
@@ -215,7 +237,7 @@
       on("#reset", "click", () => { paper = null; dest = null; draw(); });
       on("#back", "click", office);
       on("#go", "click", () => { GM.assign(S, sel, paper, de); GM.prep(S); save(); handover(); });
-    };
+    });
     draw();
   }
 
@@ -337,9 +359,9 @@
     const hud = document.getElementById("hud");
     if (hud && (!dive.hudT || performance.now() - dive.hudT > 120)) {
       dive.hudT = performance.now();
-      hud.innerHTML = meter("体力", h.hp, 100, "#8fe0a0") + meter("MP", h.mp, 60, "#6fc2ff") + meter("魔力", h.magic, 100, "#ffd6f0") +
+      hud.innerHTML = meter("体力", h.hp, h.hpMax || 100, "#8fe0a0") + meter("MP", h.mp, h.mpMax || 60, "#6fc2ff") + meter("魔力", h.magic, 100, "#ffd6f0") +
         meter("気力", h.will, 100, "#f2d27a") + meter("発情", h.arousal, 100, "#ff7fb0") + meter("快感", Math.min(100, h.pleasure), 100, "#ff4f9a") +
-        `<div class="sub">絶頂 ${h.climax}　持ち物：${kitText(h.kit)}</div>` + equipHTML(h.form, G.PREP[dive.run.stated] && G.PREP[dive.run.stated].name);
+        `<div class="sub">Lv${h.lv || 1}　絶頂 ${h.climax}　持ち物：${kitText(h.kit)}</div>` + (h.skills && h.skills.length ? `<div class="sub">技：${h.skills.map(id => G.SKILLS[id].name).join("・")}</div>` : "") + equipHTML(h.form, G.PREP[dive.run.stated] && G.PREP[dive.run.stated].name);
       const chips = document.getElementById("chips");
       if (chips) {
         const st = G.Field.statusList(w);
@@ -439,65 +461,92 @@
     });
   }
 
-  /* ================================================================ 報告 */
+  /* ================================================================ 報告（監査官室で、ひかりと向き合って聞く） */
+  const OUTC = { cleared: "踏破", retreat: "撤退", ordered: "勧告で帰還", defeat: "敗北→翌日救出" };
+  function transcriptAdd(l) {
+    const box = document.getElementById("tr"); if (!box) return;
+    const who = { h: "ひかり", a: "監査官", n: "" }[l.who];
+    box.insertAdjacentHTML("beforeend", `<div class="speech ${l.who}${l.lie ? " lie" : ""}">${who ? `<span class="who">${who}</span>` : ""}${esc(l.text)}</div>`);
+  }
   function reportScreen() {
     const rec = S.rec;
     if (!rec) { S.phase = "guild"; return guild(); }
-    let shown = 0;
-    const lines = rec.report;
-    const who = { h: "ひかり", a: "監査官", n: "" };
-    const draw = () => {
-      app.innerHTML = topbar() + `<div class="office small"><div class="o-window"><i></i><i></i></div><div class="o-shelf"></div><div class="o-door"></div>
-          <img class="o-hikari" src="assets/hikari/hikari_civilian_front_1.png" alt=""><div class="o-desk"><span class="o-paper"></span><span class="o-lamp"></span></div></div>
-        <h1>口頭報告</h1>
-        <p class="sub">${esc(rec.dungeonName)}・${rec.floorReached}階まで・${({ cleared: "踏破", retreat: "撤退", ordered: "勧告で帰還", defeat: "敗北→翌日救出" })[rec.outcome]}　今日の話し方：${esc(rec.postureName)}</p>
-        <div id="talk">${lines.slice(0, shown).map((l, i) => `<div class="speech ${l.who}">${l.who !== "n" ? `<span class="who">${who[l.who]}</span>` : ""}${esc(l.text)}
-          ${l.probe && !l.probed ? `<br><button class="probe" data-i="${i}">追及する</button>` : ""}${l.probed ? `<div class="speech a" style="margin-top:6px"><span class="who">監査官</span>${esc(l.probe.q)}</div><div class="speech h"><span class="who">ひかり</span>${esc(l.probe.a)}</div>` : ""}</div>`).join("")}</div>
-        <div class="row" style="margin-top:10px">${shown < lines.length ? `<button class="primary" id="nx">次へ</button><button id="all">全部表示</button>` : `<button class="primary" id="audit">書類監査へ</button>`}</div>`;
-      on("#nx", "click", () => { shown++; draw(); window.scrollTo(0, document.body.scrollHeight); });
-      on("#all", "click", () => { shown = lines.length; draw(); });
-      on(".probe", "click", e => { lines[+e.currentTarget.dataset.i].probed = true; draw(); });
-      on("#audit", "click", () => { S.phase = "audit"; save(); auditScreen(); });
-    };
-    shown = 1; draw();
+    app.innerHTML = topbar() + officeHTML() + `
+      <div class="panel sub" id="rinfo"><b>口頭報告</b>　${esc(rec.dungeonName)}・${rec.floorReached}階まで・${OUTC[rec.outcome]}　今日の話し方：${esc(rec.postureName)}
+        <br><span class="dim">話の途中で「追及する」を選べるのは、その件を言い終えた、その時だけ。嘘なら崩れることがある。本当のことなら、中身を言わされる。</span></div>
+      <div class="row hidden" id="rdone"><button class="primary" id="todoc">報告書を受け取る</button></div>
+      <details class="panel" id="trp"><summary>ここまでの話（書き起こし）</summary><div id="tr"></div></details>`;
+    hikariIn();
+    const seq = rec.report.map(l => {
+      const o = Object.assign({}, l, { onShow: transcriptAdd });
+      if (l.probe && l.who === "h") o.choices = [
+        { label: "追及する", cls: "danger", fn: () => { const r = G.Report.probe(rec, l, S); save(); return r.lines.map(x => Object.assign(x, { onShow: transcriptAdd })); } },
+        { label: "流す", fn: () => [] },
+      ];
+      return o;
+    });
+    vn(seq, () => {
+      document.getElementById("rdone").classList.remove("hidden");
+      on("#todoc", "click", () => { if (!rec.docWritten) GM.writeDoc(S); S.phase = "audit"; save(); auditScreen(); });
+    });
   }
 
-  /* ================================================================ 書類監査 */
+  /* ================================================================ 報告書（書面。記録に残るので、ここでまた嘘を書く） */
+  function docSheet(rec, flags, stamp) {
+    const req = (S.pick && S.pick.title) || "";
+    return `<div class="docsheet">
+      <div class="ds-head"><span class="ds-guild">冒険者ギルド　迷宮監査課</span><span class="ds-no">第 ${rec.day} 号</span></div>
+      <div class="ds-title">迷 宮 探 索 報 告 書</div>
+      <table class="ds-meta"><tr><th>提出日</th><td>${rec.day}日目</td><th>提出者</th><td>星野 ひかり（ルミナ）</td></tr>
+        <tr><th>依頼</th><td colspan="3">${esc(req)}</td></tr>
+        <tr><th>行き先</th><td>${esc(rec.dungeonName)}</td><th>結果</th><td>${rec.floorReached}階・${OUTC[rec.outcome]}</td></tr></table>
+      <div class="ds-sec">経過</div>
+      ${rec.doc.map((d, i) => `<div class="doc-line ds-line ${flags.has(i) ? "flag" : ""} ${d.fixed ? "fixed" : ""}" data-i="${i}"><span class="ds-n">${i + 1}.</span><span class="ds-t">${esc(d.text)}</span><span class="mark">${flags.has(i) ? "虚" : ""}</span></div>`).join("")}
+      <div class="ds-foot"><span>上記のとおり、相違ないことを報告します。</span><span class="ds-sign">星野 ひかり<i class="hanko">星野</i></span></div>
+      ${stamp ? `<div class="ds-stamp">受理</div>` : ""}
+    </div>`;
+  }
   function auditScreen() {
     const rec = S.rec, flags = new Set();
-    const draw = () => {
-      app.innerHTML = topbar() + `<h1>書類監査</h1>
-        <p class="sub">ひかりが提出した報告書。嘘だと思う行に印を付けて確定する（一日一度きり）。<br>本人が覚えていないだけの行（「特に何もなし」）は嘘ではない。嘘と欠落を見分けること。</p>
-        <div class="panel">${rec.doc.map((d, i) => `<div class="doc-line ${flags.has(i) ? "flag" : ""} ${d.fixed ? "fixed" : ""}" data-i="${i}"><span class="mark">${flags.has(i) ? "✕" : ""}</span><span>${esc(d.text)}</span></div>`).join("")}</div>
-        <details class="panel"><summary>水晶の監視記録を見る</summary><div class="monitor">${rec.monitor.map(esc).join("<br>") || "（記録なし）"}</div></details>
-        <div class="row"><button class="primary" id="ok">この印で確定</button><button id="back">報告を読み返す</button></div>`;
-      on(".doc-line", "click", e => { const i = +e.currentTarget.dataset.i; if (rec.doc[i].fixed) return; flags.has(i) ? flags.delete(i) : flags.add(i); draw(); });
-      on("#back", "click", () => { S.phase = "report"; reportScreen(); });
+    if (!rec.docWritten) GM.writeDoc(S);
+    const draw = keep(() => {
+      app.innerHTML = topbar() + `<h1>報告書の監査</h1>
+        <p class="sub">ひかりが書いて提出した報告書。書面は記録に残るので、口では言えたことでも書かないことがある。<br>水晶の監視記録と見比べ、嘘だと思う行に印を付けて確定する（一日一度きり）。本人が覚えていないだけの行（「特に何もなし」）は嘘ではない。</p>
+        ${docSheet(rec, flags, false)}
+        <details class="panel" open><summary>水晶の監視記録</summary><div class="monitor">${rec.monitor.map(esc).join("<br>") || "（記録なし）"}</div></details>
+        <details class="panel"><summary>口頭報告の書き起こし</summary>${rec.report.map(l => `<div class="speech ${l.who}">${l.who !== "n" ? `<span class="who">${{ h: "ひかり", a: "監査官" }[l.who]}</span>` : ""}${esc(l.text)}</div>`).join("")}</details>
+        <div class="row"><button class="primary" id="ok">この印で確定</button></div>`;
+      on(".ds-line", "click", e => { const i = +e.currentTarget.dataset.i; if (rec.doc[i].fixed) return; flags.has(i) ? flags.delete(i) : flags.add(i); draw(); });
       on("#ok", "click", () => {
         const res = GM.audit(S, [...flags]); save();
         const msg = `<p>摘発 <b>${res.caught.length}</b> 件 ／ 誤った指摘 <b>${res.wrong.length}</b> 件 ／ 見逃し <b>${res.missed.length}</b> 件</p>
           ${res.wrong.some(d => d.kind === "missing") ? `<p class="sub">「特に何もなし」の行は、本人が覚えていないだけだった。</p>` : ""}
           ${res.missed.length ? `<p class="sub">見逃した嘘は、隠し通せた経験として、ひかりの心に積もる。</p>` : ""}
-          <div class="row"><button class="primary" id="ok2">${res.caught.length ? "再報告を聞く" : "処置へ"}</button></div>`;
+          <div class="row"><button class="primary" id="ok2">${res.caught.length ? "呼び戻して、問いただす" : "一日を終える"}</button></div>`;
         modal(msg, b => b.querySelector("#ok2").onclick = () => { closeModal(); route(); });
       });
-    };
+    });
     draw();
   }
 
+  // 再尋問：暴いた行を突きつける（監査官室で）
   function rereportScreen() {
     const rec = S.rec, res = rec.audit;
     const lines = G.Report.rereport(rec, res.caught, S);
-    app.innerHTML = topbar() + `<h1>非公開の再報告</h1>
-      <div>${lines.map(l => `<div class="speech h"><span class="who">ひかり</span>${esc(l.text)}</div>`).join("")}</div>
-      <div class="panel"><p class="sub">訂正報告書を受け取った。このあと——</p>
+    save();
+    app.innerHTML = topbar() + officeHTML() + `<div class="panel sub"><b>再尋問</b>　報告書の嘘 ${res.caught.length} 件を、本人に突きつける。</div>
+      <div class="panel hidden" id="rechoice"><p class="sub">訂正の報告書を書かせた。このあと——</p>
         <div class="row"><button class="primary" id="rec">記録だけ取って帰す</button><button class="danger" id="lewd">踏み込んで確認する</button></div>
         <p class="sub">踏み込んだ確認は、信頼を下げる代わりに、澱晶とギルドの澱みを得る。</p></div>`;
-    on("#rec", "click", () => { GM.rereportChoice(S, false); save(); clinicScreen(); });
-    on("#lewd", "click", () => {
-      const R = G.Report.REREPORT;
-      modal(`<p>${esc(U.pick(R.lewdAsk))}</p><p>${esc(U.pick(R.lewdLine))}</p><p class="sub">確認は、長く続いた。</p><div class="row"><button class="primary" id="ok">終える</button></div>`,
-        b => b.querySelector("#ok").onclick = () => { closeModal(); GM.rereportChoice(S, true); save(); clinicScreen(); });
+    hikariIn();
+    vn([{ who: "n", text: "報告書を手に、監査官はひかりを呼び戻した。" }].concat(lines), () => {
+      document.getElementById("rechoice").classList.remove("hidden");
+      on("#rec", "click", () => { GM.rereportChoice(S, false); save(); clinicScreen(); });
+      on("#lewd", "click", () => {
+        const R = G.Report.REREPORT;
+        modal(`<p>${esc(U.pick(R.lewdAsk))}</p><p>${esc(U.pick(R.lewdLine))}</p><p class="sub">確認は、長く続いた。</p><div class="row"><button class="primary" id="ok">終える</button></div>`,
+          b => b.querySelector("#ok").onclick = () => { closeModal(); GM.rereportChoice(S, true); save(); clinicScreen(); });
+      });
     });
   }
 
@@ -505,10 +554,10 @@
   function clinicScreen() {
     S.phase = "clinic"; save();
     const sel = new Set(S.ailments.map(a => a.id));
-    const draw = () => {
+    const draw = keep(() => {
       const fee = [...sel].reduce((a, id) => a + GM.AILMENTS[id].fee, 0);
       const g = S.rec ? S.rec.gain : null;
-      app.innerHTML = topbar() + `<h1>処置と一日の終わり</h1>
+      app.innerHTML = topbar() + `<h1>一日の終わり（処置）</h1>
         ${g ? `<div class="panel sub">今日の変化：肉体 +${g.body}　精神 +${g.mind}　ギルド資金 ${g.funds >= 0 ? "+" : ""}${g.funds}　澱晶 +${g.dark}${S.rec.forged ? `　違和感 +${g.sus}` : ""}</div>` : ""}
         <div class="panel">${S.ailments.length ? S.ailments.map(a => { const A = GM.AILMENTS[a.id]; return `<label class="doc-line"><input type="checkbox" data-id="${a.id}" ${sel.has(a.id) ? "checked" : ""}> <span><b>${esc(GM.ailmentName(a))}</b>${A.kink ? "（深層処置）" : ""}　◈${A.fee}<br><span class="sub">${A.note}</span></span></label>`; }).join("") : `<p class="sub">状態異常はない。</p>`}
           <p class="sub">処置しないで残すと、次の潜行に響き、ギルドの空気も少し澱む。</p></div>
@@ -518,7 +567,7 @@
         if (fee > S.funds) return toast("ギルド資金が足りない");
         GM.treat(S, [...sel]); GM.endDay(S); save(); guild();
       });
-    };
+    });
     draw();
   }
 
@@ -526,7 +575,7 @@
   function deckScreen(dk, back) {
     let cur = typeof dk === "string" ? dk : Object.keys(G.DUNGEONS)[0];
     const done = typeof back === "function" ? back : guild;
-    const draw = () => {
+    const draw = keep(() => {
       const dg = G.DUNGEONS[cur], n = G.BAL.freeSlots + S.upgrades.freeSlot;
       const mine = (S.decks[cur] || []).slice(0, n);
       const cands = GM.freeCandidates(cur);
@@ -547,7 +596,41 @@
       });
       on(".fr", "mouseenter", e => { const d = G.Field.cardInfo(e.currentTarget.dataset.c).d; document.getElementById("desc").textContent = d.name + "：" + d.desc; });
       on("#done", "click", done);
-    };
+    });
+    draw();
+  }
+
+  // ひかりの手帳：本人が夜に書く日記と、魔物のメモ（監査官が、こっそり覗く）
+  function diaryScreen(tab) {
+    tab = tab || "diary";
+    const draw = keep(() => {
+      const pages = (S.diary || []).slice().reverse();
+      const notes = G.Diary ? G.Diary.monsterNotes(S) : [];
+      const art = n => `<img src="assets/monsters/${n.art}" alt=""${n.tint ? ` style="filter:hue-rotate(${n.tint}deg)"` : ""}>`;
+      app.innerHTML = topbar() + `<h1>ひかりの手帳</h1>
+        <p class="sub">（ひかりの鞄から、薄桃色の手帳がのぞいている。……少しだけなら。報告では言わなかったことも、ここには書いてある）</p>
+        <div class="row"><button class="tb" data-t="diary" style="${tab === "diary" ? "border-color:var(--pink)" : ""}">日記</button><button class="tb" data-t="mon" style="${tab === "mon" ? "border-color:var(--pink)" : ""}">魔物のメモ（${notes.length}）</button><button id="back">そっと戻す</button></div>
+        ${tab === "diary" ? (pages.length ? pages.map(p => `<div class="notebook"><div class="nb-date">${p.day}日目　${esc(p.weather)}</div>${p.lines.map(l => `<p>${esc(l)}</p>`).join("")}</div>`).join("") : `<div class="notebook"><p>（まだ何も書かれていない）</p></div>`)
+          : `<div class="grid2">${notes.map(n => `<div class="notebook nb-mon ${n.ex > 0.3 ? "nb-hot" : ""}"><div class="nb-head">${art(n)}<b>${esc(n.name)}</b> <span class="tag t-${n.type}">${n.type}</span><span class="nb-st">${n.stage}</span></div>${n.lines.map(l => `<p>${esc(l)}</p>`).join("")}</div>`).join("") || `<div class="notebook"><p>（まだ何も書かれていない）</p></div>`}</div>`}`;
+      on(".tb", "click", e => diaryScreen(e.currentTarget.dataset.t));
+      on("#back", "click", guild);
+    });
+    draw();
+  }
+  // 覚えた技の付け替え（装備できる数はレベルで増える）
+  function skillScreen() {
+    const draw = keep(() => {
+      const slots = G.GROWTH.slots(S.lv);
+      app.innerHTML = topbar() + `<h1>ルミナの技</h1>
+        <p class="sub">戦いの最中に、ふとした瞬間に閃いた技。装備できるのは ${slots} つまで（Lv6・Lv14で増える）。レベルの伸びは小さく、頭打ちになる。</p>
+        <div class="panel sub">Lv${S.lv}　体力 ${G.GROWTH.hpMax(S.lv)}　MP ${G.GROWTH.mpMax(S.lv)}　威力 ×${G.GROWTH.dmg(S.lv).toFixed(2)}　次のレベルまで ${G.GROWTH.xpNeed(S.lv) - S.xp}</div>
+        <div class="grid2">${Object.entries(G.SKILLS).map(([id, k]) => { const have = S.skills[id], on = S.equip.includes(id);
+          return `<div class="card ${on ? "sel" : ""}"><b>${have ? esc(k.name) : "？？？"}</b>　<span class="sub">${have ? esc(k.desc) : "まだ閃いていない"}</span>
+            ${have ? `<div><button class="eq" data-id="${id}">${on ? "外す" : "装備する"}</button></div>` : ""}</div>`; }).join("")}</div>
+        <button id="back" style="margin-top:10px">戻る</button>`;
+      on(".eq", "click", e => { const r = GM.equipSkill(S, e.currentTarget.dataset.id); if (r === "full") toast("これ以上は装備できない"); save(); draw(); });
+      on("#back", "click", guild);
+    });
     draw();
   }
 

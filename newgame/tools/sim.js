@@ -2,7 +2,7 @@
 // 使い方: node newgame/tools/sim.js [日数] [種]
 const vm = require("vm"), fs = require("fs"), path = require("path");
 const ctx = { console, Math, Date, JSON }; vm.createContext(ctx);
-for (const f of ["util", "data", "map", "text", "field", "report", "game"])
+for (const f of ["util", "data", "map", "text", "field", "report", "diary", "game"])
   vm.runInContext(fs.readFileSync(path.join(__dirname, "..", "js", f + ".js"), "utf8"), ctx, { filename: f + ".js" });
 const DAYS = +process.argv[2] || 30, SEED = +process.argv[3] || 7;
 const out = vm.runInContext(`(function(){

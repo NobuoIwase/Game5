@@ -30,10 +30,20 @@ for(let i=0;i<500;i++){
   await p.waitForTimeout(40);
 }
 await p.waitForTimeout(800);
-for(let i=0;i<10;i++){ if(await p.$('#all')||await p.$('#audit')) break; const d=await p.$('#dlg:not(.hidden)'); if(d) await d.click(); await p.waitForTimeout(500);}
-await p.click('#all');await p.waitForTimeout(200);await p.screenshot({path:SP+'v6_report.png',fullPage:true});
-await p.click('#audit');await p.waitForTimeout(200);await p.click('#ok');await p.waitForTimeout(200);await p.click('#ok2');await p.waitForTimeout(200);
-const re=await p.$('#rec'); if(re) await re.click();
+// 口頭報告：窓を押して進める。選択肢が出たら、最初の一回だけ「追及する」
+let probed=false;
+for(let i=0;i<120;i++){
+  if(await p.$('#todoc')&&await p.$('#rdone:not(.hidden)')) break;
+  const ch=await p.$$('#dlgc:not(.hidden) button');
+  if(ch.length){ await ch[probed?1:0].click(); if(!probed){probed=true;await p.screenshot({path:SP+'v6_report.png',fullPage:true});} }
+  else { const d=await p.$('#dlg:not(.hidden)'); if(d) await d.click(); }
+  await p.waitForTimeout(120);
+}
+await p.click('#todoc');await p.waitForTimeout(300);
+const lines=await p.$$('.ds-line:not(.fixed)'); if(lines.length) await lines[lines.length-1].click();
+await p.waitForTimeout(200);await p.screenshot({path:SP+'v6b_doc.png',fullPage:true});
+await p.click('#ok');await p.waitForTimeout(200);await p.click('#ok2');await p.waitForTimeout(400);
+for(let i=0;i<60;i++){ if(await p.$('#rechoice:not(.hidden)')||await p.$('h1')) { if(await p.$('#rechoice:not(.hidden)')){await p.click('#rec');await p.waitForTimeout(300);} break; } const d=await p.$('#dlg:not(.hidden)'); if(d) await d.click(); await p.waitForTimeout(150); }
 await p.waitForTimeout(200);await p.click('#ok');await p.waitForTimeout(1500);await p.screenshot({path:SP+'v7_day2.png',fullPage:true});
 console.log('errors',errs,'scrollW',await p.evaluate(()=>document.documentElement.scrollWidth));
 await b.close();})();

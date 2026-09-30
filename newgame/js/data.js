@@ -444,6 +444,34 @@ var G = (typeof G !== "undefined") ? G : {};
     },
   };
 
+  /* ---- ひかりの成長：レベル（ゆっくり・上限あり）と、閃き（ロマサガ式）----
+   * 時間が巻き戻らない（毎日が続く）ので、レベルで強くなりすぎないように、伸びは小さく頭打ちにする。
+   * 本当の伸びしろは「閃き」：戦いの最中に、低い確率で新しい技や戦い方を思いつく。装備できる数は限られる。
+   * how：閃くきっかけ（dodge 避けた時／shot 光弾／melee 杖／burst 大技／struggle もがいた時／flash 光で弾いた時／rest 息を整えた時／pinch 追い詰められた時／hit 何かを浴びた時／walk 歩いている時）
+   */
+  G.SKILLS = {
+    mikiri:    { name: "見切り",                 how: "dodge",    desc: "構えを見てから避けるまでが速くなる" },
+    stardust:  { name: "スターダスト・ステップ", how: "dodge",    desc: "避ける一歩が伸び、その瞬間だけ何にも捕まらない" },
+    twin:      { name: "ルミナ・ツインショット", how: "shot",     desc: "光弾を二発まとめて撃つ（MPを少し多く使う）" },
+    spear:     { name: "スター・スピア",         how: "melee",    desc: "杖の突きが伸び、重くなる" },
+    nova:      { name: "シャイン・ノヴァ",       how: "burst",    desc: "シャイン・バスターが広く、強くなる" },
+    hodoki:    { name: "縄抜けの型",             how: "struggle", desc: "捕まった時、もがき方が上手くなる" },
+    heartlock: { name: "心の錠",                 how: "struggle", desc: "捕まって触れられても、快感が入りにくい" },
+    flash2:    { name: "フラッシュ・ヴェール",   how: "flash",    desc: "ルミナ・フラッシュが軽く、広く、早く使える" },
+    prism:     { name: "プリズム・ガード",       how: "hit",      desc: "浴びせられる熱や惑いを、少し弾く" },
+    breath:    { name: "月光の呼吸",             how: "rest",     desc: "MPと気力の戻りが早くなる" },
+    wind:      { name: "追い風",                 how: "walk",     desc: "足取りが軽くなる" },
+    veil:      { name: "ルミナ・ヴェール",       how: "pinch",    desc: "階ごとに一度だけ、掴みかかってきた手を弾く" },
+  };
+  G.GROWTH = {
+    lvMax: 30,
+    xpNeed: lv => Math.round(40 * Math.pow(lv, 1.35)),          // 次のレベルまで
+    hpMax: lv => 100 + Math.min(40, 2 * (lv - 1)),
+    mpMax: lv => 60 + Math.min(20, lv - 1),
+    dmg: lv => 1 + Math.min(0.3, 0.02 * (lv - 1)),
+    slots: lv => 2 + (lv >= 6 ? 1 : 0) + (lv >= 14 ? 1 : 0),     // 装備できる技の数（最大4）
+  };
+
   /* ---- 迷宮の法則（Game2）：潜行の入口で決まり、潜行全体に効く。無い日もある ---- */
   G.LAWS = {
     shumoku:   { name: "衆目の法則", note: "触れるより『見られる』。視線の熱が増し、見られながら達した姿は記録に残る" },

@@ -51,6 +51,9 @@ var G = (typeof G !== "undefined") ? G : {};
       strafe: 1, strafeT: 0, search: null, glance: null, idleT: 0, kb: 0, kbA: 0, brakeT: 0, spPrev: 0, goal: null, state: "explore",
     });
     Object.assign(h, { freeze: 0, sniff: 0, salute: 0, pray: 0, countGame: null, drawn: null, deny: null, altar: null });
+    // 階の時計（w.t）は階ごとに0から。前の階の時刻・座標を持ち越すと、届かない目的地に向かい続けて固まる
+    Object.assign(h, { veilUsed: false, inspT: undefined, fireSpot: null, peekSpot: null, wallHits: 0, _pp: null, convey: null, cdMelee: 0, cdFlash: 0, cdBreak: 0, ifr: 0, thinkT: 0,
+      charmT: {}, anticT: undefined, saluteT: undefined, bcastT: undefined, edgeT: undefined, lastClimaxT: undefined, ringT: undefined, tipT: undefined });
     map.seen = new Uint8Array(map.W * map.H);
     populate(w);
     msg(w, "floor", { floor: floorNo, dg: run.dungeonName || dg.name });
@@ -205,6 +208,25 @@ var G = (typeof G !== "undefined") ? G : {};
     if (w.msgs.length > 40) w.msgs.shift();
   }
   function fx(w, o) { w.fx.push(Object.assign({ t: 0, life: 0.6 }, o)); }
+  // 出来上がった文をそのまま窓に出す（捕まっている間の「何をされたか」）
+  function pushMsg(w, text, key) {
+    if (!text) return;
+    const last = w.msgs[w.msgs.length - 1];
+    if (last && last.text === text && w.t - last.t < 1.2) return;
+    w.msgs.push({ text, t: w.t, key: key || "act" });
+    if (w.msgs.length > 40) w.msgs.shift();
+  }
+  // 魔物の声（しゃべる種だけ）。同じ魔物は数秒あけ、画面に出る声は二つまで
+  function monSay(w, m, key, p) {
+    if (!m || !m.d || w.outcome && w.outcome !== "defeat") return;
+    if (p !== undefined && !U.chance(p)) return;
+    if (w.t - (m.sayT ?? -99) < 3.5 && key !== "climax") return;
+    if (w.monsters.filter(o => o.bubble && o.bubble.t > 0.5 && o !== m).length >= 2) return;
+    const t = G.Text.voice(m.kind, key); if (!t) return;
+    m.sayT = w.t; m.bubble = { text: t, t: 2.4 };
+  }
+  function actMsg(w, key, ctx) { pushMsg(w, G.Text.actMsg(key, Object.assign({ n: heroName(w) }, ctx || {})), key); }
+  function actBub(w, key) { const t = G.Text.actBubble(key); if (t) w.run.h.bubble = { text: t, t: 2.2 }; }
   // 媚薬の靄（床に溜まって、しばらく残る）
   function addCloud(w, m, C) { w.clouds.push({ x: m.x, y: m.y, r: C.r, life: C.life, t: 0, power: C.power * (m.pow || 1), name: m.d.name, kind: m.kind }); }
   function logLine(w, text, cls) { w.log.push({ t: w.t, text, cls: cls || "" }); if (w.log.length > 60) w.log.shift(); }
@@ -215,7 +237,15 @@ var G = (typeof G !== "undefined") ? G : {};
       if ((h.hyp || 0) >= 60 || h.sleep > 0) e.hidden = true;
       else if (w.run.law === "boukyaku" && U.chance(0.35)) e.hidden = true;
     }
-    w.run.events.push(e); return e;
+    w.run.events.push(e);
+    // 学習と期待（相手ごとに、日をまたいで残る）
+    if (e.mon) {
+      if (e.kind === "kill") learn(w, e.mon, 1);
+      else if (e.kind === "hold") learn(w, e.mon, 2);
+      else if (e.kind === "climax") crave(w, e.mon, 3);
+    }
+    if (e.kind === "trap" && e.trap) learn(w, "trap:" + e.trap, 2);
+    return e;
   }
   /* ---- 状態の小道具 ---- */
   const MACHINE = ["ratchet", "karte", "exam", "capture", "pod", "drone_capture", "drone_tickle", "belt", "gate", "armor", "saddle"];
@@ -370,7 +400,33 @@ var G = (typeof G !== "undefined") ? G : {};
     return k;
   }
   function tierFx(w) { return TIER_FX[G.tier(w.run.save.body, w.run.save.mind)]; }
-  function knowledge(w, kind) { const k = (w.run.save.know || {})[kind] || 0; return Math.min(1, k / 6); }
+  // ひかりの学習：知っている相手ほど上手くあしらえる（見た1・倒した1・捕まった2・抜けた2・罠は掛かった2）
+  function knowledge(w, kind) { const k = (w.run.save.know || {})[kind] || 0; return Math.min(1, k / 14); }
+  function learn(w, kind, n) { const sv = w.run.save; if (!sv || !kind) return; sv.know = sv.know || {}; sv.know[kind] = (sv.know[kind] || 0) + n; }
+  // 期待：その相手に気持ちよくされた分だけ、次に会った時、身体が先に思い出す
+  function expectation(w, kind) { const e = ((w.run.save && w.run.save.lewd) || {})[kind] || 0; return Math.min(1, e / 30); }
+  // 技（装備しているものだけが効く）と、閃き
+  function sk(w, id) { const k = w.run.h.skills; return !!(k && k.includes(id)); }
+  function inspire(w, how) {
+    const h = w.run.h, sv = w.run.save;
+    if (!sv || w.outcome || w.t - (h.inspT ?? -99) < 15) return;
+    const pool = Object.keys(G.SKILLS).filter(id => G.SKILLS[id].how === how && !(sv.skills || {})[id]);
+    if (!pool.length) return;
+    h.inspT = w.t;
+    const near = w.monsters.filter(m => m.hp > 0 && m.alert > 0 && U.dist(m.x, m.y, h.x, h.y) < 5).length;
+    sv.insp = (sv.insp || 0) + 1;                                       // 閃かないほど、次は閃きやすい
+    const p = 0.02 * (1 + 0.4 * near) * (how === "pinch" ? 2 : 1) * (1 + sv.insp * 0.04);
+    if (!U.chance(p)) return;
+    const id = U.pick(pool); sv.insp = 0;
+    sv.skills = sv.skills || {}; sv.skills[id] = true;
+    const slots = G.GROWTH.slots(sv.lv || 1); sv.equip = sv.equip || [];
+    if (sv.equip.length < slots && !sv.equip.includes(id)) { sv.equip.push(id); h.skills = (h.skills || []).concat(id); }   // 空きがあれば、その場から使える
+    record(w, { kind: "inspire", skill: id, skillName: G.SKILLS[id].name, sev: 0 });
+    msg(w, "inspire", { skill: G.SKILLS[id].name }); say(w, "inspire", { skill: G.SKILLS[id].name });
+    fx(w, { kind: "burst", x: h.x, y: h.y - 0.8, color: "#fff6a0", r: 0.6, life: 0.8 });
+    fx(w, { kind: "sfx", text: "閃いた！", x: h.x, y: h.y - 1.4, life: 1.6, color: "#fff2a0" });
+  }
+  function crave(w, kind, n) { const sv = w.run.save; if (!sv || !kind) return; sv.lewd = sv.lewd || {}; sv.lewd[kind] = (sv.lewd[kind] || 0) + n; }
 
   /* ================================================================ 位置と移動 */
   function free(map, x, y, r) {
@@ -429,6 +485,7 @@ var G = (typeof G !== "undefined") ? G : {};
   /* ================================================================ 効き目 */
   function applyEffect(w, type, power, src, how) {
     const h = w.run.h, k = mult(w, type), tf = tierFx(w);
+    if (type === "惑" || type === "蕩") { if (sk(w, "prism")) power *= 0.82; if (power >= 0.5) inspire(w, "hit"); }
     const name = src ? (src.d ? src.d.name : "") : "";
     const sev = k * power >= 1.6 ? 2 : 1;
     if (type === "惑") {
@@ -505,9 +562,12 @@ var G = (typeof G !== "undefined") ? G : {};
     h.trance = Math.max(h.trance, 1.6);
     const e = record(w, { kind: "climax", type: src && src.d ? src.d.type : "蕩", mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: 3, bound: !!h.bound });
     logLine(w, G.Text.log("climax", { mon: e.monName }), "heavy");
-    msg(w, "climax", {});
+    const la = h.bound && h.bound.last && w.t - h.bound.last.t < 2.5 ? h.bound.last : null;
+    if (la) { e.act = la.p; e.monName = e.monName || la.mon; actMsg(w, "climaxAct", { p: la.p, mon: la.mon }); if (h.bound.ev) h.bound.ev.climaxActs = (h.bound.ev.climaxActs || []).concat(la.p); }
+    else msg(w, "climax", {});
     fx(w, { kind: "burst", x: h.x, y: h.y, color: "#ff9ccc", life: 1.0 });
     say(w, "climax", {});
+    { const vm = w.monsters.filter(m => m.hp > 0 && G.Text.hasVoice(m.kind) && U.dist(m.x, m.y, h.x, h.y) < 6).sort((a, b) => U.dist(a.x, a.y, h.x, h.y) - U.dist(b.x, b.y, h.x, h.y))[0]; if (vm) monSay(w, vm, "climax", 0.8); }
     // 覗き目玉：見られながら達した姿は、記録に残る
     const eye = w.monsters.find(m => m.hp > 0 && m.d.atk.film && U.dist(m.x, m.y, h.x, h.y) < 6.5 && M.los(w.map, m.x, m.y, h.x, h.y));
     if (eye) { record(w, { kind: "filmed", type: "惑", mon: eye.kind, monName: eye.d.name, sev: 3 }); msg(w, "filmed", { mon: eye.d.name }); fx(w, { kind: "flashCam", x: eye.x, y: eye.y, life: 0.4 }); }
@@ -597,13 +657,21 @@ var G = (typeof G !== "undefined") ? G : {};
   function grab(w, src, power, type) {
     const h = w.run.h;
     if (h.ifr > 0 && src.d && src.d.spd !== undefined) return false;
+    if (!h.bound && sk(w, "veil") && !h.veilUsed && src.d && src.d.spd !== undefined) {   // ルミナ・ヴェール：階ごとに一度、掴む手を弾く
+      h.veilUsed = true; h.ifr = 0.6; msg(w, "veil", { mon: src.d.name }); h.bubble = { text: "ルミナ・ヴェール！", t: 1.2 };
+      fx(w, { kind: "ring", x: h.x, y: h.y, color: "#fff2c0", r: 1.2, life: 0.6 }); return false;
+    }
     if (h.bound) {
-      if (h.bound.by.length >= 3 || h.bound.by.includes(src.id)) return false;
-      h.bound.by.push(src.id); h.bound.power += power;
-      msg(w, "grabMore", { mon: src.d.name });
+      if (h.bound.by.length >= 5 || h.bound.by.includes(src.id)) return false;
+      h.bound.by.push(src.id); h.bound.power += power * 0.6;       // 数が増えるほど、振りほどけない
+      if (src.d && src.d.spd !== undefined) monSay(w, src, "grab", 0.6);
+      actMsg(w, "swarm", { mon: src.d.name, c: h.bound.by.length + w.monsters.filter(m => m.molest && m.hp > 0).length });
+      if (h.bound.by.length >= 3) actBub(w, "swarm");
+      if (src.d && src.d.pack) callPack(w, src);
       return true;
     }
-    h.bound = { by: [src.id], power, type: type || "絡", t: 0, struggle: 0, src };
+    h.bound = { by: [src.id], power, type: type || "絡", t: 0, struggle: 0, src, acts: 0, stage: 0, actT: 0.9 };
+    if (src.d && src.d.pack) callPack(w, src);
     const A = src.d && src.d.atk;
     if (A && src.d.spd !== undefined) {                 // 魔物ごとの捕まえ方
       if (A.wire) Object.assign(h.bound, { wire: true, slowStruggle: 0.8 });
@@ -616,6 +684,7 @@ var G = (typeof G !== "undefined") ? G : {};
       if (A.kiss) { h.bound.kiss = true; kiss(w, src); }
     }
     h.cast = null; h.vx = h.vy = 0;
+    if (src.d && src.d.spd !== undefined) monSay(w, src, "grab", 0.8);
     const e = record(w, { kind: "hold", type: type || "絡", mon: src.kind, monName: src.d.name, sev: 2 });
     h.bound.ev = e;
     logLine(w, G.Text.log("hold", { mon: src.d.name }), "mid");
@@ -623,9 +692,14 @@ var G = (typeof G !== "undefined") ? G : {};
     say(w, "held", { mon: src.d.name });
     return true;
   }
+  // 群れで来る種：一体が捕まえると、仲間を呼ぶ
+  function callPack(w, src) {
+    for (const m of w.monsters) if (m.hp > 0 && m !== src && m.kind === src.kind && U.dist(m.x, m.y, src.x, src.y) < 9) alertMon(w, m, 1);
+  }
   function release(w, broke) {
     const h = w.run.h, b = h.bound;
     if (!b) return;
+    for (const m of w.monsters) if (m.molest) { m.molest = false; if (broke) { m.stun = 1.2; knock(w, m, U.angle(h.x, h.y, m.x, m.y), 0.8); } m.cd = Math.max(m.cd, 2); }
     for (const id of b.by) {
       const m = w.monsters.find(x => x.id === id);
       if (m) { m.holding = false; m.stun = broke ? 1.6 : 0.6; m.cd = 2.5; m.rcl = 0.3; m.rclX = Math.sign(m.x - h.x) || 1; knock(w, m, U.angle(h.x, h.y, m.x, m.y), 1.0); }
@@ -633,7 +707,7 @@ var G = (typeof G !== "undefined") ? G : {};
       if (tr) { tr.armed = false; tr.rearm = tr.d.rearm; }
     }
     if (b.ev) { b.ev.dur = +b.t.toFixed(1); if (b.t > 3.5) b.ev.sev = 3; }
-    if (broke) { say(w, "breakFree", {}); msg(w, "free", {}); fx(w, { kind: "burst", x: h.x, y: h.y, color: "#fff2a8", life: 0.6 }); }
+    if (broke) { say(w, "breakFree", {}); msg(w, "free", {}); fx(w, { kind: "burst", x: h.x, y: h.y, color: "#fff2a8", life: 0.6 }); if (b.src) learn(w, b.src.kind, 2); record(w, { kind: "escape", mon: b.src && b.src.kind, monName: b.src && b.src.d ? b.src.d.name : "", sev: 0 }); }
     h.bound = null;
     h.trance = Math.max(h.trance, 0.3);
     h.think = Math.max(h.think || 0, broke ? 0.9 : 0.6); h.label = "息を整える";   // 抜けた直後は、よろめいて立て直す
@@ -642,28 +716,90 @@ var G = (typeof G !== "undefined") ? G : {};
     const nx = m.x + Math.cos(a) * dist, ny = m.y + Math.sin(a) * dist;
     if (free(w.map, nx, ny, m.d.r * 0.6)) { m.x = nx; m.y = ny; }
   }
+  // 捕まえている相手・まとわりついている相手のうち、触れてくる者
+  function actCat(w, src) {
+    const h = w.run.h;
+    let c = G.Text.actorOf(src.kind);
+    if (!c) return null;                                            // 縛るだけの罠・機械
+    if (h.futa && c !== "watch" && c !== "tickle" && U.chance(src.d && src.d.futa ? 0.75 : 0.3)) c = "futa";
+    return c;
+  }
+  function lewdTick(w, dt) {
+    const h = w.run.h, b = h.bound, tf = tierFx(w);
+    const srcs = [];
+    for (const id of b.by) { const s = w.monsters.find(x => x.id === id && x.hp > 0) || w.traps.find(t => t.id === id); if (s) srcs.push(s); }
+    for (const m of w.monsters) if (m.molest && m.hp > 0 && !b.by.includes(m.id)) srcs.push(m);
+    const acts = srcs.filter(s => G.Text.actorOf(s.kind));
+    const touching = acts.filter(s => G.Text.actorOf(s.kind) !== "watch");
+    b.nAct = touching.length;
+    if (!acts.length) {                                              // 縛られているだけ
+      b.idleT = (b.idleT || 0) + dt;
+      if (b.idleT > 2 && U.chance(dt * 0.3)) { actMsg(w, "alone", { trap: b.src.d ? b.src.d.name : "" }); if (U.chance(0.5)) actBub(w, "alone"); }
+      return;
+    }
+    b.actT -= dt;
+    if (b.actT > 0) return;
+    const n = Math.max(1, touching.length);
+    b.actT = U.rf(1.1, 1.7) / (1 + 0.28 * (n - 1));
+    b.acts++;
+    // 段階：服の上から → 服の中 → 直接。時間・回数・装束の損壊・発情で進む
+    const st = (b.acts >= 7 || b.t > 8 || (h.exposure && b.acts >= 3)) ? 2 : (b.acts >= 3 || b.t > 3.5 || h.exposure || h.arousal > 60) ? 1 : 0;
+    const who = acts[b.acts % acts.length], name = who.d ? who.d.name : "";
+    if (st > b.stage) { b.stage = st; actMsg(w, "stage" + st, { mon: name }); if (st === 2) actBub(w, "touch2"); }
+    const cat = actCat(w, who), act = G.Text.act(cat, b.stage);
+    if (!act) return;
+    pushMsg(w, G.Text.fillAct(act, { mon: name, n: heroName(w) }) + "……", "act");
+    if (who.d && who.d.spd !== undefined) monSay(w, who, "act", 0.45);
+    fx(w, { kind: "sfx", text: act.fx, x: h.x + U.rf(-0.6, 0.6), y: h.y - U.rf(0.7, 1.3), life: 1.2, color: act.watch ? "#d8c8ff" : "#ffb3d6" });
+    for (const m of w.monsters) if (m.hp > 0 && !m.alert && U.dist(m.x, m.y, h.x, h.y) < 4.5 && G.Text.actorOf(m.kind)) alertMon(w, m, 0.6);   // 声が、近くの魔物を呼ぶ
+    if (act.watch) { h.watched = 1.5; h.arousal = Math.min(100, h.arousal + 2.5); return; }
+    const k = mult(w, "蕩"), swarm = 1 + 0.18 * (n - 1);
+    const gain = 8.5 * act.pw * (who.pow || 1) * k * (1 + h.arousal / 90) * intake(w, who) * swarm * tf.pleasure * (w.run.law === "seishi" ? 0.8 : 1) * (act.tickle ? 0.7 : 1) * (sk(w, "heartlock") ? 0.82 : 1);
+    if (act.cum && h.futa) addCum(w, 11 * act.pw * swarm * intake(w, who), who); else h.pleasure += gain;
+    h.arousal = Math.min(100, h.arousal + 3.2 * act.pw * k);
+    if (act.tickle) h.will = Math.max(0, h.will - 3);
+    if (act.edge) h.pleasure = Math.min(h.pleasure, 94);
+    if (b.ev) { b.ev.acts = b.ev.acts || {}; b.ev.acts[act.part] = (b.ev.acts[act.part] || 0) + 1; b.ev.stage = b.stage; b.ev.n = Math.max(b.ev.n || 1, n); }
+    b.last = { p: act.p, mon: name, kind: who.kind, part: act.part, t: w.t };
+    crave(w, who.kind, 0.25 * act.pw);
+    { const sv = w.run.save; if (sv) { sv.parts = sv.parts || {}; const pp = sv.parts[who.kind] || (sv.parts[who.kind] = {}); pp[act.part] = (pp[act.part] || 0) + 1; } }
+    // 吹き出し：触れはじめ／くすぐり／段階ごとの喘ぎ
+    if (b.acts === 1) actBub(w, act.tickle ? "tickleLaugh" : "touch");
+    else if (act.tickle && U.chance(0.6)) actBub(w, "tickleLaugh");
+    else if (U.chance(0.6)) actBub(w, h.pleasure < 45 ? "moan1" : h.pleasure < 80 ? "moan2" : "moan3");
+    // どこまで溜まったか
+    const lv = h.pleasure >= 88 ? 3 : h.pleasure >= 70 ? 2 : h.pleasure >= 45 ? 1 : 0;
+    if (lv > (b.heat || 0)) { b.heat = lv; actMsg(w, "heat" + lv, { c: Math.round(h.pleasure) }); }
+    checkClimax(w, who);
+    if (h.pleasure < 45) b.heat = 0;
+  }
   function updateBound(w, dt) {
     const h = w.run.h, b = h.bound, tf = tierFx(w);
     b.t += dt;
     b.by = b.by.filter(id => w.monsters.some(m => m.id === id && m.hp > 0) || w.traps.some(t => t.id === id));
     if (!b.by.length) { release(w, false); return; }
     const k = mult(w, b.type), p = b.power;
-    h.hp = Math.max(0, h.hp - 1.2 * p * dt);
+    h.hp = Math.max(0, h.hp - 0.9 * p * dt);
     h.will = Math.max(0, h.will - 3.0 * p * k * tf.will * dt);      // 拘束は長く見せる分、一秒あたりは緩め
-    h.arousal = Math.min(100, h.arousal + 3 * p * k * dt);
-    h.pleasure += 6.5 * p * k * (1 + h.arousal / 90) * intake(w, b.src) * (b.tickle ? 0.6 : 1) * (w.run.law === "seishi" ? 0.8 : 1) * dt;
+    // 縛られているだけでは、熱は上がらない。触れられて、はじめて上がる
+    lewdTick(w, dt);
+    if (!h.bound) return;
     for (const id of b.by) { const m = w.monsters.find(x => x.id === id); if (m && m.d.atk.drain) drainMagic(w, m.d.atk.drain * dt, m); }
     if (h.kit.knife > 0 && b.t > 0.8 && !b.knifed && b.type === "絡" && !b.noKnife) { b.knifed = true; h.kit.knife--; b.struggle += 0.6; msg(w, "item", { item: "縄抜けの小刀" }); record(w, { kind: "item", item: "knife", sev: 0 }); }
     const arms = b.by.length + (b.shadow && b.shadow.arms >= 4 ? 1 : 0);      // 影の腕が増えたら、二か所以上に掴まれたのと同じ
     if (h.form === "magica" && !b.noFlash && h.cdFlash <= 0 && h.mp >= G.HIKARI.flash.cost && h.trance <= 0 && !b.wait && b.t > 1.8 && (arms >= 2 || (b.t > 2.6 && pressure(w, h.x, h.y, 2.4).n >= 3))) { flash(w); return; }
     const prep = G.PREP[w.run.stated];
     let rate = (0.2 + h.will / 260) * (h.form === "magica" ? 1.25 : 0.7) * tf.struggle / Math.max(0.5, k * p) * (b.slowStruggle || 1) * resist(w);
+    rate /= 1 + 0.25 * (b.nAct > 1 ? b.nAct - 1 : 0);                // 群がられるほど、もがく隙がない
+    if (h.pleasure > 70) rate *= 0.75;                                 // 気持ちよさで、力が入らない
     if (prep && prep.slow && b.type === "絡") rate *= 0.8;
     rate *= 1 + knowledge(w, b.src.kind) * 0.35;        // 知っている相手ほど、抜け方が分かる
+    rate *= 1 - expectation(w, b.src.kind) * 0.3;       // 気持ちよさを覚えている相手だと、本気で振りほどけない
+    if (sk(w, "hodoki")) rate *= 1.3;
     if (b.t < 2.4) rate *= 0.25;                           // 捕まった直後は、まず何もできない
     b.struggle += rate * 0.5 * dt;
     if (U.chance(dt * 0.8)) msg(w, "struggle", {}, 2.5);
-    if (b.struggle > 0.7 && !b.almost) { b.almost = true; msg(w, "almostFree", {}); }
+    if (b.struggle > 0.7 && !b.almost) { b.almost = true; msg(w, "almostFree", {}); inspire(w, "struggle"); }
     if (b.edge) { h.pleasure = Math.min(h.pleasure, 96); h.will = Math.max(0, h.will - 2.2 * dt); if (b.t > 2 && U.chance(dt * 0.6)) msg(w, "edge", {}, 3); }
     if (b.pillory) { h.watched = 0.4; h.arousal = Math.min(100, h.arousal + 1.2 * dt); }
     // 吊花：逆さのまま、蜜が一定の間隔で垂れてくる
@@ -693,7 +829,14 @@ var G = (typeof G !== "undefined") ? G : {};
     // 開発：捕まっている間、少しずつ敏感にされる。装束も剥がされる
     if (b.develop) { b.devT = (b.devT || 0) + dt; if (b.devT > 2.5) { b.devT = 0; h.sens = Math.min(5, (h.sens || 0) + 1); if (!h.exposure) { h.exposure = true; record(w, { kind: "exposure", sev: 2, mon: b.src.kind, monName: b.src.d ? b.src.d.name : "" }); } msg(w, "develop", { c: h.sens }, 2); } }
     // 抱きついて、数秒で離れる
-    if (b.brief && b.t > b.brief) { release(w, false); return; }
+    if (b.brief && b.t > b.brief) {
+      // 短く抱きつく相手・網が離れても、ほかに掴んでいる者がいれば捕まったまま
+      const rest = b.by.filter(id => id !== b.src.id && w.monsters.some(m => m.id === id && m.hp > 0));
+      if (!rest.length) { release(w, false); return; }
+      const m0 = w.monsters.find(m => m.id === b.src.id); if (m0) { m0.holding = false; m0.cd = Math.max(m0.cd, 2); }
+      b.by = rest; b.src = w.monsters.find(m => m.id === rest[0]); b.brief = 0; b.power = Math.max(0.4, b.power * 0.7);
+      for (const f of ["net", "tickle", "wire"]) b[f] = false;
+    }
     // 戦闘員化ポッド：名前を塗り替えられていく
     if (b.pod) { addBrain(w, 7 * dt, b.src); if (!h.bound) return; if (U.chance(dt * 0.4)) msg(w, "podName", {}, 4); }
     // うつろの鎧：内側は柔らかく、光も杖も届かない
@@ -748,7 +891,7 @@ var G = (typeof G !== "undefined") ? G : {};
     for (const tr of w.traps) {
       if (tr.found) continue;
       const d = U.dist(h.x, h.y, tr.x, tr.y);
-      if (d < 2.3 && M.los(map, h.x, h.y, tr.x, tr.y) && U.chance(tr.d.detect * (1 - h.arousal / 220) * 0.35)) {
+      if (d < 2.3 + knowledge(w, "trap:" + tr.kind) && M.los(map, h.x, h.y, tr.x, tr.y) && U.chance(tr.d.detect * (1 - h.arousal / 220) * 0.35 * (1 + 1.5 * knowledge(w, "trap:" + tr.kind)))) {
         tr.found = true;
         say(w, "trapFound", { trap: tr.d.name }); msg(w, "trapFound", { trap: tr.d.name });
         record(w, { kind: "trapFound", type: tr.d.type, trap: tr.kind, trapName: tr.d.name, sev: 0 });
@@ -760,14 +903,23 @@ var G = (typeof G !== "undefined") ? G : {};
     const h = w.run.h, run = w.run;
     h.think = 0.4; h.face = { x: m.x, y: m.y, t: 0.6 };
     record(w, { kind: "spot", type: m.d.type, mon: m.kind, monName: m.d.name, sev: 0, boss: !!m.boss });
-    const sv = run.save; sv.know = sv.know || {}; sv.know[m.kind] = (sv.know[m.kind] || 0) + 1;
+    const kn = knowledge(w, m.kind), ex = expectation(w, m.kind);
+    learn(w, m.kind, 1);
     msg(w, m.boss ? "spotBoss" : "spot", { mon: m.d.name }, 1.5);
     if (m.boss) { run.bossSeen = true; say(w, "spotBoss", { mon: m.d.name }); return; }
     const paper = run.paper || {};
-    if (m.d.type !== run.stated && m.d.type !== "削") {
-      run.mismatch = (run.mismatch || 0) + 1;
-      if (run.mismatch === 1 || U.chance(0.25)) { say(w, "mismatch", { mon: m.d.name, stated: run.stated }); return; }
+    const odd = m.d.type !== run.stated && m.d.type !== "削";
+    if (odd) run.mismatch = (run.mismatch || 0) + 1;
+    // 身体が先に思い出す：以前に気持ちよくされた相手を見ると、熱が上がる
+    if (ex > 0.15 && w.t - (h.anticT ?? -99) > 6) {
+      h.anticT = w.t;
+      h.arousal = Math.min(100, h.arousal + 30 * ex); h.pleasure += 8 * ex;
+      record(w, { kind: "anticipate", type: "惑", mon: m.kind, monName: m.d.name, lv: Math.ceil(ex * 3), sev: ex > 0.6 ? 2 : 1 });
+      msg(w, "anticipate", { mon: m.d.name }); say(w, ex > 0.6 ? "anticipate3" : ex > 0.35 ? "anticipate2" : "anticipate1", { mon: m.d.name });
+      return;
     }
+    if (kn > 0.45 && U.chance(0.5)) { msg(w, "knowIt", { mon: m.d.name }, 4); say(w, "knowIt", { mon: m.d.name, kind: m.kind }); return; }
+    if (odd && (run.mismatch === 1 || U.chance(0.25))) { say(w, "mismatch", { mon: m.d.name, stated: run.stated }); return; }
     if (paper.level && run.real && run.real.level > paper.level && !run.strongNoticed && U.chance(0.35)) { run.strongNoticed = true; say(w, "stronger", { mon: m.d.name }); return; }
     say(w, "spot", { mon: m.d.name, kind: m.kind });
   }
@@ -840,7 +992,7 @@ var G = (typeof G !== "undefined") ? G : {};
       if (!seeIt) continue;
       const key = "c" + m.cast.id;
       if (!h.react[key]) {
-        let d = 0.36 - knowledge(w, m.kind) * 0.12 + (h.trance > 0 ? 0.25 : 0) + (h.hyp || 0) / 300 + h.arousal / 320 + U.rf(-0.05, 0.09);
+        let d = 0.36 - knowledge(w, m.kind) * 0.12 - (sk(w, "mikiri") ? 0.08 : 0) + (h.trance > 0 ? 0.25 : 0) + (h.hyp || 0) / 300 + h.arousal / 320 + U.rf(-0.05, 0.09);
         d = U.clamp(d, 0.06, 0.8);
         h.react[key] = { at: w.t - U.clamp(m.cast.total - m.cast.t, 0, 0.3), d };
       }
@@ -888,8 +1040,9 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   // ルミナ・フラッシュ：拘束を弾き、まわりを押し返して怯ませる
   function flash(w) {
-    const h = w.run.h, F = G.HIKARI.flash;
-    h.mp -= F.cost; h.cdFlash = F.cd; h.ifr = 0.8;
+    const h = w.run.h, F0 = G.HIKARI.flash, v = sk(w, "flash2");
+    const F = v ? Object.assign({}, F0, { cost: F0.cost - 4, cd: F0.cd - 3, radius: F0.radius + 0.8 }) : F0;
+    h.mp -= F.cost; h.cdFlash = F.cd; h.ifr = 0.8; inspire(w, "flash");
     if (h.bound) release(w, true);
     for (const m of w.monsters) {
       if (m.hp <= 0 || U.dist(m.x, m.y, h.x, h.y) > F.radius) continue;
@@ -935,6 +1088,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (h.slow > 0) s *= 0.55;
     if (h.glue > 0) s *= 0.1;
     if (h.numb > 0) s *= 0.75;
+    if (sk(w, "wind")) s *= 1.07;
     return s * (1 - h.arousal / 260);
   }
   function avoidFn(w) {
@@ -958,11 +1112,11 @@ var G = (typeof G !== "undefined") ? G : {};
     const h = w.run.h, run = w.run, map = w.map, S = G.HIKARI;
     const caution = run.caution || 1;         // 依頼書の脅威度で変わる用心深さ
     // 道具
-    if (h.hp < 38 && h.kit.salve > 0) { h.kit.salve--; h.hp = Math.min(S.hpMax, h.hp + 35); say(w, "useSalve", {}); msg(w, "item", { item: "治癒の軟膏" }); record(w, { kind: "item", item: "salve", sev: 0 }); }
+    if (h.hp < 38 && h.kit.salve > 0) { h.kit.salve--; h.hp = Math.min(h.hpMax || S.hpMax, h.hp + 35); say(w, "useSalve", {}); msg(w, "item", { item: "治癒の軟膏" }); record(w, { kind: "item", item: "salve", sev: 0 }); }
     const use = (k, fn) => { h.kit[k]--; fn(); msg(w, "item", { item: G.Game.ITEMS[k].name }); record(w, { kind: "item", item: k, sev: 0 }); };
     if ((h.will < 32 || h.trance > 1.2 || h.hyp > 55) && h.kit.smelling > 0) use("smelling", () => { h.will = Math.min(100, h.will + 30); h.trance = Math.min(h.trance, 0.2); h.hyp = Math.max(0, h.hyp - 50); if (h.hyp <= 0 && h.sleep <= 0) h.hypno = null; });
     // MP：戦いの最中に切れそうなら水薬。静かなら、使わずに息を整える
-    if (h.form === "magica" && h.kit.ether > 0 && h.mp < 14 && threats(w).some(o => o.d < 6)) use("ether", () => { h.mp = Math.min(G.HIKARI.mpMax, h.mp + 30); });
+    if (h.form === "magica" && h.kit.ether > 0 && h.mp < 14 && threats(w).some(o => o.d < 6)) use("ether", () => { h.mp = Math.min(h.mpMax || G.HIKARI.mpMax, h.mp + 30); });
     // 火照り：自分で気づけている分だけ（鎮心の香が効いていると気づけない）
     if (h.kit.cool > 0 && perceivedArousal(w) > 55) use("cool", () => { h.arousal = Math.max(0, h.arousal - 35); h.pleasure = Math.max(0, h.pleasure - 20); });
     const ts = threats(w), near = ts.filter(o => o.d < 4.2);
@@ -988,12 +1142,13 @@ var G = (typeof G !== "undefined") ? G : {};
     const u = urgent(w);
     if (u) {
       const v = bestDodge(w, u, ts[0] && ts[0].m);
-      if (!h.dashed[u.key]) { h.dashed[u.key] = 1; h.dashT = 0.28; }
+      if (!h.dashed[u.key]) { h.dashed[u.key] = 1; h.dashT = 0.28; if (sk(w, "stardust")) { h.dashT = 0.36; h.ifr = Math.max(h.ifr, 0.3); } inspire(w, "dodge"); }
       h.cast = null;
-      setIntent(h, v.x, v.y, h.dashT > 0 ? 1.9 : 1.25, "回避", ts[0] ? ts[0].m : null);
-      msg(w, "dodge", {}, 2.5);
+      setIntent(h, v.x, v.y, h.dashT > 0 ? (sk(w, "stardust") ? 2.2 : 1.9) : 1.25, "回避", ts[0] ? ts[0].m : null);
+      if (u.m && knowledge(w, u.m.kind) > 0.5 && U.chance(0.4)) msg(w, "knowDodge", { mon: u.m.d.name }, 5); else msg(w, "dodge", {}, 2.5);
       return;
     }
+    if (h.hp < 35 || h.will < 25) inspire(w, "pinch");
     // 撤退
     const pa = perceivedArousal(w);
     const wantRetreat = run.recall || h.hp < 26 * caution || (h.form === "civilian" && h.kit.star === 0 && h.hp < 60 * caution) || h.will < 18;
@@ -1021,7 +1176,8 @@ var G = (typeof G !== "undefined") ? G : {};
         if (fs) { h.fireSpot = { x: fs.x, y: fs.y, until: w.t + 3 }; msg(w, "reposition", {}, 6); }
       }
       if (h.fireSpot && w.t < h.fireSpot.until && h.form === "magica") {
-        if (U.dist(h.x, h.y, h.fireSpot.x, h.fireSpot.y) > 0.35) { goToward(w, h.fireSpot.x, h.fireSpot.y, 0.95, "射線を探す", m); return; }
+        // 行けない場所なら諦める（固まらない）。相手が目の前なら、探すより打つ
+        if (U.dist(h.x, h.y, h.fireSpot.x, h.fireSpot.y) > 0.35 && t0.d > S.melee.range + 0.6 && goToward(w, h.fireSpot.x, h.fireSpot.y, 0.95, "射線を探す", m)) return;
         h.fireSpot = null;
       }
       h.state = "combat";
@@ -1032,13 +1188,14 @@ var G = (typeof G !== "undefined") ? G : {};
         // 近接：MP が少ない時、相手が攻撃のあとの隙を見せている時、触手の短い相手には踏み込んで打つ
         const A2 = m.d.atk, reachy = (A2.kind === "grab" && (A2.range || 1) > 1.4) || A2.kind === "drain" || (A2.kind === "aura" && !A2.burst);
         const opening = !m.cast && (m.cd > 0.35 || m.stun > 0);
-        const saving = h.mp < G.HIKARI.mpMax * 0.5;          // MP を切らさないように
+        const saving = h.mp < (h.mpMax || G.HIKARI.mpMax) * 0.5;          // MP を切らさないように
         const wantMelee = seenNow && (!!h.possess || (saving && !reachy) || h.mp < S.shot.cost * 2 || (opening && !reachy) || (m.d.spd === 0 && !reachy));
         if (wantMelee && h.mp >= S.melee.cost) {
           if (d <= S.melee.range + m.d.r * 0.5 && h.cdMelee <= 0) { tryCast(w, m, "melee"); return; }
           if (d < 4 && h.cdMelee <= 0.3) { goToward(w, m.x, m.y, 1.15, "踏み込む", m); return; }
         }
-        if (d < 2.6 && m.d.spd > 0) {                 // 近い：相手を見たまま下がる
+        const reach = m.d.atk.kind === "grab" ? (m.d.atk.range || 1) + 0.5 : 0, kn = knowledge(w, m.kind);
+        if (d < Math.max(2.6, (reach + 0.6) * kn + 2.6 * (1 - kn)) && m.d.spd > 0) {    // 近い：相手を見たまま下がる（知っている相手は、届く距離を覚えている）
           const a = U.angle(m.x, m.y, h.x, h.y);
           const v = bestDodge(w, { t: 0.4, key: "space" }, m);
           setIntent(h, (Math.cos(a) + v.x) / 2, (Math.sin(a) + v.y) / 2, 1.0, "間合い", m);
@@ -1074,7 +1231,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (h.form === "magica" && h.mp < 30 && !ts.some(o => o.d < 7)) {
       const shrine = w.traps.find(tr => tr.kind === "shrine" && tr.armed && !tr.found && U.dist(h.x, h.y, tr.x, tr.y) < 9);
       if (shrine) { goToward(w, shrine.x, shrine.y, 0.8, "祠へ"); return; }
-      h.rest = 2.2; h.intent = null; h.label = "息を整える"; say(w, "rest", {}); msg(w, "rest", {}, 12); return;
+      h.rest = 2.2; h.intent = null; h.label = "息を整える"; say(w, "rest", {}); msg(w, "rest", {}, 12); inspire(w, "rest"); return;
     }
     if (pa > 42) {
       const basin = w.traps.find(tr => (tr.kind === "basin" || tr.kind === "spring") && tr.armed && !tr.found && U.dist(h.x, h.y, tr.x, tr.y) < 9 && M.los(map, h.x, h.y, tr.x, tr.y));
@@ -1115,6 +1272,7 @@ var G = (typeof G !== "undefined") ? G : {};
     let unknown = 0;
     for (let k = 1; k <= 3; k++) { const x = h.x + Math.cos(h.a) * k, y = h.y + Math.sin(h.a) * k; if (M.walkable(map, x, y) && !map.seen[Math.floor(y) * map.W + Math.floor(x)]) unknown++; }
     goToward(w, h.search.x, h.search.y, unknown >= 2 ? 0.62 : 0.8, "探索");
+    if (U.chance(0.01)) inspire(w, "walk");
     msg(w, "explore", {}, 14);
   }
   function openChest(w, c) {
@@ -1147,6 +1305,8 @@ var G = (typeof G !== "undefined") ? G : {};
     if (!shotClear(w.map, h.x, h.y, target.x, target.y)) return;
     const lv = target.kind && h.charm ? h.charm[target.kind] || 0 : 0;
     if (!lv && target.kind && h.brand === target.kind && U.chance(0.15)) { h.think = 0.4; msg(w, "brandHesitate", { mon: target.d ? target.d.name : "" }, 5); return; }
+    const ex = target.kind ? expectation(w, target.kind) : 0;
+    if (!lv && ex > 0.35 && U.chance(0.12 * ex)) { h.think = 0.45; msg(w, "anticipateHesitate", { mon: target.d ? target.d.name : "" }, 5); say(w, "anticipateHesitate", {}); return; }   // 期待：撃つ手が、一瞬止まる
     if (lv && U.chance(0.2 * lv)) { h.think = 0.5; msg(w, "charmHesitate", { mon: target.d ? target.d.name : "" }, 4); say(w, "charmHesitate", { mon: target.d ? target.d.name : "" }); return; }   // 魅了：好きな相手に、撃てない
     h.cast = { kind, t: (kind === "burst" ? S.burst.cast : kind === "melee" ? S.melee.cast : S.shot.cast) * (h.numb > 0 ? 1.6 : 1), target, tx: target.x, ty: target.y };
     h.intent = null; h.label = kind === "burst" ? "詠唱" : "攻撃";
@@ -1167,32 +1327,34 @@ var G = (typeof G !== "undefined") ? G : {};
     const tgt = c.target && c.target.hp > 0 ? c.target : { x: c.tx, y: c.ty };
     if (c.kind === "melee") {
       h.mp -= S.melee.cost; h.cdMelee = S.melee.cd; h.idleMp = 0;
-      const a = U.angle(h.x, h.y, c.tx, c.ty);
+      const a = U.angle(h.x, h.y, c.tx, c.ty), spear = sk(w, "spear"), mRange = S.melee.range + (spear ? 0.35 : 0), mDmg = (S.melee.dmg + (spear ? 5 : 0)) * (h.dmgMul || 1);
       fx(w, { kind: "slash", x: h.x + Math.cos(a) * 0.7, y: h.y + Math.sin(a) * 0.7, a, color: "#fff4c0", life: 0.25 });
       let hit = 0;
       for (const m of w.monsters) {
-        if (m.hp <= 0 || U.dist(h.x, h.y, m.x, m.y) > S.melee.range + m.d.r * 0.6) continue;
+        if (m.hp <= 0 || U.dist(h.x, h.y, m.x, m.y) > mRange + m.d.r * 0.6) continue;
         if (Math.abs(U.angDiff(a, U.angle(h.x, h.y, m.x, m.y))) > S.melee.arc / 2 + 0.2) continue;
-        hurtMon(w, m, S.melee.dmg); knock(w, m, U.angle(h.x, h.y, m.x, m.y), 0.45); m.stun = Math.max(m.stun, 0.25); if (m.cast) { m.cast = null; msg(w, "interrupt", { mon: m.d.name }, 1); } hit++;
+        hurtMon(w, m, mDmg); knock(w, m, U.angle(h.x, h.y, m.x, m.y), 0.45); m.stun = Math.max(m.stun, 0.25); if (m.cast) { m.cast = null; msg(w, "interrupt", { mon: m.d.name }, 1); } hit++;
       }
-      if (!hit) msg(w, "whiff", {}, 2);
+      if (!hit) msg(w, "whiff", {}, 2); else inspire(w, "melee");
       record(w, { kind: "melee", sev: 0 });
       return;
     }
     if (c.kind === "burst") {
       h.mp -= S.burst.cost; h.cdBurst = S.burst.cd; h.cdShot = 0.9; h.idleMp = 0;
       drainMagic(w, S.burst.magic, null);
-      fx(w, { kind: "burst", x: tgt.x, y: tgt.y, color: "#fff4c0", r: S.burst.radius, life: 0.7 });
-      for (const m of w.monsters) if (m.hp > 0 && U.dist(m.x, m.y, tgt.x, tgt.y) < S.burst.radius) hurtMon(w, m, S.burst.dmg);
-      record(w, { kind: "burst", sev: 0 });
+      const nova = sk(w, "nova"), bR = S.burst.radius + (nova ? 0.5 : 0);
+      fx(w, { kind: "burst", x: tgt.x, y: tgt.y, color: "#fff4c0", r: bR, life: 0.7 });
+      for (const m of w.monsters) if (m.hp > 0 && U.dist(m.x, m.y, tgt.x, tgt.y) < bR) hurtMon(w, m, (S.burst.dmg + (nova ? 6 : 0)) * (h.dmgMul || 1));
+      record(w, { kind: "burst", sev: 0 }); inspire(w, "burst");
     } else {
       const lead = U.dist(h.x, h.y, tgt.x, tgt.y) / S.shot.speed;
       const tx = tgt.x + (tgt.vx || 0) * lead, ty = tgt.y + (tgt.vy || 0) * lead;
       const spread = (h.arousal / 100) * 0.45 + (h.hyp || 0) / 100 * 0.3 + (h.trance > 0 ? 0.3 : 0) + 0.04;
       const a = U.angle(h.x, h.y, tx, ty) + U.rf(-spread, spread);
-      w.projs.push({ id: w.nextId++, x: h.x + Math.cos(a) * 0.4, y: h.y + Math.sin(a) * 0.4, vx: Math.cos(a) * S.shot.speed, vy: Math.sin(a) * S.shot.speed, owner: "h", dmg: S.shot.dmg, r: 0.18, life: S.shot.range / S.shot.speed, kind: "star" });
-      h.mp -= S.shot.cost; h.cdShot = S.shot.cd; h.idleMp = 0;
-      record(w, { kind: "shot", sev: 0 });
+      const twin = sk(w, "twin") && h.mp >= S.shot.cost + 3, dm = S.shot.dmg * (h.dmgMul || 1);
+      for (const off of twin ? [-0.09, 0.09] : [0]) w.projs.push({ id: w.nextId++, x: h.x + Math.cos(a + off) * 0.4, y: h.y + Math.sin(a + off) * 0.4, vx: Math.cos(a + off) * S.shot.speed, vy: Math.sin(a + off) * S.shot.speed, owner: "h", dmg: dm, r: 0.18, life: S.shot.range / S.shot.speed, kind: "star" });
+      h.mp -= S.shot.cost + (twin ? 3 : 0); h.cdShot = S.shot.cd; h.idleMp = 0;
+      record(w, { kind: "shot", sev: 0 }); inspire(w, "shot");
     }
     for (const m of w.monsters) if (U.dist(m.x, m.y, h.x, h.y) < 5 && m.hp > 0) alertMon(w, m, 0.8);
   }
@@ -1207,6 +1369,7 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   function hurtMon(w, m, dmg) {
     const before = m.hp;
+    dmg *= 1 + 0.25 * knowledge(w, m.kind);           // 弱いところを知っている
     m.hp -= dmg; m.flash = 0.2; m.rcl = 0.26; m.rclX = Math.sign(m.x - w.run.h.x) || 1;
     alertMon(w, m, 1);
     fx(w, { kind: "hit", x: m.x, y: m.y, color: "#fff6c8", life: 0.3 });
@@ -1216,13 +1379,14 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     if (m.hp <= 0) { killMon(w, m); return; }
     msg(w, "dmg", { mon: m.d.name, n: Math.round(before - m.hp) }, 0.4);
+    monSay(w, m, "hurt", 0.3);
     if (m.d.flee && m.hp < m.maxHp * 0.5) m.flee = 3;
     // 手負いは、悲鳴をあげて逃げ、仲間を呼ぶ（動けない種と長は逃げない）
     if (!m.fled && !m.boss && m.d.spd > 0 && m.hp <= m.maxHp * 0.25) {
       m.fled = true;
       if (U.chance(0.55)) {
         m.flee = U.rf(2.2, 3.2); m.cast = null;
-        msg(w, "flee", { mon: m.d.name });
+        msg(w, "flee", { mon: m.d.name }); monSay(w, m, "flee", 0.9);
         for (const o of w.monsters) if (o !== m && o.hp > 0 && !o.alert && U.dist(o.x, o.y, m.x, m.y) < 6.5) alertMon(w, o, 1);
       }
     }
@@ -1324,7 +1488,7 @@ var G = (typeof G !== "undefined") ? G : {};
 
   /* ================================================================ 魔物のAI */
   function alertMon(w, m, amount) {
-    if (!m.alert && amount > 0) { m.hop = 0.32; }     // 気づいた瞬間、跳ねる
+    if (!m.alert && amount > 0) { m.hop = 0.32; monSay(w, m, "spot", 0.6); }     // 気づいた瞬間、跳ねる（しゃべる種は一言）
     m.alert = Math.max(m.alert, amount * 6); m.lastSeenH = { x: w.run.h.x, y: w.run.h.y };
     if (m.hidden && !m.d.chest && !m.d.hidden) m.hidden = false;
   }
@@ -1359,6 +1523,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (m.dormant) { if (U.dist(m.x, m.y, h.x, h.y) < 1.4) { m.dormant = false; alertMon(w, m, 1); } else return; }
     const px = m.x, py = m.y;
     m.flash = Math.max(0, m.flash - dt); m.cd = Math.max(0, m.cd - dt);
+    if (m.bubble) { m.bubble.t -= dt; if (m.bubble.t <= 0) m.bubble = null; }
     m.hop = Math.max(0, m.hop - dt); m.rcl = Math.max(0, m.rcl - dt); m.lunge = Math.max(0, m.lunge - dt);
     m.pounceCd = Math.max(0, (m.pounceCd || 0) - dt);
     if (m.dash) {                                 // 飛びかかりの最中
@@ -1372,7 +1537,29 @@ var G = (typeof G !== "undefined") ? G : {};
     if (m.stun > 0) { m.stun -= dt; m.vx *= 0.8; m.vy *= 0.8; return; }
     if (monSees(w, m)) alertMon(w, m, 1); else m.alert = Math.max(0, m.alert - dt);
     const dist = U.dist(m.x, m.y, h.x, h.y);
-    if (m.holding) { m.x += (h.x - m.x) * 0.1; m.y += (h.y - m.y) * 0.1; m.vx = m.vy = 0; return; }
+    // 捕まえている／群がっている：ひかりのまわりに、輪になって取りつく
+    if ((m.holding || m.molest) && h.bound) {
+      const by = h.bound.by, mol = w.monsters.filter(o => o.molest && o.hp > 0 && !by.includes(o.id));
+      const i = m.holding && by.includes(m.id) ? by.indexOf(m.id) : by.length + mol.indexOf(m), n = by.length + mol.length;
+      const a = i / Math.max(1, n) * Math.PI * 2 + 0.5, r = n <= 1 ? 0.25 : 0.55;
+      m.x += (h.x + Math.cos(a) * r - m.x) * 0.12; m.y += (h.y + Math.sin(a) * r * 0.8 - m.y) * 0.12; m.vx = m.vy = 0;
+      m.a = U.angle(m.x, m.y, h.x, h.y);
+      return;
+    }
+    if (m.holding) { m.holding = false; m.cd = Math.max(m.cd, 1); }
+    if (m.molest && !h.bound) m.molest = false;
+    // 捕まった獲物には、触れてくる種が群がる（掴める種は掴みに、そうでない種はまとわりつく）
+    if (h.bound && !w.outcome && m.alert > 0 && d.spd > 0 && !m.cast && G.Text.actorOf(m.kind) && dist < 7 && m.stun <= 0) {
+      if (dist <= 1.15) {
+        if (A.kind === "grab" && (m.cd <= 0.6 || d.pack) && h.bound.by.length < 5) { if (grab(w, m, A.power * m.pow, m.d.type === "蕩" ? "蕩" : "絡")) { m.holding = true; return; } }
+        const nMol = w.monsters.filter(o => o.molest && o.hp > 0).length;
+        if (!m.molest && h.bound.by.length + nMol < 6) { m.molest = true; monSay(w, m, "grab", 0.7); actMsg(w, "swarm", { mon: d.name, c: h.bound.by.length + nMol + 1 }); if (h.bound.by.length + nMol + 1 >= 3) actBub(w, "swarm"); }
+        return;
+      }
+      const p = pathDir(w, m, h.x, h.y, d.r * 0.6);
+      if (p) { const sp = d.spd * 1.15; m.vx += (p.x * sp - m.vx) * Math.min(1, dt * 6); m.vy += (p.y * sp - m.vy) * Math.min(1, dt * 6); move(w, m, m.vx, m.vy, dt, d.r * 0.6); turnTo(m, Math.atan2(m.vy, m.vx), 6, dt); }
+      return;
+    }
     let tvx = 0, tvy = 0, spd = d.spd;
     if (m.flee > 0) {
       m.flee -= dt;
@@ -1445,10 +1632,10 @@ var G = (typeof G !== "undefined") ? G : {};
         } else if (A.broadcast) {                  // 実況：捕まった姿、達した瞬間を中継する
           if (h.bound || h.freeze > 0 || w.t - (h.lastClimaxT ?? -99) < 3) {
             h.watched = 1.2; h.will = Math.max(0, h.will - 3); h.pleasure += 3 * intake(w, m);
-            if (w.t - (h.bcastT ?? -99) > 7) { h.bcastT = w.t; record(w, { kind: "broadcast", type: "惑", mon: m.kind, monName: d.name, sev: 3 }); msg(w, "broadcast", { mon: d.name }); say(w, "broadcast", {}); }
+            if (w.t - (h.bcastT ?? -99) > 7) { h.bcastT = w.t; record(w, { kind: "broadcast", type: "惑", mon: m.kind, monName: d.name, sev: 3 }); msg(w, "broadcast", { mon: d.name }); say(w, "broadcast", {}); monSay(w, m, "broadcast"); }
           } else msg(w, "bcastIdle", { mon: d.name }, 10);
         } else if (A.mock) {                       // 嘲り：捕まっている姿を罵る。罵られるほど、なぜか好きになる
-          if (h.bound) { h.will = Math.max(0, h.will - 3); msg(w, "mock", { mon: d.name }, 5); record(w, { kind: "mock", type: "惑", mon: m.kind, monName: d.name, sev: 2 }); if (U.chance(0.3)) addCharm(w, m, 10); }
+          if (h.bound) { h.will = Math.max(0, h.will - 3); msg(w, "mock", { mon: d.name }, 5); monSay(w, m, "mock", 0.6); record(w, { kind: "mock", type: "惑", mon: m.kind, monName: d.name, sev: 2 }); if (U.chance(0.3)) addCharm(w, m, 10); }
         } else if (A.gazeCharm) {                  // 教祖：見つめられるほど惹かれる。惹かれていると、祈ってしまう
           if (monSees(w, m)) {
             applyEffect(w, "惑", A.power * m.pow * 0.4, m); h.watched = 1;
@@ -1510,6 +1697,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const t = kind === "grab2" ? 0.7 : kind === "pounce" ? 0.5 : (A.windup || 0.6);
     const lead = U.clamp(0.12 * ((w.run.real && w.run.real.level) || 2), 0, 0.5) * t;   // 深い・強い相手ほど動きを読む
     m.cast = { id: w.nextId++, kind, t, total: t, tx: h.x + (h.vx || 0) * lead, ty: h.y + (h.vy || 0) * lead };
+    monSay(w, m, ["deny", "omazuke", "count", "lure"].includes(kind) ? kind : "attack", kind === "grab" || kind === "shot" || kind === "pounce" ? 0.35 : 0.8);
     if (kind === "shot" || kind === "lure") msg(w, "monCast", { mon: m.d.name, skill: G.Text.skillName(m.kind, kind) }, 1.5);
   }
 
@@ -1876,11 +2064,11 @@ var G = (typeof G !== "undefined") ? G : {};
     if (h.form === "magica") {
       h.magic = Math.max(0, h.magic - G.BAL.passiveMagicDrain * dt);
       if (h.magic <= 0) untransform(w, null);
-      if (h.idleMp > 1.5) h.mp = Math.min(G.HIKARI.mpMax, h.mp + (h.rest > 0 ? G.HIKARI.mpRest : G.HIKARI.mpRegen) * dt);
+      if (h.idleMp > 1.5) h.mp = Math.min(h.mpMax || G.HIKARI.mpMax, h.mp + (h.rest > 0 ? G.HIKARI.mpRest : G.HIKARI.mpRegen) * (sk(w, "breath") ? 1.4 : 1) * dt);
     }
     h.arousal = Math.max(0, h.arousal - (h.bound ? 0 : 0.12) * dt);
     h.pleasure = Math.max(0, h.pleasure - (h.bound ? 0 : 0.6) * dt);
-    if (!h.bound) h.will = Math.min(100, h.will + 0.6 * dt * (1 - h.arousal / 150) * (1 - (h.hyp || 0) / 110));
+    if (!h.bound) h.will = Math.min(100, h.will + 0.6 * dt * (1 - h.arousal / 150) * (1 - (h.hyp || 0) / 110) * (sk(w, "breath") ? 1.5 : 1));
     perceive(w);
     const rm = roomAt(w, h.x, h.y);
     if (rm !== h.room) {
@@ -1936,15 +2124,47 @@ var G = (typeof G !== "undefined") ? G : {};
   function nightBeat(w) {
     const h = w.run.h, n = w.night;
     const around = w.monsters.filter(m => m.hp > 0 && (U.dist(m.x, m.y, h.x, h.y) < 9 || m.summoned));
-    const m = U.pick(around.filter(x => !n.beats.some(b => b.mon === x.kind && b.i === n.beat - 1))) || U.pick(around);
-    const beat = { i: n.beat, mon: m ? m.kind : null, monName: m ? m.d.name : "", type: m ? m.d.type : "蕩" };
-    h.pleasure += 40; h.arousal = Math.min(100, h.arousal + 10);
-    if (h.pleasure >= 100) { h.pleasure = 20; h.climax++; beat.climax = true; }
-    if (m) { const a = U.rf(0, Math.PI * 2); const nx = h.x + Math.cos(a) * 0.7, ny = h.y + Math.sin(a) * 0.7; if (M.walkable(w.map, nx, ny)) { m.x = nx; m.y = ny; } }
-    beat.lines = G.Text.nightBeat(beat, { run: w.run, h, n: n.beat, total: G.BAL.nightBeats });
+    const lewd = around.filter(m => G.Text.actorOf(m.kind));
+    const pool = lewd.length ? lewd : around;
+    // 一場面に一〜三体。前の場面と同じ顔ぶれは避けぎみに
+    const lead = U.pick(pool.filter(x => !n.beats.some(b => b.mon === x.kind && b.i === n.beat - 1))) || U.pick(pool);
+    const group = lead ? [lead].concat(U.shuffle(pool.filter(x => x !== lead)).slice(0, U.pick([0, 1, 1, 2]))) : [];
+    const beat = { i: n.beat, mon: lead ? lead.kind : null, monName: lead ? lead.d.name : "", type: lead ? lead.d.type : "蕩", group: group.map(m => m.d.name), acts: 0, climaxN: 0, parts: {} };
+    group.forEach((m, i) => { const a = i / Math.max(1, group.length) * Math.PI * 2 + U.rf(0, 1); const nx = h.x + Math.cos(a) * 0.7, ny = h.y + Math.sin(a) * 0.7; if (M.walkable(w.map, nx, ny)) { m.x = nx; m.y = ny; } });
+    const scene = G.Text.nightParts(beat, { run: w.run, h, n: n.beat, total: G.BAL.nightBeats });
+    const lines = scene.head.slice();
+    for (const m of group) { const v = G.Text.voice(m.kind, U.chance(0.5) ? "act" : "climax"); if (v && U.chance(0.7)) lines.push(`${m.d.name}「${v}」`); }
+    // 何を、どのくらいされたか（夜はもう、直接）
+    const swarm = 1 + 0.2 * (group.length - 1);
+    for (const m of group) {
+      const cat = actCat(w, m) || "hands";
+      for (let k = 0, nk = 1 + (U.chance(0.55) ? 1 : 0); k < nk; k++) {
+        const act = G.Text.act(cat, U.chance(0.8) ? 2 : 1); if (!act) continue;
+        lines.push(G.Text.fillAct(act, { mon: m.d.name, n: "ひかり" }) + "。" + (act.fx ? "《" + act.fx + "》" : ""));
+        beat.acts++; beat.parts[act.part] = (beat.parts[act.part] || 0) + 1;
+        crave(w, m.kind, 0.3 * act.pw); { const sv = w.run.save; if (sv) { sv.parts = sv.parts || {}; const pp = sv.parts[m.kind] || (sv.parts[m.kind] = {}); pp[act.part] = (pp[act.part] || 0) + 1; } }
+        if (act.watch) { h.arousal = Math.min(100, h.arousal + 5); continue; }
+        if (act.cum && h.futa) { h.cum = (h.cum || 0) + 30 * act.pw * swarm; if (h.cum >= 100) { h.cum -= 85; h.shasei = (h.shasei || 0) + 1; lines.push(G.Text.actMsg("nightShasei", { mon: m.d.name, c: h.shasei })); } continue; }
+        h.pleasure += 26 * act.pw * swarm * (1 + h.arousal / 150); h.arousal = Math.min(100, h.arousal + 6);
+        if (h.pleasure >= 100) { h.pleasure = 25 + U.rf(0, 20); h.climax++; beat.climaxN++; lines.push(G.Text.actMsg("nightClimax", { p: act.p, mon: m.d.name, c: h.climax })); }
+      }
+    }
+    beat.climax = beat.climaxN > 0;
+    lines.push(G.Text.actMsg("nightGauge", { c: Math.round(Math.min(99, h.pleasure)) }));
+    if (scene.climax && beat.climax) lines.push(scene.climax);
+    if (n.beat === G.BAL.nightBeats - 1) {
+      const all = n.beats.concat(beat), acts = all.reduce((a, b) => a + (b.acts || 0), 0), cl = all.reduce((a, b) => a + (b.climaxN || 0), 0);
+      const mons = [...new Set(all.flatMap(b => b.group || [b.monName]).filter(Boolean))];
+      const parts = {}; for (const b of all) for (const k in b.parts || {}) parts[k] = (parts[k] || 0) + b.parts[k];
+      const top = Object.entries(parts).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => k).join("・");
+      w.run.nightSum = { acts, climax: cl, mons, top };
+      lines.push(G.Text.actMsg("nightSum", { mons: mons.join("・"), a: acts, c: cl, top }));
+      if (scene.close) lines.push(scene.close);
+    }
+    beat.lines = lines;
     n.beats.push(beat);
     w.run.night.push(beat);
-    record(w, { kind: "night", type: beat.type, mon: beat.mon, monName: beat.monName, sev: 3, climax: !!beat.climax, hidden: false });
+    record(w, { kind: "night", type: beat.type, mon: beat.mon, monName: beat.monName, sev: 3, climax: beat.climax, n: beat.climaxN, acts: beat.acts, hidden: false });
     n.beat++;
     return beat;
   }
@@ -1956,6 +2176,10 @@ var G = (typeof G !== "undefined") ? G : {};
     const B = h.bound;
     if (B) add(B.hang ? "逆さ吊り" : B.root ? "床下" : B.cocoon ? "繭の中" : B.ratchet ? "爪車（" + B.ratchet.n + "歯）" : B.shadow ? "影の腕×" + B.shadow.arms
                : B.pillory ? "晒し台" : B.edge ? "焦らし" : B.wait ? "壁の環" : B.slowStruggle ? "採寸中" : "拘束", null, "pink");
+    if (B) {
+      const mol = w.monsters.filter(m => m.molest && m.hp > 0).length, n = B.by.length + mol;
+      add((B.src && B.src.d ? B.src.d.name : "") + (n > 1 ? `ほか ${n}体に群がられている` : "に捕まっている") + "・" + (B.nAct ? ["服の上から", "服の中まで", "直接"][B.stage || 0] : "縛られているだけ"), null, B.nAct ? "red" : "dim");
+    }
     if (h.possess) add("憑き手（腕）", h.possess.t, "violet");
     if (h.freeze > 0) add("時間停止", h.freeze, "violet");
     if (h.futa) add("変生 射精感" + Math.round(h.cum || 0) + "%" + (h.shasei ? "（" + h.shasei + "回）" : ""), null, "pink");
@@ -2007,5 +2231,6 @@ var G = (typeof G !== "undefined") ? G : {};
     return out;
   }
   G.Field = { statusList, createWorld, step, place, canPlace, cardInfo, startNight, nightBeat, spawnMonster, mult };
+  G.Field._test = { grab, applyEffect, triggerTrap, checkClimax };   // 検査用（tools から直接呼ぶ）
 })();
 if (typeof module !== "undefined") module.exports = G;

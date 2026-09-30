@@ -107,6 +107,7 @@ var G = (typeof G !== "undefined") ? G : {};
       history: [], reportMem: {}, lastPosture: null, caughtDay: -9, silentAccepted: false,
       requests: null, pick: null, rec: null, log: [],
       traits: {}, counts: {}, waldo: { rescues: 0, converted: 0 }, carry: {}, crack: 0, futaMarks: 0, futaFixed: false,
+      lv: 1, xp: 0, skills: {}, equip: [], know: {}, lewd: {},
     };
   }
   // 古いセーブに、後から足した項目を補う（v2 のまま）
@@ -114,6 +115,8 @@ var G = (typeof G !== "undefined") ? G : {};
     if (!s) return s;
     s.traits = s.traits || {}; s.counts = s.counts || {}; s.waldo = s.waldo || { rescues: 0, converted: 0 }; s.carry = s.carry || {};
     s.crack = s.crack || 0; s.futaMarks = s.futaMarks || 0; s.futaFixed = !!s.futaFixed;
+    s.know = s.know || {}; s.lewd = s.lewd || {};
+    s.lv = s.lv || 1; s.xp = s.xp || 0; s.skills = s.skills || {}; s.equip = (s.equip || []).filter(id => G.SKILLS[id]);
     for (const k in G.DUNGEONS) if (!s.decks[k]) { const dg = G.DUNGEONS[k]; s.decks[k] = [dg.free.find(x => G.MONSTERS[x].type === "削"), "trap:" + dg.traps[0]]; }
     s.ailments = (s.ailments || []).filter(a => AILMENTS[a.id]);
     return s;
@@ -211,7 +214,8 @@ var G = (typeof G !== "undefined") ? G : {};
       events: [], night: [], deck: deckFor(s, p.dungeon), maxLive: G.BAL.maxLive + s.upgrades.live,
       autoDirector: s.autoDirector, save: s, recall: false, floor: 1, mismatch: 0,
       h: {
-        hp: Math.round(G.HIKARI.hpMax * (1 - s.fatigue / 250)), mp: G.HIKARI.mpMax, magic: has("hollow") ? 60 : G.HIKARI.magicMax,
+        lv: s.lv || 1, hpMax: G.GROWTH.hpMax(s.lv || 1), mpMax: G.GROWTH.mpMax(s.lv || 1), dmgMul: G.GROWTH.dmg(s.lv || 1), skills: (s.equip || []).slice(),
+        hp: Math.round(G.GROWTH.hpMax(s.lv || 1) * (1 - s.fatigue / 250)), mp: G.GROWTH.mpMax(s.lv || 1), magic: has("hollow") ? 60 : G.HIKARI.magicMax,
         will: Math.round(100 - s.fatigue / 5 - (has("exhaustion") ? 20 : 0)), arousal: Math.min(60, (has("heat") ? 30 : 0) + (has("impCurse") ? 25 : 0)), pleasure: 0, climax: 0, form: "magica", kit: Object.assign({}, p.kit),
         sigil: has("sigil") ? 1 : 0,
         // 前の潜行から持ち越した状態
@@ -314,6 +318,14 @@ var G = (typeof G !== "undefined") ? G : {};
       if (st > cur) { s.traits[id] = st; gained.push({ id, stage: st }); }
     }
     run.traitsGained = gained;
+    // 成長：経験（倒した数・降りた深さ・踏破・抜け出した回数）でゆっくりレベルが上がる。閃いた技は潜行中に覚えている
+    const lv0 = s.lv || 1;
+    const xp = n("kill") * 3 + run.floorReached * 6 + (run.outcome === "cleared" ? 25 : 0) + n("breakout") + n("escape") * 2 + 4;
+    s.xp = (s.xp || 0) + xp;
+    while (s.lv < G.GROWTH.lvMax && s.xp >= G.GROWTH.xpNeed(s.lv)) { s.xp -= G.GROWTH.xpNeed(s.lv); s.lv++; }
+    const inspired = ev.filter(e => e.kind === "inspire").map(e => e.skill);
+    for (const id of inspired) if (s.equip.length < G.GROWTH.slots(s.lv) && !s.equip.includes(id)) s.equip.push(id);   // 空きがあれば、すぐ使う
+    run.growth = { lv0, lv: s.lv, xp, inspired };
     // 報酬
     const req = s.pick.req;
     let funds = run.outcome === "cleared" ? req.reward : run.outcome === "defeat" ? 0 : Math.round(req.reward * run.floorReached / 12);
@@ -339,7 +351,7 @@ var G = (typeof G !== "undefined") ? G : {};
       day: s.day, dungeon: run.dungeon, dungeonName: run.dungeonName || G.DUNGEONS[run.dungeon].name, stated: run.stated, realType: run.realType, forged: run.forged,
       outcome: run.outcome, floorReached: run.floorReached, events: ev, night: run.night, mismatch: run.mismatch || 0,
       h: { hp: run.h.hp, arousal: run.h.arousal, form: run.h.form, climax: climaxes, attach: (run.h.attach || []).slice(), rewired: !!run.h.rewired }, ailments: s.ailments.map(a => a.id),
-      law: run.law || null, traitsGained: run.traitsGained || [], converted: !!run.converted,
+      law: run.law || null, traitsGained: run.traitsGained || [], converted: !!run.converted, growth: run.growth,
       gain: { body: +bodyGain.toFixed(1), mind: +mindGain.toFixed(1), funds, dark, sus: +sus.toFixed(1) },
     };
     rec.report = G.Report.build(rec, s);
@@ -352,6 +364,20 @@ var G = (typeof G !== "undefined") ? G : {};
     return rec;
   }
 
+  // 口頭報告が終わってから、報告書を書く（追及で認めたことも反映される。ただし書面では、また隠すことがある）
+  function writeDoc(s) {
+    const rec = s.rec; if (!rec) return;
+    rec.doc = G.Report.documentLines(rec, s);
+    rec.docWritten = true;
+  }
+  // 技を付け替える（装備できる数はレベルで決まる）
+  function equipSkill(s, id) {
+    if (!s.skills[id]) return "none";
+    const i = s.equip.indexOf(id);
+    if (i >= 0) { s.equip.splice(i, 1); return "off"; }
+    if (s.equip.length >= G.GROWTH.slots(s.lv)) return "full";
+    s.equip.push(id); return "on";
+  }
   /* ================================================================ 書類監査 */
   function audit(s, flagged) {
     const rec = s.rec, doc = rec.doc;
@@ -373,7 +399,7 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   // 再報告のあとの選択：記録だけ取る／踏み込んで確認する
   function rereportChoice(s, lewd) {
-    if (lewd) { s.trust = U.clamp(s.trust - 6, 0, 100); s.dark += 3; s.taint = U.clamp(s.taint + 2, 0, 100); s.body = U.clamp(s.body + 2, 0, 100); }
+    if (lewd) { s.trust = U.clamp(s.trust - 6, 0, 100); s.dark += 3; s.taint = U.clamp(s.taint + 2, 0, 100); s.body = U.clamp(s.body + 2, 0, 100); if (s.rec) s.rec.lewdCheck = true; }
     s.phase = "clinic";
   }
 
@@ -392,6 +418,7 @@ var G = (typeof G !== "undefined") ? G : {};
     }
   }
   function endDay(s) {
+    if (G.Diary && s.rec && !s.rec.diaryDone) { s.rec.diaryDone = true; G.Diary.write(s); }   // その夜、ひかりは手帳を書く
     // 残した状態異常は、ギルドの空気を少しずつ澱ませる
     s.taint = U.clamp(s.taint + s.ailments.length * 1.5, 0, 100);
     s.fatigue = U.clamp(s.fatigue - 22, 0, 100);
@@ -411,6 +438,6 @@ var G = (typeof G !== "undefined") ? G : {};
 
   function taintStage(s) { return s.taint >= 100 ? 4 : s.taint >= 70 ? 3 : s.taint >= 42 ? 2 : s.taint >= 18 ? 1 : 0; }
 
-  G.Game = { upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, buy, taintStage };
+  G.Game = { equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, buy, taintStage };
 })();
 if (typeof module !== "undefined") module.exports = G;

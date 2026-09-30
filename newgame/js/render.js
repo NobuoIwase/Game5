@@ -206,6 +206,11 @@ var G = (typeof G !== "undefined") ? G : {};
       else if (f.kind === "fan") { const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, S * f.r); g.addColorStop(0, "rgba(235,215,255,0.85)"); g.addColorStop(1, "rgba(180,140,255,0)"); ctx.save(); ctx.globalAlpha = 1 - k; ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, S * f.r * (0.6 + 0.4 * Math.min(1, k * 4)), f.a - f.arc, f.a + f.arc); ctx.closePath(); ctx.fill(); ctx.restore(); }
       else if (f.kind === "slash") { ctx.lineWidth = S * 0.12 * (1 - k) + 1; ctx.beginPath(); ctx.arc(cx - Math.cos(f.a) * S * 0.7, cy - Math.sin(f.a) * S * 0.7, S * 1.1, f.a - 0.7 + k * 0.4, f.a + 0.7 + k * 0.4); ctx.stroke(); }
       else if (f.kind === "flashCam") { ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(cx, cy, S * 0.6 * (1 - k * 0.5), 0, 7); ctx.fill(); }
+      else if (f.kind === "sfx") {                 // 擬音（捕まっている間の「くちゅ」「むにゅっ」）
+        ctx.globalAlpha = k < 0.15 ? k / 0.15 : 1 - (k - 0.15) / 0.85;
+        ctx.font = `bold ${Math.round(S * 0.4)}px "Noto Sans JP",sans-serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        const yy = cy - k * S * 0.5; ctx.lineWidth = 3.5; ctx.strokeStyle = "rgba(60,10,40,0.85)"; ctx.strokeText(f.text, cx, yy); ctx.fillStyle = f.color || "#ffb3d6"; ctx.fillText(f.text, cx, yy);
+      }
       else if (f.kind === "summon") { ctx.lineWidth = 2; for (let r = 0; r < 3; r++) { ctx.beginPath(); ctx.arc(cx, cy, S * (0.2 + r * 0.25) * (1 - k * 0.5), 0, 7); ctx.stroke(); } }
       ctx.globalAlpha = 1;
     }
@@ -261,9 +266,17 @@ var G = (typeof G !== "undefined") ? G : {};
     ctx.fillStyle = open ? "#5a3a22" : "#8a5a2e"; ctx.fillRect(x - S * 0.32, y - S * 0.18, S * 0.64, S * 0.4);
   }
 
+  // 人の大きさで描く魔物：[画面での身長（ルミナ＝約1.85）, 絵の中の頭の上端, 足元]（256px の絵での位置）
+  // 人間（ワルドー・教団）はルミナと同じか少し大きく、小淫魔はルミナより少し小さく
+  const FIG = {
+    waldo_grunt: [1.95, 44, 230], waldo_officer: [2.05, 35, 230], shinja: [1.9, 73, 230], sekkyoushi: [1.95, 73, 230], chuushutsu: [1.9, 73, 230], kyouso: [2.1, 2, 230],
+    inma: [1.85, 8, 248], muma_queen: [1.95, 67, 248], kuchizuke: [1.8, 8, 248],
+    imp: [1.45, 8, 247], futago: [1.35, 86, 230], sakiimp: [1.45, 83, 230], jikkyou: [1.45, 83, 230], kusuguri: [1.45, 40, 230], kazoe: [1.45, 36, 230], azakeri: [1.45, 82, 230],
+  };
   function drawMonster(ctx, w, m, x, y, S) {
-    const d = m.d, h = w.run.h, sz = Math.max(0.9, d.r * 2.4) * S;
-    ctx.fillStyle = "rgba(0,0,0,0.3)"; ctx.beginPath(); ctx.ellipse(x, y + S * 0.28, sz * 0.36, sz * 0.12, 0, 0, 7); ctx.fill();
+    const d = m.d, h = w.run.h, F = FIG[m.kind], sz = F ? F[0] * S * 256 / (F[2] - F[1]) : Math.max(0.9, d.r * 2.4) * S;
+    const sh = Math.min(sz, 1.3 * S);
+    ctx.fillStyle = "rgba(0,0,0,0.3)"; ctx.beginPath(); ctx.ellipse(x, y + S * 0.28, sh * 0.36, sh * 0.12, 0, 0, 7); ctx.fill();
     if (d.chest && m.hidden) { drawChest(ctx, x, y, S, false); return; }
     // 構え（攻撃の予兆）
     if (m.cast) {
@@ -293,21 +306,32 @@ var G = (typeof G !== "undefined") ? G : {};
     const bob = d.behavior === "float" ? Math.sin(w.t * 3 + m.id) * S * 0.08 : 0;
     const im = img("assets/monsters/" + d.art);
     ctx.save();
-    ctx.globalAlpha = m.hidden ? 0.4 : 1;
+    ctx.globalAlpha = m.hidden ? 0.4 : (m.holding || m.molest) && h.bound ? 0.7 : 1;     // 群がっている魔物は、少し透かしてルミナを見せる
     ctx.translate(x + dx, y + S * 0.3 + dy + bob); ctx.transform(1, 0, -sk, 1, 0, 0); ctx.scale(sx, sy);
     if (ok(im)) {
       const k = sz / Math.max(im.naturalWidth, im.naturalHeight), iw = im.naturalWidth * k, ih = im.naturalHeight * k;
       if (d.tint) ctx.filter = `hue-rotate(${d.tint}deg) saturate(1.2)`;   // 同じ絵の色違い（口づけの淫魔など）
-      ctx.drawImage(im, -iw / 2, -ih, iw, ih);
+      const foot = F ? (256 - F[2]) / 256 * ih : 0;               // 絵の下の余白ぶん下げて、足を床につける
+      ctx.drawImage(im, -iw / 2, -ih + foot, iw, ih);
       if (d.tint) ctx.filter = "none";
-      if (m.flash > 0) { ctx.globalAlpha = 0.55; ctx.globalCompositeOperation = "lighter"; ctx.drawImage(im, -iw / 2, -ih, iw, ih); ctx.globalCompositeOperation = "source-over"; }
+      if (m.flash > 0) { ctx.globalAlpha = 0.55; ctx.globalCompositeOperation = "lighter"; ctx.drawImage(im, -iw / 2, -ih + foot, iw, ih); ctx.globalCompositeOperation = "source-over"; }
     } else { ctx.fillStyle = TYPE_COLOR[d.type]; ctx.beginPath(); ctx.arc(0, -sz * 0.4, sz * 0.4, 0, 7); ctx.fill(); }
     ctx.restore();
     ctx.globalAlpha = 1;
-    ctx.fillStyle = TYPE_COLOR[d.type]; ctx.beginPath(); ctx.arc(x - sz * 0.42, y - sz * 0.62, S * 0.1, 0, 7); ctx.fill();
-    if (m.boss) { ctx.fillStyle = "#f2d27a"; ctx.font = `bold ${Math.round(S * 0.34)}px sans-serif`; ctx.textAlign = "center"; ctx.fillText("長", x, y - sz * 0.95); }
+    ctx.fillStyle = TYPE_COLOR[d.type]; ctx.beginPath(); ctx.arc(x - Math.min(sz, S * 1.2) * 0.42, y - (F ? F[0] * S * 0.62 : sz * 0.62), S * 0.1, 0, 7); ctx.fill();
+    if (m.bubble) {                                  // 魔物の声
+      const t = m.bubble.text, top = y - (F ? F[0] * S : sz * 0.9) - S * 0.35;
+      ctx.font = `${Math.max(10, Math.round(S * 0.3))}px "Noto Sans JP",sans-serif`;
+      const tw = Math.min(ctx.measureText(t).width, S * 6.5);
+      ctx.globalAlpha = Math.min(1, m.bubble.t * 2);
+      ctx.fillStyle = m.d.type === "惑" ? "rgba(58,34,84,0.92)" : "rgba(84,26,56,0.92)"; roundRect(ctx, x - tw / 2 - 7, top - S * 0.27, tw + 14, S * 0.54, 7); ctx.fill();
+      ctx.strokeStyle = "rgba(255,170,210,0.8)"; ctx.lineWidth = 1.2; ctx.stroke();
+      ctx.fillStyle = "#ffe6f2"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(t, x, top + 1, S * 6.5);
+      ctx.globalAlpha = 1;
+    }
+    if (m.boss) { ctx.fillStyle = "#f2d27a"; ctx.font = `bold ${Math.round(S * 0.34)}px sans-serif`; ctx.textAlign = "center"; ctx.fillText("長", x, y - (F ? F[0] * S * 0.95 : sz * 0.95)); }
     if (m.hp < m.maxHp) { ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(x - S * 0.4, y + S * 0.38, S * 0.8, 4); ctx.fillStyle = "#ff9ab8"; ctx.fillRect(x - S * 0.4, y + S * 0.38, S * 0.8 * m.hp / m.maxHp, 4); }
-    if (m.summoned) { ctx.strokeStyle = "rgba(255,120,190,0.5)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(x, y + S * 0.28, sz * 0.38, 0, 7); ctx.stroke(); }
+    if (m.summoned) { ctx.strokeStyle = "rgba(255,120,190,0.5)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(x, y + S * 0.28, sh * 0.38, 0, 7); ctx.stroke(); }
   }
 
   function drawHikari(ctx, w, x, y, S) {

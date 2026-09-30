@@ -332,6 +332,13 @@ var G = (typeof G !== "undefined") ? G : {};
     msg(w, "charm", { mon: m.d ? m.d.name : "", lv: ["", "Ⅰ", "Ⅱ", "Ⅲ"][h.charm[kind]] });
     say(w, "charm" + h.charm[kind], { mon: m.d ? m.d.name : "" });
   }
+  // 触れられるたびに、魅了が深まる（Game4 のナメクジ）。女王に触れられると、一族ごと
+  const SLUGS = ["namekuji", "namequeen", "firstslug"];
+  function charmTouch(w, src) {
+    addCharm(w, src, 3);
+    if (src.kind === "namequeen") addCharm(w, { kind: "namekuji", d: G.MONSTERS.namekuji }, 3);
+    if (src.kind === "firstslug" && (src.grown || 0) > 50) { const h = w.run.h; if (h.charmT) h.charmT.firstslug = -99; addCharm(w, src, 0); }   // 濃くなった主は、一度に二段
+  }
   // 付着体：身体に貼りついて、自分からは剥がれない
   const ATTACH = {
     orb:       { name: "震え珠", power: 1.0, flash: false },
@@ -623,7 +630,7 @@ var G = (typeof G !== "undefined") ? G : {};
     // 憑き手は、宿主が果てると離れる
     if (h.possess) endPossess(w, true);
     // 格下に達しさせられると、本人の意志と無関係に「好き」が芽生える
-    if (!forced && h.bound && src && src.d && src.d.spd !== undefined && ["goblin", "waldo_grunt", "slime", "nikubana", "gulper_worm"].includes(src.kind) && U.chance(0.45)) addCharm(w, src, 20);
+    if (!forced && h.bound && src && src.d && src.d.spd !== undefined && ["goblin", "waldo_grunt", "slime", "nikubana", "gulper_worm", "namekuji", "mitsusui", "firstslug"].includes(src.kind) && U.chance(0.45)) addCharm(w, src, 20);
   }
   // 淫紋を刻む（その潜行のあいだ蕩が効きやすくなる。帰還後は状態異常「淫紋」として残る）
   function engraveSigil(w, n, src) {
@@ -717,6 +724,7 @@ var G = (typeof G !== "undefined") ? G : {};
       actMsg(w, "swarm", { mon: src.d.name, c: h.bound.by.length + w.monsters.filter(m => m.molest && m.hp > 0).length });
       if (h.bound.by.length >= 3) actBub(w, "swarm");
       if (src.d && src.d.pack) callPack(w, src);
+      if (src.d && src.d.atk && src.d.atk.charmTouch) charmTouch(w, src);
       return true;
     }
     h.bound = { by: [src.id], power, type: type || "絡", t: 0, struggle: 0, src, acts: 0, stage: 0, actT: 0.5 };
@@ -731,6 +739,7 @@ var G = (typeof G !== "undefined") ? G : {};
       if (A.futaSuck) h.bound.futaSuck = A.futaSuck;
       if (A.mud) { h.slow = Math.max(h.slow, 4); h.bound.slowStruggle = 0.75; }
       if (A.kiss) { h.bound.kiss = true; kiss(w, src); }
+      if (A.charmTouch) charmTouch(w, src);
     }
     h.cast = null; h.vx = h.vy = 0;
     if (src.d && src.d.spd !== undefined) monSay(w, src, "grab", 0.8);
@@ -859,6 +868,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (h.pleasure > 70) rate *= 0.75;                                 // 気持ちよさで、力が入らない
     if (prep && prep.slow && b.type === "絡") rate *= 0.8;
     rate *= 1 + knowledge(w, b.src.kind) * 0.35;        // 知っている相手ほど、抜け方が分かる
+    rate *= 1 - 0.12 * ((h.charm && h.charm[b.src.kind]) || 0);   // 好きな相手の腕は、本気で振りほどけない（魅了拘束）
     rate *= 1 - expectation(w, b.src.kind) * 0.3;       // 気持ちよさを覚えている相手だと、本気で振りほどけない
     if (sk(w, "hodoki")) rate *= 1.3;
     if (b.t < 2.4) rate *= 0.25;                           // 捕まった直後は、まず何もできない
@@ -1515,6 +1525,13 @@ var G = (typeof G !== "undefined") ? G : {};
   function hurtMon(w, m, dmg) {
     const before = m.hp;
     dmg *= 1 + 0.25 * knowledge(w, m.kind);           // 弱いところを知っている
+    const cl = (w.run.h.charm && w.run.h.charm[m.kind]) || 0;
+    if (cl) dmg *= 1 - 0.2 * cl;                       // 好きになった種族には、手が鈍る（Ⅲで6割減）
+    if (m.d.grows && (m.grown || 0) < 110) {           // はじめの夜の主：抗うほど濃くなる
+      m.grown = (m.grown || 0) + dmg;
+      const add = dmg * 0.3; m.maxHp += add; m.hp += add; m.pow = Math.min(2.2, (m.pow || 1) + dmg / 140);
+      if (U.chance(0.25)) msg(w, "grows", { mon: m.d.name }, 5);
+    }
     m.hp -= dmg; m.flash = 0.2; m.rcl = 0.26; m.rclX = Math.sign(m.x - w.run.h.x) || 1;
     alertMon(w, m, 1);
     fx(w, { kind: "hit", x: m.x, y: m.y, color: "#fff6c8", life: 0.3 });
@@ -1671,6 +1688,23 @@ var G = (typeof G !== "undefined") ? G : {};
     if (m.bubble) { m.bubble.t -= dt; if (m.bubble.t <= 0) m.bubble = null; }
     m.hop = Math.max(0, m.hop - dt); m.rcl = Math.max(0, m.rcl - dt); m.lunge = Math.max(0, m.lunge - dt);
     m.pounceCd = Math.max(0, (m.pounceCd || 0) - dt);
+    // 魅了の脈動（ナメクジ女王）・甘い燐光／胞子（蜜吸い虫・媚芯茸）
+    if (d.charmPulse && m.alert > 0 && !w.outcome) {
+      const P = d.charmPulse; m.pulseT = (m.pulseT || 0) + dt;
+      if (m.pulseT >= P.every) {
+        m.pulseT = 0; fx(w, { kind: "ring", x: m.x, y: m.y, color: "#ffb3cf", r: P.r, life: 0.9 });
+        if (U.dist(m.x, m.y, h.x, h.y) <= P.r) { applyEffect(w, "惑", 0.4 * m.pow, m); for (const k of P.kinds) addCharm(w, { kind: k, d: G.MONSTERS[k] }, 3); msg(w, "charmPulse", { mon: d.name }, 3); hitDesc(w, m, 6); }
+      }
+    }
+    if (d.charmGlow && !w.outcome && U.dist(m.x, m.y, h.x, h.y) <= d.charmGlow.r && M.los(w.map, m.x, m.y, h.x, h.y)) {
+      const P = d.charmGlow; m.glowT = (m.glowT || 0) + dt;
+      if (m.glowT >= P.every) {
+        m.glowT = 0; hitDesc(w, m, 7);
+        applyEffect(w, "惑", 0.3 * m.pow, m); h.arousal = Math.min(100, h.arousal + 2);
+        if (P.futa && h.futa) addCum(w, 6, m);
+        m.glowN = (m.glowN || 0) + 1; if (m.glowN % 2 === 0) addCharm(w, m, 5);
+      }
+    }
     if (m.dash) {                                 // 飛びかかりの最中
       m.dash.t -= dt;
       const sp = m.d.spd * 3.4 + 3;
@@ -1791,7 +1825,8 @@ var G = (typeof G !== "undefined") ? G : {};
             if (w.t - (h.bcastT ?? -99) > 7) { h.bcastT = w.t; record(w, { kind: "broadcast", type: "惑", mon: m.kind, monName: d.name, sev: 3 }); msg(w, "broadcast", { mon: d.name }); say(w, "broadcast", {}); monSay(w, m, "broadcast"); }
           } else msg(w, "bcastIdle", { mon: d.name }, 10);
         } else if (A.mock) {                       // 嘲り：捕まっている姿を罵る。罵られるほど、なぜか好きになる
-          if (h.bound) { h.will = Math.max(0, h.will - 3); msg(w, "mock", { mon: d.name }, 5); monSay(w, m, "mock", 0.6); record(w, { kind: "mock", type: "惑", mon: m.kind, monName: d.name, sev: 2 }); if (U.chance(0.3)) addCharm(w, m, 10); }
+          if (h.bound) { h.will = Math.max(0, h.will - 3); msg(w, "mock", { mon: d.name }, 5); monSay(w, m, "mock", 0.6); record(w, { kind: "mock", type: "惑", mon: m.kind, monName: d.name, sev: 2 }); if (U.chance(A.charm ?? 0.3)) addCharm(w, m, A.charm ? 7 : 10); }
+          else if (A.charm && monSees(w, m) && U.chance(0.35)) { hitDesc(w, m, 8); applyEffect(w, "惑", A.power * m.pow * 0.4, m); if (U.chance(0.3)) addCharm(w, m, 9); }   // 手懐ける小淫魔：捕まっていなくても、甘やかす声で
         } else if (A.gazeCharm) {                  // 教祖：見つめられるほど惹かれる。惹かれていると、祈ってしまう
           hitDesc(w, m, 10);
           if (monSees(w, m)) {
@@ -2216,6 +2251,17 @@ var G = (typeof G !== "undefined") ? G : {};
     h.inCloud = !!cl;
     if (cl && !w.outcome) { h.cloudT = (h.cloudT || 0) + dt; if (h.cloudT > 1.2) { h.cloudT = 0; applyEffect(w, "蕩", cl.power, { d: { name: cl.name, type: "蕩" }, kind: cl.kind, x: cl.x, y: cl.y }); msg(w, "cloud", { mon: cl.name }, 5); } }
     if (h.bubble) { h.bubble.t -= dt; if (h.bubble.t <= 0) h.bubble = null; }
+    // 魅了は、触れられ続けなければ少しずつ解ける（Game4：一段26秒）
+    if (h.charm) for (const k in h.charm) if (h.charm[k] > 0 && w.t - (h.charmT[k] ?? -99) > 26) { h.charm[k]--; h.charmT[k] = w.t; if (!h.charm[k]) msg(w, "charmFade", { mon: G.MONSTERS[k] ? G.MONSTERS[k].name : "" }, 4); }
+    // 魅了Ⅱ以上：ときどき、好きな種族の方へ、自分から寄っていってしまう（Game4 の発作）
+    if (h.charm && !h.bound && !h.drawn && h.form) {
+      h.driftT = (h.driftT ?? 6.5) - dt;
+      if (h.driftT <= 0) {
+        h.driftT = 6.5;
+        const m = w.monsters.filter(o => o.hp > 0 && (h.charm[o.kind] || 0) >= 2 && U.dist(o.x, o.y, h.x, h.y) < 7 && h.known[o.id]).sort((a, b) => U.dist(a.x, a.y, h.x, h.y) - U.dist(b.x, b.y, h.x, h.y))[0];
+        if (m) { const lv = h.charm[m.kind]; h.drawn = { x: m.x, y: m.y, t: 1.2 * lv, mon: m.d.name }; record(w, { kind: "drawn", type: "惑", mon: m.kind, monName: m.d.name, sev: 1 }); msg(w, "drawn", { mon: m.d.name }); say(w, "charmPull", { mon: m.d.name }); }
+      }
+    }
     // 達したあと、責めが止んでいれば、我に返る一言
     if (h.recoverAt && w.t > h.recoverAt) { if (!h.bound || !h.bound.nAct) feed(w, "recover", G.Text.live.recover(G.tier(w.run.save.body, w.run.save.mind), heroName(w))); h.recoverAt = null; }
     if (h.decoy) { h.decoy.t -= dt; if (h.decoy.t <= 0) h.decoy = null; }

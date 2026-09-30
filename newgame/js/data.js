@@ -489,6 +489,7 @@ var G = (typeof G !== "undefined") ? G : {};
    * count: 数える事柄（game.js の finishDive で数える）／need: 段階ごとの必要数
    * どれも戦力を減らさない（Game4 の考え）：その場面の快感の入りが増え、代わりに同じ責めへの慣れ（振りほどき）も増える */
   G.TRAITS = {
+    swarmHabit: { name: "群がられ癖",   count: "swarm",   need: [3, 8, 16],  ctx: "swarm",   desc: "何人もの手に一度に触れられると、どこで感じているのか分からなくなる" },
     loser:      { name: "負け癖",       count: "defeat",  need: [2, 4, 7],   ctx: "bound",   desc: "組み伏せられた時、抗うより先に息が抜けるようになった" },
     bindhabit:  { name: "拘束癖",       count: "hold",    need: [8, 20, 40], ctx: "bound",   desc: "手足を塞がれた形を、身体が覚えてしまった" },
     edgeweak:   { name: "焦らし弱",     count: "edge",    need: [3, 7, 14],  ctx: "edge",    desc: "栓をされている間の宙吊りに、身体が期待を覚えた" },

@@ -308,7 +308,7 @@ var G = (typeof G !== "undefined") ? G : {};
       engulf: ev.filter(e => e.kind === "hold" && e.type === "蕩").length, machine: ev.filter(e => e.kind === "hold" && MACH.includes(e.mon)).length,
       imp: ev.filter(e => (e.kind === "charm" || e.kind === "deny" || e.kind === "beg" || e.kind === "kiss" || e.kind === "countGame") && IMP.includes(e.mon)).length,
       worm: ev.filter(e => WORM.includes(e.mon) && (e.kind === "hold" || e.kind === "attach")).length, shasei: n("shasei") + n("ringRelease"),
-      pray: n("pray") + n("crack"), kiss: n("kiss"),
+      pray: n("pray") + n("crack"), kiss: n("kiss"), swarm: ev.filter(e => e.kind === "hold" && (e.n || 1) >= 3).length,
     };
     const gained = [];
     for (const k in cnt) s.counts[k] = (s.counts[k] || 0) + cnt[k];
@@ -326,6 +326,17 @@ var G = (typeof G !== "undefined") ? G : {};
     const inspired = ev.filter(e => e.kind === "inspire").map(e => e.skill);
     for (const id of inspired) if (s.equip.length < G.GROWTH.slots(s.lv) && !s.equip.includes(id)) s.equip.push(id);   // 空きがあれば、すぐ使う
     run.growth = { lv0, lv: s.lv, xp, inspired };
+    // 魔物ごとの出来事の記録（手帳のメモに、日付つきで書き足される）
+    s.monLog = s.monLog || {};
+    const note = (k, what) => { if (!G.MONSTERS[k]) return; const L = s.monLog[k] || (s.monLog[k] = []); if (!L.some(x => x.what === what)) L.push({ day: s.day, what }); };
+    for (const e of ev) {
+      if (e.kind === "spot") note(e.mon, "seen");
+      else if (e.kind === "hold") { note(e.mon, "caught"); if ((e.stage || 0) >= 2) note(e.mon, "direct"); if ((e.n || 1) >= 3) note(e.mon, "swarm"); }
+      else if (e.kind === "climax" && e.mon) note(e.mon, "climax");
+      else if (e.kind === "kill") note(e.mon, "killed");
+      else if (e.kind === "anticipate") note(e.mon, "crave");
+    }
+    if (run.outcome === "defeat" && run.defeatBy) note(run.defeatBy, "defeat");
     // 報酬
     const req = s.pick.req;
     let funds = run.outcome === "cleared" ? req.reward : run.outcome === "defeat" ? 0 : Math.round(req.reward * run.floorReached / 12);
@@ -423,6 +434,7 @@ var G = (typeof G !== "undefined") ? G : {};
     s.taint = U.clamp(s.taint + s.ailments.length * 1.5, 0, 100);
     s.fatigue = U.clamp(s.fatigue - 22, 0, 100);
     s.day++;
+    s.lastGrowth = s.rec && s.rec.growth || null;      // 翌朝の会話で使う
     s.rec = null;
     morning(s);
   }

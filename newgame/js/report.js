@@ -323,15 +323,15 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   const MOAN = ["……っ、", "……ん、", "……ふ、ぅ……", "……ぁ、"];
   const LAW_TALK = {
-    shumoku: ["迷宮の法則は『衆目』でした。……どこにいても、見られてる感じがして", "法則が、『衆目』で。……見物が、多かったです"],
-    juntaku: ["法則は『潤沢』。……入った時点で、空気が、もう", "『潤沢の法則』でした。息をしてるだけで、熱くなるやつです"],
-    kinzetsu: ["……法則は、『禁絶』でした。……出た時のことは、救護の人も見てたので、……言わなくても、分かりますよね", "『禁絶の法則』。中では、一度も、……その。……出た瞬間に、全部来ました"],
-    seishi: ["法則は『静止』。捕まると、長いんです。……何もされないのが、長い", "『静止の法則』でした。……時間が、長かったです"],
-    boukyaku: ["法則は……えっと。なんでしたっけ。……たぶん、大したことない法則でした", "入口に何か書いてあった気はします。……特に、何もなかったと思います"],
-    eibin: ["法則は『鋭敏』。降りるたびに、服が擦れるのが……気になって", "『鋭敏の法則』でした。……今も、ちょっと、肌が"],
-    hakudatsu: ["法則は『剥奪』。……降りるたびに、一枚ずつ。……それ以上は、見れば分かると思います", "『剥奪の法則』でした。……替えの衣装、お願いします"],
-    kokuin: ["法則は『刻印』。入口で、……お腹に、紋を", "『刻印の法則』でした。……入っただけで、紋が"],
-    yuuka: ["法則は『雄化』。……入った瞬間に、……その。神殿じゃないのに", "『雄化の法則』でした。……中では、ずっと、生えてました"],
+    shumoku: ["……『衆目の法則』。どこを向いても、目、目、目で", "法則は『衆目』。……ずっと、誰かに見られてました", "迷宮の法則は『衆目』でした。……どこにいても、見られてる感じがして", "法則が、『衆目』で。……見物が、多かったです"],
+    juntaku: ["……『潤沢』でした。空気を吸うだけで、……っ", "法則は『潤沢』。息を止めるわけにも、いかなくて", "法則は『潤沢』。……入った時点で、空気が、もう", "『潤沢の法則』でした。息をしてるだけで、熱くなるやつです"],
+    kinzetsu: ["『禁絶』。……溜まったまま、ずっと。出口で、……はい", "……法則は、『禁絶』でした。……出た時のことは、救護の人も見てたので、……言わなくても、分かりますよね", "『禁絶の法則』。中では、一度も、……その。……出た瞬間に、全部来ました"],
+    seishi: ["……『静止』です。捕まったら、何もされないまま、ずっと", "法則は『静止』。捕まると、長いんです。……何もされないのが、長い", "『静止の法則』でした。……時間が、長かったです"],
+    boukyaku: ["法則……なんでしたっけ。書いてあったはず、なんですけど", "法則は……えっと。なんでしたっけ。……たぶん、大したことない法則でした", "入口に何か書いてあった気はします。……特に、何もなかったと思います"],
+    eibin: ["『鋭敏の法則』。……下に行くほど、肌が、……っ", "法則は『鋭敏』。降りるたびに、服が擦れるのが……気になって", "『鋭敏の法則』でした。……今も、ちょっと、肌が"],
+    hakudatsu: ["……『剥奪』。……服、一枚ずつ、でした", "法則は『剥奪』。……降りるたびに、一枚ずつ。……それ以上は、見れば分かると思います", "『剥奪の法則』でした。……替えの衣装、お願いします"],
+    kokuin: ["……『刻印』。入口で、もう、お腹に", "法則は『刻印』。入口で、……お腹に、紋を", "『刻印の法則』でした。……入っただけで、紋が"],
+    yuuka: ["……『雄化』です。……それ以上は、報告書に", "法則は『雄化』でした。……神殿でも、ないのに", "法則は『雄化』。……入った瞬間に、……その。神殿じゃないのに", "『雄化の法則』でした。……中では、ずっと、生えてました"],
   };
   const CONVERT_OPEN = ["戦闘員その2、報告します！ ……え？ あ、……あれ。……ひかり、です。星野、ひかり。……今の、なしで", "ワルドー万歳……じゃ、なくて。……おはようございます。……救出、ありがとうございました"];
 
@@ -546,7 +546,12 @@ var G = (typeof G !== "undefined") ? G : {};
       used[k] = (used[k] || 0) + 1;
       mem["style:" + k] = day;
       const tpl = freshPick(mem, day, "st:" + k, STYLE[k].lines, 3);
-      const wtxt = what(u, day, mem);
+      let wtxt = what(u, day, mem);
+      // 口が滑る：崩れている日や、堕ちが進んでいるほど、聞かれてもいない中身まで言ってしまう
+      if (u.kind === "hold" && u.acts && U.chance((posture === "crack" || posture === "core" ? 0.55 : 0.15) + 0.1 * G.tier(s.body, s.mind))) {
+        const top = Object.entries(u.acts).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => PROBE.part[k] || k);
+        wtxt += U.pick(["。……{a}を、です", "。……その、{a}を", "。{a}、……触られて"]).replace("{a}", top.join("と、")) + (u.stage >= 2 ? U.pick(["。……直接、でした", "。……服の、中まで"]) : "");
+      }
       const fillc = Object.assign({}, ctx, {
         what: wtxt, trap: u.trapName || "",
         whatA: U.fill(WHAT_A[u.kind] || WHAT_A.arouse, { mon: u.monName || "", trap: u.trapName || "", dur: durText(u.dur), n: u.n || 1 }) + (u.kind === "untransform" && u.n > 1 ? `（${u.n}回）` : ""),
@@ -615,12 +620,31 @@ var G = (typeof G !== "undefined") ? G : {};
     confess: ["……っ、……ごめんなさい。本当は、{what}", "……嘘、でした。……{what}", "……わかりました、言います。……{what}", "……っ、……記録、見られてるなら、隠しても、無駄ですよね。{what}"],
     hold: ["……それだけ、です。本当に", "……っ。そう、書いてあるなら、そうなんじゃないですか", "……記録のほうが、間違ってるんだと思います", "……しつこい、です。何も、なかったです", "……っ、……ありません。何も"],
     nightConfess: ["……っ、……本当は、覚えてます。朝まで、{mons}に……{n}回は、数えました", "……気を失ってたなんて、嘘です。……ずっと、起きてました。{mons}が、ずっと"],
+    evidence: ["水晶の記録だ。見ろ", "これを見ても、同じことが言えるか", "記録を読み上げる。……聞いていろ"],
+    evidenceNarr: ["監査官は、水晶に残った{floor}階の記録を、ひかりの前に映し出した。", "机の上に、{floor}階の監視記録が広げられた。", "水晶が、{floor}階の光景を映す。ひかりの顔から、血の気が引いた。"],
+    hurt: ["……っ、……本当のこと、しか、言ってません……！ 記録、見せなくても……", "……見せなくて、いいです。……わかってます、から……っ", "……疑われてたんですね、あたし。……っ、そう、ですよね"],
     nightMore: ["……何を、って……っ、……全部、です。服の中も、……中も", "……代わる代わる、でした。……一晩じゅう"],
   };
   // 追及された時の一問一答。嘘なら崩れることがある（崩れたら、その件は口頭では正直に言ったことになる）
-  function probe(rec, line, save) {
+  function probe(rec, line, save, evidence) {
     const s = save, mem = s.reportMem, day = rec.day, u = line.unit, tier = G.tier(s.body, s.mind);
     const out = [], P = PROBE;
+    // 記録を突きつける：嘘ならほぼ崩れる。本当のことを言っていたなら、ただ傷つける（そして、中身を晒される）
+    if (evidence && u) {
+      out.push({ who: "a", text: U.pick(P.evidence) });
+      out.push({ who: "n", text: U.fill(U.pick(P.evidenceNarr), { floor: u.floor }) });
+      if (line.lie && U.chance(0.85)) {
+        u.truth = "honest"; u.confessed = true; line.lie = false;
+        out.push({ who: "h", text: U.fill(U.pick(P.confess), { what: what(u, day, mem) }) });
+        s.trust = U.clamp(s.trust - 1, 0, 100); s.dark += 2; s.body = U.clamp(s.body + 0.5, 0, 100);
+        return { lines: out, confessed: true };
+      }
+      if (line.lie) { out.push({ who: "h", text: U.pick(P.hold) }); s.trust = U.clamp(s.trust - 4, 0, 100); return { lines: out, confessed: false }; }
+      out.push({ who: "h", text: U.pick(P.hurt) });
+      if (u.acts) { const top = Object.entries(u.acts).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => P.part[k] || k); out.push({ who: "h", text: U.fill(U.pick(P.parts), { a: top.join("と、") }) + (u.stage ? P.stage[u.stage] : "") }); }
+      s.trust = U.clamp(s.trust - 5, 0, 100); s.dark += 1; s.body = U.clamp(s.body + 1, 0, 100);
+      return { lines: out };
+    }
     const ctx = u ? { floor: u.floor, mon: u.monName || u.trapName || "", dur: durText(u.dur), n: u.climax || u.n || 1 } : {};
     rec.probes = (rec.probes || 0) + 1;
     if (line.night) {

@@ -119,6 +119,13 @@
     // 残っている状態異常が、朝の会話に出る（どれか一つ）
     const ailTalk = ["rewired", "attached", "omazuke", "charm", "throb", "sensitive", "addict", "hairTrigger", "exposure"].filter(id => S.ailments.some(a => a.id === id));
     if (ailTalk.length) out.unshift(T.office("talk.ail_" + U.pick(ailTalk)));
+    // 昨日の成長・学習・期待が、朝の会話に出る
+    const g = S.lastGrowth;
+    if (g && g.inspired && g.inspired.length && U.chance(0.8)) out.unshift(T.office("talk.inspired", { skill: G.SKILLS[g.inspired[0]].name }));
+    else if (g && g.lv > g.lv0 && U.chance(0.6)) out.push(T.office("talk.lvup"));
+    const crave = Object.entries(S.lewd || {}).filter(([k, v]) => G.MONSTERS[k] && v >= 12).sort((a, b) => b[1] - a[1])[0];
+    if (crave && U.chance(0.35)) out.push(T.office("talk.crave", { mon: G.MONSTERS[crave[0]].name }));
+    else { const kn = Object.entries(S.know || {}).filter(([k, v]) => G.MONSTERS[k] && v >= 14); if (kn.length && U.chance(0.25)) out.push(T.office("talk.knows", { mon: G.MONSTERS[U.pick(kn)[0]].name })); }
     if (S.suspicion >= 45) out.push(T.office("talk.suspicious"));
     if (GM.taintStage(S) >= 2 && U.chance(0.6)) out.push(T.office("talk.taint"));
     if (G.tier(S.body, S.mind) >= 2 && U.chance(0.6)) out.push(T.office("talk.fallen"));
@@ -152,7 +159,7 @@
         <button id="shop">裏の取引（澱晶 ${S.dark}）</button>
         <button id="hist">これまでの記録</button>
         <button id="skill">ルミナの技</button>
-        <button id="diary">ひかりの手帳</button>
+        <button id="diary">ひかりの手帳${(S.diary || []).length && S.diary[S.diary.length - 1].day !== S.diarySeen ? "（新しいページ）" : ""}</button>
       </div>
       <div class="panel sub hidden" id="menu2">オート指揮：<button id="auto">${S.autoDirector ? "入" : "切"}</button>　潜行中に魔物や罠を自動で差し向ける（自分で置くこともできる）
         <br><span class="dim">ひかりの弱点：素で惑に強い。変身中は絡にも強い。変身が解けると一気に崩れる。</span></div>`;
@@ -338,7 +345,8 @@
     if (!cv) return;
     if (dive.whole) { dive.cam.scale = Math.min(cv.width / w.map.W, cv.height / w.map.H); dive.cam.x = w.map.W / 2; dive.cam.y = w.map.H / 2; }
     else {
-      dive.cam.scale = Math.max(26, Math.min(cv.width / 12, cv.height / 9));
+      const base = Math.max(26, Math.min(cv.width / 12, cv.height / 9)), want = base * (w.run.h.bound ? 1.6 : 1);   // 捕まっている間は、寄って見せる
+      dive.zoom = (dive.zoom || base) + (want - (dive.zoom || base)) * Math.min(1, dt * 3); dive.cam.scale = dive.zoom;
       dive.cam.x += (w.run.h.x - dive.cam.x) * Math.min(1, dt * 4); dive.cam.y += (w.run.h.y - dive.cam.y) * Math.min(1, dt * 4);
     }
     G.Render.draw(cv.getContext("2d"), w, dive.cam, { hover: dive.hover, card: dive.card, night: !!dive.night });
@@ -421,9 +429,10 @@
     dive.whole = false;
     const log = document.getElementById("log");
     log.classList.remove("hidden");
+    const cardsEl = document.getElementById("cards"); if (cardsEl) cardsEl.parentNode.insertBefore(log, cardsEl);   // 夜の記録は、カードより上に
     const btns = document.querySelector(".dive .row");
     btns.innerHTML = `<button class="primary" id="nx">次の場面</button><button id="skip">朝まで飛ばす</button><span class="sub">夜のコスト ${G.BAL.nightBudget}。カードを選んで地図を押すと、呼び足せる</span>`;
-    log.style.maxHeight = "220px";
+    log.style.maxHeight = "340px"; log.style.fontSize = "13px";
     log.innerHTML = `<div class="heavy">ひかりは動けない。救出は朝になる。</div>`;
     drawCards();
     const next = () => {
@@ -473,7 +482,7 @@
     if (!rec) { S.phase = "guild"; return guild(); }
     app.innerHTML = topbar() + officeHTML() + `
       <div class="panel sub" id="rinfo"><b>口頭報告</b>　${esc(rec.dungeonName)}・${rec.floorReached}階まで・${OUTC[rec.outcome]}　今日の話し方：${esc(rec.postureName)}
-        <br><span class="dim">話の途中で「追及する」を選べるのは、その件を言い終えた、その時だけ。嘘なら崩れることがある。本当のことなら、中身を言わされる。</span></div>
+        <br><span class="dim">話の途中で「追及する」「記録を突きつける」を選べるのは、その件を言い終えた、その時だけ。嘘なら崩れることがある。本当のことなら、中身を言わされる（記録を突きつけると、嘘はほぼ崩れるが、本当だった時はひどく傷つける）。</span></div>
       <div class="row hidden" id="rdone"><button class="primary" id="todoc">報告書を受け取る</button></div>
       <details class="panel" id="trp"><summary>ここまでの話（書き起こし）</summary><div id="tr"></div></details>`;
     hikariIn();
@@ -481,6 +490,7 @@
       const o = Object.assign({}, l, { onShow: transcriptAdd });
       if (l.probe && l.who === "h") o.choices = [
         { label: "追及する", cls: "danger", fn: () => { const r = G.Report.probe(rec, l, S); save(); return r.lines.map(x => Object.assign(x, { onShow: transcriptAdd })); } },
+        ...(l.unit ? [{ label: "記録を突きつける", fn: () => { const r = G.Report.probe(rec, l, S, true); save(); return r.lines.map(x => Object.assign(x, { onShow: transcriptAdd })); } }] : []),
         { label: "流す", fn: () => [] },
       ];
       return o;
@@ -553,7 +563,8 @@
   /* ================================================================ 処置 */
   function clinicScreen() {
     S.phase = "clinic"; save();
-    const sel = new Set(S.ailments.map(a => a.id));
+    // 初めは、払える分だけ選んでおく（安いものから）
+    const sel = new Set(); { let left = S.funds; for (const a of S.ailments.slice().sort((x, y) => GM.AILMENTS[x.id].fee - GM.AILMENTS[y.id].fee)) { const f = GM.AILMENTS[a.id].fee; if (f <= left) { sel.add(a.id); left -= f; } } }
     const draw = keep(() => {
       const fee = [...sel].reduce((a, id) => a + GM.AILMENTS[id].fee, 0);
       const g = S.rec ? S.rec.gain : null;
@@ -561,7 +572,7 @@
         ${g ? `<div class="panel sub">今日の変化：肉体 +${g.body}　精神 +${g.mind}　ギルド資金 ${g.funds >= 0 ? "+" : ""}${g.funds}　澱晶 +${g.dark}${S.rec.forged ? `　違和感 +${g.sus}` : ""}</div>` : ""}
         <div class="panel">${S.ailments.length ? S.ailments.map(a => { const A = GM.AILMENTS[a.id]; return `<label class="doc-line"><input type="checkbox" data-id="${a.id}" ${sel.has(a.id) ? "checked" : ""}> <span><b>${esc(GM.ailmentName(a))}</b>${A.kink ? "（深層処置）" : ""}　◈${A.fee}<br><span class="sub">${A.note}</span></span></label>`; }).join("") : `<p class="sub">状態異常はない。</p>`}
           <p class="sub">処置しないで残すと、次の潜行に響き、ギルドの空気も少し澱む。</p></div>
-        <div class="row"><button class="primary" id="ok">${sel.size ? `処置して（◈${fee}）` : "このまま"}翌日へ</button></div>`;
+        <div class="row"><button class="primary" id="ok" ${fee > S.funds ? "disabled" : ""}>${sel.size ? `処置して（◈${fee}）` : "このまま"}翌日へ</button>${fee > S.funds ? `<span class="sub" style="color:var(--red)">資金が足りない（◈${S.funds}）。選び直す</span>` : ""}</div>`;
       on("input[type=checkbox]", "change", e => { e.target.checked ? sel.add(e.target.dataset.id) : sel.delete(e.target.dataset.id); draw(); });
       on("#ok", "click", () => {
         if (fee > S.funds) return toast("ギルド資金が足りない");
@@ -603,6 +614,7 @@
   // ひかりの手帳：本人が夜に書く日記と、魔物のメモ（監査官が、こっそり覗く）
   function diaryScreen(tab) {
     tab = tab || "diary";
+    if ((S.diary || []).length) { S.diarySeen = S.diary[S.diary.length - 1].day; save(); }
     const draw = keep(() => {
       const pages = (S.diary || []).slice().reverse();
       const notes = G.Diary ? G.Diary.monsterNotes(S) : [];
@@ -611,7 +623,7 @@
         <p class="sub">（ひかりの鞄から、薄桃色の手帳がのぞいている。……少しだけなら。報告では言わなかったことも、ここには書いてある）</p>
         <div class="row"><button class="tb" data-t="diary" style="${tab === "diary" ? "border-color:var(--pink)" : ""}">日記</button><button class="tb" data-t="mon" style="${tab === "mon" ? "border-color:var(--pink)" : ""}">魔物のメモ（${notes.length}）</button><button id="back">そっと戻す</button></div>
         ${tab === "diary" ? (pages.length ? pages.map(p => `<div class="notebook"><div class="nb-date">${p.day}日目　${esc(p.weather)}</div>${p.lines.map(l => `<p>${esc(l)}</p>`).join("")}</div>`).join("") : `<div class="notebook"><p>（まだ何も書かれていない）</p></div>`)
-          : `<div class="grid2">${notes.map(n => `<div class="notebook nb-mon ${n.ex > 0.3 ? "nb-hot" : ""}"><div class="nb-head">${art(n)}<b>${esc(n.name)}</b> <span class="tag t-${n.type}">${n.type}</span><span class="nb-st">${n.stage}</span></div>${n.lines.map(l => `<p>${esc(l)}</p>`).join("")}</div>`).join("") || `<div class="notebook"><p>（まだ何も書かれていない）</p></div>`}</div>`}`;
+          : `<div class="grid2">${notes.map(n => `<div class="notebook nb-mon ${n.ex > 0.3 ? "nb-hot" : ""}"><div class="nb-head">${art(n)}<b>${esc(n.name)}</b> <span class="tag t-${n.type}">${n.type}</span><span class="nb-st">${n.stage}</span></div>${n.lines.map((l, i) => `<p class="${n.struck.includes(i) ? "nb-strike" : ""} ${n.shaky && i === n.lines.length - 1 ? "nb-shaky" : ""}">${esc(l)}</p>`).join("")}${n.dated.length ? `<div class="nb-log">${n.dated.map(l => `<p>${esc(l)}</p>`).join("")}</div>` : ""}</div>`).join("") || `<div class="notebook"><p>（まだ何も書かれていない）</p></div>`}</div>`}`;
       on(".tb", "click", e => diaryScreen(e.currentTarget.dataset.t));
       on("#back", "click", guild);
     });

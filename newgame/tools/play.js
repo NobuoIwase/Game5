@@ -35,7 +35,7 @@ let probed=false;
 for(let i=0;i<120;i++){
   if(await p.$('#todoc')&&await p.$('#rdone:not(.hidden)')) break;
   const ch=await p.$$('#dlgc:not(.hidden) button');
-  if(ch.length){ await ch[probed?1:0].click(); if(!probed){probed=true;await p.screenshot({path:SP+'v6_report.png',fullPage:true});} }
+  if(ch.length){ await ch[probed?ch.length-1:0].click(); if(!probed){probed=true;await p.screenshot({path:SP+'v6_report.png',fullPage:true});} }
   else { const d=await p.$('#dlg:not(.hidden)'); if(d) await d.click(); }
   await p.waitForTimeout(120);
 }

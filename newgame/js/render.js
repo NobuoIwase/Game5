@@ -56,6 +56,13 @@ var G = (typeof G !== "undefined") ? G : {};
 
   // 漂う光の粒（画面ごと）
   const motes = [];
+  // 漂う粒の色：霧の色を白に寄せたもの（ダンジョンごと）
+  const MOTE = { "#8a7cc0": "200,180,255", "#c07a98": "255,180,210", "#7a90c0": "170,200,255", "#7ab08a": "190,255,200" };
+  function moteRGB(fog) {
+    if (MOTE[fog]) return MOTE[fog];
+    const n = parseInt(fog.slice(1), 16), c = [n >> 16, (n >> 8) & 255, n & 255].map(v => Math.round(v + (255 - v) * 0.5));
+    return (MOTE[fog] = c.join(","));
+  }
   function stepMotes(w, dt) {
     while (motes.length < 36) motes.push({ x: U.rf(0, w.map.W), y: U.rf(0, w.map.H), vx: U.rf(-0.15, 0.15), vy: U.rf(-0.25, -0.05), a: U.rf(0.2, 0.7), t: U.rf(0, 6) });
     for (const m of motes) { m.x += m.vx * dt; m.y += m.vy * dt; m.t += dt; if (m.y < 0 || m.x < 0 || m.x > w.map.W) { m.x = U.rf(0, w.map.W); m.y = w.map.H; } }
@@ -219,7 +226,7 @@ var G = (typeof G !== "undefined") ? G : {};
     ctx.globalCompositeOperation = "lighter";
     for (const d of dec) if (d.kind === "torch") { const g = ctx.createRadialGradient(X(d.x), Y(d.y) - S * 0.5, 0, X(d.x), Y(d.y) - S * 0.5, S * 2.2); g.addColorStop(0, "rgba(255,160,70,0.22)"); g.addColorStop(1, "rgba(255,160,70,0)"); ctx.fillStyle = g; ctx.fillRect(X(d.x) - S * 2.2, Y(d.y) - S * 2.7, S * 4.4, S * 4.4); }
     // 漂う光の粒
-    for (const m of motes) { ctx.fillStyle = `rgba(${pal.fog === "#8a7cc0" ? "200,180,255" : pal.fog === "#c07a98" ? "255,180,210" : pal.fog === "#7a90c0" ? "170,200,255" : "190,255,200"},${m.a * (0.6 + 0.4 * Math.sin(m.t * 2))})`; ctx.fillRect(X(m.x), Y(m.y), 2, 2); }
+    for (const m of motes) { ctx.fillStyle = `rgba(${moteRGB(pal.fog)},${m.a * (0.6 + 0.4 * Math.sin(m.t * 2))})`; ctx.fillRect(X(m.x), Y(m.y), 2, 2); }
     ctx.globalCompositeOperation = "source-over";
     // 催眠中は画面の縁が紫に染まる
     if ((h.trance > 0 || h.hyp > 20) && !ui.night) {
@@ -290,7 +297,9 @@ var G = (typeof G !== "undefined") ? G : {};
     ctx.translate(x + dx, y + S * 0.3 + dy + bob); ctx.transform(1, 0, -sk, 1, 0, 0); ctx.scale(sx, sy);
     if (ok(im)) {
       const k = sz / Math.max(im.naturalWidth, im.naturalHeight), iw = im.naturalWidth * k, ih = im.naturalHeight * k;
+      if (d.tint) ctx.filter = `hue-rotate(${d.tint}deg) saturate(1.2)`;   // 同じ絵の色違い（口づけの淫魔など）
       ctx.drawImage(im, -iw / 2, -ih, iw, ih);
+      if (d.tint) ctx.filter = "none";
       if (m.flash > 0) { ctx.globalAlpha = 0.55; ctx.globalCompositeOperation = "lighter"; ctx.drawImage(im, -iw / 2, -ih, iw, ih); ctx.globalCompositeOperation = "source-over"; }
     } else { ctx.fillStyle = TYPE_COLOR[d.type]; ctx.beginPath(); ctx.arc(0, -sz * 0.4, sz * 0.4, 0, 7); ctx.fill(); }
     ctx.restore();

@@ -18,6 +18,7 @@ await p.screenshot({path:SP+'v4_hand.png',fullPage:true});
 await p.click('#go');await p.waitForTimeout(300);
 for(let i=0;i<10;i++){ if(await p.$('#cv')) break; const d=await p.$('#dlg:not(.hidden)'); if(d) await d.click(); await p.waitForTimeout(500);}
 await p.waitForTimeout(1500);
+for(let i=0;i<5;i++){ const m=await p.$('#modal:not(.hidden) #ok'); if(!m) break; await m.click(); await p.waitForTimeout(300);}   // 入口の場面（法則・変生）を閉じる
 await p.click('#auto');await p.click('#spd');await p.click('#spd');
 await p.waitForTimeout(9000);await p.screenshot({path:SP+'v5_dive.png'});
 for(let i=0;i<500;i++){

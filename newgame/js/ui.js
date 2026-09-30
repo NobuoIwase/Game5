@@ -24,7 +24,7 @@
   function cardArt(c) {
     const ci = G.Field.cardInfo(c);
     if (ci.trap) return `<img src="assets/traps/${ci.id}.${ci.id === "web" || ci.id === "tower" ? "png" : "svg"}" alt="" style="border-bottom:2px solid ${G.Render.TYPE_COLOR[ci.d.type]}">`;
-    return `<img src="assets/monsters/${ci.d.art}" alt="">`;
+    return `<img src="assets/monsters/${ci.d.art}" alt=""${ci.d.tint ? ` style="filter:hue-rotate(${ci.d.tint}deg) saturate(1.2)"` : ""}>`;
   }
   const TIER_NAME = ["抵抗", "綻び", "心は拒み、体は応える", "待ってしまう"];
   const TAINT_NAME = ["澄んでいる", "ざわついている", "澱みはじめた", "倒錯が日常になった", "すっかり澱んだ"];

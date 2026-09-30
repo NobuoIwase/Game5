@@ -27,6 +27,14 @@ var G = (typeof G !== "undefined") ? G : {};
     addict:     { name: "中毒",       note: "咳き茸の粉が忘れられない。茸を見ると、自分から寄っていく", fee: 12 },
     hairTrigger:{ name: "暗示の引き金", note: "解けた暗示の底に鉤が残っている。前触れなく無様な発作が出る（深層処置）", fee: 30, kink: true },
     rewired:    { name: "常識改変",   note: "ワルドーの『敬礼』を正式な挨拶だと信じ込んでいる。本人は疑わない（深層処置）", fee: 30, kink: true },
+    // ---- 蟲・変生・教団・淫魔 ----
+    swell:      { name: "肥大化",     note: "ヒルに吸われた所が、ぷっくり腫れたまま戻らない。布が擦れるたびに声が出る", fee: 10, ongoing: true },
+    futaAfter:  { name: "変生の名残", note: "神殿で生えたものが、まだ引っ込まない。次の潜行も生えたまま始まる", fee: 12, ongoing: true },
+    futaFixed:  { name: "変生の定着", note: "射精を数え取られ、身体が『そういう形』で覚えてしまった。どこへ潜っても生える（深層処置）", fee: 30, kink: true },
+    crack:      { name: "心のヒビ",   note: "教団の説法で心の防護壁に入ったヒビ。惑が隙間から入り込む。一度の処置で三つ分しか塞がらない", fee: 14, kink: true },
+    impCurse:   { name: "淫魔の呪い", note: "淫魔に気に入られた印。起きた時からもう熱い。次の潜行は熱を抱えて始まる", fee: 12, ongoing: true },
+    kissMark:   { name: "口づけの印", note: "唇に淫魔の印が残っている。口づけ一つで、相手を好きになってしまう", fee: 14 },
+    permit:     { name: "絶頂許可制", note: "淫魔と結んだ契約が生きている。許しをもらうまで達せない。三度ねだると許される", fee: 18, ongoing: true },
     defeatBrand:{ name: "敗北洗脳",   note: "『この相手には勝てない』と刷り込まれた。その種に本気を出せない（深層処置）", fee: 30, kink: true },
   };
   // 状態異常の表示名（魅了は向き先つき）
@@ -35,6 +43,8 @@ var G = (typeof G !== "undefined") ? G : {};
     if (a.id === "charm" && a.to) return A.name + "（" + Object.keys(a.to).map(k => G.MONSTERS[k].name + ["", "Ⅰ", "Ⅱ", "Ⅲ"][a.to[k]]).join("・") + "）";
     if (a.id === "attached" && a.list) return A.name + "（" + a.list.join("・") + "）";
     if (a.id === "defeatBrand" && a.to) return A.name + "（" + G.MONSTERS[a.to].name + "）";
+    if (a.id === "crack" && a.n) return A.name + "（" + a.n + "）";
+    if (a.id === "swell" && a.n) return A.name + "（" + a.n + "）";
     return A.name;
   }
 
@@ -75,6 +85,10 @@ var G = (typeof G !== "undefined") ? G : {};
     inma: "寸止めの館", muma_queen: "夢魔の宮", futago: "双子の小部屋", waldo_grunt: "ワルドーの詰所", waldo_officer: "ワルドーの司令室", drone_capture: "ドローン工廠",
     drone_tickle: "ドローン工廠", drone_camera: "記録室", karte: "開発棟", shibire: "胞子の野", sekitake: "咳き茸の洞", suiyou: "水妖の沼", kabeguchi: "肉の回廊",
     inyoku: "淫翼の巣", hoshibami: "星喰みの磯", tentacle_lord: "触手の主の坑",
+    tsurimushi: "吊り蟲の縦穴", zuidou: "隧道蟲の巣", hibiki: "響き蟲の洞", doromushi: "泥蟲の沼", gitai: "擬態蟲の回廊", haimushi: "這い蟲の床", hiru: "ヒルの淵",
+    kuwaemushi: "咥え蟲の祠", sayagoke: "鞘苔の岩室", tenohira: "掌の間", ukegame: "受け壺の蔵", sakiimp: "先舐めの間",
+    shinja: "教団の礼拝所", sekkyoushi: "説法の間", chuushutsu: "抽出所", kyouso: "教祖の座",
+    jikkyou: "中継の舞台", kusuguri: "くすぐりの間", kazoe: "数え歌の間", azakeri: "嘲りの回廊", kuchizuke: "口づけの寝所",
     nikubana: "肉花の庭", dakitake: "抱き茸の森", kouryuu: "媚香の淀み", tsukite: "憑き手の礼拝堂", shousha: "照射の回廊", banjin: "沈んだ祭殿", medama: "目玉の天窓",
   };
   function placeName(dungeon, species) { return species ? (DEN_NAME[species] || G.MONSTERS[species].name + "の巣") : G.DUNGEONS[dungeon].name; }
@@ -92,13 +106,14 @@ var G = (typeof G !== "undefined") ? G : {};
       decks, autoDirector: false, speed: 1,
       history: [], reportMem: {}, lastPosture: null, caughtDay: -9, silentAccepted: false,
       requests: null, pick: null, rec: null, log: [],
-      traits: {}, counts: {}, waldo: { rescues: 0, converted: 0 }, carry: {},
+      traits: {}, counts: {}, waldo: { rescues: 0, converted: 0 }, carry: {}, crack: 0, futaMarks: 0, futaFixed: false,
     };
   }
   // 古いセーブに、後から足した項目を補う（v2 のまま）
   function upgradeSave(s) {
     if (!s) return s;
     s.traits = s.traits || {}; s.counts = s.counts || {}; s.waldo = s.waldo || { rescues: 0, converted: 0 }; s.carry = s.carry || {};
+    s.crack = s.crack || 0; s.futaMarks = s.futaMarks || 0; s.futaFixed = !!s.futaFixed;
     for (const k in G.DUNGEONS) if (!s.decks[k]) { const dg = G.DUNGEONS[k]; s.decks[k] = [dg.free.find(x => G.MONSTERS[x].type === "削"), "trap:" + dg.traps[0]]; }
     s.ailments = (s.ailments || []).filter(a => AILMENTS[a.id]);
     return s;
@@ -197,7 +212,7 @@ var G = (typeof G !== "undefined") ? G : {};
       autoDirector: s.autoDirector, save: s, recall: false, floor: 1, mismatch: 0,
       h: {
         hp: Math.round(G.HIKARI.hpMax * (1 - s.fatigue / 250)), mp: G.HIKARI.mpMax, magic: has("hollow") ? 60 : G.HIKARI.magicMax,
-        will: Math.round(100 - s.fatigue / 5 - (has("exhaustion") ? 20 : 0)), arousal: has("heat") ? 30 : 0, pleasure: 0, climax: 0, form: "magica", kit: Object.assign({}, p.kit),
+        will: Math.round(100 - s.fatigue / 5 - (has("exhaustion") ? 20 : 0)), arousal: Math.min(60, (has("heat") ? 30 : 0) + (has("impCurse") ? 25 : 0)), pleasure: 0, climax: 0, form: "magica", kit: Object.assign({}, p.kit),
         sigil: has("sigil") ? 1 : 0,
         // 前の潜行から持ち越した状態
         sens: has("sensitive") ? 2 : 0, sensBase: has("sensitive") ? 1 : 0, ache: has("throb") ? 40 : 0, numb: has("paralysis") ? 20 : 0,
@@ -205,6 +220,10 @@ var G = (typeof G !== "undefined") ? G : {};
         charm: Object.assign({}, (ail("charm") || {}).to || {}), attach: (s.carry.attach || []).slice(),
         exposure: has("exposure"), addict: has("addict"), trigger: has("hairTrigger"), rewired: has("rewired"), taint: has("mindTaint"),
         brand: (ail("defeatBrand") || {}).to || null, brain: 0,
+        swell: has("swell") ? (s.carry.swell || 1) : 0, crack: s.crack || 0,
+        futa: !!(G.DUNGEONS[p.dungeon].futa || s.futaFixed || has("futaAfter")), cum: 0, shasei: 0,
+        futaCarry: has("futaAfter") && !G.DUNGEONS[p.dungeon].futa && !s.futaFixed,   // 名残だけで生えている（神殿の外）
+        kissMark: has("kissMark"), permit: has("permit") ? { over: 0, edges: 0 } : null,
       },
       law,
       budgetBonus: s.upgrades.budget * 2,
@@ -251,7 +270,18 @@ var G = (typeof G !== "undefined") ? G : {};
     const over = ((H.omazuke || {}).over || 0) + ((H.deny || {}).over || 0) + ((H.kinOver || {}).over || 0);
     if (H.omazuke || over > 20) { add("omazuke"); s.carry.omazuke = Math.round(over + 30); } else if (!s.ailments.some(a => a.id === "omazuke")) s.carry.omazuke = 0;
     if (H.charm && Object.values(H.charm).some(v => v > 0)) { add("charm"); s.ailments.find(a => a.id === "charm").to = Object.assign({}, H.charm); }
-    if (H.attach && H.attach.length) { add("attached"); s.carry.attach = H.attach.slice(); s.ailments.find(a => a.id === "attached").list = H.attach.map(id => ({ orb: "震え珠", suit: "纏い衣", hoshibami: "星喰み", sucker: "吸盤" })[id]); } else s.carry.attach = [];
+    if (H.attach && H.attach.length) { add("attached"); s.carry.attach = H.attach.slice(); s.ailments.find(a => a.id === "attached").list = H.attach.map(id => ((G.ATTACH_NAME || {})[id]) || ({ orb: "震え珠", suit: "纏い衣", hoshibami: "星喰み", sucker: "吸盤", mushi: "潜り蟲", hibiki: "響き蟲", hiru: "肥大化ヒル" })[id] || id); } else s.carry.attach = [];
+    // 蟲・変生・教団・淫魔
+    if (H.swell) { add("swell"); s.carry.swell = H.swell; s.ailments.find(a => a.id === "swell").n = H.swell; }
+    if (s.futaFixed) { add("futaFixed"); s.ailments = s.ailments.filter(a => a.id !== "futaAfter"); }
+    else if (H.futaCarry && run.law !== "yuuka") s.ailments = s.ailments.filter(a => a.id !== "futaAfter");   // 名残は、神殿の外で一度潜ると引く
+    else if (H.futa && (H.shasei || 0) >= 1) add("futaAfter");
+    s.crack = H.crack || 0;
+    if (s.crack > 0) { add("crack"); s.ailments.find(a => a.id === "crack").n = s.crack; }
+    const IMPS2 = ["imp", "futago", "inma", "muma_queen", "sakiimp", "jikkyou", "kusuguri", "kazoe", "azakeri", "kuchizuke"];
+    if (ev.filter(e => (e.kind === "charm" || e.kind === "kiss" || e.kind === "beg" || e.kind === "countGame") && IMPS2.includes(e.mon)).length >= 3 || (run.outcome === "defeat" && IMPS2.includes(run.defeatBy))) add("impCurse");
+    if (H.kissMark) add("kissMark");
+    if (H.permit) add("permit");
     if (H.exposure) add("exposure");
     if (n("numb") >= 2) add("paralysis");
     if (run.outcome === "defeat" && s.fatigue >= 45) add("exhaustion");      // 連日の敗北で
@@ -265,13 +295,16 @@ var G = (typeof G !== "undefined") ? G : {};
       if (s.counts["lost:" + run.defeatBy] >= 2 && !s.ailments.some(a => a.id === "defeatBrand")) { add("defeatBrand"); s.ailments.find(a => a.id === "defeatBrand").to = run.defeatBy; }
     }
     // 性癖：行動の積み重ねで身につき、消えない
-    const MACH = ["ratchet", "karte", "exam", "capture", "pod", "drone_capture", "drone_tickle", "belt", "gate", "armor"], IMP = ["imp", "futago", "inma", "muma_queen"];
+    const MACH = ["ratchet", "karte", "exam", "capture", "pod", "drone_capture", "drone_tickle", "belt", "gate", "armor"], IMP = ["imp", "futago", "inma", "muma_queen", "sakiimp", "jikkyou", "kusuguri", "kazoe", "azakeri", "kuchizuke"];
+    const WORM = ["tsurimushi", "zuidou", "hibiki", "doromushi", "gitai", "haimushi", "hiru"];
     const cnt = {
       defeat: run.outcome === "defeat" ? 1 : 0, hold: n("hold"), edge: n("edge") + n("deny") + n("vow"), climax: climaxes,
       watched: n("filmed") + n("salute") + ev.filter(e => e.trap === "pillory").length, drain: n("drain"), sniff: n("sniff"), sigil: n("sigil") + n("rune"),
       hypno: ev.filter(e => e.hidden).length, drawn: n("drawn"), tickle: ev.filter(e => e.kind === "hold" && (e.mon === "drone_tickle" || e.mon === "tickle")).length,
       engulf: ev.filter(e => e.kind === "hold" && e.type === "蕩").length, machine: ev.filter(e => e.kind === "hold" && MACH.includes(e.mon)).length,
-      imp: ev.filter(e => (e.kind === "charm" || e.kind === "deny" || e.kind === "beg") && IMP.includes(e.mon)).length,
+      imp: ev.filter(e => (e.kind === "charm" || e.kind === "deny" || e.kind === "beg" || e.kind === "kiss" || e.kind === "countGame") && IMP.includes(e.mon)).length,
+      worm: ev.filter(e => WORM.includes(e.mon) && (e.kind === "hold" || e.kind === "attach")).length, shasei: n("shasei") + n("ringRelease"),
+      pray: n("pray") + n("crack"), kiss: n("kiss"),
     };
     const gained = [];
     for (const k in cnt) s.counts[k] = (s.counts[k] || 0) + cnt[k];
@@ -353,6 +386,9 @@ var G = (typeof G !== "undefined") ? G : {};
       s.ailments = s.ailments.filter(x => x.id !== id);
       if (id === "attached") s.carry.attach = [];
       if (id === "omazuke") s.carry.omazuke = 0;
+      if (id === "swell") s.carry.swell = 0;
+      if (id === "futaFixed") { s.futaFixed = false; s.futaMarks = 0; }
+      if (id === "crack") { s.crack = Math.max(0, (s.crack || 0) - 3); if (s.crack > 0) s.ailments.push({ id: "crack", day: s.day, n: s.crack }); }
     }
   }
   function endDay(s) {

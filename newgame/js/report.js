@@ -789,7 +789,7 @@ var G = (typeof G !== "undefined") ? G : {};
         const acts = e.acts ? Object.entries(e.acts).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k}×${v}`).join("・") : "";
         out.push(`${e.floor}階 ${e.t}秒：${who}が拘束（${durText(e.dur)}）${e.n > 1 ? `・${e.n}体` : ""}${acts ? `　行為：${acts}${e.stage >= 2 ? "（直接）" : e.stage === 1 ? "（服の中）" : ""}` : "　行為なし"}${gap}`);
       }
-      else if (e.kind === "climax") out.push(`${e.floor}階 ${e.t}秒：絶頂${who ? "（" + who + (e.act ? "・" + e.act.replace(/ /g, "") : "") + "）" : ""}${e.chain ? `　拘束中 連続${e.chain}回目` : ""}${e.first ? `　※当該部位での初の絶頂（${e.first}）` : ""}`);
+      else if (e.kind === "climax") out.push(`${e.floor}階 ${e.t}秒：絶頂${who ? "（" + who + (e.act ? "・" + e.act.replace(/ /g, "") : "") + "）" : ""}${e.chain ? `　拘束中 連続${e.chain}回目` : ""}${e.first ? `　※当該部位での初の絶頂（${e.first}）` : ""}${e.squirt ? "　※決壊（飛沫）を確認" : ""}`);
       else if (e.kind === "trap") out.push(`${e.floor}階 ${e.t}秒：罠「${who}」作動${gap}`);
       else if (e.kind === "untransform") out.push(`${e.floor}階 ${e.t}秒：変身解除`);
       else if (e.kind === "trance" && e.hidden) out.push(`${e.floor}階 ${e.t}秒：${who}の惑い（本人の記憶に残らない深さ）`);

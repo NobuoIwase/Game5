@@ -1354,6 +1354,12 @@ var G = (typeof G !== "undefined") ? G : {};
       { sfx: "……っ、……っ", line: "……もう、……わかん、な……", body: "何度目かも、どこで一度が終わって、どこから次が始まったのかも。\n{n}は、絶頂と絶頂の切れ目のない場所に、置き去りにされていた。" },
     ],
   ];
+  // 決壊（堰が切れる）。連続の果て、または決壊癖
+  const SQUIRT = [
+    "——ぷしゃっ、と。\n達した拍子に、内側の堰が切れた。熱いものが内腿を伝い、床に小さな音を立てる。\n（……うそ、……いまの、……わたし……？）",
+    "止まらない。達するたびに、ぴゅく、ぴゅく、と溢れて、下着の中がどうしようもなく濡れていく。\n{n}は、真っ赤な顔で、それを見ないようにした。",
+    "腰が跳ねるのに合わせて、熱い飛沫が散った。\n押さえようとした手の中で、それは余計に音を立てた。",
+  ];
   // 達する直前の口走り（段階2・3）
   const DECLARE = [
     ["……っ、い、……いっちゃ、う……いっちゃうっ……！", "だめ、だめっ、……く、る……きちゃう、からぁ……っ", "や、……みないで、……いま、いく、とこ……っ"],
@@ -1425,6 +1431,7 @@ var G = (typeof G !== "undefined") ? G : {};
       const cc = ctx.cat && CX_CAT[ctx.cat];
       if (cc && U.chance(0.75)) out.push({ cls: "body", text: fresh("cc" + ctx.cat, cc) });
       else if (k < 2 && U.chance(0.6)) out.push({ cls: "body", text: fresh("tell", BODY_TELL) });
+      if (ctx.squirt) out.push({ cls: "body cx", text: f(fresh("sq", SQUIRT)) });
       if (ctx.firstPart && FIRST_PART[ctx.firstPart]) out.push({ cls: "first", text: FIRST_PART[ctx.firstPart] });
       return out;
     },

@@ -297,7 +297,7 @@
       <div class="stage" id="stage"><canvas id="cv"></canvas><div class="overlay hidden" id="ov"></div>
         <div class="msgwin" id="msgwin"><p></p><p></p><p></p></div>
         <div class="live hidden" id="live"><div class="lv-fig" id="lvfig"><div class="lv-hold" id="lvh"></div><img id="lvimg" alt=""><i class="lv-blush"></i><i class="lv-drops"></i></div>
-          <div class="lv-g"><i id="lvg"></i><span>快感</span></div><div class="lv-feed" id="lvf"></div><button class="lv-skip" id="lvskip">▶▶</button></div>
+          <div class="lv-g"><i id="lvg"></i><span>快感</span></div><b class="lv-cn" id="lvc"></b><div class="lv-feed" id="lvf"></div><button class="lv-skip" id="lvskip">▶▶</button></div>
         <div class="cxcut hidden" id="cxcut"><b>絶　頂</b><span id="cxn"></span></div></div>
       <div class="chips" id="chips"></div>
       <div class="hud" id="hud"></div>
@@ -465,6 +465,7 @@
     fig.classList.toggle("naked", !!h.exposure);
     fig.classList.toggle("after", w.t - (h.lastClimaxT ?? -99) < 6 && now >= (dive.cxUntil || 0));
     document.getElementById("lvg").style.height = Math.min(100, h.pleasure).toFixed(0) + "%";
+    const cn = document.getElementById("lvc"), ct = h.climax ? `絶頂 ${h.climax}` : ""; if (cn.textContent !== ct) cn.textContent = ct;
     // 掴んでいる／群がっている相手を、立ち絵の後ろに
     const hold = dive.night ? (dive.nightHold || []).slice() : [];
     if (h.bound) {

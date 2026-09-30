@@ -581,6 +581,7 @@ var G = (typeof G !== "undefined") ? G : {};
     else msg(w, "climax", {});
     fx(w, { kind: "burst", x: h.x, y: h.y, color: "#ff9ccc", life: 1.0 });
     say(w, "climax", {});
+    for (const m of w.monsters) if (m.hp > 0 && !m.alert && U.dist(m.x, m.y, h.x, h.y) < 7 && G.Text.actorOf(m.kind)) { alertMon(w, m, 0.8); m.lastSeenH = { x: h.x, y: h.y }; }   // 声が、迷宮に響く
     { const vm = w.monsters.filter(m => m.hp > 0 && G.Text.hasVoice(m.kind) && U.dist(m.x, m.y, h.x, h.y) < 6).sort((a, b) => U.dist(a.x, a.y, h.x, h.y) - U.dist(b.x, b.y, h.x, h.y))[0]; if (vm) monSay(w, vm, "climax", 0.8); }
     // 覗き目玉：見られながら達した姿は、記録に残る
     const eye = w.monsters.find(m => m.hp > 0 && m.d.atk.film && U.dist(m.x, m.y, h.x, h.y) < 6.5 && M.los(w.map, m.x, m.y, h.x, h.y));
@@ -721,6 +722,9 @@ var G = (typeof G !== "undefined") ? G : {};
       if (tr) { tr.armed = false; tr.rearm = tr.d.rearm; }
     }
     if (b.ev) { b.ev.dur = +b.t.toFixed(1); if (b.t > 3.5) b.ev.sev = 3; }
+    if (broke) {                                    // 群れは、逃げた獲物をすぐ追い直す
+      for (const m of w.monsters) if (m.hp > 0 && m.d.pack && !b.by.includes(m.id) && !m.molest && U.dist(m.x, m.y, h.x, h.y) < 5) { alertMon(w, m, 1); m.cd = 0; m.pounceCd = 0; }
+    }
     if (broke) { h.lastEscT = w.t; say(w, "breakFree", {}); msg(w, "free", {}); fx(w, { kind: "burst", x: h.x, y: h.y, color: "#fff2a8", life: 0.6 }); if (b.src) learn(w, b.src.kind, 2); record(w, { kind: "escape", mon: b.src && b.src.kind, monName: b.src && b.src.d ? b.src.d.name : "", sev: 0 }); }
     h.bound = null;
     h.trance = Math.max(h.trance, 0.3);
@@ -1310,6 +1314,28 @@ var G = (typeof G !== "undefined") ? G : {};
     else if (w.floorNo >= 6 && U.chance(0.3)) key = "monoDeep";
     else if (U.chance(0.35)) key = "monoCalm";
     if (key) say(w, key, {});
+  }
+  // 迷宮が生きている：静かな時の気配、気づいていない魔物の独り言、火照った匂い
+  function liveliness(w, dt) {
+    const h = w.run.h;
+    if (w.outcome) return;
+    w.ambT = (w.ambT ?? U.rf(18, 30)) - dt;
+    if (w.ambT <= 0) { w.ambT = U.rf(22, 40); if (!threats(w).some(o => o.d < 7)) pushMsg(w, G.Text.ambient(w.run.dungeon), "amb"); }
+    w.idleT = (w.idleT ?? 3) - dt;
+    if (w.idleT <= 0) {
+      w.idleT = U.rf(5, 9);
+      const m = U.pick(w.monsters.filter(o => o.hp > 0 && !o.alert && !o.dormant && !o.hidden && G.Text.hasVoice(o.kind) && U.dist(o.x, o.y, h.x, h.y) < 8 && M.los(w.map, o.x, o.y, h.x, h.y)));
+      if (m) monSay(w, m, "idle");
+    }
+    // 火照った匂い：発情が高いと、気づいていない魔物まで寄ってくる
+    if (h.arousal > 70 && !h.bound) {
+      w.scentT = (w.scentT ?? 4) - dt;
+      if (w.scentT <= 0) {
+        w.scentT = U.rf(6, 10);
+        const m = w.monsters.find(o => o.hp > 0 && !o.alert && !o.dormant && o.d.spd > 0 && G.Text.actorOf(o.kind) && U.dist(o.x, o.y, h.x, h.y) < 4 + h.arousal / 20);
+        if (m) { alertMon(w, m, 1); m.lastSeenH = { x: h.x, y: h.y }; pushMsg(w, G.Text.scent({ mon: m.d.name, n: heroName(w) }), "scent"); }
+      }
+    }
   }
   function openChest(w, c) {
     const h = w.run.h;
@@ -2113,6 +2139,7 @@ var G = (typeof G !== "undefined") ? G : {};
     h.pleasure = Math.max(0, h.pleasure - (h.bound ? 0 : 0.6) * dt);
     if (!h.bound) h.will = Math.min(100, h.will + 0.6 * dt * (1 - h.arousal / 150) * (1 - (h.hyp || 0) / 110) * (sk(w, "breath") ? 1.5 : 1));
     perceive(w);
+    liveliness(w, dt);
     const rm = roomAt(w, h.x, h.y);
     if (rm !== h.room) {
       h.room = rm;

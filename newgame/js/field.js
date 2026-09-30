@@ -1388,7 +1388,7 @@ var G = (typeof G !== "undefined") ? G : {};
     h.cast = { kind, t: (kind === "burst" ? S.burst.cast : kind === "melee" ? S.melee.cast : S.shot.cast) * (h.numb > 0 ? 1.6 : 1), target, tx: target.x, ty: target.y };
     h.intent = null; h.label = kind === "burst" ? "詠唱" : "攻撃";
     h.face = { x: target.x, y: target.y, t: 0.5 };
-    const name = kind === "burst" ? "シャイン・バスター" : kind === "melee" ? "ルミナ・ストライク" : "ルミナ・ショット";
+    const name = kind === "burst" ? (sk(w, "nova") ? "シャイン・ノヴァ" : "シャイン・バスター") : kind === "melee" ? (sk(w, "spear") ? "スター・スピア" : "ルミナ・ストライク") : (sk(w, "twin") && h.mp >= S.shot.cost + 3 ? "ルミナ・ツインショット" : "ルミナ・ショット");
     if (kind === "burst" || U.chance(kind === "melee" ? 0.25 : 0.35)) h.bubble = { text: name + "！", t: 1.2 };
     msg(w, "cast", { spell: name }, kind === "burst" ? 0 : 1.2);
   }

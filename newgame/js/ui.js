@@ -294,7 +294,10 @@
     app.innerHTML = `<div class="dive">
       <div class="topbar" id="dtop"></div>
       <div class="stage" id="stage"><canvas id="cv"></canvas><div class="overlay hidden" id="ov"></div>
-        <div class="msgwin" id="msgwin"><p></p><p></p><p></p></div></div>
+        <div class="msgwin" id="msgwin"><p></p><p></p><p></p></div>
+        <div class="live hidden" id="live"><div class="lv-fig" id="lvfig"><div class="lv-hold" id="lvh"></div><img id="lvimg" alt=""><i class="lv-blush"></i><i class="lv-drops"></i></div>
+          <div class="lv-g"><i id="lvg"></i><span>快感</span></div><div class="lv-feed" id="lvf"></div><button class="lv-skip" id="lvskip">▶▶</button></div>
+        <div class="cxcut hidden" id="cxcut"><b>絶　頂</b><span id="cxn"></span></div></div>
       <div class="chips" id="chips"></div>
       <div class="hud" id="hud"></div>
       <div class="row">
@@ -310,6 +313,7 @@
     on("#pause", "click", e => { dive.paused = !dive.paused; e.currentTarget.textContent = dive.paused ? "再開" : "一時停止"; });
     on("#auto", "click", e => { S.autoDirector = !S.autoDirector; dive.run.autoDirector = S.autoDirector; dive.w.dir.auto = S.autoDirector; e.currentTarget.textContent = "オート " + (S.autoDirector ? "入" : "切"); });
     on("#whole", "click", () => { dive.whole = !dive.whole; });
+    on("#lvskip", "click", () => { dive.lskip = true; });
     on("#recall", "click", () => { if (dive.run.recall) return; dive.run.recall = true; toast("帰還を勧告した"); });
     const toWorld = ev => {
       const r = cv.getBoundingClientRect(), dpr = cv.width / r.width;
@@ -336,6 +340,7 @@
     dive.trans = 1.1;
     dive.logN = 0;
     dive.msgN = 0; dive.msgLines = dive.msgLines || [];
+    dive.feedId = 0; dive.lq = dive.lq || [];
   }
 
   function loop(now) {
@@ -344,7 +349,7 @@
     const w = dive.w;
     if (dive.trans > 0) dive.trans -= dt;
     else if (!dive.paused && !dive.night && !w.scene) {
-      dive.acc += dt * dive.speed;
+      dive.acc += dt * dive.speed * (dive.slowmo || 1);
       while (dive.acc > 1 / 60) { G.Field.step(w, 1 / 60); dive.acc -= 1 / 60; if (w.scene || w.outcome) break; }
     }
     if (w.scene && !dive.sceneOpen) openScene(w);
@@ -355,13 +360,14 @@
     else {
       const base = Math.max(26, Math.min(cv.width / 12, cv.height / 9)), want = base * (w.run.h.bound ? 1.6 : 1);   // 捕まっている間は、寄って見せる
       dive.zoom = (dive.zoom || base) + (want - (dive.zoom || base)) * Math.min(1, dt * 3); dive.cam.scale = dive.zoom;
-      dive.cam.x += (w.run.h.x - dive.cam.x) * Math.min(1, dt * 4); dive.cam.y += (w.run.h.y - dive.cam.y) * Math.min(1, dt * 4);
+      dive.cam.x += (w.run.h.x - dive.cam.x) * Math.min(1, dt * 4); dive.cam.y += (w.run.h.y + (dive.liveOn ? cv.height * 0.12 / dive.cam.scale : 0) - dive.cam.y) * Math.min(1, dt * 4);   // 実況の間は、ひかりを上へ寄せる
     }
     G.Render.draw(cv.getContext("2d"), w, dive.cam, { hover: dive.hover, card: dive.card, night: !!dive.night });
     const ov = document.getElementById("ov");
     if (dive.trans > 0) { ov.classList.remove("hidden"); ov.textContent = `${dive.run.dungeonName || G.DUNGEONS[dive.run.dungeon].name}　${w.floorNo}階`; }
     else ov.classList.add("hidden");
     drawHud();
+    drawLive(w, now);
     if (w.outcome && !w.scene && !dive.sceneOpen && !dive.night && !dive.ending) endFloor();
     if (!dive || dive.ending) return;          // 潜行が終わった
     dive.raf = requestAnimationFrame(loop);
@@ -417,7 +423,78 @@
     box.querySelectorAll(".cbtn").forEach(b => b.addEventListener("click", () => { dive.card = dive.card === b.dataset.c ? null : b.dataset.c; box.dataset.h = ""; drawCards(); }));
   }
 
+  /* 実況：捕まっている間・達した前後は、立ち絵の横に一行ずつ流す（Game2 の場面の流れ方にならう）
+   *   責め → 崩れていく言葉 → 決壊（画面が弾ける） → 沈黙 → 余韻 → 我に返る */
+  const LIVE_GAP = { act: 800, line: 650, mon: 650, sfx: 380, gauge: 350, cx: 900, first: 1700, pause: 1100, after: 1300, recover: 1100, scene: 1600, build: 1000 };
+  const LIVE_KEEP = /cx|first|scene|build|pause|after|recover/;
+  function liveGap(cls) { let g = 0; for (const k of cls.split(" ")) if (LIVE_GAP[k]) g = Math.max(g, LIVE_GAP[k]); return (g || 700) / (1 + 0.35 * ((dive.speed || 1) - 1)); }
+  function drawLive(w, now) {
+    const el = document.getElementById("live"); if (!el) return;
+    const h = w.run.h, q = dive.lq;
+    for (const f of w.feed) if (f.id > dive.feedId) { dive.feedId = f.id; q.push({ cls: f.cls, text: f.text }); }
+    // 溜まりすぎたら、ありふれた行から間引く（決壊・場面は残す）
+    const cap = h.bound || h.pleasure >= 85 ? 9 : 3;           // 解けたあとは、遅れを早めに畳む
+    while (q.length > cap) { const i = q.findIndex(l => !LIVE_KEEP.test(l.cls)); if (i < 0) break; q.splice(i, 1); }
+    if (q.length && (dive.lskip || now >= (dive.lnext || 0)) && !(dive.paused && !dive.lskip)) {
+      const n = dive.lskip ? q.length : 1;
+      for (let i = 0; i < n; i++) liveLine(q.shift(), now);
+      dive.lskip = false;
+    }
+    const busy = q.some(l => /cx|scene|first/.test(l.cls)) || now < (dive.cxUntil || 0);
+    dive.slowmo = busy ? 0.3 : 1;                       // 決壊と場面の間は、時の流れを落とす
+    const on = !!h.bound || now < (dive.liveUntil || 0) || q.length > 0;
+    el.classList.toggle("hidden", !on); dive.liveOn = on;
+    const mw = document.getElementById("msgwin"); if (mw) mw.classList.toggle("hidden", on);
+    if (!on) return;
+    const img = document.getElementById("lvimg"), src = `assets/hikari/hikari_${h.form === "magica" ? "magica" : "civilian"}_front_${now % 1400 < 700 ? 1 : 0}.png`;
+    if (img.getAttribute("src") !== src) img.setAttribute("src", src);
+    const fig = document.getElementById("lvfig");
+    fig.classList.toggle("blush", h.arousal > 35 || h.pleasure > 40);
+    fig.classList.toggle("hot", h.pleasure > 70);
+    fig.classList.toggle("bound", !!h.bound);
+    fig.classList.toggle("cx", now < (dive.cxUntil || 0));
+    fig.classList.toggle("naked", !!h.exposure);
+    document.getElementById("lvg").style.height = Math.min(100, h.pleasure).toFixed(0) + "%";
+    // 掴んでいる／群がっている相手を、立ち絵の後ろに
+    const hold = [];
+    if (h.bound) {
+      for (const id of h.bound.by) { const m = w.monsters.find(x => x.id === id && x.hp > 0); if (m) hold.push(m.d); else { const t = w.traps.find(x => x.id === id); if (t) hold.push({ trap: t.kind }); } }
+      for (const m of w.monsters) if (m.molest && m.hp > 0) hold.push(m.d);
+    }
+    const hk = hold.slice(0, 4).map(d => d.trap || d.art).join(",");
+    const hb = document.getElementById("lvh");
+    if (hb.dataset.k !== hk) {
+      hb.dataset.k = hk;
+      hb.innerHTML = hold.slice(0, 4).map((d, i) => `<img class="h${i}" src="${d.trap ? `assets/traps/${d.trap}.${d.trap === "web" || d.trap === "tower" ? "png" : "svg"}` : "assets/monsters/" + d.art}" alt=""${d.tint ? ` style="filter:hue-rotate(${d.tint}deg)"` : ""}>`).join("");
+    }
+  }
+  function liveLine(l, now) {
+    if (!l) return;
+    const box = document.getElementById("lvf"); if (!box) return;
+    const d = document.createElement("div");
+    d.className = "fl " + l.cls;
+    d.innerHTML = esc(l.text).replace(/\n/g, "<br>");
+    box.appendChild(d);
+    while (box.children.length > 6) box.removeChild(box.firstChild);
+    const hb0 = dive.w && dive.w.run.h;
+    dive.lnext = now + liveGap(l.cls) * (hb0 && !hb0.bound && !LIVE_KEEP.test(l.cls) ? 0.5 : 1);
+    dive.liveUntil = now + 3600 + liveGap(l.cls);
+    if (/gauge cx/.test(l.cls)) {                       // 決壊：画面が弾ける
+      dive.cxUntil = now + 1600;
+      const cut = document.getElementById("cxcut"), st = document.getElementById("stage");
+      document.getElementById("cxn").textContent = /（(\d+)回目）/.test(l.text) ? RegExp.$1 + "回目" : "";
+      cut.classList.remove("hidden", "go"); void cut.offsetWidth; cut.classList.add("go");
+      st.classList.remove("shake"); void st.offsetWidth; st.classList.add("shake");
+      clearTimeout(dive.cxTm); dive.cxTm = setTimeout(() => cut.classList.add("hidden"), 1500);
+    }
+  }
+  // 階の入口の場面（法則・変生）と敗北は、読ませる窓で。戦闘中の場面は、流れの中へ
+  const MODAL_SCENES = new Set(["law", "futaOn", "vowRelease", "defeat"]);
   function openScene(w) {
+    if (!MODAL_SCENES.has(w.scene.key)) {
+      for (const l of w.scene.lines) dive.lq.push({ cls: /^[「『]/.test(l) ? "line scene" : "scene", text: l });
+      w.scene = null; return;
+    }
     dive.sceneOpen = true;
     const sc = w.scene;
     modal(`${sc.lines.map(l => `<p>${esc(l)}</p>`).join("")}<div class="row"><button class="primary" id="ok">続ける</button></div>`, b => b.querySelector("#ok").onclick = () => { closeModal(); w.scene = null; dive.sceneOpen = false; });

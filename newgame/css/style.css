@@ -156,3 +156,52 @@ select { font: inherit; color: var(--tx); background: var(--panel2); border: 1px
 .o-hikari.tremble.sway { animation: tremble 0.9s infinite, sway 3.2s ease-in-out infinite; }
 @keyframes tremble { 0%,100% { margin-left: 0; } 20% { margin-left: -1px; } 40% { margin-left: 1px; } 60% { margin-left: -1px; } 80% { margin-left: 0.5px; } }
 @keyframes sway { 0%,100% { margin-bottom: 0; } 50% { margin-bottom: 3px; } }
+/* 実況：立ち絵＋流れる文（捕まっている間・達した前後） */
+.live { position: absolute; inset: 0; pointer-events: none; }
+.live.hidden, .msgwin.hidden { display: none; }
+.lv-fig { position: absolute; left: 0; bottom: 0; width: 38%; height: 80%; background: radial-gradient(ellipse at 50% 70%, rgba(255,120,190,0.22), rgba(0,0,0,0) 65%); }
+.lv-fig img#lvimg { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); height: 88%; max-width: 100%; object-fit: contain; image-rendering: auto; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6)); }
+.lv-fig.bound img#lvimg { animation: lvStrain 0.5s ease-in-out infinite; }
+.lv-fig.hot img#lvimg { filter: drop-shadow(0 0 14px rgba(255,90,160,0.75)) saturate(1.2); animation: lvStrain 0.28s ease-in-out infinite; }
+.lv-fig.cx img#lvimg { animation: lvCx 0.12s linear infinite; filter: drop-shadow(0 0 22px rgba(255,160,210,1)) brightness(1.25); }
+.lv-fig .lv-blush { position: absolute; left: 50%; bottom: 55%; width: 34%; height: 8%; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(ellipse, rgba(255,70,130,0.55), rgba(255,70,130,0) 70%); opacity: 0; transition: opacity 0.6s; }
+.lv-fig.blush .lv-blush { opacity: 1; }
+.lv-fig .lv-drops { position: absolute; right: 16%; top: 16%; width: 10px; height: 14px; opacity: 0; background: radial-gradient(circle at 50% 70%, #cfe8ff 45%, rgba(0,0,0,0) 50%); }
+.lv-fig.hot .lv-drops { opacity: 0.9; animation: lvDrop 1.2s ease-in infinite; }
+.lv-hold img { position: absolute; bottom: 4%; height: 46%; max-width: 70%; opacity: 0.85; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.7)); }
+.lv-hold .h0 { left: -8%; } .lv-hold .h1 { right: -10%; } .lv-hold .h2 { left: 18%; bottom: 44%; height: 34%; opacity: 0.6; } .lv-hold .h3 { right: 10%; bottom: 46%; height: 30%; opacity: 0.55; }
+.lv-g { position: absolute; left: 38%; bottom: 3%; width: 9px; height: 46%; border: 1px solid rgba(255,190,220,0.7); border-radius: 5px; background: rgba(20,8,20,0.7); overflow: hidden; }
+.lv-g i { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(0deg, #ff4f9a, #ffb3d6); transition: height 0.3s; }
+.lv-g span { position: absolute; left: 12px; bottom: 0; font-size: 10px; color: #ffb3d6; writing-mode: vertical-rl; white-space: nowrap; }
+.lv-feed { position: absolute; right: 2%; bottom: 3%; width: 57%; max-width: 560px; max-height: 64%; display: flex; flex-direction: column; justify-content: flex-end; gap: 3px; overflow: hidden; }
+.lv-feed .fl { background: rgba(12,6,16,0.84); border-left: 3px solid #8a6fb0; border-radius: 4px; padding: 3px 7px; font-size: 13px; line-height: 1.45; color: #eee6f4; animation: lvIn 0.35s ease-out; }
+.lv-feed .fl:nth-last-child(n+4) { opacity: 0.55; } .lv-feed .fl:nth-last-child(n+6) { opacity: 0.35; }
+.lv-feed .fl.line { border-left-color: #f2d27a; background: rgba(36,28,12,0.86); color: #fff4d6; }
+.lv-feed .fl.mon { border-left-color: #9fd3ff; color: #d6ecff; font-size: 12px; }
+.lv-feed .fl.sfx { border-left-color: transparent; background: none; color: #ffa8d4; text-align: center; letter-spacing: 0.18em; font-size: 15px; text-shadow: 0 0 6px rgba(255,80,160,0.8); }
+.lv-feed .fl.build { border-left-color: #ff7fb0; color: #ffd0e4; font-style: italic; }
+.lv-feed .fl.cx { border-left-color: #ff5fa0; background: rgba(60,14,40,0.92); color: #ffe0ef; animation: lvIn 0.35s ease-out, lvFlash 0.6s ease-out; }
+.lv-feed .fl.sfx.cx { font-size: 18px; background: none; }
+.lv-feed .fl.gauge { border-left-color: #ff4f9a; color: #ff9ccc; font-size: 12px; letter-spacing: 0.1em; }
+.lv-feed .fl.first { border-left-color: #ffd6f0; background: rgba(50,20,50,0.92); color: #fff; }
+.lv-feed .fl.pause { background: none; border-left-color: transparent; text-align: center; color: #8d7fa0; letter-spacing: 0.3em; }
+.lv-feed .fl.after { border-left-color: #a8459c; font-style: italic; color: #e6cfe8; }
+.lv-feed .fl.recover { border-left-color: #8fe0a0; color: #e8fff0; }
+.lv-feed .fl.scene { border-left-color: #c4459c; background: rgba(30,14,34,0.9); }
+.lv-skip { position: absolute; right: 2%; top: 2%; pointer-events: auto; padding: 2px 8px; font-size: 12px; opacity: 0.8; }
+.cxcut { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+.cxcut.hidden { display: none; }
+.cxcut.go { animation: cxBg 1.5s ease-out forwards; }
+.cxcut b { font-size: 44px; color: #fff; letter-spacing: 0.2em; text-shadow: 0 0 10px #ff5fa0, 0 0 26px #ff5fa0; animation: cxTxt 1.5s ease-out forwards; }
+.cxcut span { font-size: 16px; color: #ffd6ea; margin-top: 4px; text-shadow: 0 0 8px #ff5fa0; }
+.stage.shake { animation: stShake 0.45s ease-in-out; }
+@keyframes lvIn { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+@keyframes lvFlash { 0% { box-shadow: 0 0 0 rgba(255,95,160,0); } 30% { box-shadow: 0 0 22px rgba(255,95,160,0.7); } 100% { box-shadow: 0 0 8px rgba(255,95,160,0.2); } }
+@keyframes lvStrain { 0%,100% { transform: translateX(-50%); } 50% { transform: translateX(-50%) translateY(-1.5px) rotate(-0.6deg); } }
+@keyframes lvCx { 0%,100% { transform: translateX(-50%); } 25% { transform: translateX(calc(-50% - 2px)) translateY(-2px); } 75% { transform: translateX(calc(-50% + 2px)) translateY(1px); } }
+@keyframes lvDrop { from { transform: translateY(0); opacity: 0.9; } to { transform: translateY(18px); opacity: 0; } }
+@keyframes cxBg { 0% { background: rgba(255,255,255,0.85); } 15% { background: rgba(255,120,190,0.45); } 100% { background: rgba(255,120,190,0); } }
+@keyframes cxTxt { 0% { transform: scale(1.8); opacity: 0; } 12% { transform: scale(1); opacity: 1; } 75% { opacity: 1; } 100% { opacity: 0; transform: scale(1.05); } }
+@keyframes stShake { 0%,100% { transform: none; } 20% { transform: translate(-4px, 2px); } 40% { transform: translate(4px, -2px); } 60% { transform: translate(-3px, 1px); } 80% { transform: translate(2px, 0); } }
+@media (max-width: 520px) { .lv-feed .fl { font-size: 11.5px; padding: 2px 6px; } .lv-feed { width: 58%; max-height: 66%; } .cxcut b { font-size: 34px; } }
+@media (prefers-reduced-motion: reduce) { .stage.shake, .lv-fig img#lvimg, .cxcut b { animation: none !important; } }

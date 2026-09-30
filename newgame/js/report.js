@@ -571,7 +571,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (rec.outcome === "defeat" && rec.night && rec.night.length) {
       push("a", freshPick(mem, day, "aud:night", AUD.nightAsk, 2));
       const mons = [...new Set(rec.night.map(b => b.monName).filter(Boolean))];
-      const n = rec.night.filter(b => b.climax).length;
+      const n = rec.night.reduce((a, b) => a + (b.climaxN || (b.climax ? 1 : 0)), 0);
       const tier = G.tier(s.body, s.mind);
       const hid = rec.night.some(b => b.type === "惑");
       let mode = "honest";
@@ -740,7 +740,8 @@ var G = (typeof G !== "undefined") ? G : {};
     if (rec.outcome === "defeat" && rec.night && rec.night.length) {
       const mons = [...new Set(rec.night.map(b => b.monName).filter(Boolean))];
       const mode = rec.nightTruth || "honest";
-      out.push({ text: U.fill(DOC.night[mode], { mons: mons.join("と"), mon1: mons[0] || "何か" }), kind: mode === "denial" ? "false" : mode === "partial" ? "missing" : "honest", night: true });
+      const cl = rec.night.reduce((a, b) => a + (b.climaxN || (b.climax ? 1 : 0)), 0);
+      out.push({ text: U.fill(DOC.night[mode], { mons: mons.join("と"), mon1: mons[0] || "何か" }) + (mode === "honest" && cl ? `（絶頂 ${cl}回）` : ""), kind: mode === "denial" ? "false" : mode === "partial" ? "missing" : "honest", night: true });
     }
     return out;
   }
@@ -751,8 +752,11 @@ var G = (typeof G !== "undefined") ? G : {};
     for (const e of rec.events) {
       const who = e.monName || e.trapName || "";
       const gap = e.hidden ? "　※本人の記憶に残らない" : "";
-      if (e.kind === "hold") out.push(`${e.floor}階 ${e.t}秒：${who}が拘束（${durText(e.dur)}）${gap}`);
-      else if (e.kind === "climax") out.push(`${e.floor}階 ${e.t}秒：絶頂${who ? "（" + who + "）" : ""}`);
+      if (e.kind === "hold") {
+        const acts = e.acts ? Object.entries(e.acts).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k}×${v}`).join("・") : "";
+        out.push(`${e.floor}階 ${e.t}秒：${who}が拘束（${durText(e.dur)}）${e.n > 1 ? `・${e.n}体` : ""}${acts ? `　行為：${acts}${e.stage >= 2 ? "（直接）" : e.stage === 1 ? "（服の中）" : ""}` : "　行為なし"}${gap}`);
+      }
+      else if (e.kind === "climax") out.push(`${e.floor}階 ${e.t}秒：絶頂${who ? "（" + who + (e.act ? "・" + e.act.replace(/ /g, "") : "") + "）" : ""}`);
       else if (e.kind === "trap") out.push(`${e.floor}階 ${e.t}秒：罠「${who}」作動${gap}`);
       else if (e.kind === "untransform") out.push(`${e.floor}階 ${e.t}秒：変身解除`);
       else if (e.kind === "trance" && e.hidden) out.push(`${e.floor}階 ${e.t}秒：${who}の惑い（本人の記憶に残らない深さ）`);
@@ -796,7 +800,9 @@ var G = (typeof G !== "undefined") ? G : {};
       else if (e.kind === "tipTease") out.push(`${e.floor}階 ${e.t}秒：${who}による先端のみの刺激`);
     }
     if (rec.night && rec.night.length) {
-      rec.night.forEach((b, i) => out.push(`夜 ${i + 1}：${b.monName || "何か"}${b.climax ? "・絶頂" : ""}`));
+      rec.night.forEach((b, i) => out.push(`夜 ${i + 1}：${(b.group && b.group.length ? b.group.join("・") : b.monName) || "何か"}　行為 ${b.acts || 0}回${b.climaxN ? `・絶頂 ${b.climaxN}回` : b.climax ? "・絶頂" : ""}`));
+      const sum = rec.night.reduce((a, b) => ({ acts: a.acts + (b.acts || 0), cl: a.cl + (b.climaxN || 0) }), { acts: 0, cl: 0 });
+      out.push(`夜 合計：行為 ${sum.acts}回・絶頂 ${sum.cl}回`);
     }
     return out;
   }

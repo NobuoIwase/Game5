@@ -216,6 +216,15 @@ var G = (typeof G !== "undefined") ? G : {};
     w.msgs.push({ text, t: w.t, key: key || "act" });
     if (w.msgs.length > 40) w.msgs.shift();
   }
+  // 魔物の声（しゃべる種だけ）。同じ魔物は数秒あけ、画面に出る声は二つまで
+  function monSay(w, m, key, p) {
+    if (!m || !m.d || w.outcome && w.outcome !== "defeat") return;
+    if (p !== undefined && !U.chance(p)) return;
+    if (w.t - (m.sayT ?? -99) < 3.5 && key !== "climax") return;
+    if (w.monsters.filter(o => o.bubble && o.bubble.t > 0.5 && o !== m).length >= 2) return;
+    const t = G.Text.voice(m.kind, key); if (!t) return;
+    m.sayT = w.t; m.bubble = { text: t, t: 2.4 };
+  }
   function actMsg(w, key, ctx) { pushMsg(w, G.Text.actMsg(key, Object.assign({ n: heroName(w) }, ctx || {})), key); }
   function actBub(w, key) { const t = G.Text.actBubble(key); if (t) w.run.h.bubble = { text: t, t: 2.2 }; }
   // 媚薬の靄（床に溜まって、しばらく残る）
@@ -558,6 +567,7 @@ var G = (typeof G !== "undefined") ? G : {};
     else msg(w, "climax", {});
     fx(w, { kind: "burst", x: h.x, y: h.y, color: "#ff9ccc", life: 1.0 });
     say(w, "climax", {});
+    { const vm = w.monsters.filter(m => m.hp > 0 && G.Text.hasVoice(m.kind) && U.dist(m.x, m.y, h.x, h.y) < 6).sort((a, b) => U.dist(a.x, a.y, h.x, h.y) - U.dist(b.x, b.y, h.x, h.y))[0]; if (vm) monSay(w, vm, "climax", 0.8); }
     // 覗き目玉：見られながら達した姿は、記録に残る
     const eye = w.monsters.find(m => m.hp > 0 && m.d.atk.film && U.dist(m.x, m.y, h.x, h.y) < 6.5 && M.los(w.map, m.x, m.y, h.x, h.y));
     if (eye) { record(w, { kind: "filmed", type: "惑", mon: eye.kind, monName: eye.d.name, sev: 3 }); msg(w, "filmed", { mon: eye.d.name }); fx(w, { kind: "flashCam", x: eye.x, y: eye.y, life: 0.4 }); }
@@ -654,6 +664,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (h.bound) {
       if (h.bound.by.length >= 5 || h.bound.by.includes(src.id)) return false;
       h.bound.by.push(src.id); h.bound.power += power * 0.6;       // 数が増えるほど、振りほどけない
+      if (src.d && src.d.spd !== undefined) monSay(w, src, "grab", 0.6);
       actMsg(w, "swarm", { mon: src.d.name, c: h.bound.by.length + w.monsters.filter(m => m.molest && m.hp > 0).length });
       if (h.bound.by.length >= 3) actBub(w, "swarm");
       if (src.d && src.d.pack) callPack(w, src);
@@ -673,6 +684,7 @@ var G = (typeof G !== "undefined") ? G : {};
       if (A.kiss) { h.bound.kiss = true; kiss(w, src); }
     }
     h.cast = null; h.vx = h.vy = 0;
+    if (src.d && src.d.spd !== undefined) monSay(w, src, "grab", 0.8);
     const e = record(w, { kind: "hold", type: type || "絡", mon: src.kind, monName: src.d.name, sev: 2 });
     h.bound.ev = e;
     logLine(w, G.Text.log("hold", { mon: src.d.name }), "mid");
@@ -737,6 +749,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const cat = actCat(w, who), act = G.Text.act(cat, b.stage);
     if (!act) return;
     pushMsg(w, G.Text.fillAct(act, { mon: name, n: heroName(w) }) + "……", "act");
+    if (who.d && who.d.spd !== undefined) monSay(w, who, "act", 0.45);
     fx(w, { kind: "sfx", text: act.fx, x: h.x + U.rf(-0.6, 0.6), y: h.y - U.rf(0.7, 1.3), life: 1.2, color: act.watch ? "#d8c8ff" : "#ffb3d6" });
     for (const m of w.monsters) if (m.hp > 0 && !m.alert && U.dist(m.x, m.y, h.x, h.y) < 4.5 && G.Text.actorOf(m.kind)) alertMon(w, m, 0.6);   // 声が、近くの魔物を呼ぶ
     if (act.watch) { h.watched = 1.5; h.arousal = Math.min(100, h.arousal + 2.5); return; }
@@ -1366,13 +1379,14 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     if (m.hp <= 0) { killMon(w, m); return; }
     msg(w, "dmg", { mon: m.d.name, n: Math.round(before - m.hp) }, 0.4);
+    monSay(w, m, "hurt", 0.3);
     if (m.d.flee && m.hp < m.maxHp * 0.5) m.flee = 3;
     // 手負いは、悲鳴をあげて逃げ、仲間を呼ぶ（動けない種と長は逃げない）
     if (!m.fled && !m.boss && m.d.spd > 0 && m.hp <= m.maxHp * 0.25) {
       m.fled = true;
       if (U.chance(0.55)) {
         m.flee = U.rf(2.2, 3.2); m.cast = null;
-        msg(w, "flee", { mon: m.d.name });
+        msg(w, "flee", { mon: m.d.name }); monSay(w, m, "flee", 0.9);
         for (const o of w.monsters) if (o !== m && o.hp > 0 && !o.alert && U.dist(o.x, o.y, m.x, m.y) < 6.5) alertMon(w, o, 1);
       }
     }
@@ -1474,7 +1488,7 @@ var G = (typeof G !== "undefined") ? G : {};
 
   /* ================================================================ 魔物のAI */
   function alertMon(w, m, amount) {
-    if (!m.alert && amount > 0) { m.hop = 0.32; }     // 気づいた瞬間、跳ねる
+    if (!m.alert && amount > 0) { m.hop = 0.32; monSay(w, m, "spot", 0.6); }     // 気づいた瞬間、跳ねる（しゃべる種は一言）
     m.alert = Math.max(m.alert, amount * 6); m.lastSeenH = { x: w.run.h.x, y: w.run.h.y };
     if (m.hidden && !m.d.chest && !m.d.hidden) m.hidden = false;
   }
@@ -1509,6 +1523,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (m.dormant) { if (U.dist(m.x, m.y, h.x, h.y) < 1.4) { m.dormant = false; alertMon(w, m, 1); } else return; }
     const px = m.x, py = m.y;
     m.flash = Math.max(0, m.flash - dt); m.cd = Math.max(0, m.cd - dt);
+    if (m.bubble) { m.bubble.t -= dt; if (m.bubble.t <= 0) m.bubble = null; }
     m.hop = Math.max(0, m.hop - dt); m.rcl = Math.max(0, m.rcl - dt); m.lunge = Math.max(0, m.lunge - dt);
     m.pounceCd = Math.max(0, (m.pounceCd || 0) - dt);
     if (m.dash) {                                 // 飛びかかりの最中
@@ -1538,7 +1553,7 @@ var G = (typeof G !== "undefined") ? G : {};
       if (dist <= 1.15) {
         if (A.kind === "grab" && (m.cd <= 0.6 || d.pack) && h.bound.by.length < 5) { if (grab(w, m, A.power * m.pow, m.d.type === "蕩" ? "蕩" : "絡")) { m.holding = true; return; } }
         const nMol = w.monsters.filter(o => o.molest && o.hp > 0).length;
-        if (!m.molest && h.bound.by.length + nMol < 6) { m.molest = true; actMsg(w, "swarm", { mon: d.name, c: h.bound.by.length + nMol + 1 }); if (h.bound.by.length + nMol + 1 >= 3) actBub(w, "swarm"); }
+        if (!m.molest && h.bound.by.length + nMol < 6) { m.molest = true; monSay(w, m, "grab", 0.7); actMsg(w, "swarm", { mon: d.name, c: h.bound.by.length + nMol + 1 }); if (h.bound.by.length + nMol + 1 >= 3) actBub(w, "swarm"); }
         return;
       }
       const p = pathDir(w, m, h.x, h.y, d.r * 0.6);
@@ -1617,10 +1632,10 @@ var G = (typeof G !== "undefined") ? G : {};
         } else if (A.broadcast) {                  // 実況：捕まった姿、達した瞬間を中継する
           if (h.bound || h.freeze > 0 || w.t - (h.lastClimaxT ?? -99) < 3) {
             h.watched = 1.2; h.will = Math.max(0, h.will - 3); h.pleasure += 3 * intake(w, m);
-            if (w.t - (h.bcastT ?? -99) > 7) { h.bcastT = w.t; record(w, { kind: "broadcast", type: "惑", mon: m.kind, monName: d.name, sev: 3 }); msg(w, "broadcast", { mon: d.name }); say(w, "broadcast", {}); }
+            if (w.t - (h.bcastT ?? -99) > 7) { h.bcastT = w.t; record(w, { kind: "broadcast", type: "惑", mon: m.kind, monName: d.name, sev: 3 }); msg(w, "broadcast", { mon: d.name }); say(w, "broadcast", {}); monSay(w, m, "broadcast"); }
           } else msg(w, "bcastIdle", { mon: d.name }, 10);
         } else if (A.mock) {                       // 嘲り：捕まっている姿を罵る。罵られるほど、なぜか好きになる
-          if (h.bound) { h.will = Math.max(0, h.will - 3); msg(w, "mock", { mon: d.name }, 5); record(w, { kind: "mock", type: "惑", mon: m.kind, monName: d.name, sev: 2 }); if (U.chance(0.3)) addCharm(w, m, 10); }
+          if (h.bound) { h.will = Math.max(0, h.will - 3); msg(w, "mock", { mon: d.name }, 5); monSay(w, m, "mock", 0.6); record(w, { kind: "mock", type: "惑", mon: m.kind, monName: d.name, sev: 2 }); if (U.chance(0.3)) addCharm(w, m, 10); }
         } else if (A.gazeCharm) {                  // 教祖：見つめられるほど惹かれる。惹かれていると、祈ってしまう
           if (monSees(w, m)) {
             applyEffect(w, "惑", A.power * m.pow * 0.4, m); h.watched = 1;
@@ -1682,6 +1697,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const t = kind === "grab2" ? 0.7 : kind === "pounce" ? 0.5 : (A.windup || 0.6);
     const lead = U.clamp(0.12 * ((w.run.real && w.run.real.level) || 2), 0, 0.5) * t;   // 深い・強い相手ほど動きを読む
     m.cast = { id: w.nextId++, kind, t, total: t, tx: h.x + (h.vx || 0) * lead, ty: h.y + (h.vy || 0) * lead };
+    monSay(w, m, ["deny", "omazuke", "count", "lure"].includes(kind) ? kind : "attack", kind === "grab" || kind === "shot" || kind === "pounce" ? 0.35 : 0.8);
     if (kind === "shot" || kind === "lure") msg(w, "monCast", { mon: m.d.name, skill: G.Text.skillName(m.kind, kind) }, 1.5);
   }
 
@@ -2108,15 +2124,47 @@ var G = (typeof G !== "undefined") ? G : {};
   function nightBeat(w) {
     const h = w.run.h, n = w.night;
     const around = w.monsters.filter(m => m.hp > 0 && (U.dist(m.x, m.y, h.x, h.y) < 9 || m.summoned));
-    const m = U.pick(around.filter(x => !n.beats.some(b => b.mon === x.kind && b.i === n.beat - 1))) || U.pick(around);
-    const beat = { i: n.beat, mon: m ? m.kind : null, monName: m ? m.d.name : "", type: m ? m.d.type : "蕩" };
-    h.pleasure += 40; h.arousal = Math.min(100, h.arousal + 10);
-    if (h.pleasure >= 100) { h.pleasure = 20; h.climax++; beat.climax = true; }
-    if (m) { const a = U.rf(0, Math.PI * 2); const nx = h.x + Math.cos(a) * 0.7, ny = h.y + Math.sin(a) * 0.7; if (M.walkable(w.map, nx, ny)) { m.x = nx; m.y = ny; } }
-    beat.lines = G.Text.nightBeat(beat, { run: w.run, h, n: n.beat, total: G.BAL.nightBeats });
+    const lewd = around.filter(m => G.Text.actorOf(m.kind));
+    const pool = lewd.length ? lewd : around;
+    // 一場面に一〜三体。前の場面と同じ顔ぶれは避けぎみに
+    const lead = U.pick(pool.filter(x => !n.beats.some(b => b.mon === x.kind && b.i === n.beat - 1))) || U.pick(pool);
+    const group = lead ? [lead].concat(U.shuffle(pool.filter(x => x !== lead)).slice(0, U.pick([0, 1, 1, 2]))) : [];
+    const beat = { i: n.beat, mon: lead ? lead.kind : null, monName: lead ? lead.d.name : "", type: lead ? lead.d.type : "蕩", group: group.map(m => m.d.name), acts: 0, climaxN: 0, parts: {} };
+    group.forEach((m, i) => { const a = i / Math.max(1, group.length) * Math.PI * 2 + U.rf(0, 1); const nx = h.x + Math.cos(a) * 0.7, ny = h.y + Math.sin(a) * 0.7; if (M.walkable(w.map, nx, ny)) { m.x = nx; m.y = ny; } });
+    const scene = G.Text.nightParts(beat, { run: w.run, h, n: n.beat, total: G.BAL.nightBeats });
+    const lines = scene.head.slice();
+    for (const m of group) { const v = G.Text.voice(m.kind, U.chance(0.5) ? "act" : "climax"); if (v && U.chance(0.7)) lines.push(`${m.d.name}「${v}」`); }
+    // 何を、どのくらいされたか（夜はもう、直接）
+    const swarm = 1 + 0.2 * (group.length - 1);
+    for (const m of group) {
+      const cat = actCat(w, m) || "hands";
+      for (let k = 0, nk = 1 + (U.chance(0.55) ? 1 : 0); k < nk; k++) {
+        const act = G.Text.act(cat, U.chance(0.8) ? 2 : 1); if (!act) continue;
+        lines.push(G.Text.fillAct(act, { mon: m.d.name, n: "ひかり" }) + "。" + (act.fx ? "《" + act.fx + "》" : ""));
+        beat.acts++; beat.parts[act.part] = (beat.parts[act.part] || 0) + 1;
+        crave(w, m.kind, 0.3 * act.pw); { const sv = w.run.save; if (sv) { sv.parts = sv.parts || {}; const pp = sv.parts[m.kind] || (sv.parts[m.kind] = {}); pp[act.part] = (pp[act.part] || 0) + 1; } }
+        if (act.watch) { h.arousal = Math.min(100, h.arousal + 5); continue; }
+        if (act.cum && h.futa) { h.cum = (h.cum || 0) + 30 * act.pw * swarm; if (h.cum >= 100) { h.cum -= 85; h.shasei = (h.shasei || 0) + 1; lines.push(G.Text.actMsg("nightShasei", { mon: m.d.name, c: h.shasei })); } continue; }
+        h.pleasure += 26 * act.pw * swarm * (1 + h.arousal / 150); h.arousal = Math.min(100, h.arousal + 6);
+        if (h.pleasure >= 100) { h.pleasure = 25 + U.rf(0, 20); h.climax++; beat.climaxN++; lines.push(G.Text.actMsg("nightClimax", { p: act.p, mon: m.d.name, c: h.climax })); }
+      }
+    }
+    beat.climax = beat.climaxN > 0;
+    lines.push(G.Text.actMsg("nightGauge", { c: Math.round(Math.min(99, h.pleasure)) }));
+    if (scene.climax && beat.climax) lines.push(scene.climax);
+    if (n.beat === G.BAL.nightBeats - 1) {
+      const all = n.beats.concat(beat), acts = all.reduce((a, b) => a + (b.acts || 0), 0), cl = all.reduce((a, b) => a + (b.climaxN || 0), 0);
+      const mons = [...new Set(all.flatMap(b => b.group || [b.monName]).filter(Boolean))];
+      const parts = {}; for (const b of all) for (const k in b.parts || {}) parts[k] = (parts[k] || 0) + b.parts[k];
+      const top = Object.entries(parts).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => k).join("・");
+      w.run.nightSum = { acts, climax: cl, mons, top };
+      lines.push(G.Text.actMsg("nightSum", { mons: mons.join("・"), a: acts, c: cl, top }));
+      if (scene.close) lines.push(scene.close);
+    }
+    beat.lines = lines;
     n.beats.push(beat);
     w.run.night.push(beat);
-    record(w, { kind: "night", type: beat.type, mon: beat.mon, monName: beat.monName, sev: 3, climax: !!beat.climax, hidden: false });
+    record(w, { kind: "night", type: beat.type, mon: beat.mon, monName: beat.monName, sev: 3, climax: beat.climax, n: beat.climaxN, acts: beat.acts, hidden: false });
     n.beat++;
     return beat;
   }
@@ -2128,6 +2176,10 @@ var G = (typeof G !== "undefined") ? G : {};
     const B = h.bound;
     if (B) add(B.hang ? "逆さ吊り" : B.root ? "床下" : B.cocoon ? "繭の中" : B.ratchet ? "爪車（" + B.ratchet.n + "歯）" : B.shadow ? "影の腕×" + B.shadow.arms
                : B.pillory ? "晒し台" : B.edge ? "焦らし" : B.wait ? "壁の環" : B.slowStruggle ? "採寸中" : "拘束", null, "pink");
+    if (B) {
+      const mol = w.monsters.filter(m => m.molest && m.hp > 0).length, n = B.by.length + mol;
+      add((B.src && B.src.d ? B.src.d.name : "") + (n > 1 ? `ほか ${n}体に群がられている` : "に捕まっている") + "・" + (B.nAct ? ["服の上から", "服の中まで", "直接"][B.stage || 0] : "縛られているだけ"), null, B.nAct ? "red" : "dim");
+    }
     if (h.possess) add("憑き手（腕）", h.possess.t, "violet");
     if (h.freeze > 0) add("時間停止", h.freeze, "violet");
     if (h.futa) add("変生 射精感" + Math.round(h.cum || 0) + "%" + (h.shasei ? "（" + h.shasei + "回）" : ""), null, "pink");

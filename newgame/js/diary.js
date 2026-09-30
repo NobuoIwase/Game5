@@ -102,7 +102,8 @@ var G = (typeof G !== "undefined") ? G : {};
     if ((rec.probes || 0) > 0 && U.chance(0.7)) out.push(pick(D.probed));
     if (rec.outcome === "defeat" && rec.night && rec.night.length) {
       const mons = [...new Set(rec.night.map(b => b.monName).filter(Boolean))].join("と") || "何か";
-      out.push(fill(pick(D.night), { mons }));
+      const cl = rec.night.reduce((a, b) => a + (b.climaxN || (b.climax ? 1 : 0)), 0), acts = rec.night.reduce((a, b) => a + (b.acts || 0), 0);
+      out.push(fill(pick(D.night), { mons }) + (cl ? fill(pick(["……{c}回。数えなきゃよかった。", "{c}回、いかされた。{a}回、触られた。……記録係の人が、そう言ってた。", "朝までに、{c}回。"]), { c: cl, a: acts }) : ""));
     }
     const gr = rec.growth;
     if (gr && gr.inspired && gr.inspired.length) out.push(fill(pick(D.inspire), { skill: gr.inspired.map(id => G.SKILLS[id].name).join("』と『") }));

@@ -306,7 +306,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const bob = d.behavior === "float" ? Math.sin(w.t * 3 + m.id) * S * 0.08 : 0;
     const im = img("assets/monsters/" + d.art);
     ctx.save();
-    ctx.globalAlpha = m.hidden ? 0.4 : 1;
+    ctx.globalAlpha = m.hidden ? 0.4 : (m.holding || m.molest) && h.bound ? 0.7 : 1;     // 群がっている魔物は、少し透かしてルミナを見せる
     ctx.translate(x + dx, y + S * 0.3 + dy + bob); ctx.transform(1, 0, -sk, 1, 0, 0); ctx.scale(sx, sy);
     if (ok(im)) {
       const k = sz / Math.max(im.naturalWidth, im.naturalHeight), iw = im.naturalWidth * k, ih = im.naturalHeight * k;
@@ -319,6 +319,16 @@ var G = (typeof G !== "undefined") ? G : {};
     ctx.restore();
     ctx.globalAlpha = 1;
     ctx.fillStyle = TYPE_COLOR[d.type]; ctx.beginPath(); ctx.arc(x - Math.min(sz, S * 1.2) * 0.42, y - (F ? F[0] * S * 0.62 : sz * 0.62), S * 0.1, 0, 7); ctx.fill();
+    if (m.bubble) {                                  // 魔物の声
+      const t = m.bubble.text, top = y - (F ? F[0] * S : sz * 0.9) - S * 0.35;
+      ctx.font = `${Math.max(10, Math.round(S * 0.3))}px "Noto Sans JP",sans-serif`;
+      const tw = Math.min(ctx.measureText(t).width, S * 6.5);
+      ctx.globalAlpha = Math.min(1, m.bubble.t * 2);
+      ctx.fillStyle = m.d.type === "惑" ? "rgba(58,34,84,0.92)" : "rgba(84,26,56,0.92)"; roundRect(ctx, x - tw / 2 - 7, top - S * 0.27, tw + 14, S * 0.54, 7); ctx.fill();
+      ctx.strokeStyle = "rgba(255,170,210,0.8)"; ctx.lineWidth = 1.2; ctx.stroke();
+      ctx.fillStyle = "#ffe6f2"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(t, x, top + 1, S * 6.5);
+      ctx.globalAlpha = 1;
+    }
     if (m.boss) { ctx.fillStyle = "#f2d27a"; ctx.font = `bold ${Math.round(S * 0.34)}px sans-serif`; ctx.textAlign = "center"; ctx.fillText("長", x, y - (F ? F[0] * S * 0.95 : sz * 0.95)); }
     if (m.hp < m.maxHp) { ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(x - S * 0.4, y + S * 0.38, S * 0.8, 4); ctx.fillStyle = "#ff9ab8"; ctx.fillRect(x - S * 0.4, y + S * 0.38, S * 0.8 * m.hp / m.maxHp, 4); }
     if (m.summoned) { ctx.strokeStyle = "rgba(255,120,190,0.5)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(x, y + S * 0.28, sh * 0.38, 0, 7); ctx.stroke(); }

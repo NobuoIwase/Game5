@@ -352,6 +352,12 @@ var G = (typeof G !== "undefined") ? G : {};
     return rec;
   }
 
+  // 口頭報告が終わってから、報告書を書く（追及で認めたことも反映される。ただし書面では、また隠すことがある）
+  function writeDoc(s) {
+    const rec = s.rec; if (!rec) return;
+    rec.doc = G.Report.documentLines(rec, s);
+    rec.docWritten = true;
+  }
   /* ================================================================ 書類監査 */
   function audit(s, flagged) {
     const rec = s.rec, doc = rec.doc;
@@ -411,6 +417,6 @@ var G = (typeof G !== "undefined") ? G : {};
 
   function taintStage(s) { return s.taint >= 100 ? 4 : s.taint >= 70 ? 3 : s.taint >= 42 ? 2 : s.taint >= 18 ? 1 : 0; }
 
-  G.Game = { upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, buy, taintStage };
+  G.Game = { writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, buy, taintStage };
 })();
 if (typeof module !== "undefined") module.exports = G;

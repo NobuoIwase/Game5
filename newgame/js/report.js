@@ -353,7 +353,8 @@ var G = (typeof G !== "undefined") ? G : {};
       const e = ev[i];
       if (e.kind === "hold") {
         const cl = ev.slice(i + 1).filter(x => x.kind === "climax" && x.bound && x.floor === e.floor && x.t - e.t <= (e.dur || 6) + 0.5).length;
-        out.push({ kind: "hold", floor: e.floor, t: e.t, mon: e.mon, monName: e.monName, type: e.type, sev: e.sev || 2, dur: e.dur || 3, climax: cl, hidden: !!e.hidden });
+        out.push({ kind: "hold", floor: e.floor, t: e.t, mon: e.mon, monName: e.monName, type: e.type, sev: Math.min(3, (e.sev || 2) + ((e.stage || 0) >= 2 ? 1 : 0)), dur: e.dur || 3, climax: cl, hidden: !!e.hidden,
+          acts: e.acts || null, stage: e.stage || 0, swarm: e.n || 1, climaxActs: e.climaxActs || [] });
       } else if (e.kind === "trap" && (e.sev || 0) >= 1) {
         const same = out.find(u => u.kind === "trap" && u.trap === e.trap && u.floor === e.floor);
         if (same) { same.n = (same.n || 1) + 1; continue; }
@@ -366,6 +367,7 @@ var G = (typeof G !== "undefined") ? G : {};
         out.push({ kind: e.kind, key, floor: e.floor, t: e.t, mon: e.kind === "attach" ? e.att : e.mon, monName: e.kind === "attach" ? e.attName : e.monName, type: e.type || "蕩", sev: e.sev || 2, lv: e.lv, n: 1, climax: 0, hidden: !!e.hidden });
       } else if (["release", "beg", "rescue", "convert", "vow", "freeze", "exposure", "addict"].includes(e.kind)) {
         if (["exposure", "addict"].includes(e.kind) && out.some(u => u.kind === e.kind)) continue;
+        if (e.kind === "release") { const same = out.find(u => u.kind === "release"); if (same) { same.n += e.n || 1; same.rel = same.n; continue; } }
         out.push({ kind: e.kind, floor: e.floor, t: e.t, mon: e.mon, monName: e.monName || "", type: e.type || "蕩", sev: e.sev || 2, n: e.n || 1, climax: e.kind === "release" ? 0 : 0, rel: e.n || 0, hidden: false });
       } else if (["futaOn", "shasei", "tipTease", "ringRelease", "futaFixed", "crack", "pray", "broadcast", "countGame", "kiss", "swell", "miniClimax", "mock"].includes(e.kind)) {
         // 変生・教団・淫魔の件：種類ごとに潜行全体で一件（回数）
@@ -522,7 +524,7 @@ var G = (typeof G !== "undefined") ? G : {};
       if (u.truth === "false") {
         // 嘘：軽く言う
         const t = U.fill(DOWNPLAY_KIND[u.kind] ? freshPick(mem, day, "downK:" + u.kind, DOWNPLAY_KIND[u.kind], 2) : u.kind === "trap" ? freshPick(mem, day, "downT", DOWNPLAY_TRAP, 2) : freshPick(mem, day, "down", DOWNPLAY, 2), Object.assign({ trap: u.trapName }, ctx));
-        push("h", `${u.floor}階は……${t}`, { unit: u, lie: true, probe: { q: U.fill(freshPick(mem, day, "aud:probe", AUD.probeLie, 2), ctx), a: U.pick(["……それだけ、です。本当に", "……っ。そう、書いてあるなら、そうなんじゃないですか", "……記録のほうが、間違ってるんだと思います"]) } });
+        push("h", `${u.floor}階は……${t}`, { unit: u, lie: true, probe: true });
         return;
       }
       // 型を選ぶ：姿勢の傾き×条件×1回の報告で2回まで
@@ -555,6 +557,9 @@ var G = (typeof G !== "undefined") ? G : {};
         if (tpl.a) push("a", U.fill(tpl.a, fillc));
         if (tpl.h2) push("h", U.fill(tpl.h2, fillc), { unit: u });
       }
+      // 追及できるのは、その件を言い終えた、その時だけ
+      const lastL = lines.slice().reverse().find(l => l.unit === u);
+      if (lastL && u.kind !== "untransform") lastL.probe = true;
     });
     if (breaks > 0) { const id = U.pick(going); push("h", ongoingLine(mem, day, id)); }
     if (rec.units.rest) push("h", U.fill(freshPick(mem, day, "rest", REST, 3), { n: rec.units.rest }).replace(/。$/, "") + U.pick(REST_TAIL));
@@ -571,7 +576,7 @@ var G = (typeof G !== "undefined") ? G : {};
       if (hid && U.chance(0.5)) mode = "partial";
       else if (tier === 2 && U.chance(0.35) || s.trust < 30 && U.chance(0.5)) mode = "denial";
       rec.nightTruth = mode;
-      push("h", U.fill(freshPick(mem, day, "night:" + mode, NIGHT_RECOUNT[mode], 3), { mons: mons.join("と") || "何か", mon1: mons[0] || "何か", n: Math.max(1, n) }), { night: true, lie: mode === "denial" });
+      push("h", U.fill(freshPick(mem, day, "night:" + mode, NIGHT_RECOUNT[mode], 3), { mons: mons.join("と") || "何か", mon1: mons[0] || "何か", n: Math.max(1, n) }), { night: true, lie: mode === "denial", probe: true });
     }
     // 締め
     const closeKey = rec.h.arousal > 45 || (rec.ailments && rec.ailments.length) ? "ailment" : (s.trust < 35 ? "low" : "base");
@@ -585,6 +590,69 @@ var G = (typeof G !== "undefined") ? G : {};
     rec.posture = posture;
     rec.postureName = P.name;
     return lines;
+  }
+
+  /* ================================================================ 追及（その場でしかできない） */
+  const PROBE = {
+    askTrue: ["具体的に言え", "どこを、どうされた", "詳しく話せ。記録に残す", "それだけでは分からない。何をされた", "省くな。全部だ"],
+    askNight: ["朝まで、何をされていた", "具体的に言え。夜の間のことだ"],
+    part: { "胸": "胸", "胸の先": "胸の、先", "脚の間": "脚の、間", "秘所": "……あそこ", "突起": "……一番、敏感な、とこ", "お尻": "お尻", "内腿": "内腿", "太腿": "太腿", "首筋": "首筋", "耳": "耳", "脇": "脇", "脇腹": "脇腹",
+            "肌": "肌じゅう", "全身": "全部", "胸と秘所": "胸と、……あそこ", "生えたもの": "……生えた、の", "先端": "……先っぽ", "脚の付け根": "脚の、付け根", "胸の横": "胸の、横", "足の裏": "足の裏", "腰": "腰", "胸元": "胸元", "脚": "脚", "手足": "手足", "顔": "顔" },
+    parts: ["……{a}を、です", "……{a}、……です。……っ", "……{a}を、……触られました"],
+    stage: ["", "……服の、中に、……手が、入ってきて", "……直接、です。……中、まで"],
+    swarm: ["……{n}体、いっぺんに、でした", "……囲まれて、……{n}体に、でした"],
+    climax: ["……{p}、……達しました", "……{p}、……それで、頭が真っ白に", "……{p}、……いっちゃい、ました"],
+    none: ["……言った、とおりです。それ以上は、……勘弁してください", "……本当に、それだけです", "……っ、もう、いいですよね……？", "……細かいことは、覚えてません。……本当です"],
+    confess: ["……っ、……ごめんなさい。本当は、{what}", "……嘘、でした。……{what}", "……わかりました、言います。……{what}", "……っ、……記録、見られてるなら、隠しても、無駄ですよね。{what}"],
+    hold: ["……それだけ、です。本当に", "……っ。そう、書いてあるなら、そうなんじゃないですか", "……記録のほうが、間違ってるんだと思います", "……しつこい、です。何も、なかったです", "……っ、……ありません。何も"],
+    nightConfess: ["……っ、……本当は、覚えてます。朝まで、{mons}に……{n}回は、数えました", "……気を失ってたなんて、嘘です。……ずっと、起きてました。{mons}が、ずっと"],
+    nightMore: ["……何を、って……っ、……全部、です。服の中も、……中も", "……代わる代わる、でした。……一晩じゅう"],
+  };
+  // 追及された時の一問一答。嘘なら崩れることがある（崩れたら、その件は口頭では正直に言ったことになる）
+  function probe(rec, line, save) {
+    const s = save, mem = s.reportMem, day = rec.day, u = line.unit, tier = G.tier(s.body, s.mind);
+    const out = [], P = PROBE;
+    const ctx = u ? { floor: u.floor, mon: u.monName || u.trapName || "", dur: durText(u.dur), n: u.climax || u.n || 1 } : {};
+    rec.probes = (rec.probes || 0) + 1;
+    if (line.night) {
+      out.push({ who: "a", text: U.pick(P.askNight) });
+      const mons = [...new Set((rec.night || []).map(b => b.monName).filter(Boolean))], n = Math.max(1, (rec.night || []).filter(b => b.climax).length);
+      if (line.lie && U.chance(0.35 + tier * 0.12 + (s.trust > 60 ? 0.15 : 0))) {
+        rec.nightTruth = "honest"; line.lie = false;
+        out.push({ who: "h", text: U.fill(U.pick(P.nightConfess), { mons: mons.join("と") || "何か", n }) });
+        s.trust = U.clamp(s.trust + 3, 0, 100); s.dark += 1;
+        return { lines: out, confessed: true };
+      }
+      if (line.lie) { out.push({ who: "h", text: U.pick(P.hold) }); s.trust = U.clamp(s.trust - 3, 0, 100); return { lines: out, confessed: false }; }
+      out.push({ who: "h", text: U.pick(P.nightMore) }); s.body = U.clamp(s.body + 0.5, 0, 100); s.dark += 1;
+      return { lines: out };
+    }
+    if (line.lie && u) {
+      out.push({ who: "a", text: U.fill(freshPick(mem, day, "aud:probe", AUD.probeLie, 2), ctx) });
+      const pc = 0.3 + tier * 0.1 + (s.trust > 60 ? 0.15 : 0) - (u.shame - 2) * 0.08;
+      if (U.chance(U.clamp(pc, 0.12, 0.8))) {
+        u.truth = "honest"; u.confessed = true; line.lie = false;
+        out.push({ who: "h", text: U.fill(U.pick(P.confess), { what: what(u, day, mem) }) });
+        s.trust = U.clamp(s.trust + 3, 0, 100); s.mind = U.clamp(s.mind - 0.5, 0, 100); s.dark += 1;
+        return { lines: out, confessed: true };
+      }
+      out.push({ who: "h", text: U.pick(P.hold) });
+      s.trust = U.clamp(s.trust - 3, 0, 100); u.pressed = true;
+      return { lines: out, confessed: false };
+    }
+    // 本当のことを言っている件：言わされるのは、中身
+    out.push({ who: "a", text: U.pick(P.askTrue) });
+    s.trust = U.clamp(s.trust - 1.5, 0, 100);
+    if (u && u.acts) {
+      const top = Object.entries(u.acts).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => P.part[k] || k);
+      let t = U.fill(U.pick(P.parts), { a: top.join("と、") });
+      if (u.stage) t += P.stage[u.stage];
+      out.push({ who: "h", text: t });
+      if (u.swarm >= 3) out.push({ who: "h", text: U.fill(U.pick(P.swarm), { n: u.swarm }) });
+      if (u.climaxActs && u.climaxActs.length) out.push({ who: "h", text: U.fill(U.pick(P.climax), { p: u.climaxActs[u.climaxActs.length - 1].replace(/ /g, "") }) });
+      s.body = U.clamp(s.body + 0.5, 0, 100); s.dark += 1;
+    } else out.push({ who: "h", text: U.pick(P.none) });
+    return { lines: out };
   }
 
   /* ================================================================ 報告書（口語体） */
@@ -641,11 +709,20 @@ var G = (typeof G !== "undefined") ? G : {};
     const out = [{ text: U.fill(DOC.head[rec.outcome] || DOC.head.retreat, { deep: rec.floorReached }), kind: "honest", fixed: true }];
     // 報告に出た件と、隠した件（欠落）を、階の順に
     const floors = [...new Set(rec.units.map(u => u.floor))].sort((a, b) => a - b);
+    // 書面は記録に残る。口では言えたことでも、書く段になると隠したくなる（口で認めた件は、少しだけ隠しにくい）
+    const tier = G.tier(save.body, save.mind);
+    for (const u of rec.units) {
+      if (u.truth === "missing") u.docTruth = "missing";
+      else if (u.truth === "false") u.docTruth = "false";
+      else if (u.shame >= 2 && u.kind !== "untransform") u.docTruth = U.chance(U.clamp((u.confessed ? 0.18 : 0.1 + 0.12 * (u.shame - 2)) + (tier === 2 ? 0.08 : 0) - (tier >= 3 ? 0.08 : 0), 0.03, 0.5)) ? "false" : "honest";
+      else u.docTruth = "honest";
+      if (u.docTruth === "false" && u.truth !== "false") u.writtenLie = true;      // 口では言ったのに、書かなかった
+    }
     for (const f of floors) {
       for (const u of rec.units.filter(x => x.floor === f)) {
         const ctx = { floor: f, mon: u.monName || u.trapName || "", trap: u.trapName, dur: durText(u.dur), n: u.climax || u.n || 1 };
-        if (u.truth === "missing") out.push({ text: U.fill(freshPick(mem, day, "doc:miss", DOC.missing, 1), ctx), kind: "missing", unit: u });
-        else if (u.truth === "false") out.push({ text: U.fill(DOC.falseKind[u.kind] ? freshPick(mem, day, "doc:falseK:" + u.kind, DOC.falseKind[u.kind], 1) : u.kind === "trap" ? freshPick(mem, day, "doc:falseT", DOC.falseTrap, 1) : freshPick(mem, day, "doc:false", DOC.false, 1), ctx), kind: "false", unit: u });
+        if (u.docTruth === "missing") out.push({ text: U.fill(freshPick(mem, day, "doc:miss", DOC.missing, 1), ctx), kind: "missing", unit: u });
+        else if (u.docTruth === "false") out.push({ text: U.fill(DOC.falseKind[u.kind] ? freshPick(mem, day, "doc:falseK:" + u.kind, DOC.falseKind[u.kind], 1) : u.kind === "trap" ? freshPick(mem, day, "doc:falseT", DOC.falseTrap, 1) : freshPick(mem, day, "doc:false", DOC.false, 1), ctx), kind: "false", unit: u });
         else {
           const key = u.kind === "hold" ? (u.climax ? "holdC" : "hold") : u.kind;
           const arr = DOC.honest[key] || DOC.honest.arouse;
@@ -720,20 +797,27 @@ var G = (typeof G !== "undefined") ? G : {};
   const REREPORT = {
     why: ["……恥ずかしかったんです。記録に残るのが。ずっと、残るのが", "魔法少女が、こんなことで……って、思われたくなくて", "……嘘ついたの、ごめんなさい。でも、言えなかった"],
     fix: ["訂正します。{floor}階で、{what}", "……本当のことを書きます。{floor}階、{what}"],
+    written: ["……口では、言えたんです。でも、書くのは……ずっと、残るから", "……話したことと、書いたことが違うのは、……分かってました", "……書類に、あのことを書くのは、……無理でした"],
+    ask: ["報告書の、この行だ。水晶の記録と合わない", "この一文。説明しろ", "書類と記録が食い違っている"],
     lewdAsk: ["詳しい確認が必要だと、監査官はひかりを奥の部屋へ呼んだ。", "記録との照合と称して、監査官はひかりに、その時と同じ姿勢を取らせた。"],
     lewdLine: ["「……っ、ここまで、する必要……あるん、ですか……」", "「確認、だけ……ですよね……？」"],
   };
+  // 再尋問：暴かれた行を一つずつ突きつけ、言い直させる
   function rereport(rec, caught, save) {
     const mem = save.reportMem, day = rec.day;
-    const lines = [{ who: "h", text: freshPick(mem, day, "re:why", REREPORT.why, 3) }];
-    for (const d of caught) {
-      if (d.night) { lines.push({ who: "h", text: "……夜のことも、本当は、覚えてます。" }); continue; }
+    const lines = [];
+    caught.forEach((d, i) => {
+      lines.push({ who: "a", text: `「${d.text.replace(/^\d+階：/, "")}」——${U.pick(REREPORT.ask)}` });
+      if (i === 0) lines.push({ who: "h", text: freshPick(mem, day, "re:why", REREPORT.why, 3) });
+      if (d.night) { lines.push({ who: "h", text: "……夜のことも、本当は、覚えてます。" }); return; }
       const u = d.unit;
+      if (u.writtenLie) lines.push({ who: "h", text: U.pick(REREPORT.written) });
       lines.push({ who: "h", text: U.fill(freshPick(mem, day, "re:fix", REREPORT.fix, 1), { floor: u.floor, what: what(u, day, mem) }) });
-    }
+      if (u.acts && U.chance(0.6)) { const r = probe(rec, { unit: u }, save); lines.push(...r.lines); }
+    });
     return lines;
   }
 
-  G.Report = { build, documentLines, monitorLog, rereport, units, REREPORT, POSTURE, STYLE };
+  G.Report = { build, documentLines, monitorLog, rereport, units, probe, REREPORT, POSTURE, STYLE };
 })();
 if (typeof module !== "undefined") module.exports = G;

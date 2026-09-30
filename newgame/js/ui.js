@@ -472,6 +472,7 @@
       for (const id of h.bound.by) { const m = w.monsters.find(x => x.id === id && x.hp > 0); if (m) hold.push(m.d); else { const t = w.traps.find(x => x.id === id); if (t) hold.push({ trap: t.kind }); } }
       for (const m of w.monsters) if (m.molest && m.hp > 0) hold.push(m.d);
     }
+    else if (h.liveTrap && w.t - (h.liveT ?? -99) < 4) hold.push({ trap: h.liveTrap });   // 罠を受けた直後：その罠を後ろに
     const hk = hold.slice(0, 4).map(d => d.trap || d.art).join(",");
     const hb = document.getElementById("lvh");
     if (hb.dataset.k !== hk) {

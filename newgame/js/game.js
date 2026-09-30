@@ -256,8 +256,9 @@ var G = (typeof G !== "undefined") ? G : {};
     const nightBeats = run.night.length;
     const climaxes = run.h.climax;
     // 肉体は一晩で一段（25）まで。精神は、その日の肉体の伸びの1/3まで
-    const bodyGain = Math.min(25, climaxes * 1.6 + holdSec * 0.12 + nightBeats * 1.8 + run.h.arousal * 0.03);
-    let mindGain = (run.outcome === "defeat" ? 2.5 : 0) + nightBeats * 0.5;
+    // 堕ちはゆっくり。一日の上限を低くし、進むほど進みにくい（抗う心がまだ強い）
+    const bodyGain = Math.min(11, climaxes * 0.9 + holdSec * 0.06 + nightBeats * 0.9 + run.h.arousal * 0.015) * (1 - s.body / 170);
+    let mindGain = ((run.outcome === "defeat" ? 1.5 : 0) + nightBeats * 0.3) * (1 - s.mind / 150);
     mindGain = Math.min(bodyGain / 3, mindGain);
     s.body = U.clamp(s.body + bodyGain, 0, 100);
     s.mind = U.clamp(s.mind + mindGain, 0, 100);
@@ -339,9 +340,12 @@ var G = (typeof G !== "undefined") ? G : {};
     if (run.outcome === "defeat" && run.defeatBy) note(run.defeatBy, "defeat");
     // 報酬
     const req = s.pick.req;
-    let funds = run.outcome === "cleared" ? req.reward : run.outcome === "defeat" ? 0 : Math.round(req.reward * run.floorReached / 12);
-    if (run.outcome === "defeat") funds -= 15;       // 救出の費用
+    // 前金で半額（失敗しても返さない）。踏破で残りの半額。倒した魔物には討伐手当
+    const advance = Math.round(req.reward / 2), rest = run.outcome === "cleared" ? req.reward - advance : 0;
+    const bounty = ev.filter(e => e.kind === "kill").reduce((a, e) => { const d = G.MONSTERS[e.mon]; return a + (e.boss ? 12 : d ? Math.max(1, Math.round((d.hp || 8) / 9)) : 1); }, 0);
+    const funds = advance + rest + bounty;
     s.funds = Math.max(0, s.funds + funds);
+    run.pay = { advance, rest, bounty };
     const sevSum = ev.reduce((a, e) => a + (["hold", "climax", "trap", "trance", "arouse", "untransform"].includes(e.kind) ? (e.sev || 0) : 0), 0);
     const dark = Math.round(Math.min(10, sevSum / 10) + climaxes * 0.8 + nightBeats * 0.6 + (run.outcome === "defeat" ? 3 : 0));
     s.dark += dark;
@@ -363,7 +367,7 @@ var G = (typeof G !== "undefined") ? G : {};
       outcome: run.outcome, floorReached: run.floorReached, events: ev, night: run.night, mismatch: run.mismatch || 0,
       h: { hp: run.h.hp, arousal: run.h.arousal, form: run.h.form, climax: climaxes, attach: (run.h.attach || []).slice(), rewired: !!run.h.rewired }, ailments: s.ailments.map(a => a.id),
       law: run.law || null, traitsGained: run.traitsGained || [], converted: !!run.converted, growth: run.growth, firstParts: run.firstParts || [],
-      gain: { body: +bodyGain.toFixed(1), mind: +mindGain.toFixed(1), funds, dark, sus: +sus.toFixed(1) },
+      gain: { body: +bodyGain.toFixed(1), mind: +mindGain.toFixed(1), funds, dark, sus: +sus.toFixed(1), pay: run.pay },
     };
     rec.report = G.Report.build(rec, s);
     rec.doc = G.Report.documentLines(rec, s);
@@ -401,7 +405,7 @@ var G = (typeof G !== "undefined") ? G : {};
     });
     s.trust = U.clamp(s.trust + res.caught.length * 8 - res.wrong.length * 6, 0, 100);
     // 暴かれると心は少し戻る。隠し通せた嘘は、自分を誤魔化した分だけ心を進める
-    s.mind = U.clamp(s.mind - res.caught.length * 1.5 + res.missed.length * 2.5, 0, 100);
+    s.mind = U.clamp(s.mind - res.caught.length * 1.5 + res.missed.length * 1.1 * (1 - s.mind / 150), 0, 100);
     s.dark += res.caught.length;
     if (res.caught.length) s.caughtDay = s.day;
     rec.audit = res;
@@ -439,6 +443,21 @@ var G = (typeof G !== "undefined") ? G : {};
     morning(s);
   }
 
+  // 休養：今日は潜らない。疲労が大きく抜け、軽い状態異常（発情・過敏・疼き・疲弊）は自然に引く。堕ちも少し戻る。報酬は無い
+  const REST_HEAL = ["heat", "sensitive", "throb", "exhaustion"];
+  function rest(s) {
+    const healed = s.ailments.filter(a => REST_HEAL.includes(a.id)).map(a => AILMENTS[a.id].name);
+    s.ailments = s.ailments.filter(a => !REST_HEAL.includes(a.id));
+    const f0 = s.fatigue, b0 = s.body, m0 = s.mind;
+    s.fatigue = U.clamp(s.fatigue - 50, 0, 100);
+    s.body = U.clamp(s.body - 2.5, 0, 100); s.mind = U.clamp(s.mind - 1.5, 0, 100);
+    s.rested = (s.rested || 0) + 1;
+    const out = { healed, fatigue: Math.round(f0 - s.fatigue), body: +(b0 - s.body).toFixed(1), mind: +(m0 - s.mind).toFixed(1) };
+    if (G.Diary && G.Diary.writeRest) G.Diary.writeRest(s, out);
+    s.rec = null;
+    endDay(s);
+    return out;
+  }
   function buy(s, key) {
     const it = SHOP[key], lv = s.upgrades[key] || 0;
     if (!it || lv >= it.costs.length) return "max";
@@ -450,6 +469,6 @@ var G = (typeof G !== "undefined") ? G : {};
 
   function taintStage(s) { return s.taint >= 100 ? 4 : s.taint >= 70 ? 3 : s.taint >= 42 ? 2 : s.taint >= 18 ? 1 : 0; }
 
-  G.Game = { equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, buy, taintStage };
+  G.Game = { equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, rest, buy, taintStage };
 })();
 if (typeof module !== "undefined") module.exports = G;

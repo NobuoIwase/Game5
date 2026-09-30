@@ -318,8 +318,12 @@ var G = (typeof G !== "undefined") ? G : {};
     permit: ["……許可、……いえ、なんでもないです。", "……っ、まだ、だめ、なので。", "……契約、が。……すみません。", "……ねだって、ない、です。"],
     resume: ["……続けます。", "……はい。次、いきます。", "……大丈夫、です。", "……どこまで、話しましたっけ。", "……報告、続けます、から。", "", "……えっと、次は。", "……すみません。もう平気です。", "……今の、記録しないでください。", "……気にしないで、ください。", "……それで、ですね。", ""],
   };
+  // 今まさに触れられている（服の下で動く付着体・腫れた所が服に擦れる）時だけ、声が漏れる。
+  // 熱や疼きが残っているだけの時は、快感を受けているようには描かない（言葉が途切れるだけ）
+  const STIM = ["attached", "swell"];
+  const PAUSE = ["……すみません。", "……えっと。", "……少し、待ってください。", "……ふう。", "……っ。", "……あの。"];
   function ongoingLine(mem, day, id) {
-    return (freshPick(mem, day, "go:m", ONGOING.moan, 1) + freshPick(mem, day, "go:" + id, ONGOING[id], 2) + freshPick(mem, day, "go:r", ONGOING.resume, 1)).replace(/。。/g, "。");
+    return ((STIM.includes(id) ? freshPick(mem, day, "go:m", ONGOING.moan, 1) : freshPick(mem, day, "go:p", PAUSE, 1)) + freshPick(mem, day, "go:" + id, ONGOING[id], 2) + freshPick(mem, day, "go:r", ONGOING.resume, 1)).replace(/。。/g, "。");
   }
   const MOAN = ["……っ、", "……ん、", "……ふ、ぅ……", "……ぁ、"];
   const LAW_TALK = {
@@ -561,7 +565,7 @@ var G = (typeof G !== "undefined") ? G : {};
       let htext = tpl.h ? U.fill(tpl.h, fillc) : null;
       if (htext && stamLeft > 0 && u.shame >= 2) { htext = stammer(htext); stamLeft--; }
       // いま現在の快感が、言葉に割り込む
-      if (htext && going.length && U.chance(0.45)) htext = htext.replace(/、/, "、" + U.pick(MOAN));
+      if (htext && going.some(id => STIM.includes(id)) && U.chance(0.45)) htext = htext.replace(/、/, "、" + U.pick(MOAN));   // 声が混じるのは、いま触れられている時だけ
       if (tpl.a && !tpl.h2) { push("a", U.fill(tpl.a, fillc)); push("h", htext, { unit: u }); }
       else {
         if (htext) push("h", htext, { unit: u });

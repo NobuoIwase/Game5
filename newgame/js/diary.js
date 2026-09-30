@@ -190,6 +190,20 @@ var G = (typeof G !== "undefined") ? G : {};
     return out;
   }
 
-  G.Diary = { write, monsterNotes };
+  // 休養の日のページ
+  const REST = {
+    open: ["今日はお休み。監査官さんが『休め』って。", "一日、何もしない日。……何もしないの、久しぶり。", "休養日。朝、目覚ましを止めて、二度寝した。"],
+    mid: ["大学の講義に出た。ノートを取ってる間は、迷宮のこと、忘れてられた。", "友だちとお茶した。『最近、顔色いいね』って。……そうかな。", "お風呂に長く浸かった。肩まで。", "一日じゅう、部屋で本を読んでた。", "駅前のパン屋さん、今日はちゃんと開いてた。", "洗濯して、布団を干した。お日さまの匂い。"],
+    heal: ["{what}が、やっと引いた。", "ひと晩寝たら、{what}が落ち着いた。"],
+    close: ["明日からまた、ルミナ、頑張ります。", "よく眠れそう。", "……休むのも、仕事のうち。たぶん。"],
+  };
+  function writeRest(s, r) {
+    const out = [pick(REST.open), pick(REST.mid)];
+    if (r && r.healed && r.healed.length) out.push(fill(pick(REST.heal), { what: r.healed.join("と") }));
+    out.push(pick(REST.close));
+    const page = { day: s.day, weather: U.pick(["晴れ", "くもり", "晴れのち雨", "小春日和", "薄曇り"]), lines: out, rest: true };
+    s.diary = s.diary || []; s.diary.push(page); if (s.diary.length > 60) s.diary.shift();
+  }
+  G.Diary = { write, writeRest, monsterNotes };
 })();
 if (typeof module !== "undefined") module.exports = G;

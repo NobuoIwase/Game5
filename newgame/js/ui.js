@@ -168,6 +168,7 @@
         <button id="shop">裏の取引（澱晶 ${S.dark}）</button>
         <button id="hist">これまでの記録</button>
         <button id="skill">ルミナの技</button>
+        <button id="rest">休養させる（今日は潜らない）</button>
         <button id="diary">ひかりの手帳${(S.diary || []).length && S.diary[S.diary.length - 1].day !== S.diarySeen ? "（新しいページ）" : ""}</button>
       </div>
       <div class="panel sub hidden" id="menu2">オート指揮：<button id="auto">${S.autoDirector ? "入" : "切"}</button>　潜行中に魔物や罠を自動で差し向ける（自分で置くこともできる）
@@ -179,6 +180,7 @@
     on("#hist", "click", historyScreen);
     on("#skill", "click", skillScreen);
     on("#diary", "click", () => diaryScreen());
+    on("#rest", "click", restDay);
     on("#auto", "click", e => { S.autoDirector = !S.autoDirector; save(); e.currentTarget.textContent = S.autoDirector ? "入" : "切"; });
     if (S.greeted === S.day) { hikariIn(); document.getElementById("dlg").classList.add("hidden"); return showMenu(); }
     const T = G.Text;
@@ -191,6 +193,17 @@
         vn(talk, () => { S.greeted = S.day; save(); showMenu(); });
       }, 650);
     });
+  }
+
+  // 休養：一日、潜らせない
+  function restDay() {
+    document.getElementById("menu").classList.add("hidden"); document.getElementById("menu2").classList.add("hidden");
+    const H = ["え、今日は……休み、ですか？", "……いいんですか。じゃあ、お言葉に甘えて", "やった。……あ、いえ、ありがとうございます"];
+    vn([{ who: "a", text: "今日は潜らなくていい。休め。" }, { who: "h", text: U.pick(H) }], () => hikariOut(() => {
+      const r = GM.rest(S); save();
+      const bits = [`疲労 −${r.fatigue}`, r.body ? `肉体 −${r.body}` : "", r.mind ? `精神 −${r.mind}` : "", r.healed.length ? `自然に引いた：${r.healed.join("・")}` : ""].filter(Boolean).join("　");
+      vn([{ who: "n", text: "ひかりは一日、迷宮から離れて過ごした。" }, { who: "n", text: bits + "。報酬は無い。" }], () => guild());
+    }));
   }
 
   function confrontScreen() {
@@ -227,7 +240,7 @@
       app.innerHTML = topbar() + `<h1>依頼書</h1>
         <p class="sub">ひかりの希望する依頼。机の上の一枚を選び、中身を書き換えてから渡す。</p>
         <div class="grid2">${S.requests.map((q, i) => `<div class="card paper ${i === sel ? "sel" : ""}" data-i="${i}">
-          <b>${esc(q.title)}</b><div class="sub">${esc(q.place || G.DUNGEONS[q.dungeon].name)}・報酬 ◈${q.reward}</div>
+          <b>${esc(q.title)}</b><div class="sub">${esc(q.place || G.DUNGEONS[q.dungeon].name)}・報酬 ◈${q.reward}（前金 ◈${Math.round(q.reward / 2)}・失敗しても返さない）</div>
           <div class="sub">脅威度 ${LV_NAME[q.real.level]}・${SC_NAME[q.real.scale]}${q.real.boss ? "・長あり" : ""}</div></div>`).join("")}</div>
         <div class="panel">
           <h2 style="margin-top:0">書き換える</h2>
@@ -692,7 +705,7 @@
       const fee = [...sel].reduce((a, id) => a + GM.AILMENTS[id].fee, 0);
       const g = S.rec ? S.rec.gain : null;
       app.innerHTML = topbar() + `<h1>一日の終わり（処置）</h1>
-        ${g ? `<div class="panel sub">今日の変化：肉体 +${g.body}　精神 +${g.mind}　ギルド資金 ${g.funds >= 0 ? "+" : ""}${g.funds}　澱晶 +${g.dark}${S.rec.forged ? `　違和感 +${g.sus}` : ""}</div>` : ""}
+        ${g ? `<div class="panel sub">今日の変化：肉体 +${g.body}　精神 +${g.mind}　ギルド資金 ${g.funds >= 0 ? "+" : ""}${g.funds}${g.pay ? `（前金 ${g.pay.advance}${g.pay.rest ? "・踏破 " + g.pay.rest : ""}${g.pay.bounty ? "・討伐 " + g.pay.bounty : ""}）` : ""}　澱晶 +${g.dark}${S.rec.forged ? `　違和感 +${g.sus}` : ""}</div>` : ""}
         <div class="panel">${S.ailments.length ? S.ailments.map(a => { const A = GM.AILMENTS[a.id]; return `<label class="doc-line"><input type="checkbox" data-id="${a.id}" ${sel.has(a.id) ? "checked" : ""}> <span><b>${esc(GM.ailmentName(a))}</b>${A.kink ? "（深層処置）" : ""}　◈${A.fee}<br><span class="sub">${A.note}</span></span></label>`; }).join("") : `<p class="sub">状態異常はない。</p>`}
           <p class="sub">処置しないで残すと、次の潜行に響き、ギルドの空気も少し澱む。</p></div>
         <div class="row"><button class="primary" id="ok" ${fee > S.funds ? "disabled" : ""}>${sel.size ? `処置して（◈${fee}）` : "このまま"}翌日へ</button>${fee > S.funds ? `<span class="sub" style="color:var(--red)">資金が足りない（◈${S.funds}）。選び直す</span>` : ""}</div>`;

@@ -188,6 +188,15 @@ var G = (typeof G !== "undefined") ? G : {};
     // kiss: 口づけ。口づけの印が残ると、次からは淫魔の口づけだけで好きになってしまう
     kuchizuke:    { name: "口づけの淫魔",     type: "惑", art: "inma.png", tint: 150, hp: 34, spd: 1.8, r: 0.45, sight: 7, fov: 360, behavior: "float", cost: 5, ct: 14, imp: true,
                     atk: { kind: "grab", range: 0.9, windup: 0.6, cd: 5, power: 0.7, brief: 3.5, kiss: true }, desc: "唇だけで勝負する淫魔。抱き寄せて、口を塞ぐ。口づけの印が残った唇は、もう口づけに逆らえない" },
+    // 魅了してくる者たち（見つめる・歌う・香る・囁く）。惹かれるほど、撃つ手が止まり、足がそちらへ向く
+    utaimp:       { name: "歌う小淫魔",       type: "惑", art: "imp.png", tint: 200, hp: 20, spd: 2.2, r: 0.38, sight: 7, fov: 360, behavior: "wander", cost: 3, ct: 9, flee: true, imp: true,
+                    atk: { kind: "lure", range: 5.5, windup: 0.9, cd: 3.8, power: 0.9, charm: 0.7 }, desc: "子守唄のような歌で呼び寄せる。聴いているうちに、この子を撃つのが可哀想になってくる" },
+    hitomi:       { name: "見つめる淫魔",     type: "惑", art: "inma.png", tint: 60, hp: 30, spd: 1.2, r: 0.45, sight: 8, fov: 360, behavior: "float", cost: 4, ct: 12, imp: true,
+                    atk: { kind: "aura", range: 5, power: 0.7, gaze: true, allure: true }, desc: "何もしない。ただ、潤んだ瞳で見つめてくる。目が合うたびに、胸の奥が甘く疼く" },
+    miwakubana:   { name: "魅惑の花",         type: "惑", art: "nikubana.png", tint: 250, hp: 26, spd: 0, r: 0.5, sight: 5, fov: 360, behavior: "lurk", cost: 3, ct: 10,
+                    atk: { kind: "aura", range: 3.8, power: 0.8, allure: true, scent: true }, desc: "甘い香りの花。嗅いでいるうちに、この花のそばにいたくなる。近づけば、花弁が閉じてくる" },
+    sasayaki:     { name: "囁きスライム",     type: "惑", art: "slime.png", tint: 290, hp: 28, spd: 1.1, r: 0.42, sight: 6, fov: 360, behavior: "wander", cost: 3, ct: 9,
+                    atk: { kind: "lure", range: 4, windup: 0.8, cd: 3.4, power: 0.8, charm: 0.5, alsoGrab: 1.0 }, desc: "耳元で囁くように泡立つ粘体。呼び寄せて、寄ってきた獲物を包みこむ" },
   };
 
   /* ---- 罠（置いてある物） ----
@@ -375,15 +384,15 @@ var G = (typeof G !== "undefined") ? G : {};
   const DRAIN = ["drain_roper", "ghost_head", "pot", "wisp"];
   G.DUNGEONS = {
     mist: { name: "霧鏡の回廊", type: "惑", floors: 10, pal: { floor: "#3a3548", floor2: "#342f42", wall: "#0e0b14", wallTop: "#6a6080", edge: "#5a4e74", fog: "#8a7cc0" },
-            fixed: ["gazer", "mind_roper", "moth", "mirror_slime"], free: ["imp", "peeper", "tsukite", "medama", "inma", "futago", "muma_queen", "shibire", ...DRAIN], traps: ["bell", "mirror", "decoy", "shrine", "basin", "pillory", "belt", "tower", "shadow", "echo_gate", "lull_voice", "stasis", "vow", "whisper_ring", "suit", "rune"],
+            fixed: ["gazer", "mind_roper", "moth", "mirror_slime"], free: ["imp", "peeper", "tsukite", "medama", "inma", "futago", "muma_queen", "shibire", "hitomi", "utaimp", ...DRAIN], traps: ["bell", "mirror", "decoy", "shrine", "basin", "pillory", "belt", "tower", "shadow", "echo_gate", "lull_voice", "stasis", "vow", "whisper_ring", "suit", "rune"],
             rooms: ["mirror_hall", "hypno_bell", "twin_shadow", "dreamwalk", "fungal_bed", "purify", "caliper", "pillory", "whisper", "shadow_hall", "imp_nest", "edge_parlor", "dream_throne", "echo_hall", "stasis_room", "box_room"],
             desc: "鏡と霧の遺跡。見たものを信じるほど深く迷う" },
     mire: { name: "蜜溜まりの湿窟", type: "蕩", floors: 10, pal: { floor: "#43323a", floor2: "#3b2c33", wall: "#100a0c", wallTop: "#7a5a64", edge: "#7a4a5c", fog: "#c07a98" },
-            fixed: ["slime", "slug", "jellyfish", "lure_cap"], free: ["fluff", "nikubana", "dakitake", "kouryuu", "shousha", "banjin", "sekitake", "kabeguchi", "inyoku", "hoshibami", "inma", "hiru", "hibiki", "tsurimushi", "doromushi", ...DRAIN], traps: ["glue", "vent", "urn", "shrine", "basin", "tease", "belt", "slime_drop", "bud", "altar", "saddle", "itch", "tickle", "aphro_wall", "toybox", "honey", "rune", "vow"],
+            fixed: ["slime", "slug", "jellyfish", "lure_cap"], free: ["fluff", "nikubana", "sasayaki", "miwakubana", "dakitake", "kouryuu", "shousha", "banjin", "sekitake", "kabeguchi", "inyoku", "hoshibami", "inma", "hiru", "hibiki", "tsurimushi", "doromushi", ...DRAIN], traps: ["glue", "vent", "urn", "shrine", "basin", "tease", "belt", "slime_drop", "bud", "altar", "saddle", "itch", "tickle", "aphro_wall", "toybox", "honey", "rune", "vow"],
             rooms: ["foam_cell", "mist_hall", "gel_urn", "tease_rack", "hot_spring", "purify", "fungal_bed", "feed_belt", "slime_ceil", "bud_hall", "flower_bed", "incense_pool", "hug_grove", "beam_hall", "seal_altar", "cocoon_room", "itch_cell", "saddle_pit", "tickle_hall", "honey_cave", "rune_road", "mouth_floor", "spore_field", "edge_parlor", "hive_cave", "drop_shaft", "mud_hall", "leech_bank"],
             desc: "甘い湿気の籠もる洞窟。息をするだけで熱がこもる" },
     vine: { name: "絡繰りの蔦森", type: "絡", floors: 10, pal: { floor: "#323d34", floor2: "#2c362e", wall: "#0a0e0b", wallTop: "#5e6a5c", edge: "#4a6a52", fog: "#7ab08a" },
-            fixed: ["roper", "hanging_vine", "puppet_hand", "gulper_worm"], free: ["goblin", "mimic", "nikubana", "tsukite", "suiyou", "hoshibami", "tentacle_lord", "kabeguchi", "zuidou", "gitai", "haimushi", ...DRAIN], traps: ["vine", "rope", "glue", "shrine", "basin", "pillory", "belt", "root", "cocoon", "ratchet", "shadow", "armor", "net", "pitfall", "curtain", "sucker", "web", "exam"],
+            fixed: ["roper", "hanging_vine", "puppet_hand", "gulper_worm"], free: ["goblin", "mimic", "nikubana", "miwakubana", "tsukite", "suiyou", "hoshibami", "tentacle_lord", "kabeguchi", "zuidou", "gitai", "haimushi", ...DRAIN], traps: ["vine", "rope", "glue", "shrine", "basin", "pillory", "belt", "root", "cocoon", "ratchet", "shadow", "armor", "net", "pitfall", "curtain", "sucker", "web", "exam"],
             rooms: ["vine_hall", "kote_swarm", "tent_pit", "idle_cell", "caliper", "feed_belt", "pillory", "fungal_bed", "purify", "root_floor", "cocoon_room", "ratchet_room", "shadow_hall", "flower_bed", "armor_hall", "sucker_hall", "web_hall", "lord_den", "pond", "mouth_floor", "worm_nest", "mud_hall"],
             desc: "蔦に呑まれた古い砦。道も壁も、ゆっくり動く" },
     waldo: { name: "ワルドーの支部", type: "惑", floors: 10, pal: { floor: "#2e3240", floor2: "#282b38", wall: "#0a0b10", wallTop: "#565c74", edge: "#4c5a7a", fog: "#7a90c0" },
@@ -397,11 +406,11 @@ var G = (typeof G !== "undefined") ? G : {};
             desc: "入った者の身体を作り変える神殿。潜っているあいだ、そこに無かったものが生える" },
     // 教団：攻めに行く。潜入はしない
     cult: { name: "教団の拠点", type: "惑", floors: 10, pal: { floor: "#3e3438", floor2: "#382e32", wall: "#100c0e", wallTop: "#7a6a70", edge: "#8a4a4a", fog: "#c09a8a" },
-            fixed: ["shinja", "sekkyoushi", "chuushutsu", "roper"], free: ["kyouso", "tsurimushi", "nikubana", ...DRAIN], traps: ["yurugi", "kaikou", "shashin", "maseki", "seisui", "jouka", "vow", "net", "altar"],
+            fixed: ["shinja", "sekkyoushi", "chuushutsu", "roper"], free: ["kyouso", "tsurimushi", "nikubana", "miwakubana", ...DRAIN], traps: ["yurugi", "kaikou", "shashin", "maseki", "seisui", "jouka", "vow", "net", "altar"],
             rooms: ["c_hall", "c_ray_room", "c_photo", "c_extract", "c_treasury", "c_sanctum", "leech_bank", "seal_altar"],
             desc: "『性の悦びこそ救い』と説く教団の拠点。媚薬と魔導具で人を狂わせる。叩き潰しに行く" },
     imp: { name: "淫魔の館", type: "惑", floors: 10, pal: { floor: "#3a2c40", floor2: "#342638", wall: "#0e0812", wallTop: "#7a5a86", edge: "#8a4a8a", fog: "#c08ad0" },
-            fixed: ["imp", "jikkyou", "kusuguri", "kazoe"], free: ["azakeri", "kuchizuke", "futago", "inma", "muma_queen", "sakiimp", ...DRAIN], traps: ["kouro", "keiyaku", "vow", "lips", "tease", "glue", "feather_bed"],
+            fixed: ["imp", "jikkyou", "kusuguri", "kazoe"], free: ["azakeri", "kuchizuke", "futago", "inma", "muma_queen", "sakiimp", "utaimp", "hitomi", ...DRAIN], traps: ["kouro", "keiyaku", "vow", "lips", "tease", "glue", "feather_bed"],
             rooms: ["i_stage", "i_count", "i_tickle", "i_mock", "i_kiss", "i_contract", "i_throne", "imp_nest", "edge_parlor", "dream_throne"],
             desc: "淫魔たちの住まう館。自分では何もしない者ばかり。見て、数えて、嘲って、許しを出さない" },
   };
@@ -426,14 +435,14 @@ var G = (typeof G !== "undefined") ? G : {};
       magica:   { "惑": 0.55, "蕩": 1.0, "絡": 0.6, "削": 1.0 },
       civilian: { "惑": 0.8,  "蕩": 1.35, "絡": 1.6, "削": 1.0 },
     },
-    hpMax: 100, mpMax: 60, magicMax: 100, willMax: 100,
+    hpMax: 100, mpMax: 100, magicMax: 100, willMax: 100,
     spd: { magica: 2.9, civilian: 2.3 },
-    shot: { dmg: 9, cost: 7, cd: 0.8, cast: 0.3, speed: 8, range: 6.5 },   // ルミナ・ショット（遠距離・消費大）
+    shot: { dmg: 9, cost: 4, cd: 0.8, cast: 0.3, speed: 8, range: 6.5 },   // ルミナ・ショット（遠距離・消費大）
     melee: { dmg: 11, cost: 1, cd: 0.65, cast: 0.16, range: 1.35, arc: 1.25 },  // ルミナ・ストライク（杖で打つ・消費小）
-    burst: { dmg: 14, cost: 18, cd: 5, cast: 0.7, radius: 2.3, magic: 3 },   // シャイン・バスター
+    burst: { dmg: 14, cost: 16, cd: 5, cast: 0.7, radius: 2.3, magic: 3 },   // シャイン・バスター
     flash: { cost: 12, cd: 14, radius: 2.3, push: 1.3, stun: 1.2 },   // ルミナ・フラッシュ（囲まれた・二か所以上掴まれた時に弾き飛ばす）
     breakout: { cd: 5, dist: 2.8 },                                    // 囲まれたら、空いている方へ突き抜ける
-    mpRegen: 1.8, mpRest: 5.5,
+    mpRegen: 2.6, mpRest: 6.5,
     noTransform: 25,                                       // 変身が解けてから、また変身できるまで（秒）
     transformCast: 1.6,                                    // 星の雫で変身し直すのにかかる時間
     kit: { star: 2, salve: 2, smelling: 1, ether: 2, cool: 0, knife: 0 },
@@ -467,7 +476,7 @@ var G = (typeof G !== "undefined") ? G : {};
     lvMax: 30,
     xpNeed: lv => Math.round(40 * Math.pow(lv, 1.35)),          // 次のレベルまで
     hpMax: lv => 100 + Math.min(40, 2 * (lv - 1)),
-    mpMax: lv => 60 + Math.min(20, lv - 1),
+    mpMax: lv => 100 + Math.min(30, Math.round(1.5 * (lv - 1))),
     dmg: lv => 1 + Math.min(0.3, 0.02 * (lv - 1)),
     slots: lv => 2 + (lv >= 6 ? 1 : 0) + (lv >= 14 ? 1 : 0),     // 装備できる技の数（最大4）
   };

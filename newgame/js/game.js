@@ -326,6 +326,17 @@ var G = (typeof G !== "undefined") ? G : {};
     const inspired = ev.filter(e => e.kind === "inspire").map(e => e.skill);
     for (const id of inspired) if (s.equip.length < G.GROWTH.slots(s.lv) && !s.equip.includes(id)) s.equip.push(id);   // 空きがあれば、すぐ使う
     run.growth = { lv0, lv: s.lv, xp, inspired };
+    // 魔物ごとの出来事の記録（手帳のメモに、日付つきで書き足される）
+    s.monLog = s.monLog || {};
+    const note = (k, what) => { if (!G.MONSTERS[k]) return; const L = s.monLog[k] || (s.monLog[k] = []); if (!L.some(x => x.what === what)) L.push({ day: s.day, what }); };
+    for (const e of ev) {
+      if (e.kind === "spot") note(e.mon, "seen");
+      else if (e.kind === "hold") { note(e.mon, "caught"); if ((e.stage || 0) >= 2) note(e.mon, "direct"); if ((e.n || 1) >= 3) note(e.mon, "swarm"); }
+      else if (e.kind === "climax" && e.mon) note(e.mon, "climax");
+      else if (e.kind === "kill") note(e.mon, "killed");
+      else if (e.kind === "anticipate") note(e.mon, "crave");
+    }
+    if (run.outcome === "defeat" && run.defeatBy) note(run.defeatBy, "defeat");
     // 報酬
     const req = s.pick.req;
     let funds = run.outcome === "cleared" ? req.reward : run.outcome === "defeat" ? 0 : Math.round(req.reward * run.floorReached / 12);

@@ -146,3 +146,6 @@ select { font: inherit; color: var(--tx); background: var(--panel2); border: 1px
 .nb-mon { font-size: 13px; line-height: 24px; background-size: auto, 100% 24px; }
 .nb-hot { box-shadow: 0 3px 10px rgba(0,0,0,0.4), inset 0 0 0 2px rgba(255,120,170,0.35); }
 .notebook .tag { color: #5a3a50; background: #f0e0ea; }
+.nb-strike { text-decoration: line-through; text-decoration-color: rgba(200,40,80,0.7); color: #8a7080; }
+.nb-shaky { font-style: italic; letter-spacing: 0.08em; color: #a0406a; transform: rotate(-0.6deg); }
+.nb-log { border-top: 1px dashed #e0b0c8; margin-top: 4px; font-size: 12px; color: #6a5060; line-height: 22px; }

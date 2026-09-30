@@ -158,6 +158,12 @@ var G = (typeof G !== "undefined") ? G : {};
     ],
   };
   const STAGE = ["見たことがある", "知っている", "よく知っている"];
+  // 日付つきの書き足し（会うたびに増える）
+  const LOGW = {
+    seen: ["初めて見た。", "初遭遇。"], killed: ["一体、倒した。", "倒せた。……ちょっと自慢。"], caught: ["捕まった。", "……捕まった。油断。"],
+    direct: ["服の中まで、された。", "……直接、された。"], swarm: ["何体にも、いっぺんに。", "囲まれた。数が多いと、だめ。"],
+    climax: ["……いかされた。", "……達した。こいつに。"], defeat: ["負けた。朝まで。", "負けた。……書きたくない。"], crave: ["見ただけで、身体が熱くなった。", "……会いたかった、わけじゃない。"],
+  };
   function monsterNotes(s) {
     const out = [];
     for (const [kind, d] of Object.entries(G.MONSTERS)) {
@@ -172,7 +178,12 @@ var G = (typeof G !== "undefined") ? G : {};
       }
       const parts = partsText(((s.parts || {})[kind]) || null);
       if (ex > 0.1) lines.push(fill(GEN.lewd[ex > 0.6 ? 2 : ex > 0.3 || parts ? 1 : 0], { parts: parts || "いろんなところ" }));
-      out.push({ kind, name: d.name, art: d.art, tint: d.tint, type: d.type, stage: STAGE[lv], lines, ex });
+      // 取り消し線：最初の強気は、負けた後で線を引かれる
+      const log = ((s.monLog || {})[kind] || []);
+      const struck = log.some(x => x.what === "defeat" || x.what === "climax") ? [0] : [];
+      const ORD = ["seen", "killed", "caught", "direct", "swarm", "climax", "crave", "defeat"];
+      const dated = log.slice().sort((a, b) => a.day - b.day || ORD.indexOf(a.what) - ORD.indexOf(b.what)).map(x => `${x.day}日目：${U.pick(LOGW[x.what] || ["……"])}`);
+      out.push({ kind, name: d.name, art: d.art, tint: d.tint, type: d.type, stage: STAGE[lv], lines, ex, struck, dated, shaky: ex > 0.6 });
     }
     return out;
   }

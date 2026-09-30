@@ -756,7 +756,7 @@ var G = (typeof G !== "undefined") ? G : {};
     // 捕まっていた間のまとめ：何回・どこを・何回達したか、そして今どんな有様か
     if ((b.acts || 0) >= 2) {
       const top = b.ev && b.ev.acts ? Object.entries(b.ev.acts).sort((a, c) => c[1] - a[1]).slice(0, 2).map(([k]) => k).join("と") : "";
-      const look = h.pleasure > 70 ? "脚が 震えて、まともに 立てない" : b.stage >= 2 ? "乱れた 服を 直す 指が 震えている" : "息を 整えながら、服の 裾を 直した";
+      const look = h.pleasure > 70 ? "脚が 震えて、まともに 立てない" : b.climaxN >= 2 ? "膝が 笑って、壁に 手を ついた" : b.climaxN ? "達した 余韻が 抜けず、内腿が まだ 震えている" : b.stage >= 2 ? "乱れた 服を 直す 指が 震えている" : "息を 整えながら、服の 裾を 直した";
       pushMsg(w, `——${b.t.toFixed(0)}秒、${b.acts}回 触れられた${top ? "（" + top + "）" : ""}${b.climaxN ? "。絶頂 " + b.climaxN + "回" : ""}。${heroName(w)}は ${look}……`, "after");
     }
     if (broke) {                                    // 群れは、逃げた獲物をすぐ追い直す

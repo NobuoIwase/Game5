@@ -242,7 +242,7 @@ var G = (typeof G !== "undefined") ? G : {};
       ctx.fillStyle = g; ctx.fillRect(0, 0, cv.width, cv.height);
     }
     // 吹き出しは明かりの上に
-    if (h.bubble && !ui.night) drawBubble(ctx, h, X(h.x), Y(h.y), S);
+    if (h.bubble && !ui.night && !ui.liveSay) drawBubble(ctx, h, X(h.x), Y(h.y), S);   // 実況中は、立ち絵の吹き出しで
     if (h.bound && !ui.night) drawCapture(ctx, w, cv);
     // 置き場所の見本
     if (ui.hover && ui.card) {

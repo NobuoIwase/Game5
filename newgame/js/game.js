@@ -423,6 +423,7 @@ var G = (typeof G !== "undefined") ? G : {};
     s.taint = U.clamp(s.taint + s.ailments.length * 1.5, 0, 100);
     s.fatigue = U.clamp(s.fatigue - 22, 0, 100);
     s.day++;
+    s.lastGrowth = s.rec && s.rec.growth || null;      // 翌朝の会話で使う
     s.rec = null;
     morning(s);
   }

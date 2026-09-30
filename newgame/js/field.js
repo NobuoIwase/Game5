@@ -53,12 +53,19 @@ var G = (typeof G !== "undefined") ? G : {};
     Object.assign(h, { freeze: 0, sniff: 0, salute: 0, pray: 0, countGame: null, drawn: null, deny: null, altar: null });
     // 階の時計（w.t）は階ごとに0から。前の階の時刻・座標を持ち越すと、届かない目的地に向かい続けて固まる
     Object.assign(h, { veilUsed: false, inspT: undefined, fireSpot: null, peekSpot: null, wallHits: 0, _pp: null, convey: null, cdMelee: 0, cdFlash: 0, cdBreak: 0, ifr: 0, thinkT: 0,
-      charmT: {}, anticT: undefined, saluteT: undefined, bcastT: undefined, edgeT: undefined, lastClimaxT: undefined, ringT: undefined, tipT: undefined });
+      charmT: {}, anticT: undefined, monoT: undefined, lastEscT: undefined, saluteT: undefined, bcastT: undefined, edgeT: undefined, lastClimaxT: undefined, ringT: undefined, tipT: undefined });
     map.seen = new Uint8Array(map.W * map.H);
     populate(w);
     msg(w, "floor", { floor: floorNo, dg: run.dungeonName || dg.name });
     if (w.trapFloor) msg(w, "trapFloor", {});
     say(w, "floorIn", { floor: floorNo });
+    if (floorNo === 1 && run.save) {                      // 一階の入口：昨日を引きずった一言
+      const sv = run.save, last = (sv.history || [])[sv.history.length - 1], tier = G.tier(sv.body, sv.mind);
+      if (tier >= 2 && U.chance(0.4)) say(w, "startFallen", {});
+      else if (last && last.outcome === "defeat" && U.chance(0.7)) say(w, "startDefeat", {});
+      else if ((sv.ailments || []).some(a => ["attached", "throb", "sensitive", "omazuke", "swell", "futaAfter", "impCurse", "permit"].includes(a.id)) && U.chance(0.6)) say(w, "startAil", {});
+      else if (last && last.outcome === "cleared" && U.chance(0.5)) say(w, "startCleared", {});
+    }
     // 迷宮の法則（入口で決まる）
     const law = run.law;
     if (law && floorNo === 1) { msg(w, "law", { law: G.LAWS[law].name }); w.scene = { key: "law", lines: G.Text.lawLines(law, { n: heroName(w) }), mon: null }; }
@@ -714,7 +721,7 @@ var G = (typeof G !== "undefined") ? G : {};
       if (tr) { tr.armed = false; tr.rearm = tr.d.rearm; }
     }
     if (b.ev) { b.ev.dur = +b.t.toFixed(1); if (b.t > 3.5) b.ev.sev = 3; }
-    if (broke) { say(w, "breakFree", {}); msg(w, "free", {}); fx(w, { kind: "burst", x: h.x, y: h.y, color: "#fff2a8", life: 0.6 }); if (b.src) learn(w, b.src.kind, 2); record(w, { kind: "escape", mon: b.src && b.src.kind, monName: b.src && b.src.d ? b.src.d.name : "", sev: 0 }); }
+    if (broke) { h.lastEscT = w.t; say(w, "breakFree", {}); msg(w, "free", {}); fx(w, { kind: "burst", x: h.x, y: h.y, color: "#fff2a8", life: 0.6 }); if (b.src) learn(w, b.src.kind, 2); record(w, { kind: "escape", mon: b.src && b.src.kind, monName: b.src && b.src.d ? b.src.d.name : "", sev: 0 }); }
     h.bound = null;
     h.trance = Math.max(h.trance, 0.3);
     h.think = Math.max(h.think || 0, broke ? 0.9 : 0.6); h.label = "息を整える";   // 抜けた直後は、よろめいて立て直す
@@ -1279,8 +1286,30 @@ var G = (typeof G !== "undefined") ? G : {};
     let unknown = 0;
     for (let k = 1; k <= 3; k++) { const x = h.x + Math.cos(h.a) * k, y = h.y + Math.sin(h.a) * k; if (M.walkable(map, x, y) && !map.seen[Math.floor(y) * map.W + Math.floor(x)]) unknown++; }
     goToward(w, h.search.x, h.search.y, unknown >= 2 ? 0.62 : 0.8, "探索");
+    monologue(w);
     if (U.chance(0.01)) inspire(w, "walk");
     msg(w, "explore", {}, 14);
+  }
+  // 歩きながらの独り言：その時いちばん気になっていることを、ぽつりと
+  function monologue(w) {
+    const h = w.run.h;
+    if (h.bubble || w.t - (h.monoT ?? -99) < U.rf(9, 16)) return;
+    h.monoT = w.t;
+    const tier = G.tier(w.run.save.body, w.run.save.mind);
+    let key = null;
+    if (h.lastClimaxT !== undefined && w.t - h.lastClimaxT < 18) key = "monoAfter";
+    else if (h.lastEscT !== undefined && w.t - h.lastEscT < 12) key = "monoEscaped";
+    else if (h.watched > 0) key = "monoWatched";
+    else if (h.attach && h.attach.length && U.chance(0.6)) key = "monoAttach";
+    else if (h.futa && U.chance(0.5)) key = "monoFuta";
+    else if (h.arousal > 50 && U.chance(0.7)) key = "monoAroused";
+    else if (h.sigil && U.chance(0.5)) key = "monoSigil";
+    else if (h.exposure && U.chance(0.5)) key = "monoExposed";
+    else if (h.will < 45 || h.hp < 45) key = "monoTired";
+    else if (tier >= 2 && U.chance(0.5)) key = "monoFallen";
+    else if (w.floorNo >= 6 && U.chance(0.3)) key = "monoDeep";
+    else if (U.chance(0.35)) key = "monoCalm";
+    if (key) say(w, key, {});
   }
   function openChest(w, c) {
     const h = w.run.h;

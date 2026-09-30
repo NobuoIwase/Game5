@@ -119,6 +119,13 @@
     // 残っている状態異常が、朝の会話に出る（どれか一つ）
     const ailTalk = ["rewired", "attached", "omazuke", "charm", "throb", "sensitive", "addict", "hairTrigger", "exposure"].filter(id => S.ailments.some(a => a.id === id));
     if (ailTalk.length) out.unshift(T.office("talk.ail_" + U.pick(ailTalk)));
+    // 昨日の成長・学習・期待が、朝の会話に出る
+    const g = S.lastGrowth;
+    if (g && g.inspired && g.inspired.length && U.chance(0.8)) out.unshift(T.office("talk.inspired", { skill: G.SKILLS[g.inspired[0]].name }));
+    else if (g && g.lv > g.lv0 && U.chance(0.6)) out.push(T.office("talk.lvup"));
+    const crave = Object.entries(S.lewd || {}).filter(([k, v]) => G.MONSTERS[k] && v >= 12).sort((a, b) => b[1] - a[1])[0];
+    if (crave && U.chance(0.35)) out.push(T.office("talk.crave", { mon: G.MONSTERS[crave[0]].name }));
+    else { const kn = Object.entries(S.know || {}).filter(([k, v]) => G.MONSTERS[k] && v >= 14); if (kn.length && U.chance(0.25)) out.push(T.office("talk.knows", { mon: G.MONSTERS[U.pick(kn)[0]].name })); }
     if (S.suspicion >= 45) out.push(T.office("talk.suspicious"));
     if (GM.taintStage(S) >= 2 && U.chance(0.6)) out.push(T.office("talk.taint"));
     if (G.tier(S.body, S.mind) >= 2 && U.chance(0.6)) out.push(T.office("talk.fallen"));

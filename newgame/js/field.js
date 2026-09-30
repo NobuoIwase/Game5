@@ -1969,7 +1969,7 @@ var G = (typeof G !== "undefined") ? G : {};
     tr.found = true;
     const ev = record(w, { kind: "trap", type: tr.d.type, trap: tr.kind, trapName: tr.d.name, sev: 1 });
     logLine(w, G.Text.log("trap", { trap: tr.d.name }), "mid");
-    h.liveT = w.t;
+    h.liveT = w.t; h.liveTrap = tr.kind;
     msg(w, "trap", { trap: tr.d.name });
     pushMsg(w, G.Text.trapHit(tr.d.effect, { n: heroName(w), trap: tr.d.name }), "trapHit");     // 身体に何が起きたか
     fx(w, { kind: "ring", x: tr.x, y: tr.y, color: "#ffd27a", r: tr.d.radius, life: 0.9 });

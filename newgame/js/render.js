@@ -241,6 +241,7 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     // 吹き出しは明かりの上に
     if (h.bubble && !ui.night) drawBubble(ctx, h, X(h.x), Y(h.y), S);
+    if (h.bound && !ui.night) drawCapture(ctx, w, cv);
     // 置き場所の見本
     if (ui.hover && ui.card) {
       const cx = X(Math.floor(ui.hover.x) + 0.5), cy = Y(Math.floor(ui.hover.y) + 0.5);
@@ -320,7 +321,7 @@ var G = (typeof G !== "undefined") ? G : {};
     ctx.globalAlpha = 1;
     ctx.fillStyle = TYPE_COLOR[d.type]; ctx.beginPath(); ctx.arc(x - Math.min(sz, S * 1.2) * 0.42, y - (F ? F[0] * S * 0.62 : sz * 0.62), S * 0.1, 0, 7); ctx.fill();
     if (m.bubble) {                                  // 魔物の声
-      const t = m.bubble.text, top = y - (F ? F[0] * S : sz * 0.9) - S * 0.35;
+      const t = m.bubble.text, top = y - (F ? F[0] * S : sz * 0.9) - S * ((m.holding || m.molest) && h.bound ? 1.15 + (m.id % 3) * 0.5 : 0.35);   // 群がっている時は、ルミナの吹き出しより上へ
       ctx.font = `${Math.max(10, Math.round(S * 0.3))}px "Noto Sans JP",sans-serif`;
       const tw = Math.min(ctx.measureText(t).width, S * 6.5);
       ctx.globalAlpha = Math.min(1, m.bubble.t * 2);
@@ -382,6 +383,31 @@ var G = (typeof G !== "undefined") ? G : {};
     if (h.possess) { ctx.fillStyle = `rgba(230,236,255,${0.45 + 0.25 * Math.sin(w.t * 6)})`; ctx.beginPath(); ctx.arc(x - S * 0.22, y - H * 0.55, S * 0.12, 0, 7); ctx.fill(); }
     if (h.bound) { const b = h.bound; ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S, 5); ctx.fillStyle = "#fff0a0"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S * Math.min(1, b.struggle), 5); }
     if (h.cast && h.cast.kind === "transform") { ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S, 5); ctx.fillStyle = "#ffd6f0"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S * (1 - h.cast.t / G.HIKARI.transformCast), 5); }
+  }
+  // 捕まっている間の札（左上）：誰に・何体に・どこまで、快感はどれだけ溜まったか
+  function drawCapture(ctx, w, cv) {
+    const h = w.run.h, b = h.bound, rw = cv.getBoundingClientRect().width, dpr = rw ? cv.width / rw : 1, u = 12 * dpr;
+    const mol = w.monsters.filter(m => m.molest && m.hp > 0);
+    const names = {}; for (const id of b.by) { const m = w.monsters.find(x => x.id === id); const t = m || w.traps.find(x => x.id === id); if (t) names[t.d.name] = (names[t.d.name] || 0) + 1; }
+    for (const m of mol) names[m.d.name] = (names[m.d.name] || 0) + 1;
+    const who = Object.entries(names).map(([k, v]) => v > 1 ? `${k}×${v}` : k).join("・");
+    const stage = b.nAct ? ["服の上から", "服の中まで", "直接"][b.stage || 0] : "縛られているだけ";
+    const lines = [`捕まっている：${who}`, `${stage}${b.last && b.nAct ? "　— " + b.last.p.replace(/ /g, "") : ""}`];
+    ctx.save();
+    ctx.font = `${Math.round(u)}px "Noto Sans JP",sans-serif`;
+    const wBox = Math.min(cv.width * 0.6, Math.max(...lines.map(l => ctx.measureText(l).width)) + u * 1.6), hBox = u * 4.4;
+    const x0 = u * 0.8, y0 = u * 0.8;
+    ctx.fillStyle = "rgba(40,10,30,0.82)"; ctx.strokeStyle = "rgba(255,140,190,0.8)"; ctx.lineWidth = 1.5 * dpr;
+    roundRect(ctx, x0, y0, wBox, hBox, 8 * dpr); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = "#ffd6ea"; ctx.textAlign = "left"; ctx.textBaseline = "top";
+    ctx.fillText(lines[0], x0 + u * 0.8, y0 + u * 0.5, wBox - u * 1.6);
+    ctx.fillStyle = "#e8c0d8"; ctx.fillText(lines[1], x0 + u * 0.8, y0 + u * 1.8, wBox - u * 1.6);
+    // 快感のゲージ（絶頂まで）。栓をされている時は 95 で止まる印
+    const gx = x0 + u * 0.8, gy = y0 + u * 3.3, gw = wBox - u * 1.6, gh = u * 0.5, p = Math.min(1, h.pleasure / 100);
+    ctx.fillStyle = "rgba(0,0,0,0.5)"; ctx.fillRect(gx, gy, gw, gh);
+    ctx.fillStyle = p > 0.88 ? "#ff3f8a" : p > 0.7 ? "#ff6fa6" : "#ff9ac4"; ctx.fillRect(gx, gy, gw * p, gh);
+    if (h.deny || h.omazuke || h.permit || w.run.law === "kinzetsu") { ctx.fillStyle = "#fff"; ctx.fillRect(gx + gw * 0.95, gy - 2, 2, gh + 4); }
+    ctx.restore();
   }
   function drawBubble(ctx, h, x, y, S) {
     const H = S * 1.9, t = h.bubble.text;

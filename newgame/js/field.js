@@ -860,7 +860,10 @@ var G = (typeof G !== "undefined") ? G : {};
     // うつろの鎧：内側は柔らかく、光も杖も届かない
     if (b.armor && U.chance(dt * 0.35)) msg(w, "armorIn", {}, 5);
     if (b.itch) h.ache = Math.max(h.ache || 0, 20);
-    if (b.t > 4 && !b.sceneShown && !b.pillory && !b.edge && !b.slowStruggle) { b.sceneShown = true; openScene(w, "hold", b.src); }
+    if (b.t > 4 && !b.sceneShown && !b.pillory && !b.edge && !b.slowStruggle) {
+      b.sceneShown = true; const rs = w.run.holdScenes || (w.run.holdScenes = {});
+      if (!rs[b.src.kind]) { rs[b.src.kind] = 1; openScene(w, "hold", b.src); }   // 同じ相手の場面は一潜行に一度（あとは行為の文で描く）
+    }
     if (b.struggle >= 1) release(w, true);
     else if (h.will <= 0 || h.hp <= 0) defeat(w, b.src);
   }

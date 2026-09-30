@@ -296,7 +296,7 @@
       <div class="topbar" id="dtop"></div>
       <div class="stage" id="stage"><canvas id="cv"></canvas><div class="overlay hidden" id="ov"></div>
         <div class="msgwin" id="msgwin"><p></p><p></p><p></p></div>
-        <div class="live hidden" id="live"><div class="lv-fig" id="lvfig"><div class="lv-hold" id="lvh"></div><img id="lvimg" alt=""><i class="lv-blush"></i><i class="lv-drops"></i><i class="lv-hearts"><b>♡</b><b>♡</b><b>♡</b></i><div class="lv-say hidden" id="lvsay"></div></div>
+        <div class="live hidden" id="live"><div class="lv-fig" id="lvfig"><div class="lv-hold" id="lvh"></div><img id="lvimg" alt=""><i class="lv-blush"></i><i class="lv-drops"></i><i class="lv-hearts"><b>♡</b><b>♡</b><b>♡</b></i><div class="lv-say hidden" id="lvsay"></div><div class="lv-msay hidden" id="lvmsay"></div></div>
           <div class="lv-g"><i id="lvg"></i><span>快感</span></div><b class="lv-cn" id="lvc"></b><div class="lv-feed" id="lvf"></div><button class="lv-skip" id="lvskip">▶▶</button></div>
         <div class="cxcut hidden" id="cxcut"><b>絶　頂</b><span id="cxn"></span></div></div>
       <div class="chips" id="chips"></div>
@@ -493,6 +493,10 @@
     if (/(^| )(line|build)( |$)/.test(l.cls) && !/scene/.test(l.cls)) {   // ひかりの声：立ち絵の吹き出しにも
       const sb = document.getElementById("lvsay");
       if (sb) { sb.textContent = l.text.replace(/^「|」$/g, ""); sb.classList.remove("hidden", "pop"); void sb.offsetWidth; sb.classList.add("pop"); sb.classList.toggle("cx", /cx/.test(l.cls)); clearTimeout(dive.sayTm); dive.sayTm = setTimeout(() => sb.classList.add("hidden"), 2600); }
+    }
+    if (/(^| )mon( |$)/.test(l.cls)) {                  // 魔物の声：立ち絵の脇に小さく
+      const mb = document.getElementById("lvmsay"), m = /^(.*?)([「『].*)$/.exec(l.text);
+      if (mb && m) { mb.innerHTML = `<i>${esc(m[1])}</i>${esc(m[2].replace(/^「|」$/g, ""))}`; mb.classList.remove("hidden", "pop"); void mb.offsetWidth; mb.classList.add("pop"); clearTimeout(dive.msayTm); dive.msayTm = setTimeout(() => mb.classList.add("hidden"), 2400); }
     }
     if (/grab/.test(l.cls)) { const st = document.getElementById("stage"); st.classList.remove("grabbed"); void st.offsetWidth; st.classList.add("grabbed"); }   // 捕まった瞬間：縁が赤く締まる
     if (/gauge cx/.test(l.cls)) {                       // 決壊：画面が弾ける

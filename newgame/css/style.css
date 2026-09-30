@@ -234,3 +234,8 @@ select { font: inherit; color: var(--tx); background: var(--panel2); border: 1px
 .lv-say.cx { background: #ffe0ef; border-color: #ff4f9a; font-weight: bold; }
 @keyframes lvPop { from { transform: scale(0.85); opacity: 0; } to { transform: none; opacity: 1; } }
 @media (max-width: 520px) { .lv-say { font-size: 11.5px; max-width: 200px; } }
+.lv-msay { position: absolute; right: -12%; bottom: 52%; max-width: min(200px, 60vw); width: max-content; background: rgba(20,24,40,0.92); color: #d6ecff; border: 1px solid #9fd3ff; border-radius: 10px; padding: 3px 8px; font-size: 12px; line-height: 1.4; z-index: 2; }
+.lv-msay i { display: block; font-style: normal; font-size: 10px; color: #9fd3ff; }
+.lv-msay.hidden { display: none; }
+.lv-msay.pop { animation: lvPop 0.25s ease-out; }
+@media (max-width: 520px) { .lv-msay { font-size: 11px; max-width: 150px; } }

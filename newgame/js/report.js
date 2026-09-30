@@ -546,7 +546,12 @@ var G = (typeof G !== "undefined") ? G : {};
       used[k] = (used[k] || 0) + 1;
       mem["style:" + k] = day;
       const tpl = freshPick(mem, day, "st:" + k, STYLE[k].lines, 3);
-      const wtxt = what(u, day, mem);
+      let wtxt = what(u, day, mem);
+      // 口が滑る：崩れている日や、堕ちが進んでいるほど、聞かれてもいない中身まで言ってしまう
+      if (u.kind === "hold" && u.acts && U.chance((posture === "crack" || posture === "core" ? 0.55 : 0.15) + 0.1 * G.tier(s.body, s.mind))) {
+        const top = Object.entries(u.acts).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => PROBE.part[k] || k);
+        wtxt += U.pick(["。……{a}を、です", "。……その、{a}を", "。{a}、……触られて"]).replace("{a}", top.join("と、")) + (u.stage >= 2 ? U.pick(["。……直接、でした", "。……服の、中まで"]) : "");
+      }
       const fillc = Object.assign({}, ctx, {
         what: wtxt, trap: u.trapName || "",
         whatA: U.fill(WHAT_A[u.kind] || WHAT_A.arouse, { mon: u.monName || "", trap: u.trapName || "", dur: durText(u.dur), n: u.n || 1 }) + (u.kind === "untransform" && u.n > 1 ? `（${u.n}回）` : ""),

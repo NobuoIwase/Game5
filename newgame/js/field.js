@@ -764,7 +764,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const st = (b.acts >= 7 || b.t > 8 || (h.exposure && b.acts >= 3)) ? 2 : (b.acts >= 3 || b.t > 3.5 || h.exposure || h.arousal > 60) ? 1 : 0;
     const who = acts[b.acts % acts.length], name = who.d ? who.d.name : "";
     if (st > b.stage) { b.stage = st; actMsg(w, "stage" + st, { mon: name }); if (st === 2) actBub(w, "touch2"); }
-    const cat = actCat(w, who), act = G.Text.act(cat, b.stage);
+    const cat = actCat(w, who), act = G.Text.actFor(who.kind, cat, b.stage);
     if (!act) return;
     pushMsg(w, G.Text.fillAct(act, { mon: name, n: heroName(w) }) + "……", "act");
     if (who.d && who.d.spd !== undefined) monSay(w, who, "act", 0.45);
@@ -2203,13 +2203,14 @@ var G = (typeof G !== "undefined") ? G : {};
     group.forEach((m, i) => { const a = i / Math.max(1, group.length) * Math.PI * 2 + U.rf(0, 1); const nx = h.x + Math.cos(a) * 0.7, ny = h.y + Math.sin(a) * 0.7; if (M.walkable(w.map, nx, ny)) { m.x = nx; m.y = ny; } });
     const scene = G.Text.nightParts(beat, { run: w.run, h, n: n.beat, total: G.BAL.nightBeats });
     const lines = scene.head.slice();
-    for (const m of group) { const v = G.Text.voice(m.kind, U.chance(0.5) ? "act" : "climax"); if (v && U.chance(0.7)) lines.push(`${m.d.name}「${v}」`); }
+    for (const m of w.monsters) m.bubble = null;
+    for (const m of group) { const v = G.Text.voice(m.kind, U.chance(0.5) ? "act" : "climax"); if (v && U.chance(0.7)) { lines.push(`${m.d.name}「${v}」`); m.bubble = { text: v, t: 99 }; } }
     // 何を、どのくらいされたか（夜はもう、直接）
     const swarm = 1 + 0.2 * (group.length - 1);
     for (const m of group) {
       const cat = actCat(w, m) || "hands";
       for (let k = 0, nk = 1 + (U.chance(0.55) ? 1 : 0); k < nk; k++) {
-        const act = G.Text.act(cat, U.chance(0.8) ? 2 : 1); if (!act) continue;
+        const act = G.Text.actFor(m.kind, cat, U.chance(0.8) ? 2 : 1); if (!act) continue;
         lines.push(G.Text.fillAct(act, { mon: m.d.name, n: "ひかり" }) + "。" + (act.fx ? "《" + act.fx + "》" : ""));
         beat.acts++; beat.parts[act.part] = (beat.parts[act.part] || 0) + 1;
         crave(w, m.kind, 0.3 * act.pw); { const sv = w.run.save; if (sv) { sv.parts = sv.parts || {}; const pp = sv.parts[m.kind] || (sv.parts[m.kind] = {}); pp[act.part] = (pp[act.part] || 0) + 1; } }

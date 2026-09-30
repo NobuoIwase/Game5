@@ -428,9 +428,10 @@
     dive.whole = false;
     const log = document.getElementById("log");
     log.classList.remove("hidden");
+    const cardsEl = document.getElementById("cards"); if (cardsEl) cardsEl.parentNode.insertBefore(log, cardsEl);   // 夜の記録は、カードより上に
     const btns = document.querySelector(".dive .row");
     btns.innerHTML = `<button class="primary" id="nx">次の場面</button><button id="skip">朝まで飛ばす</button><span class="sub">夜のコスト ${G.BAL.nightBudget}。カードを選んで地図を押すと、呼び足せる</span>`;
-    log.style.maxHeight = "220px";
+    log.style.maxHeight = "340px"; log.style.fontSize = "13px";
     log.innerHTML = `<div class="heavy">ひかりは動けない。救出は朝になる。</div>`;
     drawCards();
     const next = () => {

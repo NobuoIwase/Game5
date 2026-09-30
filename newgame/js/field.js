@@ -52,7 +52,7 @@ var G = (typeof G !== "undefined") ? G : {};
     });
     Object.assign(h, { freeze: 0, sniff: 0, salute: 0, pray: 0, countGame: null, drawn: null, deny: null, altar: null });
     // 階の時計（w.t）は階ごとに0から。前の階の時刻・座標を持ち越すと、届かない目的地に向かい続けて固まる
-    Object.assign(h, { veilUsed: false, inspT: undefined, fireSpot: null, peekSpot: null, wallHits: 0, _pp: null, convey: null, cdMelee: 0, cdFlash: 0, cdBreak: 0, ifr: 0, thinkT: 0,
+    Object.assign(h, { ignore: {}, peekHold: 0, failN: 0, veilUsed: false, inspT: undefined, fireSpot: null, peekSpot: null, wallHits: 0, _pp: null, convey: null, cdMelee: 0, cdFlash: 0, cdBreak: 0, ifr: 0, thinkT: 0,
       charmT: {}, anticT: undefined, monoT: undefined, lastEscT: undefined, saluteT: undefined, bcastT: undefined, edgeT: undefined, lastClimaxT: undefined, ringT: undefined, tipT: undefined });
     map.seen = new Uint8Array(map.W * map.H);
     populate(w);
@@ -947,7 +947,9 @@ var G = (typeof G !== "undefined") ? G : {};
       if (m.hp <= 0) continue;
       const k = h.known[m.id];
       if (!k || w.t - k.t > 6) continue;
-      out.push({ m, k, d: U.dist(h.x, h.y, m.x, m.y), kd: U.dist(h.x, h.y, k.x, k.y) });
+      const dd = U.dist(h.x, h.y, m.x, m.y);
+      if (h.ignore && h.ignore[m.id] > w.t && dd > 2.5) continue;      // 相手にしないと決めた（動かない・届かない）。近づかれたら別
+      out.push({ m, k, d: dd, kd: U.dist(h.x, h.y, k.x, k.y) });
     }
     return out.sort((a, b) => a.kd - b.kd);
   }
@@ -1184,7 +1186,10 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     if (h.decoy && h.decoy.t > 0 && h.form === "magica") { tryCast(w, h.decoy, "shot"); return; }
 
-    const t0 = ts[0];
+    // 狙う相手：近さが同じくらいなら、構えている者・弱っている者・指揮する者・知っている厄介な者を先に
+    const score = o => o.kd - (o.m.cast && o.m.cast.kind !== "pounce" ? 0.8 : 0) - (o.m.hp <= o.m.maxHp * 0.3 ? 0.6 : 0) - (o.m.d.command ? 0.9 : 0) - knowledge(w, o.m.kind) * (o.m.d.atk.kind === "grab" ? 0.5 : 0.2);
+    const visible = ts.filter(o => o.k.seen && w.t - o.k.t < 0.5 && shotClear(map, h.x, h.y, o.m.x, o.m.y));   // 今、撃てる相手
+    const t0 = visible.length ? visible.filter(o => o.kd < visible[0].kd + 1.8).sort((a, b) => score(a) - score(b))[0] : ts[0];
     if (t0) {
       const m = t0.m, seenNow = t0.k.seen && w.t - t0.k.t < 0.5, vis = seenNow && shotClear(map, h.x, h.y, m.x, m.y);
       // 見えているのに射線が通らない（角・柱）／弾が壁に当たり続けた：撃てる位置へ動く
@@ -1223,10 +1228,14 @@ var G = (typeof G !== "undefined") ? G : {};
         if (!vis) {                                   // 見えない：物陰から覗く／回り込む
           if (h.peekT <= 0) { const spot = coverWithView(w, t0.k.x, t0.k.y); if (spot) { h.peekSpot = spot; h.peekT = 6; say(w, "peek", {}); msg(w, "peek", {}, 8); } }
           if (h.peekSpot && h.peekT > 0) {
-            if (U.dist(h.x, h.y, h.peekSpot.x, h.peekSpot.y) < 0.35) { h.intent = null; h.label = "覗く"; h.face = { x: t0.k.x, y: t0.k.y, t: 0.5 }; return; }
-            goToward(w, h.peekSpot.x, h.peekSpot.y, 0.7, "物陰へ"); return;
+            if (U.dist(h.x, h.y, h.peekSpot.x, h.peekSpot.y) < 0.35) {
+              h.peekHold = (h.peekHold || 0) + 0.12;
+              // 覗いても出てこない（動かない相手・届かない相手）：しばらく相手にしない
+              if (h.peekHold > 3) { h.peekHold = 0; h.peekSpot = null; h.peekT = 0; h.ignore = h.ignore || {}; h.ignore[m.id] = w.t + 12; msg(w, "giveUp", { mon: m.d.name }, 6); }
+              else { h.intent = null; h.label = "覗く"; h.face = { x: t0.k.x, y: t0.k.y, t: 0.5 }; return; }
+            } else { h.peekHold = 0; if (!goToward(w, h.peekSpot.x, h.peekSpot.y, 0.7, "物陰へ")) { h.peekSpot = null; h.peekT = 0; } else return; }
           }
-          goToward(w, t0.k.x, t0.k.y, 0.75, "回り込む"); return;
+          if (!h.ignore || !(h.ignore[m.id] > w.t)) { if (goToward(w, t0.k.x, t0.k.y, 0.75, "回り込む")) return; h.ignore = h.ignore || {}; h.ignore[m.id] = w.t + 8; }
         }
         if (d > far) {                                // 遠い：近づく。気づかれていなければ忍び寄る
           const sneak = !m.alert && m.d.spd > 0;
@@ -1289,7 +1298,9 @@ var G = (typeof G !== "undefined") ? G : {};
     // 見ていない場所が前にあると、慎重に歩く
     let unknown = 0;
     for (let k = 1; k <= 3; k++) { const x = h.x + Math.cos(h.a) * k, y = h.y + Math.sin(h.a) * k; if (M.walkable(map, x, y) && !map.seen[Math.floor(y) * map.W + Math.floor(x)]) unknown++; }
-    goToward(w, h.search.x, h.search.y, unknown >= 2 ? 0.62 : 0.8, "探索");
+    if (!goToward(w, h.search.x, h.search.y, unknown >= 2 ? 0.62 : 0.8, "探索")) {   // 行けない場所だった：探す先を変える
+      h.search = null; h.failN = (h.failN || 0) + 1; if (h.failN > 15) { h.failN = 0; h.wantDown = true; }
+    } else h.failN = 0;
     monologue(w);
     if (U.chance(0.01)) inspire(w, "walk");
     msg(w, "explore", {}, 14);

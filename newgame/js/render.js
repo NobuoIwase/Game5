@@ -206,6 +206,11 @@ var G = (typeof G !== "undefined") ? G : {};
       else if (f.kind === "fan") { const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, S * f.r); g.addColorStop(0, "rgba(235,215,255,0.85)"); g.addColorStop(1, "rgba(180,140,255,0)"); ctx.save(); ctx.globalAlpha = 1 - k; ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, S * f.r * (0.6 + 0.4 * Math.min(1, k * 4)), f.a - f.arc, f.a + f.arc); ctx.closePath(); ctx.fill(); ctx.restore(); }
       else if (f.kind === "slash") { ctx.lineWidth = S * 0.12 * (1 - k) + 1; ctx.beginPath(); ctx.arc(cx - Math.cos(f.a) * S * 0.7, cy - Math.sin(f.a) * S * 0.7, S * 1.1, f.a - 0.7 + k * 0.4, f.a + 0.7 + k * 0.4); ctx.stroke(); }
       else if (f.kind === "flashCam") { ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(cx, cy, S * 0.6 * (1 - k * 0.5), 0, 7); ctx.fill(); }
+      else if (f.kind === "sfx") {                 // 擬音（捕まっている間の「くちゅ」「むにゅっ」）
+        ctx.globalAlpha = k < 0.15 ? k / 0.15 : 1 - (k - 0.15) / 0.85;
+        ctx.font = `bold ${Math.round(S * 0.4)}px "Noto Sans JP",sans-serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        const yy = cy - k * S * 0.5; ctx.lineWidth = 3.5; ctx.strokeStyle = "rgba(60,10,40,0.85)"; ctx.strokeText(f.text, cx, yy); ctx.fillStyle = f.color || "#ffb3d6"; ctx.fillText(f.text, cx, yy);
+      }
       else if (f.kind === "summon") { ctx.lineWidth = 2; for (let r = 0; r < 3; r++) { ctx.beginPath(); ctx.arc(cx, cy, S * (0.2 + r * 0.25) * (1 - k * 0.5), 0, 7); ctx.stroke(); } }
       ctx.globalAlpha = 1;
     }

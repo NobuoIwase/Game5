@@ -361,6 +361,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (ok(im)) { const k = H / im.naturalHeight, iw = im.naturalWidth * k; ctx.drawImage(im, -iw / 2, -H, iw, H); }   // 縦横比はそのまま
     else { ctx.fillStyle = "#ffd0e8"; ctx.fillRect(-S * 0.3, -S * 1.3, S * 0.6, S * 1.3); }
     ctx.restore();
+    if (h.bound) drawBindFx(ctx, w, x, y, S, H);
     if (h.trance > 0 || h.hyp > 0) {                // 催眠・惑い：頭のまわりの渦と、名前（催眠度）
       const hy = y - H + S * 0.15;
       ctx.strokeStyle = "rgba(200,160,255,0.9)"; ctx.lineWidth = 2.5;
@@ -407,6 +408,52 @@ var G = (typeof G !== "undefined") ? G : {};
     ctx.fillStyle = "rgba(0,0,0,0.5)"; ctx.fillRect(gx, gy, gw, gh);
     ctx.fillStyle = p > 0.88 ? "#ff3f8a" : p > 0.7 ? "#ff6fa6" : "#ff9ac4"; ctx.fillRect(gx, gy, gw * p, gh);
     if (h.deny || h.omazuke || h.permit || w.run.law === "kinzetsu") { ctx.fillStyle = "#fff"; ctx.fillRect(gx + gw * 0.95, gy - 2, 2, gh + 4); }
+    ctx.restore();
+  }
+  // 捕まっている時、何に・どう捕まっているかを絵で：触手・蔦は身体に絡む線、手は胸と腰に、粘体は下半身を包む膜、機械はアーム、縄や網は身体に掛かる
+  const BIND_COL = { tentacle: "#ff8fbf", plant: "#8fd07a", worm: "#f0a8c8", hands: "#e8c0a8", imp: "#c890ff", slime: "#ffb0d8", mouth: "#d06a90", machine: "#b8c4dc", tickle: "#fff0f8", watch: null, itch: "#ffe27a" };
+  function drawBindFx(ctx, w, x, y, S, H) {
+    const h = w.run.h, b = h.bound, t = w.t;
+    const pts = [{ x: x - S * 0.12, y: y - H * 0.6 }, { x: x + S * 0.12, y: y - H * 0.58 }, { x: x, y: y - H * 0.42 }, { x: x - S * 0.14, y: y - H * 0.24 }, { x: x + S * 0.14, y: y - H * 0.22 }];
+    const srcs = [];
+    for (const id of b.by) { const m = w.monsters.find(o => o.id === id && o.hp > 0); if (m) srcs.push(m); else { const tr = w.traps.find(o => o.id === id); if (tr) srcs.push(tr); } }
+    for (const m of w.monsters) if (m.molest && m.hp > 0 && !b.by.includes(m.id)) srcs.push(m);
+    ctx.save();
+    srcs.forEach((src, i) => {
+      const cat = G.Text.actorOf(src.kind) || "restraint", col = BIND_COL[cat];
+      const sx = x + (src.x - h.x) * S, sy = y + (src.y - h.y) * S - S * 0.4;
+      if (cat === "restraint") {                              // 縄・網・枷：身体に掛かる
+        ctx.strokeStyle = "rgba(210,190,150,0.85)"; ctx.lineWidth = 2;
+        if (b.net || src.kind === "net" || src.kind === "web") { for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(x - S * 0.35, y - H * 0.5 + k * S * 0.12); ctx.lineTo(x + S * 0.35, y - H * 0.35 + k * S * 0.12); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x + S * 0.35, y - H * 0.5 + k * S * 0.12); ctx.lineTo(x - S * 0.35, y - H * 0.35 + k * S * 0.12); ctx.stroke(); } }
+        else { ctx.lineWidth = 3; for (const yy of [0.62, 0.52, 0.3]) { ctx.beginPath(); ctx.ellipse(x, y - H * yy, S * 0.24, S * 0.06, 0, 0, 7); ctx.stroke(); } }
+        return;
+      }
+      if (!col) return;
+      if (cat === "slime" || cat === "mouth") {                // 下半身を包む膜
+        ctx.fillStyle = cat === "slime" ? "rgba(255,170,215,0.38)" : "rgba(200,90,130,0.45)";
+        ctx.beginPath(); ctx.ellipse(x, y - H * 0.22, S * 0.36, H * (0.22 + 0.02 * Math.sin(t * 3 + i)), 0, 0, 7); ctx.fill();
+        ctx.strokeStyle = "rgba(255,210,235,0.6)"; ctx.lineWidth = 1.5; ctx.stroke();
+        return;
+      }
+      if (cat === "hands" || cat === "imp") {                  // 手：胸と腰に
+        const p = pts[(i * 2 + (b.stage || 0)) % pts.length], jit = Math.sin(t * 6 + i) * S * 0.03;
+        ctx.fillStyle = col; ctx.globalAlpha = 0.85; ctx.beginPath(); ctx.ellipse(p.x + jit, p.y, S * 0.08, S * 0.06, 0.4, 0, 7); ctx.fill();
+        for (let f = 0; f < 4; f++) { ctx.beginPath(); ctx.ellipse(p.x + jit + (f - 1.5) * S * 0.035, p.y - S * 0.07, S * 0.018, S * 0.04, 0, 0, 7); ctx.fill(); }
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(sx, sy); ctx.quadraticCurveTo((sx + p.x) / 2, (sy + p.y) / 2 + S * 0.2, p.x + jit, p.y + S * 0.04); ctx.stroke();
+        return;
+      }
+      // 触手・蔦・蟲・機械・羽根：身体へ伸びる線（揺れる）
+      const n = cat === "worm" ? 4 : cat === "machine" || cat === "tickle" ? 2 : 3;
+      ctx.strokeStyle = col; ctx.lineWidth = cat === "machine" ? 2.5 : cat === "worm" ? 2 : 4; ctx.lineCap = "round";
+      for (let k = 0; k < n; k++) {
+        const p = pts[(i + k * 2 + (b.stage || 0)) % pts.length], wob = Math.sin(t * (cat === "machine" ? 9 : 3) + k + i) * S * 0.18;
+        ctx.globalAlpha = 0.8; ctx.beginPath(); ctx.moveTo(sx, sy);
+        ctx.bezierCurveTo(sx + (p.x - sx) * 0.3 + wob, sy + (p.y - sy) * 0.3 - wob, sx + (p.x - sx) * 0.7 - wob, sy + (p.y - sy) * 0.7 + wob, p.x, p.y); ctx.stroke();
+        if (cat === "tentacle" || cat === "plant") { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(p.x, p.y, S * 0.04, 0, 7); ctx.fill(); }
+      }
+      ctx.globalAlpha = 1;
+    });
     ctx.restore();
   }
   function drawBubble(ctx, h, x, y, S) {

@@ -345,7 +345,8 @@
     if (!cv) return;
     if (dive.whole) { dive.cam.scale = Math.min(cv.width / w.map.W, cv.height / w.map.H); dive.cam.x = w.map.W / 2; dive.cam.y = w.map.H / 2; }
     else {
-      dive.cam.scale = Math.max(26, Math.min(cv.width / 12, cv.height / 9));
+      const base = Math.max(26, Math.min(cv.width / 12, cv.height / 9)), want = base * (w.run.h.bound ? 1.6 : 1);   // 捕まっている間は、寄って見せる
+      dive.zoom = (dive.zoom || base) + (want - (dive.zoom || base)) * Math.min(1, dt * 3); dive.cam.scale = dive.zoom;
       dive.cam.x += (w.run.h.x - dive.cam.x) * Math.min(1, dt * 4); dive.cam.y += (w.run.h.y - dive.cam.y) * Math.min(1, dt * 4);
     }
     G.Render.draw(cv.getContext("2d"), w, dive.cam, { hover: dive.hover, card: dive.card, night: !!dive.night });

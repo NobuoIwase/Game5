@@ -620,12 +620,31 @@ var G = (typeof G !== "undefined") ? G : {};
     confess: ["……っ、……ごめんなさい。本当は、{what}", "……嘘、でした。……{what}", "……わかりました、言います。……{what}", "……っ、……記録、見られてるなら、隠しても、無駄ですよね。{what}"],
     hold: ["……それだけ、です。本当に", "……っ。そう、書いてあるなら、そうなんじゃないですか", "……記録のほうが、間違ってるんだと思います", "……しつこい、です。何も、なかったです", "……っ、……ありません。何も"],
     nightConfess: ["……っ、……本当は、覚えてます。朝まで、{mons}に……{n}回は、数えました", "……気を失ってたなんて、嘘です。……ずっと、起きてました。{mons}が、ずっと"],
+    evidence: ["水晶の記録だ。見ろ", "これを見ても、同じことが言えるか", "記録を読み上げる。……聞いていろ"],
+    evidenceNarr: ["監査官は、水晶に残った{floor}階の記録を、ひかりの前に映し出した。", "机の上に、{floor}階の監視記録が広げられた。", "水晶が、{floor}階の光景を映す。ひかりの顔から、血の気が引いた。"],
+    hurt: ["……っ、……本当のこと、しか、言ってません……！ 記録、見せなくても……", "……見せなくて、いいです。……わかってます、から……っ", "……疑われてたんですね、あたし。……っ、そう、ですよね"],
     nightMore: ["……何を、って……っ、……全部、です。服の中も、……中も", "……代わる代わる、でした。……一晩じゅう"],
   };
   // 追及された時の一問一答。嘘なら崩れることがある（崩れたら、その件は口頭では正直に言ったことになる）
-  function probe(rec, line, save) {
+  function probe(rec, line, save, evidence) {
     const s = save, mem = s.reportMem, day = rec.day, u = line.unit, tier = G.tier(s.body, s.mind);
     const out = [], P = PROBE;
+    // 記録を突きつける：嘘ならほぼ崩れる。本当のことを言っていたなら、ただ傷つける（そして、中身を晒される）
+    if (evidence && u) {
+      out.push({ who: "a", text: U.pick(P.evidence) });
+      out.push({ who: "n", text: U.fill(U.pick(P.evidenceNarr), { floor: u.floor }) });
+      if (line.lie && U.chance(0.85)) {
+        u.truth = "honest"; u.confessed = true; line.lie = false;
+        out.push({ who: "h", text: U.fill(U.pick(P.confess), { what: what(u, day, mem) }) });
+        s.trust = U.clamp(s.trust - 1, 0, 100); s.dark += 2; s.body = U.clamp(s.body + 0.5, 0, 100);
+        return { lines: out, confessed: true };
+      }
+      if (line.lie) { out.push({ who: "h", text: U.pick(P.hold) }); s.trust = U.clamp(s.trust - 4, 0, 100); return { lines: out, confessed: false }; }
+      out.push({ who: "h", text: U.pick(P.hurt) });
+      if (u.acts) { const top = Object.entries(u.acts).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => P.part[k] || k); out.push({ who: "h", text: U.fill(U.pick(P.parts), { a: top.join("と、") }) + (u.stage ? P.stage[u.stage] : "") }); }
+      s.trust = U.clamp(s.trust - 5, 0, 100); s.dark += 1; s.body = U.clamp(s.body + 1, 0, 100);
+      return { lines: out };
+    }
     const ctx = u ? { floor: u.floor, mon: u.monName || u.trapName || "", dur: durText(u.dur), n: u.climax || u.n || 1 } : {};
     rec.probes = (rec.probes || 0) + 1;
     if (line.night) {

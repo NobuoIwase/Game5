@@ -308,7 +308,7 @@ var G = (typeof G !== "undefined") ? G : {};
       engulf: ev.filter(e => e.kind === "hold" && e.type === "蕩").length, machine: ev.filter(e => e.kind === "hold" && MACH.includes(e.mon)).length,
       imp: ev.filter(e => (e.kind === "charm" || e.kind === "deny" || e.kind === "beg" || e.kind === "kiss" || e.kind === "countGame") && IMP.includes(e.mon)).length,
       worm: ev.filter(e => WORM.includes(e.mon) && (e.kind === "hold" || e.kind === "attach")).length, shasei: n("shasei") + n("ringRelease"),
-      pray: n("pray") + n("crack"), kiss: n("kiss"),
+      pray: n("pray") + n("crack"), kiss: n("kiss"), swarm: ev.filter(e => e.kind === "hold" && (e.n || 1) >= 3).length,
     };
     const gained = [];
     for (const k in cnt) s.counts[k] = (s.counts[k] || 0) + cnt[k];

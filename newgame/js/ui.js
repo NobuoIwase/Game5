@@ -159,7 +159,7 @@
         <button id="shop">裏の取引（澱晶 ${S.dark}）</button>
         <button id="hist">これまでの記録</button>
         <button id="skill">ルミナの技</button>
-        <button id="diary">ひかりの手帳</button>
+        <button id="diary">ひかりの手帳${(S.diary || []).length && S.diary[S.diary.length - 1].day !== S.diarySeen ? "（新しいページ）" : ""}</button>
       </div>
       <div class="panel sub hidden" id="menu2">オート指揮：<button id="auto">${S.autoDirector ? "入" : "切"}</button>　潜行中に魔物や罠を自動で差し向ける（自分で置くこともできる）
         <br><span class="dim">ひかりの弱点：素で惑に強い。変身中は絡にも強い。変身が解けると一気に崩れる。</span></div>`;
@@ -481,7 +481,7 @@
     if (!rec) { S.phase = "guild"; return guild(); }
     app.innerHTML = topbar() + officeHTML() + `
       <div class="panel sub" id="rinfo"><b>口頭報告</b>　${esc(rec.dungeonName)}・${rec.floorReached}階まで・${OUTC[rec.outcome]}　今日の話し方：${esc(rec.postureName)}
-        <br><span class="dim">話の途中で「追及する」を選べるのは、その件を言い終えた、その時だけ。嘘なら崩れることがある。本当のことなら、中身を言わされる。</span></div>
+        <br><span class="dim">話の途中で「追及する」「記録を突きつける」を選べるのは、その件を言い終えた、その時だけ。嘘なら崩れることがある。本当のことなら、中身を言わされる（記録を突きつけると、嘘はほぼ崩れるが、本当だった時はひどく傷つける）。</span></div>
       <div class="row hidden" id="rdone"><button class="primary" id="todoc">報告書を受け取る</button></div>
       <details class="panel" id="trp"><summary>ここまでの話（書き起こし）</summary><div id="tr"></div></details>`;
     hikariIn();
@@ -489,6 +489,7 @@
       const o = Object.assign({}, l, { onShow: transcriptAdd });
       if (l.probe && l.who === "h") o.choices = [
         { label: "追及する", cls: "danger", fn: () => { const r = G.Report.probe(rec, l, S); save(); return r.lines.map(x => Object.assign(x, { onShow: transcriptAdd })); } },
+        ...(l.unit ? [{ label: "記録を突きつける", fn: () => { const r = G.Report.probe(rec, l, S, true); save(); return r.lines.map(x => Object.assign(x, { onShow: transcriptAdd })); } }] : []),
         { label: "流す", fn: () => [] },
       ];
       return o;
@@ -561,7 +562,8 @@
   /* ================================================================ 処置 */
   function clinicScreen() {
     S.phase = "clinic"; save();
-    const sel = new Set(S.ailments.map(a => a.id));
+    // 初めは、払える分だけ選んでおく（安いものから）
+    const sel = new Set(); { let left = S.funds; for (const a of S.ailments.slice().sort((x, y) => GM.AILMENTS[x.id].fee - GM.AILMENTS[y.id].fee)) { const f = GM.AILMENTS[a.id].fee; if (f <= left) { sel.add(a.id); left -= f; } } }
     const draw = keep(() => {
       const fee = [...sel].reduce((a, id) => a + GM.AILMENTS[id].fee, 0);
       const g = S.rec ? S.rec.gain : null;
@@ -569,7 +571,7 @@
         ${g ? `<div class="panel sub">今日の変化：肉体 +${g.body}　精神 +${g.mind}　ギルド資金 ${g.funds >= 0 ? "+" : ""}${g.funds}　澱晶 +${g.dark}${S.rec.forged ? `　違和感 +${g.sus}` : ""}</div>` : ""}
         <div class="panel">${S.ailments.length ? S.ailments.map(a => { const A = GM.AILMENTS[a.id]; return `<label class="doc-line"><input type="checkbox" data-id="${a.id}" ${sel.has(a.id) ? "checked" : ""}> <span><b>${esc(GM.ailmentName(a))}</b>${A.kink ? "（深層処置）" : ""}　◈${A.fee}<br><span class="sub">${A.note}</span></span></label>`; }).join("") : `<p class="sub">状態異常はない。</p>`}
           <p class="sub">処置しないで残すと、次の潜行に響き、ギルドの空気も少し澱む。</p></div>
-        <div class="row"><button class="primary" id="ok">${sel.size ? `処置して（◈${fee}）` : "このまま"}翌日へ</button></div>`;
+        <div class="row"><button class="primary" id="ok" ${fee > S.funds ? "disabled" : ""}>${sel.size ? `処置して（◈${fee}）` : "このまま"}翌日へ</button>${fee > S.funds ? `<span class="sub" style="color:var(--red)">資金が足りない（◈${S.funds}）。選び直す</span>` : ""}</div>`;
       on("input[type=checkbox]", "change", e => { e.target.checked ? sel.add(e.target.dataset.id) : sel.delete(e.target.dataset.id); draw(); });
       on("#ok", "click", () => {
         if (fee > S.funds) return toast("ギルド資金が足りない");
@@ -611,6 +613,7 @@
   // ひかりの手帳：本人が夜に書く日記と、魔物のメモ（監査官が、こっそり覗く）
   function diaryScreen(tab) {
     tab = tab || "diary";
+    if ((S.diary || []).length) { S.diarySeen = S.diary[S.diary.length - 1].day; save(); }
     const draw = keep(() => {
       const pages = (S.diary || []).slice().reverse();
       const notes = G.Diary ? G.Diary.monsterNotes(S) : [];

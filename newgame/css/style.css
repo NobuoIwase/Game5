@@ -203,5 +203,13 @@ select { font: inherit; color: var(--tx); background: var(--panel2); border: 1px
 @keyframes cxBg { 0% { background: rgba(255,255,255,0.85); } 15% { background: rgba(255,120,190,0.45); } 100% { background: rgba(255,120,190,0); } }
 @keyframes cxTxt { 0% { transform: scale(1.8); opacity: 0; } 12% { transform: scale(1); opacity: 1; } 75% { opacity: 1; } 100% { opacity: 0; transform: scale(1.05); } }
 @keyframes stShake { 0%,100% { transform: none; } 20% { transform: translate(-4px, 2px); } 40% { transform: translate(4px, -2px); } 60% { transform: translate(-3px, 1px); } 80% { transform: translate(2px, 0); } }
-@media (max-width: 520px) { .lv-feed .fl { font-size: 11.5px; padding: 2px 6px; } .lv-feed { width: 58%; max-height: 66%; } .cxcut b { font-size: 34px; } }
+@media (max-width: 520px) { .lv-feed .fl { font-size: 11.5px; padding: 2px 6px; } .lv-feed .fl.sfx.cx { font-size: 15px; } .lv-feed { width: 58%; max-height: 66%; } .cxcut b { font-size: 34px; } }
 @media (prefers-reduced-motion: reduce) { .stage.shake, .lv-fig img#lvimg, .cxcut b { animation: none !important; } }
+.lv-fig.after img#lvimg { animation: lvAfter 1.6s ease-in-out infinite; filter: drop-shadow(0 0 12px rgba(255,120,190,0.7)) saturate(1.15); }
+.lv-fig.after .lv-blush { opacity: 1; }
+@keyframes lvAfter { 0%,100% { transform: translateX(-50%); } 30% { transform: translateX(-50%) translateY(1px); } 50% { transform: translateX(calc(-50% - 1px)) translateY(2px); } 58% { transform: translateX(calc(-50% + 1px)) translateY(0); } }
+.lv-feed .fl.mind { border-left-color: #9a86d8; color: #d4c4f4; background: rgba(22,16,40,0.86); font-size: 12px; }
+.lv-feed .fl:nth-last-child(n+7) { display: none; }
+.live.paused .lv-feed { pointer-events: auto; overflow-y: auto; justify-content: flex-start; max-height: 74%; background: rgba(8,4,12,0.55); border-radius: 6px; }
+.live.paused .lv-feed .fl { display: block; opacity: 1; animation: none; }
+.live.paused .lv-feed::before { content: "一時停止中：さかのぼって読めます"; display: block; font-size: 11px; color: #b8a8d0; padding: 2px 4px; }

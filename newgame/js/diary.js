@@ -44,6 +44,7 @@ var G = (typeof G !== "undefined") ? G : {};
     night: ["倒れてから朝まで、{mons}に……。何回いったか、途中から数えてない。", "夜のことは、書かない。……{mons}。それだけ。", "一晩じゅう。{mons}が、代わる代わる。……朝の光が、あんなに嬉しかったことはない。"],
     inspire: ["戦ってる最中に『{skill}』を思いついた！ 明日から使う。", "閃いた。『{skill}』。……身体が勝手に動いた感じ。忘れないように、ここに書いとく。"],
     lvup: ["なんとなく、身体が軽い。ルミナ、ちょっとだけ強くなった……かも。"],
+    firstPart: ["{mon}に、……{part}で、いかされた。初めて。そんなところで、いけるなんて、知らなかった。", "{part}で、……達した。{mon}に。今日まで、そこはただの{part}だったのに。", "初めて、{part}だけで。……{mon}のせい。書いたら、また思い出して、じんじんしてきた。"],
     rereportLewd: ["……奥の部屋でのことは、ここにも書けない。", "『確認』。……あれは、確認なんかじゃなかった。……でも、いやじゃ、なかった、かも。消す。"],
     trust: { high: ["監査官さんは、優しい。……たぶん、この街で一番、あたしのことを知ってる人。"], low: ["監査官さんの目が、最近、こわい。"] },
     ail: {
@@ -105,6 +106,7 @@ var G = (typeof G !== "undefined") ? G : {};
       const cl = rec.night.reduce((a, b) => a + (b.climaxN || (b.climax ? 1 : 0)), 0), acts = rec.night.reduce((a, b) => a + (b.acts || 0), 0);
       out.push(fill(pick(D.night), { mons }) + (cl ? fill(pick(["……{c}回。数えなきゃよかった。", "{c}回、いかされた。{a}回、触られた。……記録係の人が、そう言ってた。", "朝までに、{c}回。"]), { c: cl, a: acts }) : ""));
     }
+    for (const f of (rec.firstParts || []).slice(0, 2)) out.push(fill(pick(D.firstPart), { part: PART[f.part] || f.part, mon: f.mon || "何か" }));
     const gr = rec.growth;
     if (gr && gr.inspired && gr.inspired.length) out.push(fill(pick(D.inspire), { skill: gr.inspired.map(id => G.SKILLS[id].name).join("』と『") }));
     if (gr && gr.lv > gr.lv0) out.push(pick(D.lvup));

@@ -86,6 +86,7 @@
     if (ids.some(i => ["heat", "impCurse", "sigil"].includes(i))) c.push("blush");
     if (ids.some(i => ["attached", "omazuke", "throb", "permit", "swell", "futaAfter"].includes(i))) c.push("tremble");
     if (S && G.tier(S.body, S.mind) >= 2) c.push("sway");
+    if (S && S.rec && S.phase !== "guild" && (S.rec.h.climax || 0) >= 3 && !c.includes("blush")) c.push("blush");   // 帰ってきたばかり：何度も達した後は、まだ頬が赤い
     return c;
   }
   function hikariIn(src) { const el = document.getElementById("oh"); if (!el) return; if (src) el.src = src; el.classList.add(...moodClass()); requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove("out"))); }
@@ -302,7 +303,7 @@
       <div class="hud" id="hud"></div>
       <div class="row">
         <button id="spd">×${dive.speed}</button><button id="pause">一時停止</button><button id="auto">オート ${S.autoDirector ? "入" : "切"}</button>
-        <button id="whole">全体</button><button id="recall" class="danger">帰還を勧告</button>
+        <button id="whole">全体</button><button id="livebtn">実況 ${S.liveOff ? "切" : "入"}</button><button id="recall" class="danger">帰還を勧告</button>
       </div>
       <div class="cards" id="cards"></div>
       <div class="log hidden" id="log"></div></div>`;
@@ -314,6 +315,7 @@
     on("#auto", "click", e => { S.autoDirector = !S.autoDirector; dive.run.autoDirector = S.autoDirector; dive.w.dir.auto = S.autoDirector; e.currentTarget.textContent = "オート " + (S.autoDirector ? "入" : "切"); });
     on("#whole", "click", () => { dive.whole = !dive.whole; });
     on("#lvskip", "click", () => { dive.lskip = true; });
+    on("#livebtn", "click", e => { S.liveOff = !S.liveOff; save(); e.currentTarget.textContent = "実況 " + (S.liveOff ? "切" : "入"); });
     on("#recall", "click", () => { if (dive.run.recall) return; dive.run.recall = true; toast("帰還を勧告した"); });
     const toWorld = ev => {
       const r = cv.getBoundingClientRect(), dpr = cv.width / r.width;
@@ -432,8 +434,13 @@
     const el = document.getElementById("live"); if (!el) return;
     const h = w.run.h, q = dive.lq;
     for (const f of w.feed) if (f.id > dive.feedId) { dive.feedId = f.id; q.push({ cls: f.cls, text: f.text }); }
+    if (S.liveOff) {                                     // 実況を切っている：窓だけで見る
+      q.length = 0; el.classList.add("hidden"); dive.liveOn = false; dive.slowmo = 1;
+      const mw0 = document.getElementById("msgwin"); if (mw0) mw0.classList.remove("hidden");
+      return;
+    }
     // 溜まりすぎたら、ありふれた行から間引く（決壊・場面は残す）
-    const cap = h.bound || h.pleasure >= 85 ? 9 : 3;           // 解けたあとは、遅れを早めに畳む
+    const cap = dive.night ? 60 : h.bound || h.pleasure >= 85 ? 9 : 3;           // 解けたあとは、遅れを早めに畳む
     while (q.length > cap) { const i = q.findIndex(l => !LIVE_KEEP.test(l.cls)); if (i < 0) break; q.splice(i, 1); }
     if (q.length && (dive.lskip || now >= (dive.lnext || 0)) && !(dive.paused && !dive.lskip)) {
       const n = dive.lskip ? q.length : 1;
@@ -442,8 +449,10 @@
     }
     const busy = q.some(l => /cx|scene|first/.test(l.cls)) || now < (dive.cxUntil || 0);
     dive.slowmo = busy ? 0.3 : 1;                       // 決壊と場面の間は、時の流れを落とす
+    if (dive.paused && dive.liveOn) dive.liveUntil = Math.max(dive.liveUntil || 0, now + 500);   // 止めている間は、消さない
     const on = !!h.bound || now < (dive.liveUntil || 0) || q.length > 0;
     el.classList.toggle("hidden", !on); dive.liveOn = on;
+    if (el.classList.contains("paused") !== !!dive.paused) { el.classList.toggle("paused", !!dive.paused); const fb = document.getElementById("lvf"); if (fb) fb.scrollTop = fb.scrollHeight; }
     const mw = document.getElementById("msgwin"); if (mw) mw.classList.toggle("hidden", on);
     if (!on) return;
     const img = document.getElementById("lvimg"), src = `assets/hikari/hikari_${h.form === "magica" ? "magica" : "civilian"}_front_${now % 1400 < 700 ? 1 : 0}.png`;
@@ -454,9 +463,10 @@
     fig.classList.toggle("bound", !!h.bound);
     fig.classList.toggle("cx", now < (dive.cxUntil || 0));
     fig.classList.toggle("naked", !!h.exposure);
+    fig.classList.toggle("after", w.t - (h.lastClimaxT ?? -99) < 6 && now >= (dive.cxUntil || 0));
     document.getElementById("lvg").style.height = Math.min(100, h.pleasure).toFixed(0) + "%";
     // 掴んでいる／群がっている相手を、立ち絵の後ろに
-    const hold = [];
+    const hold = dive.night ? (dive.nightHold || []).slice() : [];
     if (h.bound) {
       for (const id of h.bound.by) { const m = w.monsters.find(x => x.id === id && x.hp > 0); if (m) hold.push(m.d); else { const t = w.traps.find(x => x.id === id); if (t) hold.push({ trap: t.kind }); } }
       for (const m of w.monsters) if (m.molest && m.hp > 0) hold.push(m.d);
@@ -475,9 +485,9 @@
     d.className = "fl " + l.cls;
     d.innerHTML = esc(l.text).replace(/\n/g, "<br>");
     box.appendChild(d);
-    while (box.children.length > 6) box.removeChild(box.firstChild);
+    while (box.children.length > 40) box.removeChild(box.firstChild);     // 一時停止中は、さかのぼって読める
     const hb0 = dive.w && dive.w.run.h;
-    dive.lnext = now + liveGap(l.cls) * (hb0 && !hb0.bound && !LIVE_KEEP.test(l.cls) ? 0.5 : 1);
+    dive.lnext = now + liveGap(l.cls) * (hb0 && !hb0.bound && !dive.night && !LIVE_KEEP.test(l.cls) ? 0.5 : 1);
     dive.liveUntil = now + 3600 + liveGap(l.cls);
     if (/gauge cx/.test(l.cls)) {                       // 決壊：画面が弾ける
       dive.cxUntil = now + 1600;
@@ -525,6 +535,7 @@
       const b = G.Field.nightBeat(dive.w);
       log.innerHTML += b.lines.map(l => `<div>${esc(l)}</div>`).join("") + "<hr style='border-color:#2a2433'>";
       log.scrollTop = log.scrollHeight;
+      nightLive(b);
       drawCards();
       if (dive.w.night.beat >= G.BAL.nightBeats) document.getElementById("nx").textContent = "朝になった";
     };
@@ -532,6 +543,22 @@
     on("#skip", "click", () => { while (dive.w.night.beat < G.BAL.nightBeats) G.Field.nightBeat(dive.w); finishDive(); });
   }
 
+  // 夜の場面も、立ち絵の横に流す。達した所は、決壊として
+  function nightLive(b) {
+    const q = dive.lq, cx = b.cx || [];
+    dive.nightHold = (b.group || []).map(nm => { const m = dive.w.monsters.find(x => x.d.name === nm); return m && m.d; }).filter(Boolean);
+    dive.nightCx = dive.nightCx || 0;
+    b.lines.forEach((l0, i) => {
+      const l = String(l0).replace(/(\S) (?=\S)/g, "$1"), c = cx.find(x => x.at === i);
+      if (c) {
+        const seq = G.Text.live.climax({ chain: Math.min(4, 1 + (dive.nightCx++ % 4)), part: c.part, cat: G.Text.actorOf(c.kind), mon: c.mon, n: "ひかり" });
+        q.push({ cls: "gauge cx", text: `快感 100／100　（今夜${dive.nightCx}回目）` }, seq[1], seq[2], { cls: "body cx", text: l });
+        return;
+      }
+      const m = /^(.{1,12})「/.exec(l);
+      q.push({ cls: /^「/.test(l) ? "line" : m ? "mon" : /《/.test(l) ? "act" : "scene", text: l });
+    });
+  }
   function finishDive() {
     if (!dive || dive.ending) return;
     dive.ending = true;

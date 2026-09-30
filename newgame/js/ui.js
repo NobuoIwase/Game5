@@ -140,6 +140,7 @@
     app.innerHTML = topbar() + officeHTML() + `
       <div class="panel" id="status">
         <b>星野 ひかり</b> <span class="sub">大学生。本業は魔法少女ルミナ（正体を知るのは監査官だけ）</span>
+        <div class="sub">ルミナ Lv<b>${S.lv}</b>　次まで ${G.GROWTH.xpNeed(S.lv) - S.xp}　技 ${S.equip.length}/${G.GROWTH.slots(S.lv)}（覚えた ${Object.keys(S.skills).length}/${Object.keys(G.SKILLS).length}）</div>
         ${meter("肉体", S.body, 100, "#ff7fb0")}${meter("精神", S.mind, 100, "#b48cff")}${meter("信頼", S.trust, 100, "#8fe0a0")}${meter("疲労", S.fatigue, 100, "#f2d27a")}
         <div class="sub">堕ち：${TIER_NAME[tier]} ／ 状態異常：${ail}</div>
         <div class="sub">身についた性癖（通常の処置では抜けない）：${tr}</div>
@@ -150,6 +151,8 @@
         <button id="deck">デッキを組む</button>
         <button id="shop">裏の取引（澱晶 ${S.dark}）</button>
         <button id="hist">これまでの記録</button>
+        <button id="skill">ルミナの技</button>
+        <button id="diary">ひかりの手帳</button>
       </div>
       <div class="panel sub hidden" id="menu2">オート指揮：<button id="auto">${S.autoDirector ? "入" : "切"}</button>　潜行中に魔物や罠を自動で差し向ける（自分で置くこともできる）
         <br><span class="dim">ひかりの弱点：素で惑に強い。変身中は絡にも強い。変身が解けると一気に崩れる。</span></div>`;
@@ -158,6 +161,8 @@
     on("#deck", "click", () => deckScreen(null, office));
     on("#shop", "click", shopScreen);
     on("#hist", "click", historyScreen);
+    on("#skill", "click", skillScreen);
+    on("#diary", "click", () => diaryScreen());
     on("#auto", "click", e => { S.autoDirector = !S.autoDirector; save(); e.currentTarget.textContent = S.autoDirector ? "入" : "切"; });
     if (S.greeted === S.day) { hikariIn(); document.getElementById("dlg").classList.add("hidden"); return showMenu(); }
     const T = G.Text;
@@ -354,9 +359,9 @@
     const hud = document.getElementById("hud");
     if (hud && (!dive.hudT || performance.now() - dive.hudT > 120)) {
       dive.hudT = performance.now();
-      hud.innerHTML = meter("体力", h.hp, 100, "#8fe0a0") + meter("MP", h.mp, 60, "#6fc2ff") + meter("魔力", h.magic, 100, "#ffd6f0") +
+      hud.innerHTML = meter("体力", h.hp, h.hpMax || 100, "#8fe0a0") + meter("MP", h.mp, h.mpMax || 60, "#6fc2ff") + meter("魔力", h.magic, 100, "#ffd6f0") +
         meter("気力", h.will, 100, "#f2d27a") + meter("発情", h.arousal, 100, "#ff7fb0") + meter("快感", Math.min(100, h.pleasure), 100, "#ff4f9a") +
-        `<div class="sub">絶頂 ${h.climax}　持ち物：${kitText(h.kit)}</div>` + equipHTML(h.form, G.PREP[dive.run.stated] && G.PREP[dive.run.stated].name);
+        `<div class="sub">Lv${h.lv || 1}　絶頂 ${h.climax}　持ち物：${kitText(h.kit)}</div>` + (h.skills && h.skills.length ? `<div class="sub">技：${h.skills.map(id => G.SKILLS[id].name).join("・")}</div>` : "") + equipHTML(h.form, G.PREP[dive.run.stated] && G.PREP[dive.run.stated].name);
       const chips = document.getElementById("chips");
       if (chips) {
         const st = G.Field.statusList(w);
@@ -591,6 +596,40 @@
       });
       on(".fr", "mouseenter", e => { const d = G.Field.cardInfo(e.currentTarget.dataset.c).d; document.getElementById("desc").textContent = d.name + "：" + d.desc; });
       on("#done", "click", done);
+    });
+    draw();
+  }
+
+  // ひかりの手帳：本人が夜に書く日記と、魔物のメモ（監査官が、こっそり覗く）
+  function diaryScreen(tab) {
+    tab = tab || "diary";
+    const draw = keep(() => {
+      const pages = (S.diary || []).slice().reverse();
+      const notes = G.Diary ? G.Diary.monsterNotes(S) : [];
+      const art = n => `<img src="assets/monsters/${n.art}" alt=""${n.tint ? ` style="filter:hue-rotate(${n.tint}deg)"` : ""}>`;
+      app.innerHTML = topbar() + `<h1>ひかりの手帳</h1>
+        <p class="sub">（ひかりの鞄から、薄桃色の手帳がのぞいている。……少しだけなら。報告では言わなかったことも、ここには書いてある）</p>
+        <div class="row"><button class="tb" data-t="diary" style="${tab === "diary" ? "border-color:var(--pink)" : ""}">日記</button><button class="tb" data-t="mon" style="${tab === "mon" ? "border-color:var(--pink)" : ""}">魔物のメモ（${notes.length}）</button><button id="back">そっと戻す</button></div>
+        ${tab === "diary" ? (pages.length ? pages.map(p => `<div class="notebook"><div class="nb-date">${p.day}日目　${esc(p.weather)}</div>${p.lines.map(l => `<p>${esc(l)}</p>`).join("")}</div>`).join("") : `<div class="notebook"><p>（まだ何も書かれていない）</p></div>`)
+          : `<div class="grid2">${notes.map(n => `<div class="notebook nb-mon ${n.ex > 0.3 ? "nb-hot" : ""}"><div class="nb-head">${art(n)}<b>${esc(n.name)}</b> <span class="tag t-${n.type}">${n.type}</span><span class="nb-st">${n.stage}</span></div>${n.lines.map(l => `<p>${esc(l)}</p>`).join("")}</div>`).join("") || `<div class="notebook"><p>（まだ何も書かれていない）</p></div>`}</div>`}`;
+      on(".tb", "click", e => diaryScreen(e.currentTarget.dataset.t));
+      on("#back", "click", guild);
+    });
+    draw();
+  }
+  // 覚えた技の付け替え（装備できる数はレベルで増える）
+  function skillScreen() {
+    const draw = keep(() => {
+      const slots = G.GROWTH.slots(S.lv);
+      app.innerHTML = topbar() + `<h1>ルミナの技</h1>
+        <p class="sub">戦いの最中に、ふとした瞬間に閃いた技。装備できるのは ${slots} つまで（Lv6・Lv14で増える）。レベルの伸びは小さく、頭打ちになる。</p>
+        <div class="panel sub">Lv${S.lv}　体力 ${G.GROWTH.hpMax(S.lv)}　MP ${G.GROWTH.mpMax(S.lv)}　威力 ×${G.GROWTH.dmg(S.lv).toFixed(2)}　次のレベルまで ${G.GROWTH.xpNeed(S.lv) - S.xp}</div>
+        <div class="grid2">${Object.entries(G.SKILLS).map(([id, k]) => { const have = S.skills[id], on = S.equip.includes(id);
+          return `<div class="card ${on ? "sel" : ""}"><b>${have ? esc(k.name) : "？？？"}</b>　<span class="sub">${have ? esc(k.desc) : "まだ閃いていない"}</span>
+            ${have ? `<div><button class="eq" data-id="${id}">${on ? "外す" : "装備する"}</button></div>` : ""}</div>`; }).join("")}</div>
+        <button id="back" style="margin-top:10px">戻る</button>`;
+      on(".eq", "click", e => { const r = GM.equipSkill(S, e.currentTarget.dataset.id); if (r === "full") toast("これ以上は装備できない"); save(); draw(); });
+      on("#back", "click", guild);
     });
     draw();
   }

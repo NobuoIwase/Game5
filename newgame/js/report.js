@@ -62,6 +62,7 @@ var G = (typeof G !== "undefined") ? G : {};
     swell: ["{mon}に吸われて、……腫れました。まだ、戻ってません", "……吸われた所が、ぷっくりしてて。……擦れるんです"],
     miniClimax: ["{trap}の光で、……達したわけじゃ、ないんです。防いだんです。……防いだ分が、ちょっとだけ、漏れて", "……小さく、跳ねました。{n}回。……達しては、ないです"],
     mock: ["{mon}に、……罵られました。捕まってる間、ずっと", "……ざこ、って。{mon}に。……何回も"],
+    anticipate: ["{mon}を見たら、……身体が、前のを思い出して。……それだけです", "……{mon}、です。見ただけで、……熱く、なりました", "{mon}の姿を見た時、……その、……期待、しちゃって"],
   };
   // 魔物・罠ごとの言い表し方（「種:件の種類」）。あれば半分くらいの確率でこちらを使う
   const WHAT_KIND = {
@@ -137,7 +138,7 @@ var G = (typeof G !== "undefined") ? G : {};
     exposure: "装束の損壊", addict: "{mon}の粉への中毒",
     futaOn: "変生（雄の形の発現）", shasei: "射精 {n}回", tipTease: "{mon}による先端のみの刺激", ringRelease: "締環の解除と一斉射精", futaFixed: "変生の定着",
     crack: "{mon}による心の防護壁の損傷", pray: "{mon}への祈り", broadcast: "{mon}による中継", countGame: "{mon}との数え歌", kiss: "{mon}との口づけ",
-    swell: "{mon}による肥大化", miniClimax: "罠「{trap}」による閾下の絶頂", mock: "{mon}による罵倒",
+    swell: "{mon}による肥大化", miniClimax: "罠「{trap}」による閾下の絶頂", mock: "{mon}による罵倒", anticipate: "{mon}の視認による発情（身体の記憶）",
   };
   const CLIMAX = { 1: ["……最後、力が抜けちゃって", "……一回、頭が真っ白になりました", "……それで、その、達しちゃいました", "……一回だけ、堪えきれなくて"],
                    n: ["……{n}回、頭が真っ白になりました", "……数えてたのは{n}回まで、です", "……{n}回。途中から、堪えるふりだけしてました", "……{n}回です。……数え間違いじゃ、ないです"] };
@@ -152,6 +153,7 @@ var G = (typeof G !== "undefined") ? G : {};
     futaOn: ["神殿は、……普通の神殿でした"], shasei: ["……特に、何も"], tipTease: ["{mon}は、追い払いました"], ringRelease: ["帰還は、普通でした"],
     crack: ["{mon}の話なんか、聞いてません"], pray: ["{mon}？ 見ただけです"], broadcast: ["{mon}は、飛んでただけです"], countGame: ["{mon}とは、遊んでません"],
     kiss: ["{mon}は、倒しました。近づかれる前に"], swell: ["虫刺されです"], miniClimax: ["{trap}の光は、防ぎました。全部"], mock: ["{mon}が、何か言ってました。聞いてません"],
+    anticipate: ["{mon}ですか？ 普通に、撃ちました"],
     possess: ["{mon}が袖に入りかけたけど、すぐ払いました", "{mon}？ 袖、締めてたので平気でした"],
     filmed: ["{mon}はいましたけど、見てただけです。何も", "{mon}がいたのは知ってます。……それだけです"],
   };
@@ -369,7 +371,7 @@ var G = (typeof G !== "undefined") ? G : {};
         if (["exposure", "addict"].includes(e.kind) && out.some(u => u.kind === e.kind)) continue;
         if (e.kind === "release") { const same = out.find(u => u.kind === "release"); if (same) { same.n += e.n || 1; same.rel = same.n; continue; } }
         out.push({ kind: e.kind, floor: e.floor, t: e.t, mon: e.mon, monName: e.monName || "", type: e.type || "蕩", sev: e.sev || 2, n: e.n || 1, climax: e.kind === "release" ? 0 : 0, rel: e.n || 0, hidden: false });
-      } else if (["futaOn", "shasei", "tipTease", "ringRelease", "futaFixed", "crack", "pray", "broadcast", "countGame", "kiss", "swell", "miniClimax", "mock"].includes(e.kind)) {
+      } else if (["futaOn", "shasei", "tipTease", "ringRelease", "futaFixed", "crack", "pray", "broadcast", "countGame", "kiss", "swell", "miniClimax", "mock", "anticipate"].includes(e.kind)) {
         // 変生・教団・淫魔の件：種類ごとに潜行全体で一件（回数）
         const same = out.find(u => u.kind === e.kind);
         if (same) { same.n += e.kind === "ringRelease" ? (e.n || 1) : 1; same.sev = Math.max(same.sev, e.sev || 1); if (e.lost) same.lost = true; continue; }
@@ -585,6 +587,10 @@ var G = (typeof G !== "undefined") ? G : {};
     const c1 = freshPick(mem, day, "close:" + closeKey, CLOSE[closeKey], 3);
     const c2 = closeKey === "low" ? "" : freshPick(mem, day, "close2:" + closeKey, CLOSE2[closeKey], 3);
     push("h", c2 && U.chance(0.6) ? c1.replace(/[。！]?$/, "。") + c2 : c1);
+    // 成長（閃いた技・レベル）
+    const gr = rec.growth;
+    if (gr && gr.inspired && gr.inspired.length) push("h", U.fill(U.pick(["……あ、それと。今日、新しい技を思いついたんです。『{sk}』って", "……戦ってる最中に、ふっと閃いて。『{sk}』。……使えそうです", "そうだ、報告し忘れてた。『{sk}』、閃きました！"]), { sk: gr.inspired.map(id => G.SKILLS[id].name).join("』と『") }));
+    if (gr && gr.lv > gr.lv0) push("n", `（ルミナの成長：Lv${gr.lv0} → Lv${gr.lv}。${G.GROWTH.slots(gr.lv) > G.GROWTH.slots(gr.lv0) ? "装備できる技が一つ増えた。" : "少しだけ、身体が軽い。"}）`);
     const TRAIT_FMT = ["（監査記録：身についた性癖——{name}・{st}。{desc}）", "（記録係の欄外：『{name}』が{st}の段に進んだ。{desc}）", "（今日の記録で、{name}が{st}になった。{desc}）", "（{desc}——性癖の欄に『{name}・{st}』と書き足された）"];
     for (const g of rec.traitsGained || []) push("n", U.fill(freshPick(mem, day, "tfmt", TRAIT_FMT, 2), { name: G.TRAITS[g.id].name, st: G.TRAIT_STAGE[g.stage], desc: G.TRAITS[g.id].desc }));
     rec.posture = posture;
@@ -685,6 +691,7 @@ var G = (typeof G !== "undefined") ? G : {};
       countGame: ["{floor}階：{mon}の数え歌。負けた。罰を受けた。", "{floor}階：{mon}の遊びに付き合わされた。寸前で放置。"],
       kiss: ["{floor}階：{mon}と口づけ（{n}回）。", "{floor}階：{mon}に唇を奪われた。"], swell: ["{floor}階：{mon}に吸われ、患部が肥大化。"],
       miniClimax: ["{floor}階：{trap}の光。防御したが、閾下の反応あり（{n}回）。"], mock: ["{floor}階：{mon}に罵られた。"],
+      anticipate: ["{floor}階：{mon}を見て、動揺した（以前の件を思い出した）。"],
     },
     falseKind: {
       charm: ["{floor}階：{mon}と交戦。特に問題なし。"], attach: ["{floor}階：付着物なし。"], release: ["{floor}階：特記事項なし。"], beg: ["{floor}階：{mon}と交戦、撃退。"],
@@ -695,7 +702,7 @@ var G = (typeof G !== "undefined") ? G : {};
       futaOn: ["{floor}階：神殿。特に異常なし。"], shasei: ["{floor}階：特記事項なし。"], ringRelease: ["帰還：問題なし。"], futaFixed: ["{floor}階：祭壇あり。触れていない。"],
       crack: ["{floor}階：{mon}と交戦。説法は聞いていない。"], pray: ["{floor}階：{mon}を目視。接触なし。"], broadcast: ["{floor}階：{mon}を目視。無害。"],
       countGame: ["{floor}階：{mon}を撃退。"], kiss: ["{floor}階：{mon}を撃退。接触なし。"], swell: ["{floor}階：虫刺され程度。"], miniClimax: ["{floor}階：{trap}の光を防御。影響なし。"],
-      mock: ["{floor}階：{mon}を撃退。"], tipTease: ["{floor}階：{mon}を撃退。"],
+      mock: ["{floor}階：{mon}を撃退。"], tipTease: ["{floor}階：{mon}を撃退。"], anticipate: ["{floor}階：{mon}と交戦。問題なし。"],
     },
     falseTrap: ["{floor}階：{trap}を見つけたので避けた。", "{floor}階：{trap}があったけど、何ともなかった。"],
     false: ["{floor}階：{mon}とすれ違った。特に問題なし。", "{floor}階：{mon}に一瞬つかまれたけど、すぐ振りほどいた。", "{floor}階：{mon}がいたので避けて通った。"],
@@ -785,6 +792,7 @@ var G = (typeof G !== "undefined") ? G : {};
       else if (e.kind === "swell") out.push(`${e.floor}階 ${e.t}秒：肥大化（${who}）`);
       else if (e.kind === "miniClimax") out.push(`${e.floor}階 ${e.t}秒：閾下の絶頂反応（${who}）`);
       else if (e.kind === "mock") { if (!out.some(l => l.includes(who + "による罵倒"))) out.push(`${e.floor}階 ${e.t}秒：${who}による罵倒`); }
+      else if (e.kind === "anticipate") out.push(`${e.floor}階 ${e.t}秒：${who}を視認、発情値の急上昇（身体の記憶・${e.lv}）`);
       else if (e.kind === "tipTease") out.push(`${e.floor}階 ${e.t}秒：${who}による先端のみの刺激`);
     }
     if (rec.night && rec.night.length) {

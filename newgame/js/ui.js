@@ -446,7 +446,7 @@
       const n = dive.lskip ? q.length : 1;
       for (let i = 0; i < n; i++) liveLine(q.shift(), now);
       dive.lskip = false;
-    }
+    } else if (!q.length) dive.lskip = false;
     const busy = q.some(l => /cx|scene|first/.test(l.cls)) || now < (dive.cxUntil || 0);
     dive.slowmo = busy ? 0.3 : 1;                       // 決壊と場面の間は、時の流れを落とす
     if (dive.paused && dive.liveOn) dive.liveUntil = Math.max(dive.liveUntil || 0, now + 500);   // 止めている間は、消さない
@@ -489,6 +489,7 @@
     const hb0 = dive.w && dive.w.run.h;
     dive.lnext = now + liveGap(l.cls) * (hb0 && !hb0.bound && !dive.night && !LIVE_KEEP.test(l.cls) ? 0.5 : 1);
     dive.liveUntil = now + 3600 + liveGap(l.cls);
+    if (/grab/.test(l.cls)) { const st = document.getElementById("stage"); st.classList.remove("grabbed"); void st.offsetWidth; st.classList.add("grabbed"); }   // 捕まった瞬間：縁が赤く締まる
     if (/gauge cx/.test(l.cls)) {                       // 決壊：画面が弾ける
       dive.cxUntil = now + 1600;
       const cut = document.getElementById("cxcut"), st = document.getElementById("stage");

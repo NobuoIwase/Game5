@@ -225,7 +225,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (last && last.text === text && w.t - last.t < 1.2) return;
     w.msgs.push({ text, t: w.t, key });
     if (w.msgs.length > 40) w.msgs.shift();
-    if (live(w) && !FEED_SKIP.has(key)) feed(w, "act", plain(text));
+    if (live(w) && !FEED_SKIP.has(key)) feed(w, key === "grab" ? "act grab" : "act", plain(text));
   }
   function fx(w, o) { w.fx.push(Object.assign({ t: 0, life: 0.6 }, o)); }
   // 出来上がった文をそのまま窓に出す（捕まっている間の「何をされたか」）
@@ -1263,7 +1263,7 @@ var G = (typeof G !== "undefined") ? G : {};
         const saving = h.mp < (h.mpMax || G.HIKARI.mpMax) * 0.5;          // MP を切らさないように
         const wantMelee = seenNow && (!!h.possess || (saving && !reachy) || h.mp < S.shot.cost * 2 || (opening && !reachy) || (m.d.spd === 0 && !reachy));
         if (wantMelee && h.mp >= S.melee.cost) {
-          if (d <= S.melee.range + m.d.r * 0.5 && h.cdMelee <= 0) { tryCast(w, m, "melee"); return; }
+          if (d <= S.melee.range + m.d.r * 0.5 && h.cdMelee <= 0) { tryCast(w, m, "melee"); if (h.cast || h.think > 0) return; }   // 角に阻まれて打てなければ、ほかの手へ
           if (d < 4 && h.cdMelee <= 0.3 && goToward(w, m.x, m.y, 1.15, "踏み込む", m)) return;   // 道が無ければ（壁の角越し）、ほかの手へ
         }
         const reach = m.d.atk.kind === "grab" ? (m.d.atk.range || 1) + 0.5 : 0, kn = knowledge(w, m.kind);
@@ -1304,7 +1304,13 @@ var G = (typeof G !== "undefined") ? G : {};
           if (!goToward(w, m.x, m.y, sneak ? 0.5 : 0.9, sneak ? "忍び寄る" : "接近", m)) { h.walled = h.walled || {}; h.walled[m.id] = w.t + 6; }   // 行けない相手は、しばらく置いておく
           return;
         }
-        if (h.mp >= S.shot.cost && h.cdShot <= 0 && (!saving || reachy || m.d.atk.kind === "shot")) { tryCast(w, m, "shot"); return; }
+        if (h.mp >= S.shot.cost && h.cdShot <= 0 && (!saving || reachy || m.d.atk.kind === "shot")) { tryCast(w, m, "shot"); if (h.cast || h.think > 0) return; }
+        // 動かない相手が、撃てない位置にいる：打ちに行く。行けなければ、しばらく置いておく（その前で立ち尽くさない）
+        if (!vis && !m.d.spd) {
+          if (h.mp >= S.melee.cost && h.cdMelee <= 0 && d <= S.melee.range + m.d.r * 0.5) { tryCast(w, m, "melee"); if (h.cast) return; }
+          if (d > S.melee.range * 0.8 && goToward(w, m.x, m.y, 0.9, "踏み込む", m)) return;
+          h.walled = h.walled || {}; h.walled[m.id] = w.t + 6; return;
+        }
         if (saving && !reachy && h.cdMelee <= 0.3 && d < 4.5 && goToward(w, m.x, m.y, 1.1, "踏み込む", m)) return;
         // 撃てない間は、足を止めて見据える。相手が寄ってくる時だけ、一歩ずつ下がる
         if (d < 3.4 && m.d.spd > 0) { const a = U.angle(m.x, m.y, h.x, h.y); setIntent(h, Math.cos(a), Math.sin(a), 0.5, "間合い", m); }

@@ -357,9 +357,10 @@ var G = (typeof G !== "undefined") ? G : {};
     for (let i = 0; i < ev.length; i++) {
       const e = ev[i];
       if (e.kind === "hold") {
-        const cl = ev.slice(i + 1).filter(x => x.kind === "climax" && x.bound && x.floor === e.floor && x.t - e.t <= (e.dur || 6) + 0.5).length;
+        const cls = ev.slice(i + 1).filter(x => x.kind === "climax" && x.bound && x.floor === e.floor && x.t - e.t <= (e.dur || 6) + 0.5), cl = cls.length;
+        const first = (cls.find(x => x.first) || {}).first || null;
         out.push({ kind: "hold", floor: e.floor, t: e.t, mon: e.mon, monName: e.monName, type: e.type, sev: Math.min(3, (e.sev || 2) + ((e.stage || 0) >= 2 ? 1 : 0)), dur: e.dur || 3, climax: cl, hidden: !!e.hidden,
-          acts: e.acts || null, stage: e.stage || 0, swarm: e.n || 1, climaxActs: e.climaxActs || [] });
+          acts: e.acts || null, stage: e.stage || 0, swarm: e.n || 1, climaxActs: e.climaxActs || [], first });
       } else if (e.kind === "trap" && (e.sev || 0) >= 1) {
         const same = out.find(u => u.kind === "trap" && u.trap === e.trap && u.floor === e.floor);
         if (same) { same.n = (same.n || 1) + 1; continue; }
@@ -683,6 +684,11 @@ var G = (typeof G !== "undefined") ? G : {};
       out.push({ who: "h", text: t });
       if (u.swarm >= 3) out.push({ who: "h", text: U.fill(U.pick(P.swarm), { n: u.swarm }) });
       if (u.climaxActs && u.climaxActs.length) out.push({ who: "h", text: U.fill(U.pick(P.climax), { p: u.climaxActs[u.climaxActs.length - 1].replace(/ /g, "") }) });
+      if (u.first) {                                    // 記録にある「当該部位での初の絶頂」
+        out.push({ who: "a", text: U.pick(["記録に、注記がある。『当該部位での初の絶頂』。", "監視記録には、こうある。——初めての部位で、達した、と。"]) });
+        out.push({ who: "h", text: U.fill(U.pick(["……{p}、です。……そこで、って、……自分でも、知らなかったです……", "……っ、……{p}で、……はい。……初めて、でした。……書かないで、ください……", "……{p}。……そんなところで、って、思いました。……思ったのに、……"]), { p: P.part[u.first] || u.first }) });
+        s.body = U.clamp(s.body + 0.5, 0, 100);
+      }
       s.body = U.clamp(s.body + 0.5, 0, 100); s.dark += 1;
     } else out.push({ who: "h", text: U.pick(P.none) });
     return { lines: out };

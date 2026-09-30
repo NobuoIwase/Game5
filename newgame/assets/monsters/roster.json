@@ -308,6 +308,155 @@
    "type": "絡",
    "from": "Game2",
    "art": "new"
+  },
+  {
+   "id": "tsurimushi",
+   "name": "吊り蟲",
+   "type": "蕩",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "zuidou",
+   "name": "隧道蟲",
+   "type": "絡",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "hibiki",
+   "name": "響き蟲",
+   "type": "蕩",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "doromushi",
+   "name": "泥蟲",
+   "type": "絡",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "gitai",
+   "name": "擬態蟲",
+   "type": "絡",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "haimushi",
+   "name": "這い蟲",
+   "type": "絡",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "hiru",
+   "name": "肥大化ヒル",
+   "type": "蕩",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "kuwaemushi",
+   "name": "咥え蟲",
+   "type": "蕩",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "sayagoke",
+   "name": "鞘苔",
+   "type": "蕩",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "tenohira",
+   "name": "掌の群れ",
+   "type": "絡",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "ukegame",
+   "name": "受け壺",
+   "type": "蕩",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "sakiimp",
+   "name": "先嬲りの小淫魔",
+   "type": "惑",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "shinja",
+   "name": "信者",
+   "type": "絡",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "sekkyoushi",
+   "name": "説教師",
+   "type": "惑",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "chuushutsu",
+   "name": "抽出師",
+   "type": "蕩",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "kyouso",
+   "name": "教祖",
+   "type": "惑",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "jikkyou",
+   "name": "実況する小淫魔",
+   "type": "惑",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "kusuguri",
+   "name": "擽りの小淫魔",
+   "type": "蕩",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "kazoe",
+   "name": "数える小淫魔",
+   "type": "惑",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "azakeri",
+   "name": "嘲りの小淫魔",
+   "type": "惑",
+   "from": "Game2",
+   "art": "new"
+  },
+  {
+   "id": "kuchizuke",
+   "name": "口づけの淫魔",
+   "type": "惑",
+   "from": "Game2",
+   "art": "game4",
+   "file": "inma.png",
+   "tint": 150
   }
  ]
 }

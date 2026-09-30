@@ -48,6 +48,20 @@ var G = (typeof G !== "undefined") ? G : {};
     freeze: ["{mon}で、身体の時間を止められました。……止まってる間も、感覚だけはあって", "止まってる間に、いろいろ、……積もってました"],
     exposure: ["服が、もう、服じゃなくなりました", "装束が、……ほとんど、残ってません。替えを、お願いします"],
     addict: ["{mon}の粉を、……吸っちゃって。今も、ちょっと、また吸いたいっていうか……違います", "咳き茸、です。……あの粉は、危ないです。危ない、です"],
+    // ---- 蟲・変生・教団・淫魔 ----
+    futaOn: ["……神殿に入ったら、……その。生えました。……何が、とは、言わせないでください", "身体が、……変わりました。神殿の、せいで。……下の、ほうが"],
+    shasei: ["……出ました。{n}回。……何が、とは、聞かないでください", "……{n}回、出しちゃいました。……止め方が、分からなくて", "出……ました。……{n}回です。数えてたので、間違いないです"],
+    tipTease: ["{mon}に、……先だけ、ずっと。……最後まで、行かせてもらえなくて", "{mon}が、先っぽだけ撫でて。……根元は、一回も"],
+    ringRelease: ["輪っかを嵌められてて。……出口で外れた瞬間、……{n}回、まとめて", "締環、です。……溜まってた分が、帰った時に、全部"],
+    futaFixed: ["祭壇の升目が、……全部、埋まりました。……もう、神殿の外でも、引っ込みません", "……定着、したそうです。……数えられて、全部、覚えられて"],
+    crack: ["{mon}の説法を、聞きすぎました。……心の、どこかに、ヒビが", "……説法が、耳から離れなくて。……ちからを、ぬきなさい、って"],
+    pray: ["{mon}に、……祈っちゃいました。{n}回。……手が、勝手に", "……気づいたら、手を組んでて。腰が、揺れてて。……{mon}に向かって"],
+    broadcast: ["{mon}に、……中継されました。捕まってるとこも、……その、いちばん見られたくないとこも", "{mon}が、ずっと指の枠で。……誰に見せてたのかは、知りません"],
+    countGame: ["{mon}と、……数え歌で、遊ばされました。……負けました", "十数えるあいだ、声を出さなければ勝ち、って。……勝っても、負けても、寸前で置いていかれました"],
+    kiss: ["{mon}に、……キス、されました。{n}回", "……口づけ、です。{mon}に。……舌も", "{mon}に、唇を。……何回かは、覚えてません"],
+    swell: ["{mon}に吸われて、……腫れました。まだ、戻ってません", "……吸われた所が、ぷっくりしてて。……擦れるんです"],
+    miniClimax: ["{trap}の光で、……達したわけじゃ、ないんです。防いだんです。……防いだ分が、ちょっとだけ、漏れて", "……小さく、跳ねました。{n}回。……達しては、ないです"],
+    mock: ["{mon}に、……罵られました。捕まってる間、ずっと", "……ざこ、って。{mon}に。……何回も"],
   };
   // 魔物・罠ごとの言い表し方（「種:件の種類」）。あれば半分くらいの確率でこちらを使う
   const WHAT_KIND = {
@@ -91,6 +105,26 @@ var G = (typeof G !== "undefined") ? G : {};
     "saddle:trap": ["{trap}。……跨って渡るしか、なくて。梁が、動くんです", "{trap}で、……瘤の数は、数えませんでした"],
     "toybox:trap": ["{trap}を開けたら、中身が……跳んできて", "宝箱だと思ったんです。……{trap}でした"],
     "hypno_ray:trap": ["{trap}の光で、……頭が、ぼんやりして", "ワルドーの{trap}。……何回か、浴びました"],
+    "kusuguri:hold": ["{mon}に、粘糸で腕を吊られて。……ずっと、くすぐられてました", "{mon}の尻尾で、脇を。……笑いすぎて、途中から、笑いじゃなくなって"],
+    "kuchizuke:hold": ["{mon}に、……口づけ、されてました。長いやつを", "{mon}に頬を包まれて。……突き放せなかったです"],
+    "shinja:hold": ["{mon}たちに、祈りの形で押さえ込まれました", "{mon}に膝をつかされて、手を組まされて。……撫でられながら、祈らされました"],
+    "kuwaemushi:hold": ["{mon}に、……咥えられました。どこを、とは", "{mon}に吸いつかれて。……剥がせませんでした"],
+    "sayagoke:hold": ["岩の苔が{mon}で。……座ったら、包まれて", "{mon}に包まれて、……擦られてました。立てなくなるまで"],
+    "tenohira:hold": ["床から生えた{mon}に、……扱かれました。二つがかりで", "{mon}に掴まれました。……慣れた手つき、でした"],
+    "ukegame:hold": ["{mon}に、……入れられました。壺の中に", "{mon}の中の粘液が、渦を巻いてて"],
+    "zuidou:hold": ["{mon}が、服の中に群れで。……這い回られました", "{mon}の群れに、脚から潜り込まれました"],
+    "doromushi:hold": ["{mon}の沼で、脚を取られました。泥の中に、何かいて", "泥に沈んで、……{mon}に、太腿まで"],
+    "gitai:hold": ["壁だと思ったら{mon}の群れでした。全身、覆われて", "{mon}に覆われて、しばらく何も見えませんでした"],
+    "haimushi:hold": ["{mon}が三匹、ばらばらに這ってきて", "{mon}に、三か所いっぺんに這われました"],
+    "hiru:attach": ["{mon}に吸いつかれました。……まだ、剥がれてません", "{mon}が、胸に。……吸われたところが、腫れて"],
+    "sekkyoushi:trance": ["{mon}の説法を、聞いちゃいました。……声が、蜜みたいで", "『ちからを、ぬきなさい』って。{mon}が。……ぬけました"],
+    "kyouso:trance": ["{mon}に、見つめられました。……それだけ、なのに", "{mon}の目を見たら、……腰が"],
+    "chuushutsu:arouse": ["{mon}の雫を浴びました。当たったとこが、敏感になって", "{mon}のスポイトで、……撃たれました"],
+    "gauze:hold": ["{mon}に、……包まれて、磨かれました。どこを、とは", "ぬるぬるの布が、左右に。……止めて、くれなくて"],
+    "suikan:hold": ["{mon}に吸われました。……目盛りが、上がってました", "床の筒に咥えられて、……機械の拍子で、ずっと"],
+    "feather_bed:hold": ["{mon}に沈んで、……羽根が、服の中に", "{mon}で、笑わされて、それから、……笑いじゃなくなって"],
+    "namagoroshi:hold": ["{mon}の蕾に、……寸前で、何度も止められて", "{mon}。……最後は、あたしのほうから、花を追ってました"],
+    "jouka:hold": ["{mon}で、……浄化、されました。ねだるまで、終わらなくて", "{mon}の台に留められて、……寸前で、何度も"],
     "furnace:trap": ["{trap}に、魔力を吸われました。……吸われるの、なんか、甘くて", "{trap}のそばで、……力が、抜けていって"],
   };
   // 監査官が読み上げるときの言い方
@@ -101,6 +135,9 @@ var G = (typeof G !== "undefined") ? G : {};
     charm: "{mon}への魅了", attach: "付着体「{mon}」", release: "溜められた絶頂の一斉解放", beg: "{mon}への懇願", rescue: "洗脳の未遂", convert: "戦闘員化",
     sniff: "{mon}の臭いの吸引", salute: "{mon}への『敬礼』", fit: "原因不明の発作", deny: "{mon}による絶頂の禁止", vow: "誓約による絶頂の禁止", freeze: "{mon}による時間停止",
     exposure: "装束の損壊", addict: "{mon}の粉への中毒",
+    futaOn: "変生（雄の形の発現）", shasei: "射精 {n}回", tipTease: "{mon}による先端のみの刺激", ringRelease: "締環の解除と一斉射精", futaFixed: "変生の定着",
+    crack: "{mon}による心の防護壁の損傷", pray: "{mon}への祈り", broadcast: "{mon}による中継", countGame: "{mon}との数え歌", kiss: "{mon}との口づけ",
+    swell: "{mon}による肥大化", miniClimax: "罠「{trap}」による閾下の絶頂", mock: "{mon}による罵倒",
   };
   const CLIMAX = { 1: ["……最後、力が抜けちゃって", "……一回、頭が真っ白になりました", "……それで、その、達しちゃいました", "……一回だけ、堪えきれなくて"],
                    n: ["……{n}回、頭が真っ白になりました", "……数えてたのは{n}回まで、です", "……{n}回。途中から、堪えるふりだけしてました", "……{n}回です。……数え間違いじゃ、ないです"] };
@@ -112,6 +149,9 @@ var G = (typeof G !== "undefined") ? G : {};
     charm: ["{mon}ですか？ 普通に倒しました", "{mon}は、……別に。ただの敵です"], attach: ["何も、付いてないです。……ほんとに"], release: ["特に、何も。……普通でした"],
     beg: ["{mon}は、倒しました。……それだけです"], sniff: ["{mon}とは、すれ違っただけです"], deny: ["{mon}？ 何もされてません"], vow: ["祭壇はありましたけど、触ってません"],
     addict: ["茸の所は、迂回しました"], fit: ["……体調は、普通です"],
+    futaOn: ["神殿は、……普通の神殿でした"], shasei: ["……特に、何も"], tipTease: ["{mon}は、追い払いました"], ringRelease: ["帰還は、普通でした"],
+    crack: ["{mon}の話なんか、聞いてません"], pray: ["{mon}？ 見ただけです"], broadcast: ["{mon}は、飛んでただけです"], countGame: ["{mon}とは、遊んでません"],
+    kiss: ["{mon}は、倒しました。近づかれる前に"], swell: ["虫刺されです"], miniClimax: ["{trap}の光は、防ぎました。全部"], mock: ["{mon}が、何か言ってました。聞いてません"],
     possess: ["{mon}が袖に入りかけたけど、すぐ払いました", "{mon}？ 袖、締めてたので平気でした"],
     filmed: ["{mon}はいましたけど、見てただけです。何も", "{mon}がいたのは知ってます。……それだけです"],
   };
@@ -249,9 +289,16 @@ var G = (typeof G !== "undefined") ? G : {};
     hairTrigger: ["（報告の途中、前触れなくひかりの肩が跳ねた。本人にも、理由は分からないらしい）", "（一瞬、目の焦点が消え、すぐ戻った。ひかりは何事もなかったように続けている）"],
     exposure: ["（替えの衣装が間に合わなかったらしい。借り物の外套の合わせを、ずっと手で押さえている）"],
     addict: ["（部屋の隅の鉢植えの茸に、ひかりの視線が何度も吸い寄せられる）"],
-    mindTaint: ["（ときどき、報告と関係のない所で、うっとりと言葉を切る）"],
+    mindTaint: ["（ときどき、報告と関係のない所で、うっとりと言葉を切る）", "（質問に答える前に、ほんの一拍、目が潤む）", "（ペン先で、書類の余白に丸をいくつも描いている。本人は気づいていない）", "（声が、ところどころで甘く伸びる）", "（窓の外を見て、何かを思い出したように頬を染めた）", "（言い終えた後で、自分の言葉を小さく繰り返している）"],
     exhaustion: ["（声に張りがない。言葉の途中で、何度か息継ぎをした）", "（背もたれに寄りかからないと、座っていられないようだ）", "（目の下に隈。連日の消耗が抜けていない）",
                  "（一文ごとに、少し間があく）", "（書類を持つ手が、かすかに震えている）"],
+    swell: ["（座り方がぎこちない。服が擦れるたび、小さく息を詰めている）", "（胸元の布が、妙に張って見える。本人は腕で隠している）", "（上着の前を、指でそっと浮かせている。布が触れないように）", "（書類を胸の前に抱えない。いつもは抱えるのに）", "（ときどき、肩をすくめて姿勢を変える。どこかが擦れるらしい）"],
+    futaAfter: ["（外套の前を、両手でずっと押さえている）", "（脚を組もうとして、やめた。座り直す動作が慎重すぎる）", "（椅子に浅く、前かがみに座っている）", "（書類を膝の上に置いたまま、動かさない）", "（立ち上がる時、外套の裾を先に押さえた）"],
+    futaFixed: ["（外套の前を押さえる手つきが、もう慣れたものになっている）", "（椅子に座る前に、裾を整える動作が一つ増えている）", "（膝の上に鞄を置いている。前を隠す位置に）", "（脚を少し開いて座る。閉じると、どこかが窮屈らしい）", "（外套の丈が、以前より長いものに替わっている）"],
+    crack: ["（ときどき、報告の合間に『ちからを、ぬきなさい』と小さく呟く。本人は気づいていない）", "（両手が、膝の上で、祈りの形に組まれている）", "（窓の外の鐘の音に、一瞬だけ目を閉じた）", "（『教祖』という言葉の前で、声が少しだけ柔らかくなる）", "（話の切れ目ごとに、小さく頷く癖がついている。誰に頷いているのかは分からない）"],
+    impCurse: ["（頬が上気している。部屋に入ってきた時から、ずっと）", "（呼吸が浅い。熱が朝から抜けないようだ）", "（襟元を指で広げて、風を入れている）", "（首筋にうっすら汗。部屋は涼しい）", "（ときどき、ぼんやりと宙を見て、慌てて視線を戻す）"],
+    kissMark: ["（ときどき、指先で自分の唇に触れている）", "（唇の端に、小さな紋が見える。本人は荒れているだけだと言う）", "（口元を、書類で隠すようにして話す）", "（話の途中で、唇を舌で湿らせる。その度に、少し顔が赤くなる）", "（水を飲む時、杯の縁から唇を離すのが遅い）"],
+    permit: ["（言葉の途中で、ときどき『許可』と言いかけて、飲み込む）", "（腿を擦り合わせて、何かを堪えている。許しを待っているような顔だ）", "（監査官が口を開くたび、何かを期待するように顔を上げる）", "（『よし』という言葉に、びくりと肩が跳ねた）", "（指先が、落ち着きなく机の縁をなぞっている）"],
   };
   // 報告の最中に割り込む、いま現在の快感（付着体・おあずけ・疼き）
   // 組み合わせで作る：漏れた声＋言い訳（状態異常ごと）＋続け方
@@ -260,7 +307,11 @@ var G = (typeof G !== "undefined") ? G : {};
     attached: ["……動いて、るだけ、なので。", "……服の、中の、が。……すみません。", "……今の、なんでも、ないです。", "……取れて、ないんです、まだ。", "……止まって、くれない、ので。", "……こ、これは、報告とは、関係、なくて。", "……震えてる、だけ、です。", "……あ、あたしが、動いたんじゃ、ないです。"],
     omazuke: ["……熱い、だけ、です。", "……座り直しても、いいですか。", "……いま、話しかけないで、もらえると。", "……溜まってる、だけ、なので。", "……なんでも、ない、です。……ほんとに。", "……っ、あと、ちょっと、とか、思ってないです。", "……す、すみません、足、組み替えます。", "……だいじょうぶ、まだ、大丈夫、です。"],
     throb: ["……かゆ、……いえ、なんでもないです。", "……ちょっと、膝が。", "……掻いても、いいですか。……いえ、我慢します。", "……肌が、ぴりってしただけです。", "……疼いて、るだけ、です。", "……すみません、じっと、してられなくて。"],
-    resume: ["……続けます。", "……はい。次、いきます。", "……大丈夫、です。", "……どこまで、話しましたっけ。", "……報告、続けます、から。", ""],
+    swell: ["……擦れる、だけ、です。", "……腫れてる、ところが、服に。", "……座り方、変えても、いいですか。", "……っ、なんでも、ないです。"],
+    futaAfter: ["……前、押さえてる、だけ、なので。", "……引っ込んで、くれなくて。", "……っ、見ないで、ください。", "……外套、閉めてます、から。"],
+    impCurse: ["……朝から、熱くて。", "……淫魔の、せい、です。たぶん。", "……っ、平気、です。", "……お水、もらえますか。"],
+    permit: ["……許可、……いえ、なんでもないです。", "……っ、まだ、だめ、なので。", "……契約、が。……すみません。", "……ねだって、ない、です。"],
+    resume: ["……続けます。", "……はい。次、いきます。", "……大丈夫、です。", "……どこまで、話しましたっけ。", "……報告、続けます、から。", "", "……えっと、次は。", "……すみません。もう平気です。", "……今の、記録しないでください。", "……気にしないで、ください。", "……それで、ですね。", ""],
   };
   function ongoingLine(mem, day, id) {
     return (freshPick(mem, day, "go:m", ONGOING.moan, 1) + freshPick(mem, day, "go:" + id, ONGOING[id], 2) + freshPick(mem, day, "go:r", ONGOING.resume, 1)).replace(/。。/g, "。");
@@ -275,6 +326,7 @@ var G = (typeof G !== "undefined") ? G : {};
     eibin: ["法則は『鋭敏』。降りるたびに、服が擦れるのが……気になって", "『鋭敏の法則』でした。……今も、ちょっと、肌が"],
     hakudatsu: ["法則は『剥奪』。……降りるたびに、一枚ずつ。……それ以上は、見れば分かると思います", "『剥奪の法則』でした。……替えの衣装、お願いします"],
     kokuin: ["法則は『刻印』。入口で、……お腹に、紋を", "『刻印の法則』でした。……入っただけで、紋が"],
+    yuuka: ["法則は『雄化』。……入った瞬間に、……その。神殿じゃないのに", "『雄化の法則』でした。……中では、ずっと、生えてました"],
   };
   const CONVERT_OPEN = ["戦闘員その2、報告します！ ……え？ あ、……あれ。……ひかり、です。星野、ひかり。……今の、なしで", "ワルドー万歳……じゃ、なくて。……おはようございます。……救出、ありがとうございました"];
 
@@ -315,6 +367,11 @@ var G = (typeof G !== "undefined") ? G : {};
       } else if (["release", "beg", "rescue", "convert", "vow", "freeze", "exposure", "addict"].includes(e.kind)) {
         if (["exposure", "addict"].includes(e.kind) && out.some(u => u.kind === e.kind)) continue;
         out.push({ kind: e.kind, floor: e.floor, t: e.t, mon: e.mon, monName: e.monName || "", type: e.type || "蕩", sev: e.sev || 2, n: e.n || 1, climax: e.kind === "release" ? 0 : 0, rel: e.n || 0, hidden: false });
+      } else if (["futaOn", "shasei", "tipTease", "ringRelease", "futaFixed", "crack", "pray", "broadcast", "countGame", "kiss", "swell", "miniClimax", "mock"].includes(e.kind)) {
+        // 変生・教団・淫魔の件：種類ごとに潜行全体で一件（回数）
+        const same = out.find(u => u.kind === e.kind);
+        if (same) { same.n += e.kind === "ringRelease" ? (e.n || 1) : 1; same.sev = Math.max(same.sev, e.sev || 1); if (e.lost) same.lost = true; continue; }
+        out.push({ kind: e.kind, floor: e.floor, t: e.t, mon: e.mon, monName: e.monName || "", trapName: e.monName || "", type: e.type || "蕩", sev: e.sev || 2, n: e.n || 1, climax: 0, hidden: !!e.hidden, lost: !!e.lost });
       } else if (e.kind === "possess") {
         out.push({ kind: "possess", floor: e.floor, t: e.t, mon: e.mon, monName: e.monName, type: "惑", sev: 2, dur: e.dur || 5, climax: 0 });
       } else if (e.kind === "sigil") {
@@ -440,7 +497,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const charmTo = Object.keys((s.ailments.find(a => a.id === "charm") || {}).to || {}).map(k => G.MONSTERS[k] ? G.MONSTERS[k].name : k)[0] || "";
     const noteKeys = ails.filter(id => AIL_NOTE[id]).sort((a, b) => (b === "rewired") - (a === "rewired"));
     for (const id of noteKeys.slice(0, 2)) push("n", U.fill(freshPick(mem, day, "ail:" + id, AIL_NOTE[id], 3), { to: charmTo }));
-    const going = ["attached", "omazuke", "throb"].filter(id => ails.includes(id));
+    const going = ["attached", "omazuke", "throb", "swell", "futaAfter", "impCurse", "permit"].filter(id => ails.includes(id));
     let breaks = going.length ? 2 : 0;
 
     push("a", freshPick(mem, day, "aud:open", AUD.open, 3));
@@ -485,7 +542,7 @@ var G = (typeof G !== "undefined") ? G : {};
       const wtxt = what(u, day, mem);
       const fillc = Object.assign({}, ctx, {
         what: wtxt, trap: u.trapName || "",
-        whatA: U.fill(WHAT_A[u.kind] || WHAT_A.arouse, { mon: u.monName || "", trap: u.trapName || "", dur: durText(u.dur) }) + (u.kind === "untransform" && u.n > 1 ? `（${u.n}回）` : ""),
+        whatA: U.fill(WHAT_A[u.kind] || WHAT_A.arouse, { mon: u.monName || "", trap: u.trapName || "", dur: durText(u.dur), n: u.n || 1 }) + (u.kind === "untransform" && u.n > 1 ? `（${u.n}回）` : ""),
         tail: u.kind === "hold" ? (u.climax ? "" : durText(u.dur) + "くらいで抜けました。") : u.kind === "possess" ? (u.climax ? "" : durText(u.dur) + "くらいで離れました。") : u.kind === "sigil" && u.lv > 1 ? ["", "", "……二重に、刻まれてます。", "……三重、です。"][u.lv] : (u.kind === "untransform" && u.n > 1 ? `……${u.n}回、です。` : ""),
       });
       let htext = tpl.h ? U.fill(tpl.h, fillc) : null;
@@ -552,6 +609,14 @@ var G = (typeof G !== "undefined") ? G : {};
       sniff: ["{floor}階：{mon}の臭いで足が止まった（{n}回）。"], salute: ["{floor}階：{mon}に敬礼した。規定どおりの挨拶。"],
       fit: ["{floor}階：原因不明の発作（{n}回）。"], deny: ["{floor}階：{mon}に絶頂を止められていた。"], vow: ["{floor}階：誓約の祭壇。階を出るまで達せなかった。出た後のことは、書かない。"],
       freeze: ["{floor}階：{mon}で、身体の時間が止まった。"], exposure: ["{floor}階：装束損壊。替えを申請。"], addict: ["{floor}階：{mon}の粉を吸った。依存性あり。"],
+      futaOn: ["{floor}階：神殿の作用で、身体が変化（雄の形）。", "{floor}階：変生。……形の詳細は、別紙で。"],
+      shasei: ["{floor}階：射精（{n}回）。", "{floor}階：変生した部位から、{n}回。"], tipTease: ["{floor}階：{mon}に先端だけを刺激され続けた。一度も出せなかった。"],
+      ringRelease: ["{floor}階：締環が外れ、溜まっていた分が一度に出た。"], futaFixed: ["{floor}階：数取りの祭壇、十二升目到達。変生が定着。処置を申請します。"],
+      crack: ["{floor}階：{mon}の説法で、精神防壁に損傷。", "{floor}階：{mon}の声を聞き続けた。心のヒビ、処置希望。"],
+      pray: ["{floor}階：{mon}に祈った（{n}回）。自分の意思ではない。"], broadcast: ["{floor}階：{mon}に姿を『中継』された。"],
+      countGame: ["{floor}階：{mon}の数え歌。負けた。罰を受けた。", "{floor}階：{mon}の遊びに付き合わされた。寸前で放置。"],
+      kiss: ["{floor}階：{mon}と口づけ（{n}回）。", "{floor}階：{mon}に唇を奪われた。"], swell: ["{floor}階：{mon}に吸われ、患部が肥大化。"],
+      miniClimax: ["{floor}階：{trap}の光。防御したが、閾下の反応あり（{n}回）。"], mock: ["{floor}階：{mon}に罵られた。"],
     },
     falseKind: {
       charm: ["{floor}階：{mon}と交戦。特に問題なし。"], attach: ["{floor}階：付着物なし。"], release: ["{floor}階：特記事項なし。"], beg: ["{floor}階：{mon}と交戦、撃退。"],
@@ -559,6 +624,10 @@ var G = (typeof G !== "undefined") ? G : {};
       sigil: ["{floor}階：{mon}で呪いの転写。魔力の壁で丸ごと弾き返した。紋様は受けていない。", "{floor}階：{mon}を破壊した。問題なし。"],
       possess: ["{floor}階：{mon}が袖口から入ろうとしたが、払った。", "{floor}階：{mon}を見かけた。袖を締めて通過。"],
       filmed: ["{floor}階：{mon}がいた。見ているだけで害はない。"],
+      futaOn: ["{floor}階：神殿。特に異常なし。"], shasei: ["{floor}階：特記事項なし。"], ringRelease: ["帰還：問題なし。"], futaFixed: ["{floor}階：祭壇あり。触れていない。"],
+      crack: ["{floor}階：{mon}と交戦。説法は聞いていない。"], pray: ["{floor}階：{mon}を目視。接触なし。"], broadcast: ["{floor}階：{mon}を目視。無害。"],
+      countGame: ["{floor}階：{mon}を撃退。"], kiss: ["{floor}階：{mon}を撃退。接触なし。"], swell: ["{floor}階：虫刺され程度。"], miniClimax: ["{floor}階：{trap}の光を防御。影響なし。"],
+      mock: ["{floor}階：{mon}を撃退。"], tipTease: ["{floor}階：{mon}を撃退。"],
     },
     falseTrap: ["{floor}階：{trap}を見つけたので避けた。", "{floor}階：{trap}があったけど、何ともなかった。"],
     false: ["{floor}階：{mon}とすれ違った。特に問題なし。", "{floor}階：{mon}に一瞬つかまれたけど、すぐ振りほどいた。", "{floor}階：{mon}がいたので避けて通った。"],
@@ -574,7 +643,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const floors = [...new Set(rec.units.map(u => u.floor))].sort((a, b) => a - b);
     for (const f of floors) {
       for (const u of rec.units.filter(x => x.floor === f)) {
-        const ctx = { floor: f, mon: u.monName || u.trapName || "", trap: u.trapName, dur: durText(u.dur), n: u.climax || 1 };
+        const ctx = { floor: f, mon: u.monName || u.trapName || "", trap: u.trapName, dur: durText(u.dur), n: u.climax || u.n || 1 };
         if (u.truth === "missing") out.push({ text: U.fill(freshPick(mem, day, "doc:miss", DOC.missing, 1), ctx), kind: "missing", unit: u });
         else if (u.truth === "false") out.push({ text: U.fill(DOC.falseKind[u.kind] ? freshPick(mem, day, "doc:falseK:" + u.kind, DOC.falseKind[u.kind], 1) : u.kind === "trap" ? freshPick(mem, day, "doc:falseT", DOC.falseTrap, 1) : freshPick(mem, day, "doc:false", DOC.false, 1), ctx), kind: "false", unit: u });
         else {
@@ -623,6 +692,23 @@ var G = (typeof G !== "undefined") ? G : {};
       else if (e.kind === "vow") out.push(`${e.floor}階 ${e.t}秒：誓約（この階での絶頂禁止）`);
       else if (e.kind === "deny") out.push(`${e.floor}階 ${e.t}秒：${who}による絶頂禁止`);
       else if (e.kind === "addict") out.push(`${e.floor}階 ${e.t}秒：${who}の粉への中毒`);
+      else if (e.kind === "futaOn") out.push(`${e.floor}階 ${e.t}秒：変生（雄の形の発現）`);
+      else if (e.kind === "shasei") out.push(`${e.floor}階 ${e.t}秒：射精${who ? "（" + who + "）" : ""}`);
+      else if (e.kind === "ringRelease") out.push(`帰還時：締環の解除（${e.n}回）`);
+      else if (e.kind === "futaFixed") out.push(`${e.floor}階 ${e.t}秒：変生の定着（数取り 12/12）`);
+      else if (e.kind === "countAltar") out.push(`${e.floor}階 ${e.t}秒：数取りの祭壇に登録`);
+      else if (e.kind === "ring") out.push(`${e.floor}階 ${e.t}秒：締環の装着`);
+      else if (e.kind === "crack") out.push(`${e.floor}階 ${e.t}秒：心の防護壁に損傷（ヒビ ${e.lv}）${who ? "　" + who : ""}`);
+      else if (e.kind === "pray") out.push(`${e.floor}階 ${e.t}秒：${who}への祈り`);
+      else if (e.kind === "broadcast") out.push(`${e.floor}階 ${e.t}秒：${who}による中継`);
+      else if (e.kind === "countGame") out.push(`${e.floor}階 ${e.t}秒：${who}の数え歌（${e.lost ? "負け" : "勝ち"}）`);
+      else if (e.kind === "kiss") out.push(`${e.floor}階 ${e.t}秒：${who}との口づけ`);
+      else if (e.kind === "kissMark") out.push(`${e.floor}階 ${e.t}秒：口づけの印`);
+      else if (e.kind === "permit") out.push(`${e.floor}階 ${e.t}秒：絶頂許可制の契約`);
+      else if (e.kind === "swell") out.push(`${e.floor}階 ${e.t}秒：肥大化（${who}）`);
+      else if (e.kind === "miniClimax") out.push(`${e.floor}階 ${e.t}秒：閾下の絶頂反応（${who}）`);
+      else if (e.kind === "mock") { if (!out.some(l => l.includes(who + "による罵倒"))) out.push(`${e.floor}階 ${e.t}秒：${who}による罵倒`); }
+      else if (e.kind === "tipTease") out.push(`${e.floor}階 ${e.t}秒：${who}による先端のみの刺激`);
     }
     if (rec.night && rec.night.length) {
       rec.night.forEach((b, i) => out.push(`夜 ${i + 1}：${b.monName || "何か"}${b.climax ? "・絶頂" : ""}`));

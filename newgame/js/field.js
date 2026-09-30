@@ -50,7 +50,7 @@ var G = (typeof G !== "undefined") ? G : {};
       wantDown: false, stuckT: 0, lastX: map.up.x, lastY: map.up.y, cast: null, dashT: 0, react: {}, dashed: {},
       strafe: 1, strafeT: 0, search: null, glance: null, idleT: 0, kb: 0, kbA: 0, brakeT: 0, spPrev: 0, goal: null, state: "explore",
     });
-    Object.assign(h, { freeze: 0, sniff: 0, salute: 0, drawn: null, deny: null, altar: null });
+    Object.assign(h, { freeze: 0, sniff: 0, salute: 0, pray: 0, countGame: null, drawn: null, deny: null, altar: null });
     map.seen = new Uint8Array(map.W * map.H);
     populate(w);
     msg(w, "floor", { floor: floorNo, dg: run.dungeonName || dg.name });
@@ -62,6 +62,12 @@ var G = (typeof G !== "undefined") ? G : {};
     if (law === "eibin") h.sens = Math.min(5, (h.sens || 0) + 1);
     if (law === "hakudatsu" && floorNo >= 2 && !h.exposure) { h.exposure = true; record(w, { kind: "exposure", sev: 2, monName: G.LAWS.hakudatsu.name }); msg(w, "strip", {}); }
     if (law === "kokuin" && floorNo === 1) engraveSigil(w, 1, { kind: "kokuin", d: { name: G.LAWS.kokuin.name } });
+    // 変生：神殿に入った時／雄化の法則／定着してしまった身体
+    if (floorNo === 1 && !h.futa && (dg.futa || law === "yuuka" || (run.save && run.save.futaFixed))) {
+      h.futa = true; h.cum = h.cum || 0; record(w, { kind: "futaOn", type: "蕩", sev: 2 });
+      const L = G.Text.scene("futaOn", { run, h, n: heroName(w) }) || [];
+      if (w.scene) w.scene.lines = w.scene.lines.concat(L); else w.scene = { key: "futaOn", lines: L, mon: null };   // 法則の場面があれば、続けて読ませる
+    }
     // 誓い（おあずけ）は、階を出た瞬間に全部返ってくる
     if (h.omazuke && h.omazuke.floor && h.omazuke.floor < floorNo) {
       const o = h.omazuke; h.omazuke = null;
@@ -79,7 +85,8 @@ var G = (typeof G !== "undefined") ? G : {};
     const scale = [0, 0.75, 1, 1.4][real.scale || 2];
     const nMon = Math.round((3 + Math.floor(f / 2.5) + (U.chance(0.5) ? 1 : 0)) * scale);
     for (let i = 0; i < nMon; i++) {
-      const id = real.main && U.chance(real.species ? 0.7 : 0.45) ? real.main : U.pick(pool), p = M.randomFloor(map, far);
+      let id = real.main && U.chance(real.species ? 0.7 : 0.45) ? real.main : U.pick(pool); const p = M.randomFloor(map, far);
+      if (G.MONSTERS[id].deep && f < G.MONSTERS[id].deep) id = U.pick(dg.fixed.filter(k => !G.MONSTERS[k].deep) );   // 深い階にしか出ない魔物（教祖など）
       if (p) spawnMonster(w, id, p.x, p.y, false);
     }
     // 長（ボス）：最下層の転移陣の手前に
@@ -153,7 +160,7 @@ var G = (typeof G !== "undefined") ? G : {};
   function spawnMonster(w, id, x, y, summoned) {
     const d = G.MONSTERS[id];
     const lv = LV[(w.run.real && w.run.real.level) || 2];
-    const n = d.pair ? 2 : (d.pack && summoned) ? d.pack : 1;
+    const n = d.trio ? 3 : d.pair ? 2 : (d.pack && summoned) ? d.pack : 1;
     let last = null;
     for (let k = 0; k < n; k++) {
       let px = x, py = y;
@@ -212,18 +219,22 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   /* ---- 状態の小道具 ---- */
   const MACHINE = ["ratchet", "karte", "exam", "capture", "pod", "drone_capture", "drone_tickle", "belt", "gate", "armor", "saddle"];
-  const IMPS = ["imp", "futago", "inma", "muma_queen"];
+  const IMPS = ["imp", "futago", "inma", "muma_queen", "jikkyou", "kusuguri", "kazoe", "azakeri", "kuchizuke", "sakiimp"];
   function trait(w, id) { return ((w.run.save && w.run.save.traits) || {})[id] || 0; }
   // 快感の入り：堕ちの段階・敏感化・ハイ・その場面に噛み合った性癖
   function intake(w, src) {
     const h = w.run.h, b = h.bound;
-    let k = tierFx(w).pleasure * (1 + 0.07 * (h.sens || 0)) * (h.high > 0 ? 1.3 : 1);
+    let k = tierFx(w).pleasure * (1 + 0.07 * (h.sens || 0)) * (h.high > 0 ? 1.3 : 1) * (1 + 0.08 * (h.swell || 0));
     const amp = id => { k *= 1 + 0.12 * trait(w, id); };
     if (b) { amp("bindhabit"); if (b.by.length >= 2 || h.surrounded) amp("loser"); if (b.type === "蕩") amp("engulfCalm"); if (b.tickle) amp("ticklish"); if (b.src && MACHINE.includes(b.src.kind)) amp("rhythmSub"); }
     if (h.watched > 0) amp("publicHeat");
     if (h.deny || h.omazuke || w.run.law === "kinzetsu" || (b && b.edge)) amp("edgeweak");
     if (h.sigil) amp("sigilJoy");
-    if (src && IMPS.includes(src.kind)) amp("impLove");
+    if (src && IMPS.includes(src.kind)) { amp("impLove"); if (h.impSweet) k *= 1.2; }
+    if (h.attach && h.attach.some(a => a === "mushi" || a === "hibiki" || a === "hiru")) amp("wormCalm");
+    if (h.futa) amp("shasei");
+    if (h.pray > 0) amp("prayer");
+    if (b && b.kiss) amp("kissHabit");
     return k;
   }
   // 抜け出す手際：同じ責めへの慣れ（性癖は戦力を減らさない）
@@ -238,7 +249,7 @@ var G = (typeof G !== "undefined") ? G : {};
     return k;
   }
   // 達するのを禁じられている（絶頂禁止・おあずけ・禁絶の法則）：溜まった分は取っておく
-  function capped(w) { const h = w.run.h; return (h.deny && h.deny.t > 0) || !!h.omazuke || w.run.law === "kinzetsu"; }
+  function capped(w) { const h = w.run.h; return (h.deny && h.deny.t > 0) || !!h.omazuke || !!h.permit || w.run.law === "kinzetsu"; }
   // 溜まった分を一度に返す：まとめて何度も
   function releaseOverflow(w, amount, src, why) {
     const h = w.run.h;
@@ -266,17 +277,67 @@ var G = (typeof G !== "undefined") ? G : {};
     suit:      { name: "纏い衣", power: 0.8, flash: false, blind: true },   // 本人は「良い装備」だと思っている
     hoshibami: { name: "星喰み", power: 0.9, flash: true },
     sucker:    { name: "吸盤",   power: 0.6, flash: true },
+    mushi:     { name: "潜り蟲", power: 0.8, flash: true },
+    hibiki:    { name: "響き蟲", power: 1.3, flash: true },
+    hiru:      { name: "肥大化ヒル", power: 0.9, flash: false, swell: true },
   };
   function addAttach(w, id, src) {
     const h = w.run.h, A = ATTACH[id];
     h.attach = h.attach || [];
     if (h.attach.length >= 4 || (id === "suit" && h.attach.includes("suit"))) return false;
     h.attach.push(id);
+    if (A.swell) { h.swell = Math.min(3, (h.swell || 0) + 1); record(w, { kind: "swell", type: "蕩", lv: h.swell, sev: 2, monName: A.name }); msg(w, "swell", { c: h.swell }); }
     record(w, { kind: "attach", type: "蕩", att: id, attName: A.name, mon: src && src.kind, monName: src && src.d ? src.d.name : A.name, sev: A.blind ? 3 : 2, blind: !!A.blind, hidden: !!A.blind });
     msg(w, A.blind ? "suitOn" : "attach", { att: A.name });
     say(w, A.blind ? "suitOn" : "attach", { att: A.name });
     fx(w, { kind: "ring", x: h.x, y: h.y, color: "#ff9ad0", r: 0.5, life: 0.6 });
     return true;
+  }
+  // 変生（ふたなり）：生えた部位に溜まる射精感。100で射精。締環があれば溜まる一方
+  function addCum(w, n, src) {
+    const h = w.run.h;
+    if (!h.futa || w.outcome) return;
+    h.cum = (h.cum || 0) + n * intake(w, src);
+    if (h.ring && h.cum >= 95) { h.ring.over += h.cum - 94; h.cum = 94; if (w.t - (h.ringT ?? -99) > 5) { h.ringT = w.t; msg(w, "ringFull", {}); say(w, "ringFull", {}); record(w, { kind: "edge", type: "蕩", sev: 2, monName: "締環" }); } return; }
+    if (h.tipTease > 0 && h.cum >= 92) { h.cum = 92; return; }          // 先だけ撫でられている間は、行き着かない
+    while (h.cum >= 100) {
+      h.cum -= 88; h.shasei = (h.shasei || 0) + 1; h.will = Math.max(0, h.will - 5); h.arousal = Math.min(100, h.arousal + 8);
+      record(w, { kind: "shasei", type: "蕩", mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: 3, n: h.shasei });
+      msg(w, "shasei", { c: h.shasei }); say(w, "shasei", {}); fx(w, { kind: "burst", x: h.x, y: h.y, color: "#fff4fa", life: 0.8 });
+      if (h.shasei === 1 && !w.run.seenShasei) { w.run.seenShasei = true; openScene(w, "firstShasei", src); }
+      if (h.countAltar && (w.run.save.futaMarks || 0) < 12) {   // 数取りの升が、一つ埋まる。升は減らない（十二で満ちる）
+        const sv = w.run.save; sv.futaMarks = (sv.futaMarks || 0) + 1;
+        msg(w, "countMark", { c: sv.futaMarks }); record(w, { kind: "countMark", sev: 2, n: sv.futaMarks });
+        if (sv.futaMarks >= 12 && !sv.futaFixed) { sv.futaFixed = true; record(w, { kind: "futaFixed", sev: 3 }); openScene(w, "futaFixed", null); }
+      }
+    }
+  }
+  // 心のヒビ（教団）：防護壁に入ったヒビは、日をまたいで残り、少しずつ広がる
+  function addCrack(w, n, src) {
+    const h = w.run.h;
+    const before = h.crack || 0; h.crack = Math.min(10, before + n);
+    if (h.crack === before) return;
+    record(w, { kind: "crack", type: "惑", lv: h.crack, mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: h.crack >= 5 ? 3 : 2 });
+    msg(w, "crack", { c: h.crack }); if (h.crack === 1 || h.crack % 3 === 0) say(w, "crack", {});
+  }
+  // 祈り（教団）：教祖に惹かれた身体が、腰を揺らして祈ってしまう。祈りは魔力を吸い、甘い
+  function pray(w, src, t) {
+    const h = w.run.h;
+    h.pray = t; h.intent = null;
+    h.pleasure += 8 * intake(w, src); drainMagic(w, 3, src);
+    record(w, { kind: "pray", type: "惑", mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: 2 });
+    msg(w, "pray", {}); say(w, "pray", {});
+    checkClimax(w, src);
+  }
+  // 口づけ：口づけの印が残ると、次からは口づけだけで好きになる
+  function kiss(w, m) {
+    const h = w.run.h;
+    h.kissN = (h.kissN || 0) + 1;
+    record(w, { kind: "kiss", type: "惑", mon: m.kind, monName: m.d.name, sev: 2 });
+    msg(w, "kiss", { mon: m.d.name }); say(w, "kiss", {});
+    h.pleasure += 10 * intake(w, m); h.will = Math.max(0, h.will - 4);
+    if (h.kissMark) addCharm(w, m, 3);
+    else if (h.kissN >= 2) { h.kissMark = true; record(w, { kind: "kissMark", type: "惑", sev: 3, monName: m.d.name }); msg(w, "kissMark", {}); openScene(w, "kissMark", m); }
   }
   // 洗脳（ワルドー）：100で戦闘員化。最初の二度はプラムの光が引き戻す
   function addBrain(w, n, src) {
@@ -305,6 +366,7 @@ var G = (typeof G !== "undefined") ? G : {};
     let k = G.HIKARI.resist[h.form][type] || 1;
     if (prep) k *= (prep.guard[type] || 1) * (prep.side[type] || 1);
     if (type === "蕩" && h.sigil) k *= 1 + 0.15 * h.sigil;       // 淫紋：刻まれた分だけ、熱が入りやすい
+    if (type === "惑" && h.crack) k *= 1 + 0.05 * h.crack;      // 心のヒビ：防護壁の割れた分だけ、惑が通る
     return k;
   }
   function tierFx(w) { return TIER_FX[G.tier(w.run.save.body, w.run.save.mind)]; }
@@ -384,6 +446,7 @@ var G = (typeof G !== "undefined") ? G : {};
     } else if (type === "蕩") {
       h.arousal = Math.min(100, h.arousal + 15 * power * k);
       h.pleasure += 5 * power * k * (1 + h.arousal / 100) * intake(w, src);
+      if (h.futa) addCum(w, 3.5 * power * k, src);
       h.slow = Math.max(h.slow, 4 * power);
       record(w, { kind: "arouse", type, mon: src && src.kind, monName: name, sev });
       fx(w, { kind: "ring", x: h.x, y: h.y, color: "#ff8ab8", life: 0.8 });
@@ -422,13 +485,22 @@ var G = (typeof G !== "undefined") ? G : {};
     if (!forced && h.pleasure >= 96 && capped(w)) {        // 栓をされている：あと少しで止まり、溢れた分が溜まる
       const over = h.pleasure - 95;
       h.pleasure = 95;
-      const box = h.deny && h.deny.t > 0 ? h.deny : h.omazuke || (h.kinOver = h.kinOver || { over: 0 });
+      const box = h.deny && h.deny.t > 0 ? h.deny : h.omazuke || h.permit || (h.kinOver = h.kinOver || { over: 0 });
       box.over = (box.over || 0) + over;
-      if (w.t - (h.edgeT ?? -99) > 4) { h.edgeT = w.t; record(w, { kind: "edge", type: "蕩", sev: 2, mon: src && src.kind, monName: src && src.d ? src.d.name : "" }); msg(w, "edgeCap", {}); say(w, "edgeCap", {}); }
+      if (w.t - (h.edgeT ?? -99) > 4) {
+        h.edgeT = w.t; record(w, { kind: "edge", type: "蕩", sev: 2, mon: src && src.kind, monName: src && src.d ? src.d.name : "" }); msg(w, "edgeCap", {}); say(w, "edgeCap", {});
+        // 絶頂許可制：三度止められると、許しを乞うてしまう。乞えば、許しが出る
+        if (box === h.permit && ++h.permit.edges >= 3) {
+          const o = h.permit.over; h.permit = null;
+          record(w, { kind: "beg", type: "惑", mon: "keiyaku", monName: "淫魔の契約", sev: 3 }); openScene(w, "permitBeg", null);
+          releaseOverflow(w, o + 50, { kind: "keiyaku", d: { name: "淫魔の契約", type: "惑" } }, "permit");
+        }
+      }
       return;
     }
     if (h.pleasure < 100) return;
-    h.pleasure = 22 + 8 * trait(w, "squirthabit"); h.climax++;
+    h.pleasure = 22 + 8 * trait(w, "squirthabit"); h.climax++; h.lastClimaxT = w.t;
+    if (h.futa) addCum(w, 30, src);
     h.will = Math.max(0, h.will - 12);
     h.trance = Math.max(h.trance, 1.6);
     const e = record(w, { kind: "climax", type: src && src.d ? src.d.type : "蕩", mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: 3, bound: !!h.bound });
@@ -474,7 +546,21 @@ var G = (typeof G !== "undefined") ? G : {};
   function tickStatus(w, dt) {
     const h = w.run.h;
     if (w.outcome) return;
-    for (const k of ["numb", "high", "ache", "freeze", "sniff", "salute"]) if (h[k] > 0) h[k] = Math.max(0, h[k] - dt);
+    for (const k of ["numb", "high", "ache", "freeze", "sniff", "salute", "pray", "tipTease"]) if (h[k] > 0) h[k] = Math.max(0, h[k] - dt);
+    if (h.pray > 0) { h.pleasure += 3 * intake(w) * dt; h.vx = h.vy = 0; }
+    // 数え歌：十数えるあいだに声が漏れたら負け。負けても勝っても、寸前で置き去り
+    if (h.countGame) {
+      const g = h.countGame; g.t -= dt;
+      const n = Math.min(10, Math.floor(10 - g.t) + 1); if (n > g.n) { g.n = n; if (n > 1) msg(w, "countTick", { c: n }); }
+      if (!g.lost && (h.pleasure - g.p0 > 16 || h.climax > g.c0)) { g.lost = true; msg(w, "countLose", { mon: g.monName }); say(w, "countLose", {}); }
+      if (g.t <= 0) {
+        h.countGame = null;
+        record(w, { kind: "countGame", type: "惑", mon: g.mon, monName: g.monName, lost: g.lost, sev: g.lost ? 3 : 2 });
+        h.pleasure = Math.max(h.pleasure, 93);
+        h.deny = { t: g.lost ? 12 : 5, over: (h.deny && h.deny.over) || 0, mon: g.mon, monName: g.monName };
+        openScene(w, g.lost ? "countLost" : "countWon", { kind: g.mon, d: G.MONSTERS[g.mon] });
+      }
+    }
     // 敏感化はゆっくり引く（翌日に残るのは過敏として）
     if (h.sens > (h.sensBase || 0)) { h.sensT = (h.sensT || 0) + dt; if (h.sensT > 35) { h.sensT = 0; h.sens--; } }
     // 疼き：熱が引かない
@@ -525,6 +611,9 @@ var G = (typeof G !== "undefined") ? G : {};
       if (A.develop) Object.assign(h.bound, { develop: true, slowStruggle: 0.7 });
       if (A.brief) h.bound.brief = A.brief;
       if (A.sens) h.sens = Math.min(5, (h.sens || 0) + A.sens);
+      if (A.futaSuck) h.bound.futaSuck = A.futaSuck;
+      if (A.mud) { h.slow = Math.max(h.slow, 4); h.bound.slowStruggle = 0.75; }
+      if (A.kiss) { h.bound.kiss = true; kiss(w, src); }
     }
     h.cast = null; h.vx = h.vy = 0;
     const e = record(w, { kind: "hold", type: type || "絡", mon: src.kind, monName: src.d.name, sev: 2 });
@@ -592,6 +681,13 @@ var G = (typeof G !== "undefined") ? G : {};
     // 影腕：時とともに腕が増える
     if (b.shadow) { b.shadow.t += dt; if (b.shadow.t > 1.8 && b.shadow.arms < 8) { b.shadow.t = 0; b.shadow.arms += 2; b.power += 0.12; msg(w, "shadowArms", { c: b.shadow.arms }, 1); } }
     checkClimax(w, b.src);
+    // 変生した部位を吸われる
+    if (b.futaSuck) { if (h.futa) addCum(w, b.futaSuck * dt, b.src); else h.pleasure += b.futaSuck * 0.4 * intake(w, b.src) * dt; if (U.chance(dt * 0.3)) msg(w, h.futa ? "futaSuck" : "struggle", {}, 4); }
+    // 浄化の台：放っておかれる。求めなければ、与えられない
+    if (b.begAfter && b.t > b.begAfter) {
+      const src = b.src; record(w, { kind: "beg", type: "惑", mon: src.kind, monName: src.d ? src.d.name : "", sev: 3 }); openScene(w, "joukaBeg", src);
+      release(w, false); releaseOverflow(w, 60, src, "jouka"); return;
+    }
     // くすぐり：笑いを堪えるうちに気力が削れる
     if (b.tickle) { h.will = Math.max(0, h.will - 1.2 * dt); if (U.chance(dt * 0.5)) msg(w, "tickle", {}, 3); }
     // 開発：捕まっている間、少しずつ敏感にされる。装束も剥がされる
@@ -694,7 +790,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (m.cast.kind === "grab") return U.dist(m.x, m.y, p.x, p.y) <= (A.range || 1) + 0.25 + margin;
     if (m.cast.kind === "grab2") return U.dist(m.x, m.y, p.x, p.y) <= (A.alsoGrab || 1) + 0.25 + margin;
     if (m.cast.kind === "attach") return U.dist(m.x, m.y, p.x, p.y) <= (A.range || 1) + 0.25 + margin;
-    if (m.cast.kind === "deny" || m.cast.kind === "omazuke") return U.dist(m.x, m.y, p.x, p.y) <= A.range + margin;
+    if (m.cast.kind === "deny" || m.cast.kind === "omazuke" || m.cast.kind === "count") return U.dist(m.x, m.y, p.x, p.y) <= A.range + margin;
     if (m.cast.kind === "possess") return U.dist(m.x, m.y, p.x, p.y) <= (A.range || 1) + 0.25 + margin;
     if (m.cast.kind === "lure") return U.dist(m.x, m.y, p.x, p.y) <= A.range + margin;
     if (m.cast.kind === "pounce") {            // 飛びかかる線の上
@@ -993,7 +1089,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const downSeen = map.seen[Math.floor(map.down.y) * map.W + Math.floor(map.down.x)];
     const mimic = w.monsters.find(m => m.d.chest && m.hp > 0 && m.hidden && map.seen[Math.floor(m.y) * map.W + Math.floor(m.x)]);
     const chest = w.chests.find(c => !c.open && map.seen[Math.floor(c.y) * map.W + Math.floor(c.x)]);
-    const box = w.traps.find(tr => (tr.kind === "toybox" || tr.kind === "suit") && tr.armed && map.seen[Math.floor(tr.y) * map.W + Math.floor(tr.x)]);
+    const box = w.traps.find(tr => ["toybox", "suit", "maseki", "seisui", "keiyaku", "feather_bed"].includes(tr.kind) && tr.armed && map.seen[Math.floor(tr.y) * map.W + Math.floor(tr.x)]);
     const tgtChest = mimic || chest || box;
     // 中毒：茸を見ると寄っていってしまう／魅了Ⅱ以上：その種の方へ
     if (!h.drawn && U.chance(0.04)) {
@@ -1114,6 +1210,10 @@ var G = (typeof G !== "undefined") ? G : {};
     m.hp -= dmg; m.flash = 0.2; m.rcl = 0.26; m.rclX = Math.sign(m.x - w.run.h.x) || 1;
     alertMon(w, m, 1);
     fx(w, { kind: "hit", x: m.x, y: m.y, color: "#fff6c8", life: 0.3 });
+    if (m.d.swarmOnHit && U.chance(m.d.swarmOnHit) && w.monsters.filter(o => o.hp > 0 && o.kind === m.kind).length < 8) {   // 撃つたび壁が鳴って、群れが増える
+      const p = M.randomFloor(w.map, (x, y) => U.dist(x, y, m.x, m.y) < 3 && U.dist(x, y, m.x, m.y) > 1);
+      if (p) { const o = spawnMonster(w, m.kind, p.x, p.y, false); o.alert = 6; msg(w, "swarm", { mon: m.d.name }, 3); }
+    }
     if (m.hp <= 0) { killMon(w, m); return; }
     msg(w, "dmg", { mon: m.d.name, n: Math.round(before - m.hp) }, 0.4);
     if (m.d.flee && m.hp < m.maxHp * 0.5) m.flee = 3;
@@ -1167,9 +1267,9 @@ var G = (typeof G !== "undefined") ? G : {};
       h.arousal = Math.min(100, h.arousal + 1.5 * dt);
       if (h.convey.saddle) { h.pleasure += 7 * intake(w) * dt; if (U.chance(dt * 0.6)) msg(w, "saddleRide", {}, 3); checkClimax(w, { d: { name: "鞍の渡り", type: "蕩" }, kind: "saddle" }); }
       if (h.convey.t <= 0 || U.dist(h.x, h.y, h.convey.x, h.convey.y) < 0.4) h.convey = null;
-    } else if (h.freeze > 0 || h.sniff > 0 || h.salute > 0) {   // 止まった時間／嗅いでしまう／敬礼してしまう
+    } else if (h.freeze > 0 || h.sniff > 0 || h.salute > 0 || h.pray > 0) {   // 止まった時間／嗅いでしまう／敬礼してしまう／祈ってしまう
       h.intent = null; h.vx *= 0.5; h.vy *= 0.5;
-      h.label = h.freeze > 0 ? "静止" : h.sniff > 0 ? "嗅いでしまう" : "敬礼";
+      h.label = h.freeze > 0 ? "静止" : h.sniff > 0 ? "嗅いでしまう" : h.pray > 0 ? "祈り" : "敬礼";
     } else if (h.drawn) {                           // 肉花の息に、ふらりと寄ってしまう
       h.drawn.t -= dt;
       const a = U.angle(h.x, h.y, h.drawn.x, h.drawn.y);
@@ -1287,7 +1387,7 @@ var G = (typeof G !== "undefined") ? G : {};
       const cap = w.monsters.filter(o => o.alert && o.hp > 0).length >= 3 ? 2 : 1;
       const can = m.cd <= 0 && castingCount(w, m) < cap && (!h.bound || A.kind === "grab");
       const inRange = dist <= (A.range || 1) + (A.kind === "grab" ? 0.25 : 0);
-      if (can && (A.kind === "grab" || A.kind === "shot" || A.kind === "lure" || (A.kind === "possess" && !h.possess) || A.kind === "deny" || A.kind === "omazuke" || A.kind === "attach") && inRange && M.los(w.map, m.x, m.y, h.x, h.y)) startCast(w, m, A.kind);
+      if (can && (A.kind === "grab" || A.kind === "shot" || A.kind === "lure" || (A.kind === "possess" && !h.possess) || A.kind === "deny" || A.kind === "omazuke" || A.kind === "attach" || (A.kind === "count" && !h.countGame)) && inRange && M.los(w.map, m.x, m.y, h.x, h.y)) startCast(w, m, A.kind);
       else if (can && A.alsoGrab && dist <= A.alsoGrab) startCast(w, m, "grab2");
       else if (can && A.kind === "grab" && d.spd > 0 && !h.bound && dist > (A.range || 1) + 0.4 && dist < 3.6 && M.los(w.map, m.x, m.y, h.x, h.y) && m.pounceCd <= 0) { startCast(w, m, "pounce"); m.pounceCd = U.rf(5, 9); }
       else if (d.spd > 0) {
@@ -1318,7 +1418,7 @@ var G = (typeof G !== "undefined") ? G : {};
     // 近くにいるだけで効くもの
     if (A.kind === "aura" && dist <= A.range && !w.outcome) {
       m.auraT = (m.auraT || 0) + dt;
-      if (A.gaze) { if (monSees(w, m)) { h.arousal = Math.min(100, h.arousal + 1.6 * A.power * mult(w, "惑") * dt); h.watched = 0.4; msg(w, "watched", { mon: d.name }, 8); } }
+      if (A.gaze && !A.gazeCharm) { if (monSees(w, m)) { h.arousal = Math.min(100, h.arousal + 1.6 * A.power * mult(w, "惑") * dt); h.watched = 0.4; msg(w, "watched", { mon: d.name }, 8); } }
       else if (A.burst) { if (dist < 0.9) { applyEffect(w, d.type, A.power * m.pow, m); m.hp = 0; if (m.summoned) w.dir.live = Math.max(0, w.dir.live - 1); msg(w, "pop", { mon: d.name }); fx(w, { kind: "pop", x: m.x, y: m.y, color: "#f6ffd8", life: 0.6 }); } }
       else if (m.auraT > 1.1) {
         m.auraT = 0;
@@ -1337,6 +1437,24 @@ var G = (typeof G !== "undefined") ? G : {};
           h.high = 6; h.sporeN = (h.sporeN || 0) + 1;
           msg(w, "spore", { mon: d.name }, 4);
           if (h.sporeN >= 3 && !h.addict) { h.addict = true; record(w, { kind: "addict", sev: 2, mon: m.kind, monName: d.name }); msg(w, "addict", {}); say(w, "addict", {}); }
+        } else if (A.tipTease) {                   // 先嬲り：先だけ。行き着かない
+          if (h.futa) { h.tipTease = 1.3; addCum(w, 7, m); msg(w, "tipTease", { mon: d.name }, 5); if (w.t - (h.tipT ?? -99) > 8) { h.tipT = w.t; record(w, { kind: "tipTease", type: "蕩", mon: m.kind, monName: d.name, sev: 2 }); say(w, "tipTease", {}); } } else applyEffect(w, "蕩", A.power * 0.5, m);
+        } else if (A.sermon) {                     // 説法：聞くほど、心の壁が薄くなる
+          applyEffect(w, "惑", A.power * m.pow * 0.45, m); msg(w, "sermon", { mon: d.name }, 6);
+          m.sermonN = (m.sermonN || 0) + 1; if (m.sermonN % 7 === 0 && h.will < 70) addCrack(w, 1, m);
+        } else if (A.broadcast) {                  // 実況：捕まった姿、達した瞬間を中継する
+          if (h.bound || h.freeze > 0 || w.t - (h.lastClimaxT ?? -99) < 3) {
+            h.watched = 1.2; h.will = Math.max(0, h.will - 3); h.pleasure += 3 * intake(w, m);
+            if (w.t - (h.bcastT ?? -99) > 7) { h.bcastT = w.t; record(w, { kind: "broadcast", type: "惑", mon: m.kind, monName: d.name, sev: 3 }); msg(w, "broadcast", { mon: d.name }); say(w, "broadcast", {}); }
+          } else msg(w, "bcastIdle", { mon: d.name }, 10);
+        } else if (A.mock) {                       // 嘲り：捕まっている姿を罵る。罵られるほど、なぜか好きになる
+          if (h.bound) { h.will = Math.max(0, h.will - 3); msg(w, "mock", { mon: d.name }, 5); record(w, { kind: "mock", type: "惑", mon: m.kind, monName: d.name, sev: 2 }); if (U.chance(0.3)) addCharm(w, m, 10); }
+        } else if (A.gazeCharm) {                  // 教祖：見つめられるほど惹かれる。惹かれていると、祈ってしまう
+          if (monSees(w, m)) {
+            applyEffect(w, "惑", A.power * m.pow * 0.4, m); h.watched = 1;
+            m.gazeN = (m.gazeN || 0) + 1; if (m.gazeN % 3 === 0) addCharm(w, m, 6);
+            if ((h.charm && h.charm[m.kind] || 0) >= 2 && h.arousal >= 35 && !(h.pray > 0) && !h.bound) pray(w, m, 2.6);
+          }
         } else applyEffect(w, d.type, A.power * m.pow * 0.55 * (A.gaze && w.run.law === "shumoku" ? 1.6 : 1), m);
       }
     }
@@ -1446,6 +1564,11 @@ var G = (typeof G !== "undefined") ? G : {};
           releaseOverflow(w, over + 60, m, "queen");
         }
       }
+    } else if (c.kind === "count") {            // 数え歌：十数えるあいだ、声を出したら負け
+      if (dist <= A.range && !w.outcome && !h.countGame) {
+        h.countGame = { t: 10, p0: h.pleasure, c0: h.climax, mon: m.kind, monName: m.d.name, n: 0 };
+        record(w, { kind: "countStart", type: "惑", mon: m.kind, monName: m.d.name, sev: 1 }); msg(w, "countStart", { mon: m.d.name }); openScene(w, "countStart", m);
+      }
     } else if (c.kind === "attach") {           // 星喰み：服の中へ滑り込んで貼りつく
       if (dist <= (A.range || 1) + 0.3 && !w.outcome && addAttach(w, A.as, m)) { m.hp = 0; if (m.summoned) w.dir.live = Math.max(0, w.dir.live - 1); }
       else msg(w, "miss", { mon: m.d.name }, 1);
@@ -1480,6 +1603,13 @@ var G = (typeof G !== "undefined") ? G : {};
     aphro:   { every: 2.0, n: 6, color: "#ff9ad0", msg: "aphroPulse", fn(w, tr, src) { const h = w.run.h; applyEffect(w, "蕩", 0.3, src); if (tr.pulses % 2 === 0) h.sens = Math.min(5, (h.sens || 0) + 1); } },
     hray:    { every: 2.8, n: 5, color: "#9fb8ff", msg: "hrayPulse", fn(w, tr, src) { const h = w.run.h; applyEffect(w, "惑", 0.6, src); addBrain(w, 10, src); if (h.trance > 0 && !h.bound) h.lureTo = { x: tr.x, y: tr.y }; } },
     furnace: { every: 1.5, n: 8, color: "#8ff0ff", msg: "furnacePulse", fn(w, tr, src) { const h = w.run.h; drainMagic(w, 6 * mult(w, "削"), src); h.mp = Math.max(0, h.mp - 3); h.pleasure += 4 * intake(w) * (1 + 0.15 * trait(w, "drainBliss")); record(w, { kind: "drain", type: "削", mon: "furnace", monName: tr.d.name, sev: 1 }); checkClimax(w, src); } },
+    hive:    { every: 3.0, n: 5, color: "#b8ffd8", msg: "hivePulse", fn(w, tr, src) { if (w.monsters.filter(m => m.hp > 0 && m.kind === "hibiki").length < 7) { const p = M.randomFloor(w.map, (x, y) => U.dist(x, y, tr.x, tr.y) < 2.5); if (p) { const m = spawnMonster(w, "hibiki", p.x, p.y, false); m.alert = 6; } } } },
+    lips:    { every: 2.0, n: 6, color: "#ff9ad0", msg: "lipsPulse", fn(w, tr, src) { const h = w.run.h; applyEffect(w, "蕩", 0.3, src); addCum(w, 6, src); h.kissN = (h.kissN || 0) + (U.chance(0.25) ? 1 : 0); } },
+    yurugi:  { every: 2.6, n: 6, color: "#e8b0a0", msg: "yurugiPulse", fn(w, tr, src) { applyEffect(w, "惑", 0.35, src); if (tr.pulses % 3 === 0) addCrack(w, 1, src); } },
+    kaikou:  { every: 3.4, n: 4, color: "#ffe27a", msg: "kaikouPulse", fn(w, tr, src) { const h = w.run.h;   // 防いでも、ヒビから入った分が「絶頂にも満たない絶頂」になる
+      if ((h.crack || 0) >= 4 && U.chance(0.1 * h.crack)) { h.pleasure = 100; checkClimax(w, src); }
+      else { h.pleasure = Math.max(h.pleasure, 90); h.ache = Math.max(h.ache || 0, 25); record(w, { kind: "miniClimax", type: "蕩", sev: 2, monName: tr.d.name }); msg(w, "miniClimax", {}); } } },
+    kouro:   { every: 2.6, n: 5, color: "#e0a0ff", msg: "kouroPulse", fn(w, tr, src) { const h = w.run.h; applyEffect(w, "惑", 0.3, src); h.impSweet = true; const imp = w.monsters.find(m => m.hp > 0 && IMPS.includes(m.kind) && U.dist(m.x, m.y, h.x, h.y) < 8); if (imp && U.chance(0.35)) addCharm(w, imp, 10); } },
   };
   function updateTower(w, tr, dt) {
     const h = w.run.h;
@@ -1583,6 +1713,23 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     else if (e === "web") { grab(w, src, 0.75, "絡"); }
     else if (e === "rune") { engraveSigil(w, 1, src); }
+    // ---- 蟲 ----
+    else if (e === "mushiPit") { h.glue = 2.2; h.cast = null; addAttach(w, "mushi", src); addAttach(w, "mushi", src); say(w, "mushiPit", {}); ev.sev = 2; }
+    // ---- 変生の神殿 ----
+    else if (e === "ring") { if (h.futa && !h.ring) { h.ring = { over: 0 }; record(w, { kind: "ring", type: "蕩", sev: 2, monName: tr.d.name }); msg(w, "ringOn", {}); openScene(w, "ring", src); } else applyEffect(w, "蕩", 0.4, src); ev.sev = 2; }
+    else if (e === "gauze") { if (grab(w, src, 0.9, "蕩")) { Object.assign(h.bound, { futaSuck: 16, slowStruggle: 0.7, sceneShown: true }); openScene(w, "gauze", src); } ev.sev = 2; }
+    else if (e === "temari") { applyEffect(w, "蕩", 0.4, src); addCum(w, 22, src); say(w, "temari", {}); }
+    else if (e === "count") { if (!h.countAltar) { h.countAltar = true; record(w, { kind: "countAltar", sev: 2, monName: tr.d.name }); openScene(w, "countAltar", src); } ev.sev = 2; }
+    else if (e === "feather") { if (grab(w, src, 0.6, "蕩")) Object.assign(h.bound, { tickle: true, futaSuck: 8, brief: 6 }); openScene(w, "feather", src); ev.sev = 2; }
+    else if (e === "nama") { if (grab(w, src, 0.9, "蕩")) { Object.assign(h.bound, { edge: true, futaSuck: 10, sceneShown: true }); h.tipTease = 99; openScene(w, "nama", src); } ev.sev = 2; }
+    else if (e === "suikan") { if (grab(w, src, 1.0, "蕩")) { Object.assign(h.bound, { futaSuck: 20, slowStruggle: 0.6, sceneShown: true }); openScene(w, "suikan", src); } ev.sev = 2; }
+    // ---- 教団 ----
+    else if (e === "shashin") { addCharm(w, { kind: "kyouso", d: G.MONSTERS.kyouso }, 2); pray(w, src, 3.2); if ((h.charm.kyouso || 0) >= 2) addCrack(w, 1, src); openScene(w, "shashin", src); ev.sev = 2; }
+    else if (e === "maseki") { drainMagic(w, 14 * mult(w, "削"), src); h.pleasure += 18 * intake(w); record(w, { kind: "drain", type: "削", mon: "maseki", monName: tr.d.name, sev: 2 }); say(w, "maseki", {}); checkClimax(w, src); ev.sev = 2; }
+    else if (e === "seisui") { h.arousal = Math.min(100, h.arousal + 30); h.sens = Math.min(5, (h.sens || 0) + 1); applyEffect(w, "蕩", 0.8, src); say(w, "seisui", {}); ev.sev = 2; }
+    else if (e === "jouka") { if (grab(w, src, 0.7, "蕩")) { Object.assign(h.bound, { edge: true, begAfter: 7, slowStruggle: 0.4, sceneShown: true }); h.ache = Math.max(h.ache || 0, 20); openScene(w, "jouka", src); } ev.sev = 2; }
+    // ---- 淫魔の館 ----
+    else if (e === "keiyaku") { if (!h.permit) { h.permit = { over: 0, edges: 0 }; record(w, { kind: "permit", type: "惑", sev: 2, monName: tr.d.name }); msg(w, "permitOn", {}); openScene(w, "keiyaku", src); } ev.sev = 2; }
     else if (e === "basin") { drainMagic(w, 16 * mult(w, "削"), src); h.arousal = Math.max(0, h.arousal - 15); say(w, "basin", {}); ev.sev = 2; }
     if (rearm) { tr.armed = false; tr.rearm = tr.d.rearm; }
   }
@@ -1765,6 +1912,12 @@ var G = (typeof G !== "undefined") ? G : {};
     if (Math.floor(w.t) !== Math.floor(w.t - dt)) for (const k in h.react) if (w.t - h.react[k].at > 4) { delete h.react[k]; delete h.dashed[k]; }
     if (h.hp <= 0 && !w.outcome) defeat(w, h.bound ? h.bound.src : null);
     if (w.outcome === "down" || w.outcome === "cleared") msg(w, w.outcome === "cleared" ? "portal" : "down", {});
+    // 締環：出口で外れる。溜まっていた分が、一度に
+    if (h.ring && ["cleared", "retreat", "ordered"].includes(w.outcome) && !w.ringDone) {
+      w.ringDone = true; const over = h.ring.over; h.ring = null; const n = Math.min(4, 1 + Math.floor(over / 40));
+      h.cum = 0; h.shasei = (h.shasei || 0) + n; record(w, { kind: "ringRelease", type: "蕩", n, sev: 3 });
+      if (!w.scene) w.scene = { key: "ringRelease", lines: G.Text.scene("ringRelease", { run: w.run, h, n: heroName(w) }) || [], mon: null };
+    }
     // 禁絶の法則：門を出た瞬間に、溜めた分が全部返ってくる
     if (w.run.law === "kinzetsu" && ["cleared", "retreat", "ordered"].includes(w.outcome) && !w.kinDone) {
       w.kinDone = true; const over = (h.kinOver && h.kinOver.over) || 0; h.kinOver = null;
@@ -1805,6 +1958,15 @@ var G = (typeof G !== "undefined") ? G : {};
                : B.pillory ? "晒し台" : B.edge ? "焦らし" : B.wait ? "壁の環" : B.slowStruggle ? "採寸中" : "拘束", null, "pink");
     if (h.possess) add("憑き手（腕）", h.possess.t, "violet");
     if (h.freeze > 0) add("時間停止", h.freeze, "violet");
+    if (h.futa) add("変生 射精感" + Math.round(h.cum || 0) + "%" + (h.shasei ? "（" + h.shasei + "回）" : ""), null, "pink");
+    if (h.ring) add("締環（溜まっている " + Math.round(h.ring.over) + "）", null, "pink");
+    if (h.countAltar) add("数取り " + ((w.run.save && w.run.save.futaMarks) || 0) + "/12", null, "pink");
+    if (h.countGame) add("数え歌 " + Math.min(10, h.countGame.n) + (h.countGame.lost ? "（負け）" : ""), h.countGame.t, "violet");
+    if (h.permit) add("絶頂許可制", null, "pink");
+    if (h.kissMark) add("口づけの印", null, "pink");
+    if (h.swell) add("肥大化 " + h.swell, null, "pink");
+    if (h.crack) add("心のヒビ " + h.crack, null, "violet");
+    if (h.pray > 0) add("祈り", h.pray, "violet");
     if (h.deny) add(h.deny.queen ? "おあずけ（女王）" : "絶頂禁止", h.deny.t, "pink");
     if (h.omazuke) add("誓い：この階では達せない", null, "pink");
     if (w.run.law === "kinzetsu") add("禁絶：溜まっている " + Math.round((h.kinOver || {}).over || 0), null, "pink");

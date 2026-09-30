@@ -580,6 +580,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (la) { e.act = la.p; e.monName = e.monName || la.mon; actMsg(w, "climaxAct", { p: la.p, mon: la.mon }); if (h.bound.ev) h.bound.ev.climaxActs = (h.bound.ev.climaxActs || []).concat(la.p); }
     else msg(w, "climax", {});
     fx(w, { kind: "burst", x: h.x, y: h.y, color: "#ff9ccc", life: 1.0 });
+    fx(w, { kind: "sfx", text: U.pick(["びくんっ♡", "——っ♡", "びくびくっ", "ぷしゃっ"]), x: h.x, y: h.y - 1.5, life: 1.4, color: "#ff5fa0" });
     say(w, "climax", {});
     for (const m of w.monsters) if (m.hp > 0 && !m.alert && U.dist(m.x, m.y, h.x, h.y) < 7 && G.Text.actorOf(m.kind)) { alertMon(w, m, 0.8); m.lastSeenH = { x: h.x, y: h.y }; }   // 声が、迷宮に響く
     { const vm = w.monsters.filter(m => m.hp > 0 && G.Text.hasVoice(m.kind) && U.dist(m.x, m.y, h.x, h.y) < 6).sort((a, b) => U.dist(a.x, a.y, h.x, h.y) - U.dist(b.x, b.y, h.x, h.y))[0]; if (vm) monSay(w, vm, "climax", 0.8); }
@@ -704,7 +705,7 @@ var G = (typeof G !== "undefined") ? G : {};
     h.bound.ev = e;
     logLine(w, G.Text.log("hold", { mon: src.d.name }), "mid");
     msg(w, "grab", { mon: src.d.name });
-    say(w, "held", { mon: src.d.name });
+    if (src.kind && expectation(w, src.kind) > 0.35) say(w, "anticipateGrab", { mon: src.d.name }); else say(w, "held", { mon: src.d.name });
     return true;
   }
   // 群れで来る種：一体が捕まえると、仲間を呼ぶ
@@ -860,7 +861,10 @@ var G = (typeof G !== "undefined") ? G : {};
     // うつろの鎧：内側は柔らかく、光も杖も届かない
     if (b.armor && U.chance(dt * 0.35)) msg(w, "armorIn", {}, 5);
     if (b.itch) h.ache = Math.max(h.ache || 0, 20);
-    if (b.t > 4 && !b.sceneShown && !b.pillory && !b.edge && !b.slowStruggle) { b.sceneShown = true; openScene(w, "hold", b.src); }
+    if (b.t > 4 && !b.sceneShown && !b.pillory && !b.edge && !b.slowStruggle) {
+      b.sceneShown = true; const rs = w.run.holdScenes || (w.run.holdScenes = {});
+      if (!rs[b.src.kind]) { rs[b.src.kind] = 1; openScene(w, "hold", b.src); }   // 同じ相手の場面は一潜行に一度（あとは行為の文で描く）
+    }
     if (b.struggle >= 1) release(w, true);
     else if (h.will <= 0 || h.hp <= 0) defeat(w, b.src);
   }
@@ -1384,7 +1388,7 @@ var G = (typeof G !== "undefined") ? G : {};
     h.cast = { kind, t: (kind === "burst" ? S.burst.cast : kind === "melee" ? S.melee.cast : S.shot.cast) * (h.numb > 0 ? 1.6 : 1), target, tx: target.x, ty: target.y };
     h.intent = null; h.label = kind === "burst" ? "詠唱" : "攻撃";
     h.face = { x: target.x, y: target.y, t: 0.5 };
-    const name = kind === "burst" ? "シャイン・バスター" : kind === "melee" ? "ルミナ・ストライク" : "ルミナ・ショット";
+    const name = kind === "burst" ? (sk(w, "nova") ? "シャイン・ノヴァ" : "シャイン・バスター") : kind === "melee" ? (sk(w, "spear") ? "スター・スピア" : "ルミナ・ストライク") : (sk(w, "twin") && h.mp >= S.shot.cost + 3 ? "ルミナ・ツインショット" : "ルミナ・ショット");
     if (kind === "burst" || U.chance(kind === "melee" ? 0.25 : 0.35)) h.bubble = { text: name + "！", t: 1.2 };
     msg(w, "cast", { spell: name }, kind === "burst" ? 0 : 1.2);
   }

@@ -149,3 +149,10 @@ select { font: inherit; color: var(--tx); background: var(--panel2); border: 1px
 .nb-strike { text-decoration: line-through; text-decoration-color: rgba(200,40,80,0.7); color: #8a7080; }
 .nb-shaky { font-style: italic; letter-spacing: 0.08em; color: #a0406a; transform: rotate(-0.6deg); }
 .nb-log { border-top: 1px dashed #e0b0c8; margin-top: 4px; font-size: 12px; color: #6a5060; line-height: 22px; }
+/* 立ち姿の様子 */
+.o-hikari.blush { filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)) drop-shadow(0 0 10px rgba(255,120,170,0.55)) saturate(1.15); }
+.o-hikari.tremble { animation: tremble 0.9s infinite; }
+.o-hikari.sway { animation: sway 3.2s ease-in-out infinite; }
+.o-hikari.tremble.sway { animation: tremble 0.9s infinite, sway 3.2s ease-in-out infinite; }
+@keyframes tremble { 0%,100% { margin-left: 0; } 20% { margin-left: -1px; } 40% { margin-left: 1px; } 60% { margin-left: -1px; } 80% { margin-left: 0.5px; } }
+@keyframes sway { 0%,100% { margin-bottom: 0; } 50% { margin-bottom: 3px; } }

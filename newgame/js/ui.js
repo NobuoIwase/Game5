@@ -80,7 +80,15 @@
       <div class="o-dialog hidden" id="dlg"><span class="o-name" id="dn"></span><p id="dt"></p><div class="o-choices hidden" id="dlgc"></div><span class="o-next" id="dnx">▼</span></div>
       ${extra || ""}</div>`;
   }
-  function hikariIn(src) { const el = document.getElementById("oh"); if (!el) return; if (src) el.src = src; requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove("out"))); }
+  // 残っている状態異常が、立ち姿に出る（赤らむ・小さく震える・熱で揺れる）
+  function moodClass() {
+    const ids = (S && S.ailments || []).map(a => a.id), c = [];
+    if (ids.some(i => ["heat", "impCurse", "sigil"].includes(i))) c.push("blush");
+    if (ids.some(i => ["attached", "omazuke", "throb", "permit", "swell", "futaAfter"].includes(i))) c.push("tremble");
+    if (S && G.tier(S.body, S.mind) >= 2) c.push("sway");
+    return c;
+  }
+  function hikariIn(src) { const el = document.getElementById("oh"); if (!el) return; if (src) el.src = src; el.classList.add(...moodClass()); requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove("out"))); }
   function hikariOut(done) { const el = document.getElementById("oh"); if (!el) return done && done(); el.src = "assets/hikari/hikari_civilian_right_1.png"; el.classList.add("leave"); setTimeout(() => done && done(), 900); }
   // 会話を一行ずつ（押すと次へ）
   // 選択肢つき：l.choices = [{ label, fn }]。fn が返した行を、その場に差し込んで続ける

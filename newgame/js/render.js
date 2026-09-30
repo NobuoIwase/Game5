@@ -214,6 +214,8 @@ var G = (typeof G !== "undefined") ? G : {};
       else if (f.kind === "summon") { ctx.lineWidth = 2; for (let r = 0; r < 3; r++) { ctx.beginPath(); ctx.arc(cx, cy, S * (0.2 + r * 0.25) * (1 - k * 0.5), 0, 7); ctx.stroke(); } }
       ctx.globalAlpha = 1;
     }
+    // 絶頂の瞬間：画面が桃色に弾ける
+    if (h.lastClimaxT !== undefined && w.t - h.lastClimaxT < 0.6 && w.t >= h.lastClimaxT) { ctx.fillStyle = `rgba(255,120,180,${0.35 * (1 - (w.t - h.lastClimaxT) / 0.6)})`; ctx.fillRect(0, 0, cv.width, cv.height); }
     // 明かり：全体を暗くして、ひかり・たいまつ・水晶の周りだけ明るく
     if (!lightCv) lightCv = document.createElement("canvas");
     if (lightCv.width !== cv.width || lightCv.height !== cv.height) { lightCv.width = cv.width; lightCv.height = cv.height; }
@@ -362,6 +364,11 @@ var G = (typeof G !== "undefined") ? G : {};
     else { ctx.fillStyle = "#ffd0e8"; ctx.fillRect(-S * 0.3, -S * 1.3, S * 0.6, S * 1.3); }
     ctx.restore();
     if (h.bound) drawBindFx(ctx, w, x, y, S, H);
+    if (!h.bound && h.pleasure > 25) {               // 快感の小さなゲージ（頭の上）
+      const gw = S * 0.8, gy = y - H - S * 0.12, p = Math.min(1, h.pleasure / 100);
+      ctx.fillStyle = "rgba(0,0,0,0.55)"; ctx.fillRect(x - gw / 2, gy, gw, 4);
+      ctx.fillStyle = p > 0.88 ? "#ff3f8a" : p > 0.7 ? "#ff6fa6" : "#ff9ac4"; ctx.fillRect(x - gw / 2, gy, gw * p, 4);
+    }
     if (h.trance > 0 || h.hyp > 0) {                // 催眠・惑い：頭のまわりの渦と、名前（催眠度）
       const hy = y - H + S * 0.15;
       ctx.strokeStyle = "rgba(200,160,255,0.9)"; ctx.lineWidth = 2.5;

@@ -24,7 +24,7 @@ await p.waitForTimeout(9000);await p.screenshot({path:SP+'v5_dive.png'});
 for(let i=0;i<500;i++){
   const st=await p.evaluate(()=>{const d=G.debug.dive; if(!d) return 'done';
     for(let k=0;k<600;k++){ if(d.w.scene){return 'scene'} if(d.w.outcome||d.night) break; G.Field.step(d.w,1/30);} return d.night?'night':'run';});
-  if(st==='scene'){ await p.click('#modal #ok'); }
+  if(st==='scene'){ await p.waitForTimeout(120); const mo=await p.$('#modal:not(.hidden) #ok'); if(mo) await mo.click(); }   // 戦闘中の場面は窓を出さず、実況に流れる
   if(st==='night'){ await p.waitForTimeout(300); await p.click('#nx'); await p.click('#skip'); }
   if(st==='done') break;
   await p.waitForTimeout(40);

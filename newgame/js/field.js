@@ -40,7 +40,7 @@ var G = (typeof G !== "undefined") ? G : {};
       monsters: [], traps: [], chests: [], projs: [], fx: [], clouds: [],
       covers: M.coverSpots(map),
       dir: { spent: 0, cap: G.BAL.floorCost(floorNo), ct: {}, live: 0, auto: !!run.autoDirector, next: 2 },
-      scene: null, nextId: 1, log: [], msgs: [], msgGap: {},
+      scene: null, nextId: 1, log: [], msgs: [], msgGap: {}, feed: [], feedN: 0,
     };
     const h = run.h;
     Object.assign(h, {
@@ -53,7 +53,7 @@ var G = (typeof G !== "undefined") ? G : {};
     Object.assign(h, { freeze: 0, sniff: 0, salute: 0, pray: 0, countGame: null, drawn: null, deny: null, altar: null });
     // 階の時計（w.t）は階ごとに0から。前の階の時刻・座標を持ち越すと、届かない目的地に向かい続けて固まる
     Object.assign(h, { ignore: {}, peekHold: 0, failN: 0, veilUsed: false, inspT: undefined, fireSpot: null, peekSpot: null, wallHits: 0, _pp: null, convey: null, cdMelee: 0, cdFlash: 0, cdBreak: 0, ifr: 0, thinkT: 0,
-      charmT: {}, anticT: undefined, monoT: undefined, lastEscT: undefined, saluteT: undefined, bcastT: undefined, edgeT: undefined, lastClimaxT: undefined, ringT: undefined, tipT: undefined });
+      charmT: {}, anticT: undefined, monoT: undefined, lastEscT: undefined, saluteT: undefined, bcastT: undefined, edgeT: undefined, lastClimaxT: undefined, ringT: undefined, tipT: undefined, spaceAt: null, walled: {}, liveT: undefined, unboundT: undefined, recoverAt: null });
     map.seen = new Uint8Array(map.W * map.H);
     populate(w);
     msg(w, "floor", { floor: floorNo, dg: run.dungeonName || dg.name });
@@ -202,7 +202,19 @@ var G = (typeof G !== "undefined") ? G : {};
     const text = G.Text.bubble(key, Object.assign({ h, run: w.run }, ctx || {}));
     if (!text) return;
     h.bubble = { text, t: 2.6 };
+    if (live(w)) feed(w, "line", "「" + text + "」");
   }
+  /* 実況：捕まっている間・達した直後は、立ち絵の横に一行ずつ流れる（画面側が間を取って出す） */
+  function live(w) { const h = w.run.h; return !!h.bound || h.pleasure >= 85 || w.t - (h.lastClimaxT ?? -99) < 4 || w.t - (h.unboundT ?? -99) < 1.2 || w.t - (h.liveT ?? -99) < 2.5; }
+  function feed(w, cls, text) {
+    if (!text || w.feedMute) return;
+    const f = w.feed, l = f[f.length - 1];
+    if (l && l.text === text) return;
+    f.push({ cls, text, t: w.t, id: ++w.feedN });
+    if (f.length > 60) f.shift();
+  }
+  const FEED_SKIP = new Set(["hear", "spot", "miss", "whiff", "tranceOut", "wake", "hypOut", "item", "shot", "hit", "kill"]);
+  const plain = t => String(t).replace(/(\S) (?=\S)/g, "$1");    // 窓用の分かち書きを、流す文では詰める
   // 画面下のメッセージ窓（ドラクエ風）。gap 秒のあいだ、同じ種類は出さない
   function msg(w, key, ctx, gap) {
     if (gap && w.t - (w.msgGap[key] ?? -99) < gap) return;
@@ -213,6 +225,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (last && last.text === text && w.t - last.t < 1.2) return;
     w.msgs.push({ text, t: w.t, key });
     if (w.msgs.length > 40) w.msgs.shift();
+    if (live(w) && !FEED_SKIP.has(key)) feed(w, key === "grab" ? "act grab" : "act", plain(text));
   }
   function fx(w, o) { w.fx.push(Object.assign({ t: 0, life: 0.6 }, o)); }
   // 出来上がった文をそのまま窓に出す（捕まっている間の「何をされたか」）
@@ -222,6 +235,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (last && last.text === text && w.t - last.t < 1.2) return;
     w.msgs.push({ text, t: w.t, key: key || "act" });
     if (w.msgs.length > 40) w.msgs.shift();
+    if (live(w)) feed(w, key === "after" ? "after" : "act", plain(text));
   }
   // 魔物の声（しゃべる種だけ）。同じ魔物は数秒あけ、画面に出る声は二つまで
   function monSay(w, m, key, p) {
@@ -231,16 +245,17 @@ var G = (typeof G !== "undefined") ? G : {};
     if (w.monsters.filter(o => o.bubble && o.bubble.t > 0.5 && o !== m).length >= 2) return;
     const t = G.Text.voice(m.kind, key); if (!t) return;
     m.sayT = w.t; m.bubble = { text: t, t: 2.4 };
+    if (live(w)) feed(w, "mon", m.d.name + (/^[「『]/.test(t) ? t : "「" + t + "」"));
   }
   // 魔物の攻撃が当たった：身体のどこに何が起きたか
   function hitDesc(w, m, gap) {
     if (!m || !m.kind || w.t - (m.hitT ?? -99) < (gap || 4)) return;
     const r = G.Text.monHit(m.kind, { n: heroName(w) }); if (!r) return;
-    m.hitT = w.t; pushMsg(w, r.text, "hit");
+    m.hitT = w.t; if (w.run.h.arousal >= 50) w.run.h.liveT = w.t; pushMsg(w, r.text, "hit");
     const h = w.run.h; fx(w, { kind: "sfx", text: r.fx, x: h.x + U.rf(-0.4, 0.4), y: h.y - 1.1, life: 1.0, color: "#e8c8ff" });
   }
   function actMsg(w, key, ctx) { pushMsg(w, G.Text.actMsg(key, Object.assign({ n: heroName(w) }, ctx || {})), key); }
-  function actBub(w, key) { const t = G.Text.actBubble(key); if (t) w.run.h.bubble = { text: t, t: 2.2 }; }
+  function actBub(w, key) { const h = w.run.h, t = G.Text.actBubble(key); if (!t) return; h.bubble = { text: t, t: 2.2 }; if (live(w)) { const lewd = /^(moan|p:|touch)/.test(key); feed(w, "line", "「" + (lewd && h.pleasure >= 55 && U.chance(0.4) ? G.Text.live.breath(h.pleasure) + "、" : "") + (lewd ? G.Text.live.mark(t, h.pleasure) : t) + "」"); } }
   // 媚薬の靄（床に溜まって、しばらく残る）
   function addCloud(w, m, C) { w.clouds.push({ x: m.x, y: m.y, r: C.r, life: C.life, t: 0, power: C.power * (m.pow || 1), name: m.d.name, kind: m.kind }); }
   function logLine(w, text, cls) { w.log.push({ t: w.t, text, cls: cls || "" }); if (w.log.length > 60) w.log.shift(); }
@@ -577,12 +592,26 @@ var G = (typeof G !== "undefined") ? G : {};
     const e = record(w, { kind: "climax", type: src && src.d ? src.d.type : "蕩", mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: 3, bound: !!h.bound });
     logLine(w, G.Text.log("climax", { mon: e.monName }), "heavy");
     const la = h.bound && h.bound.last && w.t - h.bound.last.t < 2.5 ? h.bound.last : null;
-    if (h.bound) h.bound.climaxN = (h.bound.climaxN || 0) + 1;
+    if (h.bound) { h.bound.climaxN = (h.bound.climaxN || 0) + 1; h.bound.built = false; h.bound.overSaid = false; }
+    w.feedMute = true;          // この一瞬は、下の「決壊」の流れでまとめて見せる
     if (la) { e.act = la.p; e.monName = e.monName || la.mon; actMsg(w, "climaxAct", { p: la.p, mon: la.mon }); if (h.bound.ev) h.bound.ev.climaxActs = (h.bound.ev.climaxActs || []).concat(la.p); }
     else msg(w, "climax", {});
     fx(w, { kind: "burst", x: h.x, y: h.y, color: "#ff9ccc", life: 1.0 });
     fx(w, { kind: "sfx", text: U.pick(["びくんっ♡", "——っ♡", "びくびくっ", "ぷしゃっ"]), x: h.x, y: h.y - 1.5, life: 1.4, color: "#ff5fa0" });
     say(w, "climax", {});
+    w.feedMute = false;
+    {
+      const sv = w.run.save, part = la && la.part, cp = sv ? (sv.climaxParts = sv.climaxParts || []) : [];
+      const first = part && G.Text.live.hasFirst(part) && !cp.includes(part) ? part : null;
+      if (first) e.first = first;
+      if (h.bound && h.bound.climaxN > 1) e.chain = h.bound.climaxN;
+      if (first) { cp.push(first); (w.run.firstParts = w.run.firstParts || []).push({ part: first, mon: la ? la.mon : "" }); }
+      const cat = la && la.kind ? G.Text.actorOf(la.kind) : src && src.kind ? G.Text.actorOf(src.kind) : null;
+      for (const l of G.Text.live.climax({ chain: h.bound ? h.bound.climaxN : 1, tier: G.tier(w.run.save.body, w.run.save.mind), squirt: (e.squirt = U.chance(trait(w, "squirthabit") ? 0.5 : h.bound && h.bound.climaxN >= 3 ? 0.35 : 0)), part, cat, mon: la ? la.mon : (src && src.d ? src.d.name : null), n: heroName(w), firstPart: first })) feed(w, l.cls, l.text);
+      feed(w, "pause", "……………………");
+      feed(w, "after", G.Text.live.after({ n: heroName(w) }));
+      h.recoverAt = w.t + 3.2;
+    }
     for (const m of w.monsters) if (m.hp > 0 && !m.alert && U.dist(m.x, m.y, h.x, h.y) < 7 && G.Text.actorOf(m.kind)) { alertMon(w, m, 0.8); m.lastSeenH = { x: h.x, y: h.y }; }   // 声が、迷宮に響く
     { const vm = w.monsters.filter(m => m.hp > 0 && G.Text.hasVoice(m.kind) && U.dist(m.x, m.y, h.x, h.y) < 6).sort((a, b) => U.dist(a.x, a.y, h.x, h.y) - U.dist(b.x, b.y, h.x, h.y))[0]; if (vm) monSay(w, vm, "climax", 0.8); }
     // 覗き目玉：見られながら達した姿は、記録に残る
@@ -734,7 +763,7 @@ var G = (typeof G !== "undefined") ? G : {};
       for (const m of w.monsters) if (m.hp > 0 && m.d.pack && !b.by.includes(m.id) && !m.molest && U.dist(m.x, m.y, h.x, h.y) < 5) { alertMon(w, m, 1); m.cd = 0; m.pounceCd = 0; }
     }
     if (broke) { h.lastEscT = w.t; say(w, "breakFree", {}); msg(w, "free", {}); fx(w, { kind: "burst", x: h.x, y: h.y, color: "#fff2a8", life: 0.6 }); if (b.src) learn(w, b.src.kind, 2); record(w, { kind: "escape", mon: b.src && b.src.kind, monName: b.src && b.src.d ? b.src.d.name : "", sev: 0 }); }
-    h.bound = null;
+    h.bound = null; h.unboundT = w.t;
     h.trance = Math.max(h.trance, 0.3);
     h.think = Math.max(h.think || 0, broke ? 0.9 : 0.6); h.label = "息を整える";   // 抜けた直後は、よろめいて立て直す
   }
@@ -777,10 +806,13 @@ var G = (typeof G !== "undefined") ? G : {};
     pushMsg(w, G.Text.fillAct(act, { mon: name, n: heroName(w) }) + "……", "act");
     if (who.d && who.d.spd !== undefined) monSay(w, who, "act", 0.45);
     fx(w, { kind: "sfx", text: act.fx, x: h.x + U.rf(-0.6, 0.6), y: h.y - U.rf(0.7, 1.3), life: 1.2, color: act.watch ? "#d8c8ff" : "#ffb3d6" });
+    if (act.fx && U.chance(0.5)) feed(w, "sfx", act.fx);
     for (const m of w.monsters) if (m.hp > 0 && !m.alert && U.dist(m.x, m.y, h.x, h.y) < 4.5 && G.Text.actorOf(m.kind)) alertMon(w, m, 0.6);   // 声が、近くの魔物を呼ぶ
     if (act.watch) { h.watched = 1.5; h.arousal = Math.min(100, h.arousal + 2.5); if (U.chance(0.5)) actBub(w, "watched"); return; }
     const k = mult(w, "蕩"), swarm = (1 + 0.18 * (n - 1)) * (n >= 3 ? 1 + 0.1 * trait(w, "swarmHabit") : 1);
-    const gain = 7.0 * act.pw * (who.pow || 1) * k * (1 + h.arousal / 90) * intake(w, who) * swarm * tf.pleasure * (w.run.law === "seishi" ? 0.8 : 1) * (act.tickle ? 0.7 : 1) * (sk(w, "heartlock") ? 0.82 : 1);
+    const over = w.t - (h.lastClimaxT ?? -99) < 5 ? 1.2 : 1;          // 達したばかりの身体は、敏感すぎる
+    if (over > 1 && !b.overSaid && !act.watch) { b.overSaid = true; feed(w, "after", G.Text.live.oversens()); }
+    const gain = over * 7.0 * act.pw * (who.pow || 1) * k * (1 + h.arousal / 90) * intake(w, who) * swarm * tf.pleasure * (w.run.law === "seishi" ? 0.8 : 1) * (act.tickle ? 0.7 : 1) * (sk(w, "heartlock") ? 0.82 : 1);
     if (act.cum && h.futa) addCum(w, 11 * act.pw * swarm * intake(w, who), who); else h.pleasure += gain;
     h.arousal = Math.min(100, h.arousal + 3.2 * act.pw * k);
     if (act.tickle) h.will = Math.max(0, h.will - 3);
@@ -789,11 +821,14 @@ var G = (typeof G !== "undefined") ? G : {};
     b.last = { p: act.p, mon: name, kind: who.kind, part: act.part, t: w.t };
     crave(w, who.kind, 0.25 * act.pw);
     { const sv = w.run.save; if (sv) { sv.parts = sv.parts || {}; const pp = sv.parts[who.kind] || (sv.parts[who.kind] = {}); pp[act.part] = (pp[act.part] || 0) + 1; } }
-    // 吹き出し：触れはじめ／くすぐり／段階ごとの喘ぎ
-    if (b.acts === 1) actBub(w, act.tickle ? "tickleLaugh" : "touch");
+    // 吹き出し：触れはじめ／くすぐり／段階ごとの喘ぎ。限界の手前では、言葉が崩れていく
+    if (h.pleasure >= 84 && !b.built && !act.edge) { b.built = true; const t = G.Text.live.build(G.tier(w.run.save.body, w.run.save.mind), heroName(w)); h.bubble = { text: t.replace(/^……/, "").slice(0, 16) + "……", t: 2.4 }; feed(w, "line build", "「" + t + "」"); }
+    else if (b.acts === 1) actBub(w, act.tickle ? "tickleLaugh" : "touch");
     else if (act.tickle && U.chance(0.6)) actBub(w, "tickleLaugh");
     else if (h.pleasure < 80 && U.chance(0.35) && G.Text.actBubble("p:" + act.part)) actBub(w, "p:" + act.part);   // 触られた所への反応
     else if (U.chance(0.6)) actBub(w, h.pleasure < 45 ? "moan1" : h.pleasure < 80 ? "moan2" : "moan3");
+    // 心の声（数回に一度）
+    if (b.acts % 5 === 3) feed(w, "mind", G.Text.live.mind({ name: heroName(w), n, watched: h.watched > 0, expect: expectation(w, who.kind), stage: b.stage, tier: G.tier(w.run.save.body, w.run.save.mind) }));
     // どこまで溜まったか
     const lv = h.pleasure >= 88 ? 3 : h.pleasure >= 70 ? 2 : h.pleasure >= 45 ? 1 : 0;
     if (lv > (b.heat || 0)) { b.heat = lv; actMsg(w, "heat" + lv, { c: Math.round(h.pleasure) }); }
@@ -960,7 +995,8 @@ var G = (typeof G !== "undefined") ? G : {};
       const k = h.known[m.id];
       if (!k || w.t - k.t > 6) continue;
       const dd = U.dist(h.x, h.y, m.x, m.y);
-      if (h.ignore && h.ignore[m.id] > w.t && dd > 2.5) continue;      // 相手にしないと決めた（動かない・届かない）。近づかれたら別
+      if (h.ignore && h.ignore[m.id] > w.t && dd > 2.5) continue;
+      if (h.walled && h.walled[m.id] > w.t) continue;                  // 壁の角越しで、撃てず・届かず・向こうも来ない相手      // 相手にしないと決めた（動かない・届かない）。近づかれたら別
       out.push({ m, k, d: dd, kd: U.dist(h.x, h.y, k.x, k.y) });
     }
     return out.sort((a, b) => a.kd - b.kd);
@@ -1132,8 +1168,8 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   function perceivedArousal(w) { const h = w.run.h, prep = G.PREP[w.run.stated]; return prep && prep.numb ? h.arousal * 0.35 : h.arousal; }
   function setIntent(h, x, y, spd, label, face) { h.intent = { x, y, spd }; h.label = label; if (face) h.face = { x: face.x, y: face.y, t: 0.4 }; }
-  function goToward(w, gx, gy, spd, label, face) {
-    const h = w.run.h, p = pathDir(w, h, gx, gy, HR, avoidFn(w));
+  function goToward(w, gx, gy, spd, label, face, force) {
+    const h = w.run.h, p = pathDir(w, h, gx, gy, HR, avoidFn(w)) || (force ? (h._pp = null, pathDir(w, h, gx, gy, HR, null)) : null);   // force：知っている罠を避ける道が無ければ、踏む覚悟で
     if (!p) { h.intent = null; return false; }
     setIntent(h, p.x, p.y, spd * (p.d < 0.6 ? p.d / 0.6 : 1), label, face);
     h.goal = { x: gx, y: gy, why: label };
@@ -1197,7 +1233,7 @@ var G = (typeof G !== "undefined") ? G : {};
       if (U.dist(h.x, h.y, h.goal.x, h.goal.y) < 0.6) w.outcome = run.recall ? "ordered" : "retreat";
       return;
     }
-    if (h.decoy && h.decoy.t > 0 && h.form === "magica") { tryCast(w, h.decoy, "shot"); return; }
+    if (h.decoy && h.decoy.t > 0 && h.form === "magica") { tryCast(w, h.decoy, "shot"); if (h.cast || h.think > 0) return; }   // 撃てない間は、ほかの事を
 
     // 狙う相手：近さが同じくらいなら、構えている者・弱っている者・指揮する者・知っている厄介な者を先に
     const score = o => o.kd - (o.m.cast && o.m.cast.kind !== "pounce" ? 0.8 : 0) - (o.m.hp <= o.m.maxHp * 0.3 ? 0.6 : 0) - (o.m.d.command ? 0.9 : 0) - knowledge(w, o.m.kind) * (o.m.d.atk.kind === "grab" ? 0.5 : 0.2);
@@ -1220,18 +1256,31 @@ var G = (typeof G !== "undefined") ? G : {};
       if (h.form === "magica") {
         const d = t0.d, far = S.shot.range - 0.6;
         const cluster = ts.filter(o => U.dist(o.m.x, o.m.y, m.x, m.y) < S.burst.radius && o.d < 6);
-        if (vis && cluster.length >= 2 && h.mp >= S.burst.cost && h.cdBurst <= 0 && d < 6) { tryCast(w, m, "burst"); return; }
+        if (vis && cluster.length >= 2 && h.mp >= S.burst.cost && h.cdBurst <= 0 && d < 6) { tryCast(w, m, "burst"); if (h.cast || h.think > 0) return; }
         // 近接：MP が少ない時、相手が攻撃のあとの隙を見せている時、触手の短い相手には踏み込んで打つ
         const A2 = m.d.atk, reachy = (A2.kind === "grab" && (A2.range || 1) > 1.4) || A2.kind === "drain" || (A2.kind === "aura" && !A2.burst);
         const opening = !m.cast && (m.cd > 0.35 || m.stun > 0);
         const saving = h.mp < (h.mpMax || G.HIKARI.mpMax) * 0.5;          // MP を切らさないように
         const wantMelee = seenNow && (!!h.possess || (saving && !reachy) || h.mp < S.shot.cost * 2 || (opening && !reachy) || (m.d.spd === 0 && !reachy));
         if (wantMelee && h.mp >= S.melee.cost) {
-          if (d <= S.melee.range + m.d.r * 0.5 && h.cdMelee <= 0) { tryCast(w, m, "melee"); return; }
-          if (d < 4 && h.cdMelee <= 0.3) { goToward(w, m.x, m.y, 1.15, "踏み込む", m); return; }
+          if (d <= S.melee.range + m.d.r * 0.5 && h.cdMelee <= 0) { tryCast(w, m, "melee"); if (h.cast || h.think > 0) return; }   // 角に阻まれて打てなければ、ほかの手へ
+          if (d < 4 && h.cdMelee <= 0.3 && goToward(w, m.x, m.y, 1.15, "踏み込む", m)) return;   // 道が無ければ（壁の角越し）、ほかの手へ
         }
         const reach = m.d.atk.kind === "grab" ? (m.d.atk.range || 1) + 0.5 : 0, kn = knowledge(w, m.kind);
         if (d < Math.max(2.6, (reach + 0.6) * kn + 2.6 * (1 - kn)) && m.d.spd > 0) {    // 近い：相手を見たまま下がる（知っている相手は、届く距離を覚えている）
+          // 下がれない（壁際・角）まま1.5秒：向き直って、その場で撃つ／踏み込んで打つ
+          const sp = h.spaceAt;
+          if (!sp || w.t - sp.last > 0.6 || U.dist(sp.x, sp.y, h.x, h.y) > 0.3) h.spaceAt = { x: h.x, y: h.y, t: w.t, last: w.t }; else sp.last = w.t;
+          if (w.t - h.spaceAt.t > 1.5) {
+            h.face = { x: m.x, y: m.y, t: 0.5 };
+            if (h.cdShot <= 0 && h.mp >= S.shot.cost && shotClear(map, h.x, h.y, m.x, m.y)) { tryCast(w, m, "shot"); if (h.cast) { h.spaceAt = null; return; } }
+            if (h.mp >= S.melee.cost && h.cdMelee <= 0.3) {
+              if (d <= S.melee.range + m.d.r * 0.5) { if (h.cdMelee <= 0) tryCast(w, m, "melee"); if (h.cast) { h.spaceAt = null; return; } }
+              else if (goToward(w, m.x, m.y, 1.15, "踏み込む", m)) return;
+            }
+            // それでも何もできないまま3秒：壁越しの相手。しばらく相手にしない（ほかの目当て・探索へ戻る）
+            if (w.t - h.spaceAt.t > 3) { h.walled = h.walled || {}; h.walled[m.id] = w.t + 6; h.spaceAt = null; msg(w, "giveUp", { mon: m.d.name }, 6); return; }
+          }
           const a = U.angle(m.x, m.y, h.x, h.y);
           const v = bestDodge(w, { t: 0.4, key: "space" }, m);
           setIntent(h, (Math.cos(a) + v.x) / 2, (Math.sin(a) + v.y) / 2, 1.0, "間合い", m);
@@ -1252,10 +1301,17 @@ var G = (typeof G !== "undefined") ? G : {};
         }
         if (d > far) {                                // 遠い：近づく。気づかれていなければ忍び寄る
           const sneak = !m.alert && m.d.spd > 0;
-          goToward(w, m.x, m.y, sneak ? 0.5 : 0.9, sneak ? "忍び寄る" : "接近", m); return;
+          if (!goToward(w, m.x, m.y, sneak ? 0.5 : 0.9, sneak ? "忍び寄る" : "接近", m)) { h.walled = h.walled || {}; h.walled[m.id] = w.t + 6; }   // 行けない相手は、しばらく置いておく
+          return;
         }
-        if (h.mp >= S.shot.cost && h.cdShot <= 0 && (!saving || reachy || m.d.atk.kind === "shot")) { tryCast(w, m, "shot"); return; }
-        if (saving && !reachy && h.cdMelee <= 0.3 && d < 4.5) { goToward(w, m.x, m.y, 1.1, "踏み込む", m); return; }
+        if (h.mp >= S.shot.cost && h.cdShot <= 0 && (!saving || reachy || m.d.atk.kind === "shot")) { tryCast(w, m, "shot"); if (h.cast || h.think > 0) return; }
+        // 動かない相手が、撃てない位置にいる：打ちに行く。行けなければ、しばらく置いておく（その前で立ち尽くさない）
+        if (!vis && !m.d.spd) {
+          if (h.mp >= S.melee.cost && h.cdMelee <= 0 && d <= S.melee.range + m.d.r * 0.5) { tryCast(w, m, "melee"); if (h.cast) return; }
+          if (d > S.melee.range * 0.8 && goToward(w, m.x, m.y, 0.9, "踏み込む", m)) return;
+          h.walled = h.walled || {}; h.walled[m.id] = w.t + 6; return;
+        }
+        if (saving && !reachy && h.cdMelee <= 0.3 && d < 4.5 && goToward(w, m.x, m.y, 1.1, "踏み込む", m)) return;
         // 撃てない間は、足を止めて見据える。相手が寄ってくる時だけ、一歩ずつ下がる
         if (d < 3.4 && m.d.spd > 0) { const a = U.angle(m.x, m.y, h.x, h.y); setIntent(h, Math.cos(a), Math.sin(a), 0.5, "間合い", m); }
         else { h.intent = null; h.label = "構え"; h.face = { x: m.x, y: m.y, t: 0.4 }; }
@@ -1264,7 +1320,7 @@ var G = (typeof G !== "undefined") ? G : {};
       }
       // 素の姿：戦えない。見つからないように階段へ、近ければ逃げる
       if (t0.d < 2.6 && m.d.spd > 0) { const a = U.angle(m.x, m.y, h.x, h.y); setIntent(h, Math.cos(a), Math.sin(a), 1.15, "逃げる"); tryShove(w, m); return; }
-      if (map.seen[Math.floor(map.down.y) * map.W + Math.floor(map.down.x)]) { goToward(w, map.down.x, map.down.y, 0.8, "階段へ"); return; }
+      if (map.seen[Math.floor(map.down.y) * map.W + Math.floor(map.down.x)] && goToward(w, map.down.x, map.down.y, 0.8, "階段へ", null, true)) return;
     }
     h.state = "explore";
     // MP が足りない：物陰で整える／偽りの祠で休む
@@ -1297,9 +1353,9 @@ var G = (typeof G !== "undefined") ? G : {};
     let seenN = 0, floorN = 0;
     for (let i = 0; i < map.t.length; i++) if (map.t[i] === 0) { floorN++; if (map.seen[i]) seenN++; }
     if (downSeen && (seenN / floorN > 0.55 || h.floorT > 45 || h.wantDown)) {
-      goToward(w, map.down.x, map.down.y, 0.9, "階段へ"); msg(w, "stairs", {}, 20);
-      if (U.dist(h.x, h.y, map.down.x, map.down.y) < 0.5) w.outcome = map.last ? "cleared" : "down";
-      return;
+      const ok = goToward(w, map.down.x, map.down.y, 0.9, "階段へ", null, true);
+      if (U.dist(h.x, h.y, map.down.x, map.down.y) < 0.5) { w.outcome = map.last ? "cleared" : "down"; return; }
+      if (ok) { msg(w, "stairs", {}, 20); return; }       // 道が無い（封じられた部屋の向こう等）：ほかを探す
     }
     // まだ見ていない所へ（探す先は少しの間だけ保つ）
     if (!h.search || map.seen[Math.floor(h.search.y) * map.W + Math.floor(h.search.x)] && U.dist(h.x, h.y, h.search.x, h.search.y) < 1.2 || w.t > h.search.until) {
@@ -1913,6 +1969,7 @@ var G = (typeof G !== "undefined") ? G : {};
     tr.found = true;
     const ev = record(w, { kind: "trap", type: tr.d.type, trap: tr.kind, trapName: tr.d.name, sev: 1 });
     logLine(w, G.Text.log("trap", { trap: tr.d.name }), "mid");
+    h.liveT = w.t;
     msg(w, "trap", { trap: tr.d.name });
     pushMsg(w, G.Text.trapHit(tr.d.effect, { n: heroName(w), trap: tr.d.name }), "trapHit");     // 身体に何が起きたか
     fx(w, { kind: "ring", x: tr.x, y: tr.y, color: "#ffd27a", r: tr.d.radius, life: 0.9 });
@@ -2149,6 +2206,8 @@ var G = (typeof G !== "undefined") ? G : {};
     h.inCloud = !!cl;
     if (cl && !w.outcome) { h.cloudT = (h.cloudT || 0) + dt; if (h.cloudT > 1.2) { h.cloudT = 0; applyEffect(w, "蕩", cl.power, { d: { name: cl.name, type: "蕩" }, kind: cl.kind, x: cl.x, y: cl.y }); msg(w, "cloud", { mon: cl.name }, 5); } }
     if (h.bubble) { h.bubble.t -= dt; if (h.bubble.t <= 0) h.bubble = null; }
+    // 達したあと、責めが止んでいれば、我に返る一言
+    if (h.recoverAt && w.t > h.recoverAt) { if (!h.bound || !h.bound.nAct) feed(w, "recover", G.Text.live.recover(G.tier(w.run.save.body, w.run.save.mind), heroName(w))); h.recoverAt = null; }
     if (h.decoy) { h.decoy.t -= dt; if (h.decoy.t <= 0) h.decoy = null; }
     if (h.mislead > 0) { h.mislead -= dt; if (h.mislead <= 0) { say(w, "misleadRealize", {}); h._pp = null; } }
     h.peekT = Math.max(0, h.peekT - dt);
@@ -2241,7 +2300,7 @@ var G = (typeof G !== "undefined") ? G : {};
         if (act.watch) { h.arousal = Math.min(100, h.arousal + 5); continue; }
         if (act.cum && h.futa) { h.cum = (h.cum || 0) + 30 * act.pw * swarm; if (h.cum >= 100) { h.cum -= 85; h.shasei = (h.shasei || 0) + 1; lines.push(G.Text.actMsg("nightShasei", { mon: m.d.name, c: h.shasei })); } continue; }
         h.pleasure += 26 * act.pw * swarm * (1 + h.arousal / 150); h.arousal = Math.min(100, h.arousal + 6);
-        if (h.pleasure >= 100) { h.pleasure = 25 + U.rf(0, 20); h.climax++; beat.climaxN++; lines.push(G.Text.actMsg("nightClimax", { p: act.p, mon: m.d.name, c: h.climax })); }
+        if (h.pleasure >= 100) { h.pleasure = 25 + U.rf(0, 20); h.climax++; beat.climaxN++; lines.push(G.Text.actMsg("nightClimax", { p: act.p, mon: m.d.name, c: h.climax })); (beat.cx = beat.cx || []).push({ at: lines.length - 1, kind: m.kind, part: act.part, mon: m.d.name }); }
       }
     }
     beat.climax = beat.climaxN > 0;

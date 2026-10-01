@@ -15,6 +15,7 @@ var G = (typeof G !== "undefined") ? G : {};
     for (const k in G.TRAPS) img(trapArt(k));
     for (const f of ["civilian", "magica"]) for (const d of ["front", "back", "left", "right"]) img(`assets/hikari/hikari_${f}_${d}_1.png`);
     for (const k in G.DUNGEONS) img(`assets/env/floor_${k}.png`);
+    for (const skin of Object.values(G.ROOM_SKINS || {})) { img(skin.floor); img(skin.deco); }
     for (const n of ["dungeon.png", "chest_closed.webp", "chest_open.webp", "stairs_open.webp", "pool.webp"]) img("assets/env/" + n);
   }
   // 罠の絵：淫糸の巣と囁きの塔は Game4 の絵（PNG）、ほかは tools/make_art.py の SVG
@@ -23,6 +24,61 @@ var G = (typeof G !== "undefined") ? G : {};
                       gate: "門", cuffs: "環", bed: "褥", spring: "湯", slime_drop: "落", bud: "蕾", root: "根", cocoon: "繭", ratchet: "枠", altar: "紋", shadow: "影", tower: "塔" };
   const TYPE_COLOR = { "惑": "#b48cff", "蕩": "#ff7fb0", "絡": "#6fc2ff", "削": "#63e0d6" };
   const hash = (x, y, k) => { let h = (x * 374761393 + y * 668265263 + (k || 0) * 2246822519) >>> 0; h = (h ^ (h >>> 13)) * 1274126177 >>> 0; return (h ^ (h >>> 16)) >>> 0; };
+
+  const roomSkin = r => r && G.ROOM_SKINS && G.ROOM_SKINS[r.T.skin];
+  const insideRoom = (r, x, y) => x >= r.x && x < r.x + r.w && y >= r.y && y < r.y + r.h;
+  function roomTile(ctx, skin, tx, ty, x, y, S, seed, prefix = "") {
+    const im = img(prefix + skin.floor); if (!ok(im)) return false;
+    const hv = hash(tx, ty, seed), col = hv % 100 < 5 ? 3 : hv % 3, row = (hv >>> 4) % 2;
+    ctx.drawImage(im, col * 64, row * 64, 64, 64, x, y, S + 1, S + 1);
+    ctx.fillStyle = "rgba(10,8,16,0.28)"; ctx.fillRect(x, y, S + 1, S + 1);
+    return true;
+  }
+  // floor/wall判定と可視範囲を受け取る。同じ描画を素材一覧でも使う。
+  // activeとfillは読むだけ。配置には座標ハッシュだけを使いG.Uに触れない。
+  function roomDecor(ctx, r, skin, t, S, X, Y, bounds, tile, prefix = "") {
+    const im = img(prefix + skin.deco); if (!ok(im)) return;
+    const fill = Number.isFinite(r.fill) ? Math.max(0, Math.min(1, r.fill)) : 0;
+    const speed = skin.speed * (r.active ? 1.9 : 1), size = 1 + fill * 0.35 + (r.active ? 0.12 : 0);
+    const [x0, y0, x1, y1] = bounds, density = Math.min(1, skin.density + fill * 0.55);
+    function sprite(index, x, y, phase, scale, angle = 0) {
+      const sway = Math.sin(t * speed + phase) * 0.055;
+      ctx.save(); ctx.translate(X(x), Y(y)); ctx.rotate(angle + sway);
+      ctx.drawImage(im, index * 64, 0, 64, 64, -S * scale / 2, -S * scale, S * scale, S * scale);
+      ctx.restore();
+    }
+    // 部屋内だけに描く。fill=1でも隣の通路へはみ出さない。
+    ctx.save(); ctx.beginPath(); ctx.rect(X(r.x), Y(r.y), r.w * S, r.h * S); ctx.clip();
+    for (let y = Math.max(y0, r.y); y < Math.min(y1, r.y + r.h); y++) for (let x = Math.max(x0, r.x); x < Math.min(x1, r.x + r.w); x++) {
+      if (tile(x, y) !== 0) continue;
+      const hv = hash(x, y, 53);
+      if (hv % 1000 / 1000 >= density) continue;
+      const type = skin.scatter[(hv >>> 12) % skin.scatter.length];
+      sprite(type, x + 0.35 + ((hv >>> 8) % 30) / 100, y + 0.9, hv % 37, size * 0.78);
+    }
+    // 薄い部屋色の霧。部屋内の範囲に限定する。
+    ctx.globalAlpha = 0.035 + fill * 0.025 + (r.active ? 0.015 : 0);
+    ctx.fillStyle = skin.fog; ctx.fillRect(X(r.x), Y(r.y), r.w * S, r.h * S);
+    ctx.restore();
+    for (let y = Math.max(y0, r.y - 1); y < Math.min(y1, r.y + r.h + 1); y++) for (let x = Math.max(x0, r.x - 1); x < Math.min(x1, r.x + r.w + 1); x++) {
+      if (tile(x, y) !== 1) continue;
+      const side = [[0, 1, Math.PI], [0, -1, 0], [1, 0, Math.PI / 2], [-1, 0, -Math.PI / 2]].find(([dx, dy]) => insideRoom(r, x + dx, y + dy) && tile(x + dx, y + dy) !== 1);
+      if (!side) continue;
+      const [dx, dy, angle] = side;
+      sprite(skin.wall, x + 0.5 + dx * 0.1, y + 0.5 + dy * 0.1, hash(x, y, 71) % 37, size * 0.72, angle);
+    }
+  }
+  function roomPreview(ctx, key, active, fill, t, prefix = "") {
+    const skin = G.ROOM_SKINS[key], S = ctx.canvas.width / 9;
+    const r = {x:1, y:1, w:7, h:5, T:{skin:key}, active, fill};
+    const X = x => x * S, Y = y => y * S, tile = (x, y) => insideRoom(r, x, y) ? 0 : 1;
+    ctx.imageSmoothingEnabled = false; ctx.fillStyle = skin.wallTop; ctx.fillRect(0, 0, S * 9, S * 7);
+    for (let y = 1; y < 6; y++) for (let x = 1; x < 8; x++) {
+      roomTile(ctx, skin, x, y, X(x), Y(y), S, 1, prefix);
+      ctx.fillStyle = skin.overlay; ctx.fillRect(X(x), Y(y), S + 1, S + 1);
+    }
+    roomDecor(ctx, r, skin, t, S, X, Y, [0, 0, 9, 7], tile, prefix);
+  }
 
   // dungeon.png（64px 四方×4×4）の中の小物
   const ATLAS = { torch: [2, 1], crystal: [3, 1], rubble: [0, 3], mire: [0, 2], fog: [3, 2], wall: [3, 0] };
@@ -80,24 +136,30 @@ var G = (typeof G !== "undefined") ? G : {};
     const x0 = Math.max(0, Math.floor(cam.x - cv.width / 2 / S) - 1), x1 = Math.min(map.W, Math.ceil(cam.x + cv.width / 2 / S) + 1);
     const y0 = Math.max(0, Math.floor(cam.y - cv.height / 2 / S) - 1), y1 = Math.min(map.H, Math.ceil(cam.y + cv.height / 2 / S) + 1);
     const floorIm = img(`assets/env/floor_${w.run.dungeon}.png`);
-    const trapRoom = (tx, ty) => (w.trapRooms || []).some(r => tx >= r.x && tx < r.x + r.w && ty >= r.y && ty < r.y + r.h);
+    const rooms = (w.trapRooms || []).filter(r => r.x - 1 < x1 && r.x + r.w + 1 > x0 && r.y - 1 < y1 && r.y + r.h + 1 > y0);
+    const trapRoom = (tx, ty) => rooms.find(r => insideRoom(r, tx, ty));
+    const wallRoom = (tx, ty) => rooms.find(r => [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => insideRoom(r, tx + dx, ty + dy) && map.t[(ty + dy) * map.W + tx + dx] !== 1));
     // 床
     for (let ty = y0; ty < y1; ty++) for (let tx = x0; tx < x1; tx++) {
       const t = map.t[ty * map.W + tx];
       if (t === 1) continue;
-      if (ok(floorIm)) {
+      const room = trapRoom(tx, ty), skin = roomSkin(room);
+      if (skin && roomTile(ctx, skin, tx, ty, X(tx), Y(ty), S, w.floorNo)) {
+        // スキンの読み込み中だけ既存床へフォールバックする。
+      } else if (ok(floorIm)) {
         const hv = hash(tx, ty, w.floorNo), col = hv % 100 < 5 ? 3 : hv % 3, row = (hv >> 4) % 2;
         ctx.drawImage(floorIm, col * 64, row * 64, 64, 64, X(tx), Y(ty), S + 1, S + 1);
         ctx.fillStyle = "rgba(10,8,16,0.28)"; ctx.fillRect(X(tx), Y(ty), S + 1, S + 1);
       } else { ctx.fillStyle = (tx + ty) % 2 ? pal.floor : pal.floor2; ctx.fillRect(X(tx), Y(ty), S + 1, S + 1); }
-      if (trapRoom(tx, ty)) { ctx.fillStyle = "rgba(160,40,80,0.10)"; ctx.fillRect(X(tx), Y(ty), S + 1, S + 1); }
+      if (room) { ctx.fillStyle = skin ? skin.overlay : "rgba(160,40,80,0.10)"; ctx.fillRect(X(tx), Y(ty), S + 1, S + 1); }
     }
     // 壁：上面は石積み（床より明るい灰）で塗り、床との境に縁を引く。床に面した壁は、正面（壁の顔）も描く
     for (let ty = y0; ty < y1; ty++) for (let tx = x0; tx < x1; tx++) {
       if (map.t[ty * map.W + tx] !== 1) continue;
       const nearFloor = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, 1], [1, -1], [-1, -1]].some(([dx, dy]) => { const nx = tx + dx, ny = ty + dy; return nx >= 0 && ny >= 0 && nx < map.W && ny < map.H && map.t[ny * map.W + nx] !== 1; });
       if (!nearFloor) continue;
-      ctx.fillStyle = pal.wallTop || "#5a5264"; ctx.fillRect(X(tx), Y(ty), S + 1, S + 1);
+      const skin = roomSkin(wallRoom(tx, ty));
+      ctx.fillStyle = skin ? skin.wallTop : pal.wallTop || "#5a5264"; ctx.fillRect(X(tx), Y(ty), S + 1, S + 1);
       ctx.fillStyle = "rgba(0,0,0,0.22)";
       const off = (ty % 2) * 0.5;
       for (let k = 0; k < 2; k++) { ctx.fillRect(X(tx), Y(ty + k * 0.5), S + 1, 1.5); ctx.fillRect(X(tx + ((k * 0.5 + off) % 1)), Y(ty + k * 0.5), 1.5, S * 0.5); }
@@ -116,6 +178,10 @@ var G = (typeof G !== "undefined") ? G : {};
         ctx.fillStyle = g; ctx.fillRect(X(tx), Y(ty + 0.25), S + 1, S * 0.75 + 1);
         ctx.fillStyle = "rgba(255,255,255,0.05)"; for (let k = 0; k < 3; k++) ctx.fillRect(X(tx + (hash(tx, ty, k) % 8) / 8), Y(ty + 0.4 + k * 0.18), S * 0.12, 1);
       }
+    }
+    for (const room of rooms) {
+      const skin = roomSkin(room); if (!skin) continue;
+      roomDecor(ctx, room, skin, w.t, S, X, Y, [x0, y0, x1, y1], (x, y) => x < 0 || y < 0 || x >= map.W || y >= map.H ? 1 : map.t[y * map.W + x]);
     }
     // 柱
     for (let ty = y0; ty < y1; ty++) for (let tx = x0; tx < x1; tx++) {
@@ -475,5 +541,5 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
 
-  G.Render = { draw, preload, img, TYPE_COLOR };
+  G.Render = { draw, preload, img, TYPE_COLOR, roomPreview };
 })();

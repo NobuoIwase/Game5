@@ -133,7 +133,7 @@ Game2 の報告・監査と潜行の中身、Game5 のリアルタイム探索�
 ## 3. 中身の地図（コード）
 
 素の JS。ビルドなし。すべて `G` という1つのグローバルに載る。
-読み込み順（`index.html`）：`util → data → map → text → field → report → diary → game → render → ui`。
+読み込み順（`index.html`）：`util → data → map → text → field/world → talk → body → bound → hikari → monster → trap → step → report → diary → game → render → ui`。
 `util〜game` は DOM を触らないので、Node の `vm` でそのまま動く（検査ツールはこれを使う）。
 
 | ファイル | 中身 |
@@ -141,7 +141,14 @@ Game2 の報告・監査と潜行の中身、Game5 のリアルタイム探索�
 | `js/util.js` | `G.U`：シード付き乱数（`setSeed`）、`rand/ri/rf/pick/shuffle/weighted/clamp/dist/angle/angDiff/fill` |
 | `js/data.js` | `G.MONSTERS`（65体）、`G.TRAPS`（67種）、`G.TRAP_ROOMS`（81部屋）、`G.DUNGEONS`（7つ）、`G.LAWS`（迷宮の法則9）、`G.TRAITS`（性癖18）、`G.PREP`（対策の品）、`G.HIKARI`（ひかりの技・数値・持ち込み品の初期値・装備名）、`G.BAL`（全体の数値） |
 | `js/map.js` | `G.Map`：1階の生成（部屋・L字通路・柱、26×20タイル）、見通し `los`、A* `path`（危険を避ける重み付き） |
-| `js/field.js` | `G.Field`：潜行の中身すべて（下に詳しく） |
+| `js/field/world.js` | 世界の生成・初期配置。内部共有の `G.F` を初期化 |
+| `js/field/talk.js` | 実況・メッセージ・記録 |
+| `js/field/body.js` | 状態の計算・学習・効き目 |
+| `js/field/bound.js` | 拘束と解除・状態遷移 |
+| `js/field/hikari.js` | 経路・判断・移動・技 |
+| `js/field/monster.js` | 魔物の判断・攻撃・撃破 |
+| `js/field/trap.js` | 罠・弾の更新 |
+| `js/field/step.js` | 配置・一歩・夜・状態一覧。共有参照を結び、従来どおり `G.Field` と `_test` を公開 |
 | `js/text.js` | `G.Text`：吹き出し、メッセージ窓（`MSG`）、技名（`SKILL`）、重い場面（`SCENE`）、一晩の場面（`NIGHT`・魔物ごとの `NIGHT_MON`）、監査官室の会話（`OFFICE`）、アイテム名。**配列に書き足すとそのまま候補に入る**。<br>魔物ごと・姿ごとの差し替え：吹き出しは `BUBBLE["spot@種"]`、捕まった場面は `SCENE["hold@種"]`、素の姿だけの場面は `SCENE["鍵#civilian"]`。無ければ共通のものを使う |
 | `js/report.js` | `G.Report`：口頭報告・報告書・監視記録・再報告を組み立てる。文章の在庫もここ。日をまたいで同じ文を避ける（`save.reportMem`）。<br>魔物・罠ごとの言い方は `WHAT_KIND["種:件の種類"]`（例 `"nikubana:hold"`）、件の種類ごとの嘘は `DOWNPLAY_KIND`／`DOC.falseKind` |
 | `js/diary.js` | `G.Diary`：ひかりの手帳。`write(save)` で一日分の日記を書き（`save.diary`）、`monsterNotes(save)` で魔物のメモ（知っている度合い・期待・された部位で中身が変わる。代表的な種は `OWN` に本人の言葉） |
@@ -150,7 +157,7 @@ Game2 の報告・監査と潜行の中身、Game5 のリアルタイム探索�
 | `js/ui.js` | 画面すべて（監査官室・依頼書の編集・手渡し・潜行・観測・報告・監査・再報告・処置・デッキ・取引・履歴）。`G.debug.dive` で潜行中の世界を覗ける |
 | `css/style.css` | 見た目。監査官室は CSS で描いた部屋 |
 
-### `js/field.js` の主な部分
+### `js/field/` の主な部分
 - `createWorld / populate`：1階を作り、魔物・罠・罠部屋・宝箱を置く。種族特化の依頼ならその種を7割に。
 - **罠部屋**：`makeTrapRoom`、`enterTrapRoom`（入ると封鎖、眠っていた魔物が起きる、部屋の気）。
 - **効き目** `applyEffect(w, 系統, 強さ, 出どころ, how)`：
@@ -298,7 +305,13 @@ localStorage、版 `v: 2`。古い版は読まずに捨てる。後から足し�
 |---|---|
 | `node newgame/tools/sim.js 30 7 --dup` | ブラウザなしで30日分を回す。止まらないか、報告の文がどれだけ重なるか（同じ台詞の割合など）を数える。`--show` で報告を表示 |
 | `node newgame/tools/fingerprint.js [潜行数] [種]` | 挙動の指紋。種を固定して潜行・報告を回し、出来事・結果・報告の全文の sha256 を出す。作り直しの前後で同じなら振る舞いは変わっていない（`--dump` で中身も） |
-| `node newgame/tools/wip/*.js` | 作業中の検査の下書き（踏破率・固まり検出・打ち切りの内訳・魅了の数）。説明は `tools/wip/README.md` |
+| `node newgame/tools/check.js` | 速い一括検査：指紋10潜行（値のみ表示）・sim 10日・同じ報告の重複検査・固まり検出（種1×1階）。失敗時は終了コード1。PRでもNode 22で実行 |
+| `node newgame/tools/check/rates.js --seeds 1-2 --runs 5 [--json]` | 種ごとの集計と合計。結果の割合・平均到達階・脅威度別踏破率・帰還理由・敗北させた魔物・罠の数。標準は種1×20回 |
+| `node newgame/tools/check/stuck.js [--seeds 7-14 --runs 5] [--json]` | 固まり検出。runsは階数、種は7倍して使用。場面を1行ずつ出力し、検出時は終了コード1。標準は従来の全範囲 |
+| `node newgame/tools/check/timeouts.js [--seeds 1-4 --runs 20] [--json]` | 300秒で打ち切った階の後半150秒の行動回数（30Hz）。JSONでは全内訳、端末では上位5つ |
+| `node newgame/tools/check/charm.js [--seeds 1-5 --runs 1] [--json]` | 5ダンジョンの魅了の発生元と回数。種は13倍して使用 |
+| `node newgame/tools/check/repeat.js [--seeds 7 --runs 30] [--json]` | sim.jsと共有した数え方で同じ台詞の割合と、半分以上の報告に出る8字の並び・その中身。runsは日数 |
+| `node newgame/tools/wip/*.js` | 正式版との比較用に残した旧版（`tools/wip/README.md`）。新しい検査には `check/` を使用 |
 | `node newgame/tools/bal.js <seed> <true/false> <回数>` | 潜行だけを回し、1回ごとの結果（結果・到達階・捕まった回数・催眠の長さ・拘束の長さなど）を1行で出す。バランス確認用 |
 | `npx http-server -p 8766` → `OUT=保存先 node newgame/tools/play.js` | 実際のブラウザ（Playwright・Chromium は `/opt/pw-browsers/chromium`）で、監査官室から翌日までを通しでクリックし、画面写真とエラーを出す。`W=1280` で広い画面 |
 

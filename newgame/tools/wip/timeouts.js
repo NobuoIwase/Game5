@@ -1,5 +1,5 @@
 const vm=require('vm'),fs=require('fs');const c={console,Math,Date,JSON};vm.createContext(c);
-for(const f of ['util','data','map','text','field','report','game'])vm.runInContext(fs.readFileSync(require('path').join(__dirname,'..','..','js',f+'.js'),'utf8'),c,{filename:f});
+for(const f of require("../files"))vm.runInContext(fs.readFileSync(require('path').join(__dirname,'..','..','js',f+'.js'),'utf8'),c,{filename:f});
 vm.runInContext(`
 for(const seed of [1,2,3,4]){G.U.setSeed(seed);
 for(let i=0;i<20;i++){const s=G.Game.newSave();s.autoDirector=false;G.Game.morning(s);G.Game.assign(s,i%s.requests.length,null,null);G.Game.prep(s);const run=G.Game.startDive(s);

@@ -1,5 +1,5 @@
 const vm=require('vm'),fs=require('fs');const DIR=process.env.DIR||require('path').join(__dirname,'..','..','js');const c={console,Math,Date,JSON};vm.createContext(c);
-for(const f of ['util','data','map','text','field','report','game'])vm.runInContext(fs.readFileSync(DIR+'/'+f+'.js','utf8'),c,{filename:f});
+for(const f of require("../files"))vm.runInContext(fs.readFileSync(DIR+'/'+f+'.js','utf8'),c,{filename:f});
 vm.runInContext(`
 G.U.setSeed(${process.argv[2]||1});const N=${process.argv[3]||20};
 const r={cleared:0,retreat:0,defeat:0,timeout:0,ordered:0,floors:0,lv:{}};

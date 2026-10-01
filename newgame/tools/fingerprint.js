@@ -3,7 +3,7 @@
 // 使い方: node newgame/tools/fingerprint.js [潜行数=40] [種=1]   → 1行目に sha256、--dump で中身も出す
 const vm = require("vm"), fs = require("fs"), path = require("path"), crypto = require("crypto");
 const ctx = { console, Math, Date, JSON }; vm.createContext(ctx);
-for (const f of ["util", "data", "map", "text", "field", "report", "diary", "game"])
+for (const f of require("./files"))
   vm.runInContext(fs.readFileSync(path.join(__dirname, "..", "js", f + ".js"), "utf8"), ctx, { filename: f + ".js" });
 const N = +process.argv[2] || 40, SEED = +process.argv[3] || 1, DUMP = process.argv.includes("--dump");
 const out = vm.runInContext(`(function(){

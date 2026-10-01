@@ -452,12 +452,12 @@ var G = (typeof G !== "undefined") ? G : {};
       magica:   { "惑": 0.55, "蕩": 1.0, "絡": 0.6, "削": 1.0 },
       civilian: { "惑": 0.8,  "蕩": 1.35, "絡": 1.6, "削": 1.0 },
     },
-    hpMax: 100, mpMax: 100, magicMax: 100, willMax: 100,
+    hpMax: 130, mpMax: 100, magicMax: 100, willMax: 100,
     spd: { magica: 2.9, civilian: 2.3 },
-    shot: { dmg: 9, cost: 4, cd: 0.8, cast: 0.3, speed: 8, range: 6.5 },   // ルミナ・ショット（遠距離・消費大）
-    melee: { dmg: 11, cost: 1, cd: 0.65, cast: 0.16, range: 1.35, arc: 1.25 },  // ルミナ・ストライク（杖で打つ・消費小）
+    shot: { dmg: 12, cost: 4, cd: 0.8, cast: 0.3, speed: 8, range: 6.5 },   // ルミナ・ショット（遠距離・消費大）
+    melee: { dmg: 14, cost: 1, cd: 0.65, cast: 0.16, range: 1.35, arc: 1.25 },  // ルミナ・ストライク（杖で打つ・消費小）
     burst: { dmg: 14, cost: 16, cd: 5, cast: 0.7, radius: 2.3, magic: 3 },   // シャイン・バスター
-    flash: { cost: 12, cd: 14, radius: 2.3, push: 1.3, stun: 1.2 },   // ルミナ・フラッシュ（囲まれた・二か所以上掴まれた時に弾き飛ばす）
+    flash: { cost: 12, cd: 9, radius: 2.3, push: 1.3, stun: 1.2 },   // ルミナ・フラッシュ（囲まれた・二か所以上掴まれた時に弾き飛ばす）
     breakout: { cd: 5, dist: 2.8 },                                    // 囲まれたら、空いている方へ突き抜ける
     mpRegen: 2.6, mpRest: 6.5,
     noTransform: 25,                                       // 変身が解けてから、また変身できるまで（秒）
@@ -492,7 +492,7 @@ var G = (typeof G !== "undefined") ? G : {};
   G.GROWTH = {
     lvMax: 30,
     xpNeed: lv => Math.round(40 * Math.pow(lv, 1.35)),          // 次のレベルまで
-    hpMax: lv => 100 + Math.min(40, 2 * (lv - 1)),
+    hpMax: lv => 130 + Math.min(40, 2 * (lv - 1)),
     mpMax: lv => 100 + Math.min(30, Math.round(1.5 * (lv - 1))),
     dmg: lv => 1 + Math.min(0.3, 0.02 * (lv - 1)),
     slots: lv => 2 + (lv >= 6 ? 1 : 0) + (lv >= 14 ? 1 : 0),     // 装備できる技の数（最大4）

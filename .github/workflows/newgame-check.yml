@@ -1,0 +1,20 @@
+name: Newgame checks
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          sparse-checkout: |
+            newgame/js
+            newgame/tools
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node newgame/tools/check.js

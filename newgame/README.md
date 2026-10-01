@@ -305,7 +305,13 @@ localStorage、版 `v: 2`。古い版は読まずに捨てる。後から足し�
 |---|---|
 | `node newgame/tools/sim.js 30 7 --dup` | ブラウザなしで30日分を回す。止まらないか、報告の文がどれだけ重なるか（同じ台詞の割合など）を数える。`--show` で報告を表示 |
 | `node newgame/tools/fingerprint.js [潜行数] [種]` | 挙動の指紋。種を固定して潜行・報告を回し、出来事・結果・報告の全文の sha256 を出す。作り直しの前後で同じなら振る舞いは変わっていない（`--dump` で中身も） |
-| `node newgame/tools/wip/*.js` | 作業中の検査の下書き（踏破率・固まり検出・打ち切りの内訳・魅了の数）。説明は `tools/wip/README.md` |
+| `node newgame/tools/check.js` | 速い一括検査：指紋10潜行（値のみ表示）・sim 10日・同じ報告の重複検査・固まり検出（種1×1階）。失敗時は終了コード1。PRでもNode 22で実行 |
+| `node newgame/tools/check/rates.js --seeds 1-2 --runs 5 [--json]` | 種ごとの集計と合計。結果の割合・平均到達階・脅威度別踏破率・帰還理由・敗北させた魔物・罠の数。標準は種1×20回 |
+| `node newgame/tools/check/stuck.js [--seeds 7-14 --runs 5] [--json]` | 固まり検出。runsは階数、種は7倍して使用。場面を1行ずつ出力し、検出時は終了コード1。標準は従来の全範囲 |
+| `node newgame/tools/check/timeouts.js [--seeds 1-4 --runs 20] [--json]` | 300秒で打ち切った階の後半150秒の行動回数（30Hz）。JSONでは全内訳、端末では上位5つ |
+| `node newgame/tools/check/charm.js [--seeds 1-5 --runs 1] [--json]` | 5ダンジョンの魅了の発生元と回数。種は13倍して使用 |
+| `node newgame/tools/check/repeat.js [--seeds 7 --runs 30] [--json]` | sim.jsと共有した数え方で同じ台詞の割合と、半分以上の報告に出る8字の並び・その中身。runsは日数 |
+| `node newgame/tools/wip/*.js` | 正式版との比較用に残した旧版（`tools/wip/README.md`）。新しい検査には `check/` を使用 |
 | `node newgame/tools/bal.js <seed> <true/false> <回数>` | 潜行だけを回し、1回ごとの結果（結果・到達階・捕まった回数・催眠の長さ・拘束の長さなど）を1行で出す。バランス確認用 |
 | `npx http-server -p 8766` → `OUT=保存先 node newgame/tools/play.js` | 実際のブラウザ（Playwright・Chromium は `/opt/pw-browsers/chromium`）で、監査官室から翌日までを通しでクリックし、画面写真とエラーを出す。`W=1280` で広い画面 |
 

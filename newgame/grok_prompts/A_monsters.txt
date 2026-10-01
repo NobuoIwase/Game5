@@ -1,0 +1,48 @@
+課題A：魔物11種。Grok の画像生成に、===== で区切った1ブロックずつ（STYLE の行ごと）そのまま貼る。縦横比は正方形（1:1）。
+選んだ1枚を ~/grok_raw/A/<id>_<番号>.png に保存し、
+  python3 newgame/tools/grok_fit.py sprite ~/grok_raw/A/<id>_<番号>.png newgame/assets/monsters/<id>.png --pixel 2
+で整える。
+
+===== kuchizuke（口づけの淫魔）
+STYLE: 2D pixel-art game sprite, chibi super-deformed proportions, clean dark outline, soft cel shading, pastel pink and wine-purple palette, one character only, full body fully inside the frame, centered, front three-quarter view, no ground, no shadow, no text, no watermark, no green anywhere on the character, flat solid pure green (#00FF00) background.
+Subject: an elegant adult succubus woman floating slightly above the ground. Small curved horns, small bat wings, a thin tail with a heart tip, long wavy lavender hair. She wears a long dark-rose gothic dress that covers her body. Glossy full lips, eyes half-closed, blowing a kiss with one hand; a tiny pink heart floats from her lips. Mature, graceful face.
+
+===== hitomi（見つめる淫魔）
+STYLE: 2D pixel-art game sprite, chibi super-deformed proportions, clean dark outline, soft cel shading, pastel pink and wine-purple palette, one character only, full body fully inside the frame, centered, front three-quarter view, no ground, no shadow, no text, no watermark, no green anywhere on the character, flat solid pure green (#00FF00) background.
+Subject: a quiet adult succubus woman floating in place, doing nothing but gazing at the viewer. Very large, moist, glowing pink eyes with heart-shaped highlights, a gentle longing expression. Long straight dark plum hair over one shoulder, small horns, small folded bat wings, a thin tail. A deep wine-red dress with a translucent lilac shawl; hands softly clasped at her chest. Mature, calm face.
+
+===== utaimp（歌う小淫魔）
+STYLE: 2D pixel-art game sprite, chibi super-deformed proportions, clean dark outline, soft cel shading, pastel pink and wine-purple palette, one character only, full body fully inside the frame, centered, front three-quarter view, no ground, no shadow, no text, no watermark, no green anywhere on the character, flat solid pure green (#00FF00) background.
+Subject: a petite adult imp woman (a small demon, fairy-sized but an adult), singing a lullaby with her eyes closed and mouth open, hands over her chest. Small horns, tiny bat wings, a thin tail. Short fluffy pink-violet hair, a frilly short dress in rose and lilac. Small glowing musical notes drift around her. Adult face and proportions, not a child.
+
+===== tenazuke（手懐ける小淫魔）
+STYLE: 2D pixel-art game sprite, chibi super-deformed proportions, clean dark outline, soft cel shading, pastel pink and wine-purple palette, one character only, full body fully inside the frame, centered, front three-quarter view, no ground, no shadow, no text, no watermark, no green anywhere on the character, flat solid pure green (#00FF00) background.
+Subject: a petite adult imp woman (a small demon, fairy-sized but an adult) with a smug, teasing smirk and one hand on her hip, twirling a long pink ribbon with the other hand. Small sharp horns, tiny bat wings, a tail with a heart tip. Black and magenta outfit with a short cape, twin tails hairstyle in dark magenta. Adult face and proportions, not a child.
+
+===== miwakubana（魅惑の花）
+STYLE: 2D pixel-art game sprite, chibi super-deformed proportions, clean dark outline, soft cel shading, pastel pink and wine-purple palette, one creature only, whole creature fully inside the frame, centered, front three-quarter view, no ground, no shadow, no text, no watermark, no green anywhere on the creature, flat solid pure green (#00FF00) background.
+Subject: a large fantasy flower monster rooted in place. Big soft pink-violet petals half-closed like cupped hands, a glowing heart-shaped center, sweet sparkling pollen drifting upward. Curling leaves and stem in dark wine-purple (not green). No face.
+
+===== sasayaki（囁きスライム）
+STYLE: 2D pixel-art game sprite, chibi super-deformed proportions, clean dark outline, soft cel shading, pastel pink and wine-purple palette, one creature only, whole creature fully inside the frame, centered, front three-quarter view, no ground, no shadow, no text, no watermark, no green anywhere on the creature, flat solid pure green (#00FF00) background.
+Subject: a round translucent lavender slime blob. Bubbles rise inside it and pop at the surface as little soft mouth-shaped openings, as if it were whispering; faint pink curling wisps float out like murmurs. Two small sleepy eyes. Glossy highlights.
+
+===== namekuji（ナメクジ）
+STYLE: 2D pixel-art game sprite, chibi super-deformed proportions, clean dark outline, soft cel shading, pastel pink and wine-purple palette, one creature only, whole creature fully inside the frame, centered, side three-quarter view, no ground, no shadow, no text, no watermark, no green anywhere on the creature, flat solid pure green (#00FF00) background.
+Subject: a small chubby fantasy slug, soft pinkish-lilac glossy body with a slime sheen, two short eye stalks with round dark eyes, a tiny heart-shaped mark on its back. Slow and harmless-looking.
+
+===== namequeen（ナメクジ女王）
+STYLE: 2D pixel-art game sprite, chibi super-deformed proportions, clean dark outline, soft cel shading, pastel pink and wine-purple palette, one creature only, whole creature fully inside the frame, centered, side three-quarter view, no ground, no shadow, no text, no watermark, no green anywhere on the creature, flat solid pure green (#00FF00) background.
+Subject: a large regal fantasy slug, deep magenta-violet glossy body. Along its back rises a soft frilled ridge shaped like a royal crown. A glowing heart pattern on its body pulses with soft pink light rings. Two eye stalks, calm and majestic.
+
+===== firstslug（はじめの夜の主）
+STYLE: 2D pixel-art game sprite, chibi super-deformed proportions, clean dark outline, soft cel shading, pastel pink and wine-purple palette, one creature only, whole creature fully inside the frame, centered, side three-quarter view, no ground, no shadow, no text, no watermark, no green anywhere on the creature, flat solid pure green (#00FF00) background.
+Subject: a small fantasy slug, the same simple shape as an ordinary small slug, but much darker: deep plum and black-purple glossy body with faint glowing pink veins, and quietly glowing pink eyes on its eye stalks. Small, not big, yet eerie.
+
+===== mitsusui（蜜吸い虫）
+STYLE: 2D pixel-art game sprite, chibi super-deformed proportions, clean dark outline, soft cel shading, pastel pink and wine-purple palette, one creature only, whole creature fully inside the frame, centered, front three-quarter view, no ground, no shadow, no text, no watermark, no green anywhere on the creature, flat solid pure green (#00FF00) background.
+Subject: a tiny palm-sized fantasy wisp creature: a round fluffy glowing body like a dandelion puff, two soft translucent petal-shaped wings, small round shy eyes, and a short curled tube of light it uses to sip nectar. It sheds sweet golden-pink phosphorescent dust. It must NOT look like a real insect: no insect legs, no antennae, no compound eyes, no segmented body.
+
+===== bishin（媚芯茸）
+STYLE: 2D pixel-art game sprite, chibi super-deformed proportions, clean dark outline, soft cel shading, pastel pink and wine-purple palette, one creature only, whole creature fully inside the frame, centered, front three-quarter view, no ground, no shadow, no text, no watermark, no green anywhere on the creature, flat solid pure green (#00FF00) background.
+Subject: a small cluster of fantasy mushrooms with rounded magenta-pink caps dotted with glowing heart-shaped spots and slender pale lilac stalks. A soft cloud of glowing pink spores puffs up from the caps. No face.

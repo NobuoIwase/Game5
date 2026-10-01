@@ -1,7 +1,7 @@
 /* field/step.js — field 内部。tools/files.js と index.html の順で読み込む。 */
 (function () {
   "use strict";
-  let U, M, createWorld, enterTrapRoom, spawnMonster, spawnTrap, heroName, say, live, feed, msg, fx, actMsg, record, heat, releaseOverflow, ATTACH, pray, mult, tierFx, sk, crave, applyEffect, untransform, engraveSigil, possess, tickStatus, endPossess, checkClimax, grab, release, actCat, defeat, perceive, roomAt, liveliness, updateHikari, updateMonster, updateTraps, triggerTrap, updateProjs;
+  let U, M, createWorld, enterTrapRoom, spawnMonster, spawnTrap, heroName, say, live, feed, msg, fx, actMsg, record, heat, releaseOverflow, ATTACH, pray, mult, tierFx, sk, crave, applyEffect, untransform, engraveSigil, possess, tickStatus, endPossess, checkClimax, grab, release, actCat, defeat, perceive, roomAt, liveliness, updateHikari, updateMonster, updateTraps, triggerTrap, updateProjs, floodTick;
   /* ================================================================ 配置（プレイヤー／オート指揮） */
   function cardInfo(card) {
     if (card.startsWith("trap:")) { const id = card.slice(5); return { id, trap: true, d: G.TRAPS[id] }; }
@@ -144,6 +144,7 @@
       if (!tr.active) continue;
       tr.t += dt;
       if (tr.wakeT > 0) { tr.wakeT -= dt; if (tr.wakeT <= 0 && tr.wake) tr.wake(); }
+      if (tr.T.flood) floodTick(w, tr, dt);
       if (tr.T.aura && h.room === tr.r && !w.outcome) { tr.auraT = (tr.auraT || 0) + dt; if (tr.auraT > 1.3) { tr.auraT = 0; applyEffect(w, tr.T.aura[0], tr.T.aura[1], { d: { name: tr.T.name, type: tr.T.aura[0] }, kind: tr.key, x: h.x, y: h.y }); } }
     }
     if (w.sealed) {                               // 扉が閉まっている：部屋から出られない
@@ -289,7 +290,7 @@
     if (h.form === "civilian") add((h.noTransform || 0) > 0 ? "変身不可" : "素の姿", h.noTransform > 0 ? h.noTransform : null, "red");
     if (h.cast && h.cast.kind === "transform") add("変身詠唱", h.cast.t, "violet");
     if (h.mislead > 0) add("幻に迷う", h.mislead, "violet");
-    if (w.sealed) add("閉じ込め", w.sealed.t, "red");
+    if (w.sealed) { const fr = w.sealed.room; if (fr.flood) add("閉じ込め・触手 " + Math.round(fr.fill * 100) + "%", null, "red"); else add("閉じ込め", w.sealed.t, "red"); }
     if (h.surrounded) add("包囲", null, "red");
     if (prep) add(prep.name + "（" + (prep.numb ? "熱に鈍い" : prep.slow ? "動きが重い" : "暗示に弱い") + "）", null, "dim");
     for (const a of w.run.save.ailments || []) { const A = G.Game && G.Game.AILMENTS[a.id]; if (A) add(A.name, null, "dim"); }
@@ -297,7 +298,7 @@
   }
 
   Object.assign(G.F, { cardInfo, canPlace, place, autoDirect, step, startNight, nightBeat, statusList });
-  G.F.bind.push(() => { ({ U, M, createWorld, enterTrapRoom, spawnMonster, spawnTrap, heroName, say, live, feed, msg, fx, actMsg, record, heat, releaseOverflow, ATTACH, pray, mult, tierFx, sk, crave, applyEffect, untransform, engraveSigil, possess, tickStatus, endPossess, checkClimax, grab, release, actCat, defeat, perceive, roomAt, liveliness, updateHikari, updateMonster, updateTraps, triggerTrap, updateProjs } = G.F); });
+  G.F.bind.push(() => { ({ U, M, createWorld, enterTrapRoom, spawnMonster, spawnTrap, heroName, say, live, feed, msg, fx, actMsg, record, heat, releaseOverflow, ATTACH, pray, mult, tierFx, sk, crave, applyEffect, untransform, engraveSigil, possess, tickStatus, endPossess, checkClimax, grab, release, actCat, defeat, perceive, roomAt, liveliness, updateHikari, updateMonster, updateTraps, triggerTrap, updateProjs, floodTick } = G.F); });
   for (const bind of G.F.bind) bind();
   delete G.F.bind;
   G.Field = { statusList, createWorld, step, place, canPlace, cardInfo, startNight, nightBeat, spawnMonster, mult };

@@ -262,6 +262,8 @@ var G = (typeof G !== "undefined") ? G : {};
     strip: ["{n}の 装束が また一枚 失われた……"],
     release: ["溜めこまれていた 熱が いっせいに 返ってきた！（{c}回）", "栓が 抜けた。{n}の 体が 何度も 跳ねた……（{c}回）"],
     charm: ["{n}の 胸が {mon}に 跳ねた……（魅了{lv}）", "{n}は {mon}から 目が 離せない……（魅了{lv}）"],
+    orbShut: ["光が {trap}の 殻に 弾かれた。……脈打つ 瞬間しか、開かない？", "{trap}は 殻を 閉じている。開く 一瞬を 待たないと……"],
+    orbCrack: ["光が {trap}に 当たった！ 玉に ひびが 入る。（あと{c}回）", "{trap}が 大きく 脈打ち、ひびが 広がった。（あと{c}回）"],
     lastStand: ["{n}の 身体から、まばゆい 光が 弾けた！ ……底力！", "尽きかけた 気力を 振り絞り、{n}は 光で 全部を 弾き飛ばした！"],
     charmFade: ["{mon}への 甘い 気持ちが、少しずつ 醒めていく……"],
     charmPulse: ["{mon}が 甘い 脈動を 放った。ナメクジが、みんな、いとしく 見える……", "{mon}の 脈動が 胸の 奥に 響いた。一族ごと、好きに なっていく……"],
@@ -983,7 +985,7 @@ var G = (typeof G !== "undefined") ? G : {};
     shadow: "hands", jouka: "hands", tease: "hands", pod: "machine",
     roper: "tentacle", mind_roper: "tentacle", drain_roper: "tentacle", tentacle_lord: "tentacle", hanging_vine: "tentacle", jellyfish: "tentacle",
     vine: "tentacle", root: "tentacle", curtain: "tentacle", armor: "slime",
-    slime: "slime", mirror_slime: "slime", sasayaki: "slime", namekuji: "slime", namequeen: "slime", firstslug: "slime", mitsusui: "worm", tenazuke: "imp", suiyou: "slime", ukegame: "slime", spring: "slime", slime_drop: "slime",
+    flood_orb: "tentacle", slime: "slime", mirror_slime: "slime", sasayaki: "slime", namekuji: "slime", namequeen: "slime", firstslug: "slime", mitsusui: "worm", tenazuke: "imp", suiyou: "slime", ukegame: "slime", spring: "slime", slime_drop: "slime",
     nikubana: "plant", dakitake: "plant", bud: "plant", sayagoke: "plant", namagoroshi: "plant", cocoon: "plant",
     zuidou: "worm", doromushi: "worm", gitai: "worm", haimushi: "worm", mushi_pit: "worm",
     gulper_worm: "mouth", kabeguchi: "mouth", mimic: "mouth", kuwaemushi: "mouth",
@@ -1472,6 +1474,69 @@ var G = (typeof G !== "undefined") ? G : {};
     },
     // 達したばかりの、敏感すぎる身体
     oversens: () => fresh("os", ["達したばかりの身体に、次の刺激が容赦なく重なる……", "敏感になりすぎた肌が、触れられるたびに跳ねる……", "まだ震えの引かない場所を、また責められる……"]),
+  };
+})();
+/* ---- 満ちる触手の間：水位のように満ちてくる触手（Game2 の「満ちてくる触手の部屋」を、ひかり向けに書き直したもの） ---- */
+(function () {
+  "use strict";
+  const U = G.U;
+  const last = {};
+  const fresh = (k, a) => { const pool = a.length > 1 ? a.filter(x => x !== last[k]) : a; const v = U.pick(pool); last[k] = v; return v; };
+  const SC = {
+    floodIn: [
+      ["広間の真ん中で、足の下がごぼっ、と鳴った。", "振り向くより先に、入ってきた扉が石の重みで落ちた。ずしん、と、退路がふさがる。", "床にぽっかり空いた丸い穴から、てらてら光るものが、湯のように溢れ出してくる。", "一本や二本じゃない。数えきれないうねりが、床をおおい、かさを増して、水位のように部屋を満たしはじめた。", "「……え、うそ、これ、沈むやつ……！？」 穴のふちで、何かが脈打っている。……あれだ。"],
+      ["扉が落ちた。背中で、石の鳴る重い音。", "床の穴の奥で、何かが湧く音がする。ぬちゅ、ぬちゅ、と、たくさんの、柔らかいものが擦れ合う音。", "最初の一本が、穴のふちから這い出した。続いて十本。百本。触手が、水のように床を満たしていく。", "「……{n}、落ち着いて。……穴のふちの玉。あれを割れば、きっと」 ふちで、桃色の玉が、どくん、と脈打った。"],
+    ],
+    floodFull: [
+      ["満ちきった。", "足はもう床に届かない。腰から下は、ぶあつい触手のかさの中で、ゆっくりと揺すられている。", "沈んだ分だけ、責めは上へ、上へとせり上がってくる。胸の下まで、うねりが来ている。", "「……っ、玉、……玉、撃たなきゃ、……なのに、身体が……っ」"],
+      ["部屋が、触手で満ちた。", "天井の石が、すぐ頭の上にある。もう逃げる高さは残っていない。", "かさの中で、何十本もの先が、服の中を、脚の間を、好き勝手に探っている。", "「や、……っ、全部、……全部から、来る、……っ」"],
+    ],
+    floodBreak: [
+      ["光が玉を撃ち抜いた。ぱりん、と、硬い音。", "満ちていた触手が、潮が引くように、さあっと穴へ退いていく。", "絡みついていた最後の一本が、名残惜しそうに内腿を撫でて、離れた。", "扉の落ちていた石が、ごとり、と持ち上がる。", "「……はぁ、……っ、……割った。……割ったから、……もう、来ないで……」"],
+      ["玉が割れた。", "触手のかさが、床の穴へ吸い込まれるように引いていく。引いていく音が、やけに長い。", "ぬめりだけが、床と、{n}の脚に残った。", "「……ぎりぎり、セーフ。……セーフ、だよね、今の……」"],
+    ],
+    floodSpent: [
+      ["玉の脈が、ふっと弱まった。", "満ちきっていた触手が、くたびれたように、ゆっくりと穴へ戻っていく。", "割れなかった。ただ、満ち引きの時間が、終わっただけ。", "扉が開いた。{n}は、ぬめった脚を引きずるようにして、部屋の外へ這い出した。"],
+    ],
+  };
+  const STAGE = [
+    null,
+    ["触手が {n}の 足首まで 満ちてきた……", "床を おおう 触手が、{n}の くるぶしを なでる……"],
+    ["触手の かさが {n}の 膝まで 来た。足が 取られる……", "膝の 高さまで 満ちた 触手が、スカートの 裾を 揺らす……"],
+    ["触手が {n}の 腰まで 満ちた。沈んだ ぶんだけ、責めが 上へ せり上がる……", "腰まで 呑まれた。かさの 中で、脚の 間を 何本もの 先が 探っている……"],
+    ["触手が {n}の 胸の 下まで 満ちた！ もう、逃げる 高さが ない……", "部屋が 触手で 満ちていく。{n}の 身体は、ぶあつい かさの 中に 沈んでいる……"],
+  ];
+  const SAY = [null,
+    ["足首、……っ、のぼって、こないで……", "やだ、増えてる、……増えてるって……"],
+    ["膝まで、……動けな、……っ", "玉、……玉を、撃たなきゃ……"],
+    ["……っ、沈むほど、上に、来る……っ", "そこ、……沈んだとこから、のぼってこないで……っ"],
+    ["上、もう、ない……っ、のに、まだ、増える……っ", "……っ、全部、……全部、触手……"],
+  ];
+  G.Text.flood = {
+    stage: (st, ctx) => U.fill(fresh("fs" + st, STAGE[st]), ctx),
+    say: st => SAY[st] ? fresh("fy" + st, SAY[st]) : null,
+  };
+  const base = G.Text.scene;
+  G.Text.scene = function (key, ctx) {
+    if (SC[key]) return fresh("fsc" + key, SC[key]).map(l => U.fill(l, Object.assign({ n: "ルミナ" }, ctx)));
+    return base.call(this, key, ctx);
+  };
+  // 満ちてくる触手の責め：水位が上がるほど、上へ、深くなる
+  const A = (s, t, fx, part, p, pw, o) => Object.assign({ s, t, fx, part, p, pw }, o || {});
+  const ACT = [
+    A(0, "満ちてくる 触手の 表面が、{n}の 足首から ふくらはぎを、ぬるりと なであげる", "ぬる…", "脚", "ふくらはぎを なであげられて", 0.6),
+    A(0, "かさの 中から 細い 先が 伸び、{n}の 膝の 裏を くすぐる", "にゅる", "脚", "膝の裏を くすぐられて", 0.5),
+    A(1, "沈んだ 腰の まわりで、何本もの 先が スカートの 中へ もぐりこむ", "もこもこっ", "内腿", "スカートの中へ もぐりこまれて", 0.9),
+    A(1, "触手の かさが 内腿の あいだに 入りこみ、下着の 上から 擦りあげる", "ずりゅっ", "脚の間", "下着の上から 擦られて", 1.0),
+    A(2, "かさの 中で、先が 下着を ずらし、{n}の 秘所の ふちを 浅く 出たり 入ったり する", "ちゅぷっ", "秘所", "秘所の ふちを 出し入れされて", 1.3),
+    A(2, "水位が 上がるたび、沈んだ ぶんだけ 深く、何本もの 先が {n}の 中を 探る", "ぬぷっ", "秘所", "沈むほど 深く 探られて", 1.4),
+    A(2, "胸の 下まで 満ちた 触手が 服の 中へ 入り、{n}の 胸を 下から 持ち上げて 揉む", "むにゅう", "胸", "満ちた 触手に 胸を 揉まれて", 1.1),
+    A(2, "かさの 中の 一本が、{n}の 一番 敏感な 突起を 巻きこんで、締めては ゆるめる", "きゅうっ", "突起", "突起を 巻きこまれて", 1.4),
+  ];
+  const baseAct = G.Text.actFor;
+  G.Text.actFor = function (kind, cat, stage) {
+    if (kind === "flood_orb" && cat !== "futa" && U.chance(0.75)) { const own = ACT.filter(a => a.s <= stage), top = own.filter(a => a.s === stage); return U.pick(top.length && U.chance(0.65) ? top : own); }
+    return baseAct.call(this, kind, cat, stage);
   };
 })();
 if (typeof module !== "undefined") module.exports = G;

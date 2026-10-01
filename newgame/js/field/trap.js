@@ -1,10 +1,11 @@
 /* field/trap.js — field 内部。tools/files.js と index.html の順で読み込む。 */
 (function () {
   "use strict";
-  let U, M, HR, spawnMonster, heroName, say, msg, fx, pushMsg, hitDesc, logLine, record, IMPS, trait, heat, intake, addCharm, addAttach, addCum, addCrack, pray, addBrain, mult, tierFx, learn, applyEffect, drainMagic, engraveSigil, checkClimax, grab, openScene, hurtMon, alertMon;
+  let U, M, HR, spawnMonster, heroName, say, msg, fx, pushMsg, hitDesc, logLine, record, IMPS, trait, heat, intake, addCharm, addAttach, addCum, addCrack, pray, addBrain, mult, tierFx, learn, applyEffect, drainMagic, engraveSigil, checkClimax, grab, openScene, hurtMon, alertMon, release;
   function updateTraps(w, dt) {
     const h = w.run.h;
     for (const tr of w.traps) {
+      if (tr.d.inert) continue;                       // 部屋の仕掛け（満ち引きの玉など）は、踏んでも作動しない
       if (tr.d.emit) { updateTower(w, tr, dt); continue; }
       if (!tr.armed) { tr.rearm -= dt; if (tr.rearm <= 0) tr.armed = true; continue; }
       if (tr.active > 0) {
@@ -158,8 +159,71 @@
     if (rearm) { tr.armed = false; tr.rearm = tr.d.rearm; }
   }
 
-  // 見破った罠は、撃って壊せる（部屋ごとの仕掛けは壊せない）
+  // 撃たれた罠：何度か当てないと割れないもの（満ち引きの玉）は、ひびが入るだけ
+  // 満ち引きの玉は、脈打っている間だけ殻が開く（3秒ごとに1.2秒）
+  const ORB_P = 3.0, ORB_OPEN = 1.2;
+  function orbPhase(w, tr) { return ((w.t - (tr.phase || 0)) % ORB_P + ORB_P) % ORB_P; }
+  function orbOpen(w, tr) { return tr.d.effect !== "floodOrb" || orbPhase(w, tr) < ORB_OPEN; }
+  function hitTrap(w, tr) {
+    if (!orbOpen(w, tr)) {                          // 閉じた殻に弾かれる
+      fx(w, { kind: "hit", x: tr.x, y: tr.y, color: "#b08aa0", life: 0.3 });
+      if (!(tr.shutMsgT > w.t)) { tr.shutMsgT = w.t + 6; msg(w, "orbShut", { trap: tr.d.name }, 0.5); }
+      return;
+    }
+    if (tr.d.breakable && (tr.hp = (tr.hp ?? tr.d.breakable) - 1) > 0) {
+      fx(w, { kind: "hit", x: tr.x, y: tr.y, color: "#ffd0e4", life: 0.4 });
+      msg(w, "orbCrack", { trap: tr.d.name, c: tr.hp }, 0.3); w.run.h.liveT = w.t;
+      return;
+    }
+    breakTrap(w, tr);
+  }
+  /* ---------------- 満ちる触手の間 ----------------
+   * 踏み込むと、水位のように room.fill が上がる（約22秒で満ちる）。満ちるほど足を取られ、熱が上がり、
+   * 三割を越えると触手が掴む（掴み直しの間は満ちるほど短く、掴む力は強く、責めはすぐ直接になる）。
+   * 穴のふちの玉を三度撃てば（杖でも）、潮が引くように退き、扉が開く。満ちきって30秒経っても退く。 */
+  function floodTick(w, room, dt) {
+    const h = w.run.h, F = room.flood, T = room.T, orb = room.orb;
+    if (!F || F.done) return;
+    if (F.drain) { room.fill = Math.max(0, room.fill - dt / 2.5); if (room.fill <= 0) F.done = true; return; }
+    const inRoom = h.room === room.r;
+    room.fill = Math.min(1, room.fill + dt / T.flood.rise * (inRoom ? 1 : 0.4));
+    F.peak = Math.max(F.peak, room.fill);
+    const st = room.fill >= 0.85 ? 4 : room.fill >= 0.6 ? 3 : room.fill >= 0.35 ? 2 : room.fill >= 0.15 ? 1 : 0;
+    if (st > F.stage) {
+      F.stage = st; h.liveT = w.t;
+      pushMsg(w, G.Text.flood.stage(st, { n: heroName(w) }), "flood");
+      const b = G.Text.flood.say(st); if (b) h.bubble = { text: b, t: 2.4 };
+      if (st === 4) openScene(w, "floodFull", null);
+    }
+    if (room.fill >= 1) { F.fullT += dt; if (F.fullT > T.flood.fullHold) return floodBreak(w, room, true); }
+    if (!inRoom || w.outcome) return;
+    h.slow = Math.max(h.slow, 0.3 + room.fill * 0.8);
+    h.arousal = Math.min(100, h.arousal + 1.4 * room.fill * mult(w, "蕩") * dt);
+    const b = h.bound;
+    if (b && orb && b.src === orb) {
+      b.stage = Math.max(b.stage, st >= 3 ? 2 : st >= 2 ? 1 : 0);
+      const open = orbOpen(w, orb);                 // 殻が開く間は、触手の力もゆるむ（もがいて抜ける隙）
+      b.power = open ? Math.min(b.power, 0.3 + room.fill * 0.4) : Math.max(b.power, 0.4 + room.fill * 0.7);
+      b.slowStruggle = open ? 1 : 1 - room.fill * 0.35;
+    } else if (!b && orb && w.traps.includes(orb) && room.fill >= 0.35 && w.t >= F.grabT) {
+      if (grab(w, orb, 0.35 + room.fill * 0.6, "絡")) { F.grabT = w.t + 6 - room.fill * 3; record(w, { kind: "flood", type: "絡", trapName: T.name, fill: Math.round(room.fill * 100), sev: 2 }); }
+      else F.grabT = w.t + 1;
+    }
+  }
+  function floodBreak(w, room, spent) {
+    const h = w.run.h, F = room.flood;
+    if (!F || F.drain) return;
+    F.drain = true;
+    if (h.bound && room.orb && h.bound.src === room.orb) release(w, false);
+    if (room.orb) w.traps = w.traps.filter(t => t !== room.orb);
+    if (w.sealed && w.sealed.room === room) { w.sealed = null; msg(w, "unsealed", {}); }
+    h.liveT = w.t;
+    record(w, { kind: "floodEnd", trapName: room.T.name, spent: !!spent, peak: Math.round(F.peak * 100), sev: 0 });
+    openScene(w, spent ? "floodSpent" : "floodBreak", null);
+  }
+  // 見破った罠は、撃って壊せる（部屋ごとの仕掛けは壊せない。満ち引きの玉は別）
   function breakTrap(w, tr) {
+    if (tr.d.effect === "floodOrb" && tr.room) { fx(w, { kind: "burst", x: tr.x, y: tr.y, color: "#ffd0e4", life: 0.9 }); learn(w, tr.kind, 2); return floodBreak(w, tr.room, false); }
     w.traps = w.traps.filter(t => t !== tr);
     fx(w, { kind: "burst", x: tr.x, y: tr.y, color: "#fff2a8", life: 0.6 });
     msg(w, "trapBreak", { trap: tr.d.name }, 1);
@@ -173,8 +237,8 @@
       p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt;
       if (M.tile(w.map, p.x, p.y) !== 0) { p.life = 0; if (p.owner === "h") h.wallHits = (h.wallHits || 0) + 1; fx(w, { kind: "hit", x: p.x, y: p.y, color: "#aaa", life: 0.2 }); continue; }
       if (p.owner === "h") {
-        const tr = w.traps.find(t => t.found && t.armed && !t.room && U.dist(p.x, p.y, t.x, t.y) < Math.min(0.7, t.d.radius * 0.6) + p.r);
-        if (tr) { breakTrap(w, tr); p.life = 0; continue; }
+        const tr = w.traps.find(t => t.found && t.armed && (!t.room || t.d.breakable) && U.dist(p.x, p.y, t.x, t.y) < Math.min(0.7, t.d.radius * 0.6) + p.r);
+        if (tr) { hitTrap(w, tr); p.life = 0; continue; }
         for (const m of w.monsters) {
           if (m.hp <= 0 || U.dist(p.x, p.y, m.x, m.y) > m.d.r + p.r) continue;
           if (m.d.reflect && U.chance(m.d.reflect)) {
@@ -201,6 +265,6 @@
   }
 
 
-  Object.assign(G.F, { updateTraps, EMIT, updateTower, triggerTrap, breakTrap, updateProjs });
-  G.F.bind.push(() => { ({ U, M, HR, spawnMonster, heroName, say, msg, fx, pushMsg, hitDesc, logLine, record, IMPS, trait, heat, intake, addCharm, addAttach, addCum, addCrack, pray, addBrain, mult, tierFx, learn, applyEffect, drainMagic, engraveSigil, checkClimax, grab, openScene, hurtMon, alertMon } = G.F); });
+  Object.assign(G.F, { orbOpen, orbPhase, updateTraps, EMIT, updateTower, triggerTrap, breakTrap, hitTrap, floodTick, floodBreak, updateProjs });
+  G.F.bind.push(() => { ({ U, M, HR, spawnMonster, heroName, say, msg, fx, pushMsg, hitDesc, logLine, record, IMPS, trait, heat, intake, addCharm, addAttach, addCum, addCrack, pray, addBrain, mult, tierFx, learn, applyEffect, drainMagic, engraveSigil, checkClimax, grab, openScene, hurtMon, alertMon, release } = G.F); });
 })();

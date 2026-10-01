@@ -92,7 +92,7 @@
     }
     h.cast = null; h.vx = h.vy = 0;
     if (src.d && src.d.spd !== undefined) monSay(w, src, "grab", 0.8);
-    const e = record(w, { kind: "hold", type: type || "絡", mon: src.kind, monName: src.d.name, sev: 2 });
+    const e = record(w, { kind: "hold", type: type || "絡", mon: src.kind, monName: src.d.holdName || src.d.name, sev: 2 });
     h.bound.ev = e;
     logLine(w, G.Text.log("hold", { mon: src.d.name }), "mid");
     msg(w, "grab", { mon: src.d.name });
@@ -111,7 +111,7 @@
       const m = w.monsters.find(x => x.id === id);
       if (m) { m.holding = false; m.stun = broke ? 1.6 : 0.6; m.cd = 2.5; m.rcl = 0.3; m.rclX = Math.sign(m.x - h.x) || 1; knock(w, m, U.angle(h.x, h.y, m.x, m.y), 1.0); }
       const tr = w.traps.find(x => x.id === id);
-      if (tr) { tr.armed = false; tr.rearm = tr.d.rearm; }
+      if (tr && !tr.d.inert) { tr.armed = false; tr.rearm = tr.d.rearm; }   // 満ち引きの玉は、ほどけても眠らない
     }
     if (b.ev) { b.ev.dur = +b.t.toFixed(1); if (b.t > 3.5) b.ev.sev = 3; }
     // 捕まっていた間のまとめ：何回・どこを・何回達したか、そして今どんな有様か
@@ -160,7 +160,7 @@
     b.acts++;
     // 段階：服の上から → 服の中 → 直接。時間・回数・装束の損壊・発情で進む
     const st = (b.acts >= 7 || b.t > 8 || (h.exposure && b.acts >= 3)) ? 2 : (b.acts >= 3 || b.t > 3.5 || h.exposure || h.arousal > 60) ? 1 : 0;
-    const who = acts[b.acts % acts.length], name = who.d ? who.d.name : "";
+    const who = acts[b.acts % acts.length], name = who.d ? (who.d.holdName || who.d.name) : "";
     if (st > b.stage) { b.stage = st; actMsg(w, "stage" + st, { mon: name }); if (st === 2) actBub(w, "touch2"); }
     const cat = actCat(w, who), act = G.Text.actFor(who.kind, cat, b.stage);
     if (!act) return;

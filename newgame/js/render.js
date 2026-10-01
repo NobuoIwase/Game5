@@ -448,9 +448,9 @@ var G = (typeof G !== "undefined") ? G : {};
   // 人の大きさで描く魔物：[画面での身長（ルミナ＝約1.85）, 絵の中の頭の上端, 足元]（256px の絵での位置）
   // 人間（ワルドー・教団）はルミナと同じか少し大きく、小淫魔はルミナより少し小さく
   const FIG = {
-    waldo_grunt: [1.95, 44, 230], waldo_officer: [2.05, 35, 230], shinja: [1.9, 73, 230], sekkyoushi: [1.95, 73, 230], chuushutsu: [1.9, 73, 230], kyouso: [2.1, 2, 230],
+    waldo_grunt: [1.95, 8, 248], waldo_officer: [2.05, 8, 248], shinja: [1.9, 8, 248], sekkyoushi: [1.95, 8, 248], chuushutsu: [1.9, 8, 248], kyouso: [2.1, 8, 248],
     inma: [1.85, 8, 248], muma_queen: [1.95, 67, 248], kuchizuke: [1.8, 8, 248], hitomi: [1.8, 8, 248],
-    imp: [1.45, 8, 247], futago: [1.35, 86, 230], sakiimp: [1.45, 83, 230], jikkyou: [1.45, 83, 230], kusuguri: [1.45, 40, 230], kazoe: [1.45, 36, 230], azakeri: [1.45, 82, 230], utaimp: [1.45, 8, 248], tenazuke: [1.45, 8, 248],
+    imp: [1.45, 8, 247], futago: [1.35, 8, 248], sakiimp: [1.45, 8, 248], jikkyou: [1.45, 8, 248], kusuguri: [1.45, 8, 248], kazoe: [1.45, 8, 248], azakeri: [1.45, 8, 248], utaimp: [1.45, 8, 248], tenazuke: [1.45, 8, 248],
   };
   function drawMonster(ctx, w, m, x, y, S) {
     const d = m.d, h = w.run.h, F = FIG[m.kind], sz = F ? F[0] * S * 256 / (F[2] - F[1]) : Math.max(0.9, d.r * 2.4) * S;

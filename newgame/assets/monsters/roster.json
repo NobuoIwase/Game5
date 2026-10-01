@@ -20,7 +20,8 @@
    "name": "浮遊水母",
    "type": "蕩",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "jellyfish.png"
   },
   {
    "id": "lure_cap",
@@ -41,14 +42,16 @@
    "name": "ローパー",
    "type": "絡",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "roper.png"
   },
   {
    "id": "hanging_vine",
    "name": "垂れ蔦",
    "type": "絡",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "hanging_vine.png"
   },
   {
    "id": "puppet_hand",
@@ -69,7 +72,8 @@
    "name": "ミミック",
    "type": "絡",
    "from": "Game2",
-   "art": "game5"
+   "art": "game5",
+   "file": "mimic.png"
   },
   {
    "id": "goblin",
@@ -83,7 +87,8 @@
    "name": "マインドローパー",
    "type": "惑",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "mind_roper.png"
   },
   {
    "id": "gazer",
@@ -118,14 +123,16 @@
    "name": "鏡面スライム",
    "type": "惑",
    "from": "Game5",
-   "art": "game5"
+   "art": "game5",
+   "file": "mirror_slime.png"
   },
   {
    "id": "drain_roper",
    "name": "ドレインローパー",
    "type": "削",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "drain_roper.png"
   },
   {
    "id": "ghost_head",
@@ -146,7 +153,8 @@
    "name": "漂い霊",
    "type": "削",
    "from": "Game5",
-   "art": "game5"
+   "art": "game5",
+   "file": "wisp.png"
   },
   {
    "id": "nikubana",
@@ -216,56 +224,64 @@
    "name": "双子の小淫魔",
    "type": "惑",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "futago.png"
   },
   {
    "id": "waldo_grunt",
    "name": "ワルドー戦闘員",
    "type": "絡",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "waldo_grunt.png"
   },
   {
    "id": "waldo_officer",
    "name": "ワルドー幹部",
    "type": "惑",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "waldo_officer.png"
   },
   {
    "id": "drone_capture",
    "name": "捕縛ドローン",
    "type": "絡",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "drone_capture.png"
   },
   {
    "id": "drone_tickle",
    "name": "くすぐり機ドローン",
    "type": "蕩",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "drone_tickle.png"
   },
   {
    "id": "drone_camera",
    "name": "記録ドローン",
    "type": "惑",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "drone_camera.png"
   },
   {
    "id": "karte",
    "name": "性感開発機〈カルテ〉",
    "type": "蕩",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "karte.png"
   },
   {
    "id": "shibire",
    "name": "痺れ浮遊子",
    "type": "蕩",
    "from": "Game4",
-   "art": "new"
+   "art": "new",
+   "file": "shibire.png"
   },
   {
    "id": "sekitake",
@@ -300,154 +316,176 @@
    "name": "星喰み",
    "type": "蕩",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "hoshibami.png"
   },
   {
    "id": "tentacle_lord",
    "name": "触手の主",
    "type": "絡",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "tentacle_lord.png"
   },
   {
    "id": "tsurimushi",
    "name": "吊り蟲",
    "type": "蕩",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "tsurimushi.png"
   },
   {
    "id": "zuidou",
    "name": "隧道蟲",
    "type": "絡",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "zuidou.png"
   },
   {
    "id": "hibiki",
    "name": "響き蟲",
    "type": "蕩",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "hibiki.png"
   },
   {
    "id": "doromushi",
    "name": "泥蟲",
    "type": "絡",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "doromushi.png"
   },
   {
    "id": "gitai",
    "name": "擬態蟲",
    "type": "絡",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "gitai.png"
   },
   {
    "id": "haimushi",
    "name": "這い蟲",
    "type": "絡",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "haimushi.png"
   },
   {
    "id": "hiru",
    "name": "肥大化ヒル",
    "type": "蕩",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "hiru.png"
   },
   {
    "id": "kuwaemushi",
    "name": "咥え蟲",
    "type": "蕩",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "kuwaemushi.png"
   },
   {
    "id": "sayagoke",
    "name": "鞘苔",
    "type": "蕩",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "sayagoke.png"
   },
   {
    "id": "tenohira",
    "name": "掌の群れ",
    "type": "絡",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "tenohira.png"
   },
   {
    "id": "ukegame",
    "name": "受け壺",
    "type": "蕩",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "ukegame.png"
   },
   {
    "id": "sakiimp",
    "name": "先嬲りの小淫魔",
    "type": "惑",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "sakiimp.png"
   },
   {
    "id": "shinja",
    "name": "信者",
    "type": "絡",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "shinja.png"
   },
   {
    "id": "sekkyoushi",
    "name": "説教師",
    "type": "惑",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "sekkyoushi.png"
   },
   {
    "id": "chuushutsu",
    "name": "抽出師",
    "type": "蕩",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "chuushutsu.png"
   },
   {
    "id": "kyouso",
    "name": "教祖",
    "type": "惑",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "kyouso.png"
   },
   {
    "id": "jikkyou",
    "name": "実況する小淫魔",
    "type": "惑",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "jikkyou.png"
   },
   {
    "id": "kusuguri",
    "name": "擽りの小淫魔",
    "type": "蕩",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "kusuguri.png"
   },
   {
    "id": "kazoe",
    "name": "数える小淫魔",
    "type": "惑",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "kazoe.png"
   },
   {
    "id": "azakeri",
    "name": "嘲りの小淫魔",
    "type": "惑",
    "from": "Game2",
-   "art": "new"
+   "art": "new",
+   "file": "azakeri.png"
   },
   {
    "id": "kuchizuke",

@@ -18,7 +18,9 @@ var G = (typeof G !== "undefined") ? G : {};
   // 起きたことの言い表し方（一件ぶん・ひかりの口から）。{mon} {trap} {floor}
   const WHAT = {
     hold_絡: ["{mon}に捕まって、しばらく動けませんでした", "{mon}に手足を絡め取られました", "{mon}に縛り上げられて、抜けるのに時間がかかりました",
-              "{mon}に巻きつかれて、身動きが取れなくなりました", "{mon}に吊り上げられました", "{mon}に押さえ込まれました"],
+              "{mon}に巻きつかれて、身動きが取れなくなりました", "{mon}に吊り上げられました", "{mon}に押さえ込まれました",
+              "{mon}に足を取られて、そのまま捕まりました", "{mon}に腕ごと締め上げられました", "{mon}に絡まれて、しばらく抜けられませんでした", "{mon}に宙づりにされました",
+              "{mon}に後ろから捕まえられました", "{mon}に手首を取られて、壁に押しつけられました"],
     hold_蕩: ["{mon}に包み込まれて、抜け出せなくなりました", "{mon}に呑まれかけました", "{mon}の中に閉じ込められて、体がずっと熱くて",
               "{mon}に覆いかぶさられて、べたべたにされました", "{mon}に抱え込まれて、甘い匂いで頭がくらくらしました"],
     trap_絡: ["{trap}に足を取られて、縛られました", "{trap}に引っかかって、腕ごと絡め取られました", "{trap}で、足首から動けなくなりました"],
@@ -798,6 +800,7 @@ var G = (typeof G !== "undefined") ? G : {};
       }
       else if (e.kind === "climax") out.push(`${e.floor}階 ${e.t}秒：絶頂${who ? "（" + who + (e.act ? "・" + e.act.replace(/ /g, "") : "") + "）" : ""}${e.chain ? `　拘束中 連続${e.chain}回目` : ""}${e.first ? `　※当該部位での初の絶頂（${e.first}）` : ""}${e.squirt ? "　※決壊（飛沫）を確認" : ""}`);
       else if (e.kind === "trap") out.push(`${e.floor}階 ${e.t}秒：罠「${who}」作動${gap}`);
+      else if (e.kind === "trapBreak") out.push(`${e.floor}階 ${e.t}秒：罠「${who}」を破壊`);
       else if (e.kind === "untransform") out.push(`${e.floor}階 ${e.t}秒：変身解除`);
       else if (e.kind === "trance" && e.hidden) out.push(`${e.floor}階 ${e.t}秒：${who}の惑い（本人の記憶に残らない深さ）`);
       else if (e.kind === "defeat") out.push(`${e.floor}階 ${e.t}秒：行動不能`);

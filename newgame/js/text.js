@@ -217,6 +217,7 @@ var G = (typeof G !== "undefined") ? G : {};
     edge: ["{n}の 熱は、あと少しの所で 止められた……"],
     trap: ["{trap}が 作動した！", "{n}は {trap}に かかった！"],
     trapFound: ["{n}は {trap}を 見つけた。"],
+    trapBreak: ["{n}は {trap}を 撃ち抜いた！ 罠が 砕け散る。", "光弾が {trap}を 粉々に した！"],
     untransform: ["魔力が つきた！ ルミナの 変身が 解けた！"],
     transform: ["ひかりは 星の雫で ふたたび 変身した！"],
     transformStart: ["ひかりは 星の雫を かかげ、変身の言葉を となえはじめた。"],

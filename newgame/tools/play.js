@@ -2,7 +2,7 @@
 // 先に リポジトリ直下で npx http-server -p 8766 を起動しておく。 OUT=保存先 W=幅 H=高さ node newgame/tools/play.js
 const {chromium}=require(process.env.PW||'/opt/node22/lib/node_modules/playwright');
 const SP=(process.env.OUT||require('os').tmpdir())+'/';
-(async()=>{const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium'});
+(async()=>{const b=await chromium.launch(process.env.CHROMIUM===''?{}:{executablePath:process.env.CHROMIUM||'/opt/pw-browsers/chromium'});
 const p=await b.newPage({viewport:{width:+process.env.W||390,height:+process.env.H||844}});
 const errs=[];p.on('pageerror',e=>errs.push(e.message));p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});
 const talk=async(until)=>{for(let i=0;i<30;i++){ if(await p.$(until+':not(.hidden)')) return; const d=await p.$('#dlg:not(.hidden)'); if(d) await d.click(); await p.waitForTimeout(250);} };

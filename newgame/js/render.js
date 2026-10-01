@@ -29,7 +29,7 @@ var G = (typeof G !== "undefined") ? G : {};
   const insideRoom = (r, x, y) => x >= r.x && x < r.x + r.w && y >= r.y && y < r.y + r.h;
   function roomTile(ctx, skin, tx, ty, x, y, S, seed, prefix = "") {
     const im = img(prefix + skin.floor); if (!ok(im)) return false;
-    const hv = hash(tx, ty, seed), col = hv % 100 < 5 ? 3 : hv % 3, row = (hv >> 4) % 2;
+    const hv = hash(tx, ty, seed), col = hv % 100 < 5 ? 3 : hv % 3, row = (hv >>> 4) % 2;
     ctx.drawImage(im, col * 64, row * 64, 64, 64, x, y, S + 1, S + 1);
     ctx.fillStyle = "rgba(10,8,16,0.28)"; ctx.fillRect(x, y, S + 1, S + 1);
     return true;

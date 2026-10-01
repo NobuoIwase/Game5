@@ -227,6 +227,9 @@ var G = (typeof G !== "undefined") ? G : {};
     glue:   { name: "粘着床",     type: "蕩", effect: "glue",   radius: 0.8, detect: 0.4,  cost: 1, ct: 5, rearm: 6,  desc: "踏むと足が取られる" },
     vent:   { name: "香油の廊",   type: "蕩", effect: "vent",   radius: 2.2, detect: 0.3,  cost: 2, ct: 8, rearm: 7,  desc: "甘い香りを噴き、熱を溜める" },
     urn:    { name: "甘露の甕",   type: "蕩", effect: "urn",    radius: 1.3, detect: 0.5,  cost: 2, ct: 9, rearm: 16, desc: "近づくと中身が溢れ、浴びせかける" },
+    // 満ちる触手の間の中心：撃ち割れば、満ちた触手が退く（部屋の仕掛けだが、これだけは壊せる）
+    flood_orb: { name: "満ち引きの玉", holdName: "満ちてくる触手", type: "絡", effect: "floodOrb", radius: 0.5, detect: 1, cost: 9, ct: 99, rearm: 9999, inert: true, breakable: 4,
+                 desc: "床の穴のふちで脈打つ玉。部屋に満ちる触手の満ち引きを操っている。硬い殻は、脈打つ一瞬だけ開く。その隙に四度当てて割れば、触手は潮のように退く" },
     vine:   { name: "縛蔦の間",   type: "絡", effect: "vine",   radius: 0.9, detect: 0.3,  cost: 2, ct: 7, rearm: 8,  desc: "床の蔦が足首に絡みつく" },
     rope:   { name: "爪車の縄",   type: "絡", effect: "rope",   radius: 0.9, detect: 0.25, cost: 3, ct: 10, rearm: 14, desc: "張られた縄が引かれ、腕ごと縛られる" },
     shrine: { name: "偽りの祠",   type: "削", effect: "shrine", radius: 1.2, detect: 0.1,  cost: 2, ct: 12, rearm: 20, lure: true, desc: "休めそうに見える。休むと魔力を吸われる" },
@@ -320,6 +323,8 @@ var G = (typeof G !== "undefined") ? G : {};
   G.TRAP_ROOMS = {
     vine_hall:   { skin: "tentacle", name: "縛蔦の間",   type: "絡", from: 1, center: "vine", den: [["hanging_vine", 5]], desc: "幾房もの蔦が垂れ下がる。下を通ろうとした瞬間、四肢へ巻きつく" },
     kote_swarm:  { skin: "tentacle", name: "小手の群れ", type: "絡", from: 2, den: [["puppet_hand", 6]], desc: "床一面に、小さな手が息を潜めている" },
+    tent_flood:  { skin: "tentacle", name: "満ちる触手の間", type: "絡", from: 3, center: "flood_orb", den: [], seal: 999, flood: { rise: 26, fullHold: 25 },
+                   desc: "広間の真ん中に、丸い穴。踏み込むと扉が落ち、穴から触手が水位のように満ちてくる。穴のふちの玉が、その満ち引きを操っている" },
     tent_pit:    { skin: "tentacle", name: "触腕の坑",   type: "絡", from: 4, center: "rope", den: [["roper", 2], ["gulper_worm", 1]], seal: 6, desc: "床の坑から、太い触腕が這い出してくる" },
     idle_cell:   { skin: "lab", name: "不作為の間", type: "絡", from: 1, center: "cuffs", den: [["goblin", 2]], seal: 12, wake: 4, desc: "扉が落ち、手首が壁に留められる。何が来るかは、待つしかない" },
     caliper:     { skin: "lab", name: "採寸門",     type: "絡", from: 1, center: "gate", den: [["puppet_hand", 2]], desc: "回廊を塞ぐ真鍮の門。人型に凹んだ受け台がある" },
@@ -418,11 +423,11 @@ var G = (typeof G !== "undefined") ? G : {};
             desc: "鏡と霧の遺跡。見たものを信じるほど深く迷う" },
     mire: { name: "蜜溜まりの湿窟", type: "蕩", floors: 10, pal: { floor: "#43323a", floor2: "#3b2c33", wall: "#100a0c", wallTop: "#7a5a64", edge: "#7a4a5c", fog: "#c07a98" },
             fixed: ["slime", "slug", "jellyfish", "lure_cap"], free: ["fluff", "nikubana", "sasayaki", "miwakubana", "namekuji", "namequeen", "firstslug", "mitsusui", "bishin", "dakitake", "kouryuu", "shousha", "banjin", "sekitake", "kabeguchi", "inyoku", "hoshibami", "inma", "hiru", "hibiki", "tsurimushi", "doromushi", ...DRAIN], traps: ["glue", "vent", "urn", "shrine", "basin", "tease", "belt", "slime_drop", "bud", "altar", "saddle", "itch", "tickle", "aphro_wall", "toybox", "honey", "rune", "vow"],
-            rooms: ["foam_cell", "mist_hall", "gel_urn", "tease_rack", "hot_spring", "purify", "fungal_bed", "feed_belt", "slime_ceil", "bud_hall", "flower_bed", "incense_pool", "hug_grove", "beam_hall", "seal_altar", "cocoon_room", "itch_cell", "saddle_pit", "tickle_hall", "honey_cave", "rune_road", "mouth_floor", "spore_field", "edge_parlor", "hive_cave", "drop_shaft", "mud_hall", "leech_bank"],
+            rooms: ["tent_flood", "foam_cell", "mist_hall", "gel_urn", "tease_rack", "hot_spring", "purify", "fungal_bed", "feed_belt", "slime_ceil", "bud_hall", "flower_bed", "incense_pool", "hug_grove", "beam_hall", "seal_altar", "cocoon_room", "itch_cell", "saddle_pit", "tickle_hall", "honey_cave", "rune_road", "mouth_floor", "spore_field", "edge_parlor", "hive_cave", "drop_shaft", "mud_hall", "leech_bank"],
             desc: "甘い湿気の籠もる洞窟。息をするだけで熱がこもる" },
     vine: { name: "絡繰りの蔦森", type: "絡", floors: 10, pal: { floor: "#323d34", floor2: "#2c362e", wall: "#0a0e0b", wallTop: "#5e6a5c", edge: "#4a6a52", fog: "#7ab08a" },
             fixed: ["roper", "hanging_vine", "puppet_hand", "gulper_worm"], free: ["goblin", "mimic", "nikubana", "miwakubana", "namekuji", "tsukite", "suiyou", "hoshibami", "tentacle_lord", "kabeguchi", "zuidou", "gitai", "haimushi", ...DRAIN], traps: ["vine", "rope", "glue", "shrine", "basin", "pillory", "belt", "root", "cocoon", "ratchet", "shadow", "armor", "net", "pitfall", "curtain", "sucker", "web", "exam"],
-            rooms: ["vine_hall", "kote_swarm", "tent_pit", "idle_cell", "caliper", "feed_belt", "pillory", "fungal_bed", "purify", "root_floor", "cocoon_room", "ratchet_room", "shadow_hall", "flower_bed", "armor_hall", "sucker_hall", "web_hall", "lord_den", "pond", "mouth_floor", "worm_nest", "mud_hall"],
+            rooms: ["tent_flood", "vine_hall", "kote_swarm", "tent_pit", "idle_cell", "caliper", "feed_belt", "pillory", "fungal_bed", "purify", "root_floor", "cocoon_room", "ratchet_room", "shadow_hall", "flower_bed", "armor_hall", "sucker_hall", "web_hall", "lord_den", "pond", "mouth_floor", "worm_nest", "mud_hall"],
             desc: "蔦に呑まれた古い砦。道も壁も、ゆっくり動く" },
     waldo: { name: "ワルドーの支部", type: "惑", floors: 10, pal: { floor: "#2e3240", floor2: "#282b38", wall: "#0a0b10", wallTop: "#565c74", edge: "#4c5a7a", fog: "#7a90c0" },
             fixed: ["waldo_grunt", "waldo_officer", "drone_capture", "drone_camera"], free: ["drone_tickle", "karte", "inma", "tsukite", ...DRAIN], traps: ["hypno_ray", "capture", "net", "pitfall", "exam", "furnace", "pod", "stasis", "echo_gate", "suit"],
@@ -431,7 +436,7 @@ var G = (typeof G !== "undefined") ? G : {};
     // 入ると『変生』（ふたなり化）の呪いがかかる。潜行のあいだだけ
     futa: { name: "変生の神殿", type: "蕩", floors: 10, futa: true, pal: { floor: "#4a3038", floor2: "#422a32", wall: "#140a0e", wallTop: "#8a5a68", edge: "#8a4a60", fog: "#d08aa8" },
             fixed: ["kuwaemushi", "tenohira", "sayagoke", "sakiimp"], free: ["ukegame", "hibiki", "futago", "inma", "hiru", "bishin", ...DRAIN], traps: ["ring", "temari", "lips", "gauze", "count_altar", "feather_bed", "namagoroshi", "suikan", "aphro_wall", "tease"],
-            rooms: ["f_ring_hall", "f_moss_wall", "f_count_room", "f_gauze_room", "f_suck_room", "f_worm_hall", "f_nama_room", "f_feather", "tease_rack"],
+            rooms: ["tent_flood", "f_ring_hall", "f_moss_wall", "f_count_room", "f_gauze_room", "f_suck_room", "f_worm_hall", "f_nama_room", "f_feather", "tease_rack"],
             desc: "入った者の身体を作り変える神殿。潜っているあいだ、そこに無かったものが生える" },
     // 教団：攻めに行く。潜入はしない
     cult: { name: "教団の拠点", type: "惑", floors: 10, pal: { floor: "#3e3438", floor2: "#382e32", wall: "#100c0e", wallTop: "#7a6a70", edge: "#8a4a4a", fog: "#c09a8a" },

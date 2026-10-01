@@ -1,7 +1,7 @@
 /* field/hikari.js — field 内部。tools/files.js と index.html の順で読み込む。 */
 (function () {
   "use strict";
-  let U, M, HR, SPREAD, heroName, say, msg, fx, pushMsg, monSay, record, heat, intake, ATTACH, pray, mult, knowledge, learn, expectation, sk, inspire, drainMagic, possess, checkClimax, grab, release, knock, updateBound, hurtMon, alertMon;
+  let U, M, HR, SPREAD, heroName, say, msg, fx, pushMsg, monSay, record, heat, intake, ATTACH, pray, mult, knowledge, learn, expectation, sk, inspire, drainMagic, possess, checkClimax, grab, release, knock, updateBound, hurtMon, alertMon, hitTrap, orbPhase;
   function free(map, x, y, r) {
     return M.walkable(map, x, y) && M.walkable(map, x - r, y - r) && M.walkable(map, x + r, y - r) && M.walkable(map, x - r, y + r) && M.walkable(map, x + r, y + r);
   }
@@ -367,6 +367,19 @@
       if (U.dist(h.x, h.y, h.goal.x, h.goal.y) < 0.6) w.outcome = run.recall ? "ordered" : "retreat";
       return;
     }
+    // 満ちる触手の間：何より先に、穴のふちの玉を割る（撃つ／届けば杖で）
+    {
+      const fr = (w.trapRooms || []).find(r => r.flood && !r.flood.drain && !r.flood.done && h.room === r.r && r.orb && w.traps.includes(r.orb));
+      if (fr && !h.bound) {
+        const o = fr.orb, tgt = { x: o.x, y: o.y, kind: null, d: { name: o.d.name } }, d = U.dist(h.x, h.y, o.x, o.y);
+        const ph = orbPhase(w, o), soon = ph < 0.9 || ph > 2.75;   // 殻が開いている／開く寸前だけ狙う
+        if (!soon) { if (d > 2.6 && goToward(w, o.x, o.y, 1.0, "玉へ")) return; h.label = "玉の脈を待つ"; h.intent = null; return; }
+        if (h.form === "magica" && h.cdShot <= 0 && h.mp >= S.shot.cost && shotClear(map, h.x, h.y, o.x, o.y)) { tryCast(w, tgt, "shot"); if (h.cast) { h.label = "玉を撃つ"; return; } }
+        if (h.form === "magica" && d <= S.melee.range && h.cdMelee <= 0 && h.mp >= S.melee.cost) { tryCast(w, tgt, "melee"); if (h.cast) { h.label = "玉を打つ"; return; } }
+        if (h.form !== "magica" && d <= 1.0) { if (!(h.orbHitT > w.t)) { h.orbHitT = w.t + 1.2; hitTrap(w, o); h.label = "玉を叩く"; } h.intent = null; return; }   // 素の姿でも、叩いて割る
+        if (d > 0.9 && goToward(w, o.x, o.y, 1.0, "玉へ")) return;
+      }
+    }
     // 道にある、見破った罠を撃って壊す（近くに魔物がいない時）
     if (h.form === "magica" && h.cdShot <= 0 && h.mp >= S.shot.cost * 2 && !ts.some(o => o.d < 6)) {
       const g = h.goal || h.search;
@@ -634,6 +647,11 @@
         if (Math.abs(U.angDiff(a, U.angle(h.x, h.y, m.x, m.y))) > S.melee.arc / 2 + 0.2) continue;
         hurtMon(w, m, mDmg); knock(w, m, U.angle(h.x, h.y, m.x, m.y), 0.45); m.stun = Math.max(m.stun, 0.25); if (m.cast) { m.cast = null; msg(w, "interrupt", { mon: m.d.name }, 1); } hit++;
       }
+      for (const tr of w.traps.slice()) {                 // 壊せる仕掛け（満ち引きの玉）も、杖で打てる
+        if (!tr.d.breakable || !tr.found || U.dist(h.x, h.y, tr.x, tr.y) > mRange + 0.3) continue;
+        if (Math.abs(U.angDiff(a, U.angle(h.x, h.y, tr.x, tr.y))) > S.melee.arc / 2 + 0.3) continue;
+        hitTrap(w, tr); hit++;
+      }
       if (!hit) msg(w, "whiff", {}, 2); else inspire(w, "melee");
       record(w, { kind: "melee", sev: 0 });
       return;
@@ -750,5 +768,5 @@
   /* ================================================================ 魔物のAI */
 
   Object.assign(G.F, { free, clearPath, move, pathDir, shotClear, firingSpot, turnTo, perceive, roomAt, onSpot, threats, castHits, danger, urgent, bestDodge, pressure, flash, breakout, hikariSpeed, avoidFn, perceivedArousal, setIntent, goToward, hikariThink, tr_label, explore, monologue, liveliness, openChest, coverWithView, tryCast, releaseCast, tryShove, updateHikari, idleGlance });
-  G.F.bind.push(() => { ({ U, M, HR, SPREAD, heroName, say, msg, fx, pushMsg, monSay, record, heat, intake, ATTACH, pray, mult, knowledge, learn, expectation, sk, inspire, drainMagic, possess, checkClimax, grab, release, knock, updateBound, hurtMon, alertMon } = G.F); });
+  G.F.bind.push(() => { ({ U, M, HR, SPREAD, heroName, say, msg, fx, pushMsg, monSay, record, heat, intake, ATTACH, pray, mult, knowledge, learn, expectation, sk, inspire, drainMagic, possess, checkClimax, grab, release, knock, updateBound, hurtMon, alertMon, hitTrap, orbPhase } = G.F); });
 })();

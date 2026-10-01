@@ -12,7 +12,7 @@ var G = (typeof G !== "undefined") ? G : {};
 (function () {
   "use strict";
   G.F = { bind: [] };
-  let heroName, say, live, feed, msg, fx, record, releaseOverflow, pray, engraveSigil, possess, defeat, free, roomAt, flash, explore, alertMon;
+  let heroName, say, live, feed, msg, fx, record, releaseOverflow, pray, engraveSigil, possess, defeat, free, roomAt, flash, explore, alertMon, openScene;
   const U = G.U, M = G.Map;
   const HR = 0.3;                       // ひかりの当たりの半径（マス）
   const SPREAD = 0.3;                   // 扇に撃つ弾の間の角度
@@ -141,7 +141,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const room = { key, T, r, x: r.x, y: r.y, w: r.w, h: r.h, cx: r.cx, cy: r.cy, active: false, members: [] };
     w.trapRooms.push(room);
     const inRoom = () => { for (let k = 0; k < 30; k++) { const x = U.ri(r.x, r.x + r.w - 1) + 0.5, y = U.ri(r.y, r.y + r.h - 1) + 0.5; if (M.walkable(map, x, y) && !w.traps.some(t => U.dist(t.x, t.y, x, y) < 1.1)) return { x, y }; } return null; };
-    if (T.center) { const tr = spawnTrap(w, T.center, r.cx + 0.5, r.cy + 0.5); tr.room = room; }
+    if (T.center) { const tr = spawnTrap(w, T.center, r.cx + 0.5, r.cy + 0.5); tr.room = room; if (T.flood) { room.orb = tr; tr.found = true; tr.hp = tr.d.breakable; } }
     for (const t of T.traps || []) { const p = inRoom(); if (p) spawnTrap(w, t, p.x, p.y).room = room; }
     for (const [id, n] of T.den) for (let i = 0; i < n; i++) {
       const p = inRoom(); if (!p) continue;
@@ -161,6 +161,12 @@ var G = (typeof G !== "undefined") ? G : {};
     const wake = () => { for (const m of room.members) if (m.hp > 0) { m.dormant = false; alertMon(w, m, 1); } if (room.members.length) msg(w, "denWake", { room: T.name }); };
     if (T.wake) room.wakeT = T.wake; else wake();
     room.wake = wake;
+    if (T.flood) {                                  // 満ちる触手の間：扉が落ち、穴から触手が満ちてくる
+      room.fill = 0; room.flood = { stage: 0, peak: 0, grabT: w.t + 2.5, fullT: 0 };
+      if (room.orb) room.orb.phase = w.t + 2.4;     // 最初に殻が開くのは、少し満ちてから
+      record(w, { kind: "trap", type: T.type, trap: "flood_orb", trapName: T.name, sev: 2 });
+      h.liveT = w.t; openScene(w, "floodIn", null);
+    }
   }
 
   function makeBoss(m) {
@@ -201,5 +207,5 @@ var G = (typeof G !== "undefined") ? G : {};
   /* ================================================================ 小道具 */
 
   Object.assign(G.F, { U, M, HR, SPREAD, TIER_FX, LV, createWorld, populate, makeTrapRoom, enterTrapRoom, makeBoss, spawnMonster, spawnTrap });
-  G.F.bind.push(() => { ({ heroName, say, live, feed, msg, fx, record, releaseOverflow, pray, engraveSigil, possess, defeat, free, roomAt, flash, explore, alertMon } = G.F); });
+  G.F.bind.push(() => { ({ heroName, say, live, feed, msg, fx, record, releaseOverflow, pray, engraveSigil, possess, defeat, free, roomAt, flash, explore, alertMon, openScene } = G.F); });
 })();

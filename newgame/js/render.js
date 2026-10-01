@@ -88,7 +88,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const pad = 1.6, cw = Math.ceil((r.w + pad * 2) * S), ch = Math.ceil((r.h + pad * 2) * S);
     const c = r._tc || (r._tc = { cv: typeof document !== "undefined" ? document.createElement("canvas") : null, t: -9, S: 0, key: "" });
     if (!c.cv) return tentacleRoom(ctx, r, t, S, X, Y, bounds, tile, target);
-    const key = (r.active ? 1 : 0) + ":" + (r.fill || 0);
+    const key = (r.active ? 1 : 0) + ":" + Math.round((r.fill || 0) * 40);   // 満ちていく間も、描き直しは刻みごと
     if (c.S !== S || c.key !== key || t - c.t > 1 / 15 || t < c.t) {
       if (c.cv.width !== cw || c.cv.height !== ch) { c.cv.width = cw; c.cv.height = ch; }
       const cx = c.cv.getContext("2d"); cx.clearRect(0, 0, cw, ch); cx.imageSmoothingEnabled = false;
@@ -331,6 +331,11 @@ var G = (typeof G !== "undefined") ? G : {};
       if (tr.active > 0) { ctx.fillStyle = "rgba(255,150,200,0.18)"; ctx.beginPath(); ctx.arc(cx, cy, tr.d.radius * S, 0, 7); ctx.fill(); }
       if (big) { ctx.strokeStyle = "rgba(255,120,160,0.35)"; ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.arc(cx, cy, tr.d.radius * S, 0, 7); ctx.stroke(); ctx.setLineDash([]); }
       if (tr.d.emit) { ctx.strokeStyle = "rgba(200,160,255,0.28)"; ctx.setLineDash([2, 5]); ctx.beginPath(); ctx.arc(cx, cy, tr.d.radius * S, 0, 7); ctx.stroke(); ctx.setLineDash([]); }
+      if (tr.d.effect === "floodOrb" && G.F && G.F.orbOpen(w, tr)) {   // 満ち引きの玉：殻が開いている（撃ちどき）
+        const pr = S * (0.75 + 0.12 * Math.sin(w.t * 9)), g = ctx.createRadialGradient(cx, cy, 0, cx, cy, pr);
+        g.addColorStop(0, "rgba(255,190,225,0.75)"); g.addColorStop(1, "rgba(255,120,180,0)");
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, pr, 0, 7); ctx.fill();
+      }
       const ti = img(trapArt(tr.kind));
       // 床の輪：系統の色。ひかりが見つけた罠は黄色
       ctx.strokeStyle = tr.found ? "#fff3a0" : TYPE_COLOR[tr.d.type]; ctx.lineWidth = tr.found ? 2.5 : 1.5;

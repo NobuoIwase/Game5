@@ -1,7 +1,7 @@
 /* field/bound.js — field 内部。tools/files.js と index.html の順で読み込む。 */
 (function () {
   "use strict";
-  let U, M, heroName, say, live, feed, msg, fx, pushMsg, monSay, actMsg, actBub, logLine, record, trait, heat, intake, resist, capped, releaseOverflow, addCharm, charmTouch, addCum, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, drainMagic, possess, endPossess, free, pressure, flash, alertMon;
+  let U, M, heroName, say, live, feed, msg, fx, pushMsg, monSay, actMsg, actBub, logLine, record, trait, heat, intake, resist, capped, releaseOverflow, addCharm, charmTouch, addCum, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, drainMagic, possess, endPossess, free, pressure, flash, alertMon, shasei, cumBlocked, urgeUp;
   function checkClimax(w, src, forced) {
     const h = w.run.h;
     if (!forced && h.pleasure >= 96 && capped(w)) {        // 栓をされている：あと少しで止まり、溢れた分が溜まる
@@ -9,6 +9,7 @@
       h.pleasure = 95;
       const box = h.deny && h.deny.t > 0 ? h.deny : h.omazuke || h.permit || (h.kinOver = h.kinOver || { over: 0 });
       box.over = (box.over || 0) + over;
+      urgeUp(w, 4 + over * 0.5, src);
       if (w.t - (h.edgeT ?? -99) > 4) {
         h.edgeT = w.t; record(w, { kind: "edge", type: "蕩", sev: 2, mon: src && src.kind, monName: src && src.d ? src.d.name : "" }); msg(w, "edgeCap", {}); say(w, "edgeCap", {});
         // 絶頂許可制：三度止められると、許しを乞うてしまう。乞えば、許しが出る
@@ -21,9 +22,16 @@
       return;
     }
     if (h.pleasure < 100) return;
+    if (!forced && cumBlocked(w)) {                // 締環・先嬲り：出せないまま、絶頂の手前で止められる
+      h.pleasure = 95; h.cum = Math.max(h.cum || 0, 94);
+      if (h.ring) h.ring.over += 6;
+      urgeUp(w, 9, src);
+      if (w.t - (h.edgeT ?? -99) > 4) { h.edgeT = w.t; record(w, { kind: "edge", type: "蕩", sev: 2, mon: src && src.kind, monName: src && src.d ? src.d.name : "" }); msg(w, h.ring ? "ringFull" : "edgeCap", {}); say(w, h.ring ? "ringFull" : "edgeCap", {}); }
+      return;
+    }
     h.pleasure = 22 + 8 * trait(w, "squirthabit"); h.climax++; h.lastClimaxT = w.t;
-    if (h.futa) addCum(w, 30, src);
-    h.will = Math.max(0, h.will - 5);
+    if (h.futa) shasei(w, src);                     // 変生した身体は、達するたびに出してしまう
+    h.will = Math.max(0, h.will - 3.5);
     h.trance = Math.max(h.trance, 1.6);
     const e = record(w, { kind: "climax", type: src && src.d ? src.d.type : "蕩", mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: 3, bound: !!h.bound });
     logLine(w, G.Text.log("climax", { mon: e.monName }), "heavy");
@@ -156,10 +164,10 @@
     b.actT -= dt;
     if (b.actT > 0) return;
     const n = Math.max(1, touching.length);
-    b.actT = U.rf(0.9, 1.4) / (1 + 0.28 * (n - 1));
+    b.actT = U.rf(0.65, 1.0) / (1 + 0.28 * (n - 1));
     b.acts++;
     // 段階：服の上から → 服の中 → 直接。時間・回数・装束の損壊・発情で進む
-    const st = (b.acts >= 7 || b.t > 8 || (h.exposure && b.acts >= 3)) ? 2 : (b.acts >= 3 || b.t > 3.5 || h.exposure || h.arousal > 60) ? 1 : 0;
+    const st = (b.acts >= 5 || b.t > 5 || (h.exposure && b.acts >= 3) || (h.arousal > 75 && b.acts >= 3)) ? 2 : (b.acts >= 2 || b.t > 2.2 || h.exposure || h.arousal > 60) ? 1 : 0;
     const who = acts[b.acts % acts.length], name = who.d ? (who.d.holdName || who.d.name) : "";
     if (st > b.stage) { b.stage = st; actMsg(w, "stage" + st, { mon: name }); if (st === 2) actBub(w, "touch2"); }
     const cat = actCat(w, who), act = G.Text.actFor(who.kind, cat, b.stage);
@@ -173,9 +181,9 @@
     const k = mult(w, "蕩"), swarm = (1 + 0.18 * (n - 1)) * (n >= 3 ? 1 + 0.1 * trait(w, "swarmHabit") : 1);
     const over = w.t - (h.lastClimaxT ?? -99) < 5 ? 1.2 : 1;          // 達したばかりの身体は、敏感すぎる
     if (over > 1 && !b.overSaid && !act.watch) { b.overSaid = true; feed(w, "after", G.Text.live.oversens()); }
-    const gain = over * 6.0 * act.pw * (who.pow || 1) * k * intake(w, who) * swarm * tf.pleasure * (w.run.law === "seishi" ? 0.8 : 1) * (act.tickle ? 0.7 : 1) * (sk(w, "heartlock") ? 0.82 : 1);
+    const gain = over * 3.2 * act.pw * (who.pow || 1) * k * intake(w, who) * swarm * tf.pleasure * (w.run.law === "seishi" ? 0.8 : 1) * (act.tickle ? 0.7 : 1) * (sk(w, "heartlock") ? 0.82 : 1);
     if (act.cum && h.futa) addCum(w, 11 * act.pw * swarm * intake(w, who), who); else h.pleasure += gain;
-    h.arousal = Math.min(100, h.arousal + 3.2 * act.pw * k);
+    h.arousal = Math.min(100, h.arousal + 2.0 * act.pw * k);
     if (act.tickle) h.will = Math.max(0, h.will - 3);
     if (act.edge) h.pleasure = Math.min(h.pleasure, 94);
     if (b.ev) { b.ev.acts = b.ev.acts || {}; b.ev.acts[act.part] = (b.ev.acts[act.part] || 0) + 1; b.ev.stage = b.stage; b.ev.n = Math.max(b.ev.n || 1, n); }
@@ -202,15 +210,15 @@
     b.by = b.by.filter(id => w.monsters.some(m => m.id === id && m.hp > 0) || w.traps.some(t => t.id === id));
     if (!b.by.length) { release(w, false); return; }
     const k = mult(w, b.type), p = b.power;
-    h.hp = Math.max(0, h.hp - 0.6 * p * dt);
-    h.will = Math.max(0, h.will - 1.25 * p * k * tf.will * dt);   // ルミナは心が強い      // 拘束は長く見せる分、一秒あたりは緩め
+    h.hp = Math.max(0, h.hp - 0.45 * p * dt);
+    h.will = Math.max(0, h.will - 0.85 * p * k * tf.will * dt);   // ルミナは心が強い      // 拘束は長く見せる分、一秒あたりは緩め
     // 縛られているだけでは、熱は上がらない。触れられて、はじめて上がる
     lewdTick(w, dt);
     if (!h.bound) return;
     for (const id of b.by) { const m = w.monsters.find(x => x.id === id); if (m && m.d.atk.drain) drainMagic(w, m.d.atk.drain * dt, m); }
     if (h.kit.knife > 0 && b.t > 0.8 && !b.knifed && b.type === "絡" && !b.noKnife) { b.knifed = true; h.kit.knife--; b.struggle += 0.6; msg(w, "item", { item: "縄抜けの小刀" }); record(w, { kind: "item", item: "knife", sev: 0 }); }
     const arms = b.by.length + (b.shadow && b.shadow.arms >= 4 ? 1 : 0);      // 影の腕が増えたら、二か所以上に掴まれたのと同じ
-    if (h.form === "magica" && !b.noFlash && h.cdFlash <= 0 && h.mp >= G.HIKARI.flash.cost && h.trance <= 0 && !b.wait && b.t > 1.8 && (arms >= 2 || (b.t > 2.6 && pressure(w, h.x, h.y, 2.4).n >= 3))) { flash(w); return; }
+    if (h.form === "magica" && !b.noFlash && h.cdFlash <= 0 && h.mp >= G.HIKARI.flash.cost && h.trance <= 0 && !b.wait && b.t > 3.2 && (arms >= 2 || (b.t > 4 && pressure(w, h.x, h.y, 2.4).n >= 3))) { flash(w); return; }
     const prep = G.PREP[w.run.stated];
     let rate = (0.2 + h.will / 260) * (h.form === "magica" ? 1.25 : 0.7) * tf.struggle / Math.max(0.5, k * p) * (b.slowStruggle || 1) * resist(w);
     rate /= 1 + 0.25 * (b.nAct > 1 ? b.nAct - 1 : 0);                // 群がられるほど、もがく隙がない
@@ -220,7 +228,7 @@
     rate *= 1 - 0.12 * ((h.charm && h.charm[b.src.kind]) || 0);   // 好きな相手の腕は、本気で振りほどけない（魅了拘束）
     rate *= 1 - expectation(w, b.src.kind) * 0.3;       // 気持ちよさを覚えている相手だと、本気で振りほどけない
     if (sk(w, "hodoki")) rate *= 1.3;
-    if (b.t < 2.4) rate *= 0.25;                           // 捕まった直後は、まず何もできない
+    if (b.t < 3.6) rate *= 0.2;                            // 捕まった直後は、まず何もできない
     if (h.will < 25) rate *= 1.5;                          // 追い詰められて、最後の力を振り絞る
     if (!b.nAct) rate *= 1.8;                              // 縛られているだけ（誰も触れてこない）なら、落ち着いて解ける
     b.struggle += rate * 0.9 * dt;
@@ -298,5 +306,5 @@
   /* ================================================================ ひかり：知覚 */
 
   Object.assign(G.F, { checkClimax, grab, callPack, release, knock, actCat, lewdTick, updateBound, defeat, openScene });
-  G.F.bind.push(() => { ({ U, M, heroName, say, live, feed, msg, fx, pushMsg, monSay, actMsg, actBub, logLine, record, trait, heat, intake, resist, capped, releaseOverflow, addCharm, charmTouch, addCum, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, drainMagic, possess, endPossess, free, pressure, flash, alertMon } = G.F); });
+  G.F.bind.push(() => { ({ U, M, heroName, say, live, feed, msg, fx, pushMsg, monSay, actMsg, actBub, logLine, record, trait, heat, intake, resist, capped, releaseOverflow, addCharm, charmTouch, addCum, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, drainMagic, possess, endPossess, free, pressure, flash, alertMon, shasei, cumBlocked, urgeUp } = G.F); });
 })();

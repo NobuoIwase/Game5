@@ -30,11 +30,19 @@
     x = Math.floor(x) + 0.5; y = Math.floor(y) + 0.5;
     if (night) w.night.spent += ci.d.cost; else w.dir.spent += ci.d.cost;
     w.dir.ct[card] = ci.d.ct;
-    if (ci.trap) spawnTrap(w, ci.id, x, y);
+    if (ci.trap) spawnTrap(w, ci.id, x, y).placed = true;
     else { const m = spawnMonster(w, ci.id, x, y, true); if (night) m.alert = 10; }
     fx(w, { kind: "summon", x, y, color: ci.trap ? "#ffd27a" : "#e070b0", life: 0.8 });
     record(w, { kind: "place", card, sev: 0, night: !!night });
+    dirStat(w).placed++;
     return "ok";
+  }
+  // 仕込みの戦果（プレイヤーが呼んだ魔物・罠が、何をしたか）。潜行全体で数える
+  function dirStat(w) { return w.run.dirStats || (w.run.dirStats = { placed: 0, holds: 0, acts: 0, climax: 0 }); }
+  function byPlayer(w, src) {
+    if (!src) return false;
+    if (src.summoned) return true;
+    return !!(src.d && src.d.effect && src.placed);   // 呼んだ罠
   }
   function autoDirect(w, dt) {
     w.dir.next -= dt;
@@ -298,7 +306,7 @@
     return out;
   }
 
-  Object.assign(G.F, { cardInfo, canPlace, place, autoDirect, step, startNight, nightBeat, statusList });
+  Object.assign(G.F, { dirStat, byPlayer, cardInfo, canPlace, place, autoDirect, step, startNight, nightBeat, statusList });
   G.F.bind.push(() => { ({ U, M, createWorld, enterTrapRoom, spawnMonster, spawnTrap, heroName, say, live, feed, msg, fx, actMsg, record, heat, releaseOverflow, ATTACH, pray, mult, tierFx, sk, crave, applyEffect, untransform, engraveSigil, possess, tickStatus, endPossess, checkClimax, grab, release, actCat, defeat, perceive, roomAt, liveliness, updateHikari, updateMonster, updateTraps, triggerTrap, updateProjs, floodTick } = G.F); });
   for (const bind of G.F.bind) bind();
   delete G.F.bind;

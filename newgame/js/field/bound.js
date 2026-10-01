@@ -1,7 +1,7 @@
 /* field/bound.js — field 内部。tools/files.js と index.html の順で読み込む。 */
 (function () {
   "use strict";
-  let U, M, heroName, say, live, feed, msg, fx, pushMsg, monSay, actMsg, actBub, logLine, record, trait, heat, intake, resist, capped, releaseOverflow, addCharm, charmTouch, addCum, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, drainMagic, possess, endPossess, free, pressure, flash, alertMon, shasei, cumBlocked, urgeUp;
+  let U, M, heroName, say, live, feed, msg, fx, pushMsg, monSay, actMsg, actBub, logLine, record, trait, heat, intake, resist, capped, releaseOverflow, addCharm, charmTouch, addCum, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, drainMagic, possess, endPossess, free, pressure, flash, alertMon, shasei, cumBlocked, urgeUp, dirStat, byPlayer;
   function checkClimax(w, src, forced) {
     const h = w.run.h;
     if (!forced && h.pleasure >= 96 && capped(w)) {        // 栓をされている：あと少しで止まり、溢れた分が溜まる
@@ -36,6 +36,8 @@
     const e = record(w, { kind: "climax", type: src && src.d ? src.d.type : "蕩", mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: 3, bound: !!h.bound });
     logLine(w, G.Text.log("climax", { mon: e.monName }), "heavy");
     const la = h.bound && h.bound.last && w.t - h.bound.last.t < 2.5 ? h.bound.last : null;
+    const mine = (la && la.mine) || byPlayer(w, src);
+    if (mine) dirStat(w).climax++;
     if (h.bound) { h.bound.climaxN = (h.bound.climaxN || 0) + 1; h.bound.built = false; h.bound.overSaid = false; }
     w.feedMute = true;          // この一瞬は、下の「決壊」の流れでまとめて見せる
     if (la) { e.act = la.p; e.monName = e.monName || la.mon; actMsg(w, "climaxAct", { p: la.p, mon: la.mon }); if (h.bound.ev) h.bound.ev.climaxActs = (h.bound.ev.climaxActs || []).concat(la.p); }
@@ -53,6 +55,7 @@
       const cat = la && la.kind ? G.Text.actorOf(la.kind) : src && src.kind ? G.Text.actorOf(src.kind) : null;
       for (const l of G.Text.live.climax({ chain: h.bound ? h.bound.climaxN : 1, tier: G.tier(w.run.save.body, w.run.save.mind), squirt: (e.squirt = U.chance(trait(w, "squirthabit") ? 0.5 : h.bound && h.bound.climaxN >= 3 ? 0.35 : 0)), part, cat, mon: la ? la.mon : (src && src.d ? src.d.name : null), n: heroName(w), firstPart: first })) feed(w, l.cls, l.text);
       feed(w, "pause", "……………………");
+      if (mine) feed(w, "mine", "★ 呼んだ" + (la ? la.mon : src && src.d ? src.d.name : "もの") + "で、" + heroName(w) + "が達した（仕込みの戦果 絶頂" + dirStat(w).climax + "回）");
       feed(w, "after", G.Text.live.after({ n: heroName(w) }));
       h.recoverAt = w.t + 3.2;
     }
@@ -101,6 +104,7 @@
     h.cast = null; h.vx = h.vy = 0;
     if (src.d && src.d.spd !== undefined) monSay(w, src, "grab", 0.8);
     const e = record(w, { kind: "hold", type: type || "絡", mon: src.kind, monName: src.d.holdName || src.d.name, sev: 2 });
+    if (byPlayer(w, src)) { dirStat(w).holds++; h.bound.mine = true; feed(w, "mine", "★ 呼んだ" + (src.d.holdName || src.d.name) + "が、" + heroName(w) + "を捕らえた"); }
     h.bound.ev = e;
     logLine(w, G.Text.log("hold", { mon: src.d.name }), "mid");
     msg(w, "grab", { mon: src.d.name });
@@ -187,7 +191,8 @@
     if (act.tickle) h.will = Math.max(0, h.will - 3);
     if (act.edge) h.pleasure = Math.min(h.pleasure, 94);
     if (b.ev) { b.ev.acts = b.ev.acts || {}; b.ev.acts[act.part] = (b.ev.acts[act.part] || 0) + 1; b.ev.stage = b.stage; b.ev.n = Math.max(b.ev.n || 1, n); }
-    b.last = { p: act.p, mon: name, kind: who.kind, part: act.part, t: w.t };
+    b.last = { p: act.p, mon: name, kind: who.kind, part: act.part, t: w.t, mine: byPlayer(w, who) };
+    if (b.last.mine) dirStat(w).acts++;
     crave(w, who.kind, 0.25 * act.pw);
     { const sv = w.run.save; if (sv) { sv.parts = sv.parts || {}; const pp = sv.parts[who.kind] || (sv.parts[who.kind] = {}); pp[act.part] = (pp[act.part] || 0) + 1; } }
     // 吹き出し：触れはじめ／くすぐり／段階ごとの喘ぎ。限界の手前では、言葉が崩れていく
@@ -306,5 +311,5 @@
   /* ================================================================ ひかり：知覚 */
 
   Object.assign(G.F, { checkClimax, grab, callPack, release, knock, actCat, lewdTick, updateBound, defeat, openScene });
-  G.F.bind.push(() => { ({ U, M, heroName, say, live, feed, msg, fx, pushMsg, monSay, actMsg, actBub, logLine, record, trait, heat, intake, resist, capped, releaseOverflow, addCharm, charmTouch, addCum, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, drainMagic, possess, endPossess, free, pressure, flash, alertMon, shasei, cumBlocked, urgeUp } = G.F); });
+  G.F.bind.push(() => { ({ U, M, heroName, say, live, feed, msg, fx, pushMsg, monSay, actMsg, actBub, logLine, record, trait, heat, intake, resist, capped, releaseOverflow, addCharm, charmTouch, addCum, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, drainMagic, possess, endPossess, free, pressure, flash, alertMon, shasei, cumBlocked, urgeUp, dirStat, byPlayer } = G.F); });
 })();

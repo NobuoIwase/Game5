@@ -48,10 +48,10 @@ const fs = require('node:fs'), path = require('node:path'), assert = require('no
     if(states.skin && !process.env.RENDER) {
       const visual=await p.evaluate(()=>{
         const d=G.debug.dive,ctx=document.querySelector('#cv').getContext('2d'),room=roomFixture;
-        const counts=[],original=ctx.drawImage;let count=0;
-        ctx.drawImage=function(im,...args){if(im.src&&im.src.includes('room_tentacle_deco'))count++;return original.call(this,im,...args);};
-        for(const fill of [0,0.5,1]){room.fill=fill;count=0;G.Render.draw(ctx,d.w,d.cam,d);counts.push(count);if(room.fill!==fill)throw Error('fill mutated');}
-        count=0;G.Render.draw(ctx,d.w,{x:-100,y:-100,scale:40},d);const offscreen=count;ctx.drawImage=original;
+        // 触手の部屋は手続きで描くので、描いた触手の本数（G.Render.stats.tentacles）で数える
+        const counts=[],st=G.Render.stats;
+        for(const fill of [0,0.5,1]){room.fill=fill;st.tentacles=0;G.Render.draw(ctx,d.w,d.cam,d);counts.push(st.tentacles);if(room.fill!==fill)throw Error('fill mutated');}
+        st.tentacles=0;G.Render.draw(ctx,d.w,{x:-100,y:-100,scale:40},d);const offscreen=st.tentacles;
         delete room.fill;return {counts,offscreen};
       });
       assert.ok(visual.counts[2]>visual.counts[0]); assert.equal(visual.offscreen,0);

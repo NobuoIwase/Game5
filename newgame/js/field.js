@@ -53,7 +53,7 @@ var G = (typeof G !== "undefined") ? G : {};
     Object.assign(h, { freeze: 0, sniff: 0, salute: 0, pray: 0, countGame: null, drawn: null, deny: null, altar: null });
     // 階の時計（w.t）は階ごとに0から。前の階の時刻・座標を持ち越すと、届かない目的地に向かい続けて固まる
     Object.assign(h, { ignore: {}, peekHold: 0, failN: 0, veilUsed: false, inspT: undefined, fireSpot: null, peekSpot: null, wallHits: 0, _pp: null, convey: null, cdMelee: 0, cdFlash: 0, cdBreak: 0, ifr: 0, thinkT: 0,
-      charmT: {}, anticT: undefined, monoT: undefined, lastEscT: undefined, saluteT: undefined, bcastT: undefined, edgeT: undefined, lastClimaxT: undefined, ringT: undefined, tipT: undefined, spaceAt: null, walled: {}, chestT: null, chestSkip: [], tgt: null, lastStand: false, prayNext: undefined, tranceRun: 0, clearT: undefined, liveT: undefined, unboundT: undefined, recoverAt: null });
+      charmT: {}, anticT: undefined, monoT: undefined, lastEscT: undefined, saluteT: undefined, bcastT: undefined, edgeT: undefined, lastClimaxT: undefined, ringT: undefined, tipT: undefined, spaceAt: null, walled: {}, chestT: null, chestSkip: [], tgt: null, lastStand: false, prayNext: undefined, tranceRun: 0, basinT: null, basinSkip: [], fightT: null, lastDmgT: undefined, clearT: undefined, liveT: undefined, unboundT: undefined, recoverAt: null });
     map.seen = new Uint8Array(map.W * map.H);
     populate(w);
     msg(w, "floor", { floor: floorNo, dg: run.dungeonName || dg.name });
@@ -856,7 +856,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (!b.by.length) { release(w, false); return; }
     const k = mult(w, b.type), p = b.power;
     h.hp = Math.max(0, h.hp - 0.6 * p * dt);
-    h.will = Math.max(0, h.will - 1.5 * p * k * tf.will * dt);   // ルミナは心が強い      // 拘束は長く見せる分、一秒あたりは緩め
+    h.will = Math.max(0, h.will - 1.25 * p * k * tf.will * dt);   // ルミナは心が強い      // 拘束は長く見せる分、一秒あたりは緩め
     // 縛られているだけでは、熱は上がらない。触れられて、はじめて上がる
     lewdTick(w, dt);
     if (!h.bound) return;
@@ -927,7 +927,7 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     // ルミナの底力：気力が尽きかけた時、階ごとに一度だけ、光で全部を弾き飛ばす（変身中・MP があれば）
     if (h.will < 10 && h.hp > 0 && !h.lastStand && h.form === "magica" && h.mp >= 6 && !b.noFlash) {
-      h.lastStand = true; h.mp += G.HIKARI.flash.cost; flash(w); h.will = Math.max(h.will, 40); h.ifr = Math.max(h.ifr, 2);
+      h.lastStand = true; h.mp += G.HIKARI.flash.cost; flash(w); h.will = Math.max(h.will, 50); h.ifr = Math.max(h.ifr, 2);
       msg(w, "lastStand", {}); h.bubble = { text: "まだ……っ、負けない……！", t: 1.8 };
       return;
     }
@@ -1260,12 +1260,22 @@ var G = (typeof G !== "undefined") ? G : {};
       if (U.dist(h.x, h.y, h.goal.x, h.goal.y) < 0.6) w.outcome = run.recall ? "ordered" : "retreat";
       return;
     }
+    // 道にある、見破った罠を撃って壊す（近くに魔物がいない時）
+    if (h.form === "magica" && h.cdShot <= 0 && h.mp >= S.shot.cost * 2 && !ts.some(o => o.d < 6)) {
+      const g = h.goal || h.search;
+      const tr = w.traps.filter(t => t.found && t.armed && !t.room && !t.d.lure && U.dist(h.x, h.y, t.x, t.y) < 4.5 && U.dist(h.x, h.y, t.x, t.y) > 0.9 && shotClear(map, h.x, h.y, t.x, t.y)
+        && (!g || U.dist(t.x, t.y, g.x, g.y) < U.dist(h.x, h.y, g.x, g.y) + 1)).sort((a, b) => U.dist(h.x, h.y, a.x, a.y) - U.dist(h.x, h.y, b.x, b.y))[0];
+      if (tr) { tryCast(w, { x: tr.x, y: tr.y, kind: null, d: { name: tr.d.name } }, "shot"); if (h.cast) { h.label = "罠を壊す"; return; } }
+    }
     if (h.decoy && h.decoy.t > 0 && h.form === "magica") { tryCast(w, h.decoy, "shot"); if (h.cast || h.think > 0) return; }   // 撃てない間は、ほかの事を
 
     // 狙う相手：近さが同じくらいなら、構えている者・弱っている者・指揮する者・知っている厄介な者を先に
     const score = o => o.kd - (o.m.cast && o.m.cast.kind !== "pounce" ? 0.8 : 0) - (o.m.hp <= o.m.maxHp * 0.3 ? 0.6 : 0) - (o.m.d.command ? 0.9 : 0) - knowledge(w, o.m.kind) * (o.m.d.atk.kind === "grab" ? 0.5 : 0.2);
     const visible = ts.filter(o => o.k.seen && w.t - o.k.t < 0.5 && shotClear(map, h.x, h.y, o.m.x, o.m.y));   // 今、撃てる相手
     const t0 = visible.length ? visible.filter(o => o.kd < visible[0].kd + 1.8).sort((a, b) => score(a) - score(b))[0] : ts[0];
+    // 戦いの最中なのに30秒、誰にも当てられない：周りの相手は置いて、階段を目指す
+    if (t0 && ts.some(o => o.d < 7)) { h.fightT = h.fightT ?? w.t; if (w.t - Math.max(h.fightT, h.lastDmgT ?? -99) > 30 && !h.bound) { h.walled = h.walled || {}; for (const o of ts) h.walled[o.m.id] = w.t + 15; h.wantDown = true; h.fightT = w.t; msg(w, "giveUp", { mon: t0.m.d.name }, 6); } }
+    else h.fightT = null;
     // 同じ相手に20秒、一度も当てられないまま：その相手は置いて、先へ（回り込み・射線探しの堂々巡りを断つ）
     if (t0) {
       if (!h.tgt || h.tgt.id !== t0.m.id) h.tgt = { id: t0.m.id, t: w.t };
@@ -1363,7 +1373,11 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     if (pa > 42) {
       const basin = w.traps.find(tr => (tr.kind === "basin" || tr.kind === "spring") && tr.armed && !tr.found && U.dist(h.x, h.y, tr.x, tr.y) < 9 && M.los(map, h.x, h.y, tr.x, tr.y));
-      if (basin) { goToward(w, basin.x, basin.y, 0.8, tr_label(basin)); return; }
+      if (basin && !(h.basinSkip && h.basinSkip.includes(basin))) {
+        if (!h.basinT || h.basinT.id !== basin) h.basinT = { id: basin, t: w.t };
+        if (w.t - h.basinT.t > 12) (h.basinSkip = h.basinSkip || []).push(basin);   // たどり着けない：あきらめる
+        else if (goToward(w, basin.x, basin.y, 0.8, tr_label(basin))) return;
+      }
     }
     explore(w);
   }
@@ -1505,7 +1519,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const tgt = c.target && c.target.hp > 0 ? c.target : { x: c.tx, y: c.ty };
     if (c.kind === "melee") {
       h.mp -= S.melee.cost; h.cdMelee = S.melee.cd; h.idleMp = 0;
-      const a = U.angle(h.x, h.y, c.tx, c.ty), spear = sk(w, "spear"), mRange = S.melee.range + (spear ? 0.35 : 0), mDmg = (S.melee.dmg + (spear ? 5 : 0)) * (h.dmgMul || 1);
+      const a = U.angle(h.x, h.y, c.tx, c.ty), spear = sk(w, "spear"), mRange = S.melee.range + (spear ? 0.35 : 0), mDmg = (S.melee.dmg + (spear ? 3 : 0)) * (h.dmgMul || 1);
       fx(w, { kind: "slash", x: h.x + Math.cos(a) * 0.7, y: h.y + Math.sin(a) * 0.7, a, color: "#fff4c0", life: 0.25 });
       let hit = 0;
       for (const m of w.monsters) {
@@ -1522,14 +1536,14 @@ var G = (typeof G !== "undefined") ? G : {};
       drainMagic(w, S.burst.magic, null);
       const nova = sk(w, "nova"), bR = S.burst.radius + (nova ? 0.5 : 0);
       fx(w, { kind: "burst", x: tgt.x, y: tgt.y, color: "#fff4c0", r: bR, life: 0.7 });
-      for (const m of w.monsters) if (m.hp > 0 && U.dist(m.x, m.y, tgt.x, tgt.y) < bR) hurtMon(w, m, (S.burst.dmg + (nova ? 6 : 0)) * (h.dmgMul || 1));
+      for (const m of w.monsters) if (m.hp > 0 && U.dist(m.x, m.y, tgt.x, tgt.y) < bR) hurtMon(w, m, (S.burst.dmg + (nova ? 4 : 0)) * (h.dmgMul || 1));
       record(w, { kind: "burst", sev: 0 }); inspire(w, "burst");
     } else {
       const lead = U.dist(h.x, h.y, tgt.x, tgt.y) / S.shot.speed;
       const tx = tgt.x + (tgt.vx || 0) * lead, ty = tgt.y + (tgt.vy || 0) * lead;
       const spread = (h.arousal / 100) * 0.45 + (h.hyp || 0) / 100 * 0.3 + (h.trance > 0 ? 0.3 : 0) + 0.04;
       const a = U.angle(h.x, h.y, tx, ty) + U.rf(-spread, spread);
-      const twin = sk(w, "twin") && h.mp >= S.shot.cost + 3, dm = S.shot.dmg * (h.dmgMul || 1);
+      const twin = sk(w, "twin") && h.mp >= S.shot.cost + 3, dm = S.shot.dmg * (h.dmgMul || 1) * (twin ? 0.6 : 1);
       for (const off of twin ? [-0.09, 0.09] : [0]) w.projs.push({ id: w.nextId++, x: h.x + Math.cos(a + off) * 0.4, y: h.y + Math.sin(a + off) * 0.4, vx: Math.cos(a + off) * S.shot.speed, vy: Math.sin(a + off) * S.shot.speed, owner: "h", dmg: dm, r: 0.18, life: S.shot.range / S.shot.speed, kind: "star" });
       h.mp -= S.shot.cost + (twin ? 3 : 0); h.cdShot = S.shot.cd; h.idleMp = 0;
       record(w, { kind: "shot", sev: 0 }); inspire(w, "shot");
@@ -1547,7 +1561,7 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   function hurtMon(w, m, dmg) {
     const before = m.hp;
-    dmg *= 1 + 0.25 * knowledge(w, m.kind);           // 弱いところを知っている
+    dmg *= 1 + 0.15 * knowledge(w, m.kind);           // 弱いところを知っている
     const cl = (w.run.h.charm && w.run.h.charm[m.kind]) || 0;
     if (cl) dmg *= 1 - 0.2 * cl;                       // 好きになった種族には、手が鈍る（Ⅲで6割減）
     if (m.d.grows && (m.grown || 0) < 110) {           // はじめの夜の主：抗うほど濃くなる
@@ -1555,7 +1569,7 @@ var G = (typeof G !== "undefined") ? G : {};
       const add = dmg * 0.3; m.maxHp += add; m.hp += add; m.pow = Math.min(2.2, (m.pow || 1) + dmg / 140);
       if (U.chance(0.25)) msg(w, "grows", { mon: m.d.name }, 5);
     }
-    m.hp -= dmg; m.hitT2 = w.t; m.flash = 0.2; m.rcl = 0.26; m.rclX = Math.sign(m.x - w.run.h.x) || 1;
+    m.hp -= dmg; m.hitT2 = w.t; w.run.h.lastDmgT = w.t; m.flash = 0.2; m.rcl = 0.26; m.rclX = Math.sign(m.x - w.run.h.x) || 1;
     alertMon(w, m, 1);
     fx(w, { kind: "hit", x: m.x, y: m.y, color: "#fff6c8", life: 0.3 });
     if (m.d.swarmOnHit && U.chance(m.d.swarmOnHit) && w.monsters.filter(o => o.hp > 0 && o.kind === m.kind).length < 8) {   // 撃つたび壁が鳴って、群れが増える
@@ -2140,6 +2154,14 @@ var G = (typeof G !== "undefined") ? G : {};
     if (rearm) { tr.armed = false; tr.rearm = tr.d.rearm; }
   }
 
+  // 見破った罠は、撃って壊せる（部屋ごとの仕掛けは壊せない）
+  function breakTrap(w, tr) {
+    w.traps = w.traps.filter(t => t !== tr);
+    fx(w, { kind: "burst", x: tr.x, y: tr.y, color: "#fff2a8", life: 0.6 });
+    msg(w, "trapBreak", { trap: tr.d.name }, 1);
+    record(w, { kind: "trapBreak", trap: tr.kind, trapName: tr.d.name, sev: 0 });
+    learn(w, tr.kind, 1);
+  }
   /* ================================================================ 弾 */
   function updateProjs(w, dt) {
     const h = w.run.h;
@@ -2147,6 +2169,8 @@ var G = (typeof G !== "undefined") ? G : {};
       p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt;
       if (M.tile(w.map, p.x, p.y) !== 0) { p.life = 0; if (p.owner === "h") h.wallHits = (h.wallHits || 0) + 1; fx(w, { kind: "hit", x: p.x, y: p.y, color: "#aaa", life: 0.2 }); continue; }
       if (p.owner === "h") {
+        const tr = w.traps.find(t => t.found && t.armed && !t.room && U.dist(p.x, p.y, t.x, t.y) < Math.min(0.7, t.d.radius * 0.6) + p.r);
+        if (tr) { breakTrap(w, tr); p.life = 0; continue; }
         for (const m of w.monsters) {
           if (m.hp <= 0 || U.dist(p.x, p.y, m.x, m.y) > m.d.r + p.r) continue;
           if (m.d.reflect && U.chance(m.d.reflect)) {

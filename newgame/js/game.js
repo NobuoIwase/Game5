@@ -253,6 +253,8 @@ var G = (typeof G !== "undefined") ? G : {};
   /* ================================================================ 帰還後：堕ち・状態異常・リソース */
   function finishDive(s, run) {
     const ev = run.events;
+    s.dirTotal = s.dirTotal || { placed: 0, holds: 0, acts: 0, climax: 0 };
+    if (run.dirStats) for (const k in s.dirTotal) s.dirTotal[k] += run.dirStats[k] || 0;
     const holdSec = ev.filter(e => e.kind === "hold").reduce((a, e) => a + (e.dur || 3), 0);
     const nightBeats = run.night.length;
     const climaxes = run.h.climax;
@@ -367,7 +369,7 @@ var G = (typeof G !== "undefined") ? G : {};
       day: s.day, dungeon: run.dungeon, dungeonName: run.dungeonName || G.DUNGEONS[run.dungeon].name, stated: run.stated, realType: run.realType, forged: run.forged,
       outcome: run.outcome, floorReached: run.floorReached, events: ev, night: run.night, mismatch: run.mismatch || 0,
       h: { hp: run.h.hp, arousal: run.h.arousal, form: run.h.form, climax: climaxes, attach: (run.h.attach || []).slice(), rewired: !!run.h.rewired }, ailments: s.ailments.map(a => a.id),
-      law: run.law || null, traitsGained: run.traitsGained || [], converted: !!run.converted, growth: run.growth, firstParts: run.firstParts || [],
+      law: run.law || null, dirStats: run.dirStats || null, traitsGained: run.traitsGained || [], converted: !!run.converted, growth: run.growth, firstParts: run.firstParts || [],
       gain: { body: +bodyGain.toFixed(1), mind: +mindGain.toFixed(1), funds, dark, sus: +sus.toFixed(1), pay: run.pay },
     };
     rec.report = G.Report.build(rec, s);

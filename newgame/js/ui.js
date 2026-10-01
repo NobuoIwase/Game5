@@ -515,7 +515,7 @@
     const w = dive.w, h = w.run.h;
     const top = document.getElementById("dtop");
     if (top) top.innerHTML = `<span><b>${w.floorNo}</b>/${w.dg.floors}階</span><span>${esc(dive.run.dungeonName || w.dg.name)} ${tag(w.dg.type)}</span><span>依頼書 ${tag(dive.run.stated)}</span>
-      <span>${h.form === "magica" ? "<b style='color:var(--pink)'>ルミナ</b>" : "<b>素の姿</b>"}</span><span>コスト <b>${w.dir.spent}/${w.dir.cap}</b></span><span>呼んだ数 <b>${w.dir.live}/${dive.run.maxLive}</b></span>`;
+      <span>${h.form === "magica" ? "<b style='color:var(--pink)'>ルミナ</b>" : "<b>素の姿</b>"}</span><span>コスト <b>${w.dir.spent}/${w.dir.cap}</b></span><span>呼んだ数 <b>${w.dir.live}/${dive.run.maxLive}</b></span>${dive.run.dirStats && dive.run.dirStats.holds ? `<span>戦果 <b style="color:var(--pink)">捕縛${dive.run.dirStats.holds}・絶頂${dive.run.dirStats.climax}</b></span>` : ""}`;
     const hud = document.getElementById("hud");
     if (hud && (!dive.hudT || performance.now() - dive.hudT > 120)) {
       dive.hudT = performance.now();
@@ -564,7 +564,7 @@
   /* 実況：捕まっている間・達した前後は、立ち絵の横に一行ずつ流す（Game2 の場面の流れ方にならう）
    *   責め → 崩れていく言葉 → 決壊（画面が弾ける） → 沈黙 → 余韻 → 我に返る */
   const LIVE_GAP = { act: 800, line: 650, mon: 650, sfx: 380, gauge: 350, cx: 900, first: 1700, pause: 1100, after: 1300, recover: 1100, scene: 1600, build: 1000 };
-  const LIVE_KEEP = /cx|first|scene|build|pause|after|recover/;
+  const LIVE_KEEP = /cx|first|scene|build|pause|after|recover|mine/;
   function liveGap(cls) { let g = 0; for (const k of cls.split(" ")) if (LIVE_GAP[k]) g = Math.max(g, LIVE_GAP[k]); return (g || 700) / (1 + 0.35 * ((dive.speed || 1) - 1)); }
   function drawLive(w, now) {
     const el = document.getElementById("live"); if (!el) return;
@@ -740,7 +740,7 @@
     const rec = S.rec;
     if (!rec) { S.phase = "guild"; return guild(); }
     app.innerHTML = topbar() + officeHTML() + `
-      <div class="panel sub" id="rinfo"><b>口頭報告</b>　${esc(rec.dungeonName)}・${rec.floorReached}階まで・${OUTC[rec.outcome]}　今日の話し方：${esc(rec.postureName)}
+      <div class="panel sub" id="rinfo"><b>口頭報告</b>　${esc(rec.dungeonName)}・${rec.floorReached}階まで・${OUTC[rec.outcome]}　今日の話し方：${esc(rec.postureName)}${rec.dirStats && rec.dirStats.placed ? `<br><b style="color:var(--pink)">仕込みの戦果</b>　呼んだ ${rec.dirStats.placed}・捕縛 ${rec.dirStats.holds}・触れた ${rec.dirStats.acts}回・絶頂 ${rec.dirStats.climax}回（本人が何と言うか、聞いてみよう）` : ""}
         <br><span class="dim">話の途中で「追及する」「記録を突きつける」を選べるのは、その件を言い終えた、その時だけ。嘘なら崩れることがある。本当のことなら、中身を言わされる（記録を突きつけると、嘘はほぼ崩れるが、本当だった時はひどく傷つける）。</span></div>
       <div class="row hidden" id="rdone"><button class="primary" id="todoc">報告書を受け取る</button></div>
       <details class="panel" id="trp"><summary>ここまでの話（書き起こし）</summary><div id="tr"></div></details>`;

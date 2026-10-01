@@ -209,6 +209,7 @@ select { font: inherit; color: var(--tx); background: var(--panel2); border: 1px
 .lv-fig.after .lv-blush { opacity: 1; }
 @keyframes lvAfter { 0%,100% { transform: translateX(-50%); } 30% { transform: translateX(-50%) translateY(1px); } 50% { transform: translateX(calc(-50% - 1px)) translateY(2px); } 58% { transform: translateX(calc(-50% + 1px)) translateY(0); } }
 .lv-feed .fl.mind { border-left-color: #9a86d8; color: #d4c4f4; background: rgba(22,16,40,0.86); font-size: 12px; }
+.lv-feed .fl.mine { border-left-color: #ffd27a; color: #ffe7a8; background: rgba(40,28,10,0.86); font-size: 12px; font-weight: bold; }
 .lv-feed .fl:nth-last-child(n+7) { display: none; }
 .live.paused .lv-feed { pointer-events: auto; overflow-y: auto; justify-content: flex-start; max-height: 74%; background: rgba(8,4,12,0.55); border-radius: 6px; }
 .live.paused .lv-feed .fl { display: block; opacity: 1; animation: none; }

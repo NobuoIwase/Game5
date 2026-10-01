@@ -10,13 +10,29 @@ p{color:var(--sub);margin:0 0 8px}.row{display:flex;flex-wrap:wrap;gap:10px}
 .stage img{position:absolute;left:50%;bottom:0;height:120px;width:auto;object-fit:initial;transform:translateX(-50%)}.c b{display:block;font-size:13px}.c small{color:var(--sub)}
 .t{display:inline-block;border-radius:4px;padding:0 6px;font-size:12px;margin-left:4px}
 .惑{background:#5b3d8c}.蕩{background:#8c3d63}.絡{background:#3d6b8c}.削{background:#2f7a7a}
+.room-card{max-width:100%;width:294px;background:var(--card);padding:8px;border-radius:8px}.room-card canvas{width:100%;height:auto;image-rendering:pixelated}.room-card label{display:inline-block;margin-right:8px}.room-card b{display:block}
 </style></head><body>
 <h1>新作の素材</h1><p>ひかり（素の姿・変身後、4方向。歩きのコマは使わず、1枚の絵を滑らせて動かす）と、魔物・罠の絵。</p>
 <h2>ひかり</h2><div class="row" id="hk"></div>
 <h2>魔物</h2><div id="mon"></div>
 <h2>罠</h2><div id="trap"></div>
+<h2>部屋のスキン</h2><p>7×5マス。入室前・入室後、fill=0／0.5／1 を切り替えて比較できます。</p><div class="row" id="rooms"></div>
 <script src="../js/data.js"></script>
+<script src="../js/render.js"></script>
 <script>
+const roomViews=[];
+for(const key of Object.keys(G.ROOM_SKINS)){
+ const card=document.createElement('div');card.className='room-card';
+ card.innerHTML=`<b>${key}</b><canvas width="288" height="224" aria-label="${key}の部屋"></canvas><label><input type="checkbox">入室後</label><label>fill <select><option>0</option><option>0.5</option><option>1</option></select></label>`;
+ document.getElementById('rooms').append(card);
+ roomViews.push({key,card,ctx:card.querySelector('canvas').getContext('2d')});
+}
+let lastRooms=0;
+function roomFrame(t){
+ if(t-lastRooms>50){lastRooms=t;for(const v of roomViews){const r=v.card.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)continue;G.Render.roomPreview(v.ctx,v.key,v.card.querySelector('input').checked,+v.card.querySelector('select').value,matchMedia('(prefers-reduced-motion: reduce)').matches?0:t/1000,'../');}}
+ requestAnimationFrame(roomFrame);
+}
+requestAnimationFrame(roomFrame);
 const DIRS=['front','left','right','back'],JP={front:'前',left:'左',right:'右',back:'後ろ'};
 // 歩きのコマ送りはしない（崩れるため）。各向きの真ん中の1枚を、向いている方へ滑らせるだけ。
 const MOVE={front:[0,1],back:[0,-1],left:[-1,0],right:[1,0]};

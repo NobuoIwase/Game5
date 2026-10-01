@@ -70,6 +70,7 @@ var G = (typeof G !== "undefined") ? G : {};
   const LEVEL = { 1: "弱い", 2: "", 3: "手練れの" };
   const LEVEL_NAME = { 1: "低い", 2: "並", 3: "高い" };
   const SCALE_NAME = { 1: "小規模", 2: "中規模", 3: "大規模" };
+  const FLOORS_BY_SCALE = { 1: 6, 2: 8, 3: 10 };      // 規模＝深さ
   const VERB = ["討伐", "駆除", "調査", "掃討"];
   function requestTitle(c) {
     const mon = G.MONSTERS[c.main].name;
@@ -212,7 +213,7 @@ var G = (typeof G !== "undefined") ? G : {};
       real: p.real, paper: p.paper, caution: p.caution || 1, forgeSize: p.forgeSize || 0,
       dungeonName: p.dungeon === p.req.dungeon ? p.req.place : placeName(p.dungeon, null),
       events: [], night: [], deck: deckFor(s, p.dungeon), maxLive: G.BAL.maxLive + s.upgrades.live,
-      autoDirector: s.autoDirector, save: s, recall: false, floor: 1, mismatch: 0,
+      autoDirector: s.autoDirector, save: s, recall: false, floor: 1, mismatch: 0, floors: FLOORS_BY_SCALE[(p.real && p.real.scale) || 2],
       h: {
         lv: s.lv || 1, hpMax: G.GROWTH.hpMax(s.lv || 1), mpMax: G.GROWTH.mpMax(s.lv || 1), dmgMul: G.GROWTH.dmg(s.lv || 1), skills: (s.equip || []).slice(),
         hp: Math.round(G.GROWTH.hpMax(s.lv || 1) * (1 - s.fatigue / 250)), mp: G.GROWTH.mpMax(s.lv || 1), magic: has("hollow") ? 60 : G.HIKARI.magicMax,

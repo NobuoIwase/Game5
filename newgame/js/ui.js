@@ -241,7 +241,7 @@
         <p class="sub">ひかりの希望する依頼。机の上の一枚を選び、中身を書き換えてから渡す。</p>
         <div class="grid2">${S.requests.map((q, i) => `<div class="card paper ${i === sel ? "sel" : ""}" data-i="${i}">
           <b>${esc(q.title)}</b><div class="sub">${esc(q.place || G.DUNGEONS[q.dungeon].name)}・報酬 ◈${q.reward}（前金 ◈${Math.round(q.reward / 2)}・失敗しても返さない）</div>
-          <div class="sub">脅威度 ${LV_NAME[q.real.level]}・${SC_NAME[q.real.scale]}${q.real.boss ? "・長あり" : ""}</div></div>`).join("")}</div>
+          <div class="sub">脅威度 ${LV_NAME[q.real.level]}・${SC_NAME[q.real.scale]}（${({ 1: 6, 2: 8, 3: 10 })[q.real.scale]}階）${q.real.boss ? "・長あり" : ""}</div></div>`).join("")}</div>
         <div class="panel">
           <h2 style="margin-top:0">書き換える</h2>
           <div class="col">

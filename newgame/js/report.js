@@ -52,6 +52,7 @@ var G = (typeof G !== "undefined") ? G : {};
     addict: ["{mon}の粉を、……吸っちゃって。今も、ちょっと、また吸いたいっていうか……違います", "咳き茸、です。……あの粉は、危ないです。危ない、です"],
     // ---- 蟲・変生・教団・淫魔 ----
     futaOn: ["……神殿に入ったら、……その。生えました。……何が、とは、言わせないでください", "身体が、……変わりました。神殿の、せいで。……下の、ほうが"],
+    urge: ["……いけないまま、ずっと、止められてて。……おかしく、なりそうでした", "……いかせて、って、……言っちゃいました。誰もいないのに", "……出したくて、出せなくて。……腰、ずっと、動いてました"],
     shasei: ["……出ました。{n}回。……何が、とは、聞かないでください", "……{n}回、出しちゃいました。……止め方が、分からなくて", "出……ました。……{n}回です。数えてたので、間違いないです"],
     tipTease: ["{mon}に、……先だけ、ずっと。……最後まで、行かせてもらえなくて", "{mon}が、先っぽだけ撫でて。……根元は、一回も"],
     ringRelease: ["輪っかを嵌められてて。……出口で外れた瞬間、……{n}回、まとめて", "締環、です。……溜まってた分が、帰った時に、全部"],
@@ -192,7 +193,7 @@ var G = (typeof G !== "undefined") ? G : {};
     charm: "{mon}への魅了", attach: "付着体「{mon}」", release: "溜められた絶頂の一斉解放", beg: "{mon}への懇願", rescue: "洗脳の未遂", convert: "戦闘員化",
     sniff: "{mon}の臭いの吸引", salute: "{mon}への『敬礼』", fit: "原因不明の発作", deny: "{mon}による絶頂の禁止", vow: "誓約による絶頂の禁止", freeze: "{mon}による時間停止",
     exposure: "装束の損壊", addict: "{mon}の粉への中毒",
-    futaOn: "変生（雄の形の発現）", shasei: "射精 {n}回", tipTease: "{mon}による先端のみの刺激", ringRelease: "締環の解除と一斉射精", futaFixed: "変生の定着",
+    futaOn: "変生（雄の形の発現）", urge: "絶頂（射精）を止められた状態での強い欲求", shasei: "射精 {n}回", tipTease: "{mon}による先端のみの刺激", ringRelease: "締環の解除と一斉射精", futaFixed: "変生の定着",
     crack: "{mon}による心の防護壁の損傷", pray: "{mon}への祈り", broadcast: "{mon}による中継", countGame: "{mon}との数え歌", kiss: "{mon}との口づけ",
     swell: "{mon}による肥大化", miniClimax: "罠「{trap}」による閾下の絶頂", mock: "{mon}による罵倒", anticipate: "{mon}の視認による発情（身体の記憶）",
   };
@@ -209,7 +210,7 @@ var G = (typeof G !== "undefined") ? G : {};
     charm: ["{mon}ですか？ 普通に倒しました", "{mon}は、……別に。ただの敵です"], attach: ["何も、付いてないです。……ほんとに"], release: ["特に、何も。……普通でした"],
     beg: ["{mon}は、倒しました。……それだけです"], sniff: ["{mon}とは、すれ違っただけです"], deny: ["{mon}？ 何もされてません"], vow: ["祭壇はありましたけど、触ってません"],
     addict: ["茸の所は、迂回しました"], fit: ["……体調は、普通です"],
-    futaOn: ["神殿は、……普通の神殿でした"], shasei: ["……特に、何も"], tipTease: ["{mon}は、追い払いました"], ringRelease: ["帰還は、普通でした"],
+    futaOn: ["神殿は、……普通の神殿でした"], urge: ["……特に、何も。我慢は、得意なので"], shasei: ["……特に、何も"], tipTease: ["{mon}は、追い払いました"], ringRelease: ["帰還は、普通でした"],
     crack: ["{mon}の話なんか、聞いてません"], pray: ["{mon}？ 見ただけです"], broadcast: ["{mon}は、飛んでただけです"], countGame: ["{mon}とは、遊んでません"],
     kiss: ["{mon}は、倒しました。近づかれる前に"], swell: ["虫刺されです"], miniClimax: ["{trap}の光は、防ぎました。全部"], mock: ["{mon}が、何か言ってました。聞いてません"],
     anticipate: ["{mon}ですか？ 普通に、撃ちました"],
@@ -438,7 +439,7 @@ var G = (typeof G !== "undefined") ? G : {};
         if (["exposure", "addict"].includes(e.kind) && out.some(u => u.kind === e.kind)) continue;
         if (e.kind === "release") { const same = out.find(u => u.kind === "release"); if (same) { same.n += e.n || 1; same.rel = same.n; continue; } }
         out.push({ kind: e.kind, floor: e.floor, t: e.t, mon: e.mon, monName: e.monName || "", type: e.type || "蕩", sev: e.sev || 2, n: e.n || 1, climax: e.kind === "release" ? 0 : 0, rel: e.n || 0, hidden: false });
-      } else if (["futaOn", "shasei", "tipTease", "ringRelease", "futaFixed", "crack", "pray", "broadcast", "countGame", "kiss", "swell", "miniClimax", "mock", "anticipate"].includes(e.kind)) {
+      } else if (["urge", "futaOn", "shasei", "tipTease", "ringRelease", "futaFixed", "crack", "pray", "broadcast", "countGame", "kiss", "swell", "miniClimax", "mock", "anticipate"].includes(e.kind)) {
         // 変生・教団・淫魔の件：種類ごとに潜行全体で一件（回数）
         const same = out.find(u => u.kind === e.kind);
         if (same) { same.n += e.kind === "ringRelease" ? (e.n || 1) : 1; same.sev = Math.max(same.sev, e.sev || 1); if (e.lost) same.lost = true; continue; }
@@ -780,7 +781,7 @@ var G = (typeof G !== "undefined") ? G : {};
       fit: ["{floor}階：原因不明の発作（{n}回）。"], deny: ["{floor}階：{mon}に絶頂を止められていた。"], vow: ["{floor}階：誓約の祭壇。階を出るまで達せなかった。出た後のことは、書かない。"],
       freeze: ["{floor}階：{mon}で、身体の時間が止まった。"], exposure: ["{floor}階：装束損壊。替えを申請。"], addict: ["{floor}階：{mon}の粉を吸った。依存性あり。"],
       futaOn: ["{floor}階：神殿の作用で、身体が変化（雄の形）。", "{floor}階：変生。……形の詳細は、別紙で。"],
-      shasei: ["{floor}階：射精（{n}回）。", "{floor}階：変生した部位から、{n}回。"], tipTease: ["{floor}階：{mon}に先端だけを刺激され続けた。一度も出せなかった。"],
+      urge: ["{floor}階：絶頂（射精）を止められ、強い欲求状態に。", "{floor}階：解放されないまま欲求が限界に達し、懇願の発話あり。"], shasei: ["{floor}階：射精（{n}回）。", "{floor}階：変生した部位から、{n}回。"], tipTease: ["{floor}階：{mon}に先端だけを刺激され続けた。一度も出せなかった。"],
       ringRelease: ["{floor}階：締環が外れ、溜まっていた分が一度に出た。"], futaFixed: ["{floor}階：数取りの祭壇、十二升目到達。変生が定着。処置を申請します。"],
       crack: ["{floor}階：{mon}の説法で、精神防壁に損傷。", "{floor}階：{mon}の声を聞き続けた。心のヒビ、処置希望。"],
       pray: ["{floor}階：{mon}に祈った（{n}回）。自分の意思ではない。"], broadcast: ["{floor}階：{mon}に姿を『中継』された。"],
@@ -795,7 +796,7 @@ var G = (typeof G !== "undefined") ? G : {};
       sigil: ["{floor}階：{mon}で呪いの転写。魔力の壁で丸ごと弾き返した。紋様は受けていない。", "{floor}階：{mon}を破壊した。問題なし。"],
       possess: ["{floor}階：{mon}が袖口から入ろうとしたが、払った。", "{floor}階：{mon}を見かけた。袖を締めて通過。"],
       filmed: ["{floor}階：{mon}がいた。見ているだけで害はない。"],
-      futaOn: ["{floor}階：神殿。特に異常なし。"], shasei: ["{floor}階：特記事項なし。"], ringRelease: ["帰還：問題なし。"], futaFixed: ["{floor}階：祭壇あり。触れていない。"],
+      futaOn: ["{floor}階：神殿。特に異常なし。"], urge: ["{floor}階：特記事項なし。"], shasei: ["{floor}階：特記事項なし。"], ringRelease: ["帰還：問題なし。"], futaFixed: ["{floor}階：祭壇あり。触れていない。"],
       crack: ["{floor}階：{mon}と交戦。説法は聞いていない。"], pray: ["{floor}階：{mon}を目視。接触なし。"], broadcast: ["{floor}階：{mon}を目視。無害。"],
       countGame: ["{floor}階：{mon}を撃退。"], kiss: ["{floor}階：{mon}を撃退。接触なし。"], swell: ["{floor}階：虫刺され程度。"], miniClimax: ["{floor}階：{trap}の光を防御。影響なし。"],
       mock: ["{floor}階：{mon}を撃退。"], tipTease: ["{floor}階：{mon}を撃退。"], anticipate: ["{floor}階：{mon}と交戦。問題なし。"],

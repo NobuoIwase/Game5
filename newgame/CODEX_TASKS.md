@@ -1,0 +1,212 @@
+# 外部のAI（ChatGPT Codex など）に頼む作業の指示書
+
+作者が Codex に渡すための指示書。課題ごとに独立しているので、**課題の節をまるごとコピーして渡す**。
+どの課題にも、先頭の「共通の約束」を必ず一緒に渡すこと。
+
+おすすめの順番：課題1 → 課題2 →（並行して）課題3・課題4 → 課題5・課題6。
+課題1は `newgame/js/field.js` を作り直すので、ほかの課題とはブランチを分け、課題1を先に main へ入れてから残りを始めると衝突しない。
+
+---
+
+## 共通の約束（全部の課題で守る）
+
+```
+あなたは GitHub リポジトリ NobuoIwase/Game5 の newgame/（ブラウザで動く素の JavaScript のゲーム。ビルドなし）を作業します。
+最初に newgame/README.md と newgame/DESIGN.md を読んでください。README の「作業の約束」と NG リストは絶対に守ってください。
+
+- 作業ブランチは main から新しく切る（名前は課題に書いたもの）。main や claude/ で始まるブランチには直接 push しない。
+- 変えてよいのは、課題に書いた範囲だけ。ついでの改善・名前の付け替え・整形だけの変更はしない。
+- ゲームの文章（台詞・場面・報告の文）は書き足さない・書き換えない。文章が必要になったら、TODO として PR 本文に書くだけにする。
+- docs/ の中身は参照するだけで、ゲームや公開物に写さない。Game2・Game4 など他のリポジトリには触らない。
+- 魔物の配色がピンク寄りなのは意図どおり。直さない。
+- ヒロイン（星野ひかり／ルミナ）は18歳以上の大学生。幼く見せる描き方・書き方はしない。
+- TLS の検証を切らない。秘密の値をコミットしない。
+- 確認は必ず実行して、出た数字・出力をそのまま PR 本文に貼る（実行していないものを「確認済み」と書かない）。
+- 検査コマンド（リポジトリ直下から）：
+    node newgame/tools/fingerprint.js 40 1     # 挙動の指紋（1行目の sha256）
+    node newgame/tools/fingerprint.js 40 2
+    node newgame/tools/sim.js 30 7 --dup       # 30日分。落ちないこと
+    node newgame/tools/wip/stuck.js            # 固まり検出。最後の行が found 0 {} であること
+    npx http-server -p 8766 を別に起動してから OUT=/tmp/shots node newgame/tools/play.js   # ブラウザ通し。errors [] であること
+- 終わったら PR を作り、何を変えたか・確認の出力・残った TODO を書く。マージはしない（作者が見てから入れる）。
+```
+
+---
+
+## 課題1：field.js を、振る舞いを一切変えずに分割する
+
+ブランチ名：`codex/split-field`
+
+```
+目的：newgame/js/field.js（約2500行）を、役割ごとの複数ファイルに分ける。ゲームの振る舞いは一字一句変えない。
+
+今の field.js の中身（だいたいの区切り）：
+- 世界の生成（createWorld・populate・罠部屋 makeTrapRoom など）
+- 実況（feed・live）、メッセージ（msg・pushMsg・say・monSay・hitDesc）
+- 状態の計算（intake・heat・mult・tierFx・knowledge・expectation・魅了 addCharm／charmTouch・付着体）
+- 絶頂（checkClimax）、捕縛（grab・release・lewdTick・updateBound・defeat）
+- ひかりの判断（hikariThink・explore・goToward・pathDir・avoidFn・firingSpot など）と、技（tryCast・flash・breakout）
+- 魔物（updateMonster・fire・hurtMon・killMon・spawnMonster）
+- 罠（triggerTrap・breakTrap・罠部屋の脈動）、弾（updateProjs）
+- 一歩（step）、夜（startNight・nightBeat）、公開する G.Field の口
+
+やること：
+1. 作業の前に main のまま `node newgame/tools/fingerprint.js 40 1` と `40 2` を実行し、2つの sha256 を控える（これが基準）。
+2. field.js を 6〜9 個程度のファイルに分ける（例：js/field/world.js, js/field/talk.js, js/field/body.js, js/field/bound.js, js/field/hikari.js, js/field/monster.js, js/field/trap.js, js/field/step.js）。
+   - 今は一つの即時関数の中で関数どうしが直接呼び合っている。分けた後も同じ名前で呼べるように、共有の入れ物（例：G.F という内部用の名前空間）に関数を載せ、各ファイルの先頭で必要なものを取り出す、などの方法でよい。
+   - 公開している G.Field の中身（関数名・引数・G.Field._test）は変えない。
+   - 処理の順番・乱数（G.U の関数）を呼ぶ順番・回数を変えない。式の書き換えもしない。移すだけ。
+3. ファイルを読み込んでいる所をすべて新しい並びに合わせる：
+   newgame/index.html の <script>、newgame/tools/sim.js・bal.js・play.js（読む場合）・fingerprint.js・tools/wip/*.js の読み込みリスト。
+   読み込みリストを一か所（例：newgame/tools/files.js がファイル名の配列を返す）にまとめ、ツールはそれを使うようにしてよい。
+4. 分割後に fingerprint を 40 1・40 2 で実行し、基準と完全に一致することを確かめる。一致しなければ、一致するまで直す。
+
+合格条件：
+- fingerprint 40 1 と 40 2 の sha256 が、作業前の main と同じ（PR 本文に前後の値を並べて貼る）
+- sim.js 30 7 --dup が落ちない、stuck.js が found 0 {}、play.js が errors []（390幅と W=1280 H=800 の両方）
+- newgame/README.md の「中身の地図」を新しいファイル構成に合わせて書き直す（それ以外の README の記述は変えない）
+```
+
+---
+
+## 課題2：検査ツールを正式なものにして、PR ごとに自動で回す
+
+ブランチ名：`codex/checks`
+
+```
+目的：newgame/tools/wip/ にある下書きの検査（rates.js・stuck.js・timeouts.js・charmdive.js。説明は tools/wip/README.md）を、
+正式なツールに整え、GitHub Actions で PR ごとに自動で走らせる。
+
+やること：
+1. newgame/tools/check/ に正式版を作る。
+   - rates：種と回数をオプションで受け、複数の種をまとめて回して合計を表で出す（踏破・帰還・敗北・打ち切りの割合、平均到達階、脅威度ごとの踏破率、帰還の理由、敗北させた魔物の上位、罠を壊した数）。--json でも出せる。
+     node の worker_threads か子プロセスで、種ごとに並列に回してよい。
+   - stuck：固まり検出。見つかった場面を1行ずつ（ダンジョン・種・階・秒・ラベル・近くの魔物）出し、見つかれば終了コード 1。
+   - timeouts：1階300秒を超えた階の、後半の行動の内訳。
+   - charm：魅了がどの魔物から何回起きたか。
+   - repeat：sim.js の報告の重なり（一字一句同じ台詞の割合・半分以上の報告に出る8字の並びとその中身）。今の sim.js の中にある数え方を関数として切り出して使う。
+2. newgame/tools/check.js を作り、速い検査をまとめて回す：fingerprint（値を表示するだけ）・sim 10日・stuck（種を絞った速い版）・repeat。どれかが失敗したら終了コード 1。
+3. .github/workflows/ に PR 用のワークフローを足す（Node 22、ブラウザ不要の検査だけ）。既存の pages.yml は変えない。
+4. tools/wip/ は消してよい（正式版に置き換えたら）。README の「確かめ方（検査ツール）」の表を新しいツールで書き直す。
+
+合格条件：
+- 新しいツールの出力と、wip 版の出力が同じ種・同じ回数で同じ数字になる（rates と stuck を、種1〜2・回数5で比べた結果を PR に貼る）
+- node newgame/tools/check.js が手元で通る（所要時間も書く）、ワークフローが PR 上で緑
+- ゲーム本体（newgame/js/）は変えない。fingerprint 40 1 が作業前と同じ
+```
+
+---
+
+## 課題3：部屋ごとのマップチップ（「部屋が丸ごと触手まみれ」を描けるように）
+
+ブランチ名：`codex/room-skins`
+
+```
+目的：罠部屋（G.TRAP_ROOMS）ごとに、床・壁・飾りの見た目（スキン）を付けられるようにする。
+例えば触手の部屋なら、床は肉色の脈打つ床、壁からは触手が生え、部屋のあちこちで触手の束がうねっている——という見た目。
+部屋の仕組み（満ちてくる・扉が閉まる等）や文章は Claude 側で作るので、この課題は「見た目と、その受け口」まで。
+
+今の仕組み（読んでから始める）：
+- 床の絵：newgame/assets/env/floor_<ダンジョン>.png。256×128 の PNG に 64px のチップが 4列×2行。render.js の draw() が、座標のハッシュで列と行を選んで描く（4列目は5%だけ出る珍しい柄）。
+- 壁：render.js の中で、ダンジョンの色（G.DUNGEONS[k].pal：floor・floor2・wall・wallTop・edge・fog）を使って手続きで描いている。
+- 罠部屋：field.js が w.trapRooms に { key, T, x, y, w, h, cx, cy, active, members } を入れる。踏み込むと active が true になる。
+  今の見た目は、部屋の床に薄い赤を重ねているだけ（render.js の trapRoom()）。
+- 部屋の定義：data.js の G.TRAP_ROOMS（name・type・from・center・traps・den（[魔物, 数]）・aura・desc）。各ダンジョンが使う部屋は G.DUNGEONS[k].rooms。
+- 素材一覧のページ：newgame/assets/index.html（公開している素材ギャラリー）。
+
+やること：
+1. data.js に G.ROOM_SKINS を足す。スキンごとに：床のチップ画像・壁の飾り・散らす飾り（種類・密度）・色（壁の上面の色、床に重ねる色、霧の色）・動き（揺れの速さ）を持つ。
+   データを足すだけで新しいスキンを増やせる形にする。
+2. 最初に作るスキン（各 床チップ1枚＋飾り数種）：
+   - tentacle（触手まみれ：肉色の床、壁から生える触手、床から伸びる触手の束、ぬめりの光）
+   - slime（粘液だまり：半透明の粘液が床を覆い、天井から垂れる）
+   - flesh（肉の苗床：脈打つ肉の床、蕾や花弁のような飾り）
+   - worm（蟲の巣：穴だらけの土の床、壁の穴）
+   - mirror（鏡の間）、cult（教団の祭壇の間：赤い布・燭台）、lab（ワルドーの実験室：金属の床・配線・アーム）、boudoir（淫魔の寝所：絨毯・天蓋・香炉）
+3. 画像の作り方：newgame/tools/make_room_chips.py（Pillow）か node のスクリプトで「生成」し、出力の PNG（assets/env/room_<スキン>.png、床は今と同じ 256×128・64px・4列×2行）と飾りの画像（assets/env/room_<スキン>_deco.png などのスプライトシート）をコミットする。生成スクリプトもコミットし、誰でも作り直せるようにする。
+   絵の雰囲気は今の floor_*.png に合わせる（同じ解像度感・色数を抑えたドット寄り・暗めの迷宮）。魔物や肉の色がピンク寄りなのは意図どおり。リポジトリ直下の ART_DIRECTION.md も読む。
+4. render.js：罠部屋の範囲だけ、その部屋のスキンの床チップで描く。部屋に面した壁にはスキンの壁飾り（触手が壁から生えている等）を重ね、部屋の中に飾りを散らす（散らし方は座標のハッシュで決め、毎フレーム変わらない）。
+   飾りは時間でゆっくり揺らす（触手のうねり等）。room.active が true になったら（踏み込んで扉が閉まったら）揺れを速く・飾りを少し伸ばす。
+   さらに room.fill（0〜1。無ければ 0）を読み、fill が大きいほど飾りの数と大きさを増やす（「部屋が触手で満ちていく」を後から Claude が仕組みとして入れるための受け口。fill を動かす処理は入れない）。
+   スキンの付いていない部屋は今まで通り（薄い赤の重ね）。
+5. data.js の G.TRAP_ROOMS の各部屋に skin を付ける。決め方：den の最初の魔物の系統（text.js の G.Text.actorOf(種) が返す tentacle・slime・plant・worm・mouth・imp・machine・hands など）で選び、合わないものは部屋名・説明から判断して付ける。どの部屋に何を付けたか、表で PR に書く。
+   新しい部屋（G.TRAP_ROOMS の項目）は足さない（乱数の流れが変わり、検査の基準がずれるため）。
+6. newgame/assets/index.html に「部屋のスキン」の見本を足す（各スキンで 7×5 マスほどの部屋を描いて並べる。active・fill=0/0.5/1 の見比べも）。
+
+合格条件：
+- fingerprint 40 1・40 2 が作業前と同じ（見た目とデータの skin 欄だけなので、振る舞いは変わらないはず）
+- play.js が errors []（390幅・1280幅）。触手の部屋に踏み込む前と後のスクリーンショットを PR に貼る（場面の作り方は play.js の後ろに足すか、別の小さなスクリプトで G.debug.dive を使ってよい）
+- スマホ幅で描画が重くならない（飾りは部屋の中だけ・画面外は描かない）。罠部屋が画面にある時の1フレームの描画時間を、前後で測って PR に書く
+```
+
+---
+
+## 課題4：色違いで代用している魔物の専用の絵と、立ち絵の表情差分
+
+ブランチ名：`codex/monster-art`
+
+```
+目的：(1) 今は既存の絵の色違い（data.js の art と tint）で代用している魔物 11 種に、専用の絵を作る。
+(2) 実況パネルの立ち絵（assets/hikari/hikari_magica_front_*.png・hikari_civilian_front_*.png）に重ねる表情差分を作る。
+
+(1) 対象：kuchizuke（口づけの淫魔）・utaimp（歌う小淫魔）・hitomi（見つめる淫魔）・miwakubana（魅惑の花）・sasayaki（囁きスライム）・
+namekuji（ナメクジ）・namequeen（ナメクジ女王：背に王冠めいた襞を持つ大ナメクジ）・firstslug（はじめの夜の主：最初の一体と同じ小さなナメクジ。濃い色）・
+mitsusui（蜜吸い虫：手のひらほどの、甘い燐光を出す頼りない蟲。実在の虫に似せない）・bishin（媚芯茸）・tenazuke（手懐ける小淫魔）。
+それぞれの姿は data.js の desc を読む。
+- 形式は既存の assets/monsters/*.svg に合わせる（同じくらいの大きさ・線の太さ・陰影の付け方）。SVG で描く。
+- 作ったら data.js の該当の art を新しいファイル名にし、tint を外す。描画の大きさの調整が要る場合は render.js の FIG（身長・頭と足の位置）に足す。
+- NG：人型の種族（淫魔・小淫魔は除く）を増やさない。実在の虫に似せない。幼く見える描き方をしない。
+
+(2) 表情差分：立ち絵の上に重ねる透明な層（SVG か PNG）。赤らみ（弱・強）・汗・涙目・息が上がった口・とろんとした目、の5種程度。
+- 立ち絵の顔の位置に合うように、立ち絵ごとに位置を合わせる（magica と civilian、front_0／front_1）。
+- ui.js の drawLive() は今、CSS で赤らみ（.lv-blush）・汗（.lv-drops）・♡ を重ねている。これを差分画像の重ね合わせに置き換える。
+  切り替えの条件は今のクラス（blush・hot・cx・after・bound）をそのまま使う。
+
+合格条件：
+- fingerprint 40 1 が作業前と同じ（絵と表示だけ）
+- assets/index.html の魔物一覧に新しい絵が出る。実況パネルの各状態（捕まる・限界・絶頂・余韻）のスクリーンショットを PR に貼る（cx のスクショの撮り方は play.js を参考に）
+- play.js が errors []
+```
+
+---
+
+## 課題5：設計書（DESIGN.md）を今の実装に合わせて整理する
+
+ブランチ名：`codex/design-doc`
+
+```
+目的：newgame/README.md の「3回目」〜「9回目」の節に溜まった変更内容を、newgame/DESIGN.md へ「仕組みごと」に整理して書き直す。
+（README は引き継ぎ用の作業記録として残す。DESIGN.md は「今どうなっているか」の説明にする。）
+
+やること：
+- 今のコード（newgame/js/）と README を読み、DESIGN.md を次の章立てに整える：
+  潜行の流れ／ひかり（強さ・判断・学習・成長・魅了）／捕縛と快感・絶頂（熱・発情・敏感化・連続絶頂・決壊）／実況パネル／魔物と罠（罠を壊す・罠部屋）／
+  迷宮の法則／帰還後（口頭報告・報告書・監査・再報告・処置・休養・手帳）／お金／堕ち／状態異常と性癖／数値の目安（README の最新の数値を引用）
+- 数値は必ずコードから読んで書く（README と食い違ったらコードを正とし、食い違いを PR に列挙する）。
+- 作者がまだ決めていないこと（README の「残りの仕事」「資料から分かった…候補」）は、決まったことのように書かない。
+- 文章（台詞・場面）の中身は DESIGN.md に写さない。仕組みの説明だけ。
+
+合格条件：コードは一切変えない（git diff が DESIGN.md と README の該当行だけ）。食い違いの一覧を PR に付ける。
+```
+
+---
+
+## 課題6：セーブの書き出し・読み込み
+
+ブランチ名：`codex/save-io`
+
+```
+目的：今は localStorage だけのセーブを、ファイルや文字列で書き出し・読み込みできるようにする（別の端末で続ける・バックアップ用）。
+
+今の仕組み：ui.js の save()（キーは KEY）、game.js の G.Game.upgradeSave（古い項目を補う）、セーブの版 v: 2。
+やること：
+- 監査官室のメニュー（ui.js の office()）とタイトル画面に「記録の書き出し」「記録の読み込み」を足す。
+- 書き出し：JSON ファイルのダウンロードと、スマホ向けにテキストとしてコピーできる欄（長い場合は圧縮しない素の JSON でよい）。
+- 読み込み：ファイル選択か、貼り付け欄。v が 2 でない・壊れている時は読み込まずに理由を出す。読み込んだら upgradeSave を通してから使う。
+  上書きする前に確認を出す。
+- 潜行中（S.phase === "dive"）は書き出し・読み込みを出さない。
+
+合格条件：
+- 書き出し→新しい記録で始める→読み込み、で元の日数・資金・状態異常・手帳が戻ることを、Playwright の小さなスクリプト（newgame/tools/saveio.js）で確かめ、結果を PR に貼る
+- play.js が errors []、fingerprint 40 1 が作業前と同じ
+```

@@ -167,8 +167,8 @@
     if (w.outcome === "down" || w.outcome === "cleared") msg(w, w.outcome === "cleared" ? "portal" : "down", {});
     // 締環：出口で外れる。溜まっていた分が、一度に
     if (h.ring && ["cleared", "retreat", "ordered"].includes(w.outcome) && !w.ringDone) {
-      w.ringDone = true; const over = h.ring.over; h.ring = null; const n = Math.min(4, 1 + Math.floor(over / 40));
-      h.cum = 0; h.shasei = (h.shasei || 0) + n; record(w, { kind: "ringRelease", type: "蕩", n, sev: 3 });
+      w.ringDone = true; const over = h.ring.over; h.ring = null; const n = Math.min(6, 1 + Math.floor(over / 40) + Math.floor((h.urge || 0) / 35));
+      h.urge = 0; h.cum = 0; h.shasei = (h.shasei || 0) + n; h.climax += n; record(w, { kind: "ringRelease", type: "蕩", n, sev: 3 });
       if (!w.scene) w.scene = { key: "ringRelease", lines: G.Text.scene("ringRelease", { run: w.run, h, n: heroName(w) }) || [], mon: null };
     }
     // 禁絶の法則：門を出た瞬間に、溜めた分が全部返ってくる
@@ -249,6 +249,7 @@
     if (h.possess) add("憑き手（腕）", h.possess.t, "violet");
     if (h.freeze > 0) add("時間停止", h.freeze, "violet");
     if (h.futa) add("変生 射精感" + Math.round(h.cum || 0) + "%" + (h.shasei ? "（" + h.shasei + "回）" : ""), null, "pink");
+    if ((h.urge || 0) >= 10) add((h.futa ? "射精欲求 " : "絶頂欲求 ") + Math.round(h.urge), null, h.urge >= 60 ? "red" : "pink");
     if (h.ring) add("締環（溜まっている " + Math.round(h.ring.over) + "）", null, "pink");
     if (h.countAltar) add("数取り " + ((w.run.save && w.run.save.futaMarks) || 0) + "/12", null, "pink");
     if (h.countGame) add("数え歌 " + Math.min(10, h.countGame.n) + (h.countGame.lost ? "（負け）" : ""), h.countGame.t, "violet");

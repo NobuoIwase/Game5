@@ -39,7 +39,8 @@
   // 溜まった分を一度に返す：まとめて何度も
   function releaseOverflow(w, amount, src, why) {
     const h = w.run.h;
-    const n = Math.min(5, 1 + Math.floor(amount / 55));
+    amount += (h.urge || 0) * 0.8; h.urge = 0;      // 我慢させられた分も、一緒に
+    const n = Math.min(6, 1 + Math.floor(amount / 55));
     record(w, { kind: "release", type: "蕩", why, n, mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: 3 });
     for (let i = 0; i < n; i++) { h.pleasure = 100; checkClimax(w, src, true); }
     h.pleasure = Math.min(95, 40 + amount / 6);
@@ -79,7 +80,13 @@
     h.attach = h.attach || [];
     if (h.attach.length >= 4 || (id === "suit" && h.attach.includes("suit"))) return false;
     h.attach.push(id);
-    if (A.swell) { h.swell = Math.min(3, (h.swell || 0) + 1); record(w, { kind: "swell", type: "蕩", lv: h.swell, sev: 2, monName: A.name }); msg(w, "swell", { c: h.swell }); }
+    if (A.swell) {                                  // 肥大化ヒル：一匹目は乳首、二匹目はクリ、三匹目で両方がさらに
+      h.swell = Math.min(3, (h.swell || 0) + 1);
+      const part = h.swell === 1 ? "乳首" : h.swell === 2 ? "クリトリス" : "乳首とクリトリス";
+      h.swellPart = h.swell >= 2 ? "乳首とクリトリス" : "乳首";
+      record(w, { kind: "swell", type: "蕩", lv: h.swell, sev: 2, monName: A.name, part });
+      msg(w, "swell", { c: h.swell, part }); say(w, "swell" + Math.min(3, h.swell), {});
+    }
     record(w, { kind: "attach", type: "蕩", att: id, attName: A.name, mon: src && src.kind, monName: src && src.d ? src.d.name : A.name, sev: A.blind ? 3 : 2, blind: !!A.blind, hidden: !!A.blind });
     msg(w, A.blind ? "suitOn" : "attach", { att: A.name });
     say(w, A.blind ? "suitOn" : "attach", { att: A.name });
@@ -93,18 +100,37 @@
     h.cum = (h.cum || 0) + n * intake(w, src);
     if (h.ring && h.cum >= 95) { h.ring.over += h.cum - 94; h.cum = 94; if (w.t - (h.ringT ?? -99) > 5) { h.ringT = w.t; msg(w, "ringFull", {}); say(w, "ringFull", {}); record(w, { kind: "edge", type: "蕩", sev: 2, monName: "締環" }); } return; }
     if (h.tipTease > 0 && h.cum >= 92) { h.cum = 92; return; }          // 先だけ撫でられている間は、行き着かない
-    while (h.cum >= 100) {
-      h.cum -= 88; h.shasei = (h.shasei || 0) + 1; h.will = Math.max(0, h.will - 5); h.arousal = Math.min(100, h.arousal + 8);
-      record(w, { kind: "shasei", type: "蕩", mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: 3, n: h.shasei });
-      msg(w, "shasei", { c: h.shasei }); say(w, "shasei", {}); fx(w, { kind: "burst", x: h.x, y: h.y, color: "#fff4fa", life: 0.8 });
-      if (h.shasei === 1 && !w.run.seenShasei) { w.run.seenShasei = true; openScene(w, "firstShasei", src); }
-      if (h.countAltar && (w.run.save.futaMarks || 0) < 12) {   // 数取りの升が、一つ埋まる。升は減らない（十二で満ちる）
-        const sv = w.run.save; sv.futaMarks = (sv.futaMarks || 0) + 1;
-        msg(w, "countMark", { c: sv.futaMarks }); record(w, { kind: "countMark", sev: 2, n: sv.futaMarks });
-        if (sv.futaMarks >= 12 && !sv.futaFixed) { sv.futaFixed = true; record(w, { kind: "futaFixed", sev: 3 }); openScene(w, "futaFixed", null); }
-      }
+    if (h.cum >= 100) {                             // 射精は絶頂と同じ。溜まりきったら、身体ごと果てる
+      h.cum = 100; h.pleasure = Math.max(h.pleasure, 100);
+      checkClimax(w, src);
     }
   }
+  // 射精の記帳：絶頂のたびに、変生した身体は出してしまう（checkClimax から呼ぶ）
+  function shasei(w, src, n) {
+    const h = w.run.h; n = n || 1;
+    h.cum = 10; h.shasei = (h.shasei || 0) + n; h.arousal = Math.min(100, h.arousal + 8);
+    record(w, { kind: "shasei", type: "蕩", mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: 3, n: h.shasei });
+    msg(w, "shasei", { c: h.shasei }); say(w, "shasei", {}); fx(w, { kind: "burst", x: h.x, y: h.y, color: "#fff4fa", life: 0.8 });
+    if (h.shasei === n && !w.run.seenShasei) { w.run.seenShasei = true; openScene(w, "firstShasei", src); }
+    if (h.countAltar && (w.run.save.futaMarks || 0) < 12) {   // 数取りの升が、一つ埋まる。升は減らない（十二で満ちる）
+      const sv = w.run.save; sv.futaMarks = (sv.futaMarks || 0) + 1;
+      msg(w, "countMark", { c: sv.futaMarks }); record(w, { kind: "countMark", sev: 2, n: sv.futaMarks });
+      if (sv.futaMarks >= 12 && !sv.futaFixed) { sv.futaFixed = true; record(w, { kind: "futaFixed", sev: 3 }); openScene(w, "futaFixed", null); }
+    }
+  }
+  // 欲求：出させてもらえない（締環・先嬲り・寸止め・おあずけ・許可制）ほど、溜まっていく。溜まるほど気力が削れ、解けた時に一度に返ってくる
+  function urgeUp(w, n, src) {
+    const h = w.run.h, before = h.urge || 0;
+    h.urge = Math.min(100, before + n * (h.futa ? 1.3 : 1));
+    const lv = h.urge >= 90 ? 3 : h.urge >= 60 ? 2 : h.urge >= 30 ? 1 : 0, lv0 = before >= 90 ? 3 : before >= 60 ? 2 : before >= 30 ? 1 : 0;
+    if (lv > lv0) {
+      const f = h.futa ? "F" : "";
+      msg(w, "urge" + f + lv, {}); say(w, "urge" + f + lv, {});
+      if (lv >= 2) record(w, { kind: "urge", type: "蕩", lv, futa: !!h.futa, mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: lv >= 3 ? 3 : 2 });
+    }
+  }
+  // 射精を止められているか（締環・先嬲り）
+  function cumBlocked(w) { const h = w.run.h; return !!(h.futa && (h.ring || h.tipTease > 0)); }
   // 心のヒビ（教団）：防護壁に入ったヒビは、日をまたいで残り、少しずつ広がる
   function addCrack(w, n, src) {
     const h = w.run.h;
@@ -280,6 +306,17 @@
     if (w.outcome) return;
     for (const k of ["numb", "high", "ache", "freeze", "sniff", "salute", "pray", "tipTease"]) if (h[k] > 0) h[k] = Math.max(0, h[k] - dt);
     if (h.pray > 0) { h.pleasure += 3 * intake(w) * dt; h.vx = h.vy = 0; }
+    // 欲求：止められたまま限界の近くにいると募り、気力を削る。止めるものが無くなれば、ゆっくり引く
+    {
+      const blocked = cumBlocked(w) || (capped(w) && h.pleasure >= 85);
+      if (blocked && h.pleasure >= 80) urgeUp(w, 2.6 * dt, null);
+      else if (h.urge > 0) h.urge = Math.max(0, h.urge - (blocked ? 0 : 1.2) * dt);
+      if (h.urge > 0) {
+        h.will = Math.max(0, h.will - h.urge * 0.012 * dt);
+        h.arousal = Math.min(100, h.arousal + h.urge * 0.025 * dt);
+        if (h.urge >= 60 && U.chance(dt * 0.12)) say(w, (h.futa ? "urgeF" : "urge") + (h.urge >= 90 ? 3 : 2), {});
+      }
+    }
     // 数え歌：十数えるあいだに声が漏れたら負け。負けても勝っても、寸前で置き去り
     if (h.countGame) {
       const g = h.countGame; g.t -= dt;
@@ -303,7 +340,7 @@
     if (h.attach && h.attach.length) {
       let p = 0; for (const id of h.attach) p += ATTACH[id].power;
       h.pleasure += 0.7 * p * mult(w, "蕩") * intake(w) * dt; h.arousal = Math.min(100, h.arousal + 0.3 * p * dt);
-      if (U.chance(dt * 0.12)) msg(w, h.attach.includes("suit") && h.attach.length === 1 ? "suitMove" : "attachMove", { att: ATTACH[h.attach[0]].name }, 6);
+      if (U.chance(dt * 0.12)) msg(w, h.attach.includes("suit") && h.attach.length === 1 ? "suitMove" : h.attach.includes("hiru") && U.chance(0.6) ? "hiruMove" : "attachMove", { att: ATTACH[h.attach[0]].name, part: h.swellPart || "乳首" }, 6);
       checkClimax(w, { d: { name: ATTACH[h.attach[0]].name, type: "蕩" }, kind: h.attach[0] });
     }
     // 絶頂禁止：時間が来たら、溜まった分が一度に来る
@@ -327,6 +364,6 @@
 
   /* ---- 捕まる・振りほどく ---- */
 
-  Object.assign(G.F, { MACHINE, IMPS, trait, heat, intake, resist, capped, releaseOverflow, addCharm, SLUGS, charmTouch, ATTACH, addAttach, addCum, addCrack, pray, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, applyEffect, drainMagic, untransform, engraveSigil, possess, tickStatus, endPossess });
+  Object.assign(G.F, { shasei, cumBlocked, urgeUp, MACHINE, IMPS, trait, heat, intake, resist, capped, releaseOverflow, addCharm, SLUGS, charmTouch, ATTACH, addAttach, addCum, addCrack, pray, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, applyEffect, drainMagic, untransform, engraveSigil, possess, tickStatus, endPossess });
   G.F.bind.push(() => { ({ U, TIER_FX, say, live, msg, fx, logLine, record, checkClimax, release, defeat, openScene, flash } = G.F); });
 })();

@@ -185,7 +185,7 @@ var G = (typeof G !== "undefined") ? G : {};
       let px = x, py = y;
       if (k) { const ox = x + U.rf(-0.7, 0.7), oy = y + U.rf(-0.7, 0.7); if (M.walkable(w.map, ox, oy)) { px = ox; py = oy; } }
       const m = {
-        id: w.nextId++, kind: id, d, x: px, y: py, vx: 0, vy: 0, a: U.rf(0, Math.PI * 2), hp: Math.round(d.hp * lv.hp), maxHp: Math.round(d.hp * lv.hp), pow: lv.pow,
+        id: w.nextId++, kind: id, d, x: px, y: py, vx: 0, vy: 0, a: U.rf(0, Math.PI * 2), hp: Math.round(d.hp * lv.hp * (d.imp && d.spd > 0 ? 1.3 : 1)), maxHp: Math.round(d.hp * lv.hp * (d.imp && d.spd > 0 ? 1.3 : 1)), pow: lv.pow,   // 小淫魔は、すぐには墜ちない
         alert: 0, cast: null, cd: U.rf(0.6, 1.6), stun: 0, holding: false, home: { x: px, y: py }, wanderT: 0, goal: null,
         summoned, flee: 0, fled: false, hidden: !!d.hidden, lastSeenH: null, flash: 0, hop: 0, rcl: 0, rclX: 0, lunge: 0, lungeA: 0,
         side: U.chance(0.5) ? 1 : -1,

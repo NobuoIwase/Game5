@@ -22,7 +22,7 @@
     if (m.hp <= 0) { killMon(w, m); return; }
     msg(w, "dmg", { mon: m.d.name, n: Math.round(before - m.hp) }, 0.4);
     monSay(w, m, "hurt", 0.3);
-    if (m.d.flee && m.hp < m.maxHp * 0.5) m.flee = 3;
+    if (m.d.flee && m.hp < m.maxHp * (m.d.imp ? 0.3 : 0.5)) m.flee = m.d.imp ? 1.6 : 3;   // 小淫魔は、少し逃げてはまた寄ってくる
     // 手負いは、悲鳴をあげて逃げ、仲間を呼ぶ（動けない種と長は逃げない）
     if (!m.fled && !m.boss && m.d.spd > 0 && m.hp <= m.maxHp * 0.25) {
       m.fled = true;
@@ -59,8 +59,10 @@
     return M.los(w.map, m.x, m.y, h.x, h.y);
   }
   // 好む間合い（掴む種は近く、撃つ種は離れて）
-  function prefDist(m) {
+  function prefDist(m, h) {
     const A = m.d.atk;
+    // 小淫魔：獲物が火照っている・惹かれている・呆けている時は、触れる距離まで寄ってくる
+    if (m.d.imp && m.d.spd > 0 && h && (h.arousal > 40 || (h.charm && h.charm[m.kind]) || h.trance > 0 || h.pleasure > 50)) return 0.7;
     if (A.kind === "grab") return Math.max(0.5, (A.range || 1) * 0.7);
     if (A.kind === "shot" || A.kind === "lure") return A.range * 0.72;
     return (A.range || 1) * 0.55;
@@ -85,7 +87,7 @@
     m.flash = Math.max(0, m.flash - dt); m.cd = Math.max(0, m.cd - dt);
     if (m.bubble) { m.bubble.t -= dt; if (m.bubble.t <= 0) m.bubble = null; }
     m.hop = Math.max(0, m.hop - dt); m.rcl = Math.max(0, m.rcl - dt); m.lunge = Math.max(0, m.lunge - dt);
-    m.pounceCd = Math.max(0, (m.pounceCd || 0) - dt);
+    m.pounceCd = Math.max(0, (m.pounceCd || 0) - dt); m.teaseCd = Math.max(0, (m.teaseCd || 0) - dt);
     // 魅了の脈動（ナメクジ女王）・甘い燐光／胞子（蜜吸い虫・媚芯茸）
     if (d.charmPulse && m.alert > 0 && !w.outcome) {
       const P = d.charmPulse; m.pulseT = (m.pulseT || 0) + dt;
@@ -124,6 +126,12 @@
       return;
     }
     if (m.holding) { m.holding = false; m.cd = Math.max(m.cd, 1); }
+    // 小淫魔の悪戯：触れる距離まで来たら、抱きついて数秒いじる（捕まえる種でなくても）
+    if (d.imp && d.spd > 0 && A.kind !== "grab" && !h.bound && !w.outcome && m.alert > 0 && !(m.flee > 0) && !(m.teaseCd > 0) && m.stun <= 0 && dist < 0.95 && !(h.ifr > 0)
+      && (h.arousal > 45 || (h.charm && h.charm[m.kind]) || h.trance > 0) && w.t - (w.impTeaseT ?? -99) > 12) {   // 火照っている時だけ。悪戯は、階じゅうで12秒に一度まで
+      m.teaseCd = U.rf(14, 20); w.impTeaseT = w.t;
+      if (grab(w, m, 0.28 * m.pow, "蕩")) { m.holding = true; h.bound.brief = U.rf(3.0, 3.8); h.bound.imp = true; msg(w, "impTease", { mon: d.name }); monSay(w, m, "grab", 0.9); return; }
+    }
     if (m.molest && !h.bound) m.molest = false;
     // 捕まった獲物には、触れてくる種が群がる（掴める種は掴みに、そうでない種はまとわりつく）
     if (h.bound && !w.outcome && m.alert > 0 && d.spd > 0 && !m.cast && G.Text.actorOf(m.kind) && dist < 7 && m.stun <= 0) {
@@ -155,7 +163,7 @@
       else if (can && A.alsoGrab && dist <= A.alsoGrab) startCast(w, m, "grab2");
       else if (can && A.kind === "grab" && d.spd > 0 && !h.bound && dist > (A.range || 1) + 0.4 && dist < 3.6 && M.los(w.map, m.x, m.y, h.x, h.y) && m.pounceCd <= 0) { startCast(w, m, "pounce"); m.pounceCd = U.rf(5, 9); }
       else if (d.spd > 0) {
-        const pref = prefDist(m);
+        const pref = prefDist(m, h);
         let gx, gy;
         if (!M.los(w.map, m.x, m.y, h.x, h.y)) { const tgt = monSees(w, m) ? h : (m.lastSeenH || h); gx = tgt.x; gy = tgt.y; }
         else { const a = spreadAngle(w, m, h); gx = h.x + Math.cos(a) * pref; gy = h.y + Math.sin(a) * pref; }

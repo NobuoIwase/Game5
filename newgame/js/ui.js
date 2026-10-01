@@ -12,6 +12,125 @@
   const tag = t => `<span class="tag t-${t}">${t}</span>`;
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* 保存できない環境 */ } }
   function load() { try { const j = localStorage.getItem(KEY); return j ? JSON.parse(j) : null; } catch (e) { return null; } }
+  // 転送するのは既存の v2 JSON。読み込みの検査が済むまで現在の記録には触れない。
+  function parseSave(text) {
+    let next;
+    try {
+      next = JSON.parse(text, (key, value) => {
+        if (["__proto__", "prototype", "constructor"].includes(key)) throw new Error();
+        if (typeof value === "number" && !Number.isFinite(value)) throw new Error();
+        return value;
+      });
+    } catch (e) { throw new Error("JSONが壊れているか、使用できない値が含まれています。"); }
+    const object = value => value !== null && typeof value === "object" && !Array.isArray(value);
+    const known = (table, key) => typeof key === "string" && Object.hasOwn(table, key);
+    const number = value => typeof value === "number" && Number.isFinite(value);
+    const check = (ok, key) => { if (!ok) throw new Error("記録の項目が不正です：" + key); };
+    check(object(next), "全体");
+    if (next.v !== 2) throw new Error("対応している記録の版は v: 2 だけです。");
+    if (next.phase === "dive") throw new Error("潜行中の記録は読み込めません。帰還してから書き出してください。");
+    check(["guild", "prep", "report", "audit", "rereport", "clinic"].includes(next.phase), "phase");
+    for (const key of ["day", "funds", "dark", "taint", "trust", "suspicion", "body", "mind", "fatigue"])
+      check(typeof next[key] === "number" && Number.isFinite(next[key]), key);
+    check(Number.isSafeInteger(next.day) && next.day >= 1, "day");
+    const defaults = GM.newSave();
+    for (const [key, value] of Object.entries(defaults)) {
+      if (next[key] == null || value == null) continue; // 後から増えた項目は upgradeSave が補う。
+      check(Array.isArray(value) ? Array.isArray(next[key]) : object(value) ? object(next[key]) : typeof next[key] === typeof value, key);
+    }
+    for (const key of ["ailments", "history", "log"]) check(Array.isArray(next[key]), key);
+    for (const key of ["decks", "upgrades"]) check(object(next[key]), key);
+    for (const key of Object.keys(defaults.upgrades)) check(Number.isSafeInteger(next.upgrades[key]) && next.upgrades[key] >= 0, "upgrades." + key);
+    for (const [key, cards] of Object.entries(next.decks)) {
+      check(Array.isArray(cards) && cards.every(card => typeof card === "string" &&
+        (card.startsWith("trap:") ? known(G.TRAPS, card.slice(5)) : known(G.MONSTERS, card))), "decks." + key);
+    }
+    check(next.ailments.every(a => object(a) && typeof a.id === "string"), "ailments");
+    if (next.diary != null) check(Array.isArray(next.diary) && next.diary.every(p => object(p) && Number.isSafeInteger(p.day) && Array.isArray(p.lines) && p.lines.every(l => typeof l === "string")), "diary");
+    if (next.equip != null) check(next.equip.every(id => typeof id === "string"), "equip");
+    for (const key of ["traits", "counts", "know", "lewd", "reportMem"]) if (next[key] != null)
+      check(Object.values(next[key]).every(number), key);
+    check(next.history.every(object) && next.log.every(object), "history/log");
+    const paper = p => object(p) && known(G.MONSTERS, p.main) && [1, 2, 3].includes(p.level) &&
+      [1, 2, 3].includes(p.scale) && typeof p.boss === "boolean";
+    const request = r => object(r) && known(G.DUNGEONS, r.dungeon) && paper(r.real) && number(r.reward);
+    check(Array.isArray(next.requests) && next.requests.length > 0 && next.requests.every(request), "requests");
+    if (next.phase === "prep") check(object(next.pick) && request(next.pick.req) && known(G.DUNGEONS, next.pick.dungeon) &&
+      paper(next.pick.paper) && paper(next.pick.real) && known(G.PREP, next.pick.stated), "pick");
+    if (["report", "audit", "rereport", "clinic"].includes(next.phase)) {
+      const rec = next.rec;
+      check(object(rec) && object(rec.h) && number(rec.day) && number(rec.floorReached), "rec");
+      check(object(rec.gain) && ["body", "mind", "funds", "dark", "sus"].every(k => number(rec.gain[k])), "rec.gain");
+      for (const key of ["events", "units", "report", "doc", "monitor"]) check(Array.isArray(rec[key]), "rec." + key);
+      check(rec.events.every(object) && rec.units.every(object) && rec.monitor.every(l => typeof l === "string"), "rec.events/units/monitor");
+      check(rec.report.every(l => object(l) && ["h", "a", "n"].includes(l.who) && typeof l.text === "string"), "rec.report");
+      check(rec.doc.every(l => object(l) && typeof l.text === "string"), "rec.doc");
+      if (next.phase === "rereport") check(object(rec.audit) && Array.isArray(rec.audit.caught) &&
+        rec.audit.caught.every(l => object(l) && typeof l.text === "string" && (l.night || object(l.unit))), "rec.audit");
+    }
+    return GM.upgradeSave(next);
+  }
+  function saveIOButtons(record) {
+    if ((S && S.phase === "dive") || (record && record.phase === "dive")) return "";
+    return `${record && record.v === 2 ? '<button id="save-export">記録の書き出し</button>' : ""}<button id="save-import">記録の読み込み</button>`;
+  }
+  function bindSaveIO() {
+    on("#save-export", "click", exportSave);
+    on("#save-import", "click", importSave);
+  }
+  function exportSave() {
+    const record = S || load();
+    if (!record || record.v !== 2 || record.phase === "dive") return;
+    const text = JSON.stringify(record, null, 2);
+    modal(`<h2>記録の書き出し</h2><label for="save-text">記録のJSON（選択してコピーできます）</label>
+      <textarea id="save-text" readonly rows="10" style="box-sizing:border-box;width:100%"></textarea>
+      <p id="save-message" role="status"></p><div class="row"><button id="save-download">JSONファイルを保存</button><button id="save-copy">コピー</button><button id="save-close">閉じる</button></div>`, box => {
+      const field = box.querySelector("#save-text"), message = box.querySelector("#save-message");
+      field.value = text;
+      box.querySelector("#save-download").onclick = () => {
+        const url = URL.createObjectURL(new Blob([text], { type: "application/json" }));
+        const link = document.createElement("a");
+        link.href = url; link.download = "newgame-day-" + record.day + ".json";
+        document.body.appendChild(link); link.click(); link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      };
+      box.querySelector("#save-copy").onclick = async () => {
+        field.focus(); field.select();
+        try { await navigator.clipboard.writeText(text); message.textContent = "コピーしました。"; }
+        catch (e) { message.textContent = "自動コピーが使えません。選択した欄を手動でコピーしてください。"; }
+      };
+      box.querySelector("#save-close").onclick = closeModal;
+    });
+  }
+  function importSave() {
+    if (S && S.phase === "dive") return;
+    modal(`<h2>記録の読み込み</h2><label for="save-file">JSONファイルを選択</label><input id="save-file" type="file" accept=".json,application/json">
+      <label for="save-text">または記録のJSONを貼り付け</label><textarea id="save-text" rows="10" style="box-sizing:border-box;width:100%"></textarea>
+      <p id="save-message" role="status"></p><div class="row"><button id="save-apply">読み込む</button><button id="save-close">閉じる</button></div>`, box => {
+      const field = box.querySelector("#save-text"), message = box.querySelector("#save-message"), apply = box.querySelector("#save-apply");
+      box.querySelector("#save-file").onchange = async event => {
+        const file = event.target.files[0];
+        if (!file) return;
+        apply.disabled = true;
+        try { field.value = await file.text(); message.textContent = "ファイルを読みました。「読み込む」で確定します。"; }
+        catch (e) { field.value = ""; message.textContent = "ファイルを読めませんでした。"; }
+        finally { apply.disabled = false; }
+      };
+      apply.onclick = () => {
+        if (S && S.phase === "dive") return;
+        let next;
+        try { next = parseSave(field.value); }
+        catch (e) { message.textContent = e.message; return; }
+        if (!confirm("読み込んだ記録で、現在の記録を上書きしますか？")) { message.textContent = "読み込みを取り消しました。"; return; }
+        try { localStorage.setItem(KEY, JSON.stringify(next)); }
+        catch (e) { message.textContent = "保存領域に書き込めませんでした。現在の記録は変更していません。"; return; }
+        S = next;
+        closeModal();
+        route();
+      };
+      box.querySelector("#save-close").onclick = closeModal;
+    });
+  }
   function toast(t) { const el = document.getElementById("toast"); el.textContent = t; el.classList.remove("hidden"); clearTimeout(toast.tm); toast.tm = setTimeout(() => el.classList.add("hidden"), 1800); }
   function modal(html, bind) {
     const m = document.getElementById("modal"), box = m.querySelector(".modal-box");
@@ -49,10 +168,12 @@
       <p class="sub">成人向けの内容を含みます。登場人物はすべて18歳以上です。</p>
       <div class="row" style="justify-content:center;margin-top:14px">
         ${has ? `<button class="primary" id="cont">続きから</button>` : ""}<button id="new">${has ? "最初から" : "はじめる"}</button>
+        ${saveIOButtons(S || load())}
       </div>
       <p class="sub" style="margin-top:16px">あなたはギルドの監査官。そして裏では、ダンジョンを操る側の手先。<br>依頼を割り当て、依頼書を書き換え、魔物と罠を差し向ける。帰ってきた彼女の報告を聞き、書類の嘘を暴く。</p>
     </div>`;
     on("#cont", "click", () => { S = GM.upgradeSave(load()); route(); });
+    bindSaveIO();
     on("#new", "click", () => { if (has && !confirm("今のセーブを消して最初から始めますか？")) return; S = GM.newSave(); GM.morning(S); save(); route(); });
   }
 
@@ -170,11 +291,13 @@
         <button id="skill">ルミナの技</button>
         <button id="rest">休養させる（今日は潜らない）</button>
         <button id="diary">ひかりの手帳${(S.diary || []).length && S.diary[S.diary.length - 1].day !== S.diarySeen ? "（新しいページ）" : ""}</button>
+        ${saveIOButtons(S)}
       </div>
       <div class="panel sub hidden" id="menu2">オート指揮：<button id="auto">${S.autoDirector ? "入" : "切"}</button>　潜行中に魔物や罠を自動で差し向ける（自分で置くこともできる）
         <br><span class="dim">ひかりの弱点：素で惑に強い。変身中は絡にも強い。変身が解けると一気に崩れる。</span></div>`;
     const showMenu = () => { document.getElementById("menu").classList.remove("hidden"); document.getElementById("menu2").classList.remove("hidden"); };
     on("#req", "click", requestScreen);
+    bindSaveIO();
     on("#deck", "click", () => deckScreen(null, office));
     on("#shop", "click", shopScreen);
     on("#hist", "click", historyScreen);

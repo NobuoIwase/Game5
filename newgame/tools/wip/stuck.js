@@ -1,5 +1,5 @@
 const vm=require('vm'),fs=require('fs');const c={console,Math,Date,JSON};vm.createContext(c);
-for(const f of ['util','data','map','text','field','report','diary','game'])vm.runInContext(fs.readFileSync(require('path').join(__dirname,'..','..','js',f+'.js'),'utf8'),c,{filename:f});
+for(const f of require("../files"))vm.runInContext(fs.readFileSync(require('path').join(__dirname,'..','..','js',f+'.js'),'utf8'),c,{filename:f});
 vm.runInContext(`
 let found=0;const L={};
 for(const dg of Object.keys(G.DUNGEONS))for(let seed=7;seed<=14;seed++){G.U.setSeed(seed*7);

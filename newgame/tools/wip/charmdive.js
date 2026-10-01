@@ -1,5 +1,5 @@
 const vm=require('vm'),fs=require('fs');const c={console,Math,Date,JSON};vm.createContext(c);
-for(const f of ['util','data','map','text','field','report','diary','game'])vm.runInContext(fs.readFileSync(require('path').join(__dirname,'..','..','js',f+'.js'),'utf8'),c,{filename:f});
+for(const f of require("../files"))vm.runInContext(fs.readFileSync(require('path').join(__dirname,'..','..','js',f+'.js'),'utf8'),c,{filename:f});
 vm.runInContext(`
 const by={},spot={};let n=0;
 for(const dg of ["imp","mist","mire","vine","cult"])for(let seed=1;seed<=5;seed++){G.U.setSeed(seed*13);

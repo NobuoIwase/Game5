@@ -2,7 +2,7 @@
 // node newgame/tools/bal.js <seed> <オート指揮 true|false> <回数>
 // 列：行き先 本当の脅威度 結果 到達階 秒 捕まった回数 倒した数 撃った数 最後の姿 変身解除 再変身 置いた数 催眠の秒数 催眠の最大 発情40超の秒数 拘束の長さ 魔力を削った元
 const vm=require('vm'),fs=require('fs');const c={console,Math,Date,JSON};vm.createContext(c);
-for(const f of ['util','data','map','text','field','report','diary','game'])vm.runInContext(fs.readFileSync(require('path').join(__dirname,'..','js',f+'.js'),'utf8'),c,{filename:f});
+for(const f of require("./files"))vm.runInContext(fs.readFileSync(require('path').join(__dirname,'..','js',f+'.js'),'utf8'),c,{filename:f});
 vm.runInContext(`
 G.U.setSeed(${process.argv[2]||1});const auto=${process.argv[3]||'true'};
 const out=[];

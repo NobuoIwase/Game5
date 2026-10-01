@@ -149,7 +149,7 @@ var G = (typeof G !== "undefined") ? G : {};
                     atk: { kind: "grab", range: 0.8, windup: 0.4, cd: 3, power: 0.35, brief: 3 }, desc: "のろく弱い小さなワームの群れ。触れると手足に絡みつく。一匹なら何ともない" },
     // swell: 吸い付いた所が腫れて、敏感になっていく（肥大化）
     hiru:         { name: "肥大化ヒル",       type: "蕩", art: "hiru.svg",         hp: 16, spd: 0.8, r: 0.35, sight: 4, fov: 360, behavior: "lurk", cost: 3, ct: 8,
-                    atk: { kind: "attach", range: 0.9, windup: 0.5, cd: 3.5, power: 1.0, as: "hiru" }, desc: "腕ほどに太ったヒル。胸の先や脚の間に吸い付き、吸った所を張り詰めさせていく" },
+                    atk: { kind: "attach", range: 0.9, windup: 0.5, cd: 3.5, power: 1.0, as: "hiru" }, desc: "腕ほどに太ったヒル。乳首やクリトリスに吸い付いて根元から吸い伸ばし、ぷっくりと肥大させる。一度大きくなった所は、なかなか元に戻らない" },
     // ---- 変生の神殿（ふたなり） futa: 変生した部位を狙う（射精感が溜まる） ----
     kuwaemushi:   { name: "咥え蟲",           type: "蕩", art: "kuwaemushi.svg",   hp: 18, spd: 1.2, r: 0.4, sight: 5, fov: 360, behavior: "wander", cost: 3, ct: 8, futa: true,
                     atk: { kind: "grab", range: 0.9, windup: 0.5, cd: 3.2, power: 0.8, futaSuck: 14 }, desc: "口だけの白い蟲。変生した部位を根元まで咥え、吸い上げる。奥はやわらかい襞ばかり" },

@@ -79,7 +79,13 @@
     h.attach = h.attach || [];
     if (h.attach.length >= 4 || (id === "suit" && h.attach.includes("suit"))) return false;
     h.attach.push(id);
-    if (A.swell) { h.swell = Math.min(3, (h.swell || 0) + 1); record(w, { kind: "swell", type: "蕩", lv: h.swell, sev: 2, monName: A.name }); msg(w, "swell", { c: h.swell }); }
+    if (A.swell) {                                  // 肥大化ヒル：一匹目は乳首、二匹目はクリ、三匹目で両方がさらに
+      h.swell = Math.min(3, (h.swell || 0) + 1);
+      const part = h.swell === 1 ? "乳首" : h.swell === 2 ? "クリトリス" : "乳首とクリトリス";
+      h.swellPart = h.swell >= 2 ? "乳首とクリトリス" : "乳首";
+      record(w, { kind: "swell", type: "蕩", lv: h.swell, sev: 2, monName: A.name, part });
+      msg(w, "swell", { c: h.swell, part }); say(w, "swell" + Math.min(3, h.swell), {});
+    }
     record(w, { kind: "attach", type: "蕩", att: id, attName: A.name, mon: src && src.kind, monName: src && src.d ? src.d.name : A.name, sev: A.blind ? 3 : 2, blind: !!A.blind, hidden: !!A.blind });
     msg(w, A.blind ? "suitOn" : "attach", { att: A.name });
     say(w, A.blind ? "suitOn" : "attach", { att: A.name });
@@ -303,7 +309,7 @@
     if (h.attach && h.attach.length) {
       let p = 0; for (const id of h.attach) p += ATTACH[id].power;
       h.pleasure += 0.7 * p * mult(w, "蕩") * intake(w) * dt; h.arousal = Math.min(100, h.arousal + 0.3 * p * dt);
-      if (U.chance(dt * 0.12)) msg(w, h.attach.includes("suit") && h.attach.length === 1 ? "suitMove" : "attachMove", { att: ATTACH[h.attach[0]].name }, 6);
+      if (U.chance(dt * 0.12)) msg(w, h.attach.includes("suit") && h.attach.length === 1 ? "suitMove" : h.attach.includes("hiru") && U.chance(0.6) ? "hiruMove" : "attachMove", { att: ATTACH[h.attach[0]].name, part: h.swellPart || "乳首" }, 6);
       checkClimax(w, { d: { name: ATTACH[h.attach[0]].name, type: "蕩" }, kind: h.attach[0] });
     }
     // 絶頂禁止：時間が来たら、溜まった分が一度に来る

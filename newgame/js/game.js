@@ -28,7 +28,7 @@ var G = (typeof G !== "undefined") ? G : {};
     hairTrigger:{ name: "暗示の引き金", note: "解けた暗示の底に鉤が残っている。前触れなく無様な発作が出る（深層処置）", fee: 30, kink: true },
     rewired:    { name: "常識改変",   note: "ワルドーの『敬礼』を正式な挨拶だと信じ込んでいる。本人は疑わない（深層処置）", fee: 30, kink: true },
     // ---- 蟲・変生・教団・淫魔 ----
-    swell:      { name: "肥大化",     note: "ヒルに吸われた所が、ぷっくり腫れたまま戻らない。布が擦れるたびに声が出る", fee: 10, ongoing: true },
+    swell:      { name: "肥大化",     note: "ヒルに吸われた乳首とクリトリスが、ぷっくり肥大したまま戻らない。下着や布が擦れるたびに声が出る", fee: 10, ongoing: true },
     futaAfter:  { name: "変生の名残", note: "神殿で生えたものが、まだ引っ込まない。次の潜行も生えたまま始まる", fee: 12, ongoing: true },
     futaFixed:  { name: "変生の定着", note: "射精を数え取られ、身体が『そういう形』で覚えてしまった。どこへ潜っても生える（深層処置）", fee: 30, kink: true },
     crack:      { name: "心のヒビ",   note: "教団の説法で心の防護壁に入ったヒビ。惑が隙間から入り込む。一度の処置で三つ分しか塞がらない", fee: 14, kink: true },

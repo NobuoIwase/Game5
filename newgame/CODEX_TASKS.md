@@ -28,6 +28,9 @@
     node newgame/tools/sim.js 30 7 --dup       # 30日分。落ちないこと
     node newgame/tools/wip/stuck.js            # 固まり検出。最後の行が found 0 {} であること
     npx http-server -p 8766 を別に起動してから OUT=/tmp/shots node newgame/tools/play.js   # ブラウザ通し。errors [] であること
+- play.js は Claude の作業環境のパス（playwright は /opt/node22/lib/node_modules/playwright、Chromium は /opt/pw-browsers/chromium）を使っている。
+  あなたの環境で動かない時は、環境変数 PW（playwright の場所）と CHROMIUM（Chromium の実行ファイル。空文字にすると playwright に同梱のものを使う）を差し替えて動かす。どうしても動かせなければ「play.js は実行できなかった」と PR にはっきり書く（通ったことにしない）。
+- 検査で時間がかかるもの（stuck.js は数分）は、途中で止めずに最後まで回す。
 - 終わったら PR を作り、何を変えたか・確認の出力・残った TODO を書く。マージはしない（作者が見てから入れる）。
 ```
 

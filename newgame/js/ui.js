@@ -82,7 +82,7 @@
     const record = S || load();
     if (!record || record.v !== 2 || record.phase === "dive") return;
     const text = JSON.stringify(record, null, 2);
-    modal(`<h2>記録の書き出し</h2><label for="save-text">記録のJSON（選択してコピーできます）</label>
+    modal(`<h2>記録の書き出し</h2><label for="save-text" style="display:block">記録のJSON（選択してコピーできます）</label>
       <textarea id="save-text" readonly rows="10" style="box-sizing:border-box;width:100%"></textarea>
       <p id="save-message" role="status"></p><div class="row"><button id="save-download">JSONファイルを保存</button><button id="save-copy">コピー</button><button id="save-close">閉じる</button></div>`, box => {
       const field = box.querySelector("#save-text"), message = box.querySelector("#save-message");
@@ -104,8 +104,8 @@
   }
   function importSave() {
     if (S && S.phase === "dive") return;
-    modal(`<h2>記録の読み込み</h2><label for="save-file">JSONファイルを選択</label><input id="save-file" type="file" accept=".json,application/json">
-      <label for="save-text">または記録のJSONを貼り付け</label><textarea id="save-text" rows="10" style="box-sizing:border-box;width:100%"></textarea>
+    modal(`<h2>記録の読み込み</h2><label for="save-file" style="display:block">JSONファイルを選択</label><input id="save-file" type="file" accept=".json,application/json" style="max-width:100%">
+      <label for="save-text" style="display:block;margin-top:10px">または記録のJSONを貼り付け</label><textarea id="save-text" rows="10" style="box-sizing:border-box;width:100%"></textarea>
       <p id="save-message" role="status"></p><div class="row"><button id="save-apply">読み込む</button><button id="save-close">閉じる</button></div>`, box => {
       const field = box.querySelector("#save-text"), message = box.querySelector("#save-message"), apply = box.querySelector("#save-apply");
       box.querySelector("#save-file").onchange = async event => {

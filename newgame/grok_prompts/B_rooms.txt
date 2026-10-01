@@ -1,0 +1,206 @@
+課題B：罠部屋の床と飾り（7種）。Grok の画像生成に、===== で区切った1ブロックずつ（STYLE の行ごと）そのまま貼る。縦横比は正方形（1:1）。
+種ごとに6ブロック：床（ふつう）・床（珍しい）・飾り0（壁から生える）・飾り1・飾り2・飾り3。
+保存先は ~/grok_raw/B/<種>/floor_1.png・rare_1.png・deco0_1.png … のように。
+
+整え方（リポジトリ直下。<w> は作業用のフォルダ）：
+  床   python3 newgame/tools/grok_fit.py tile ~/grok_raw/B/<種>/floor_1.png <w>/tile_0.png --pixel 2   … ふつうの床を6枚（tile_0,1,2,4,5,6）、珍しい床を2枚（tile_3,7）
+       python3 newgame/tools/grok_fit.py sheet newgame/assets/env/room_<種>.png <w>/tile_0.png <w>/tile_1.png <w>/tile_2.png <w>/tile_3.png <w>/tile_4.png <w>/tile_5.png <w>/tile_6.png <w>/tile_7.png
+  飾り python3 newgame/tools/grok_fit.py deco ~/grok_raw/B/<種>/deco0_1.png <w>/deco_0.png --pixel 2   … 0〜3 の4つ
+       python3 newgame/tools/grok_fit.py sheet newgame/assets/env/room_<種>_deco.png <w>/deco_0.png <w>/deco_1.png <w>/deco_2.png <w>/deco_3.png
+ふつうの床は、1回の生成で出た何枚かを使ってよい（明るさと色がそろっているものを選ぶ）。
+
+床の STYLE（床・珍しい床のブロックに付いている）：
+  top-down 2D pixel-art floor texture for a dark fantasy dungeon game, seamless tileable on all four edges, viewed straight down (orthographic, no perspective), even lighting, low contrast, small uniform details only, no large objects, no characters, no text, fills the whole square.
+飾りの STYLE（飾りのブロックに付いている）：
+  2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+
+共通の NG：卵・卵の塊（産卵を思わせるもの）、血、実在の虫、幽霊、骸骨、実在の宗教の印。
+
+
+######## slime（粘体の部屋。色：くすんだ藤色・薄紫）
+
+===== slime 床
+STYLE: top-down 2D pixel-art floor texture for a dark fantasy dungeon game, seamless tileable on all four edges, viewed straight down (orthographic, no perspective), even lighting, low contrast, small uniform details only, no large objects, no characters, no text, fills the whole square.
+Subject: old grey-violet stone floor covered with a thin glossy film of translucent lavender slime, small shallow slime puddles and tiny bubbles. Muted dusty lilac palette.
+
+===== slime 珍しい床
+STYLE: top-down 2D pixel-art floor texture for a dark fantasy dungeon game, seamless tileable on all four edges, viewed straight down (orthographic, no perspective), even lighting, low contrast, small uniform details only, no large objects, no characters, no text, fills the whole square.
+Subject: the same grey-violet stone floor with a lavender slime film, plus one small bubbling slime puddle with a glossy highlight in the center. Muted dusty lilac palette.
+
+===== slime 飾り0（壁から生える）
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a thick drip of translucent lavender slime growing upward from its base, like a soft wobbling slime stalactite turned upside down, with a glossy highlight.
+
+===== slime 飾り1
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a small round blob of translucent lavender slime with a glossy highlight, sitting on the floor.
+
+===== slime 飾り2
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a cluster of three lilac slime bubbles of different sizes, one about to pop.
+
+===== slime 飾り3
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a flat lavender slime puddle with a single drop splashing up from it.
+
+
+######## flesh（肉の部屋。色：くすんだ桃色・ワインレッド）
+
+===== flesh 床
+STYLE: top-down 2D pixel-art floor texture for a dark fantasy dungeon game, seamless tileable on all four edges, viewed straight down (orthographic, no perspective), even lighting, low contrast, small uniform details only, no large objects, no characters, no text, fills the whole square.
+Subject: soft organic floor of muted pink flesh-like tissue with rounded lumps, faint thin veins and a moist sheen. No blood, no wounds. Dusty rose and wine palette.
+
+===== flesh 珍しい床
+STYLE: top-down 2D pixel-art floor texture for a dark fantasy dungeon game, seamless tileable on all four edges, viewed straight down (orthographic, no perspective), even lighting, low contrast, small uniform details only, no large objects, no characters, no text, fills the whole square.
+Subject: the same soft pink organic floor, plus one small glowing pore in the center with a faint pink light. No blood, no wounds.
+
+===== flesh 飾り0（壁から生える）
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a soft fleshy pink nodule growing upward from its base, smooth and rounded with faint veins and a moist highlight. No blood.
+
+===== flesh 飾り1
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a closed flower-like bulb made of soft pink flesh, its rounded petals slightly parted.
+
+===== flesh 飾り2
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a small cluster of smooth rounded pink nodules glowing faintly from inside. They are not eggs: opaque, fleshy, connected at the base.
+
+===== flesh 飾り3
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a low glossy puddle of clear pink fluid with a soft highlight.
+
+
+######## worm（巣穴の部屋。色：くすんだ土色・灰桃）
+
+===== worm 床
+STYLE: top-down 2D pixel-art floor texture for a dark fantasy dungeon game, seamless tileable on all four edges, viewed straight down (orthographic, no perspective), even lighting, low contrast, small uniform details only, no large objects, no characters, no text, fills the whole square.
+Subject: dark soft earthen burrow floor with shallow winding grooves left by something crawling, a few thin silky threads. Muted brown-mauve palette. No insects, no eggs.
+
+===== worm 珍しい床
+STYLE: top-down 2D pixel-art floor texture for a dark fantasy dungeon game, seamless tileable on all four edges, viewed straight down (orthographic, no perspective), even lighting, low contrast, small uniform details only, no large objects, no characters, no text, fills the whole square.
+Subject: the same earthen burrow floor with one small round burrow hole in the center, dark inside. No insects, no eggs.
+
+===== worm 飾り0（壁から生える）
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a smooth soft mauve tendril-like root curling upward from its base, glossy and slightly slimy.
+
+===== worm 飾り1
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a small mound of soft dark earth with a burrow opening on top.
+
+===== worm 飾り2
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a few loose strands of pale silky thread draped over a small stone.
+
+===== worm 飾り3
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a small glistening trail of slime on a flat pebble.
+
+
+######## mirror（鏡の部屋。色：淡い青・銀）
+
+===== mirror 床
+STYLE: top-down 2D pixel-art floor texture for a dark fantasy dungeon game, seamless tileable on all four edges, viewed straight down (orthographic, no perspective), even lighting, low contrast, small uniform details only, no large objects, no characters, no text, fills the whole square.
+Subject: polished pale blue-silver mirror floor tiles with faint soft reflections and thin seams. Cool muted palette.
+
+===== mirror 珍しい床
+STYLE: top-down 2D pixel-art floor texture for a dark fantasy dungeon game, seamless tileable on all four edges, viewed straight down (orthographic, no perspective), even lighting, low contrast, small uniform details only, no large objects, no characters, no text, fills the whole square.
+Subject: the same pale mirror floor tiles with one small cracked tile in the center and a tiny star-shaped glint.
+
+===== mirror 飾り0（壁から生える）
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a tall thin shard of pale blue mirror-crystal growing upward from its base, with a bright reflection streak.
+
+===== mirror 飾り1
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a small cluster of pale blue mirror-crystal shards.
+
+===== mirror 飾り2
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a small ornate silver hand mirror standing upright on its handle, its glass softly reflecting pink light.
+
+===== mirror 飾り3
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a few tiny broken mirror fragments lying flat with small sparkles.
+
+
+######## cult（教団の部屋。色：暗い赤・くすんだ金）
+
+===== cult 床
+STYLE: top-down 2D pixel-art floor texture for a dark fantasy dungeon game, seamless tileable on all four edges, viewed straight down (orthographic, no perspective), even lighting, low contrast, small uniform details only, no large objects, no characters, no text, fills the whole square.
+Subject: dark red stone floor slabs with faint thin carved lines of an abstract ritual pattern (simple arcs and dots, no real religious symbols) and a little dust. Deep crimson and muted gold palette.
+
+===== cult 珍しい床
+STYLE: top-down 2D pixel-art floor texture for a dark fantasy dungeon game, seamless tileable on all four edges, viewed straight down (orthographic, no perspective), even lighting, low contrast, small uniform details only, no large objects, no characters, no text, fills the whole square.
+Subject: the same dark red stone floor with a small pool of melted pale candle wax in the center and a faint glowing abstract sigil (simple circle and dots, no real religious symbols).
+
+===== cult 飾り0（壁から生える）
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a dark iron candle sconce rising upward from its base, holding one lit pale candle with a small warm flame.
+
+===== cult 飾り1
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a cluster of three lit pale candles of different heights with dripping wax.
+
+===== cult 飾り2
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a small brass incense burner with a thin curl of pink smoke rising.
+
+===== cult 飾り3
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a few scattered dark red rose petals lying flat.
+
+
+######## lab（研究所の部屋。色：灰青・鋼）
+
+===== lab 床
+STYLE: top-down 2D pixel-art floor texture for a dark fantasy dungeon game, seamless tileable on all four edges, viewed straight down (orthographic, no perspective), even lighting, low contrast, small uniform details only, no large objects, no characters, no text, fills the whole square.
+Subject: clean steel-grey laboratory floor tiles with a faint square grid, tiny rivets and light scuffs. Cool blue-grey palette.
+
+===== lab 珍しい床
+STYLE: top-down 2D pixel-art floor texture for a dark fantasy dungeon game, seamless tileable on all four edges, viewed straight down (orthographic, no perspective), even lighting, low contrast, small uniform details only, no large objects, no characters, no text, fills the whole square.
+Subject: the same steel-grey lab floor tiles with one small round floor drain grate in the center and a faint pink glow below it.
+
+===== lab 飾り0（壁から生える）
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a metal pipe rising upward from its base with a round red valve wheel and a small pressure gauge.
+
+===== lab 飾り1
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a small metal canister with a glass window showing glowing pink liquid inside.
+
+===== lab 飾り2
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a coil of thick black cable lying on the floor with a plug end.
+
+===== lab 飾り3
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a small glass vial standing upright, filled with softly glowing pink liquid.
+
+
+######## boudoir（閨の部屋。色：ワインレッド・くすんだ紫）
+
+===== boudoir 床
+STYLE: top-down 2D pixel-art floor texture for a dark fantasy dungeon game, seamless tileable on all four edges, viewed straight down (orthographic, no perspective), even lighting, low contrast, small uniform details only, no large objects, no characters, no text, fills the whole square.
+Subject: plush wine-red carpet with a subtle small damask pattern in muted purple. Soft velvety texture.
+
+===== boudoir 珍しい床
+STYLE: top-down 2D pixel-art floor texture for a dark fantasy dungeon game, seamless tileable on all four edges, viewed straight down (orthographic, no perspective), even lighting, low contrast, small uniform details only, no large objects, no characters, no text, fills the whole square.
+Subject: the same plush wine-red carpet with one dropped pink silk ribbon lying in the center.
+
+===== boudoir 飾り0（壁から生える）
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a draped fold of deep purple velvet curtain rising upward from its base, with a gold tassel.
+
+===== boudoir 飾り1
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a small heart-shaped satin cushion in pink with lace trim.
+
+===== boudoir 飾り2
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: an elegant crystal perfume bottle with a pink atomizer bulb and a faint sparkle of mist.
+
+===== boudoir 飾り3
+STYLE: 2D pixel-art game prop sprite for a dark fantasy dungeon game, clean dark outline, soft shading, one object only, whole object inside the frame, its base touching the bottom center of the image, no ground, no shadow, no text, no green anywhere on the object, flat solid pure green (#00FF00) background.
+Subject: a few scattered pink and red petals lying flat.

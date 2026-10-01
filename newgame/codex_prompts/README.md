@@ -5,6 +5,7 @@
 
 | ファイル | 課題 | ブランチ |
 |---|---|---|
+| 00_all.txt | **課題1〜6をまとめて一気に**（一本のブランチ・課題ごとにコミット・PR は一つ） | codex/batch-1 |
 | 01_split_field.txt | field.js を振る舞いを変えずに分割 | codex/split-field |
 | 02_checks.txt | 検査ツールの正式化と自動実行 | codex/checks |
 | 03_room_skins.txt | 部屋ごとのマップチップ（触手まみれの部屋など） | codex/room-skins |

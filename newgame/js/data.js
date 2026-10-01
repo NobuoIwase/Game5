@@ -307,7 +307,7 @@ var G = (typeof G !== "undefined") ? G : {};
    */
   // 床64px×4列×2行。飾り64px×4列（壁・大・小・光）。描画専用。
   G.ROOM_SKINS = {
-    tentacle: { floor: "assets/env/room_tentacle.png", deco: "assets/env/room_tentacle_deco.png", wall: 0, scatter: [1, 2, 3], density: 0.22, wallTop: "#76525f", overlay: "rgba(155,66,95,0.12)", fog: "#c889aa", speed: 0.8 },
+    tentacle: { floor: "assets/env/room_tentacle.png", deco: "assets/env/room_tentacle_deco.png", proc: "tentacle", wall: 0, scatter: [1, 2, 3], density: 0.22, wallTop: "#76525f", overlay: "rgba(155,66,95,0.12)", fog: "#c889aa", speed: 0.8 },
     slime: { floor: "assets/env/room_slime.png", deco: "assets/env/room_slime_deco.png", wall: 0, scatter: [1, 2, 3], density: 0.26, wallTop: "#796786", overlay: "rgba(168,115,186,0.12)", fog: "#b29bcf", speed: 0.6 },
     flesh: { floor: "assets/env/room_flesh.png", deco: "assets/env/room_flesh_deco.png", wall: 0, scatter: [1, 2, 3], density: 0.23, wallTop: "#875c68", overlay: "rgba(182,86,111,0.12)", fog: "#d395ac", speed: 0.7 },
     worm: { floor: "assets/env/room_worm.png", deco: "assets/env/room_worm_deco.png", wall: 0, scatter: [1, 2, 3], density: 0.21, wallTop: "#685860", overlay: "rgba(126,90,106,0.08)", fog: "#b993a7", speed: 0.5 },

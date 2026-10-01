@@ -36,7 +36,111 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   // floor/wall判定と可視範囲を受け取る。同じ描画を素材一覧でも使う。
   // activeとfillは読むだけ。配置には座標ハッシュだけを使いG.Uに触れない。
-  function roomDecor(ctx, r, skin, t, S, X, Y, bounds, tile, prefix = "") {
+  /* 触手を一本、手続きで描く。根元(bx,by)から角度 a の向きへ len（マス）。
+   * 体は先へ細る帯。うねりは時間と位相で、curl で先が巻き、lean で先が寄る（獲物の方へ）。
+   * 縁は暗く、背に艶、腹に吸盤。 */
+  const TCS = [
+    { rim: "#3a1424", body: "#9c4466", body2: "#c8648a", hi: "rgba(255,214,232,0.75)", sucker: "#f2b6cf", suckerIn: "#7a2c4a", wet: "rgba(255,240,248,0.55)" },
+    { rim: "#2e0f1e", body: "#86385a", body2: "#b0507a", hi: "rgba(255,200,222,0.6)", sucker: "#e4a0bc", suckerIn: "#6a2440", wet: "rgba(255,240,248,0.5)" },
+    { rim: "#40182c", body: "#a8506e", body2: "#d87a98", hi: "rgba(255,226,238,0.8)", sucker: "#f6c4d6", suckerIn: "#86344f", wet: "rgba(255,240,248,0.6)" },
+  ];
+  let TC = TCS[0];
+  const stats = { tentacles: 0 };              // 検査用：描いた触手の本数（tools/rooms.js が数える）
+  function tentacle(ctx, bx, by, a, len, wd, t, ph, curl, sp, lean) {
+    TC = TCS[Math.floor(ph * 10) % 3]; stats.tentacles++;
+    const N = 11, L = [], R = [], C = [];
+    let x = bx, y = by, ang = a;
+    for (let i = 0; i <= N; i++) {
+      const s = i / N;
+      const wig = Math.sin(t * sp * 2.1 + ph + s * 4.2) * 0.55 * s + Math.sin(t * sp * 1.3 + ph * 1.7 + s * 2.3) * 0.25 * s;
+      const dir = ang + wig + curl * s * s * 2.2 + (lean || 0) * s;
+      const w = wd * (1 - s * 0.86) * (1 + 0.08 * Math.sin(t * sp * 3 + ph + s * 9));
+      C.push([x, y, dir, w]);
+      const nx = Math.cos(dir + Math.PI / 2), ny = Math.sin(dir + Math.PI / 2);
+      L.push([x + nx * w, y + ny * w]); R.push([x - nx * w, y - ny * w]);
+      x += Math.cos(dir) * len / N; y += Math.sin(dir) * len / N;
+    }
+    const path = (o) => { ctx.beginPath(); ctx.moveTo(L[0][0], L[0][1]); for (const p of L) ctx.lineTo(p[0] + o, p[1] + o); const tip = C[N]; ctx.lineTo(tip[0], tip[1]); for (let i = N; i >= 0; i--) ctx.lineTo(R[i][0] + o, R[i][1] + o); ctx.closePath(); };
+    ctx.fillStyle = "rgba(0,0,0,0.28)"; path(wd * 0.35); ctx.fill();           // 影
+    ctx.fillStyle = TC.rim; path(0); ctx.fill();
+    ctx.save(); ctx.translate(0, 0);
+    const g = ctx.createLinearGradient(bx, by, C[N][0], C[N][1]); g.addColorStop(0, TC.body); g.addColorStop(1, TC.body2);
+    ctx.fillStyle = g; ctx.beginPath();                                          // 体（縁より一回り内側）
+    ctx.moveTo(C[0][0], C[0][1]);
+    for (let i = 0; i <= N; i++) { const [cx, cy, d, w] = C[i]; ctx.lineTo(cx + Math.cos(d + Math.PI / 2) * w * 0.78, cy + Math.sin(d + Math.PI / 2) * w * 0.78); }
+    for (let i = N; i >= 0; i--) { const [cx, cy, d, w] = C[i]; ctx.lineTo(cx - Math.cos(d + Math.PI / 2) * w * 0.78, cy - Math.sin(d + Math.PI / 2) * w * 0.78); }
+    ctx.closePath(); ctx.fill(); ctx.restore();
+    ctx.strokeStyle = TC.hi; ctx.lineWidth = Math.max(1, wd * 0.22); ctx.lineCap = "round"; ctx.beginPath();   // 背の艶
+    for (let i = 1; i < N - 1; i++) { const [cx, cy, d, w] = C[i]; const px = cx + Math.cos(d + Math.PI / 2) * w * 0.42, py = cy + Math.sin(d + Math.PI / 2) * w * 0.42; i === 1 ? ctx.moveTo(px, py) : ctx.lineTo(px, py); }
+    ctx.stroke();
+    for (let i = 2; i < N - 2; i += 2) {                                          // 腹の吸盤
+      const [cx, cy, d, w] = C[i], px = cx - Math.cos(d + Math.PI / 2) * w * 0.5, py = cy - Math.sin(d + Math.PI / 2) * w * 0.5, r = Math.max(0.8, w * 0.3);
+      ctx.fillStyle = TC.sucker; ctx.beginPath(); ctx.arc(px, py, r, 0, 7); ctx.fill();
+      ctx.fillStyle = TC.suckerIn; ctx.beginPath(); ctx.arc(px, py, r * 0.5, 0, 7); ctx.fill();
+    }
+    const [tx, ty] = C[N - 2];                                                    // 先の滴
+    const drip = (t * sp * 0.7 + ph) % 3;
+    if (drip < 1) { ctx.fillStyle = TC.wet; ctx.beginPath(); ctx.arc(tx, ty + drip * wd * 2.2, Math.max(1, wd * 0.18), 0, 7); ctx.fill(); }
+  }
+  // 触手の部屋：壁から生え、床の穴から束で伸びる。満ちるほど（fill）数も長さも増え、踏み込むと（active）速く、獲物の方へ寄る
+  // 本番の画面では、部屋ごとの別キャンバスに秒15回だけ描き直して貼る（毎フレーム全部を描くと、スマホで重い）
+  function tentacleRoomCached(ctx, r, t, S, X, Y, bounds, tile, target) {
+    const pad = 1.6, cw = Math.ceil((r.w + pad * 2) * S), ch = Math.ceil((r.h + pad * 2) * S);
+    const c = r._tc || (r._tc = { cv: typeof document !== "undefined" ? document.createElement("canvas") : null, t: -9, S: 0, key: "" });
+    if (!c.cv) return tentacleRoom(ctx, r, t, S, X, Y, bounds, tile, target);
+    const key = (r.active ? 1 : 0) + ":" + (r.fill || 0);
+    if (c.S !== S || c.key !== key || t - c.t > 1 / 15 || t < c.t) {
+      if (c.cv.width !== cw || c.cv.height !== ch) { c.cv.width = cw; c.cv.height = ch; }
+      const cx = c.cv.getContext("2d"); cx.clearRect(0, 0, cw, ch); cx.imageSmoothingEnabled = false;
+      const Xl = x => (x - r.x + pad) * S, Yl = y => (y - r.y + pad) * S;
+      tentacleRoom(cx, r, t, S, Xl, Yl, [r.x - 1, r.y - 1, r.x + r.w + 1, r.y + r.h + 1], tile, target);
+      c.S = S; c.t = t; c.key = key;
+    }
+    ctx.drawImage(c.cv, X(r.x - pad), Y(r.y - pad));
+  }
+  function tentacleRoom(ctx, r, t, S, X, Y, bounds, tile, target0) {
+    const target = target0 && { x: X(target0.x) / S, y: Y(target0.y) / S };
+    const fill = Number.isFinite(r.fill) ? Math.max(0, Math.min(1, r.fill)) : 0;
+    const sp = r.active ? 1.9 : 0.8, reach = (r.active ? 1.25 : 1) * (1 + fill * 0.9);
+    const [x0, y0, x1, y1] = bounds;
+    const leanTo = (bx, by, a) => { if (!r.active || !target) return 0; const want = Math.atan2(target.y - by, target.x - bx); let d = want - a; while (d > Math.PI) d -= Math.PI * 2; while (d < -Math.PI) d += Math.PI * 2; return Math.max(-0.9, Math.min(0.9, d)) * 0.7; };
+    ctx.save(); ctx.beginPath(); ctx.rect(X(r.x) - S * 0.3, Y(r.y) - S * 0.3, r.w * S + S * 0.6, r.h * S + S * 0.6); ctx.clip();
+    // 床の穴と、そこから伸びる束
+    for (let y = Math.max(y0, r.y); y < Math.min(y1, r.y + r.h); y++) for (let x = Math.max(x0, r.x); x < Math.min(x1, r.x + r.w); x++) {
+      if (tile(x, y) !== 0) continue;
+      const hv = hash(x, y, 91);
+      if (hv % 1000 / 1000 >= 0.3 + fill * 0.55 + (r.active ? 0.08 : 0)) continue;
+      const hx = X(x + 0.3 + ((hv >>> 6) % 40) / 100), hy = Y(y + 0.45 + ((hv >>> 11) % 40) / 100);
+      ctx.fillStyle = "rgba(20,4,12,0.85)"; ctx.beginPath(); ctx.ellipse(hx, hy, S * 0.3, S * 0.13, 0, 0, 7); ctx.fill();
+      ctx.strokeStyle = "rgba(200,90,130,0.6)"; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.ellipse(hx, hy, S * 0.31, S * 0.14, 0, Math.PI, 0); ctx.stroke();
+      const n = 3 + (hv >>> 15) % 3 + Math.round(fill * 3);
+      for (let k = 0; k < n; k++) {
+        const ph = (hv >>> (k * 3)) % 628 / 100, a = -Math.PI / 2 + (k - (n - 1) / 2) * 0.42 + Math.sin(ph) * 0.2;
+        const bx = hx + (k - (n - 1) / 2) * S * 0.09, by = hy;
+        tentacle(ctx, bx, by, a, S * (0.7 + ((hv >>> (k + 4)) % 60) / 100) * reach, S * 0.13, t, ph, (k % 2 ? 1 : -1) * 0.5, sp, leanTo(bx / S, by / S, a));
+      }
+    }
+    // 壁から生える触手
+    for (let y = Math.max(y0, r.y - 1); y < Math.min(y1, r.y + r.h + 1); y++) for (let x = Math.max(x0, r.x - 1); x < Math.min(x1, r.x + r.w + 1); x++) {
+      if (tile(x, y) !== 1) continue;
+      const side = [[0, 1], [0, -1], [1, 0], [-1, 0]].find(([dx, dy]) => insideRoom(r, x + dx, y + dy) && tile(x + dx, y + dy) !== 1);
+      if (!side) continue;
+      const hv = hash(x, y, 73);
+      if (hv % 100 >= 75 + fill * 25) continue;
+      const [dx, dy] = side, a = Math.atan2(dy, dx), n = 2 + (hv >>> 9) % 2 + Math.round(fill * 2);
+      for (let k = 0; k < n; k++) {
+        const off = ((hv >>> (k * 4)) % 80) / 100 - 0.4, ph = (hv >>> (k * 5 + 2)) % 628 / 100;
+        const bx = X(x + 0.5 + dx * 0.5 + (dy ? off : 0)), by = Y(y + 0.5 + dy * 0.5 + (dx ? off : 0));
+        if (k === 0) { const mx = X(x + 0.5 + dx * 0.5), my = Y(y + 0.5 + dy * 0.5); ctx.fillStyle = "#4a1a2e"; ctx.beginPath(); ctx.ellipse(mx, my, S * (dy ? 0.55 : 0.22), S * (dx ? 0.55 : 0.22), 0, 0, 7); ctx.fill(); ctx.fillStyle = "rgba(200,96,140,0.5)"; ctx.beginPath(); ctx.ellipse(mx, my, S * (dy ? 0.42 : 0.14), S * (dx ? 0.42 : 0.14), 0, 0, 7); ctx.fill(); }   // 壁の付け根の肉
+        tentacle(ctx, bx, by, a + Math.sin(ph) * 0.35, S * (0.9 + ((hv >>> (k + 7)) % 70) / 100) * reach, S * 0.17, t, ph, (k % 2 ? 1 : -1) * 0.7, sp, leanTo(bx / S, by / S, a));
+      }
+    }
+    ctx.globalAlpha = 0.05 + fill * 0.05 + (r.active ? 0.03 : 0);
+    ctx.fillStyle = "#c86a92"; ctx.fillRect(X(r.x), Y(r.y), r.w * S, r.h * S);
+    ctx.restore();
+  }
+  function roomDecor(ctx, r, skin, t, S, X, Y, bounds, tile, prefix = "", target, cache) {
+    if (skin.proc === "tentacle") return (cache ? tentacleRoomCached : tentacleRoom)(ctx, r, t, S, X, Y, bounds, tile, target);
     const im = img(prefix + skin.deco); if (!ok(im)) return;
     const fill = Number.isFinite(r.fill) ? Math.max(0, Math.min(1, r.fill)) : 0;
     const speed = skin.speed * (r.active ? 1.9 : 1), size = 1 + fill * 0.35 + (r.active ? 0.12 : 0);
@@ -181,7 +285,7 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     for (const room of rooms) {
       const skin = roomSkin(room); if (!skin) continue;
-      roomDecor(ctx, room, skin, w.t, S, X, Y, [x0, y0, x1, y1], (x, y) => x < 0 || y < 0 || x >= map.W || y >= map.H ? 1 : map.t[y * map.W + x]);
+      roomDecor(ctx, room, skin, w.t, S, X, Y, [x0, y0, x1, y1], (x, y) => x < 0 || y < 0 || x >= map.W || y >= map.H ? 1 : map.t[y * map.W + x], "", { x: w.run.h.x, y: w.run.h.y }, true);
     }
     // 柱
     for (let ty = y0; ty < y1; ty++) for (let tx = x0; tx < x1; tx++) {
@@ -541,5 +645,5 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
 
-  G.Render = { draw, preload, img, TYPE_COLOR, roomPreview };
+  G.Render = { draw, preload, img, TYPE_COLOR, roomPreview, stats };
 })();

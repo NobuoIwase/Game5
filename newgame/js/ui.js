@@ -144,7 +144,7 @@
   function cardName(c) { const ci = G.Field.cardInfo(c); return ci.d ? ci.d.name : c; }
   function cardArt(c) {
     const ci = G.Field.cardInfo(c);
-    if (ci.trap) return `<img src="assets/traps/${ci.id}.${ci.id === "web" || ci.id === "tower" ? "png" : "svg"}" alt="" style="border-bottom:2px solid ${G.Render.TYPE_COLOR[ci.d.type]}">`;
+    if (ci.trap) return `<img src="${G.Render.trapArt(ci.id)}" alt="" style="border-bottom:2px solid ${G.Render.TYPE_COLOR[ci.d.type]}">`;
     return `<img src="assets/monsters/${ci.d.art}" alt=""${ci.d.tint ? ` style="filter:hue-rotate(${ci.d.tint}deg) saturate(1.2)"` : ""}>`;
   }
   const TIER_NAME = ["抵抗", "綻び", "心は拒み、体は応える", "待ってしまう"];
@@ -613,7 +613,7 @@
     const hb = document.getElementById("lvh");
     if (hb.dataset.k !== hk) {
       hb.dataset.k = hk;
-      hb.innerHTML = hold.slice(0, 4).map((d, i) => `<img class="h${i}" src="${d.trap ? `assets/traps/${d.trap}.${d.trap === "web" || d.trap === "tower" ? "png" : "svg"}` : "assets/monsters/" + d.art}" alt=""${d.tint ? ` style="filter:hue-rotate(${d.tint}deg)"` : ""}>`).join("");
+      hb.innerHTML = hold.slice(0, 4).map((d, i) => `<img class="h${i}" src="${d.trap ? G.Render.trapArt(d.trap) : "assets/monsters/" + d.art}" alt=""${d.tint ? ` style="filter:hue-rotate(${d.tint}deg)"` : ""}>`).join("");
     }
   }
   function liveLine(l, now) {

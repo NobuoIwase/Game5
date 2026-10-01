@@ -1,0 +1,221 @@
+課題D：罠66種（SVG のもの全部。淫糸の巣・囁きの塔は PNG なので対象外）。Grok の画像生成（「品質」モード・正方形）に、===== で区切った1ブロックずつ、STYLE の行ごとそのまま貼る。
+選んだ1枚を ~/grok_raw/D/<id>_<番号>.png に保存し、
+  python3 newgame/tools/grok_fit.py sprite ~/grok_raw/D/<id>_<番号>.png newgame/assets/traps/<id>.png --pixel 2
+で整え、data.js の G.TRAPS の該当の罠に art: "<id>.png" を足す（type の後ろ。ほかの値は触らない）。元の <id>.svg は消さずに残す。
+
+STYLE は2種類。ブロックの頭に書いてあるものを使う。
+  [物] … 床に置かれた物・台・装置
+  [面] … 壁や床の一面（四角い板状に見せる）
+
+[物] STYLE: a single dungeon trap object sprite for a Japanese 2D dungeon RPG, in the style of Super Famicom era JRPG map chips and Japanese RPG Maker map objects. Tiny low-resolution pixel art, about 48 pixels tall and enlarged so the big square pixels are clearly visible. One object only, seen from the front and slightly from above, its base at the bottom center of the image. Flat colors with a single shade tone, about 10 colors, dark outline, simple readable silhouette, almost no small details. Dusky dungeon colors with pink and violet accents. Whole object inside the frame, no characters, no people, no ground, no shadow, no text, no watermark, no green anywhere on the object, flat solid pure green (#00FF00) background. Not western cartoon, not a detailed illustration.
+
+[面] STYLE: a single square dungeon wall or floor panel sprite for a Japanese 2D dungeon RPG, in the style of Super Famicom era JRPG map chips and Japanese RPG Maker map tiles. Tiny low-resolution pixel art, a square panel about 48 pixels wide and enlarged so the big square pixels are clearly visible, seen straight from the front. Flat colors with a single shade tone, about 10 colors, dark outline around the panel, simple readable pattern. Dusky dungeon colors with pink and violet accents. The panel fills most of the image, centered, no characters, no people, no shadow, no text, no watermark, no green anywhere on the panel, flat solid pure green (#00FF00) background around it.
+
+共通の NG：人物を描かない（罠の上に人がいない）・血・卵や卵の塊に見える物・実在の虫・幽霊・骸骨・実在の宗教の印・文字。
+
+
+######## 惑わす罠
+
+===== bell（催眠の鈴）[物]
+Subject: a small wooden frame hanging three golden bells, faint violet swirl rings drifting from the bells.
+
+===== mirror（幻影の鏡廊）[物]
+Subject: a tall oval standing mirror in an ornate silver frame, the glass showing a faint false corridor fading into pink mist.
+
+===== decoy（双影の燭）[物]
+Subject: two tall candles on iron stands side by side with violet flames, each casting a faint purple duplicate shadow.
+
+===== lull_voice（微睡の声）[物]
+Subject: a small stone horn-shaped speaker on the floor, soft lilac music notes and gentle sound-wave arcs drifting out of it.
+
+===== echo_gate（復唱の門）[物]
+Subject: a small arched stone gate with a closed grey door, the door carved with many lines of illegible engraved script (just wavy lines, no real letters), a faint violet glow along the lines.
+
+===== hypno_ray（催眠照射機）[物]
+Subject: a machine on a tripod with a round lens projecting a pink and violet hypnotic spiral of light.
+
+===== whisper_ring（囁き茸の輪）[物]
+Subject: a ring of small violet mushrooms growing in a circle on the floor, faint pale whisper-like wisps rising from the center. Mushroom stalks lilac (not green).
+
+===== rune（淫紋の敷石）[物]
+Subject: one flat square stone floor slab with a glowing pink heart-like rune carved into it (an abstract fantasy sigil, not a real religious symbol).
+
+===== yurugi（揺さぶりの魔導具）[物]
+Subject: a brass pillar-shaped magic device with a lantern-like top, emitting rippling concentric shock-wave arcs on both sides.
+
+===== kaikou（怪光線の魔導具）[物]
+Subject: a brass magic device on a stand with a star-shaped crystal at the top, firing radiating beams of bright pink light.
+
+===== shashin（教祖の写真の間）[面]
+Subject: a wall covered with a grid of small framed portraits, each portrait a simple silhouette of the same round-faced man with a thin smile (very simple, no detailed faces).
+
+===== kouro（淫魔の香炉）[物]
+Subject: a small ornate purple incense burner on three legs, thick curls of sweet pink smoke rising with a tiny heart shape in the smoke.
+
+===== keiyaku（淫魔の契約書）[物]
+Subject: an unrolled old parchment scroll on a small wooden lectern, lines of illegible handwriting (just wavy lines, no real letters), a wax seal shaped like a pink heart.
+
+
+######## 蕩かす罠
+
+===== glue（粘着床）[物]
+Subject: a flat puddle of sticky glossy pink goo on the floor with stretchy strings rising from it.
+
+===== vent（香油の廊）[物]
+Subject: a metal floor vent grate puffing out sweet pink scented mist.
+
+===== urn（甘露の甕）[物]
+Subject: a large clay urn overflowing with thick glossy pink-white liquid running down its sides.
+
+===== shrine（偽りの祠）[物]
+Subject: a small wooden roadside shrine with a peaked roof and a little teal glowing offering stone inside, looking peaceful and inviting.
+
+===== basin（清めの手水）[物]
+Subject: a stone water basin on a pedestal filled with clear pale blue water, small ripples and a faint sparkle.
+
+===== tease（焦らしの台）[物]
+Subject: a low padded examination couch in pink leather with soft cuff straps at both ends, a faint warm pink glow around it.
+
+===== bed（偽りの褥）[物]
+Subject: a plain wooden bed with a white mattress and pillow, sleepy violet "z"-like swirl wisps (no letters) rising from a small incense dish beside it.
+
+===== spring（乳白の湯）[物]
+Subject: a round stone-rimmed hot spring pool of milky white water, gentle steam rising.
+
+===== slime_drop（粘体落とし）[物]
+Subject: a seam in a dark ceiling panel at the top of the image with a heavy drop of pink slime falling from it toward a splash puddle below. (The ceiling may touch the top edge.)
+
+===== tickle（くすぐりの廊）[物]
+Subject: two narrow stone wall pillars facing each other, each with several mechanical arms ending in fluffy pink feather tips reaching into the gap between them.
+
+===== aphro_wall（媚壁）[面]
+Subject: a damp rose-colored wall panel with glistening drops of sweet pink sweat seeping out of it and running down.
+
+===== honey（蜜溜まり）[物]
+Subject: a wide shallow puddle of thick glossy amber honey on the floor with a few honey bubbles.
+
+===== itch（掻痒の檻）[物]
+Subject: a small tall birdcage-like iron cage on the floor with fine glittering golden itching powder drifting inside it.
+
+===== exam（診察台）[物]
+Subject: a white clinical examination table with padded restraint straps and a small tray of rounded smooth tools (no needles, no blades) beside it.
+
+===== feather_bed（綿毛の褥）[物]
+Subject: a big fluffy bed made of soft white down and fluff, tufts of fluff floating up from it.
+
+===== saddle（鞍の渡り）[物]
+Subject: a narrow wooden beam crossing over a dark chasm, the top edge of the beam lined with a row of rounded pink knobs. The chasm is a black gap under the beam.
+
+===== toybox（装具箱）[物]
+Subject: a small treasure chest with shiny brass fittings, its lid slightly open with small round pink beads and soft pink pads peeking out.
+
+===== suit（纏い衣）[物]
+Subject: an elegant pink and white protective garment displayed on a stand, its fabric faintly rippling as if something moves underneath it.
+
+===== temari（手鞠）[物]
+Subject: a soft round embroidered temari ball in pink and gold thread patterns, bouncing slightly above the floor.
+
+===== lips（唇の群れ）[面]
+Subject: a wall panel covered with many small flower-like growths shaped like soft pink lips, arranged in rows.
+
+===== namagoroshi（生殺しの花）[物]
+Subject: a cluster of tall pink flower buds on long stalks, each bud swollen and almost blooming but held tightly closed. Stalks and leaves in dark wine-purple (not green).
+
+===== suikan（吸い管）[物]
+Subject: a clear glass suction tube coming out of a metal wall fitting, a cup-shaped soft rim at its end and a measuring glass jar with a pink level line attached.
+
+===== ring（締環）[物]
+Subject: a single floating polished metal ring glowing with a golden rim, slowly spinning.
+
+===== gauze（研ぎ布）[物]
+Subject: a low wooden frame with a glossy wet white cloth stretched tightly across it.
+
+===== seisui（聖水の盤）[物]
+Subject: a round silver basin on a pedestal filled with fragrant pale pink holy water, a faint sweet sparkle.
+
+===== jouka（浄化の台）[物]
+Subject: a low white stone altar table with four soft cuff straps and a glass bottle of pink liquid dripping onto it.
+
+===== count_altar（数取りの祭壇）[物]
+Subject: a small dark stone altar with a grid of carved square boxes on its front, a few of the boxes glowing pink.
+
+===== maseki（魔石の台）[物]
+Subject: a round pink glowing magic stone resting on a small stone pedestal.
+
+===== furnace（精気吸収炉）[物]
+Subject: a round pulsing metal furnace with a glass window showing a glowing cyan core, pipes on the sides.
+
+
+######## 絡める罠
+
+===== vine（縛蔦の間）[物]
+Subject: a patch of thick wine-colored vines writhing up from cracks in the floor, curling tendrils reaching upward. Vines dark wine and plum (not green).
+
+===== rope（爪車の縄）[物]
+Subject: a wooden ratchet winch on a post with a taut coiled rope, the rope ending in a loose loop.
+
+===== pillory（晒し台）[物]
+Subject: a wooden pillory stocks frame on two posts with one large hole for the neck and two smaller holes for the wrists, iron hinges. Empty.
+
+===== belt（送り帯）[物]
+Subject: a section of a mechanical conveyor belt running diagonally across the floor, rollers at the edges, small arrow-like plates on it.
+
+===== gate（採寸門）[物]
+Subject: a tall brass arch frame with measuring tick marks along it and two brass mechanical arms folded at the sides.
+
+===== cuffs（壁の環）[面]
+Subject: a stone wall panel with four heavy iron rings bolted into it, two at the top and two lower down.
+
+===== bud（吊花の蕾）[物]
+Subject: three pink flower buds hanging upside down on long dark wine vines from the top of the image, each dripping a drop of nectar. (The vines may touch the top edge.) Vines dark wine (not green).
+
+===== root（蝕根の床）[物]
+Subject: a cracked stone floor patch with many thin pale roots creeping out of the cracks and curling upward.
+
+===== cocoon（白繭）[物]
+Subject: a tall standing curtain-like bundle of soft white fungal threads hanging from a dark root above, loosely wrapped like a draped shawl, with a few loose threads drifting. It must NOT look like an egg: no smooth oval shell, no round shape — it is ragged, stringy and soft.
+
+===== ratchet（爪車の枠）[物]
+Subject: a low iron frame shaped like a bench with a large toothed ratchet gear wheel on one side.
+
+===== altar（淫紋の祭壇）[物]
+Subject: a dark stone altar block with a glowing pink rune on its front, two black candles with dark purple flames on top.
+
+===== shadow（影腕の燭）[物]
+Subject: four tall candle stands in a square around a dark patch of floor, and several shadowy purple arms reaching up out of that shadow.
+
+===== armor（うつろの鎧）[物]
+Subject: an empty suit of plate armor standing upright on a small base, its chest plate opened like a door to show a soft pink padded interior.
+
+===== stasis（静止の帳）[物]
+Subject: a thin translucent pale blue curtain hanging from a rod, a large clock face with stopped hands glowing faintly in its folds.
+
+===== vow（誓いの祭壇）[物]
+Subject: a small white lectern altar with an open book of vows (wavy lines, no letters) and a pink crossed-circle mark floating above it.
+
+===== net（投網）[物]
+Subject: a large rope net falling from the top of the image, spread wide with weights at the corners. (The top may touch the top edge.)
+
+===== pitfall（落とし穴）[物]
+Subject: a round dark pit hole in the stone floor, the edges crumbling, a soft pink glow deep inside.
+
+===== curtain（垂帳の触手）[物]
+Subject: a curtain made of many long hanging pink tentacles dangling from a rod, swaying, blocking a passage.
+
+===== sucker（吸盤の壁）[面]
+Subject: a pink fleshy wall panel covered in rows of round suction cups.
+
+===== pod（戦闘員化ポッド）[物]
+Subject: a tall upright metal capsule pod with a rounded glass front window, glowing lilac inside, a small purple diamond emblem on top. Empty.
+
+===== capture（捕縛アーム）[物]
+Subject: four mechanical claw arms rising from a glowing purple circle on the floor, reaching inward.
+
+===== mushi_pit（蟲溜まり）[物]
+Subject: a shallow pit in the floor filled with a tangle of small smooth pink worm creatures wriggling. Not real insects: no legs, no antennae.
+
+===== hive_wall（響き孔の壁）[面]
+Subject: a stone wall panel riddled with many round holes, small glowing lilac lights trembling deep inside the holes.
+
+===== flood_orb（満ち引きの玉）[物]
+Subject: a glowing pink orb with a hard pearly shell resting on the rim of a dark round hole in the floor, short pink tentacles curling up around the hole.

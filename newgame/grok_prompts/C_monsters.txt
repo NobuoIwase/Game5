@@ -1,0 +1,145 @@
+課題C：SVG のままの魔物38種。Grok の画像生成（「品質」モード・正方形）に、===== で区切った1ブロックずつ、STYLE の行ごとそのまま貼る。
+STYLE は前回（課題A、PR #112）で作者が選んだ「スーパーファミコンの RPG のマップチップ風」と同じ。
+選んだ1枚を ~/grok_raw/C/<id>_<番号>.png に保存し、
+  python3 newgame/tools/grok_fit.py sprite ~/grok_raw/C/<id>_<番号>.png newgame/assets/monsters/<id>.png --pixel 2
+で整える（背景の粒が残る時は --tol 70）。
+
+STYLE は3種類。ブロックの頭に書いてあるものを使う。
+  [人] … 人の姿のもの（小淫魔・ワルドー・教団）
+  [魔] … それ以外の魔物
+  [機] … 機械（ドローン・カルテ）
+
+[人] STYLE: a single field-map enemy sprite for a Japanese 2D dungeon RPG, in the style of Super Famicom era JRPG and Japanese RPG Maker map character chips. Tiny low-resolution pixel art, about 48 pixels tall and enlarged so the big square pixels are clearly visible. Super-deformed two-heads-tall map character: big round head, small simple body, very short arms and legs, idle pose as seen on the dungeon map, seen from the front and slightly from above. Japanese anime face reduced to the minimum: simple eyes, a tiny mouth, no nose. Flat colors with a single shade tone, about 10 colors, dark outline, simple readable silhouette, almost no small details. Pastel pink and wine-purple palette. One character only, whole body inside the frame, centered, no ground, no shadow, no text, no watermark, no green anywhere on the character, flat solid pure green (#00FF00) background. Not western cartoon, not a portrait, not a detailed illustration.
+
+[魔] STYLE: a single field-map enemy sprite for a Japanese 2D dungeon RPG, in the style of Super Famicom era JRPG monsters and Japanese RPG Maker map chips. Tiny low-resolution pixel art, about 48 pixels tall and enlarged so the big square pixels are clearly visible. A simple rounded Japanese game monster as seen on the dungeon map, seen from the front and slightly from above. Flat colors with a single shade tone, about 10 colors, dark outline, simple readable silhouette, almost no small details. Pastel pink and wine-purple palette. One creature only, whole creature inside the frame, centered, no ground, no shadow, no text, no watermark, no green anywhere on the creature, flat solid pure green (#00FF00) background. Not western cartoon, not a detailed illustration.
+
+[機] STYLE: a single field-map enemy sprite for a Japanese 2D dungeon RPG, in the style of Super Famicom era JRPG robot enemies and Japanese RPG Maker map chips. Tiny low-resolution pixel art, about 48 pixels tall and enlarged so the big square pixels are clearly visible. A simple rounded machine as seen on the dungeon map, seen from the front and slightly from above. Flat colors with a single shade tone, about 10 colors, dark outline, simple readable silhouette, almost no small details. Steel grey and lilac with small pink lights. One machine only, whole machine inside the frame, centered, no ground, no shadow, no text, no watermark, no green anywhere on the machine, flat solid pure green (#00FF00) background. Not western cartoon, not a detailed illustration.
+
+
+######## 触手・粘体・浮遊するもの
+
+===== jellyfish（浮遊水母）[魔]
+Subject: a floating pink jellyfish monster with a round translucent bell and long trailing soft tentacles that glow faintly at the tips.
+
+===== roper（ローパー）[魔]
+Subject: a roper monster: a tall rounded pink pillar-shaped body with one big closed sleepy eye slit near the top, and four long flexible tentacles spreading from its sides. No mouth with teeth.
+
+===== mind_roper（マインドローパー）[魔]
+Subject: a roper monster like a tall rounded violet pillar with several long tentacles, a softly glowing swirl pattern on its body, and faint lilac ripple rings floating from it like whispers.
+
+===== drain_roper（ドレインローパー）[魔]
+Subject: a roper monster like a tall rounded dark rose pillar with several long tentacles whose tips are small glowing cups that sip blue sparkles of magic.
+
+===== tentacle_lord（触手の主）[魔]
+Subject: a large tentacle monster: a big low dome of pink flesh with many thick tentacles rising and curling from it in all directions, a crown-like ring of shorter tentacles on top. Imposing but simple.
+
+===== hanging_vine（垂れ蔦）[魔]
+Subject: a vine monster hanging down from above: thick wine-colored vines dangling from the top of the image, ending in a cluster of curling tendrils and a small pink bud with a closed eye. (The top of the vines may touch the top edge of the image.)
+
+===== mirror_slime（鏡面スライム）[魔]
+Subject: a round slime with a glossy silver-blue mirror surface that reflects pink light, two small calm eyes, bright reflection streaks.
+
+===== shibire（痺れ浮遊子）[魔]
+Subject: a small floating spore creature shaped like a translucent pale-blue umbrella cap with short dangling threads, tiny yellow sparks crackling softly around it.
+
+===== hoshibami（星喰み）[魔]
+Subject: a small soft star-shaped mollusk creature, five rounded pink arms with tiny suction dots underneath, one small mouth in the center, glossy wet sheen.
+
+===== wisp（漂い霊）[魔]
+Subject: a floating will-o'-the-wisp: a small cold pale-blue flame with two simple dot eyes, a few frosty sparkles drifting around it. It is a flame spirit, not a ghost: no sheet, no body, no hands.
+
+===== mimic（ミミック）[魔]
+Subject: a treasure chest monster with its lid wide open: wooden chest with brass corners, inside a soft pink mouth and a long tongue reaching out, two small eyes peeking under the lid. Only one chest.
+
+===== ukegame（受け壺）[魔]
+Subject: a large round clay pot with its mouth facing upward, warm terracotta color, faint pink steam rising from inside, a soft fleshy rim. No face.
+
+===== sayagoke（鞘苔）[魔]
+Subject: a pouch-shaped moss creature: a soft bulging sack of dark rose moss with an opening on top, the inside lined with short pink cilia. Moss color in rose and plum (not green).
+
+===== tenohira（掌の群れ）[魔]
+Subject: a swarm of five pale pink disembodied hands floating together in a loose circle, palms open, fingers gently curling. Soft cartoon hands, no blood, no wrists cut — each hand fades into pink mist at the wrist.
+
+
+######## 蟲・ヒル（実在の虫に似せない：脚・触角・複眼・体節の殻を描かない）
+
+===== tsurimushi（吊り蟲）[魔]
+Subject: a glowing tube-shaped worm creature hanging from a single thin thread from the top of the image, soft pink body with faint glowing rings, a round soft tip. Not a real insect: no legs, no antennae. (The thread may touch the top edge.)
+
+===== zuidou（隧道蟲）[魔]
+Subject: a thick worm creature bursting up from a small hole in stone floor tiles, pink-purple smooth body as thick as an arm, rounded head with a small round mouth. Not a real insect: no legs, no antennae, no pincers.
+
+===== hibiki（響き蟲）[魔]
+Subject: a cluster of tiny glowing lilac worm creatures inside a round hollow, all trembling, small sound-wave arcs around them. Not real insects: smooth simple bodies, no legs, no antennae.
+
+===== doromushi（泥蟲）[魔]
+Subject: a pale white worm creature half-sunk in a puddle of dark brown mud, only its smooth head and a curl of its body showing, mud dripping off. Not a real insect: no legs, no antennae.
+
+===== gitai（擬態蟲）[魔]
+Subject: a mimic worm creature disguised as an old frayed hanging rope: a coil of brown rope-textured body hanging from the top of the image, one end opening into a soft pink mouth with a tiny eye. Not a real insect. (The top may touch the top edge.)
+
+===== haimushi（這い蟲）[魔]
+Subject: a small group of three tiny soft pink worm creatures crawling together, smooth round bodies, tiny dot eyes. Cute and weak looking. Not real insects: no legs, no antennae.
+
+===== hiru（肥大化ヒル）[魔]
+Subject: a big fat leech creature as thick as an arm, glossy dark wine-red smooth body, one end a round sucker mouth ringed with soft pink, swollen and shiny. No blood.
+
+===== kuwaemushi（咥え蟲）[魔]
+Subject: a white worm creature standing up, its whole top end a round soft mouth opening with pink soft folds inside, no eyes, smooth pale body. Not a real insect. No teeth.
+
+
+######## 小淫魔（2頭身のマップキャラ。頭身が低く見えるのは作者が了承済み。肌の露出は既存の小淫魔の絵ていど）
+
+===== futago（双子の小淫魔）[人]
+Subject: two identical small imp women side by side, mirror images of each other, small horns, small bat wings, thin tails, one with pink hair and one with lilac hair, each whispering toward the other side with a hand by the mouth, matching short frilly dresses. Two characters in this one image only.
+
+===== sakiimp（先嬲りの小淫魔）[人]
+Subject: a small imp woman floating cross-legged in the air, small horns, small bat wings, a thin tail, a teasing half-smile, one finger raised with a long pointed pink fingernail drawing a little circle of light. Rose and black outfit.
+
+===== jikkyou（実況する小淫魔）[人]
+Subject: a small imp woman making a rectangular frame with the fingers of both hands and peeking through it with one eye, small horns, small bat wings, a thin tail, a small red "recording" light glowing beside her. Lilac and black outfit.
+
+===== kusuguri（擽りの小淫魔）[人]
+Subject: a small imp woman with a long fluffy feather-tipped tail curled up in front of her, small horns, small bat wings, giggling with eyes closed, a few sticky pink threads hanging from her fingers. Pink and white outfit.
+
+===== kazoe（数える小淫魔）[人]
+Subject: a small imp woman holding up one finger with a confident smile, small horns, small bat wings, a thin tail, a glowing pink heart-shaped rune with tally marks floating beside her. Violet and black outfit.
+
+===== azakeri（嘲りの小淫魔）[人]
+Subject: a small imp woman sitting on the edge of a stone ledge swinging her legs, small horns, small bat wings, a thin tail, a mocking grin with her tongue out, one hand cupped by her mouth as if jeering. Red and black outfit. The ledge is a small block under her only.
+
+
+######## ワルドー（悪の組織）
+
+===== waldo_grunt（ワルドー戦闘員）[人]
+Subject: an evil organization grunt in a full-body black bodysuit and a black full-face mask with a pink visor stripe, a small purple diamond emblem on the chest, standing with hands ready to grab. Plain, faceless henchman. Adult man.
+
+===== waldo_officer（ワルドー幹部）[人]
+Subject: an evil organization officer in a dark uniform with a tall peaked cap and a long wine-red cape with a purple diamond emblem, a smug smile, one palm raised emitting purple hypnotic swirl rings. Adult man.
+
+===== drone_capture（捕縛ドローン）[機]
+Subject: a floating spherical drone with one cyan camera eye and four short launcher tubes around it, thin metal wires coiling out of the tubes.
+
+===== drone_tickle（くすぐり機ドローン）[機]
+Subject: a floating spherical drone with one pink camera eye and two thin jointed arms ending in a fluffy pink feather brush and a soft round paintbrush.
+
+===== drone_camera（記録ドローン）[機]
+Subject: a floating spherical drone with one big camera lens and a blinking red recording lamp on top, small antenna.
+
+===== karte（性感開発機〈カルテ〉）[機]
+Subject: a boxy white medical examination machine on short legs with a big blue round lens on its head and two long multi-jointed metal arms with soft padded tips, a small chart screen on its chest. Clean clinical look.
+
+
+######## 教団
+
+===== shinja（信者）[人]
+Subject: a cult believer in a plain white hooded robe with a gold trim line, face shadowed under the hood with only two small glowing eyes, hands pressed together in prayer. Adult.
+
+===== sekkyoushi（説教師）[人]
+Subject: a senior cult preacher in a white and lilac hooded robe, holding an open book, face shadowed under the hood with a calm gentle smile, small pink sound waves floating from the mouth. Adult.
+
+===== chuushutsu（抽出師）[人]
+Subject: a cult alchemist in a white hooded robe with pale blue trim, holding a large glass dropper with a glowing pink drop at the tip, face shadowed under the hood. Adult.
+
+===== kyouso（教祖）[人]
+Subject: the cult leader, a heavy-set middle-aged man with a round face and thin smile, wearing a lavish cream and gold robe with a high collar, sitting on a red cushioned throne-seat, a faint halo-like ring of light behind him. Adult man.

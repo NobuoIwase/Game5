@@ -1,0 +1,25 @@
+あなた（手元の Claude Code）は、GitHub リポジトリ NobuoIwase/Game5 の newgame/ の絵を、前回（課題A・B、PR #112・#113）に続けて Grok の画像生成で作り直します。
+Grok はブラウザ（grok.com、ユーザーがログイン済み）で操作します。今回は課題C（魔物38種）と課題D（罠66種）です。
+
+1. main を最新にする（git checkout main && git pull）。前回の作業ブランチは使わない。
+2. newgame/GROK_TASKS.md を全部読み直す（課題C・課題D の章が増えている）。newgame/README.md の「作業の約束」と NG リストも読む。どちらも必ず守る。
+   特に：実在の虫に似せない（脚・触角・複眼・殻の体節を描かない）／卵に見える物を描かない（白繭に注意）／幽霊に見せない（漂い霊は鬼火）／
+   罠の上に人を描かない・文字を描かない／魔物のピンク寄りの配色は直さない／docs/ の中身をプロンプトや絵に写さない／ゲームの文章は書き換えない／
+   Grok の元画像はリポジトリに入れない（~/grok_raw/ に置く）。
+3. Grok は前回と同じく「品質」モード・正方形。STYLE は前回あなたが作者と決めた「スーパーファミコンの RPG のマップチップ風」を、プロンプトの中にもう書いてある。
+4. 作業前に、リポジトリ直下で node newgame/tools/fingerprint.js 40 1 と 40 2 を実行し、1行目を控える。
+5. 課題C（魔物38種）：main から grok/monster-art-2 を切る。
+   newgame/grok_prompts/C_monsters.txt のブロックを1つずつ貼り、選んで ~/grok_raw/C/ に保存。grok_fit.py sprite ... --pixel 2 で assets/monsters/<id>.png にし、
+   data.js の art と、render.js の FIG（人の大きさの12種）を GROK_TASKS.md の手順どおりに直す。
+   ミミックは開いた姿1つだけ。小淫魔6種は、前回の歌う・手懐ける小淫魔と並べて浮かないように。
+   確認（fingerprint 2本・check.js・play.js を幅390と1280で）を実行し、出力と見本・潜行画面のスクリーンショットを添えて PR を作る。マージはしない。
+6. 課題D（罠66種）：課題C の PR を出してから、main から grok/trap-art を切る。
+   newgame/grok_prompts/D_traps.txt のブロックで作り、grok_fit.py sprite ... --pixel 2 で assets/traps/<id>.png にし、data.js の G.TRAPS の該当の罠に art: "<id>.png" を足す。
+   元の SVG は消さない。一覧（assets/index.html）の罠の欄の作業前・作業後と、潜行画面のスクリーンショット、tools/rooms.js・fingerprint・check.js・play.js の出力を添えて PR を作る。マージはしない。
+7. Grok が断った・ぼかした時は、言い回しを穏やかにして作り直す。押し通さない。3回やってもだめな物は飛ばし、元の SVG のまま残して PR に書く。
+   出来が元の SVG より明らかに悪い物も、差し替えずに PR に書く。
+   ログイン・年齢確認・課金など、本人の操作が要る画面が出たら、そこで止めてユーザーに頼む。
+8. コミットや PR にモデル名を書かない。実行していない確認を「確認済み」と書かない。画面写真は前回と同じく、マージしないブランチ grok/pr-shots に置いてよい。
+9. 最後に、作った PR の URL、差し替えた物・見送った物・言い回しを変えたプロンプトを日本語で報告する。
+
+Grok に貼るのは C が38ブロック、D が66ブロック。D は数が多いので、20種ごとくらいにユーザーへ途中経過を伝える。

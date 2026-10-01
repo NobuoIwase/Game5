@@ -48,5 +48,5 @@ fetch('monsters/roster.json').then(r=>r.json()).then(({monsters})=>{const box=do
   for(const m of monsters.filter(m=>m.type===t))row.insertAdjacentHTML('beforeend',`<div class="c"><img src="monsters/${m.file||m.id+'.'+(m.art==='game4'?'png':'svg')}" alt=""${m.tint?` style="filter:hue-rotate(${m.tint}deg) saturate(1.2)"`:''}><b>${m.name}</b><small>${m.from}・${{game4:'Game4の絵',new:'新規',game5:'Game5の絵'}[m.art]}</small></div>`)}});
 const tb=document.getElementById('trap');
 for(const t of ['惑','蕩','絡','削']){const h=document.createElement('h2');h.innerHTML=`<span class="t ${t}">${t}</span>`;tb.append(h);const row=document.createElement('div');row.className='row';tb.append(row);
- for(const [k,d] of Object.entries(G.TRAPS).filter(([k,d])=>d.type===t))row.insertAdjacentHTML('beforeend',`<div class="c"><img src="traps/${k}.${k==='web'||k==='tower'?'png':'svg'}" alt=""><b>${d.name}</b><small>${k==='web'||k==='tower'?'Game4の絵':'新規'}</small></div>`)}
+ for(const [k,d] of Object.entries(G.TRAPS).filter(([k,d])=>d.type===t))row.insertAdjacentHTML('beforeend',`<div class="c"><img src="traps/${d.art||k+'.svg'}" alt=""><b>${d.name}</b><small>${k==='web'||k==='tower'?'Game4の絵':'新規'}</small></div>`)}
 </script></body></html>

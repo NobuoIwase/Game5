@@ -19,7 +19,8 @@ var G = (typeof G !== "undefined") ? G : {};
     for (const n of ["dungeon.png", "chest_closed.webp", "chest_open.webp", "stairs_open.webp", "pool.webp"]) img("assets/env/" + n);
   }
   // 罠の絵：淫糸の巣と囁きの塔は Game4 の絵（PNG）、ほかは tools/make_art.py の SVG
-  function trapArt(k) { return "assets/traps/" + k + (k === "web" || k === "tower" ? ".png" : ".svg"); }
+  // 罠の絵：data.js の art（例 "bell.png"）があればそれ、無ければ <id>.svg
+  function trapArt(k) { const d = G.TRAPS[k]; return "assets/traps/" + (d && d.art || k + ".svg"); }
   const TRAP_ICON = { bell: "鈴", mirror: "鏡", decoy: "燭", glue: "粘", vent: "香", urn: "甕", vine: "蔦", rope: "縄", shrine: "祠", basin: "水", pillory: "晒", tease: "焦", belt: "帯",
                       gate: "門", cuffs: "環", bed: "褥", spring: "湯", slime_drop: "落", bud: "蕾", root: "根", cocoon: "繭", ratchet: "枠", altar: "紋", shadow: "影", tower: "塔" };
   const TYPE_COLOR = { "惑": "#b48cff", "蕩": "#ff7fb0", "絡": "#6fc2ff", "削": "#63e0d6" };
@@ -650,5 +651,5 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
 
-  G.Render = { draw, preload, img, TYPE_COLOR, roomPreview, stats };
+  G.Render = { draw, preload, img, TYPE_COLOR, roomPreview, stats, trapArt };
 })();

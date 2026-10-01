@@ -251,7 +251,7 @@ var G = (typeof G !== "undefined") ? G : {};
     altar:   { name: "淫紋の祭壇", type: "蕩", effect: "altar",   radius: 1.3, detect: 0.15, cost: 4, ct: 16, rearm: 40, big: true, desc: "黒い炎が影を引き、祭壇の紋を影伝いに下腹へ写す。踏ん張って押し返そうとするほど、深く焼き付く" },
     shadow:  { name: "影腕の燭",   type: "絡", effect: "shadow",  radius: 1.2, detect: 0.15, cost: 4, ct: 14, rearm: 30, big: true, desc: "四方の燭台が灯り、足元の影から腕が生える。腕は時とともに増え、光弾はすり抜ける" },
     // Game4 の設置物
-    tower:   { name: "囁きの塔",   type: "惑", effect: "tower",   radius: 3.6, detect: 0.5,  cost: 3, ct: 12, rearm: 10, emit: true, desc: "細い石の塔。間をおいて囁きの波を放ち、近くにいる者の頭を痺れさせ、塔の方へ歩かせる" },
+    tower:   { name: "囁きの塔",   type: "惑", art: "tower.png", effect: "tower",   radius: 3.6, detect: 0.5,  cost: 3, ct: 12, rearm: 10, emit: true, desc: "細い石の塔。間をおいて囁きの波を放ち、近くにいる者の頭を痺れさせ、塔の方へ歩かせる" },
     // ---- Game2 の罠をさらに（呪装・幻影・拘束具・機械・放置） ----
     echo_gate: { name: "復唱の門",   type: "惑", effect: "echo",    radius: 1.0, detect: 0.2,  cost: 3, ct: 12, rearm: 30, big: true, desc: "門をくぐるには、刻まれた文句を声に出して読まねばならない。読んだ言葉は、頭の底に鉤を残す" },
     lull_voice:{ name: "微睡の声",   type: "惑", effect: "lull",    radius: 3.0, detect: 0.3,  cost: 3, ct: 12, rearm: 12, emit: true, desc: "どこからか子守唄のような声。聞いているうちに瞼が重くなり、足が遅くなる" },
@@ -277,7 +277,7 @@ var G = (typeof G !== "undefined") ? G : {};
     pod:       { name: "戦闘員化ポッド", type: "惑", effect: "pod",  radius: 1.0, detect: 0.2,  cost: 5, ct: 18, rearm: 40, big: true, desc: "人型のポッド。吸い込んだ者の名前を塗り替え、戦闘員として登録する" },
     capture:   { name: "捕縛アーム", type: "絡", effect: "capture", radius: 1.1, detect: 0.2,  cost: 4, ct: 14, rearm: 30, big: true, desc: "床の紋様から機械の腕。手首・足首・腰を取り、大の字に固定して戦闘員に引き渡す" },
     // ---- Game4 の設置物 ----
-    web:       { name: "淫糸の巣",   type: "絡", effect: "web",     radius: 1.0, detect: 0.3,  cost: 2, ct: 9,  rearm: 16, desc: "床から壁へ張られた糸。触れた四肢を、空いている分だけ全部つなぎ留める" },
+    web:       { name: "淫糸の巣",   type: "絡", art: "web.png", effect: "web",     radius: 1.0, detect: 0.3,  cost: 2, ct: 9,  rearm: 16, desc: "床から壁へ張られた糸。触れた四肢を、空いている分だけ全部つなぎ留める" },
     rune:      { name: "淫紋の敷石", type: "蕩", effect: "rune",    radius: 0.8, detect: 0.2,  cost: 2, ct: 9,  rearm: 20, desc: "踏むと灯る紋の石。灯した分だけ、下腹の紋が濃くなる" },
     // ---- 蟲 ----
     mushi_pit: { name: "蟲溜まり",   type: "蕩", effect: "mushiPit", radius: 0.9, detect: 0.25, cost: 3, ct: 10, rearm: 20, desc: "床の窪みに、細い蟲がかたまって蠢いている。落ちれば、服の中まで入ってくる" },

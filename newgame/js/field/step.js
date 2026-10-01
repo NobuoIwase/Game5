@@ -218,9 +218,15 @@
         beat.acts++; beat.parts[act.part] = (beat.parts[act.part] || 0) + 1;
         crave(w, m.kind, 0.3 * act.pw); { const sv = w.run.save; if (sv) { sv.parts = sv.parts || {}; const pp = sv.parts[m.kind] || (sv.parts[m.kind] = {}); pp[act.part] = (pp[act.part] || 0) + 1; } }
         if (act.watch) { h.arousal = Math.min(100, h.arousal + 5); continue; }
-        if (act.cum && h.futa) { h.cum = (h.cum || 0) + 30 * act.pw * swarm; if (h.cum >= 100) { h.cum -= 85; h.shasei = (h.shasei || 0) + 1; lines.push(G.Text.actMsg("nightShasei", { mon: m.d.name, c: h.shasei })); } continue; }
-        h.pleasure += 26 * act.pw * swarm * (1 + h.arousal / 150); h.arousal = Math.min(100, h.arousal + 6);
-        if (h.pleasure >= 100) { h.pleasure = 25 + U.rf(0, 20); h.climax++; beat.climaxN++; lines.push(G.Text.actMsg("nightClimax", { p: act.p, mon: m.d.name, c: h.climax })); (beat.cx = beat.cx || []).push({ at: lines.length - 1, kind: m.kind, part: act.part, mon: m.d.name }); }
+        // 射精は絶頂と同じ数え方（変生した身体は、達するたびに出す）
+        if (act.cum && h.futa) { h.cum = (h.cum || 0) + 30 * act.pw * swarm; if (h.cum >= 100) h.pleasure = Math.max(h.pleasure, 100); }
+        else { h.pleasure += 26 * act.pw * swarm * (1 + h.arousal / 150); h.arousal = Math.min(100, h.arousal + 6); }
+        if (h.pleasure >= 100) {
+          h.pleasure = 25 + U.rf(0, 20); h.climax++; beat.climaxN++;
+          if (h.futa) { h.cum = 10; h.shasei = (h.shasei || 0) + 1; lines.push(G.Text.actMsg(act.cum ? "nightShasei" : "nightClimaxF", { p: act.p, mon: m.d.name, c: h.climax })); }
+          else lines.push(G.Text.actMsg("nightClimax", { p: act.p, mon: m.d.name, c: h.climax }));
+          (beat.cx = beat.cx || []).push({ at: lines.length - 1, kind: m.kind, part: act.part, mon: m.d.name });
+        }
       }
     }
     beat.climax = beat.climaxN > 0;

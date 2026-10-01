@@ -454,9 +454,8 @@
    "name": "口づけの淫魔",
    "type": "惑",
    "from": "Game2",
-   "art": "game4",
-   "file": "inma.png",
-   "tint": 150
+   "art": "new",
+   "file": "kuchizuke.png"
   }
  ]
 }

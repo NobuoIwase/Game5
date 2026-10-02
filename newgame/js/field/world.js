@@ -21,7 +21,7 @@ var G = (typeof G !== "undefined") ? G : {};
   // 0 抵抗 / 1 綻び / 2 心は拒み、体は応える / 3 待ってしまう
   G.tier = function (body, mind) {
     if (mind >= 50) return 3;
-    if (body >= 50 && mind < body * 0.6) return 2;
+    if (body >= 50) return 2;                 // 体が先に堕ちる。心が追いついても、段階は戻らない
     if (body >= 22) return 1;
     return 0;
   };

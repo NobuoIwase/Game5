@@ -361,9 +361,9 @@
       const mains = GM.MAINS.map(k => `<option value="${k}" ${k === paper.main ? "selected" : ""}>${G.MONSTERS[k].name}（${G.MONSTERS[k].type}）</option>`).join("");
       const btn = (cls, val, cur, label) => `<button class="${cls}" data-v="${val}" style="${val === cur ? "border-color:var(--pink);background:#4a2640" : ""}">${label}</button>`;
       app.innerHTML = topbar() + `<h1>依頼書</h1>
-        <p class="sub">ひかりの希望する依頼。机の上の一枚を選び、中身を書き換えてから渡す。</p>
+        <p class="sub">ひかりの希望する依頼。机の上の一枚を選び、中身を書き換えてから渡す。前金は報酬の半分で、失敗しても返さない。</p>
         <div class="grid2">${S.requests.map((q, i) => `<div class="card paper ${i === sel ? "sel" : ""}" data-i="${i}">
-          <b>${esc(q.title)}</b><div class="sub">${esc(q.place || G.DUNGEONS[q.dungeon].name)}・報酬 ◈${q.reward}（前金 ◈${Math.round(q.reward / 2)}・失敗しても返さない）</div>
+          <b>${esc(q.title)}</b><div class="sub">${esc(q.place || G.DUNGEONS[q.dungeon].name)}・報酬 ◈${q.reward}（前金 ◈${Math.round(q.reward / 2)}）</div>
           <div class="sub">脅威度 ${LV_NAME[q.real.level]}・${SC_NAME[q.real.scale]}（${({ 1: 6, 2: 8, 3: 10 })[q.real.scale]}階）${q.real.boss ? "・長あり" : ""}</div></div>`).join("")}</div>
         <div class="panel">
           <h2 style="margin-top:0">書き換える</h2>
@@ -375,12 +375,12 @@
             ${S.upgrades.swapDest ? `<div>実際の行き先　${Object.keys(G.DUNGEONS).map(k => btn("de", k, de, G.DUNGEONS[k].name)).join(" ")}</div>` : ""}
           </div>
           <div class="paper-preview"><div class="sub">ひかりに渡す依頼書</div><b>${esc(title)}</b>
-            <div class="sub">${G.DUNGEONS[de].name}（実際）・書いた系統 ${tag(stType)}</div></div>
+            <div class="sub">${de === r.dungeon ? esc(r.place || G.DUNGEONS[de].name) + "（" + G.DUNGEONS[de].name + "）" : G.DUNGEONS[de].name + "（実際の行き先）"}・書いた系統 ${tag(stType)}</div></div>
           <p class="sub">ひかりは<b>${P.name}</b>を用意してくる（${esc(P.note)}）。持ち物は${kitTxt}。${stType === "惑" ? "気付け薬を多めに。" : stType === "蕩" ? "熱冷ましを買い込む。" : "縄抜けの小刀を忍ばせる。"}</p>
           ${size ? `<p class="sub">偽装の大きさ <b style="color:var(--red)">${size}</b>。食い違いを見るほど違和感が積もる（今 ${Math.round(S.suspicion)}/100）。</p>` : `<p class="sub">書き換えていない（正直な依頼書）。</p>`}
           <div class="row"><button class="primary" id="go">この依頼書を渡す</button><button id="reset">元に戻す</button><button id="back">戻る</button></div>
         </div>`;
-      on(".paper", "click", e => { sel = +e.currentTarget.dataset.i; paper = null; dest = null; draw(); });
+      on(".paper", "click", e => { sel = +e.currentTarget.dataset.i; paper = null; dest = null; draw(); if (window.innerWidth < 700) { const pn = document.querySelector(".paper.sel"); const ed = pn && pn.parentNode.nextElementSibling; if (ed && ed.scrollIntoView) ed.scrollIntoView({ behavior: "smooth", block: "start" }); } });   // スマホでは、書き換える欄まで送る
       on("#main", "change", e => { paper.main = e.target.value; draw(); });
       on(".sc", "click", e => { paper.scale = +e.currentTarget.dataset.v; draw(); });
       on(".lv", "click", e => { paper.level = +e.currentTarget.dataset.v; draw(); });
@@ -399,7 +399,7 @@
     if (!p || !p.kit) { S.phase = "guild"; return office(); }
     const P = G.PREP[p.stated], T = G.Text;
     app.innerHTML = topbar() + officeHTML() + `<div class="row hidden" id="hv"><button class="primary" id="go">見送る（潜行へ）</button><button id="deck">デッキを組む</button></div>
-      <p class="sub hidden" id="hvn">行き先：${G.DUNGEONS[p.dungeon].name}（実際）　持ち物：${P.name}、${kitText(p.kit)}（◈${p.kitCost || 0}）</p>`;
+      <p class="sub hidden" id="hvn">行き先：${p.dungeon === p.req.dungeon ? esc(p.req.place) + "（" + G.DUNGEONS[p.dungeon].name + "）" : G.DUNGEONS[p.dungeon].name + "（実際の行き先）"}　持ち物：${P.name}、${kitText(p.kit)}（◈${p.kitCost || 0}）</p>`;
     hikariIn();
     const lv = p.paper.level, readKey = p.paper.boss ? "read.boss" : lv === 1 ? "read.easy" : lv === 3 ? "read.hard" : "read.normal";
     const ctx = { title: p.title, mon: G.MONSTERS[p.paper.main].name, prep: P.name, type: p.stated };
@@ -554,7 +554,7 @@
     const html = dive.run.deck.map(c => {
       const ci = G.Field.cardInfo(c), ct = w ? (w.dir.ct[c] || 0) : 0;
       const afford = night ? (w.night.spent + ci.d.cost <= G.BAL.nightBudget) : (w.dir.spent + ci.d.cost <= w.dir.cap);
-      return `<button class="cbtn ${dive.card === c ? "sel" : ""}" data-c="${c}" ${afford ? "" : "disabled"}>${cardArt(c)}${esc(ci.d.name)}<div class="cost">コスト${ci.d.cost} ${tag(ci.d.type)}</div>${ct > 0 && !night ? `<div class="ct">${Math.ceil(ct)}</div>` : ""}</button>`;
+      return `<button class="cbtn ${dive.card === c ? "sel" : ""}" data-c="${c}" ${afford ? "" : "disabled"}>${cardArt(c)}${esc(ci.d.name)}<div class="cost">コスト${ci.d.cost} ${tag(ci.d.type)}</div>${ct > 0 ? `<div class="ct">${night ? "次の場面" : Math.ceil(ct)}</div>` : ""}</button>`;
     }).join("");
     if (soft && box.dataset.h === html) return;
     box.dataset.h = html; box.innerHTML = html;
@@ -577,7 +577,8 @@
     }
     // 溜まりすぎたら、ありふれた行から間引く（決壊・場面は残す）
     const cap = dive.night ? 60 : h.bound || h.pleasure >= 85 ? 9 : 3;           // 解けたあとは、遅れを早めに畳む
-    while (q.length > cap) { const i = q.findIndex(l => !LIVE_KEEP.test(l.cls)); if (i < 0) break; q.splice(i, 1); }
+    // 間引く順：効果音・心の声・目盛り → それでも多ければ、ありふれた行。触れた行（act）は最後まで残す
+    while (q.length > cap) { let i = q.findIndex(l => /sfx|gauge|mind/.test(l.cls) && !LIVE_KEEP.test(l.cls)); if (i < 0) i = q.findIndex(l => !LIVE_KEEP.test(l.cls) && !/\bact\b/.test(l.cls)); if (i < 0) i = q.findIndex(l => !LIVE_KEEP.test(l.cls)); if (i < 0) break; q.splice(i, 1); }
     if (q.length && (dive.lskip || now >= (dive.lnext || 0)) && !(dive.paused && !dive.lskip)) {
       const n = dive.lskip ? q.length : 1;
       for (let i = 0; i < n; i++) liveLine(q.shift(), now);
@@ -601,7 +602,7 @@
     fig.classList.toggle("cx", now < (dive.cxUntil || 0));
     fig.classList.toggle("naked", !!(h.exposure || h.torn));
     fig.classList.toggle("after", w.t - (h.lastClimaxT ?? -99) < 6 && now >= (dive.cxUntil || 0));
-    document.getElementById("lvg").style.height = Math.min(100, h.pleasure).toFixed(0) + "%";
+    document.getElementById("lvg").style.height = Math.min(100, h.futa ? Math.max(h.pleasure, h.cum || 0) : h.pleasure).toFixed(0) + "%";   // 変生中は、射精感も同じ目盛りで
     const cn = document.getElementById("lvc"), ct = h.climax ? `絶頂 ${h.climax}` : ""; if (cn.textContent !== ct) cn.textContent = ct;
     // 掴んでいる／群がっている相手を、立ち絵の後ろに
     const hold = dive.night ? (dive.nightHold || []).slice() : [];
@@ -919,7 +920,7 @@
     const O = { cleared: "踏破", retreat: "撤退", ordered: "勧告", defeat: "敗北" };
     app.innerHTML = topbar() + `<h1>これまでの記録</h1><div class="panel">${S.history.slice().reverse().map(h => `<div class="doc-line fixed"><span>${h.day}日目</span><span>${G.DUNGEONS[h.dungeon].name}・${O[h.outcome]}（${h.floor}階）　依頼書 ${tag(h.stated)}${h.forged ? " 偽装" : ""}　絶頂 ${h.climax}　${esc(h.posture || "")}</span></div>`).join("") || "<p class='sub'>まだ無い</p>"}</div>
       ${S.log.length ? `<div class="panel sub">${S.log.slice(-10).map(l => `${l.day}日目：${esc(l.text)}`).join("<br>")}</div>` : ""}
-      <div class="row"><button id="back">戻る</button><button id="reset" class="danger">セーブを消す</button></div>`;
+      <div class="row"><button id="back">戻る</button><button id="reset" class="danger" style="margin-left:auto;opacity:0.8">セーブを消す</button></div>`;
     on("#back", "click", guild);
     on("#reset", "click", () => { if (!confirm("セーブを消して最初から始めますか？")) return; try { localStorage.removeItem(KEY); } catch (e) { } S = null; title(); });
   }

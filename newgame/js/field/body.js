@@ -98,7 +98,7 @@
     const h = w.run.h;
     if (!h.futa || w.outcome) return;
     h.cum = (h.cum || 0) + n * intake(w, src);
-    if (h.ring && h.cum >= 95) { h.ring.over += h.cum - 94; h.cum = 94; if (w.t - (h.ringT ?? -99) > 5) { h.ringT = w.t; msg(w, "ringFull", {}); say(w, "ringFull", {}); record(w, { kind: "edge", type: "蕩", sev: 2, monName: "締環" }); } return; }
+    if (h.ring && h.cum >= 95) { const ov = h.cum - 94; h.ring.over += ov; h.cum = 94; urgeUp(w, 2 + ov * 0.35, src); if (w.t - (h.ringT ?? -99) > 14) { h.ringT = w.t; msg(w, "ringFull", {}); say(w, "ringFull", {}); record(w, { kind: "edge", type: "蕩", sev: 2, monName: "締環" }); } return; }
     if (h.tipTease > 0 && h.cum >= 92) { h.cum = 92; return; }          // 先だけ撫でられている間は、行き着かない
     if (h.cum >= 100) {                             // 射精は絶頂と同じ。溜まりきったら、身体ごと果てる
       h.cum = 100; h.pleasure = Math.max(h.pleasure, 100);
@@ -142,7 +142,7 @@
   // 祈り（教団）：教祖に惹かれた身体が、腰を揺らして祈ってしまう。祈りは魔力を吸い、甘い
   function pray(w, src, t) {
     const h = w.run.h;
-    if (w.t < (h.prayNext ?? -99)) return;          // 祈り終えてしばらくは、また祈らされない
+    if (w.t < (h.prayNext ?? -99) || h.floorT > 150) return;          // 祈り終えてしばらくは、また祈らされない（長く同じ階にいると、振り切る）
     h.prayNext = w.t + t + 10;
     h.pray = t; h.intent = null;
     h.pleasure += 8 * intake(w, src); drainMagic(w, 3, src);
@@ -309,7 +309,7 @@
     // 欲求：止められたまま限界の近くにいると募り、気力を削る。止めるものが無くなれば、ゆっくり引く
     {
       const blocked = cumBlocked(w) || (capped(w) && h.pleasure >= 85);
-      if (blocked && h.pleasure >= 80) urgeUp(w, 2.6 * dt, null);
+      if (blocked && (h.pleasure >= 80 || (h.futa && (h.cum || 0) >= 90))) urgeUp(w, 2.6 * dt, null);   // 変生中は、射精感が張りつめていても
       else if (h.urge > 0) h.urge = Math.max(0, h.urge - (blocked ? 0 : 1.2) * dt);
       if (h.urge > 0) {
         h.will = Math.max(0, h.will - h.urge * 0.006 * dt);

@@ -97,7 +97,7 @@ var G = (typeof G !== "undefined") ? G : {};
       tentacleRoom(cx, r, t, S, Xl, Yl, [r.x - 1, r.y - 1, r.x + r.w + 1, r.y + r.h + 1], tile, target);
       c.S = S; c.t = t; c.key = key;
     }
-    ctx.drawImage(c.cv, X(r.x - pad), Y(r.y - pad));
+    if (c.cv.width > 0 && c.cv.height > 0) ctx.drawImage(c.cv, X(r.x - pad), Y(r.y - pad));   // 画面が畳まれた瞬間（幅0）は描かない
   }
   function tentacleRoom(ctx, r, t, S, X, Y, bounds, tile, target0) {
     const target = target0 && { x: X(target0.x) / S, y: Y(target0.y) / S };
@@ -404,7 +404,7 @@ var G = (typeof G !== "undefined") ? G : {};
     for (const d of dec) if (d.light) hole(X(d.x), Y(d.y) - S * 0.4, S * d.light * (1 + Math.sin(now * 7 + d.x) * 0.05), 0.85);
     hole(X(map.down.x), Y(map.down.y), S * 1.6, 0.7);
     for (const p of w.projs) hole(X(p.x), Y(p.y), S * 1.2, 0.6);
-    ctx.drawImage(lightCv, 0, 0);
+    if (lightCv.width > 0 && lightCv.height > 0) ctx.drawImage(lightCv, 0, 0);
     // たいまつの暖かい色
     ctx.globalCompositeOperation = "lighter";
     for (const d of dec) if (d.kind === "torch") { const g = ctx.createRadialGradient(X(d.x), Y(d.y) - S * 0.5, 0, X(d.x), Y(d.y) - S * 0.5, S * 2.2); g.addColorStop(0, "rgba(255,160,70,0.22)"); g.addColorStop(1, "rgba(255,160,70,0)"); ctx.fillStyle = g; ctx.fillRect(X(d.x) - S * 2.2, Y(d.y) - S * 2.7, S * 4.4, S * 4.4); }
@@ -420,6 +420,18 @@ var G = (typeof G !== "undefined") ? G : {};
     // 吹き出しは明かりの上に
     if (h.bubble && !ui.night && !ui.liveSay) drawBubble(ctx, h, X(h.x), Y(h.y), S);   // 実況中は、立ち絵の吹き出しで
     if (h.bound && !ui.night) drawCapture(ctx, w, cv);
+    // カードを選んでいる間は、置けるマスを薄く緑で示す（タッチでは見当がつかないので）。0.4秒ごとに数え直す
+    if (ui.card) {
+      const key = ui.card + ":" + (ui.night ? 1 : 0), c = w._placeOk;
+      if (!c || c.key !== key || w.t - c.t > 0.4 || w.t < c.t) {
+        const ok = [];
+        for (let ty = y0; ty < y1; ty++) for (let tx = x0; tx < x1; tx++) if (map.t[ty * map.W + tx] !== 1 && G.Field.canPlace(w, ui.card, tx + 0.5, ty + 0.5, ui.night) === "ok") ok.push(tx, ty);
+        w._placeOk = { key, t: w.t, ok };
+      }
+      const ok = w._placeOk.ok;
+      ctx.fillStyle = "rgba(120,255,160,0.16)"; ctx.strokeStyle = "rgba(120,255,160,0.35)"; ctx.lineWidth = 1;
+      for (let i = 0; i < ok.length; i += 2) { const px = X(ok[i]), py = Y(ok[i + 1]); ctx.fillRect(px + 2, py + 2, S - 4, S - 4); }
+    }
     // 置き場所の見本
     if (ui.hover && ui.card) {
       const cx = X(Math.floor(ui.hover.x) + 0.5), cy = Y(Math.floor(ui.hover.y) + 0.5);

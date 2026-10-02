@@ -200,7 +200,9 @@
     h.slow = Math.max(h.slow, 0.3 + room.fill * 0.8);
     h.arousal = Math.min(100, h.arousal + 1.4 * room.fill * mult(w, "蕩") * dt);
     const b = h.bound;
+    if (F.held && !(b && orb && b.src === orb)) { F.held = false; F.grabT = Math.max(F.grabT, w.t + 3.2); }   // 振りほどいた直後は、殻が開く隙に玉を狙える
     if (b && orb && b.src === orb) {
+      F.held = true;
       b.stage = Math.max(b.stage, st >= 3 ? 2 : st >= 2 ? 1 : 0);
       const open = orbOpen(w, orb);                 // 殻が開く間は、触手の力もゆるむ（もがいて抜ける隙）
       b.power = open ? Math.min(b.power, 0.3 + room.fill * 0.4) : Math.max(b.power, 0.4 + room.fill * 0.7);

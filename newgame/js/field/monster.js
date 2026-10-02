@@ -270,7 +270,7 @@
       if (m.breathT > 1.4) {
         m.breathT = 0;
         applyEffect(w, "蕩", A.breath.power * m.pow, m);
-        if (h.arousal >= 50 && !h.drawn && dist > (A.range || 1) && U.chance(0.35)) {
+        if (h.arousal >= 50 && !h.drawn && !(h.floorT > 150) && dist > (A.range || 1) && U.chance(0.35)) {
           h.drawn = { x: m.x, y: m.y, t: 1.8, mon: m.d.name };
           record(w, { kind: "drawn", type: "蕩", mon: m.kind, monName: d.name, sev: 1 });
           msg(w, "drawn", { mon: d.name }, 4); say(w, "drawn", { mon: d.name, kind: m.kind });

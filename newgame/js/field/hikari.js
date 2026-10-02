@@ -474,6 +474,11 @@
           h.walled = h.walled || {}; h.walled[m.id] = w.t + 6; return;
         }
         if (saving && !reachy && h.cdMelee <= 0.3 && d < 4.5 && goToward(w, m.x, m.y, 1.1, "踏み込む", m)) return;
+        // 動かない相手を、魔力を惜しんで遠くから見ているだけ——にはしない。撃てるなら撃ち、撃てないなら置いて先へ
+        if (!m.d.spd) {
+          if (h.mp >= S.shot.cost && h.cdShot <= 0) { tryCast(w, m, "shot"); if (h.cast || h.think > 0) return; }
+          if (h.cdShot > 0.4 || h.mp < S.shot.cost) { h.walled = h.walled || {}; h.walled[m.id] = w.t + 8; return; }
+        }
         // 撃てない間は、足を止めて見据える。相手が寄ってくる時だけ、一歩ずつ下がる
         if (d < 3.4 && m.d.spd > 0) { const a = U.angle(m.x, m.y, h.x, h.y); setIntent(h, Math.cos(a), Math.sin(a), 0.5, "間合い", m); }
         else { h.intent = null; h.label = "構え"; h.face = { x: m.x, y: m.y, t: 0.4 }; }
@@ -511,7 +516,7 @@
     const box = w.traps.find(tr => ["toybox", "suit", "maseki", "seisui", "keiyaku", "feather_bed"].includes(tr.kind) && tr.armed && map.seen[Math.floor(tr.y) * map.W + Math.floor(tr.x)]);
     const tgtChest = mimic || chest || box;
     // 中毒：茸を見ると寄っていってしまう／魅了Ⅱ以上：その種の方へ
-    if (!h.drawn && U.chance(0.04)) {
+    if (!h.drawn && !(h.floorT > 150) && U.chance(0.04)) {
       const pull = w.monsters.find(m => m.hp > 0 && h.known[m.id] && ((h.addict && ["sekitake", "lure_cap", "dakitake"].includes(m.kind)) || (h.charm && (h.charm[m.kind] || 0) >= 2)));
       if (pull) { h.drawn = { x: pull.x, y: pull.y, t: 2.2, mon: pull.d.name }; record(w, { kind: "drawn", type: "蕩", mon: pull.kind, monName: pull.d.name, sev: 1 }); msg(w, "drawn", { mon: pull.d.name }); say(w, h.addict ? "addictPull" : "charmPull", { mon: pull.d.name }); }
     }

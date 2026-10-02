@@ -277,7 +277,7 @@
     app.innerHTML = topbar() + officeHTML() + `
       <div class="panel" id="status">
         <b>星野 ひかり</b> <span class="sub">大学生。本業は魔法少女ルミナ（正体を知るのは監査官だけ）</span>
-        <div class="sub">ルミナ Lv<b>${S.lv}</b>　次まで ${G.GROWTH.xpNeed(S.lv) - S.xp}　技 ${S.equip.length}/${G.GROWTH.slots(S.lv)}（覚えた ${Object.keys(S.skills).length}/${Object.keys(G.SKILLS).length}）</div>
+        <div class="sub">ルミナ Lv<b>${S.lv}</b>　次まで ${G.GROWTH.xpNeed(S.lv) - S.xp}　技 ${S.equip.length}/${G.GROWTH.slots(S.lv)}（覚えた ${Object.keys(S.skills).length}/${Object.keys(G.SKILLS).length}）${S.shards ? `　<span style="color:#ffe7a8">星の欠片 ${S.shards}/${G.SHARD_MAX}（体力+${3 * S.shards}・MP+${2 * S.shards}・気力+${Math.min(15, S.shards)}）</span>` : ""}</div>
         ${meter("肉体", S.body, 100, "#ff7fb0")}${meter("精神", S.mind, 100, "#b48cff")}${meter("信頼", S.trust, 100, "#8fe0a0")}${meter("疲労", S.fatigue, 100, "#f2d27a")}
         <div class="sub">堕ち：${TIER_NAME[tier]} ／ 状態異常：${ail}</div>
         <div class="sub">身についた性癖（通常の処置では抜けない）：${tr}</div>
@@ -741,7 +741,7 @@
     const rec = S.rec;
     if (!rec) { S.phase = "guild"; return guild(); }
     app.innerHTML = topbar() + officeHTML() + `
-      <div class="panel sub" id="rinfo"><b>口頭報告</b>　${esc(rec.dungeonName)}・${rec.floorReached}階まで・${OUTC[rec.outcome]}　今日の話し方：${esc(rec.postureName)}${rec.dirStats && rec.dirStats.placed ? `<br><b style="color:var(--pink)">仕込みの戦果</b>　呼んだ ${rec.dirStats.placed}・捕縛 ${rec.dirStats.holds}・触れた ${rec.dirStats.acts}回・絶頂 ${rec.dirStats.climax}回（本人が何と言うか、聞いてみよう）` : ""}
+      <div class="panel sub" id="rinfo"><b>口頭報告</b>　${esc(rec.dungeonName)}・${rec.floorReached}階まで・${OUTC[rec.outcome]}　今日の話し方：${esc(rec.postureName)}${rec.merit && (rec.merit.body || rec.merit.shards) ? `<br><b style="color:#ffe7a8">ひかりの得たもの</b>　${rec.merit.purified ? `踏破の光で浄化（肉体−${rec.merit.body}・精神−${rec.merit.mind}）` : rec.merit.body ? `深くまで降りて、少し清められた（肉体−${rec.merit.body}）` : ""}${rec.merit.shards ? `${rec.merit.body ? "・" : ""}星の欠片 +${rec.merit.shards}（合計 ${S.shards}：体力+${3 * S.shards}・MP+${2 * S.shards}）` : ""}` : ""}${rec.dirStats && rec.dirStats.placed ? `<br><b style="color:var(--pink)">仕込みの戦果</b>　呼んだ ${rec.dirStats.placed}・捕縛 ${rec.dirStats.holds}・触れた ${rec.dirStats.acts}回・絶頂 ${rec.dirStats.climax}回（本人が何と言うか、聞いてみよう）` : ""}
         <br><span class="dim">話の途中で「追及する」「記録を突きつける」を選べるのは、その件を言い終えた、その時だけ。嘘なら崩れることがある。本当のことなら、中身を言わされる（記録を突きつけると、嘘はほぼ崩れるが、本当だった時はひどく傷つける）。</span></div>
       <div class="row hidden" id="rdone"><button class="primary" id="todoc">報告書を受け取る</button></div>
       <details class="panel" id="trp"><summary>ここまでの話（書き起こし）</summary><div id="tr"></div></details>`;

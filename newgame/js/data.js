@@ -509,7 +509,7 @@ var G = (typeof G !== "undefined") ? G : {};
   G.GROWTH = {
     lvMax: 30,
     xpNeed: lv => Math.round(40 * Math.pow(lv, 1.35)),          // 次のレベルまで
-    hpMax: lv => 145 + Math.min(40, 2 * (lv - 1)),
+    hpMax: lv => 145 + Math.min(40, 2 * (lv - 1)),   // 星の欠片1つにつき、体力+3・MP+2・最初の気力+1（気力は15まで）
     mpMax: lv => 100 + Math.min(30, Math.round(1.5 * (lv - 1))),
     dmg: lv => 1 + Math.min(0.3, 0.02 * (lv - 1)),
     slots: lv => 2 + (lv >= 6 ? 1 : 0) + (lv >= 14 ? 1 : 0),     // 装備できる技の数（最大4）
@@ -531,6 +531,7 @@ var G = (typeof G !== "undefined") ? G : {};
   /* ---- 性癖（Game2・Game4）：行動の積み重ねで身につき、消えない。段階 1〜3 ----
    * count: 数える事柄（game.js の finishDive で数える）／need: 段階ごとの必要数
    * どれも戦力を減らさない（Game4 の考え）：その場面の快感の入りが増え、代わりに同じ責めへの慣れ（振りほどき）も増える */
+  G.SHARD_MAX = 20;   // 星の欠片は20まで
   G.TRAITS = {
     swarmHabit: { name: "群がられ癖",   count: "swarm",   need: [3, 8, 16],  ctx: "swarm",   desc: "何人もの手に一度に触れられると、どこで感じているのか分からなくなる" },
     loser:      { name: "負け癖",       count: "defeat",  need: [2, 4, 7],   ctx: "bound",   desc: "組み伏せられた時、抗うより先に息が抜けるようになった" },

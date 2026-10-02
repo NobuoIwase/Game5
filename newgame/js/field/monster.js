@@ -1,7 +1,7 @@
 /* field/monster.js — field 内部。tools/files.js と index.html の順で読み込む。 */
 (function () {
   "use strict";
-  let U, M, SPREAD, spawnMonster, say, live, msg, fx, monSay, hitDesc, actMsg, actBub, addCloud, record, trait, intake, releaseOverflow, addCharm, addAttach, addCum, addCrack, pray, addBrain, mult, knowledge, applyEffect, drainMagic, possess, grab, release, openScene, move, pathDir, turnTo, flash;
+  let U, M, SPREAD, spawnMonster, say, live, msg, fx, monSay, hitDesc, actMsg, actBub, addCloud, record, trait, intake, releaseOverflow, addCharm, addAttach, addCum, addCrack, pray, addBrain, mult, knowledge, applyEffect, drainMagic, possess, grab, release, openScene, move, pathDir, turnTo, flash, gainShard;
   function hurtMon(w, m, dmg) {
     const before = m.hp;
     dmg *= 1 + 0.15 * knowledge(w, m.kind);           // 弱いところを知っている
@@ -39,6 +39,7 @@
     if (m.summoned) w.dir.live = Math.max(0, w.dir.live - 1);
     if (h.bound && h.bound.by.includes(m.id)) { h.bound.by = h.bound.by.filter(i => i !== m.id); if (!h.bound.by.length) release(w, true); }
     record(w, { kind: "kill", type: m.d.type, mon: m.kind, monName: m.d.name, sev: 0, boss: !!m.boss });
+    if (m.boss) gainShard(w, "boss");                 // 長の身体から、魔石の欠片が零れる
     msg(w, "kill", { mon: m.d.name });
     fx(w, { kind: "pop", x: m.x, y: m.y, color: "#ffe0f0", life: 0.5 });
     if (m.d.atk.burst && U.dist(m.x, m.y, h.x, h.y) < 1.6) applyEffect(w, "蕩", m.d.atk.power, m);
@@ -369,5 +370,5 @@
   /* ================================================================ 罠 */
 
   Object.assign(G.F, { hurtMon, killMon, alertMon, monSees, prefDist, spreadAngle, castingCount, updateMonster, startCast, fire });
-  G.F.bind.push(() => { ({ U, M, SPREAD, spawnMonster, say, live, msg, fx, monSay, hitDesc, actMsg, actBub, addCloud, record, trait, intake, releaseOverflow, addCharm, addAttach, addCum, addCrack, pray, addBrain, mult, knowledge, applyEffect, drainMagic, possess, grab, release, openScene, move, pathDir, turnTo, flash } = G.F); });
+  G.F.bind.push(() => { ({ U, M, SPREAD, spawnMonster, say, live, msg, fx, monSay, hitDesc, actMsg, actBub, addCloud, record, trait, intake, releaseOverflow, addCharm, addAttach, addCum, addCrack, pray, addBrain, mult, knowledge, applyEffect, drainMagic, possess, grab, release, openScene, move, pathDir, turnTo, flash, gainShard } = G.F); });
 })();

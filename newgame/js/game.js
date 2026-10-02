@@ -211,7 +211,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const run = {
       day: s.day, dungeon: p.dungeon, stated: p.stated, realType: G.DUNGEONS[p.dungeon].type, forged: p.forged,
       real: p.real, paper: p.paper, caution: p.caution || 1, forgeSize: p.forgeSize || 0,
-      dungeonName: p.dungeon === p.req.dungeon ? p.req.place : placeName(p.dungeon, null),
+      dungeonName: p.dungeon === p.req.dungeon ? p.req.place + "（" + G.DUNGEONS[p.dungeon].name + "）" : placeName(p.dungeon, null),
       events: [], night: [], deck: deckFor(s, p.dungeon), maxLive: G.BAL.maxLive + s.upgrades.live,
       autoDirector: s.autoDirector, save: s, recall: false, floor: 1, mismatch: 0, floors: FLOORS_BY_SCALE[(p.real && p.real.scale) || 2],
       h: {

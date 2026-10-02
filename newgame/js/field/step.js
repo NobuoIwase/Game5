@@ -116,7 +116,7 @@
     // 魅了は、触れられ続けなければ少しずつ解ける（Game4：一段26秒）
     if (h.charm) for (const k in h.charm) if (h.charm[k] > 0 && w.t - (h.charmT[k] ?? -99) > 26) { h.charm[k]--; h.charmT[k] = w.t; if (!h.charm[k]) msg(w, "charmFade", { mon: G.MONSTERS[k] ? G.MONSTERS[k].name : "" }, 4); }
     // 魅了Ⅱ以上：ときどき、好きな種族の方へ、自分から寄っていってしまう（Game4 の発作）
-    if (h.charm && !h.bound && !h.drawn && h.form) {
+    if (h.charm && !h.bound && !h.drawn && h.form && !(h.floorT > 150)) {   // 長く同じ階にいると、正気を振り絞って出口を目指す
       h.driftT = (h.driftT ?? 6.5) - dt;
       if (h.driftT <= 0) {
         h.driftT = 6.5;
@@ -196,24 +196,25 @@
   }
   function nightBeat(w) {
     const h = w.run.h, n = w.night;
+    for (const k in w.dir.ct) w.dir.ct[k] = 0;      // 夜は一場面ごとに、呼び直せる
     const around = w.monsters.filter(m => m.hp > 0 && (U.dist(m.x, m.y, h.x, h.y) < 9 || m.summoned));
     const lewd = around.filter(m => G.Text.actorOf(m.kind));
     const pool = lewd.length ? lewd : around;
     // 一場面に一〜三体。前の場面と同じ顔ぶれは避けぎみに
     const lead = U.pick(pool.filter(x => !n.beats.some(b => b.mon === x.kind && b.i === n.beat - 1))) || U.pick(pool);
     const group = lead ? [lead].concat(U.shuffle(pool.filter(x => x !== lead)).slice(0, U.pick([0, 1, 1, 2]))) : [];
-    const beat = { i: n.beat, mon: lead ? lead.kind : null, monName: lead ? lead.d.name : "", type: lead ? lead.d.type : "蕩", group: group.map(m => m.d.name), acts: 0, climaxN: 0, parts: {} };
+    const beat = { i: n.beat, mon: lead ? lead.kind : null, monName: lead ? lead.d.name : "", type: lead ? lead.d.type : "蕩", group: [...new Set(group.map(m => m.d.name))], acts: 0, climaxN: 0, parts: {} };
     group.forEach((m, i) => { const a = i / Math.max(1, group.length) * Math.PI * 2 + U.rf(0, 1); const nx = h.x + Math.cos(a) * 0.7, ny = h.y + Math.sin(a) * 0.7; if (M.walkable(w.map, nx, ny)) { m.x = nx; m.y = ny; } });
     const scene = G.Text.nightParts(beat, { run: w.run, h, n: n.beat, total: G.BAL.nightBeats });
     const lines = scene.head.slice();
     for (const m of w.monsters) m.bubble = null;
-    for (const m of group) { const v = G.Text.voice(m.kind, U.chance(0.5) ? "act" : "climax"); if (v && U.chance(0.7)) { lines.push(`${m.d.name}「${v}」`); m.bubble = { text: v, t: 99 }; } }
+    for (const m of group) { const v = G.Text.voice(m.kind, U.chance(0.5) ? "act" : "climax"); if (v && U.chance(0.7)) { lines.push(/^「/.test(v) ? `${m.d.name}${v}` : `${m.d.name}「${v}」`); m.bubble = { text: v, t: 99 }; } }
     // 何を、どのくらいされたか（夜はもう、直接）
     const swarm = 1 + 0.2 * (group.length - 1);
     for (const m of group) {
       const cat = actCat(w, m) || "hands";
       for (let k = 0, nk = 1 + (U.chance(0.55) ? 1 : 0); k < nk; k++) {
-        const act = G.Text.actFor(m.kind, cat, U.chance(0.8) ? 2 : 1); if (!act) continue;
+        const act = G.Text.actFor(m.kind, cat, 2); if (!act) continue;   // 夜はもう、直接
         lines.push(G.Text.fillAct(act, { mon: m.d.name, n: "ひかり" }) + "。" + (act.fx ? "《" + act.fx + "》" : ""));
         beat.acts++; beat.parts[act.part] = (beat.parts[act.part] || 0) + 1;
         crave(w, m.kind, 0.3 * act.pw); { const sv = w.run.save; if (sv) { sv.parts = sv.parts || {}; const pp = sv.parts[m.kind] || (sv.parts[m.kind] = {}); pp[act.part] = (pp[act.part] || 0) + 1; } }

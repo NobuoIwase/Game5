@@ -142,7 +142,7 @@
   // 祈り（教団）：教祖に惹かれた身体が、腰を揺らして祈ってしまう。祈りは魔力を吸い、甘い
   function pray(w, src, t) {
     const h = w.run.h;
-    if (w.t < (h.prayNext ?? -99)) return;          // 祈り終えてしばらくは、また祈らされない
+    if (w.t < (h.prayNext ?? -99) || h.floorT > 150) return;          // 祈り終えてしばらくは、また祈らされない（長く同じ階にいると、振り切る）
     h.prayNext = w.t + t + 10;
     h.pray = t; h.intent = null;
     h.pleasure += 8 * intake(w, src); drainMagic(w, 3, src);

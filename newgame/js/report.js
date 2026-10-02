@@ -21,7 +21,7 @@ var G = (typeof G !== "undefined") ? G : {};
               "{mon}に巻きつかれて、身動きが取れなくなりました", "{mon}に吊り上げられました", "{mon}に押さえ込まれました",
               "{mon}に足を取られて、そのまま捕まりました", "{mon}に腕ごと締め上げられました", "{mon}に絡まれて、しばらく抜けられませんでした", "{mon}に宙づりにされました",
               "{mon}に後ろから捕まえられました", "{mon}に手首を取られて、壁に押しつけられました"],
-    hold_蕩: ["{mon}に包み込まれて、抜け出せなくなりました", "{mon}に呑まれかけました", "{mon}の中に閉じ込められて、体がずっと熱くて",
+    hold_蕩: ["{mon}に包み込まれて、抜け出せなくなりました", "{mon}に呑まれかけました", "{mon}に捕まったまま、体がずっと熱くて",
               "{mon}に覆いかぶさられて、べたべたにされました", "{mon}に抱え込まれて、甘い匂いで頭がくらくらしました"],
     trap_絡: ["{trap}に足を取られて、縛られました", "{trap}に引っかかって、腕ごと絡め取られました", "{trap}で、足首から動けなくなりました"],
     trap_蕩: ["{trap}で、変な匂いのするものを浴びました", "{trap}に掛かって、体が火照りました", "{trap}のせいで、足元がべたべたで"],
@@ -52,7 +52,7 @@ var G = (typeof G !== "undefined") ? G : {};
     addict: ["{mon}の粉を、……吸っちゃって。今も、ちょっと、また吸いたいっていうか……違います", "咳き茸、です。……あの粉は、危ないです。危ない、です"],
     // ---- 蟲・変生・教団・淫魔 ----
     futaOn: ["……神殿に入ったら、……その。生えました。……何が、とは、言わせないでください", "身体が、……変わりました。神殿の、せいで。……下の、ほうが"],
-    urge: ["……いけないまま、ずっと、止められてて。……おかしく、なりそうでした", "……いかせて、って、……言っちゃいました。誰もいないのに", "……出したくて、出せなくて。……腰、ずっと、動いてました"],
+    urge: ["……いけないまま、ずっと、止められてて。……おかしく、なりそうでした", "……いかせて、って、……言っちゃいました。誰もいないのに", "……あと少し、のところで、ずっと。……腰、ずっと、動いてました"],
     shasei: ["……出ました。{n}回。……何が、とは、聞かないでください", "……{n}回、出しちゃいました。……止め方が、分からなくて", "出……ました。……{n}回です。数えてたので、間違いないです"],
     tipTease: ["{mon}に、……先だけ、ずっと。……最後まで、行かせてもらえなくて", "{mon}が、先っぽだけ撫でて。……根元は、一回も"],
     ringRelease: ["輪っかを嵌められてて。……出口で外れた瞬間、……{n}回、まとめて", "締環、です。……溜まってた分が、帰った時に、全部"],
@@ -205,7 +205,7 @@ var G = (typeof G !== "undefined") ? G : {};
     charm: "{mon}への魅了", attach: "付着体「{mon}」", release: "溜められた絶頂の一斉解放", beg: "{mon}への懇願", rescue: "洗脳の未遂", convert: "戦闘員化",
     sniff: "{mon}の臭いの吸引", salute: "{mon}への『敬礼』", fit: "原因不明の発作", deny: "{mon}による絶頂の禁止", vow: "誓約による絶頂の禁止", freeze: "{mon}による時間停止",
     exposure: "装束の損壊", addict: "{mon}の粉への中毒",
-    futaOn: "変生（雄の形の発現）", urge: "絶頂（射精）を止められた状態での強い欲求", shasei: "射精 {n}回", tipTease: "{mon}による先端のみの刺激", ringRelease: "締環の解除と一斉射精", futaFixed: "変生の定着",
+    futaOn: "変生（雄の形の発現）", urge: "絶頂を止められた状態での強い欲求", shasei: "射精 {n}回", tipTease: "{mon}による先端のみの刺激", ringRelease: "締環の解除と一斉射精", futaFixed: "変生の定着",
     crack: "{mon}による心の防護壁の損傷", pray: "{mon}への祈り", broadcast: "{mon}による中継", countGame: "{mon}との数え歌", kiss: "{mon}との口づけ",
     swell: "{mon}による肥大化", miniClimax: "罠「{trap}」による閾下の絶頂", mock: "{mon}による罵倒", anticipate: "{mon}の視認による発情（身体の記憶）",
   };
@@ -596,6 +596,8 @@ var G = (typeof G !== "undefined") ? G : {};
     // 一件ずつ
     const lies = {};
     for (const u of rec.units) u.truth = decideLie(u, s, rec);
+    // 同じ階・同じ相手の件を、片方は打ち明け、片方は嘘でごまかす——では話が噛み合わない。嘘のほうは、黙って伏せる
+    for (const u of rec.units) if (u.truth === "false" && rec.units.some(o => o !== u && o.truth === "honest" && o.floor === u.floor && (o.mon || o.trap) && (o.mon || o.trap) === (u.mon || u.trap))) u.truth = "missing";
     const ord = order(rec.units.filter(u => u.truth !== "missing"), posture);
     const used = {};
     let stamLeft = posture === "crack" ? 2 : (rec.h.arousal > 55 ? 1 : 0);
@@ -646,7 +648,9 @@ var G = (typeof G !== "undefined") ? G : {};
       }
       // 追及できるのは、その件を言い終えた、その時だけ
       const lastL = lines.slice().reverse().find(l => l.unit === u);
-      if (lastL && u.kind !== "untransform") lastL.probe = true;
+      // 監査官が記録を読み上げ、本人は「はい」と認めただけの件は、追及しようがない
+      const readOut = k === "nod" && tpl.a && !tpl.h2 && !/\{what\}/.test(tpl.h || "");
+      if (lastL && u.kind !== "untransform" && !readOut) lastL.probe = true;
     });
     if (breaks > 0) { const id = U.pick(going); push("h", ongoingLine(mem, day, id)); }
     if (rec.units.rest) push("h", U.fill(freshPick(mem, day, "rest", REST, 3), { n: rec.units.rest }).replace(/。$/, "") + U.pick(REST_TAIL));
@@ -793,7 +797,7 @@ var G = (typeof G !== "undefined") ? G : {};
       fit: ["{floor}階：原因不明の発作（{n}回）。"], deny: ["{floor}階：{mon}に絶頂を止められていた。"], vow: ["{floor}階：誓約の祭壇。階を出るまで達せなかった。出た後のことは、書かない。"],
       freeze: ["{floor}階：{mon}で、身体の時間が止まった。"], exposure: ["{floor}階：装束損壊。替えを申請。"], addict: ["{floor}階：{mon}の粉を吸った。依存性あり。"],
       futaOn: ["{floor}階：神殿の作用で、身体が変化（雄の形）。", "{floor}階：変生。……形の詳細は、別紙で。"],
-      urge: ["{floor}階：絶頂（射精）を止められ、強い欲求状態に。", "{floor}階：解放されないまま欲求が限界に達し、懇願の発話あり。"], shasei: ["{floor}階：射精（{n}回）。", "{floor}階：変生した部位から、{n}回。"], tipTease: ["{floor}階：{mon}に先端だけを刺激され続けた。一度も出せなかった。"],
+      urge: ["{floor}階：絶頂を止められ、強い欲求状態に。", "{floor}階：解放されないまま欲求が限界に達し、懇願の発話あり。"], shasei: ["{floor}階：射精（{n}回）。", "{floor}階：変生した部位から、{n}回。"], tipTease: ["{floor}階：{mon}に先端だけを刺激され続けた。一度も出せなかった。"],
       ringRelease: ["{floor}階：締環が外れ、溜まっていた分が一度に出た。"], futaFixed: ["{floor}階：数取りの祭壇、十二升目到達。変生が定着。処置を申請します。"],
       crack: ["{floor}階：{mon}の説法で、精神防壁に損傷。", "{floor}階：{mon}の声を聞き続けた。心のヒビ、処置希望。"],
       pray: ["{floor}階：{mon}に祈った（{n}回）。自分の意思ではない。"], broadcast: ["{floor}階：{mon}に姿を『中継』された。"],
@@ -846,6 +850,8 @@ var G = (typeof G !== "undefined") ? G : {};
         }
       }
     }
+    // 同じ階・同じ相手の件が二つあると、書面の行が一字一句同じになる。見分けられるよう、二つ目からは回数を添える
+    { const seen = {}; for (const l of out) { if (l.fixed) continue; const k = l.text; seen[k] = (seen[k] || 0) + 1; if (seen[k] > 1) l.text = l.text.replace(/。?$/, "（同じ階で" + ["", "", "二度目", "三度目", "四度目"][Math.min(4, seen[k])] + "）。"); } }
     if (rec.outcome === "defeat" && rec.night && rec.night.length) {
       const mons = [...new Set(rec.night.map(b => b.monName).filter(Boolean))];
       const mode = rec.nightTruth || "honest";

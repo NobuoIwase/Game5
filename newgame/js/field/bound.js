@@ -163,6 +163,12 @@
     if (!acts.length) {                                              // 縛られているだけ
       b.idleT = (b.idleT || 0) + dt;
       if (b.idleT > 2 && U.chance(dt * 0.3)) { actMsg(w, "alone", { trap: b.src.d ? b.src.d.name : "" }); if (U.chance(0.5)) actBub(w, "alone"); }
+      // 縛られて動けない獲物の気配（もがく音・甘い匂い）に、近くの魔物が寄ってくる
+      if (b.idleT > 1.5 && (b.lureT = (b.lureT || 0) + dt) > 2) {
+        b.lureT = 0; let n = 0;
+        for (const m of w.monsters) if (m.hp > 0 && !m.dormant && !m.alert && G.Text.actorOf(m.kind) && U.dist(m.x, m.y, h.x, h.y) < 10) { alertMon(w, m, 1); m.lastSeenH = { x: h.x, y: h.y }; n++; }
+        if (n && !b.lureSaid) { b.lureSaid = true; actMsg(w, "lureCome", { c: n }); actBub(w, "lureCome"); }
+      }
       return;
     }
     b.actT -= dt;

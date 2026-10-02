@@ -275,7 +275,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const H = run.h, n = k => ev.filter(e => e.kind === k).length;
     if ((H.sens || 0) >= 3) add("sensitive");
     if (H.ache > 0 || ev.some(e => e.trap === "itch")) add("throb");
-    const over = ((H.omazuke || {}).over || 0) + ((H.deny || {}).over || 0) + ((H.kinOver || {}).over || 0);
+    const over = ((H.omazuke || {}).over || 0) + ((H.deny || {}).over || 0) + ((H.kinOver || {}).over || 0) + ((H.urge || 0) >= 40 ? H.urge * 0.8 : 0);   // 出させてもらえないまま帰った欲求も、持ち越す
     if (H.omazuke || over > 20) { add("omazuke"); s.carry.omazuke = Math.round(over + 30); } else if (!s.ailments.some(a => a.id === "omazuke")) s.carry.omazuke = 0;
     if (H.charm && Object.values(H.charm).some(v => v > 0)) { add("charm"); s.ailments.find(a => a.id === "charm").to = Object.assign({}, H.charm); }
     if (H.attach && H.attach.length) { add("attached"); s.carry.attach = H.attach.slice(); s.ailments.find(a => a.id === "attached").list = H.attach.map(id => ((G.ATTACH_NAME || {})[id]) || ({ orb: "震え珠", suit: "纏い衣", hoshibami: "星喰み", sucker: "吸盤", mushi: "潜り蟲", hibiki: "響き蟲", hiru: "肥大化ヒル" })[id] || id); } else s.carry.attach = [];
@@ -286,8 +286,8 @@ var G = (typeof G !== "undefined") ? G : {};
     else if (H.futa && (H.shasei || 0) >= 1) add("futaAfter");
     s.crack = H.crack || 0;
     if (s.crack > 0) { add("crack"); s.ailments.find(a => a.id === "crack").n = s.crack; }
-    const IMPS2 = ["imp", "futago", "inma", "muma_queen", "sakiimp", "jikkyou", "kusuguri", "kazoe", "azakeri", "kuchizuke"];
-    if (ev.filter(e => (e.kind === "charm" || e.kind === "kiss" || e.kind === "beg" || e.kind === "countGame") && IMPS2.includes(e.mon)).length >= 3 || (run.outcome === "defeat" && IMPS2.includes(run.defeatBy))) add("impCurse");
+    const IMPS2 = ["imp", "futago", "inma", "muma_queen", "sakiimp", "jikkyou", "kusuguri", "kazoe", "azakeri", "kuchizuke", "utaimp", "hitomi", "tenazuke"];
+    if (ev.filter(e => (e.kind === "charm" || e.kind === "kiss" || e.kind === "beg" || e.kind === "countGame" || e.kind === "hold") && IMPS2.includes(e.mon)).length >= 3 || (run.outcome === "defeat" && IMPS2.includes(run.defeatBy))) add("impCurse");
     if (H.kissMark) add("kissMark");
     if (H.permit) add("permit");
     if (H.exposure) add("exposure");
@@ -315,7 +315,9 @@ var G = (typeof G !== "undefined") ? G : {};
       pray: n("pray") + n("crack"), kiss: n("kiss"), swarm: ev.filter(e => e.kind === "hold" && (e.n || 1) >= 3).length,
     };
     const gained = [];
-    for (const k in cnt) s.counts[k] = (s.counts[k] || 0) + cnt[k];
+    // 一度の潜行で数えるのは、種類ごとに数回まで（性癖は日を重ねて少しずつ身につく）
+    const CAP = { hold: 2, climax: 2, drain: 2 };
+    for (const k in cnt) s.counts[k] = (s.counts[k] || 0) + Math.min(cnt[k], CAP[k] ?? 1);
     for (const [id, T] of Object.entries(G.TRAITS)) {
       const c = s.counts[T.count] || 0, cur = s.traits[id] || 0;
       let st = 0; for (let i = 0; i < 3; i++) if (c >= T.need[i]) st = i + 1;

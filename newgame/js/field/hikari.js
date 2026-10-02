@@ -105,14 +105,24 @@
     const paper = run.paper || {};
     const odd = m.d.type !== run.stated && m.d.type !== "削";
     if (odd) run.mismatch = (run.mismatch || 0) + 1;
+    // 前にこの相手とあった件を、いつ・どこを、まで覚えている（一回の潜行で、相手ごとに一度・二体まで口にする）
+    const said = run.epSaid || (run.epSaid = {}), ep = run.save && Object.keys(said).length < 2 && G.Game.pastEpisode(run.save, m.kind, run.day);
+    const recall = () => {
+      said[m.kind] = 1;
+      const tier = G.tier(run.save.body, run.save.mind);
+      const key = ep.defeat ? "recallDefeat" : ep.lied && ep.caught ? "recallCaught" : ep.climax >= 2 && U.chance(0.5) ? "recallClimax" : tier >= 3 ? "recallHold3" : tier === 2 ? "recallHold2" : "recallHold";
+      say(w, key, G.Game.epCtx(ep, run.day));
+    };
     // 身体が先に思い出す：以前に気持ちよくされた相手を見ると、熱が上がる
     if (ex > 0.15 && w.t - (h.anticT ?? -99) > 6) {
       h.anticT = w.t;
       h.arousal = Math.min(100, h.arousal + 30 * ex); h.pleasure += 8 * ex;
       record(w, { kind: "anticipate", type: "惑", mon: m.kind, monName: m.d.name, lv: Math.ceil(ex * 3), sev: ex > 0.6 ? 2 : 1 });
-      msg(w, "anticipate", { mon: m.d.name }); say(w, ex > 0.6 ? "anticipate3" : ex > 0.35 ? "anticipate2" : "anticipate1", { mon: m.d.name });
+      msg(w, "anticipate", { mon: m.d.name });
+      if (ep && !said[m.kind]) recall(); else say(w, ex > 0.6 ? "anticipate3" : ex > 0.35 ? "anticipate2" : "anticipate1", { mon: m.d.name });
       return;
     }
+    if (ep && !said[m.kind] && U.chance(0.75)) { recall(); return; }
     if (kn > 0.45 && U.chance(0.5)) { msg(w, "knowIt", { mon: m.d.name }, 4); say(w, "knowIt", { mon: m.d.name, kind: m.kind }); return; }
     if (odd && (run.mismatch === 1 || U.chance(0.25))) { say(w, "mismatch", { mon: m.d.name, stated: run.stated }); return; }
     if (paper.level && run.real && run.real.level > paper.level && !run.strongNoticed && U.chance(0.35)) { run.strongNoticed = true; say(w, "stronger", { mon: m.d.name }); return; }

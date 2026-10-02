@@ -253,6 +253,43 @@ var G = (typeof G !== "undefined") ? G : {};
     return "end";
   }
 
+
+  /* ================================================================ 出来事の記憶（後の日の言い回しに使う） */
+  // 本人が覚えている件だけを、いつ・どこで・誰に・どこを・どう報告したか、まで残す
+  const EP_PART = { "胸": "胸", "胸の先": "胸の先", "脚の間": "脚の間", "秘所": "あそこ", "突起": "クリ", "お尻": "お尻", "内腿": "内腿", "太腿": "太腿", "首筋": "首筋",
+    "耳": "耳", "脇": "脇", "脇腹": "脇腹", "肌": "肌じゅう", "全身": "全身", "胸と秘所": "胸とあそこ", "生えたもの": "生えたの", "先端": "先っぽ", "脚の付け根": "脚の付け根", "胸の横": "胸の横", "足の裏": "足の裏" };
+  function recordEpisodes(s) {
+    const rec = s.rec; if (!rec || rec.epDone) return;
+    rec.epDone = true;
+    const caught = new Set(((rec.audit || {}).caught || []).map(d => d.unit).filter(Boolean));
+    if (!Array.isArray(s.episodes)) s.episodes = [];
+    const L = s.episodes;
+    const seen = new Set();
+    for (const u of (rec.units || []).slice().sort((a, b) => (b.shame || 0) - (a.shame || 0))) {
+      if (u.hidden || u.kind !== "hold" || !u.mon || !G.MONSTERS[u.mon] || seen.has(u.mon)) continue;
+      seen.add(u.mon);
+      const parts = u.acts ? Object.entries(u.acts).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => k) : [];
+      L.push({ day: rec.day, mon: u.mon, monName: u.monName || G.MONSTERS[u.mon].name, place: rec.dungeonName, floor: u.floor, parts, stage: u.stage || 0, climax: u.climax || 0, swarm: u.swarm || 1,
+        lied: u.truth === "false" || u.docTruth === "false", caught: caught.has(u) || !!u.confessed, defeat: false });
+    }
+    // 負けた夜：相手は一体に絞って、朝まで、で覚えている
+    if (rec.outcome === "defeat" && rec.night && rec.night.length) {
+      const by = rec.night.map(b => b.mon).find(k => k && G.MONSTERS[k]);
+      if (by) L.push({ day: rec.day, mon: by, monName: G.MONSTERS[by].name, place: rec.dungeonName, floor: rec.floorReached, parts: [], stage: 2,
+        climax: rec.night.reduce((a, b) => a + (b.climaxN || (b.climax ? 1 : 0)), 0), swarm: 1, lied: rec.nightTruth === "denial", caught: false, defeat: true });
+    }
+    while (L.length > 40) L.shift();
+  }
+  // その相手との、いちばん最近の件（今日より前）
+  function pastEpisode(s, mon, day) {
+    const L = s && Array.isArray(s.episodes) ? s.episodes : [];
+    for (let i = L.length - 1; i >= 0; i--) { const e = L[i]; if (e && e.mon === mon && typeof e.day === "number" && e.day < day && Array.isArray(e.parts) && G.MONSTERS[mon]) return e; }
+    return null;
+  }
+  function agoText(epDay, day) { const d = day - epDay; return d <= 1 ? "昨日" : d === 2 ? "一昨日" : d + "日前"; }
+  function epCtx(ep, day) {
+    return { mon: ep.monName || G.MONSTERS[ep.mon].name, ago: agoText(ep.day, day), place: ep.place || "迷宮", floor: ep.floor, n: ep.climax, parts: ep.parts.map(k => EP_PART[k] || k).join("と、") || "身体じゅう" };
+  }
   /* ================================================================ 帰還後：堕ち・状態異常・リソース */
   function advanceOf(req) { return Math.round(req.reward * [0, 0.3, 0.42, 0.5][(req.real && req.real.scale) || 2]); }
   function finishDive(s, run) {
@@ -456,6 +493,7 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   function endDay(s) {
     if (G.Diary && s.rec && !s.rec.diaryDone) { s.rec.diaryDone = true; G.Diary.write(s); }   // その夜、ひかりは手帳を書く
+    recordEpisodes(s);                                  // 手帳を書いたあとで、今日の件を覚えておく（今日の手帳は、前の件と比べて書く）
     // 残した状態異常は、ギルドの空気を少しずつ澱ませる
     s.taint = U.clamp(s.taint + s.ailments.length * 1.5, 0, 100);
     s.fatigue = U.clamp(s.fatigue - 22, 0, 100);
@@ -507,6 +545,6 @@ var G = (typeof G !== "undefined") ? G : {};
 
   function taintStage(s) { return s.taint >= 100 ? 4 : s.taint >= 70 ? 3 : s.taint >= 42 ? 2 : s.taint >= 18 ? 1 : 0; }
 
-  G.Game = { advanceOf, NATURAL, equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, rest, buy, taintStage };
+  G.Game = { pastEpisode, epCtx, EP_PART, advanceOf, NATURAL, equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, rest, buy, taintStage };
 })();
 if (typeof module !== "undefined") module.exports = G;

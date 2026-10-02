@@ -40,6 +40,17 @@ var G = (typeof G !== "undefined") ? G : {};
     writtenLie: ["口では言えたのに、報告書には書けなかった。ずっと残るって思ったら、手が止まった。"],
     confess: ["追及されて、本当のことを言っちゃった。……言ったら、少しだけ楽になった。"],
     probed: ["『具体的に言え』って。……言わされた。どこを、どうされたか。監査官さんの前で。", "詳しく聞かれた。……答えてる間、ずっと、身体が熱かった。"],
+    // 前にも同じ相手と：日付まで書いて、前と比べる
+    recall: {
+      defeat: ["{ago}、朝までだった{mon}。……また、あいつ。", "{mon}。{ago}の夜のあいつと、同じ。……今日は、朝までじゃなかっただけ、まし。"],
+      caught: ["{ago}は、この{mon}のこと、報告でごまかして、ばれた。今日は、ちゃんと言った。……言えた。", "{mon}のこと、{ago}は嘘ついた。ばれた。……今日は、ごまかさなかった。"],
+      caughtAgain: ["{ago}も{mon}のことで嘘ついて、ばれた。……なのに今日も、全部は書けなかった。", "{mon}のこと、{ago}はばれた。今日も、ごまかした。……懲りてない。"],
+      escalate: ["{ago}の{mon}は、服の上からだった。今日は、中まで。……少しずつ、進んでる。", "{mon}、{ago}より奥まで来た。……慣れてきてるのは、あっち？ それとも、あたし？"],
+      more: ["{mon}に、{ago}は{pn}回。今日は{n}回。……数が、増えてる。", "{ago}は{pn}回で済んだのに。今日は{n}回。……{mon}、あたしのこと、覚えてる。"],
+      same: ["{mon}、{ago}と同じところ、ばっかり。{now}。……狙われてる。", "{ago}と同じ{mon}に、同じ{now}。……身体のほうが、先に覚えた。"],
+      diff: ["{ago}の{mon}は{prev}だった。今日は{now}。……順番に、覚えられてくみたい。", "{mon}。前（{ago}）は{prev}、今日は{now}。……次は、どこなんだろう。……考えない。"],
+      first: ["{mon}は、{ago}にも。{place}の{pf}階だった。……二回目。", "{ago}も{mon}に捕まった。……同じ失敗、二回目。"],
+    },
     anticipate: ["{mon}を見ただけで、身体が熱くなった。……あたし、おかしいのかな。", "{mon}の姿を見た瞬間、お腹の奥がきゅってした。……前のこと、身体が覚えてる。", "また{mon}。……会いたくなかった。……本当に？"],
     night: ["倒れてから朝まで、{mons}に……。何回いったか、途中から数えてない。", "夜のことは、書かない。……{mons}。それだけ。", "一晩じゅう。{mons}が、代わる代わる。……朝の光が、あんなに嬉しかったことはない。"],
     inspire: ["戦ってる最中に『{skill}』を思いついた！ 明日から使う。", "閃いた。『{skill}』。……身体が勝手に動いた感じ。忘れないように、ここに書いとく。"],
@@ -77,6 +88,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const out = [], tier = G.tier(s.body, s.mind);
     out.push(pick(D.open[rec.outcome] || D.open.retreat));
     const units = (rec.units || []).filter(u => !u.hidden).slice().sort((a, b) => b.shame - a.shame).slice(0, 3);
+    const recalled = new Set();          // 前の件と比べるのは、相手ごとに一度・一日に二件まで
     for (const u of units) {
       if (u.kind === "hold") {
         let t = fill(pick(D.hold), { mon: u.monName, floor: u.floor });
@@ -85,6 +97,15 @@ var G = (typeof G !== "undefined") ? G : {};
         if (u.swarm >= 3) t += fill(pick(D.holdSwarm), { n: u.swarm });
         if (u.climax) t += fill(pick(D.holdClimax), { n: u.climax, p: ((u.climaxActs || [])[0] || "触られて").replace(/ /g, "") });
         out.push(t);
+        const ep = !recalled.has(u.mon) && recalled.size < 2 && G.Game.pastEpisode(s, u.mon, rec.day);
+        if (ep) {
+          recalled.add(u.mon);
+          const c = G.Game.epCtx(ep, rec.day), now = u.acts ? Object.entries(u.acts).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => G.Game.EP_PART[k] || k) : [];
+          const prevP = ep.parts.map(k => G.Game.EP_PART[k] || k), same = now.some(p => prevP.includes(p));
+          const liedNow = u.truth === "false" || u.docTruth === "false";
+          const key = ep.defeat ? "defeat" : ep.lied && ep.caught ? (liedNow ? "caughtAgain" : "caught") : (u.stage || 0) >= 2 && ep.stage < 2 ? "escalate" : ep.climax && u.climax > ep.climax ? "more" : !now.length || !prevP.length ? "first" : same ? "same" : "diff";
+          out.push(fill(pick(D.recall[key]), { mon: c.mon, ago: c.ago, place: c.place, pf: ep.floor, prev: c.parts, now: now.join("と、") || "身体じゅう", pn: ep.climax, n: u.climax || 0 }));
+        }
       } else if (u.kind === "trap") out.push(fill(pick(D.trap), { trap: u.trapName }));
       else if (u.kind === "anticipate") out.push(fill(pick(D.anticipate), { mon: u.monName }));
       if (u.confessed) out.push(pick(D.confess));

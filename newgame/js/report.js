@@ -561,6 +561,30 @@ var G = (typeof G !== "undefined") ? G : {};
   }
 
   /* ================================================================ 報告を組み立てる */
+  // 前にも同じ相手とあった件：前と比べて、何が同じで何が違ったかを言う
+  const RECALL = {
+    defeat: ["……{mon}は、{ago}、朝までだった相手です。……また、でした", "……{ago}の夜と、同じ{mon}です。……言わなくても、記録にありますよね"],
+    caught: ["……{ago}みたいに、ごまかしても、ばれるので。……そのまま、言いました", "……{ago}、この{mon}のことで嘘ついて、ばれたので。……今日は、隠しません"],
+    escalate: ["……{ago}は、服の上からだったんです。今日は、……直接、でした", "……{ago}の時より、奥まで、です。……{mon}、慣れてきてるみたいで"],
+    more: ["……{ago}は{pn}回で、今日は{n}回です。……増えてます", "……{ago}も、{mon}に{pn}回。今日は{n}回。……前より、早かった気がします"],
+    same: ["……{ago}と、同じ{mon}です。……前と、同じところ、ばっかり。{now}を", "……{ago}も、{mon}に、{now}を、されてます。……覚えられてる、みたいで"],
+    diff: ["……{ago}も、{mon}でした。前は{prev}で、……今日は、{now}を", "……{ago}の{mon}と、同じ種類です。前は{prev}だったのに、今日は{now}まで"],
+    first: ["……{ago}も、{mon}に捕まってるんです。……{place}の、{pf}階で", "……{mon}は、{ago}にも。……二回目、です"],
+    want: ["……っ、別に、また会いたかったわけじゃ、ないです", "……前のこと、思い出してたわけじゃ、ないです"],
+    aud: ["{ago}の記録と照合する", "{ago}と同じ相手だな。並べて記録する", "前回の件と合わせて、書いておく"],
+  };
+  function recallLine(u, ep, day, mem, tier) {
+    const c = G.Game.epCtx(ep, day);
+    const now = u.acts ? Object.entries(u.acts).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => G.Game.EP_PART[k] || k) : [];
+    const ctx = { mon: c.mon, ago: c.ago, place: c.place, pf: ep.floor, prev: c.parts, now: now.join("と、") || "身体じゅう", pn: ep.climax, n: u.climax || 0 };
+    const same = now.length && ep.parts.length && now.some(p => ep.parts.map(k => G.Game.EP_PART[k] || k).includes(p));
+    const key = ep.defeat ? "defeat" : ep.lied && ep.caught ? "caught" : (u.stage || 0) >= 2 && ep.stage < 2 ? "escalate" : ep.climax && u.climax > ep.climax ? "more"
+      : !now.length || !ep.parts.length ? "first" : same ? "same" : "diff";
+    let t = U.fill(freshPick(mem, day, "recall:" + key, RECALL[key], 2), ctx);
+    if (tier >= 3 && U.chance(0.4)) t += "。" + U.pick(RECALL.want);
+    return { t, a: U.chance(0.4) ? U.fill(U.pick(RECALL.aud), ctx) : null };
+  }
+
   function build(rec, save) {
     const s = save, mem = s.reportMem || (s.reportMem = {}), day = rec.day;
     rec.units = units(rec);
@@ -600,6 +624,7 @@ var G = (typeof G !== "undefined") ? G : {};
     for (const u of rec.units) if (u.truth === "false" && rec.units.some(o => o !== u && o.truth === "honest" && o.floor === u.floor && (o.mon || o.trap) && (o.mon || o.trap) === (u.mon || u.trap))) u.truth = "missing";
     const ord = order(rec.units.filter(u => u.truth !== "missing"), posture);
     const used = {};
+    let recalls = 0;
     let stamLeft = posture === "crack" ? 2 : (rec.h.arousal > 55 ? 1 : 0);
     ord.list.forEach((u, i) => {
       if (i > 0 && breaks > 1 && U.chance(0.35)) { breaks--; const id = U.pick(going); push("h", ongoingLine(mem, day, id)); }
@@ -646,6 +671,9 @@ var G = (typeof G !== "undefined") ? G : {};
         if (tpl.a) push("a", U.fill(tpl.a, fillc));
         if (tpl.h2) push("h", U.fill(tpl.h2, fillc), { unit: u });
       }
+      // 前にも同じ相手と：前と比べた一言（一回の報告で一件だけ）
+      const ep = u.kind === "hold" && recalls < 1 && G.Game.pastEpisode(s, u.mon, day);
+      if (ep && U.chance(0.65)) { recalls++; const r = recallLine(u, ep, day, mem, G.tier(s.body, s.mind)); if (r.a) push("a", r.a); push("h", r.t, { unit: u }); }
       // 追及できるのは、その件を言い終えた、その時だけ
       const lastL = lines.slice().reverse().find(l => l.unit === u);
       // 監査官が記録を読み上げ、本人は「はい」と認めただけの件は、追及しようがない

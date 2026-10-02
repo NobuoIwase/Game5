@@ -37,6 +37,9 @@ var G = (typeof G !== "undefined") ? G : {};
     permit:     { name: "絶頂許可制", note: "淫魔と結んだ契約が生きている。許しをもらうまで達せない。三度ねだると許される", fee: 18, ongoing: true },
     defeatBrand:{ name: "敗北洗脳",   note: "『この相手には勝てない』と刷り込まれた。その種に本気を出せない（深層処置）", fee: 30, kink: true },
   };
+  for (const k in AILMENTS) AILMENTS[k].fee = Math.max(3, Math.round(AILMENTS[k].fee * 0.7));   // 処置は安め
+  // 自分で何とかできる・時間で薄れるもの（一晩で引く）。それ以外は、放っておくと日ごとに重くなる
+  const NATURAL = ["heat", "exposure", "soiled", "paralysis", "throb", "exhaustion"];
   // 状態異常の表示名（魅了は向き先つき）
   function ailmentName(a) {
     const A = AILMENTS[a.id]; if (!A) return a.id;
@@ -44,8 +47,8 @@ var G = (typeof G !== "undefined") ? G : {};
     if (a.id === "attached" && a.list) return A.name + "（" + a.list.join("・") + "）";
     if (a.id === "defeatBrand" && a.to) return A.name + "（" + G.MONSTERS[a.to].name + "）";
     if (a.id === "crack" && a.n) return A.name + "（" + a.n + "）";
-    if (a.id === "swell" && a.n) return A.name + "（" + a.n + "）";
-    return A.name;
+    if (a.id === "swell" && a.n) return A.name + "（" + a.n + "）" + (a.age ? `・${a.age}日放置` : "");
+    return A.name + (a.age ? `（${a.age}日放置）` : "");
   }
 
   const SHOP = {
@@ -132,7 +135,7 @@ var G = (typeof G !== "undefined") ? G : {};
       const real = { main: U.pick(dg.fixed.concat(dg.free.filter(x => G.MONSTERS[x].type !== "削"))), level: U.ri(1, 3), scale: U.ri(1, 3), boss: U.chance(0.35 + s.day * 0.005), verb: U.pick(VERB) };
       if (U.chance(0.25)) real.species = real.main;          // ときどき種族特化
       out.push({ id: s.day + ":" + k, dungeon: k, real, place: placeName(k, real.species), title: requestTitle(real), stated: G.MONSTERS[real.main].type,
-                 reward: 26 + real.level * 8 + real.scale * 4 + (real.boss ? 14 : 0) });
+                 reward: Math.round((26 + real.level * 8 + real.scale * 4 + (real.boss ? 14 : 0)) * [0, 0.6, 0.82, 1][real.scale]) });   // 小さい依頼ほど、報酬は少ない
     }
     return out;
   }
@@ -217,10 +220,10 @@ var G = (typeof G !== "undefined") ? G : {};
       h: {
         lv: s.lv || 1, hpMax: G.GROWTH.hpMax(s.lv || 1) + 3 * (s.shards || 0), mpMax: G.GROWTH.mpMax(s.lv || 1) + 2 * (s.shards || 0), dmgMul: G.GROWTH.dmg(s.lv || 1), skills: (s.equip || []).slice(),
         hp: Math.round((G.GROWTH.hpMax(s.lv || 1) + 3 * (s.shards || 0)) * (1 - s.fatigue / 250)), mp: G.GROWTH.mpMax(s.lv || 1) + 2 * (s.shards || 0), magic: has("hollow") ? 60 : G.HIKARI.magicMax,
-        will: Math.round(100 + Math.min(15, s.shards || 0) - s.fatigue / 5 - (has("exhaustion") ? 20 : 0)), arousal: Math.min(60, (has("heat") ? 30 : 0) + (has("impCurse") ? 25 : 0)), pleasure: 0, climax: 0, form: "magica", kit: Object.assign({}, p.kit),
+        will: Math.round(100 + Math.min(15, s.shards || 0) - s.fatigue / 5 - (has("exhaustion") ? 20 : 0)), arousal: Math.min(70, (has("heat") ? 30 : 0) + (has("impCurse") ? 25 + 5 * Math.min(4, (ail("impCurse") || {}).age || 0) : 0)), pleasure: 0, climax: 0, form: "magica", kit: Object.assign({}, p.kit),
         sigil: has("sigil") ? 1 : 0,
         // 前の潜行から持ち越した状態
-        sens: has("sensitive") ? 2 : 0, sensBase: has("sensitive") ? 1 : 0, ache: has("throb") ? 40 : 0, numb: has("paralysis") ? 20 : 0,
+        sens: has("sensitive") ? Math.min(5, 2 + ((ail("sensitive") || {}).age || 0)) : 0, sensBase: has("sensitive") ? 1 : 0, ache: has("throb") ? 40 : 0, numb: has("paralysis") ? 20 : 0,
         omazuke: has("omazuke") ? { over: (s.carry.omazuke || 40), floor: 1 } : null,
         charm: Object.assign({}, (ail("charm") || {}).to || {}), attach: (s.carry.attach || []).slice(),
         exposure: has("exposure"), addict: has("addict"), trigger: has("hairTrigger"), rewired: has("rewired"), taint: has("mindTaint"),
@@ -251,6 +254,7 @@ var G = (typeof G !== "undefined") ? G : {};
   }
 
   /* ================================================================ 帰還後：堕ち・状態異常・リソース */
+  function advanceOf(req) { return Math.round(req.reward * [0, 0.3, 0.42, 0.5][(req.real && req.real.scale) || 2]); }
   function finishDive(s, run) {
     const ev = run.events;
     s.dirTotal = s.dirTotal || { placed: 0, holds: 0, acts: 0, climax: 0 };
@@ -261,8 +265,9 @@ var G = (typeof G !== "undefined") ? G : {};
     // 肉体は一晩で一段（25）まで。精神は、その日の肉体の伸びの1/3まで
     // 堕ちはゆっくり。一日の上限を低くし、進むほど進みにくい（抗う心がまだ強い）
     const bodyGain = Math.min(5, climaxes * 0.45 + holdSec * 0.03 + nightBeats * 0.6 + run.h.arousal * 0.008) * (1 - s.body / 125);
-    let mindGain = ((run.outcome === "defeat" ? 1.5 : 0) + nightBeats * 0.3) * (1 - s.mind / 150);
-    mindGain = Math.min(bodyGain / 3, mindGain);
+    // 心は、身体の覚えたことに少し遅れてついていく（達した数・捕まった時間・一夜・負け）
+    let mindGain = ((run.outcome === "defeat" ? 1.5 : 0) + nightBeats * 0.3 + climaxes * 0.12 + holdSec * 0.008) * (1 - s.mind / 150);
+    mindGain = Math.min(bodyGain * 0.6, 2.6, mindGain);
     s.body = U.clamp(s.body + bodyGain, 0, 100);
     s.mind = U.clamp(s.mind + mindGain, 0, 100);
     // 探索の実り：踏破すれば、迷宮の澱みごと身体が清められる。星の欠片は、ルミナの光そのものを強くする
@@ -356,8 +361,8 @@ var G = (typeof G !== "undefined") ? G : {};
     if (run.outcome === "defeat" && run.defeatBy) note(run.defeatBy, "defeat");
     // 報酬
     const req = s.pick.req;
-    // 前金で半額（失敗しても返さない）。踏破で残りの半額。倒した魔物には討伐手当
-    const advance = Math.round(req.reward / 2), rest = run.outcome === "cleared" ? req.reward - advance : 0;
+    // 前金（失敗しても返さない。小さい依頼ほど割合も低い）。踏破で残り。倒した魔物には討伐手当
+    const advance = advanceOf(req), rest = run.outcome === "cleared" ? req.reward - advance : 0;
     const bounty = ev.filter(e => e.kind === "kill").reduce((a, e) => { const d = G.MONSTERS[e.mon]; return a + (e.boss ? 12 : d ? Math.max(1, Math.round((d.hp || 8) / 9)) : 1); }, 0);
     const funds = advance + rest + bounty;
     s.funds = Math.max(0, s.funds + funds);
@@ -421,7 +426,7 @@ var G = (typeof G !== "undefined") ? G : {};
     });
     s.trust = U.clamp(s.trust + res.caught.length * 8 - res.wrong.length * 6, 0, 100);
     // 暴かれると心は少し戻る。隠し通せた嘘は、自分を誤魔化した分だけ心を進める
-    s.mind = U.clamp(s.mind - res.caught.length * 1.5 + res.missed.length * 1.1 * (1 - s.mind / 150), 0, 100);
+    s.mind = U.clamp(s.mind - Math.min(1.2, res.caught.length * 0.4) + res.missed.length * 1.1 * (1 - s.mind / 150), 0, 100);   // 暴かれても、戻るのは少しだけ
     s.dark += res.caught.length;
     if (res.caught.length) s.caughtDay = s.day;
     rec.audit = res;
@@ -453,6 +458,22 @@ var G = (typeof G !== "undefined") ? G : {};
     // 残した状態異常は、ギルドの空気を少しずつ澱ませる
     s.taint = U.clamp(s.taint + s.ailments.length * 1.5, 0, 100);
     s.fatigue = U.clamp(s.fatigue - 22, 0, 100);
+    // 一晩たつと：着替え・湯浴み・眠りで引くものは引く。処置しなかったものは、根を張って重くなる
+    s.healedNight = s.ailments.filter(a => NATURAL.includes(a.id) && a.day < s.day + 1).map(a => AILMENTS[a.id].name);
+    s.ailments = s.ailments.filter(a => !NATURAL.includes(a.id));
+    let kept = 0;
+    for (const a of s.ailments) {
+      a.age = (a.age || 0) + 1;
+      if (AILMENTS[a.id] && AILMENTS[a.id].kink) continue;          // 深層のものは、もともと抜けない
+      kept++;
+      if (a.id === "swell" && a.age % 2 === 0) { s.carry.swell = Math.min(3, (s.carry.swell || 1) + 1); a.n = s.carry.swell; }
+      if (a.id === "crack" && a.age % 2 === 0) { s.crack = Math.min(10, (s.crack || 0) + 1); a.n = s.crack; }
+      if (a.id === "omazuke") s.carry.omazuke = (s.carry.omazuke || 40) + 15;
+      if (a.id === "charm" && a.to && a.age % 3 === 0) for (const k in a.to) a.to[k] = Math.min(3, a.to[k] + 1);
+      if (a.id === "mindTaint") s.mind = U.clamp(s.mind + 0.4, 0, 100);
+    }
+    // 抱えたままの夜は、少しずつ堕ちを進める
+    s.body = U.clamp(s.body + Math.min(1.2, kept * 0.2), 0, 100); s.mind = U.clamp(s.mind + Math.min(0.5, kept * 0.08), 0, 100);
     s.day++;
     s.lastGrowth = s.rec && s.rec.growth || null;      // 翌朝の会話で使う
     s.rec = null;
@@ -485,6 +506,6 @@ var G = (typeof G !== "undefined") ? G : {};
 
   function taintStage(s) { return s.taint >= 100 ? 4 : s.taint >= 70 ? 3 : s.taint >= 42 ? 2 : s.taint >= 18 ? 1 : 0; }
 
-  G.Game = { equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, rest, buy, taintStage };
+  G.Game = { advanceOf, NATURAL, equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, rest, buy, taintStage };
 })();
 if (typeof module !== "undefined") module.exports = G;

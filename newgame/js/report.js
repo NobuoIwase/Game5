@@ -585,6 +585,48 @@ var G = (typeof G !== "undefined") ? G : {};
     return { t, a: U.chance(0.4) ? U.fill(U.pick(RECALL.aud), ctx) : null };
   }
 
+  // ぼかした呼び方は、監査官が正しい名前で言い直させる。言い直すうちに、自分から言うようになる
+  const RENAME = [
+    { re: /胸の、?先/, w: "胸の先", x: "乳首", st: "ち、乳首" },
+    { re: /一番、?敏感な、?(?:ところ|とこ)/, w: "一番敏感なところ", x: "クリ", st: "ク、クリ" },
+    { re: /あそこ/, w: "あそこ", x: "おまんこ", st: "お、おまんこ" },
+    { re: /脚の、?間/, w: "脚の間", x: "おまんこ", st: "お、おまんこ" },
+    { re: /生えた、?の/, w: "生えたの", x: "おちんちん", st: "お、おちんちん" },
+  ];
+  const RENAME_A = ["「{w}」では記録にならない。正しい名前で言え", "「{w}」とは、どこだ。部位の名前で言い直せ", "曖昧だ。「{w}」ではなく、記録に残る言葉で", "「{w}」。……正確に", "言い直せ。「{w}」では分からない"];
+  const RENAME_H = [
+    ["……っ、……{st}、です", "……{st}、……を、です。……言わせないで、ください", "……っ。……{st}。……それ、書くんですか", "……{st}……っ、です。……もう、いいですよね"],
+    ["……{st}、です。……っ、言わされると、なんか", "……{x}、です。……{x}を、……っ", "……{st}。……言ったら、そこが、じんって"],
+    ["……{x}、です。……{x}、いっぱい、されました", "はい。……{x}、です。……ちゃんと、言えました", "……{x}。……言うの、もう、平気です"],
+  ];
+  const RENAME_SELF = ["……言えるようになったな", "最初から、そう言え", "それでいい"];
+  function renameParts(lines, s, mem, day, maxCorr) {
+    const tier = G.tier(s.body, s.mind), done = new Set();
+    let corr = 0;
+    for (let i = 0; i < lines.length; i++) {
+      const l = lines[i];
+      if (l.who !== "h" || l.renamed) continue;
+      const r = RENAME.find(r => r.re.test(l.text));
+      if (!r) continue;
+      // 言い直させられた回数だけ、最初から正しい名前で言うようになる
+      const self = Math.min(0.75, (s.renamed || 0) * 0.06 + (tier >= 3 ? 0.2 : 0));
+      if (U.chance(self)) {
+        for (const q of RENAME) l.text = l.text.replace(new RegExp(q.re.source, "g"), q.x);
+        l.text = l.text.replace(/(乳首|クリ|おまんこ|おちんちん)と、((?:……)?)\1/g, "$1");     // 「あそこと脚の間」が、同じ名前で二度並ばないように
+        if (!done.has("self") && U.chance(0.3)) { done.add("self"); lines.splice(i + 1, 0, { who: "a", text: U.pick(RENAME_SELF), renamed: true }); i++; }
+        continue;
+      }
+      if (corr >= maxCorr || done.has(r.x) || !U.chance(0.6)) continue;
+      corr++; done.add(r.x); s.renamed = (s.renamed || 0) + 1;
+      const h = { who: "h", text: U.fill(freshPick(mem, day, "renH" + Math.min(2, Math.max(0, tier - 1)), RENAME_H[Math.min(2, Math.max(0, tier - 1))], 2), r), renamed: true };
+      // 追及は、言い直したあとの一言から（言い直しも、その件の続き）
+      for (const k of ["unit", "lie", "probe", "night"]) if (l[k]) { h[k] = l[k]; if (k === "probe") delete l.probe; }
+      lines.splice(i + 1, 0, { who: "a", text: U.fill(freshPick(mem, day, "renA", RENAME_A, 2), r), renamed: true }, h);
+      i += 2;
+    }
+    return lines;
+  }
+
   function build(rec, save) {
     const s = save, mem = s.reportMem || (s.reportMem = {}), day = rec.day;
     rec.units = units(rec);
@@ -712,7 +754,7 @@ var G = (typeof G !== "undefined") ? G : {};
     for (const g of rec.traitsGained || []) push("n", U.fill(freshPick(mem, day, "tfmt", TRAIT_FMT, 2), { name: G.TRAITS[g.id].name, st: G.TRAIT_STAGE[g.stage], desc: G.TRAITS[g.id].desc }));
     rec.posture = posture;
     rec.postureName = P.name;
-    return lines;
+    return renameParts(lines, s, mem, day, 2);
   }
 
   /* ================================================================ 追及（その場でしかできない） */
@@ -736,6 +778,11 @@ var G = (typeof G !== "undefined") ? G : {};
   };
   // 追及された時の一問一答。嘘なら崩れることがある（崩れたら、その件は口頭では正直に言ったことになる）
   function probe(rec, line, save, evidence) {
+    const r = probeLines(rec, line, save, evidence);
+    renameParts(r.lines, save, save.reportMem, rec.day, 1);
+    return r;
+  }
+  function probeLines(rec, line, save, evidence) {
     const s = save, mem = s.reportMem, day = rec.day, u = line.unit, tier = G.tier(s.body, s.mind);
     const out = [], P = PROBE;
     // 記録を突きつける：嘘ならほぼ崩れる。本当のことを言っていたなら、ただ傷つける（そして、中身を晒される）

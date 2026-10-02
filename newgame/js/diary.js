@@ -166,6 +166,8 @@ var G = (typeof G !== "undefined") ? G : {};
     direct: ["服の中まで、された。", "……直接、された。"], swarm: ["何体にも、いっぺんに。", "囲まれた。数が多いと、だめ。"],
     climax: ["……いかされた。", "……達した。こいつに。"], defeat: ["負けた。朝まで。", "負けた。……書きたくない。"], crave: ["見ただけで、身体が熱くなった。", "……会いたかった、わけじゃない。"],
   };
+  // 手帳のメモは書いた時の文のまま：読み返すたびに変わらないよう、魔物・日・内容から文を決める
+  function fixed(a, key) { let h = 0; for (const c of String(key)) h = (h * 31 + c.charCodeAt(0)) >>> 0; return a[h % a.length]; }
   function monsterNotes(s) {
     const out = [];
     for (const [kind, d] of Object.entries(G.MONSTERS)) {
@@ -174,9 +176,9 @@ var G = (typeof G !== "undefined") ? G : {};
       const own = OWN[kind], lines = [];
       if (own) { for (let i = 0; i <= lv; i++) lines.push(own[i]); }
       else {
-        lines.push(pick(GEN.first[d.type] || GEN.first["絡"]) + (d.desc ? "（" + d.desc + "）" : ""));
-        if (lv >= 1) lines.push(fill(pick(GEN.tip[d.atk.kind] || GEN.tip.aura), { r: Math.round(((d.atk.range || 1) + 0.3) * 2) / 2 }));
-        if (lv >= 2) lines.push(fill(pick(GEN.weak), { n: Math.max(1, Math.ceil(d.hp / 9)) }));
+        lines.push(fixed(GEN.first[d.type] || GEN.first["絡"], kind + ":first") + (d.desc ? "（" + d.desc + "）" : ""));
+        if (lv >= 1) lines.push(fill(fixed(GEN.tip[d.atk.kind] || GEN.tip.aura, kind + ":tip"), { r: Math.round(((d.atk.range || 1) + 0.3) * 2) / 2 }));
+        if (lv >= 2) lines.push(fill(fixed(GEN.weak, kind + ":weak"), { n: Math.max(1, Math.ceil(d.hp / 9)) }));
       }
       const parts = partsText(((s.parts || {})[kind]) || null);
       if (ex > 0.1) lines.push(fill(GEN.lewd[ex > 0.6 ? 2 : ex > 0.3 || parts ? 1 : 0], { parts: parts || "いろんなところ" }));
@@ -184,7 +186,7 @@ var G = (typeof G !== "undefined") ? G : {};
       const log = ((s.monLog || {})[kind] || []);
       const struck = log.some(x => x.what === "defeat" || x.what === "climax") ? [0] : [];
       const ORD = ["seen", "killed", "caught", "direct", "swarm", "climax", "crave", "defeat"];
-      const dated = log.slice().sort((a, b) => a.day - b.day || ORD.indexOf(a.what) - ORD.indexOf(b.what)).map(x => `${x.day}日目：${U.pick(LOGW[x.what] || ["……"])}`);
+      const dated = log.slice().sort((a, b) => a.day - b.day || ORD.indexOf(a.what) - ORD.indexOf(b.what)).map(x => `${x.day}日目：${fixed(LOGW[x.what] || ["……"], kind + ":" + x.day + ":" + x.what)}`);
       out.push({ kind, name: d.name, art: d.art, tint: d.tint, type: d.type, stage: STAGE[lv], lines, ex, struck, dated, shaky: ex > 0.6 });
     }
     return out;

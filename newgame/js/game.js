@@ -352,6 +352,7 @@ var G = (typeof G !== "undefined") ? G : {};
     s.monLog = s.monLog || {};
     const note = (k, what) => { if (!G.MONSTERS[k]) return; const L = s.monLog[k] || (s.monLog[k] = []); if (!L.some(x => x.what === what)) L.push({ day: s.day, what }); };
     for (const e of ev) {
+      if (e.hidden) continue;                        // 本人が覚えていない件は、本人のメモに書けない
       if (e.kind === "spot") note(e.mon, "seen");
       else if (e.kind === "hold") { note(e.mon, "caught"); if ((e.stage || 0) >= 2) note(e.mon, "direct"); if ((e.n || 1) >= 3) note(e.mon, "swarm"); }
       else if (e.kind === "climax" && e.mon) note(e.mon, "climax");

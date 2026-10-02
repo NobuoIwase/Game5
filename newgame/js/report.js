@@ -457,7 +457,7 @@ var G = (typeof G !== "undefined") ? G : {};
         if (same) { same.n += e.kind === "ringRelease" ? (e.n || 1) : 1; same.sev = Math.max(same.sev, e.sev || 1); if (e.lost) same.lost = true; continue; }
         out.push({ kind: e.kind, floor: e.floor, t: e.t, mon: e.mon, monName: e.monName || "", trapName: e.monName || "", type: e.type || "蕩", sev: e.sev || 2, n: e.n || 1, climax: 0, hidden: !!e.hidden, lost: !!e.lost });
       } else if (e.kind === "possess") {
-        out.push({ kind: "possess", floor: e.floor, t: e.t, mon: e.mon, monName: e.monName, type: "惑", sev: 2, dur: e.dur || 5, climax: 0 });
+        out.push({ kind: "possess", floor: e.floor, t: e.t, mon: e.mon, monName: e.monName, type: "惑", sev: 2, dur: e.dur || 5, climax: 0, hidden: !!e.hidden });
       } else if (e.kind === "sigil") {
         // 淫紋は、潜行全体で一件（最後の深さ）
         const first = out.find(x => x.kind === "sigil");

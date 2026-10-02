@@ -29,7 +29,7 @@
     if (!text) return;
     const last = w.msgs[w.msgs.length - 1];
     if (last && last.text === text && w.t - last.t < 1.2) return;
-    w.msgs.push({ text, t: w.t, key });
+    w.msgs.push({ text, t: w.t, key, id: w.msgSeq = (w.msgSeq || 0) + 1 });
     if (w.msgs.length > 40) w.msgs.shift();
     if (live(w) && !FEED_SKIP.has(key)) feed(w, key === "grab" ? "act grab" : "act", plain(text));
   }
@@ -39,7 +39,7 @@
     if (!text) return;
     const last = w.msgs[w.msgs.length - 1];
     if (last && last.text === text && w.t - last.t < 1.2) return;
-    w.msgs.push({ text, t: w.t, key: key || "act" });
+    w.msgs.push({ text, t: w.t, key: key || "act", id: w.msgSeq = (w.msgSeq || 0) + 1 });
     if (w.msgs.length > 40) w.msgs.shift();
     if (live(w)) feed(w, key === "after" ? "after" : "act", plain(text));
   }

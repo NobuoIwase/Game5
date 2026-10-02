@@ -47,7 +47,7 @@ var G = (typeof G !== "undefined") ? G : {};
     };
     const h = run.h;
     Object.assign(h, {
-      x: map.up.x, y: map.up.y, a: Math.PI / 2, vx: 0, vy: 0, face: null, intent: null, label: "探索", think: 0.3,
+      x: map.up.x, y: map.up.y, torn: false, a: Math.PI / 2, vx: 0, vy: 0, face: null, intent: null, label: "探索", think: 0.3,
       known: {}, bound: null, trance: 0, hyp: 0, dazeT: 0, lureTo: null, slow: 0, glue: 0, cdShot: 0, cdBurst: 0, cdShove: 0,
       idleMp: 0, bubble: null, decoy: null, possess: null, drawn: null, altar: null, mislead: 0, rest: 0, shrineT: 0, floorT: 0, peekT: 0, peekHold: 0,
       wantDown: false, stuckT: 0, lastX: map.up.x, lastY: map.up.y, cast: null, dashT: 0, react: {}, dashed: {},

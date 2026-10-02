@@ -240,3 +240,7 @@ select { font: inherit; color: var(--tx); background: var(--panel2); border: 1px
 .lv-msay.hidden { display: none; }
 .lv-msay.pop { animation: lvPop 0.25s ease-out; }
 @media (max-width: 520px) { .lv-msay { font-size: 11px; max-width: 150px; } }
+/* 欲求：出させてもらえない／達せないまま。立ち絵が小刻みに震え、縁が脈打つ */
+.lv-fig.urge img#lvimg { animation: lvStrain 0.22s ease-in-out infinite; }
+.lv-fig.urge::after { content: ""; position: absolute; inset: 8% 10% 0; border-radius: 40%; box-shadow: 0 0 28px 6px rgba(255,60,140,0.45) inset; animation: lvUrge 0.9s ease-in-out infinite; pointer-events: none; }
+@keyframes lvUrge { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }

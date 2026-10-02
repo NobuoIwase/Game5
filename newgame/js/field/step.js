@@ -282,7 +282,7 @@
     if (h.addict) add("中毒（茸）", null, "gold");
     if (h.sniff > 0) add("嗅いでしまう", h.sniff, "gold");
     if (h.salute > 0) add("敬礼", h.salute, "violet");
-    if (h.exposure) add("装束損壊", null, "pink");
+    if (h.exposure) add("装束損壊", null, "pink"); else if (h.torn) add("衣装が裂けた", null, "pink");
     for (const id of h.attach || []) add("付着：" + (ATTACH[id].blind ? "新しい装備？" : ATTACH[id].name), null, "pink");
     for (const k in h.charm || {}) if (h.charm[k]) add("魅了" + ["", "Ⅰ", "Ⅱ", "Ⅲ"][h.charm[k]] + "（" + G.MONSTERS[k].name + "へ）", null, "pink");
     if (h.trigger) add("暗示の引き金", null, "violet");

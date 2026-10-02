@@ -595,10 +595,11 @@
     if (img.getAttribute("src") !== src) img.setAttribute("src", src);
     const fig = document.getElementById("lvfig");
     fig.classList.toggle("blush", h.arousal > 35 || h.pleasure > 40);
-    fig.classList.toggle("hot", h.pleasure > 70);
+    fig.classList.toggle("hot", h.pleasure > 70 || (h.urge || 0) >= 60);
+    fig.classList.toggle("urge", (h.urge || 0) >= 30);
     fig.classList.toggle("bound", !!h.bound);
     fig.classList.toggle("cx", now < (dive.cxUntil || 0));
-    fig.classList.toggle("naked", !!h.exposure);
+    fig.classList.toggle("naked", !!(h.exposure || h.torn));
     fig.classList.toggle("after", w.t - (h.lastClimaxT ?? -99) < 6 && now >= (dive.cxUntil || 0));
     document.getElementById("lvg").style.height = Math.min(100, h.pleasure).toFixed(0) + "%";
     const cn = document.getElementById("lvc"), ct = h.climax ? `絶頂 ${h.climax}` : ""; if (cn.textContent !== ct) cn.textContent = ct;

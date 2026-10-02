@@ -351,9 +351,9 @@
     const pa = perceivedArousal(w);
     // 自分の判断で帰る：まだ余力のあるうちに（体力・気力・この先の階数・発情と絶頂の重なり）
     const left = (w.dg.floors || 10) - w.floorNo;
-    const spent = h.hp < 30 * caution || h.will < (left >= 3 ? 26 : 16) || (h.climax >= 15 && h.arousal > 90) || (h.form === "civilian" && (h.kit.star === 0 || h.will < 50));   // 変身が解けて、戻れない／心が折れかけている：素の姿で戦い続けない
+    const spent = h.hp < 30 * caution || h.will < (left >= 3 ? 26 : 16) || (h.climax >= 18 && h.arousal > 90) || (h.form === "civilian" && (h.kit.star === 0 || h.will < 50));   // 変身が解けて、戻れない／心が折れかけている：素の姿で戦い続けない
     const wantRetreat = run.recall || spent;
-    if (wantRetreat && h.state !== "retreat") run.retreatWhy = run.recall ? "recall" : h.hp < 30 * caution ? "hp" : h.will < 26 ? "will" : h.climax >= 15 ? "heat" : "civ";
+    if (wantRetreat && h.state !== "retreat") run.retreatWhy = run.recall ? "recall" : h.hp < 30 * caution ? "hp" : h.will < 26 ? "will" : h.climax >= 18 ? "heat" : "civ";
     if (wantRetreat && h.state !== "retreat") {
       h.state = "retreat";
       say(w, run.recall ? "recall" : "retreat", {}); msg(w, "retreat", {});

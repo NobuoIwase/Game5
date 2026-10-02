@@ -31,7 +31,7 @@
     }
     h.pleasure = 22 + 8 * trait(w, "squirthabit"); h.climax++; h.lastClimaxT = w.t;
     if (h.futa) shasei(w, src);                     // 変生した身体は、達するたびに出してしまう
-    h.will = Math.max(0, h.will - 3.5);
+    h.will = Math.max(0, h.will - 2.5);
     h.trance = Math.max(h.trance, 1.6);
     const e = record(w, { kind: "climax", type: src && src.d ? src.d.type : "蕩", mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: 3, bound: !!h.bound });
     logLine(w, G.Text.log("climax", { mon: e.monName }), "heavy");
@@ -79,7 +79,7 @@
     }
     if (h.bound) {
       if (h.bound.by.length >= 5 || h.bound.by.includes(src.id)) return false;
-      h.bound.by.push(src.id); h.bound.power += power * 0.6;       // 数が増えるほど、振りほどけない
+      h.bound.by.push(src.id); h.bound.power += power * 0.4;       // 数が増えるほど、振りほどけない
       if (src.d && src.d.spd !== undefined) monSay(w, src, "grab", 0.6);
       actMsg(w, "swarm", { mon: src.d.name, c: h.bound.by.length + w.monsters.filter(m => m.molest && m.hp > 0).length });
       if (h.bound.by.length >= 3) actBub(w, "swarm");
@@ -174,6 +174,11 @@
     const st = (b.acts >= 5 || b.t > 5 || (h.exposure && b.acts >= 3) || (h.arousal > 75 && b.acts >= 3)) ? 2 : (b.acts >= 2 || b.t > 2.2 || h.exposure || h.arousal > 60) ? 1 : 0;
     const who = acts[b.acts % acts.length], name = who.d ? (who.d.holdName || who.d.name) : "";
     if (st > b.stage) { b.stage = st; actMsg(w, "stage" + st, { mon: name }); if (st === 2) actBub(w, "touch2"); }
+    // 長く捕まっていると、装束が裂ける（見た目と文だけ。階を降りる時に応急で直す）
+    if (b.stage >= 2 && b.acts >= 6 && !h.torn && !h.exposure && !w.outcome && U.chance(0.3)) {
+      h.torn = true; actMsg(w, "tear", { mon: name }); actBub(w, "tear");
+      record(w, { kind: "torn", sev: 1, mon: who.kind, monName: name });
+    }
     const cat = actCat(w, who), act = G.Text.actFor(who.kind, cat, b.stage);
     if (!act) return;
     pushMsg(w, G.Text.fillAct(act, { mon: name, n: heroName(w) }) + "……", "act");
@@ -216,7 +221,7 @@
     if (!b.by.length) { release(w, false); return; }
     const k = mult(w, b.type), p = b.power;
     h.hp = Math.max(0, h.hp - 0.45 * p * dt);
-    h.will = Math.max(0, h.will - 0.85 * p * k * tf.will * dt);   // ルミナは心が強い      // 拘束は長く見せる分、一秒あたりは緩め
+    h.will = Math.max(0, h.will - 0.7 * p * k * tf.will * dt);   // ルミナは心が強い      // 拘束は長く見せる分、一秒あたりは緩め
     // 縛られているだけでは、熱は上がらない。触れられて、はじめて上がる
     lewdTick(w, dt);
     if (!h.bound) return;
@@ -233,7 +238,7 @@
     rate *= 1 - 0.12 * ((h.charm && h.charm[b.src.kind]) || 0);   // 好きな相手の腕は、本気で振りほどけない（魅了拘束）
     rate *= 1 - expectation(w, b.src.kind) * 0.3;       // 気持ちよさを覚えている相手だと、本気で振りほどけない
     if (sk(w, "hodoki")) rate *= 1.3;
-    if (b.t < 3.6) rate *= 0.2;                            // 捕まった直後は、まず何もできない
+    if (b.t < 3.2) rate *= 0.2;                            // 捕まった直後は、まず何もできない
     if (h.will < 25) rate *= 1.5;                          // 追い詰められて、最後の力を振り絞る
     if (!b.nAct) rate *= 1.8;                              // 縛られているだけ（誰も触れてこない）なら、落ち着いて解ける
     b.struggle += rate * 0.9 * dt;

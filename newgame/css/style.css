@@ -248,3 +248,11 @@ select { font: inherit; color: var(--tx); background: var(--panel2); border: 1px
 .dive .cards { position: sticky; bottom: 0; z-index: 6; background: var(--bg); padding: 6px 0 6px; box-shadow: 0 -6px 10px rgba(0,0,0,0.45); }
 @media (max-width: 600px) { .stage { height: min(50vh, 460px); } }
 .hud { grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); }
+/* 衣装が裂けた／装束損壊：立ち絵に裂け目と、はだけた肌の色をのせる */
+.lv-fig.naked::before { content: ""; position: absolute; left: 50%; bottom: 18%; width: 30%; height: 34%; transform: translateX(-50%); z-index: 2; pointer-events: none;
+  background:
+    linear-gradient(115deg, transparent 42%, rgba(255,214,200,0.9) 43%, rgba(255,214,200,0.9) 47%, transparent 48%),
+    linear-gradient(65deg, transparent 55%, rgba(255,214,200,0.85) 56%, rgba(255,214,200,0.85) 59%, transparent 60%),
+    linear-gradient(160deg, transparent 30%, rgba(40,10,25,0.55) 31%, transparent 33%),
+    linear-gradient(20deg, transparent 66%, rgba(40,10,25,0.5) 67%, transparent 69%);
+  mix-blend-mode: normal; opacity: 0.9; }

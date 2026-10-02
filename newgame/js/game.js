@@ -260,13 +260,13 @@ var G = (typeof G !== "undefined") ? G : {};
     const climaxes = run.h.climax;
     // 肉体は一晩で一段（25）まで。精神は、その日の肉体の伸びの1/3まで
     // 堕ちはゆっくり。一日の上限を低くし、進むほど進みにくい（抗う心がまだ強い）
-    const bodyGain = Math.min(7, climaxes * 0.55 + holdSec * 0.035 + nightBeats * 0.7 + run.h.arousal * 0.01) * (1 - s.body / 140);
+    const bodyGain = Math.min(5, climaxes * 0.45 + holdSec * 0.03 + nightBeats * 0.6 + run.h.arousal * 0.008) * (1 - s.body / 125);
     let mindGain = ((run.outcome === "defeat" ? 1.5 : 0) + nightBeats * 0.3) * (1 - s.mind / 150);
     mindGain = Math.min(bodyGain / 3, mindGain);
     s.body = U.clamp(s.body + bodyGain, 0, 100);
     s.mind = U.clamp(s.mind + mindGain, 0, 100);
     // 探索の実り：踏破すれば、迷宮の澱みごと身体が清められる。星の欠片は、ルミナの光そのものを強くする
-    const merit = { body: 0, mind: 0, healed: [], shards: (run.shards || 0) + (run.outcome === "cleared" ? 1 : 0) };
+    const merit = { body: 0, mind: 0, healed: [], shards: run.shards || 0 };
     if (run.outcome === "cleared") {
       const b0 = s.body, m0 = s.mind;
       s.body = U.clamp(s.body - 6, 0, 100); s.mind = U.clamp(s.mind - 2.5, 0, 100);

@@ -1,7 +1,7 @@
 /* field/step.js — field 内部。tools/files.js と index.html の順で読み込む。 */
 (function () {
   "use strict";
-  let U, M, createWorld, enterTrapRoom, spawnMonster, spawnTrap, heroName, say, live, feed, msg, fx, actMsg, record, heat, releaseOverflow, ATTACH, pray, mult, tierFx, sk, crave, applyEffect, untransform, engraveSigil, possess, tickStatus, endPossess, checkClimax, grab, release, actCat, defeat, perceive, roomAt, liveliness, updateHikari, updateMonster, updateTraps, triggerTrap, updateProjs, floodTick;
+  let U, M, createWorld, enterTrapRoom, spawnMonster, spawnTrap, heroName, say, live, feed, msg, fx, actMsg, record, heat, releaseOverflow, ATTACH, pray, mult, tierFx, sk, crave, applyEffect, untransform, engraveSigil, possess, tickStatus, endPossess, checkClimax, grab, release, actCat, defeat, perceive, roomAt, liveliness, updateHikari, updateMonster, updateTraps, triggerTrap, updateProjs, floodTick, gainShard;
   /* ================================================================ 配置（プレイヤー／オート指揮） */
   function cardInfo(card) {
     if (card.startsWith("trap:")) { const id = card.slice(5); return { id, trap: true, d: G.TRAPS[id] }; }
@@ -173,9 +173,10 @@
     if (Math.floor(w.t) !== Math.floor(w.t - dt)) for (const k in h.react) if (w.t - h.react[k].at > 4) { delete h.react[k]; delete h.dashed[k]; }
     if (h.hp <= 0 && !w.outcome) defeat(w, h.bound ? h.bound.src : null);
     if (w.outcome === "down" || w.outcome === "cleared") msg(w, w.outcome === "cleared" ? "portal" : "down", {});
+    if (w.outcome === "cleared" && !w.shardDone) { w.shardDone = true; gainShard(w, "clear"); }   // 踏破の褒美
     // 締環：出口で外れる。溜まっていた分が、一度に
-    if (h.ring && ["cleared", "retreat", "ordered"].includes(w.outcome) && !w.ringDone) {
-      w.ringDone = true; const over = h.ring.over; h.ring = null; const n = Math.min(6, 1 + Math.floor(over / 40) + Math.floor((h.urge || 0) / 35));
+    if (h.ring && ["cleared", "retreat", "ordered", "down"].includes(w.outcome) && !w.ringDone) {   // 階段を降りる時に、輪は外れる
+      w.ringDone = true; const over = h.ring.over; h.ring = null; const n = Math.min(6, 1 + Math.floor(over / 150) + Math.floor((h.urge || 0) / 35));
       h.urge = 0; h.cum = 0; h.shasei = (h.shasei || 0) + n; h.climax += n; record(w, { kind: "ringRelease", type: "蕩", n, sev: 3 });
       if (!w.scene) w.scene = { key: "ringRelease", lines: G.Text.scene("ringRelease", { run: w.run, h, n: heroName(w) }) || [], mon: null };
     }
@@ -314,7 +315,7 @@
   }
 
   Object.assign(G.F, { dirStat, byPlayer, cardInfo, canPlace, place, autoDirect, step, startNight, nightBeat, statusList });
-  G.F.bind.push(() => { ({ U, M, createWorld, enterTrapRoom, spawnMonster, spawnTrap, heroName, say, live, feed, msg, fx, actMsg, record, heat, releaseOverflow, ATTACH, pray, mult, tierFx, sk, crave, applyEffect, untransform, engraveSigil, possess, tickStatus, endPossess, checkClimax, grab, release, actCat, defeat, perceive, roomAt, liveliness, updateHikari, updateMonster, updateTraps, triggerTrap, updateProjs, floodTick } = G.F); });
+  G.F.bind.push(() => { ({ U, M, createWorld, enterTrapRoom, spawnMonster, spawnTrap, heroName, say, live, feed, msg, fx, actMsg, record, heat, releaseOverflow, ATTACH, pray, mult, tierFx, sk, crave, applyEffect, untransform, engraveSigil, possess, tickStatus, endPossess, checkClimax, grab, release, actCat, defeat, perceive, roomAt, liveliness, updateHikari, updateMonster, updateTraps, triggerTrap, updateProjs, floodTick, gainShard } = G.F); });
   for (const bind of G.F.bind) bind();
   delete G.F.bind;
   G.Field = { statusList, createWorld, step, place, canPlace, cardInfo, startNight, nightBeat, spawnMonster, mult };

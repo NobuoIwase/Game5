@@ -577,7 +577,8 @@
     }
     // 溜まりすぎたら、ありふれた行から間引く（決壊・場面は残す）
     const cap = dive.night ? 60 : h.bound || h.pleasure >= 85 ? 9 : 3;           // 解けたあとは、遅れを早めに畳む
-    while (q.length > cap) { const i = q.findIndex(l => !LIVE_KEEP.test(l.cls)); if (i < 0) break; q.splice(i, 1); }
+    // 間引く順：効果音・心の声・目盛り → それでも多ければ、ありふれた行。触れた行（act）は最後まで残す
+    while (q.length > cap) { let i = q.findIndex(l => /sfx|gauge|mind/.test(l.cls) && !LIVE_KEEP.test(l.cls)); if (i < 0) i = q.findIndex(l => !LIVE_KEEP.test(l.cls) && !/\bact\b/.test(l.cls)); if (i < 0) i = q.findIndex(l => !LIVE_KEEP.test(l.cls)); if (i < 0) break; q.splice(i, 1); }
     if (q.length && (dive.lskip || now >= (dive.lnext || 0)) && !(dive.paused && !dive.lskip)) {
       const n = dive.lskip ? q.length : 1;
       for (let i = 0; i < n; i++) liveLine(q.shift(), now);
@@ -601,7 +602,7 @@
     fig.classList.toggle("cx", now < (dive.cxUntil || 0));
     fig.classList.toggle("naked", !!(h.exposure || h.torn));
     fig.classList.toggle("after", w.t - (h.lastClimaxT ?? -99) < 6 && now >= (dive.cxUntil || 0));
-    document.getElementById("lvg").style.height = Math.min(100, h.pleasure).toFixed(0) + "%";
+    document.getElementById("lvg").style.height = Math.min(100, h.futa ? Math.max(h.pleasure, h.cum || 0) : h.pleasure).toFixed(0) + "%";   // 変生中は、射精感も同じ目盛りで
     const cn = document.getElementById("lvc"), ct = h.climax ? `絶頂 ${h.climax}` : ""; if (cn.textContent !== ct) cn.textContent = ct;
     // 掴んでいる／群がっている相手を、立ち絵の後ろに
     const hold = dive.night ? (dive.nightHold || []).slice() : [];

@@ -129,7 +129,12 @@
     // 捕まっていた間のまとめ：何回・どこを・何回達したか、そして今どんな有様か
     if ((b.acts || 0) >= 2) {
       const top = b.ev && b.ev.acts ? Object.entries(b.ev.acts).sort((a, c) => c[1] - a[1]).slice(0, 2).map(([k]) => k).join("と") : "";
-      const look = h.pleasure > 70 ? "脚が 震えて、まともに 立てない" : b.climaxN >= 2 ? "膝が 笑って、壁に 手を ついた" : b.climaxN ? "達した 余韻が 抜けず、内腿が まだ 震えている" : b.stage >= 2 ? "乱れた 服を 直す 指が 震えている" : "息を 整えながら、服の 裾を 直した";
+      const bare = h.exposure || h.torn;
+      const look = U.pick(h.pleasure > 70 ? ["脚が 震えて、まともに 立てない", "腰が 抜けたように、しばらく 動けない", "熱に 浮かされた 目で、ふらりと 立ち上がった"]
+        : b.climaxN >= 2 ? ["膝が 笑って、壁に 手を ついた", "続けざまに 達した 身体が、まだ 小刻みに 跳ねている"]
+        : b.climaxN ? ["達した 余韻が 抜けず、内腿が まだ 震えている", "息を 弾ませ、濡れた 内腿を 擦り合わせた"]
+        : b.stage >= 2 ? (bare ? ["裂けた 衣装を 手で 押さえ、肌を 隠そうとした", "はだけた 胸元を 腕で 隠して、息を 整えた"] : ["乱れた 服を 直す 指が 震えている", "服の 中に 残った 感触を 振り払うように、身を すくめた", "頬を 赤くしたまま、衣装を 引き直した"])
+        : (bare ? ["裂けた 裾を 押さえて、息を 整えた"] : ["息を 整えながら、服の 裾を 直した", "小さく 息を ついて、身構え直した"]));
       pushMsg(w, `——${b.t.toFixed(0)}秒、${b.acts}回 触れられた${top ? "（" + top + "）" : ""}${b.climaxN ? "。絶頂 " + b.climaxN + "回" : ""}。${heroName(w)}は ${look}……`, "after");
     }
     if (broke) {                                    // 群れは、逃げた獲物をすぐ追い直す
@@ -197,7 +202,7 @@
     const over = w.t - (h.lastClimaxT ?? -99) < 5 ? 1.2 : 1;          // 達したばかりの身体は、敏感すぎる
     if (over > 1 && !b.overSaid && !act.watch) { b.overSaid = true; feed(w, "after", G.Text.live.oversens()); }
     const gain = over * 3.2 * act.pw * (who.pow || 1) * k * intake(w, who) * swarm * tf.pleasure * (w.run.law === "seishi" ? 0.8 : 1) * (act.tickle ? 0.7 : 1) * (sk(w, "heartlock") ? 0.82 : 1);
-    if (act.cum && h.futa) addCum(w, 11 * act.pw * swarm * intake(w, who), who); else h.pleasure += gain;
+    if (act.cum && h.futa) addCum(w, 8 * act.pw * swarm * intake(w, who), who); else h.pleasure += gain;
     h.arousal = Math.min(100, h.arousal + 2.0 * act.pw * k);
     if (act.tickle) h.will = Math.max(0, h.will - 3);
     if (act.edge) h.pleasure = Math.min(h.pleasure, 94);
@@ -268,7 +273,7 @@
     if (b.shadow) { b.shadow.t += dt; if (b.shadow.t > 1.8 && b.shadow.arms < 8) { b.shadow.t = 0; b.shadow.arms += 2; b.power += 0.12; msg(w, "shadowArms", { c: b.shadow.arms }, 1); } }
     checkClimax(w, b.src);
     // 変生した部位を吸われる
-    if (b.futaSuck) { if (h.futa) addCum(w, b.futaSuck * dt, b.src); else h.pleasure += b.futaSuck * 0.4 * intake(w, b.src) * dt; if (U.chance(dt * 0.3)) msg(w, h.futa ? "futaSuck" : "struggle", {}, 4); }
+    if (b.futaSuck) { if (h.futa) addCum(w, b.futaSuck * 0.55 * dt, b.src); else h.pleasure += b.futaSuck * 0.4 * intake(w, b.src) * dt; if (U.chance(dt * 0.3)) msg(w, h.futa ? "futaSuck" : "struggle", {}, 4); }
     // 浄化の台：放っておかれる。求めなければ、与えられない
     if (b.begAfter && b.t > b.begAfter) {
       const src = b.src; record(w, { kind: "beg", type: "惑", mon: src.kind, monName: src.d ? src.d.name : "", sev: 3 }); openScene(w, "joukaBeg", src);

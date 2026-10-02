@@ -182,7 +182,10 @@
     const p = S.phase;
     if (p === "guild") return guild();
     if (p === "prep") return prepScreen();
-    if (p === "dive") { S.phase = "prep"; return prepScreen(); }     // 潜行中に閉じた：準備からやり直す
+    if (p === "dive") {                                                // 潜行中に閉じた：最後に入った階の入口から
+      if (S.diveSave && S.diveSave.run) return startDive(S.diveSave);
+      S.phase = "prep"; return prepScreen();
+    }
     if (p === "report") return reportScreen();
     if (p === "audit") return auditScreen();
     if (p === "rereport") return rereportScreen();
@@ -361,9 +364,9 @@
       const mains = GM.MAINS.map(k => `<option value="${k}" ${k === paper.main ? "selected" : ""}>${G.MONSTERS[k].name}（${G.MONSTERS[k].type}）</option>`).join("");
       const btn = (cls, val, cur, label) => `<button class="${cls}" data-v="${val}" style="${val === cur ? "border-color:var(--pink);background:#4a2640" : ""}">${label}</button>`;
       app.innerHTML = topbar() + `<h1>依頼書</h1>
-        <p class="sub">ひかりの希望する依頼。机の上の一枚を選び、中身を書き換えてから渡す。前金は報酬の半分で、失敗しても返さない。</p>
+        <p class="sub">ひかりの希望する依頼。机の上の一枚を選び、中身を書き換えてから渡す。前金は小規模で報酬の3割・中規模で4割・大規模で半分。失敗しても返さない。</p>
         <div class="grid2">${S.requests.map((q, i) => `<div class="card paper ${i === sel ? "sel" : ""}" data-i="${i}">
-          <b>${esc(q.title)}</b><div class="sub">${esc(q.place || G.DUNGEONS[q.dungeon].name)}・報酬 ◈${q.reward}（前金 ◈${Math.round(q.reward / 2)}）</div>
+          <b>${esc(q.title)}</b><div class="sub">${esc(q.place || G.DUNGEONS[q.dungeon].name)}・報酬 ◈${q.reward}（前金 ◈${GM.advanceOf(q)}）</div>
           <div class="sub">脅威度 ${LV_NAME[q.real.level]}・${SC_NAME[q.real.scale]}（${({ 1: 6, 2: 8, 3: 10 })[q.real.scale]}階）${q.real.boss ? "・長あり" : ""}</div></div>`).join("")}</div>
         <div class="panel">
           <h2 style="margin-top:0">書き換える</h2>
@@ -423,8 +426,21 @@
   function prepScreen() { return handover(); }
 
   /* ================================================================ 潜行 */
-  function startDive() {
-    const run = GM.startDive(S);
+  // 階ごとの自動セーブ：階に入る直前の潜行の状態を、S.diveSave に写しておく
+  // 階の物（魔物・罠・宝箱・部屋）への参照は、階が変われば作り直されるので写さない
+  function snapRun(run, w) {
+    const skip = new Set();
+    if (w) for (const k in w) if (Array.isArray(w[k])) for (const o of w[k]) if (o && typeof o === "object") skip.add(o);
+    if (w && w.map && w.map.rooms) for (const o of w.map.rooms) skip.add(o);
+    return JSON.parse(JSON.stringify(run, (k, v) => k === "save" || k === "bound" || (v && typeof v === "object" && (skip.has(v) || Array.isArray(v.members))) ? undefined : v));
+  }
+  function diveSnap(night) {
+    try { S.diveSave = { run: snapRun(dive.run, dive.w), night: !!night }; } catch (e) { return; }   // 写せなければ、前の階の記録のまま
+    save();
+  }
+  function startDive(resume) {
+    const run = resume ? Object.assign(resume.run, { save: S }) : GM.startDive(S);
+    if (resume) { delete S.diveSave; toast(resume.night ? "敗北した夜から再開" : `${run.floor}階の入口から再開`); }
     save();
     dive = { run, w: null, cam: { x: 0, y: 0, scale: 40 }, card: null, hover: null, speed: S.speed || 1, whole: false, last: 0, acc: 0, trans: 0, raf: 0 };
     newFloor();
@@ -468,10 +484,12 @@
     });
     drawCards();
     dive.last = performance.now();
+    if (resume && resume.night) { diveSnap(true); dive.trans = 0; startNight(); }
     dive.raf = requestAnimationFrame(loop);
   }
 
   function newFloor() {
+    diveSnap(false);
     dive.w = GM.makeFloor(dive.run);
     dive.w.dir.auto = S.autoDirector;
     dive.cam.x = dive.w.run.h.x; dive.cam.y = dive.w.run.h.y;
@@ -662,7 +680,7 @@
   function endFloor() {
     const w = dive.w, r = GM.afterFloor(dive.run, w);
     if (r === "next") { newFloor(); drawCards(); return; }
-    if (w.outcome === "defeat") return startNight();
+    if (w.outcome === "defeat") { diveSnap(true); return startNight(); }
     finishDive();
   }
 
@@ -715,6 +733,7 @@
     window.onresize = null;
     const outcome = dive.run.outcome;
     GM.finishDive(S, dive.run);
+    delete S.diveSave;
     dive = null;
     save();
     returnScene(outcome);
@@ -825,14 +844,14 @@
   function clinicScreen() {
     S.phase = "clinic"; save();
     // 初めは、払える分だけ選んでおく（安いものから）
-    const sel = new Set(); { let left = S.funds; for (const a of S.ailments.slice().sort((x, y) => GM.AILMENTS[x.id].fee - GM.AILMENTS[y.id].fee)) { const f = GM.AILMENTS[a.id].fee; if (f <= left) { sel.add(a.id); left -= f; } } }
+    const sel = new Set(); { let left = S.funds; for (const a of S.ailments.filter(x => !GM.NATURAL.includes(x.id)).sort((x, y) => GM.AILMENTS[x.id].fee - GM.AILMENTS[y.id].fee)) { const f = GM.AILMENTS[a.id].fee; if (f <= left) { sel.add(a.id); left -= f; } } }
     const draw = keep(() => {
       const fee = [...sel].reduce((a, id) => a + GM.AILMENTS[id].fee, 0);
       const g = S.rec ? S.rec.gain : null;
       app.innerHTML = topbar() + `<h1>一日の終わり（処置）</h1>
         ${g ? `<div class="panel sub">今日の変化：肉体 +${g.body}　精神 +${g.mind}　ギルド資金 ${g.funds >= 0 ? "+" : ""}${g.funds}${g.pay ? `（前金 ${g.pay.advance}${g.pay.rest ? "・踏破 " + g.pay.rest : ""}${g.pay.bounty ? "・討伐 " + g.pay.bounty : ""}）` : ""}　澱晶 +${g.dark}${S.rec.forged ? `　違和感 +${g.sus}` : ""}</div>` : ""}
-        <div class="panel">${S.ailments.length ? S.ailments.map(a => { const A = GM.AILMENTS[a.id]; return `<label class="doc-line"><input type="checkbox" data-id="${a.id}" ${sel.has(a.id) ? "checked" : ""}> <span><b>${esc(GM.ailmentName(a))}</b>${A.kink ? "（深層処置）" : ""}　◈${A.fee}<br><span class="sub">${A.note}</span></span></label>`; }).join("") : `<p class="sub">状態異常はない。</p>`}
-          <p class="sub">処置しないで残すと、次の潜行に響き、ギルドの空気も少し澱む。</p></div>
+        <div class="panel">${S.ailments.length ? S.ailments.map(a => { const A = GM.AILMENTS[a.id]; return `<label class="doc-line"><input type="checkbox" data-id="${a.id}" ${sel.has(a.id) ? "checked" : ""}> <span><b>${esc(GM.ailmentName(a))}</b>${A.kink ? "（深層処置）" : ""}${GM.NATURAL.includes(a.id) ? '<span class="sub">（一晩で引く）</span>' : ""}　◈${A.fee}<br><span class="sub">${A.note}</span></span></label>`; }).join("") : `<p class="sub">状態異常はない。</p>`}
+          <p class="sub">処置しないで残すと、日ごとに根を張って重くなり（感度・紋・魅了・欲求などが深まる）、堕ちも少し進む。ギルドの空気も澱む。発情・汚れ・衣装の破れ・疲れ・痺れ・疼きは、一晩で自然に引く。</p></div>
         <div class="row"><button class="primary" id="ok" ${fee > S.funds ? "disabled" : ""}>${sel.size ? `処置して（◈${fee}）` : "このまま"}翌日へ</button>${fee > S.funds ? `<span class="sub" style="color:var(--red)">資金が足りない（◈${S.funds}）。選び直す</span>` : ""}</div>`;
       on("input[type=checkbox]", "change", e => { e.target.checked ? sel.add(e.target.dataset.id) : sel.delete(e.target.dataset.id); draw(); });
       on("#ok", "click", () => {

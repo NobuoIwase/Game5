@@ -495,7 +495,7 @@
     dive.cam.x = dive.w.run.h.x; dive.cam.y = dive.w.run.h.y;
     dive.trans = 1.1;
     dive.logN = 0;
-    dive.msgN = 0; dive.msgLines = dive.msgLines || [];
+    dive.msgId = 0; dive.msgLines = dive.msgLines || [];
     dive.feedId = 0; dive.lq = dive.lq || [];
   }
 
@@ -550,7 +550,7 @@
     // メッセージ窓（ドラクエ風）：新しい行を1文字ずつ。古い2行は薄く
     const mw = document.getElementById("msgwin");
     if (mw) {
-      while (dive.msgN < w.msgs.length) { dive.msgLines.push({ text: w.msgs[dive.msgN++].text, shown: 0 }); if (dive.msgLines.length > 3) dive.msgLines.shift(); }
+      for (const m of w.msgs) if (m.id > dive.msgId) { dive.msgId = m.id; dive.msgLines.push({ text: m.text, shown: 0 }); if (dive.msgLines.length > 3) dive.msgLines.shift(); }   // 窓の履歴は40件で切り詰められるので、長さでなく通し番号で追う
       const L = dive.msgLines, now = performance.now(), dtm = Math.min(0.1, (now - (dive.msgT || now)) / 1000); dive.msgT = now;
       for (let i = 0; i < L.length; i++) if (L[i].shown < L[i].text.length) { L[i].shown = Math.min(L[i].text.length, L[i].shown + (i < L.length - 1 ? 160 : 40) * dtm); break; }
       const html = L.map((l, i) => `<span class="${i < L.length - 1 ? "old" : ""}">${esc(l.text.slice(0, Math.ceil(l.shown)))}</span>`);

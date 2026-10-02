@@ -128,7 +128,7 @@
     if (m.holding) { m.holding = false; m.cd = Math.max(m.cd, 1); }
     // 小淫魔の悪戯：触れる距離まで来たら、抱きついて数秒いじる（捕まえる種でなくても）
     if (d.imp && d.spd > 0 && A.kind !== "grab" && !h.bound && !w.outcome && m.alert > 0 && !(m.flee > 0) && !(m.teaseCd > 0) && m.stun <= 0 && dist < 0.95 && !(h.ifr > 0)
-      && (h.arousal > 45 || (h.charm && h.charm[m.kind]) || h.trance > 0) && w.t - (w.impTeaseT ?? -99) > 12) {   // 火照っている時だけ。悪戯は、階じゅうで12秒に一度まで
+      && (h.arousal > 45 || (h.charm && h.charm[m.kind]) || h.trance > 0) && w.t - (w.impTeaseT ?? -99) > 18) {   // 火照っている時だけ。悪戯は、階じゅうで18秒に一度まで
       m.teaseCd = U.rf(14, 20); w.impTeaseT = w.t;
       if (grab(w, m, 0.28 * m.pow, "蕩")) { m.holding = true; h.bound.brief = U.rf(3.0, 3.8); h.bound.imp = true; msg(w, "impTease", { mon: d.name }); monSay(w, m, "grab", 0.9); return; }
     }

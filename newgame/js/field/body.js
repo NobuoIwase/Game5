@@ -312,7 +312,7 @@
       if (blocked && h.pleasure >= 80) urgeUp(w, 2.6 * dt, null);
       else if (h.urge > 0) h.urge = Math.max(0, h.urge - (blocked ? 0 : 1.2) * dt);
       if (h.urge > 0) {
-        h.will = Math.max(0, h.will - h.urge * 0.012 * dt);
+        h.will = Math.max(0, h.will - h.urge * 0.006 * dt);
         h.arousal = Math.min(100, h.arousal + h.urge * 0.025 * dt);
         if (h.urge >= 60 && U.chance(dt * 0.12)) say(w, (h.futa ? "urgeF" : "urge") + (h.urge >= 90 ? 3 : 2), {});
       }

@@ -64,7 +64,9 @@ var G = (typeof G !== "undefined") ? G : {};
     say(w, "floorIn", { floor: floorNo });
     if (floorNo === 1 && run.save) {                      // 一階の入口：昨日を引きずった一言
       const sv = run.save, last = (sv.history || [])[sv.history.length - 1], tier = G.tier(sv.body, sv.mind);
+      const yEp = (Array.isArray(sv.episodes) ? sv.episodes : []).filter(e => e && e.day === run.day - 1 && !e.defeat && Array.isArray(e.parts) && e.parts.length && G.MONSTERS[e.mon]).pop();
       if (tier >= 2 && U.chance(0.4)) say(w, "startFallen", {});
+      else if (yEp && U.chance(0.55)) say(w, "startEpisode", G.Game.epCtx(yEp, run.day));
       else if (last && last.outcome === "defeat" && U.chance(0.7)) say(w, "startDefeat", {});
       else if ((sv.ailments || []).some(a => ["attached", "throb", "sensitive", "omazuke", "swell", "futaAfter", "impCurse", "permit"].includes(a.id)) && U.chance(0.6)) say(w, "startAil", {});
       else if (last && last.outcome === "cleared" && U.chance(0.5)) say(w, "startCleared", {});

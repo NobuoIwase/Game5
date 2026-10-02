@@ -115,7 +115,7 @@ var G = (typeof G !== "undefined") ? G : {};
   function upgradeSave(s) {
     if (!s) return s;
     s.traits = s.traits || {}; s.counts = s.counts || {}; s.waldo = s.waldo || { rescues: 0, converted: 0 }; s.carry = s.carry || {};
-    s.crack = s.crack || 0; s.futaMarks = s.futaMarks || 0; s.futaFixed = !!s.futaFixed;
+    s.crack = s.crack || 0; s.shards = s.shards || 0; s.futaMarks = s.futaMarks || 0; s.futaFixed = !!s.futaFixed;
     s.know = s.know || {}; s.lewd = s.lewd || {};
     s.lv = s.lv || 1; s.xp = s.xp || 0; s.skills = s.skills || {}; s.equip = (s.equip || []).filter(id => G.SKILLS[id]);
     for (const k in G.DUNGEONS) if (!s.decks[k]) { const dg = G.DUNGEONS[k]; s.decks[k] = [dg.free.find(x => G.MONSTERS[x].type === "削"), "trap:" + dg.traps[0]]; }
@@ -215,9 +215,9 @@ var G = (typeof G !== "undefined") ? G : {};
       events: [], night: [], deck: deckFor(s, p.dungeon), maxLive: G.BAL.maxLive + s.upgrades.live,
       autoDirector: s.autoDirector, save: s, recall: false, floor: 1, mismatch: 0, floors: FLOORS_BY_SCALE[(p.real && p.real.scale) || 2],
       h: {
-        lv: s.lv || 1, hpMax: G.GROWTH.hpMax(s.lv || 1), mpMax: G.GROWTH.mpMax(s.lv || 1), dmgMul: G.GROWTH.dmg(s.lv || 1), skills: (s.equip || []).slice(),
-        hp: Math.round(G.GROWTH.hpMax(s.lv || 1) * (1 - s.fatigue / 250)), mp: G.GROWTH.mpMax(s.lv || 1), magic: has("hollow") ? 60 : G.HIKARI.magicMax,
-        will: Math.round(100 - s.fatigue / 5 - (has("exhaustion") ? 20 : 0)), arousal: Math.min(60, (has("heat") ? 30 : 0) + (has("impCurse") ? 25 : 0)), pleasure: 0, climax: 0, form: "magica", kit: Object.assign({}, p.kit),
+        lv: s.lv || 1, hpMax: G.GROWTH.hpMax(s.lv || 1) + 3 * (s.shards || 0), mpMax: G.GROWTH.mpMax(s.lv || 1) + 2 * (s.shards || 0), dmgMul: G.GROWTH.dmg(s.lv || 1), skills: (s.equip || []).slice(),
+        hp: Math.round((G.GROWTH.hpMax(s.lv || 1) + 3 * (s.shards || 0)) * (1 - s.fatigue / 250)), mp: G.GROWTH.mpMax(s.lv || 1) + 2 * (s.shards || 0), magic: has("hollow") ? 60 : G.HIKARI.magicMax,
+        will: Math.round(100 + Math.min(15, s.shards || 0) - s.fatigue / 5 - (has("exhaustion") ? 20 : 0)), arousal: Math.min(60, (has("heat") ? 30 : 0) + (has("impCurse") ? 25 : 0)), pleasure: 0, climax: 0, form: "magica", kit: Object.assign({}, p.kit),
         sigil: has("sigil") ? 1 : 0,
         // 前の潜行から持ち越した状態
         sens: has("sensitive") ? 2 : 0, sensBase: has("sensitive") ? 1 : 0, ache: has("throb") ? 40 : 0, numb: has("paralysis") ? 20 : 0,
@@ -260,14 +260,25 @@ var G = (typeof G !== "undefined") ? G : {};
     const climaxes = run.h.climax;
     // 肉体は一晩で一段（25）まで。精神は、その日の肉体の伸びの1/3まで
     // 堕ちはゆっくり。一日の上限を低くし、進むほど進みにくい（抗う心がまだ強い）
-    const bodyGain = Math.min(11, climaxes * 0.9 + holdSec * 0.06 + nightBeats * 0.9 + run.h.arousal * 0.015) * (1 - s.body / 170);
+    const bodyGain = Math.min(7, climaxes * 0.55 + holdSec * 0.035 + nightBeats * 0.7 + run.h.arousal * 0.01) * (1 - s.body / 140);
     let mindGain = ((run.outcome === "defeat" ? 1.5 : 0) + nightBeats * 0.3) * (1 - s.mind / 150);
     mindGain = Math.min(bodyGain / 3, mindGain);
     s.body = U.clamp(s.body + bodyGain, 0, 100);
     s.mind = U.clamp(s.mind + mindGain, 0, 100);
+    // 探索の実り：踏破すれば、迷宮の澱みごと身体が清められる。星の欠片は、ルミナの光そのものを強くする
+    const merit = { body: 0, mind: 0, healed: [], shards: (run.shards || 0) + (run.outcome === "cleared" ? 1 : 0) };
+    if (run.outcome === "cleared") {
+      const b0 = s.body, m0 = s.mind;
+      s.body = U.clamp(s.body - 6, 0, 100); s.mind = U.clamp(s.mind - 2.5, 0, 100);
+      merit.body = +(b0 - s.body).toFixed(1); merit.mind = +(m0 - s.mind).toFixed(1);
+      merit.purified = true;
+    } else if (run.outcome !== "defeat" && run.floorReached >= Math.ceil((run.floors || 8) * 0.6)) {   // 深くまで降りて自分で帰った日も、少しだけ
+      const b0 = s.body; s.body = U.clamp(s.body - 2, 0, 100); merit.body = +(b0 - s.body).toFixed(1);
+    }
+    s.shards = Math.min(G.SHARD_MAX, (s.shards || 0) + merit.shards);
     // 状態異常
     const add = id => { if (!s.ailments.some(a => a.id === id)) s.ailments.push({ id, day: s.day }); };
-    if (run.h.arousal > 55 || nightBeats > 0) add("heat");
+    if ((run.h.arousal > 55 || nightBeats > 0) && run.outcome !== "cleared") add("heat");      // 踏破の光は、熱も払う
     if (ev.some(e => e.kind === "trance" && e.hidden)) add("haze");
     if (ev.filter(e => e.type === "蕩" && (e.kind === "arouse" || e.kind === "hold")).length >= 4) add("soiled");
     if (run.h.form === "civilian") add("hollow");
@@ -371,7 +382,7 @@ var G = (typeof G !== "undefined") ? G : {};
       day: s.day, dungeon: run.dungeon, dungeonName: run.dungeonName || G.DUNGEONS[run.dungeon].name, stated: run.stated, realType: run.realType, forged: run.forged,
       outcome: run.outcome, floorReached: run.floorReached, events: ev, night: run.night, mismatch: run.mismatch || 0,
       h: { hp: run.h.hp, arousal: run.h.arousal, form: run.h.form, climax: climaxes, attach: (run.h.attach || []).slice(), rewired: !!run.h.rewired }, ailments: s.ailments.map(a => a.id),
-      law: run.law || null, dirStats: run.dirStats || null, traitsGained: run.traitsGained || [], converted: !!run.converted, growth: run.growth, firstParts: run.firstParts || [],
+      law: run.law || null, dirStats: run.dirStats || null, merit, traitsGained: run.traitsGained || [], converted: !!run.converted, growth: run.growth, firstParts: run.firstParts || [],
       gain: { body: +bodyGain.toFixed(1), mind: +mindGain.toFixed(1), funds, dark, sus: +sus.toFixed(1), pay: run.pay },
     };
     rec.report = G.Report.build(rec, s);

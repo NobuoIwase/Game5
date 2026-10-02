@@ -587,12 +587,20 @@
       }
     }
   }
+  // 星の欠片：拾うたびに、ルミナの光が少しずつ強くなる（帰ってから身につく）
+  function gainShard(w, why) {
+    w.run.shards = (w.run.shards || 0) + 1;
+    record(w, { kind: "shard", why, sev: 0 });
+    msg(w, "shard" + (why === "boss" ? "Boss" : why === "clear" ? "Clear" : ""), {}); say(w, "shard", {});
+    fx(w, { kind: "burst", x: w.run.h.x, y: w.run.h.y, color: "#fff6b0", life: 0.8 });
+  }
   function openChest(w, c) {
     const h = w.run.h;
     c.open = true;
     const it = U.pick(["star", "salve", "smelling", "ether", "ether", "cool"]); h.kit[it] = (h.kit[it] || 0) + 1;
     say(w, "chest", { item: it }); msg(w, "chest", { item: G.Game.ITEMS[it].name });
     record(w, { kind: "chest", item: it, sev: 0 });
+    if (U.chance(0.3)) gainShard(w, "chest");          // 宝箱の底に、星の欠片
   }
   function coverWithView(w, tx, ty) {
     const h = w.run.h;
@@ -767,6 +775,6 @@
 
   /* ================================================================ 魔物のAI */
 
-  Object.assign(G.F, { free, clearPath, move, pathDir, shotClear, firingSpot, turnTo, perceive, roomAt, onSpot, threats, castHits, danger, urgent, bestDodge, pressure, flash, breakout, hikariSpeed, avoidFn, perceivedArousal, setIntent, goToward, hikariThink, tr_label, explore, monologue, liveliness, openChest, coverWithView, tryCast, releaseCast, tryShove, updateHikari, idleGlance });
+  Object.assign(G.F, { gainShard, free, clearPath, move, pathDir, shotClear, firingSpot, turnTo, perceive, roomAt, onSpot, threats, castHits, danger, urgent, bestDodge, pressure, flash, breakout, hikariSpeed, avoidFn, perceivedArousal, setIntent, goToward, hikariThink, tr_label, explore, monologue, liveliness, openChest, coverWithView, tryCast, releaseCast, tryShove, updateHikari, idleGlance });
   G.F.bind.push(() => { ({ U, M, HR, SPREAD, heroName, say, msg, fx, pushMsg, monSay, record, heat, intake, ATTACH, pray, mult, knowledge, learn, expectation, sk, inspire, drainMagic, possess, checkClimax, grab, release, knock, updateBound, hurtMon, alertMon, hitTrap, orbPhase } = G.F); });
 })();

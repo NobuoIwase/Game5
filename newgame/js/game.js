@@ -472,6 +472,17 @@ var G = (typeof G !== "undefined") ? G : {};
     return res;
   }
   // 再報告のあとの選択：記録だけ取る／踏み込んで確認する
+  // 再尋問の検分を終えた結果：踏み込んだ分だけ、信頼と引き換えに堕ちと澱みが進む
+  function reintResult(s, sess, formal) {
+    s.reintCount = (s.reintCount || 0) + 1;
+    if (formal || !sess.everTouched) { s.trust = U.clamp(s.trust + 2, 0, 100); s.phase = "clinic"; return; }
+    const c = sess.climaxes;
+    s.trust = U.clamp(s.trust - 4 - c, 0, 100); s.dark += 2 + c; s.taint = U.clamp(s.taint + 2, 0, 100);
+    s.body = U.clamp(s.body + Math.min(2.5, 0.8 + 0.4 * c), 0, 100); s.mind = U.clamp(s.mind + Math.min(1.8, 0.4 + 0.3 * c + 0.2 * sess.edges), 0, 100);
+    if (s.trust >= 45) s.reintHonest = Math.min(3, (s.reintHonest || 0) + (c ? 2 : 1));    // 手ひどく検められると、次は最初から認めるようになる
+    if (s.rec) { s.rec.lewdCheck = true; s.rec.reint = { climax: c, edges: sess.edges, parts: Object.keys(sess.touched) }; }
+    s.phase = "clinic";
+  }
   function rereportChoice(s, lewd) {
     if (lewd) { s.trust = U.clamp(s.trust - 6, 0, 100); s.dark += 3; s.taint = U.clamp(s.taint + 2, 0, 100); s.body = U.clamp(s.body + 2, 0, 100); if (s.rec) s.rec.lewdCheck = true; }
     s.phase = "clinic";
@@ -545,6 +556,6 @@ var G = (typeof G !== "undefined") ? G : {};
 
   function taintStage(s) { return s.taint >= 100 ? 4 : s.taint >= 70 ? 3 : s.taint >= 42 ? 2 : s.taint >= 18 ? 1 : 0; }
 
-  G.Game = { pastEpisode, epCtx, EP_PART, advanceOf, NATURAL, equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, rest, buy, taintStage };
+  G.Game = { reintResult, pastEpisode, epCtx, EP_PART, advanceOf, NATURAL, equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, rest, buy, taintStage };
 })();
 if (typeof module !== "undefined") module.exports = G;

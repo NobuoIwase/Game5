@@ -824,21 +824,41 @@
   // 再尋問：暴いた行を突きつける（監査官室で）
   function rereportScreen() {
     const rec = S.rec, res = rec.audit;
-    const lines = G.Report.rereport(rec, res.caught, S);
+    const sess = G.Reint.begin(rec, S);
+    const lines = G.Reint.interrog(sess, rec, S);
     save();
     app.innerHTML = topbar() + officeHTML() + `<div class="panel sub"><b>再尋問</b>　報告書の嘘 ${res.caught.length} 件を、本人に突きつける。</div>
-      <div class="panel hidden" id="rechoice"><p class="sub">訂正の報告書を書かせた。このあと——</p>
-        <div class="row"><button class="primary" id="rec">記録だけ取って帰す</button><button class="danger" id="lewd">踏み込んで確認する</button></div>
-        <p class="sub">踏み込んだ確認は、信頼を下げる代わりに、澱晶とギルドの澱みを得る。</p></div>`;
+      <div class="panel hidden" id="rechoice"><p class="sub">嘘は認めさせた。このあと——</p>
+        <div class="row"><button class="primary" id="rec">訂正を書かせて帰す</button><button class="danger" id="lewd">検分する（身体で裏を取る）</button></div>
+        <p class="sub">検分は、信頼を下げる代わりに、澱晶とギルドの澱みを得る。ひかりの堕ちも進む。検分の事由は、虚偽の数だけ立つ（寸止めを重ねれば延びる）。</p></div>
+      <details class="panel" id="trp"><summary>ここまでの話（書き起こし）</summary><div id="tr"></div></details>`;
     hikariIn();
-    vn([{ who: "n", text: "報告書を手に、監査官はひかりを呼び戻した。" }].concat(lines), () => {
+    vn([{ who: "n", text: "報告書を手に、監査官はひかりを呼び戻した。" }].concat(lines).map(l => Object.assign({}, l, { onShow: transcriptAdd })), () => {
       document.getElementById("rechoice").classList.remove("hidden");
-      on("#rec", "click", () => { GM.rereportChoice(S, false); save(); clinicScreen(); });
-      on("#lewd", "click", () => {
-        const R = G.Report.REREPORT;
-        modal(`<p>${esc(U.pick(R.lewdAsk))}</p><p>${esc(U.pick(R.lewdLine))}</p><p class="sub">確認は、長く続いた。</p><div class="row"><button class="primary" id="ok">終える</button></div>`,
-          b => b.querySelector("#ok").onclick = () => { closeModal(); GM.rereportChoice(S, true); save(); clinicScreen(); });
-      });
+      on("#rec", "click", () => { document.getElementById("rechoice").classList.add("hidden"); vn(G.Reint.finish(sess, S, true).map(l => Object.assign({}, l, { onShow: transcriptAdd })), () => { GM.reintResult(S, sess, true); save(); clinicScreen(); }); });
+      on("#lewd", "click", () => { document.getElementById("rechoice").classList.add("hidden"); vn(G.Reint.transition().map(l => Object.assign({}, l, { onShow: transcriptAdd })), () => examPanel(sess)); });
+    });
+  }
+  // 検分：選ぶたびに、監査官の問いとひかりの反応が出る。快感の目盛りが満ちると達する（上限は虚偽の数）
+  function examPanel(sess) {
+    const rec = S.rec;
+    let box = document.getElementById("exam");
+    if (!box) { box = document.createElement("div"); box.id = "exam"; box.className = "panel"; document.getElementById("trp").before(box); }
+    const m = G.Reint.menu(sess, rec, S);
+    box.innerHTML = `<div class="row"><b>検分</b><span class="sub">快感</span><span class="ex-gauge"><i style="width:${Math.round(sess.gauge)}%"></i></span><span>${Math.round(sess.gauge)}</span>
+        <span class="sub">絶頂 <b style="color:var(--pink)">${sess.climaxes}</b>／${sess.cap}${sess.edges ? `　寸止め ${sess.edges}` : ""}</span></div>
+      ${m.parts.filter(p => p.acts.length).map(p => `<div class="ex-row"><span class="ex-part">${esc(p.label)}</span>${p.acts.map(a => `<button data-x="${a.id}" ${m.locked ? "disabled" : ""}>${esc(a.label)}</button>`).join("")}</div>`).join("")}
+      <div class="row">${m.specials.map(x => `<button data-x="${x.id}" class="${x.cls || ""}">${esc(x.label)}</button>`).join("")}</div>`;
+    box.querySelectorAll("button[data-x]").forEach(b => b.onclick = () => {
+      const id = b.dataset.x;
+      box.querySelectorAll("button").forEach(x => x.disabled = true);
+      const r = G.Reint.act(sess, id, rec, S);
+      const tail = () => {
+        if (!r.ended) return examPanel(sess);
+        box.remove();
+        vn(G.Reint.finish(sess, S, false).map(l => Object.assign({}, l, { onShow: transcriptAdd })), () => { GM.reintResult(S, sess, false); save(); clinicScreen(); });
+      };
+      if (r.lines.length) vn(r.lines.map(l => Object.assign({}, l, { onShow: transcriptAdd })), tail); else tail();
     });
   }
 

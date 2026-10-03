@@ -44,6 +44,7 @@ const lines=await p.$$('.ds-line:not(.fixed)'); if(lines.length) await lines[lin
 await p.waitForTimeout(200);await p.screenshot({path:SP+'v6b_doc.png',fullPage:true});
 await p.click('#ok');await p.waitForTimeout(200);await p.click('#ok2');await p.waitForTimeout(400);
 for(let i=0;i<60;i++){ if(await p.$('#rechoice:not(.hidden)')||await p.$('h1')) { if(await p.$('#rechoice:not(.hidden)')){await p.click('#rec');await p.waitForTimeout(300);} break; } const d=await p.$('#dlg:not(.hidden)'); if(d) await d.click(); await p.waitForTimeout(150); }
+for(let i=0;i<60;i++){ if(await p.$('h1')) break; const d=await p.$('#dlg:not(.hidden)'); if(d) await d.click(); await p.waitForTimeout(150); }   // 訂正を書かせて帰す：締めの会話を送る
 await p.waitForTimeout(200);await p.click('#ok');await p.waitForTimeout(1500);await p.screenshot({path:SP+'v7_day2.png',fullPage:true});
 console.log('errors',errs,'scrollW',await p.evaluate(()=>document.documentElement.scrollWidth));
 await b.close();})();

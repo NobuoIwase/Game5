@@ -7,13 +7,34 @@
   let S = null;              // セーブ
   let dive = null;           // 潜行中の状態 { run, w, cam, ... }
 
-  // 遙の番：画面に出る文を、遙の名前と言葉に寄せる（台詞はひかりの声で書かれているので、出す所でまとめて置き換える）
-  const fixText = n => { const pe = n.parentElement; if (pe && pe.closest && pe.closest('[data-raw="1"]')) return; const t = n.nodeValue, u = G.Hero.tx(t); if (u !== t) n.nodeValue = u; };
-  const fixTree = n => { if (n.nodeType === 3) return fixText(n); if (n.nodeType !== 1) return; const it = document.createTreeWalker(n, NodeFilter.SHOW_TEXT); let x; while ((x = it.nextNode())) fixText(x); };
-  if (typeof MutationObserver !== "undefined") new MutationObserver(ms => {
-    if (G.Hero.cur === "hikari") return;
-    for (const m of ms) { if (m.type === "characterData") fixText(m.target); else m.addedNodes.forEach(fixTree); }
-  }).observe(document.body, { childList: true, subtree: true, characterData: true });
+
+  /* ================================================================ 画面の文（遙の番は js/haruka/field.js の UI） */
+  const UI = {
+    skillBtn: "ルミナの技", diaryBtn: "ひかりの手帳",
+    weak: "ひかりの弱点：素で惑に強い。変身中は絡にも強い。変身が解けると一気に崩れる。",
+    silent: ["……監査官さん。ううん、なんでもないです", "（疑いはある。けれど、もう口に出す気はないらしい）"],
+    restH: ["え、今日は……休み、ですか？", "……いいんですか。じゃあ、お言葉に甘えて", "やった。……あ、いえ、ありがとうございます"],
+    restN: "ひかりは一日、迷宮から離れて過ごした。",
+    confront: ["扉を閉めるなり、ひかりは真っすぐにこちらを見た。", "……監査官さん。最近の依頼書、おかしくないですか。書いてあることと、中身が、ずっと違う", "偶然、じゃないですよね。……あたし、そこまで鈍くないです"],
+    confrontFix: ["……あれ？ あたし、何の話、してましたっけ", "ごめんなさい、疲れてるのかな。……今日の依頼、よろしくお願いしますね"],
+    reqSub: "ひかりの希望する依頼。机の上の一枚を選び、中身を書き換えてから渡す。",
+    reqTo: "ひかりに渡す依頼書",
+    reqPrep: "ひかりは<b>{p}</b>を用意してくる（{note}）。持ち物は{kit}。",
+    prepKit: { "惑": "気付け薬を多めに。", "蕩": "熱冷ましを買い込む。", "絡": "縄抜けの小刀を忍ばせる。" },
+    nightStart: "ひかりは動けない。救出は朝になる。",
+    docBy: "星野 ひかり（ルミナ）", docSign: "星野 ひかり", hanko: "星野",
+    auditSub: "ひかりが書いて提出した報告書。書面は記録に残るので、口では言えたことでも書かないことがある。",
+    missed: "見逃した嘘は、隠し通せた経験として、ひかりの心に積もる。",
+    lewdSub: "検分は、信頼を下げる代わりに、澱晶とギルドの澱みを得る。ひかりの堕ちも進む。",
+    reintCall: "報告書を手に、監査官はひかりを呼び戻した。",
+    gain: "ひかりの得たもの",
+    diaryTitle: "ひかりの手帳", diarySub: "（ひかりの鞄から、薄桃色の手帳がのぞいている。……少しだけなら。報告では言わなかったことも、ここには書いてある）",
+    skillTitle: "ルミナの技",
+    deckCut: "削（魔力を削る）",
+  };
+  const ui = k => G.Hero.T("UI", UI, k);
+  const heroShort = () => G.Hero.keep(G.Hero.d.short);
+  G.TextL = Object.assign(G.TextL || {}, { UI });
 
   /* ================================================================ 小道具 */
   const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -161,7 +182,7 @@
   function topbar() {
     const tier = G.tier(S.body, S.mind);
     return `<div class="topbar"><span><b>${S.day}</b>日目</span><span>ギルド資金 <b>◈${S.funds}</b></span><span>澱晶 <b>${S.dark}</b></span>
-      <span>ギルドの空気 <b>${TAINT_NAME[GM.taintStage(S)]}</b></span><span>ひかり <b>${TIER_NAME[tier]}</b></span><span>信頼 <b>${Math.round(S.trust)}</b></span></div>`;
+      <span>ギルドの空気 <b>${TAINT_NAME[GM.taintStage(S)]}</b></span><span>${esc(heroShort())} <b>${TIER_NAME[tier]}</b></span><span>信頼 <b>${Math.round(S.trust)}</b></span></div>`;
   }
   function meter(label, v, max, color) {
     const p = U.clamp(v / max * 100, 0, 100);
@@ -267,7 +288,7 @@
     if (ailTalk.length) out.unshift(T.office("talk.ail_" + U.pick(ailTalk)));
     // 昨日の成長・学習・期待が、朝の会話に出る
     const g = S.lastGrowth;
-    if (g && g.inspired && g.inspired.length && U.chance(0.8)) out.unshift(T.office("talk.inspired", { skill: G.SKILLS[g.inspired[0]].name }));
+    if (g && g.inspired && g.inspired.length && U.chance(0.8)) out.unshift(T.office("talk.inspired", { skill: G.skillName(g.inspired[0]) }));
     else if (g && g.lv > g.lv0 && U.chance(0.6)) out.push(T.office("talk.lvup"));
     const crave = Object.entries(S.lewd || {}).filter(([k, v]) => G.MONSTERS[k] && v >= 12).sort((a, b) => b[1] - a[1])[0];
     if (crave && U.chance(0.35)) out.push(T.office("talk.crave", { mon: G.MONSTERS[crave[0]].name }));
@@ -279,7 +300,7 @@
     return out.slice(0, 2);
   }
 
-  function kitText(kit) { return Object.keys(GM.ITEMS).filter(k => kit[k] > 0).map(k => `${GM.ITEMS[k].name}×${kit[k]}`).join("、") || "なし"; }
+  function kitText(kit) { return Object.keys(GM.ITEMS).filter(k => kit[k] > 0).map(k => `${G.Text.item(k)}×${kit[k]}`).join("、") || "なし"; }
   function equipHTML(form, prepName) {
     const eq = (G.Hero.is("haruka") ? G.HIKARI.equipHaruka : G.HIKARI.equip[form] || []).map(G.Hero.keep);
     return `<div class="sub" style="margin-top:4px">装備：${eq.map(esc).join("／")}${prepName ? `／<b>${esc(prepName)}</b>` : ""}</div>`;
@@ -297,7 +318,7 @@
         <div class="row" style="margin:4px 0">${esc("今日潜らせる：")}${GM.HEROES.map(id => { const cap = (S.captured || {})[id], nm = G.Hero.keep(G.Hero.DATA[id].short); return `<button class="${id === S.heroine ? "primary" : ""}" data-hero="${id}" ${cap ? "disabled" : ""}>${esc(nm)}${cap ? esc("（ワルドーに捕らわれている）") : ""}</button>`; }).join("")}</div>
         ${Object.keys(S.captured || {}).length ? `<div class="sub" style="color:var(--red)">${esc(G.Hero.keep(Object.keys(S.captured).map(id => `${G.Hero.DATA[id].name}は、${S.captured[id].day}日目にワルドーの戦闘員にされた。救出の依頼が出ている（支部の最下層で打ち倒せば、取り返せる）`).join("／")))}</div>` : ""}
         ${Object.keys(S.sequelae || {}).length ? `<div class="sub">後遺症（戦闘員にされた回数 ${S.convN || 0}）：${Object.entries(S.sequelae).map(([k, n]) => `<span class="tag" title="${esc(GM.SEQUELAE[k].desc)}">${esc(GM.SEQUELAE[k].name)}${n > 1 ? "×" + n : ""}</span>`).join("")}</div>` : ""}
-        <div class="sub">${esc(G.Hero.keep(G.Hero.d.formName))} Lv<b>${S.lv}</b>　次まで ${G.GROWTH.xpNeed(S.lv) - S.xp}　技 ${S.equip.length}/${G.GROWTH.slots(S.lv)}（覚えた ${Object.keys(S.skills).length}/${Object.keys(G.SKILLS).length}）${S.shards ? `　<span style="color:#ffe7a8">星の欠片 ${S.shards}/${G.SHARD_MAX}（体力+${3 * S.shards}・MP+${2 * S.shards}・気力+${Math.min(15, S.shards)}）</span>` : ""}</div>
+        <div class="sub">${esc(G.Hero.keep(G.Hero.d.formName))} Lv<b>${S.lv}</b>　次まで ${G.GROWTH.xpNeed(S.lv) - S.xp}　技 ${S.equip.length}/${G.GROWTH.slots(S.lv)}（覚えた ${Object.keys(S.skills).length}/${Object.keys(G.SKILLS).length}）${S.shards ? `　<span style="color:#ffe7a8">星の欠片 ${S.shards}/${G.SHARD_MAX}（体力+${3 * S.shards}・${G.Text.spell("mp")}+${2 * S.shards}・気力+${Math.min(15, S.shards)}）</span>` : ""}</div>
         ${meter("評判", S.rep ?? 60, 100, "#9fc4ff")}${meter("肉体", S.body, 100, "#ff7fb0")}${meter("精神", S.mind, 100, "#b48cff")}${meter("信頼", S.trust, 100, "#8fe0a0")}${meter("疲労", S.fatigue, 100, "#f2d27a")}
         <div class="sub">堕ち：${TIER_NAME[tier]} ／ 状態異常：${ail}</div>
         <div class="sub">身についた性癖（通常の処置では抜けない）：${tr}</div>
@@ -308,13 +329,13 @@
         <button id="deck">デッキを組む</button>
         <button id="shop">裏の取引（澱晶 ${S.dark}）</button>
         <button id="hist">これまでの記録</button>
-        <button id="skill">ルミナの技</button>
+        <button id="skill">${esc(ui("skillBtn"))}</button>
         <button id="rest">休養させる（今日は潜らない）</button>
-        <button id="diary">ひかりの手帳${(S.diary || []).length && S.diary[S.diary.length - 1].day !== S.diarySeen ? "（新しいページ）" : ""}</button>
+        <button id="diary">${esc(ui("diaryBtn"))}${(S.diary || []).length && S.diary[S.diary.length - 1].day !== S.diarySeen ? "（新しいページ）" : ""}</button>
         ${saveIOButtons(S)}
       </div>
       <div class="panel sub hidden" id="menu2">オート指揮：<button id="auto">${S.autoDirector ? "入" : "切"}</button>　潜行中に魔物や罠を自動で差し向ける（自分で置くこともできる）
-        <br><span class="dim">ひかりの弱点：素で惑に強い。変身中は絡にも強い。変身が解けると一気に崩れる。</span></div>`;
+        <br><span class="dim">${esc(ui("weak"))}</span></div>`;
     const showMenu = () => { document.getElementById("menu").classList.remove("hidden"); document.getElementById("menu2").classList.remove("hidden"); };
     on("#req", "click", requestScreen);
     bindSaveIO();
@@ -347,7 +368,7 @@
       hikariIn();
       setTimeout(() => {
         const talk = [{ who: "h", text: T.office("enter") }].concat(officeTalk().map(t => ({ who: "h", text: t })));
-        if (S.pendingEvent === "silent") { S.pendingEvent = null; talk.push({ who: "h", text: "……監査官さん。ううん、なんでもないです" }, { who: "n", text: "（疑いはある。けれど、もう口に出す気はないらしい）" }); }
+        if (S.pendingEvent === "silent") { S.pendingEvent = null; talk.push({ who: "h", text: ui("silent")[0] }, { who: "n", text: ui("silent")[1] }); }
         vn(talk, () => { S.greeted = S.day; save(); showMenu(); });
       }, 650);
     });
@@ -356,11 +377,11 @@
   // 休養：一日、潜らせない
   function restDay() {
     document.getElementById("menu").classList.add("hidden"); document.getElementById("menu2").classList.add("hidden");
-    const H = ["え、今日は……休み、ですか？", "……いいんですか。じゃあ、お言葉に甘えて", "やった。……あ、いえ、ありがとうございます"];
+    const H = ui("restH");
     vn([{ who: "a", text: "今日は潜らなくていい。休め。" }, { who: "h", text: U.pick(H) }], () => hikariOut(() => {
       const r = GM.rest(S); save();
       const bits = [`疲労 −${r.fatigue}`, r.body ? `肉体 −${r.body}` : "", r.mind ? `精神 −${r.mind}` : "", r.healed.length ? `自然に引いた：${r.healed.join("・")}` : ""].filter(Boolean).join("　");
-      vn([{ who: "n", text: "ひかりは一日、迷宮から離れて過ごした。" }, { who: "n", text: bits + "。報酬は無い。" }], () => guild());
+      vn([{ who: "n", text: ui("restN") }, { who: "n", text: bits + "。報酬は無い。" }], () => guild());
     }));
   }
 
@@ -368,16 +389,16 @@
     app.innerHTML = topbar() + officeHTML();
     hikariIn();
     vn([
-      { who: "n", text: "扉を閉めるなり、ひかりは真っすぐにこちらを見た。" },
-      { who: "h", text: "……監査官さん。最近の依頼書、おかしくないですか。書いてあることと、中身が、ずっと違う" },
-      { who: "h", text: "偶然、じゃないですよね。……あたし、そこまで鈍くないです" },
+      { who: "n", text: ui("confront")[0] },
+      { who: "h", text: ui("confront")[1] },
+      { who: "h", text: ui("confront")[2] },
       { who: "n", text: "確信されている。裏の力で「矯正」するしかない。澱晶はすべて失うが、信頼は最大に戻り、違和感は消える。" },
     ], () => {
       app.insertAdjacentHTML("beforeend", `<div class="row"><button class="danger" id="fix">矯正する（澱晶 ${S.dark} をすべて使う）</button></div>`);
       on("#fix", "click", () => {
         GM.resolveConfront(S); save();
         document.getElementById("fix").remove();
-        vn([{ who: "n", text: "淡い光が部屋を満たし、やがて消えた。" }, { who: "h", text: "……あれ？ あたし、何の話、してましたっけ" }, { who: "h", text: "ごめんなさい、疲れてるのかな。……今日の依頼、よろしくお願いしますね" }], () => { S.greeted = S.day; save(); office(); });
+        vn([{ who: "n", text: "淡い光が部屋を満たし、やがて消えた。" }, { who: "h", text: ui("confrontFix")[0] }, { who: "h", text: ui("confrontFix")[1] }], () => { S.greeted = S.day; save(); office(); });
       });
     });
   }
@@ -396,7 +417,7 @@
       const mains = GM.MAINS.map(k => `<option value="${k}" ${k === paper.main ? "selected" : ""}>${G.MONSTERS[k].name}（${G.MONSTERS[k].type}）</option>`).join("");
       const btn = (cls, val, cur, label) => `<button class="${cls}" data-v="${val}" style="${val === cur ? "border-color:var(--pink);background:#4a2640" : ""}">${label}</button>`;
       app.innerHTML = topbar() + `<h1>依頼書</h1>
-        <p class="sub">ひかりの希望する依頼。机の上の一枚を選び、中身を書き換えてから渡す。前金は小規模で報酬の3割・中規模で4割・大規模で半分。失敗しても返さない。</p>
+        <p class="sub">${esc(ui("reqSub"))}前金は小規模で報酬の3割・中規模で4割・大規模で半分。失敗しても返さない。</p>
         <div class="grid2">${S.requests.map((q, i) => `<div class="card paper ${i === sel ? "sel" : ""}" data-i="${i}">
           <b>${esc(q.title)}</b><div class="sub">${esc(q.place || G.DUNGEONS[q.dungeon].name)}・報酬 ◈${q.reward}（前金 ◈${GM.advanceOf(q)}）</div>
           <div class="sub">脅威度 ${LV_NAME[q.real.level]}・${SC_NAME[q.real.scale]}（${({ 1: 6, 2: 8, 3: 10 })[q.real.scale]}階）${q.real.boss ? "・長あり" : ""}</div></div>`).join("")}</div>
@@ -409,9 +430,9 @@
             <div>長　${btn("bs", 1, paper.boss ? 1 : 0, "書く")} ${btn("bs", 0, paper.boss ? 1 : 0, "書かない")}</div>
             ${S.upgrades.swapDest ? `<div>実際の行き先　${Object.keys(G.DUNGEONS).map(k => btn("de", k, de, G.DUNGEONS[k].name)).join(" ")}</div>` : ""}
           </div>
-          <div class="paper-preview"><div class="sub">ひかりに渡す依頼書</div><b>${esc(title)}</b>
+          <div class="paper-preview"><div class="sub">${esc(ui("reqTo"))}</div><b>${esc(title)}</b>
             <div class="sub">${de === r.dungeon ? esc(r.place || G.DUNGEONS[de].name) + "（" + G.DUNGEONS[de].name + "）" : G.DUNGEONS[de].name + "（実際の行き先）"}・書いた系統 ${tag(stType)}</div></div>
-          <p class="sub">ひかりは<b>${P.name}</b>を用意してくる（${esc(P.note)}）。持ち物は${kitTxt}。${stType === "惑" ? "気付け薬を多めに。" : stType === "蕩" ? "熱冷ましを買い込む。" : "縄抜けの小刀を忍ばせる。"}</p>
+          <p class="sub">${U.fill(ui("reqPrep"), { p: esc(P.name), note: esc(P.note), kit: kitTxt })}${ui("prepKit")[stType] || ui("prepKit")["絡"]}</p>
           ${size ? `<p class="sub">偽装の大きさ <b style="color:var(--red)">${size}</b>。食い違いを見るほど違和感が積もる（今 ${Math.round(S.suspicion)}/100）。</p>` : `<p class="sub">書き換えていない（正直な依頼書）。</p>`}
           <div class="row"><button class="primary" id="go">この依頼書を渡す</button><button id="reset">元に戻す</button><button id="back">戻る</button></div>
         </div>`;
@@ -512,7 +533,7 @@
       if (!dive.card) return;
       const why = G.Field.place(dive.w, dive.card, dive.hover.x, dive.hover.y, !!dive.night);
       if (why === "ok") { if (!dive.night) dive.card = null; drawCards(); }
-      else toast(({ wall: "床にしか置けない", cost: "コストが足りない", ct: "まだ待ち時間がある", live: "同時に出せる数を超える", near: "ひかりに近すぎる", seen: "ひかりに見られている", stairs: "階段の上には置けない" })[why] || "置けない");
+      else toast(({ wall: "床にしか置けない", cost: "コストが足りない", ct: "まだ待ち時間がある", live: "同時に出せる数を超える", near: heroShort() + "に近すぎる", seen: heroShort() + "に見られている", stairs: "階段の上には置けない" })[why] || "置けない");
     });
     drawCards();
     dive.last = performance.now();
@@ -565,13 +586,13 @@
     const w = dive.w, h = w.run.h;
     const top = document.getElementById("dtop");
     if (top) top.innerHTML = `<span><b>${w.floorNo}</b>/${w.dg.floors}階</span><span>${esc(dive.run.dungeonName || w.dg.name)} ${tag(w.dg.type)}</span><span>依頼書 ${tag(dive.run.stated)}</span>
-      <span>${h.form === "magica" ? "<b style='color:var(--pink)'>ルミナ</b>" : "<b>素の姿</b>"}</span><span>コスト <b>${w.dir.spent}/${w.dir.cap}</b></span><span>呼んだ数 <b>${w.dir.live}/${dive.run.maxLive}</b></span>${dive.run.dirStats && dive.run.dirStats.holds ? `<span>戦果 <b style="color:var(--pink)">捕縛${dive.run.dirStats.holds}・絶頂${dive.run.dirStats.climax}</b></span>` : ""}`;
+      <span>${h.form === "magica" ? `<b style='color:var(--pink)'>${esc(G.Text.spell("form"))}</b>` : `<b>${esc(G.Text.spell("civ"))}</b>`}</span><span>コスト <b>${w.dir.spent}/${w.dir.cap}</b></span><span>呼んだ数 <b>${w.dir.live}/${dive.run.maxLive}</b></span>${dive.run.dirStats && dive.run.dirStats.holds ? `<span>戦果 <b style="color:var(--pink)">捕縛${dive.run.dirStats.holds}・絶頂${dive.run.dirStats.climax}</b></span>` : ""}`;
     const hud = document.getElementById("hud");
     if (hud && (!dive.hudT || performance.now() - dive.hudT > 120)) {
       dive.hudT = performance.now();
-      hud.innerHTML = meter("体力", h.hp, h.hpMax || 100, "#8fe0a0") + meter("MP", h.mp, h.mpMax || 60, "#6fc2ff") + meter("魔力", h.magic, 100, "#ffd6f0") +
+      hud.innerHTML = meter("体力", h.hp, h.hpMax || 100, "#8fe0a0") + meter(G.Text.spell("mp"), h.mp, h.mpMax || 60, "#6fc2ff") + meter(G.Text.spell("magic"), h.magic, 100, "#ffd6f0") +
         meter("気力", h.will, 100, "#f2d27a") + meter("発情", h.arousal, 100, "#ff7fb0") + meter("快感", Math.min(100, h.pleasure), 100, "#ff4f9a") +
-        `<div class="sub">Lv${h.lv || 1}　絶頂 ${h.climax}　持ち物：${kitText(h.kit)}</div>` + (h.skills && h.skills.length ? `<div class="sub">技：${h.skills.map(id => G.SKILLS[id].name).join("・")}</div>` : "") + equipHTML(h.form, G.PREP[dive.run.stated] && G.PREP[dive.run.stated].name);
+        `<div class="sub">Lv${h.lv || 1}　絶頂 ${h.climax}　持ち物：${kitText(h.kit)}</div>` + (h.skills && h.skills.length ? `<div class="sub">技：${h.skills.map(id => G.skillName(id)).join("・")}</div>` : "") + equipHTML(h.form, G.PREP[dive.run.stated] && G.PREP[dive.run.stated].name);
       const chips = document.getElementById("chips");
       if (chips) {
         const st = G.Field.statusList(w);
@@ -729,7 +750,7 @@
     const btns = document.querySelector(".dive .row");
     btns.innerHTML = `<button class="primary" id="nx">次の場面</button><button id="skip">朝まで飛ばす</button><span class="sub">夜のコスト ${G.BAL.nightBudget}。カードを選んで地図を押すと、呼び足せる</span>`;
     log.style.maxHeight = "340px"; log.style.fontSize = "13px";
-    log.innerHTML = `<div class="heavy">ひかりは動けない。救出は朝になる。</div>`;
+    log.innerHTML = `<div class="heavy">${esc(ui("nightStart"))}</div>`;
     drawCards();
     const next = () => {
       if (dive.w.night.beat >= G.BAL.nightBeats) return finishDive();
@@ -752,7 +773,7 @@
     b.lines.forEach((l0, i) => {
       const l = String(l0).replace(/(\S) (?=\S)/g, "$1"), c = cx.find(x => x.at === i);
       if (c) {
-        const seq = G.Text.live.climax({ chain: Math.min(4, 1 + (dive.nightCx++ % 4)), part: c.part, cat: G.Text.actorOf(c.kind), mon: c.mon, n: "ひかり" });
+        const seq = G.Text.live.climax({ chain: Math.min(4, 1 + (dive.nightCx++ % 4)), part: c.part, cat: G.Text.actorOf(c.kind), mon: c.mon, n: heroShort(), kind: c.kind });
         q.push({ cls: "gauge cx", text: `快感 100／100　（今夜${dive.nightCx}回目）` }, seq[1], seq[2], { cls: "body cx", text: l });
         return;
       }
@@ -820,7 +841,7 @@
     const rec = S.rec;
     if (!rec) { S.phase = "guild"; return guild(); }
     app.innerHTML = topbar() + officeHTML() + `
-      <div class="panel sub" id="rinfo"><b>口頭報告</b>　${esc(rec.dungeonName)}・${rec.floorReached}階まで・${OUTC[rec.outcome]}　今日の話し方：${esc(rec.postureName)}${rec.merit && (rec.merit.body || rec.merit.shards) ? `<br><b style="color:#ffe7a8">ひかりの得たもの</b>　${rec.merit.purified ? `踏破の光で浄化（肉体−${rec.merit.body}・精神−${rec.merit.mind}）` : rec.merit.body ? `深くまで降りて、少し清められた（肉体−${rec.merit.body}）` : ""}${rec.merit.shards ? `${rec.merit.body ? "・" : ""}星の欠片 +${rec.merit.shards}（合計 ${S.shards}：体力+${3 * S.shards}・MP+${2 * S.shards}）` : ""}` : ""}${rec.dirStats && rec.dirStats.placed ? `<br><b style="color:var(--pink)">仕込みの戦果</b>　呼んだ ${rec.dirStats.placed}・捕縛 ${rec.dirStats.holds}・触れた ${rec.dirStats.acts}回・絶頂 ${rec.dirStats.climax}回（本人が何と言うか、聞いてみよう）` : ""}
+      <div class="panel sub" id="rinfo"><b>口頭報告</b>　${esc(rec.dungeonName)}・${rec.floorReached}階まで・${OUTC[rec.outcome]}　今日の話し方：${esc(rec.postureName)}${rec.merit && (rec.merit.body || rec.merit.shards) ? `<br><b style="color:#ffe7a8">${esc(ui("gain"))}</b>　${rec.merit.purified ? `踏破の光で浄化（肉体−${rec.merit.body}・精神−${rec.merit.mind}）` : rec.merit.body ? `深くまで降りて、少し清められた（肉体−${rec.merit.body}）` : ""}${rec.merit.shards ? `${rec.merit.body ? "・" : ""}星の欠片 +${rec.merit.shards}（合計 ${S.shards}：体力+${3 * S.shards}・${G.Text.spell("mp")}+${2 * S.shards}）` : ""}` : ""}${rec.dirStats && rec.dirStats.placed ? `<br><b style="color:var(--pink)">仕込みの戦果</b>　呼んだ ${rec.dirStats.placed}・捕縛 ${rec.dirStats.holds}・触れた ${rec.dirStats.acts}回・絶頂 ${rec.dirStats.climax}回（本人が何と言うか、聞いてみよう）` : ""}
         <br><span class="dim">話の途中で「追及する」「記録を突きつける」を選べるのは、その件を言い終えた、その時だけ。嘘なら崩れることがある。本当のことなら、中身を言わされる（記録を突きつけると、嘘はほぼ崩れるが、本当だった時はひどく傷つける）。</span></div>
       <div class="row hidden" id="rdone"><button class="primary" id="todoc">報告書を受け取る</button></div>
       <details class="panel" id="trp"><summary>ここまでの話（書き起こし）</summary><div id="tr"></div></details>`;
@@ -846,12 +867,12 @@
     return `<div class="docsheet">
       <div class="ds-head"><span class="ds-guild">冒険者ギルド　迷宮監査課</span><span class="ds-no">第 ${rec.day} 号</span></div>
       <div class="ds-title">迷 宮 探 索 報 告 書</div>
-      <table class="ds-meta"><tr><th>提出日</th><td>${rec.day}日目</td><th>提出者</th><td>星野 ひかり（ルミナ）</td></tr>
+      <table class="ds-meta"><tr><th>提出日</th><td>${rec.day}日目</td><th>提出者</th><td>${esc(G.Hero.keep(ui("docBy")))}</td></tr>
         <tr><th>依頼</th><td colspan="3">${esc(req)}</td></tr>
         <tr><th>行き先</th><td>${esc(rec.dungeonName)}</td><th>結果</th><td>${rec.floorReached}階・${OUTC[rec.outcome]}</td></tr></table>
       <div class="ds-sec">経過</div>
       ${rec.doc.map((d, i) => `<div class="doc-line ds-line ${flags.has(i) ? "flag" : ""} ${d.fixed ? "fixed" : ""}" data-i="${i}"><span class="ds-n">${i + 1}.</span><span class="ds-t">${esc(d.text)}</span><span class="mark">${flags.has(i) ? "虚" : ""}</span></div>`).join("")}
-      <div class="ds-foot"><span>上記のとおり、相違ないことを報告します。</span><span class="ds-sign">星野 ひかり<i class="hanko">星野</i></span></div>
+      <div class="ds-foot"><span>上記のとおり、相違ないことを報告します。</span><span class="ds-sign">${esc(G.Hero.keep(ui("docSign")))}<i class="hanko">${esc(G.Hero.keep(ui("hanko")))}</i></span></div>
       ${stamp ? `<div class="ds-stamp">受理</div>` : ""}
     </div>`;
   }
@@ -860,17 +881,17 @@
     if (!rec.docWritten) GM.writeDoc(S);
     const draw = keep(() => {
       app.innerHTML = topbar() + `<h1>報告書の監査</h1>
-        <p class="sub">ひかりが書いて提出した報告書。書面は記録に残るので、口では言えたことでも書かないことがある。<br>水晶の監視記録と見比べ、嘘だと思う行に印を付けて確定する（一日一度きり）。本人が覚えていないだけの行（「特に何もなし」）は嘘ではない。</p>
+        <p class="sub">${esc(ui("auditSub"))}<br>水晶の監視記録と見比べ、嘘だと思う行に印を付けて確定する（一日一度きり）。本人が覚えていないだけの行（「特に何もなし」）は嘘ではない。</p>
         ${docSheet(rec, flags, false)}
         <details class="panel" open><summary>水晶の監視記録</summary><div class="monitor">${rec.monitor.map(esc).join("<br>") || "（記録なし）"}</div></details>
-        <details class="panel"><summary>口頭報告の書き起こし</summary>${rec.report.map(l => `<div class="speech ${l.who}">${l.who !== "n" ? `<span class="who">${{ h: "ひかり", a: "監査官" }[l.who]}</span>` : ""}${esc(l.text)}</div>`).join("")}</details>
+        <details class="panel"><summary>口頭報告の書き起こし</summary>${rec.report.map(l => `<div class="speech ${l.who}">${l.who !== "n" ? `<span class="who">${{ h: esc(heroShort()), a: "監査官" }[l.who]}</span>` : ""}${esc(l.text)}</div>`).join("")}</details>
         <div class="row"><button class="primary" id="ok">この印で確定</button></div>`;
       on(".ds-line", "click", e => { const i = +e.currentTarget.dataset.i; if (rec.doc[i].fixed) return; flags.has(i) ? flags.delete(i) : flags.add(i); draw(); });
       on("#ok", "click", () => {
         const res = GM.audit(S, [...flags]); save();
         const msg = `<p>摘発 <b>${res.caught.length}</b> 件 ／ 誤った指摘 <b>${res.wrong.length}</b> 件 ／ 見逃し <b>${res.missed.length}</b> 件</p>
           ${res.wrong.some(d => d.kind === "missing") ? `<p class="sub">「特に何もなし」の行は、本人が覚えていないだけだった。</p>` : ""}
-          ${res.missed.length ? `<p class="sub">見逃した嘘は、隠し通せた経験として、ひかりの心に積もる。</p>` : ""}
+          ${res.missed.length ? `<p class="sub">${esc(ui("missed"))}</p>` : ""}
           <div class="row"><button class="primary" id="ok2">${res.caught.length ? "呼び戻して、問いただす" : "一日を終える"}</button></div>`;
         modal(msg, b => b.querySelector("#ok2").onclick = () => { closeModal(); route(); });
       });
@@ -887,10 +908,10 @@
     app.innerHTML = topbar() + officeHTML() + `<div class="panel sub"><b>再尋問</b>　報告書の嘘 ${res.caught.length} 件を、本人に突きつける。</div>
       <div class="panel hidden" id="rechoice"><p class="sub">嘘は認めさせた。このあと——</p>
         <div class="row"><button class="primary" id="rec">訂正を書かせて帰す</button><button class="danger" id="lewd">検分する（身体で裏を取る）</button></div>
-        <p class="sub">検分は、信頼を下げる代わりに、澱晶とギルドの澱みを得る。ひかりの堕ちも進む。検分の事由は、虚偽の数だけ立つ（寸止めを重ねれば延びる）。</p></div>
+        <p class="sub">${esc(ui("lewdSub"))}検分の事由は、虚偽の数だけ立つ（寸止めを重ねれば延びる）。</p></div>
       <details class="panel" id="trp"><summary>ここまでの話（書き起こし）</summary><div id="tr"></div></details>`;
     hikariIn(); faceIn("06_downcast_eyes");
-    vn([{ who: "n", text: "報告書を手に、監査官はひかりを呼び戻した。" }].concat(lines).map(l => withFace(Object.assign({}, l, { onShow: transcriptAdd }), S.rec)), () => {
+    vn([{ who: "n", text: ui("reintCall") }].concat(lines).map(l => withFace(Object.assign({}, l, { onShow: transcriptAdd }), S.rec)), () => {
       document.getElementById("rechoice").classList.remove("hidden");
       on("#rec", "click", () => { document.getElementById("rechoice").classList.add("hidden"); vn(G.Reint.finish(sess, S, true).map(l => withFace(Object.assign({}, l, { onShow: transcriptAdd }), S.rec)), () => { GM.reintResult(S, sess, true); save(); clinicScreen(); }); });
       on("#lewd", "click", () => { document.getElementById("rechoice").classList.add("hidden"); vn(G.Reint.transition().map(l => withFace(Object.assign({}, l, { onShow: transcriptAdd }), S.rec)), () => examPanel(sess)); });
@@ -929,7 +950,7 @@
       const g = S.rec ? S.rec.gain : null;
       app.innerHTML = topbar() + `<h1>一日の終わり（処置）</h1>
         ${g ? `<div class="panel sub">今日の変化：肉体 +${g.body}　精神 +${g.mind}　ギルド資金 ${g.funds >= 0 ? "+" : ""}${g.funds}${g.pay ? `（前金 ${g.pay.advance}${g.pay.rest ? "・踏破 " + g.pay.rest : ""}${g.pay.bounty ? "・討伐 " + g.pay.bounty : ""}）` : ""}　澱晶 +${g.dark}${S.rec.forged ? `　違和感 +${g.sus}` : ""}</div>` : ""}
-        <div class="panel">${S.ailments.length ? S.ailments.map(a => { const A = GM.AILMENTS[a.id]; return `<label class="doc-line"><input type="checkbox" data-id="${a.id}" ${sel.has(a.id) ? "checked" : ""}> <span><b>${esc(GM.ailmentName(a))}</b>${A.kink ? "（深層処置）" : ""}${GM.NATURAL.includes(a.id) ? '<span class="sub">（一晩で引く）</span>' : ""}　◈${A.fee}<br><span class="sub">${A.note}</span></span></label>`; }).join("") : `<p class="sub">状態異常はない。</p>`}
+        <div class="panel">${S.ailments.length ? S.ailments.map(a => { const A = GM.ail(a.id); return `<label class="doc-line"><input type="checkbox" data-id="${a.id}" ${sel.has(a.id) ? "checked" : ""}> <span><b>${esc(GM.ailmentName(a))}</b>${A.kink ? "（深層処置）" : ""}${GM.NATURAL.includes(a.id) ? '<span class="sub">（一晩で引く）</span>' : ""}　◈${A.fee}<br><span class="sub">${A.note}</span></span></label>`; }).join("") : `<p class="sub">状態異常はない。</p>`}
           <p class="sub">処置しないで残すと、日ごとに根を張って重くなり（感度・紋・魅了・欲求などが深まる）、堕ちも少し進む。ギルドの空気も澱む。発情・汚れ・衣装の破れ・疲れ・痺れ・疼きは、一晩で自然に引く。</p></div>
         <div class="row"><button class="primary" id="ok" ${fee > S.funds ? "disabled" : ""}>${sel.size ? `処置して（◈${fee}）` : "このまま"}翌日へ</button>${fee > S.funds ? `<span class="sub" style="color:var(--red)">資金が足りない（◈${S.funds}）。選び直す</span>` : ""}</div>`;
       on("input[type=checkbox]", "change", e => { e.target.checked ? sel.add(e.target.dataset.id) : sel.delete(e.target.dataset.id); draw(); });
@@ -953,7 +974,7 @@
         <div class="row">${Object.keys(G.DUNGEONS).map(k => `<button class="dg" data-k="${k}" style="${k === cur ? "border-color:var(--pink)" : ""}">${G.DUNGEONS[k].name}</button>`).join("")}</div>
         <div class="panel"><b>${dg.name}</b> ${tag(dg.type)} <span class="sub">${esc(dg.desc)}</span>
           <h2>固定枠</h2><div class="cards">${dg.fixed.map(c => `<div class="cbtn">${cardArt(c)}${esc(cardName(c))}<div class="cost">${G.Field.cardInfo(c).d.cost}</div></div>`).join("")}</div>
-          <h2>自由枠 ${mine.length}/${n}</h2><p class="sub">押して入れる／外す。削（魔力を削る）はどのダンジョンでも使える。</p>
+          <h2>自由枠 ${mine.length}/${n}</h2><p class="sub">押して入れる／外す。${esc(ui("deckCut"))}はどのダンジョンでも使える。</p>
           <div class="cards" style="flex-wrap:wrap">${cands.map(c => { const d = G.Field.cardInfo(c).d; return `<button class="cbtn fr ${mine.includes(c) ? "sel" : ""}" data-c="${c}">${cardArt(c)}${esc(d.name)}<div class="cost">${d.cost} ${tag(d.type)}</div></button>`; }).join("")}</div>
           <div class="sub" id="desc"></div></div>
         <button class="primary" id="done">決定</button>`;
@@ -978,8 +999,8 @@
       const pages = (S.diary || []).slice().reverse();
       const notes = G.Diary ? G.Diary.monsterNotes(S) : [];
       const art = n => `<img src="assets/monsters/${n.art}" alt=""${n.tint ? ` style="filter:hue-rotate(${n.tint}deg)"` : ""}>`;
-      app.innerHTML = topbar() + `<h1>ひかりの手帳</h1>
-        <p class="sub">（ひかりの鞄から、薄桃色の手帳がのぞいている。……少しだけなら。報告では言わなかったことも、ここには書いてある）</p>
+      app.innerHTML = topbar() + `<h1>${esc(ui("diaryTitle"))}</h1>
+        <p class="sub">${esc(ui("diarySub"))}</p>
         <div class="row"><button class="tb" data-t="diary" style="${tab === "diary" ? "border-color:var(--pink)" : ""}">日記</button><button class="tb" data-t="mon" style="${tab === "mon" ? "border-color:var(--pink)" : ""}">魔物のメモ（${notes.length}）</button><button id="back">そっと戻す</button></div>
         ${tab === "diary" ? (pages.length ? pages.map(p => `<div class="notebook"><div class="nb-date">${p.day}日目　${esc(p.weather)}</div>${p.lines.map(l => `<p>${esc(l)}</p>`).join("")}</div>`).join("") : `<div class="notebook"><p>（まだ何も書かれていない）</p></div>`)
           : `<div class="grid2">${notes.map(n => `<div class="notebook nb-mon ${n.ex > 0.3 ? "nb-hot" : ""}"><div class="nb-head">${art(n)}<b>${esc(n.name)}</b> <span class="tag t-${n.type}">${n.type}</span><span class="nb-st">${n.stage}</span></div>${n.lines.map((l, i) => `<p class="${n.struck.includes(i) ? "nb-strike" : ""} ${n.shaky && i === n.lines.length - 1 ? "nb-shaky" : ""}">${esc(l)}</p>`).join("")}${n.dated.length ? `<div class="nb-log">${n.dated.map(l => `<p>${esc(l)}</p>`).join("")}</div>` : ""}</div>`).join("") || `<div class="notebook"><p>（まだ何も書かれていない）</p></div>`}</div>`}`;
@@ -992,10 +1013,10 @@
   function skillScreen() {
     const draw = keep(() => {
       const slots = G.GROWTH.slots(S.lv);
-      app.innerHTML = topbar() + `<h1>ルミナの技</h1>
+      app.innerHTML = topbar() + `<h1>${esc(ui("skillTitle"))}</h1>
         <p class="sub">戦いの最中に、ふとした瞬間に閃いた技。装備できるのは ${slots} つまで（Lv6・Lv14で増える）。レベルの伸びは小さく、頭打ちになる。</p>
-        <div class="panel sub">Lv${S.lv}　体力 ${G.GROWTH.hpMax(S.lv)}　MP ${G.GROWTH.mpMax(S.lv)}　威力 ×${G.GROWTH.dmg(S.lv).toFixed(2)}　次のレベルまで ${G.GROWTH.xpNeed(S.lv) - S.xp}</div>
-        <div class="grid2">${Object.entries(G.SKILLS).map(([id, k]) => { const have = S.skills[id], on = S.equip.includes(id);
+        <div class="panel sub">Lv${S.lv}　体力 ${G.GROWTH.hpMax(S.lv)}　${G.Text.spell("mp")} ${G.GROWTH.mpMax(S.lv)}　威力 ×${G.GROWTH.dmg(S.lv).toFixed(2)}　次のレベルまで ${G.GROWTH.xpNeed(S.lv) - S.xp}</div>
+        <div class="grid2">${Object.keys(G.SKILLS).map(id => [id, G.skill(id)]).map(([id, k]) => { const have = S.skills[id], on = S.equip.includes(id);
           return `<div class="card ${on ? "sel" : ""}"><b>${have ? esc(k.name) : "？？？"}</b>　<span class="sub">${have ? esc(k.desc) : "まだ閃いていない"}</span>
             ${have ? `<div><button class="eq" data-id="${id}">${on ? "外す" : "装備する"}</button></div>` : ""}</div>`; }).join("")}</div>
         <button id="back" style="margin-top:10px">戻る</button>`;

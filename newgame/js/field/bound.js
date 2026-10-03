@@ -91,7 +91,7 @@
     const h = w.run.h;
     if (h.ifr > 0 && src.d && src.d.spd !== undefined) return false;
     if (!h.bound && sk(w, "veil") && !h.veilUsed && src.d && src.d.spd !== undefined) {   // ルミナ・ヴェール：階ごとに一度、掴む手を弾く
-      h.veilUsed = true; h.ifr = 0.6; msg(w, "veil", { mon: src.d.name }); h.bubble = { text: "ルミナ・ヴェール！", t: 1.2 };
+      h.veilUsed = true; h.ifr = 0.6; msg(w, "veil", { mon: src.d.name }); h.bubble = { text: G.Text.spell("veil") + "！", t: 1.2 };
       fx(w, { kind: "ring", x: h.x, y: h.y, color: "#fff2c0", r: 1.2, life: 0.6 }); return false;
     }
     if (h.bound) {
@@ -147,11 +147,8 @@
     if ((b.acts || 0) >= 2) {
       const top = b.ev && b.ev.acts ? Object.entries(b.ev.acts).sort((a, c) => c[1] - a[1]).slice(0, 2).map(([k]) => k).join("と") : "";
       const bare = h.exposure || h.torn;
-      const look = U.pick(h.pleasure > 70 ? ["脚が 震えて、まともに 立てない", "腰が 抜けたように、しばらく 動けない", "熱に 浮かされた 目で、ふらりと 立ち上がった"]
-        : b.climaxN >= 2 ? ["膝が 笑って、壁に 手を ついた", "続けざまに 達した 身体が、まだ 小刻みに 跳ねている"]
-        : b.climaxN ? ["達した 余韻が 抜けず、内腿が まだ 震えている", "息を 弾ませ、濡れた 内腿を 擦り合わせた"]
-        : b.stage >= 2 ? (bare ? ["裂けた 衣装を 手で 押さえ、肌を 隠そうとした", "はだけた 胸元を 腕で 隠して、息を 整えた"] : ["乱れた 服を 直す 指が 震えている", "服の 中に 残った 感触を 振り払うように、身を すくめた", "頬を 赤くしたまま、衣装を 引き直した"])
-        : (bare ? ["裂けた 裾を 押さえて、息を 整えた"] : ["息を 整えながら、服の 裾を 直した", "小さく 息を ついて、身構え直した"]));
+      const L = G.Text.look();
+      const look = U.pick(h.pleasure > 70 ? L.limp : b.climaxN >= 2 ? L.cxN : b.climaxN ? L.cx1 : b.stage >= 2 ? (bare ? L.bare2 : L.dress2) : (bare ? L.bare : L.dress));
       pushMsg(w, `——${b.t.toFixed(0)}秒、${b.acts}回 触れられた${top ? "（" + top + "）" : ""}${b.climaxN ? "。絶頂 " + b.climaxN + "回" : ""}。${heroName(w)}は ${look}……`, "after");
     }
     if (broke) {                                    // 群れは、逃げた獲物をすぐ追い直す
@@ -261,7 +258,7 @@
     lewdTick(w, dt);
     if (!h.bound) return;
     for (const id of b.by) { const m = w.monsters.find(x => x.id === id); if (m && m.d.atk.drain) drainMagic(w, m.d.atk.drain * dt, m); }
-    if (h.kit.knife > 0 && b.t > 0.8 && !b.knifed && b.type === "絡" && !b.noKnife) { b.knifed = true; h.kit.knife--; b.struggle += 0.6; msg(w, "item", { item: "縄抜けの小刀" }); record(w, { kind: "item", item: "knife", sev: 0 }); }
+    if (h.kit.knife > 0 && b.t > 0.8 && !b.knifed && b.type === "絡" && !b.noKnife) { b.knifed = true; h.kit.knife--; b.struggle += 0.6; msg(w, "item", { item: G.Text.item("knife") }); record(w, { kind: "item", item: "knife", sev: 0 }); }
     const arms = b.by.length + (b.shadow && b.shadow.arms >= 4 ? 1 : 0);      // 影の腕が増えたら、二か所以上に掴まれたのと同じ
     if (h.form === "magica" && !b.noFlash && h.cdFlash <= 0 && h.mp >= G.HIKARI.flash.cost && h.trance <= 0 && !b.wait && b.t > 5.5 && (arms >= 2 || (b.t > 7 && pressure(w, h.x, h.y, 2.4).n >= 3))) { flash(w); return; }
     const prep = G.PREP[w.run.stated];
@@ -330,7 +327,7 @@
     // ルミナの底力：気力が尽きかけた時、階ごとに一度だけ、光で全部を弾き飛ばす（変身中・MP があれば）
     if (h.will < 10 && h.hp > 0 && !h.lastStand && h.form === "magica" && h.mp >= 6 && !b.noFlash) {
       h.lastStand = true; h.mp += G.HIKARI.flash.cost; flash(w); h.will = Math.max(h.will, 50); h.ifr = Math.max(h.ifr, 2);
-      msg(w, "lastStand", {}); h.bubble = { text: "まだ……っ、負けない……！", t: 1.8 };
+      msg(w, "lastStand", {}); h.bubble = { text: G.Text.spell("lastStand"), t: 1.8 };
       return;
     }
     if (b.struggle >= 1) release(w, true);

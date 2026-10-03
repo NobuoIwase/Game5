@@ -217,7 +217,7 @@
       const cat = actCat(w, m) || "hands";
       for (let k = 0, nk = 1 + (U.chance(0.55) ? 1 : 0); k < nk; k++) {
         const act = G.Text.actFor(m.kind, cat, 2); if (!act) continue;   // 夜はもう、直接
-        lines.push(G.Text.fillAct(act, { mon: m.d.name, n: "ひかり" }) + "。" + (act.fx ? "《" + act.fx + "》" : ""));
+        lines.push(G.Text.fillAct(act, { mon: m.d.name, n: G.Hero.keep(G.Hero.d.short) }) + "。" + (act.fx ? "《" + act.fx + "》" : ""));
         beat.acts++; beat.parts[act.part] = (beat.parts[act.part] || 0) + 1;
         crave(w, m.kind, 0.3 * act.pw); { const sv = w.run.save; if (sv) { sv.parts = sv.parts || {}; const pp = sv.parts[m.kind] || (sv.parts[m.kind] = {}); pp[act.part] = (pp[act.part] || 0) + 1; } }
         if (act.watch) { h.arousal = Math.min(100, h.arousal + 5); continue; }
@@ -305,13 +305,13 @@
     if (h.convey) add("運ばれ中", h.convey.t, "gold");
     if (h.watched > 0) add("視線", null, "pink");
     if (h.arousal >= 70) add("発情（強）", null, "pink"); else if (h.arousal >= 40) add("発情", null, "pink");
-    if (h.form === "civilian") add((h.noTransform || 0) > 0 ? "変身不可" : "素の姿", h.noTransform > 0 ? h.noTransform : null, "red");
-    if (h.cast && h.cast.kind === "transform") add("変身詠唱", h.cast.t, "violet");
+    if (h.form === "civilian") add(G.Text.spell((h.noTransform || 0) > 0 ? "noForm" : "civ"), h.noTransform > 0 ? h.noTransform : null, "red");
+    if (h.cast && h.cast.kind === "transform") add(G.Text.spell("formCast"), h.cast.t, "violet");
     if (h.mislead > 0) add("幻に迷う", h.mislead, "violet");
     if (w.sealed) { const fr = w.sealed.room; if (fr.flood) add("閉じ込め・触手 " + Math.round(fr.fill * 100) + "%", null, "red"); else add("閉じ込め", w.sealed.t, "red"); }
     if (h.surrounded) add("包囲", null, "red");
     if (prep) add(prep.name + "（" + (prep.numb ? "熱に鈍い" : prep.slow ? "動きが重い" : "暗示に弱い") + "）", null, "dim");
-    for (const a of w.run.save.ailments || []) { const A = G.Game && G.Game.AILMENTS[a.id]; if (A) add(A.name, null, "dim"); }
+    for (const a of w.run.save.ailments || []) { const A = G.Game && G.Game.AILMENTS[a.id] && G.Game.ail(a.id); if (A) add(A.name, null, "dim"); }
     return out;
   }
 

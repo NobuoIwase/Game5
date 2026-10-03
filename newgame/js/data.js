@@ -385,7 +385,7 @@ var G = (typeof G !== "undefined") ? G : {};
     w_furnace:   { skin: "lab", name: "精気吸収炉", type: "削", from: 3, center: "furnace", den: [["waldo_grunt", 2]], desc: "部屋の中央で、炉が心臓のように脈打っている" },
     w_lab:       { skin: "lab", name: "開発室",     type: "蕩", from: 3, center: "exam", den: [["karte", 1], ["drone_tickle", 1]], seal: 8, desc: "白い台と器具の盆。壁の書類棚に、検体の記録がずらりと並ぶ" },
     w_pod_hall:  { skin: "lab", name: "戦闘員化ポッド", type: "惑", from: 5, center: "pod", traps: ["pod"], den: [["waldo_grunt", 3]], wake: 4, desc: "人型のポッドが壁際にずらりと並ぶ。一つが、ひとりでに開いた" },
-    w_command:   { skin: "lab", name: "幹部室",     type: "惑", from: 6, den: [["waldo_officer", 1], ["waldo_grunt", 2], ["drone_capture", 1]], seal: 8, desc: "組織の紋章の掛かった部屋。机の上に、ルミナの写真と『回収予定』の書類" },
+    w_command:   { skin: "lab", name: "幹部室",     type: "惑", from: 6, den: [["waldo_officer", 1], ["waldo_grunt", 2], ["drone_capture", 1]], seal: 8, desc: "組織の紋章の掛かった部屋。机の上に、ひかりと遙の写真と『回収予定』の書類" },
     w_drone_bay: { skin: "lab", name: "ドローン格納庫", type: "絡", from: 2, den: [["drone_capture", 2], ["drone_tickle", 1], ["drone_camera", 1]], desc: "天井の棚に、球体の機械が並んで眠っている" },
     // ---- 蟲 ----
     worm_nest:   { skin: "worm", name: "蟲の塒",     type: "絡", from: 2, traps: ["mushi_pit"], den: [["haimushi", 1], ["zuidou", 2]], desc: "丸い小部屋。床のくぼみで、細い蟲がかたまって蠢いている" },
@@ -437,7 +437,7 @@ var G = (typeof G !== "undefined") ? G : {};
     waldo: { name: "ワルドーの支部", type: "惑", floors: 10, pal: { floor: "#2e3240", floor2: "#282b38", wall: "#0a0b10", wallTop: "#565c74", edge: "#4c5a7a", fog: "#7a90c0" },
             fixed: ["waldo_grunt", "waldo_officer", "drone_capture", "drone_camera"], free: ["drone_tickle", "karte", "inma", "tsukite", ...DRAIN], traps: ["hypno_ray", "capture", "net", "pitfall", "exam", "furnace", "pod", "stasis", "echo_gate", "suit"],
             rooms: ["w_intake", "w_ray_room", "w_furnace", "w_lab", "w_pod_hall", "w_command", "w_drone_bay", "echo_hall", "stasis_room", "box_room"],
-            desc: "催眠と洗脳で人を戦闘員に変える組織の支部。ひかりを狙っている" },
+            desc: "催眠と洗脳で人を戦闘員に変える組織の支部。ひかりと遙を狙っている" },
     // ワルドーと教団の共同の点検路：天井の灯が、弱い催眠光を細かく瞬かせる。依頼には出ない（行き先のすり替えでだけ向かわせられる）
     strobe: { name: "明滅の点検路", type: "惑", floors: 10, hidden: true, strobe: { brain: 0.72, crackEvery: 30 }, pal: { floor: "#383c48", floor2: "#32353f", wall: "#0b0c10", wallTop: "#6a7088", edge: "#8a6a7a", fog: "#b8c0e8" },
             fixed: ["waldo_grunt", "drone_camera", "shinja", "sekkyoushi"], free: ["waldo_officer", "drone_capture", "karte", "chuushutsu", "kyouso", "tsukite", ...DRAIN], traps: ["hypno_ray", "net", "pitfall", "exam", "vow", "shashin", "kaikou", "pod", "echo_gate", "lull_voice", "stasis", "capture"],
@@ -518,6 +518,9 @@ var G = (typeof G !== "undefined") ? G : {};
     wind:      { name: "追い風",                 how: "walk",     desc: "足取りが軽くなる" },
     veil:      { name: "ルミナ・ヴェール",       how: "pinch",    desc: "階ごとに一度だけ、掴みかかってきた手を弾く" },
   };
+  // いまのヒロインの技（遙の番は js/haruka/field.js の SKILLS。効き目は同じ、名前と説明だけ別）
+  G.skill = id => (G.Hero && G.Hero.T("SKILLS", G.SKILLS, id)) || G.SKILLS[id];
+  G.skillName = id => G.skill(id).name;
   G.GROWTH = {
     lvMax: 30,
     xpNeed: lv => Math.round(40 * Math.pow(lv, 1.35)),          // 次のレベルまで

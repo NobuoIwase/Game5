@@ -30,5 +30,7 @@ if (simulation !== null) {
   } catch (error) { console.error(error); failed = true; }
 }
 command("check/stuck.js", ["--seeds", "1", "--runs", "1"]);
+// 遙の文：ひかりの表の取り違え・ひかりの言葉・ひかりと同じ文が無いか（遙で何日か回す）
+command("check/haruka.js", ["8", "3"]);
 console.log(failed ? "check FAIL" : "check PASS", "elapsed", ((performance.now() - start) / 1000).toFixed(2) + "s");
 if (failed) process.exitCode = 1;

@@ -21,6 +21,19 @@ var G = (typeof G !== "undefined") ? G : {};
 
   const HT = (name, base, key) => G.Hero.T(name, base, key);   // 遙の番は遙の表（js/haruka/*）から
   const ITEM = { star: "星の雫", salve: "治癒の軟膏", smelling: "気付け薬", ether: "魔力の水薬", cool: "熱冷まし", knife: "縄抜けの小刀" };
+  // 捕まっていた間のまとめの、今の有様（遙の番は js/haruka/field.js の LOOK）
+  const LOOK = {
+    limp: ["脚が 震えて、まともに 立てない", "腰が 抜けたように、しばらく 動けない", "熱に 浮かされた 目で、ふらりと 立ち上がった"],
+    cxN: ["膝が 笑って、壁に 手を ついた", "続けざまに 達した 身体が、まだ 小刻みに 跳ねている"],
+    cx1: ["達した 余韻が 抜けず、内腿が まだ 震えている", "息を 弾ませ、濡れた 内腿を 擦り合わせた"],
+    bare2: ["裂けた 衣装を 手で 押さえ、肌を 隠そうとした", "はだけた 胸元を 腕で 隠して、息を 整えた"],
+    dress2: ["乱れた 服を 直す 指が 震えている", "服の 中に 残った 感触を 振り払うように、身を すくめた", "頬を 赤くしたまま、衣装を 引き直した"],
+    bare: ["裂けた 裾を 押さえて、息を 整えた"],
+    dress: ["息を 整えながら、服の 裾を 直した", "小さく 息を ついて、身構え直した"],
+  };
+  // 技の名前・状態の札（遙の番は js/haruka/field.js の SPELL）
+  const SPELL = { shot: "ルミナ・ショット", twin: "ルミナ・ツインショット", melee: "ルミナ・ストライク", spear: "スター・スピア", burst: "シャイン・バスター", nova: "シャイン・ノヴァ",
+    flash: "ルミナ・フラッシュ", veil: "ルミナ・ヴェール", lastStand: "まだ……っ、負けない……！", noForm: "変身不可", civ: "素の姿", formCast: "変身詠唱", mp: "MP", magic: "魔力", form: "ルミナ" };
 
   /* ---- 吹き出し（ひかりの独り言）。form で変身中と素の姿を分けられる ---- */
   const BUBBLE = {
@@ -142,9 +155,6 @@ var G = (typeof G !== "undefined") ? G : {};
     strobe2: ["……あれ、あたし、いま、何、考えて……。……光、きれい……", "……パシャって、されるたび、……頭の、奥が、すうってする……"],
     strobe3: ["……イー……っ、……ちが、……ちがう、あたしは……っ", "……光、もっと……。……ちがう、だめ、……でも、命令、待って、……る……"],
     pavCx: ["ひぁっ……♡ イーッって、聞こえただけ、なのに……っ♡", "号令……っ、だめ、点検、思い出し……っ、ぁ……♡", "……っ、身体が、勝手に……イーッで、いっ……♡"],
-    // 戦闘員になったルミナ（遙の番に出る）
-    spotLumina: G.Hero.keep("……あの髪、あの髪飾り……っ。ひかり殿……！ 正気に、お戻りくだされ！|……ひかり殿、なのですか。……そのような、格好で……|……斬れぬ。……あれは、ひかり殿だ").split("|"),
-    luminaFlee: G.Hero.keep("……逃げられた。……ひかり殿、必ず、連れ戻します|……峰で打った。……今は、それしか|……あの敬礼が、目に焼きついて、離れぬ").split("|"),
     knowIt: ["{mon}ね。届くのは、あそこまで。……知ってる", "{mon}。前と同じなら、動きは読める", "{mon}……もう、同じ手には、かからないから", "知ってる相手。落ち着いて、いつもどおり"],
     mushiPit: ["穴……っ、底、なにか、うじゃって……っ", "ちっちゃいの、いっぱい……服の中、来な……っ！", "やだ、裾から、入ってくる……っ"],
     swell: ["……っ、吸われた、とこ……腫れて……", "……なんか、ぷっくり、して……擦れる……っ"],
@@ -656,9 +666,6 @@ var G = (typeof G !== "undefined") ? G : {};
     permitBeg: [
       ["三度目の寸前だった。溜まった熱が、行き場を失って、身体の中で渦を巻いている。", "契約書の声が、頭の中で囁いた。『許可が、欲しい？』", "「……っ、……ほし、……ほしく、な……っ」", "『じゃあ、もう一回、寸前ね』", "「……っ、……ほ、しい、……です、……きょか、……ください……っ」", "『はい、許可♡』。——堰が、切れた。"],
     ],
-    rescueLumina: [
-      ["黒いスーツの胸の紋章が、ひびを走らせて砕けた。", "膝をついた戦闘員の女その1が、ぱちぱちと瞬きをする。桃色の瞳に、少しずつ、光が戻っていく。", "「……イーッ……？ ……あ、……あれ。……あたし、……っ」", "震える手が、ガニ股のまま額に上がりかけて——止まった。", "「……っ、……ごめん。……ごめんね。……帰る。……帰りたい」", "黒いスーツの肩を抱いて、出口へ向かう。……背中の上で、まだ小さく『イーッ』と呟く声がした。"],
-    ],
     rescueHaruka: [
       ["黒いスーツの紋章が、刃のような光に割られて砕けた。", "戦闘員の女その2が、組みついた手をほどき、ゆっくりと膝をつく。黒い瞳に、静かに光が戻っていく。", "「……イ、……っ。……ここは。……私は、何を……」", "額に上がりかけた右手を、もう片方の手が、震えながら押さえこんだ。", "「……不覚。……面目、次第も……っ。……帰らせて、くだされ」", "黒いスーツの肩を貸して、出口へ向かう。……歩くたびに、膝が少しだけ外へ割れていた。"],
     ],
@@ -956,7 +963,7 @@ var G = (typeof G !== "undefined") ? G : {};
     ["（……光るたび、頭の中が、少しずつ、白くなる。……白いところが、増えていく）", "（……さっきの階のこと、もう、ぼんやりしてる。……何しに来たんだっけ）", "（パシャってされると、……気持ちいい。……気持ちいいって、思っちゃだめなのに）"],
     ["（……イーッ、って、言いたい。……言ったら、楽になれる、気がする）", "（命令、されたい。……ちがう、ちがう、{n}は、……{n}、は……）", "（……下の階に行けば、もっと、光ってる。……行かなきゃ。……行きたい）"],
   ];
-  G.TextL = Object.assign(G.TextL || {}, { ITEM, BUBBLE, BUBBLE_CIVILIAN, MSG, LOG, SCENE, NIGHT, NIGHT_MON, NIGHT_CAT, LAW_LINES, NIGHT_CLIMAX, NIGHT_OPEN, NIGHT_CLOSE, OFFICE, STROBE_MIND });   // 検査用：遙の表と鍵を突き合わせる
+  G.TextL = Object.assign(G.TextL || {}, { SKILLS: G.SKILLS, SPELL, LOOK, ITEM, BUBBLE, BUBBLE_CIVILIAN, MSG, LOG, SCENE, NIGHT, NIGHT_MON, NIGHT_CAT, LAW_LINES, NIGHT_CLIMAX, NIGHT_OPEN, NIGHT_CLOSE, OFFICE, STROBE_MIND });   // 検査用：遙の表と鍵を突き合わせる
   G.Text = {
     ITEM, OFFICE,
     lawLines(law, ctx) { return (HT("LAW_LINES", LAW_LINES, law) || []).map(l => U.fill(l, ctx || {})); },
@@ -967,6 +974,9 @@ var G = (typeof G !== "undefined") ? G : {};
     },
     msg(key, ctx) { const s = pickFresh(G.Hero.cur + "m:" + key, HT("MSG", MSG, key)); return s ? U.fill(s, ctx) : null; },
     skillName(kind, how) { return SKILL[kind] || (how === "lure" ? "呼び声" : "攻撃"); },
+    spell(k) { return HT("SPELL", SPELL, k); },
+    item(k) { return HT("ITEM", ITEM, k) || k; },
+    look() { return G.Hero.A("LOOK", LOOK); },
     bubble(key, ctx) {
       const civ = ctx.h && ctx.h.form === "civilian" && HT("BUBBLE_CIVILIAN", BUBBLE_CIVILIAN, key);
       const own = !civ && ctx.kind && HT("BUBBLE", BUBBLE, key + "@" + ctx.kind) && U.chance(0.65) ? key + "@" + ctx.kind : null;   // 魔物ごとの一言

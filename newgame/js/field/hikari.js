@@ -260,7 +260,7 @@
       if (m.d.spd > 0) knock(w, m, U.angle(h.x, h.y, m.x, m.y), F.push);
       m.stun = Math.max(m.stun, F.stun); m.cast = null; m.dash = null; m.holding = false;
     }
-    h.bubble = { text: "ルミナ・フラッシュ！", t: 1.4 };
+    h.bubble = { text: G.Text.spell("flash") + "！", t: 1.4 };
     msg(w, "flash", {});
     if (h.attach && h.attach.length) {               // 光で弾ける付着体だけ、剥がれる
       const before = h.attach.length;
@@ -323,8 +323,8 @@
     const h = w.run.h, run = w.run, map = w.map, S = G.HIKARI;
     const caution = run.caution || 1;         // 依頼書の脅威度で変わる用心深さ
     // 道具
-    if (h.hp < 38 && h.kit.salve > 0) { h.kit.salve--; h.hp = Math.min(h.hpMax || S.hpMax, h.hp + 35); say(w, "useSalve", {}); msg(w, "item", { item: "治癒の軟膏" }); record(w, { kind: "item", item: "salve", sev: 0 }); }
-    const use = (k, fn) => { h.kit[k]--; fn(); msg(w, "item", { item: G.Game.ITEMS[k].name }); record(w, { kind: "item", item: k, sev: 0 }); };
+    if (h.hp < 38 && h.kit.salve > 0) { h.kit.salve--; h.hp = Math.min(h.hpMax || S.hpMax, h.hp + 35); say(w, "useSalve", {}); msg(w, "item", { item: G.Text.item("salve") }); record(w, { kind: "item", item: "salve", sev: 0 }); }
+    const use = (k, fn) => { h.kit[k]--; fn(); msg(w, "item", { item: G.Text.item(k) }); record(w, { kind: "item", item: k, sev: 0 }); };
     if ((h.will < 32 || h.trance > 1.2 || h.hyp > 55) && h.kit.smelling > 0) use("smelling", () => { h.will = Math.min(100, h.will + 30); h.trance = Math.min(h.trance, 0.2); h.hyp = Math.max(0, h.hyp - 50); if (h.hyp <= 0 && h.sleep <= 0) h.hypno = null; });
     // MP：戦いの最中に切れそうなら水薬。静かなら、使わずに息を整える
     if (h.form === "magica" && h.kit.ether > 0 && h.mp < 14 && threats(w).some(o => o.d < 6)) use("ether", () => { h.mp = Math.min(h.mpMax || G.HIKARI.mpMax, h.mp + 30); });
@@ -616,7 +616,7 @@
     const h = w.run.h;
     c.open = true;
     const it = U.pick(["star", "salve", "smelling", "ether", "ether", "cool"]); h.kit[it] = (h.kit[it] || 0) + 1;
-    say(w, "chest", { item: it }); msg(w, "chest", { item: G.Game.ITEMS[it].name });
+    say(w, "chest", { item: it }); msg(w, "chest", { item: G.Text.item(it) });
     record(w, { kind: "chest", item: it, sev: 0 });
     if (U.chance(0.3)) gainShard(w, "chest");          // 宝箱の底に、星の欠片
   }
@@ -649,7 +649,7 @@
     h.cast = { kind, t: (kind === "burst" ? S.burst.cast : kind === "melee" ? S.melee.cast : S.shot.cast) * (h.numb > 0 ? 1.6 : 1), target, tx: target.x, ty: target.y };
     h.intent = null; h.label = kind === "burst" ? "詠唱" : "攻撃";
     h.face = { x: target.x, y: target.y, t: 0.5 };
-    const name = kind === "burst" ? (sk(w, "nova") ? "シャイン・ノヴァ" : "シャイン・バスター") : kind === "melee" ? (sk(w, "spear") ? "スター・スピア" : "ルミナ・ストライク") : (sk(w, "twin") && h.mp >= S.shot.cost + 3 ? "ルミナ・ツインショット" : "ルミナ・ショット");
+    const name = G.Text.spell(kind === "burst" ? (sk(w, "nova") ? "nova" : "burst") : kind === "melee" ? (sk(w, "spear") ? "spear" : "melee") : (sk(w, "twin") && h.mp >= S.shot.cost + 3 ? "twin" : "shot"));
     if (kind === "burst" || U.chance(kind === "melee" ? 0.25 : 0.35)) h.bubble = { text: name + "！", t: 1.2 };
     msg(w, "cast", { spell: name }, kind === "burst" ? 0 : 1.2);
   }

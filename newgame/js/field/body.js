@@ -268,8 +268,8 @@
     sv.skills = sv.skills || {}; sv.skills[id] = true;
     const slots = G.GROWTH.slots(sv.lv || 1); sv.equip = sv.equip || [];
     if (sv.equip.length < slots && !sv.equip.includes(id)) { sv.equip.push(id); h.skills = (h.skills || []).concat(id); }   // 空きがあれば、その場から使える
-    record(w, { kind: "inspire", skill: id, skillName: G.SKILLS[id].name, sev: 0 });
-    msg(w, "inspire", { skill: G.SKILLS[id].name }); say(w, "inspire", { skill: G.SKILLS[id].name });
+    record(w, { kind: "inspire", skill: id, skillName: G.skillName(id), sev: 0 });
+    msg(w, "inspire", { skill: G.skillName(id) }); say(w, "inspire", { skill: G.skillName(id) });
     fx(w, { kind: "burst", x: h.x, y: h.y - 0.8, color: "#fff6a0", r: 0.6, life: 0.8 });
     fx(w, { kind: "sfx", text: "閃いた！", x: h.x, y: h.y - 1.4, life: 1.6, color: "#fff2a0" });
   }

@@ -256,3 +256,9 @@ select { font: inherit; color: var(--tx); background: var(--panel2); border: 1px
     linear-gradient(160deg, transparent 30%, rgba(40,10,25,0.55) 31%, transparent 33%),
     linear-gradient(20deg, transparent 66%, rgba(40,10,25,0.5) 67%, transparent 69%);
   mix-blend-mode: normal; opacity: 0.9; }
+/* 再尋問の検分 */
+.ex-gauge { display: inline-block; width: 140px; height: 10px; border-radius: 5px; background: #2a2433; overflow: hidden; vertical-align: middle; }
+.ex-gauge i { display: block; height: 100%; background: linear-gradient(90deg, #c45a8e, #ff5fa0); transition: width .3s; }
+.ex-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0; }
+.ex-row button { font-size: 13px; padding: 4px 8px; }
+.ex-part { min-width: 3.5em; color: var(--pink); font-weight: bold; font-size: 13px; }

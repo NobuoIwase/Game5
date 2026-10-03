@@ -1025,6 +1025,15 @@ var G = (typeof G !== "undefined") ? G : {};
     return lines;
   }
 
-  G.Report = { build, documentLines, monitorLog, rereport, units, probe, REREPORT, POSTURE, STYLE };
+  // 再尋問で使う：その件の「記録の側の事実」（監視水晶の文面）と、「本人の口での事実」
+  function truthOf(u) {
+    const key = u.kind === "hold" ? (u.climax ? "holdC" : "hold") : u.kind;
+    const arr = DOC.honest[key] || DOC.honest.arouse;
+    let t = U.fill(U.pick(arr), { floor: u.floor, mon: u.monName || u.trapName || "", trap: u.trapName, dur: durText(u.dur), n: u.climax || u.n || 1 }).replace(/^\d+階：/, "");
+    if (u.acts) t = t.replace(/。?$/, "。") + "触れられた箇所：" + Object.entries(u.acts).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => k).join("・") + "。";
+    return t;
+  }
+  function sayOf(u, save, day) { return what(u, day, save.reportMem || (save.reportMem = {})).replace(/。?$/, "。"); }
+  G.Report = { build, documentLines, monitorLog, rereport, units, probe, truthOf, sayOf, REREPORT, POSTURE, STYLE };
 })();
 if (typeof module !== "undefined") module.exports = G;

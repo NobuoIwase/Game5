@@ -354,7 +354,7 @@
       }
     } else if (c.kind === "count") {            // 数え歌：十数えるあいだ、声を出したら負け
       if (dist <= A.range && !w.outcome && !h.countGame) {
-        h.countGame = { t: 10, p0: h.pleasure, c0: h.climax, mon: m.kind, monName: m.d.name, n: 0 };
+        h.countGame = { t: 10, p0: h.pleasure, c0: h.climax, mon: m.kind, mid: m.id, monName: m.d.name, n: 1 };
         record(w, { kind: "countStart", type: "惑", mon: m.kind, monName: m.d.name, sev: 1 }); msg(w, "countStart", { mon: m.d.name }); openScene(w, "countStart", m);
       }
     } else if (c.kind === "attach") {           // 星喰み：服の中へ滑り込んで貼りつく

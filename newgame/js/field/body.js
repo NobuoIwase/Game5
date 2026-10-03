@@ -1,9 +1,10 @@
 /* field/body.js — field 内部。tools/files.js と index.html の順で読み込む。 */
 (function () {
   "use strict";
-  let U, TIER_FX, say, live, msg, fx, logLine, record, checkClimax, release, defeat, openScene, flash;
+  let U, TIER_FX, say, live, msg, fx, logLine, record, checkClimax, release, defeat, openScene, flash, heroName, feed;
   const MACHINE = ["ratchet", "karte", "exam", "capture", "pod", "drone_capture", "drone_tickle", "belt", "gate", "armor", "saddle"];
   const IMPS = ["imp", "futago", "inma", "muma_queen", "jikkyou", "kusuguri", "kazoe", "azakeri", "kuchizuke", "sakiimp", "utaimp", "hitomi"];
+  const COUNT_KANA = ["いーち", "にーい", "さーん", "しーい", "ごーお", "ろーく", "しーち", "はーち", "きゅーう", "じゅーう"];
   function trait(w, id) { return ((w.run.save && w.run.save.traits) || {})[id] || 0; }
   // 快感の入り：堕ちの段階・敏感化・ハイ・その場面に噛み合った性癖
   // 熱：素の身体は、そう簡単には達しない。発情（媚薬・靄・匂い）と敏感化で、一気に達しやすくなる
@@ -317,10 +318,25 @@
         if (h.urge >= 60 && U.chance(dt * 0.12)) say(w, (h.futa ? "urgeF" : "urge") + (h.urge >= 90 ? 3 : 2), {});
       }
     }
+    // 空でいく：寸前で抜けた身体が、触れられないまま、遅れて達する
+    if (h.dryAt != null && w.t >= h.dryAt) {
+      const by = h.dryMon; h.dryAt = null; h.dryMon = null;
+      if (!h.bound) {
+        record(w, { kind: "dry", type: "蕩", mon: by && by.kind, monName: by ? by.name : "", sev: 3 });
+        msg(w, "dryClimax", { mon: by ? by.name : "" }); say(w, "dryClimax", {});
+        for (const t of G.Text.live.dry({ mon: by ? by.name : "", n: heroName(w) })) feed(w, t.cls, t.text);
+        h.pleasure = 100; checkClimax(w, by ? { kind: by.kind, d: { name: by.name, type: "蕩" } } : null, true);
+        h.vx = h.vy = 0; h.freeze = Math.max(h.freeze || 0, 1.2);
+      }
+    }
     // 数え歌：十数えるあいだに声が漏れたら負け。負けても勝っても、寸前で置き去り
+    if (h.countGame && !w.monsters.some(m => m.id === h.countGame.mid && m.hp > 0)) {   // 数えていた淫魔が倒れた：歌はそこで途切れる
+      const g = h.countGame; h.countGame = null;
+      msg(w, "countBroken", { mon: g.monName, c: "『" + COUNT_KANA[Math.max(0, g.n - 1)] + "』", k0: COUNT_KANA[Math.min(9, g.n)] }); say(w, "countBroken", {});
+    }
     if (h.countGame) {
       const g = h.countGame; g.t -= dt;
-      const n = Math.min(10, Math.floor(10 - g.t) + 1); if (n > g.n) { g.n = n; if (n > 1) msg(w, "countTick", { c: n }); }
+      const n = Math.min(10, Math.floor(10 - g.t) + 1); if (n > g.n) { g.n = n; if (n > 1) msg(w, "countTick", { c: n, k: COUNT_KANA[n - 1] }); }
       if (!g.lost && (h.pleasure - g.p0 > 16 || h.climax > g.c0)) { g.lost = true; msg(w, "countLose", { mon: g.monName }); say(w, "countLose", {}); }
       if (g.t <= 0) {
         h.countGame = null;
@@ -344,7 +360,12 @@
       checkClimax(w, { d: { name: ATTACH[h.attach[0]].name, type: "蕩" }, kind: h.attach[0] });
     }
     // 絶頂禁止：時間が来たら、溜まった分が一度に来る
-    if (h.deny) { h.deny.t -= dt; if (h.deny.t <= 0) { const o = h.deny; h.deny = null; if (o.over > 8 && !o.queen) { releaseOverflow(w, o.over, { kind: o.mon, d: { name: o.monName, type: "惑" } }, "deny"); } else if (!o.queen) msg(w, "denyEnd", {}); } }
+    if (h.deny) { h.deny.t -= dt; if (h.deny.t <= 0) { const o = h.deny; h.deny = null;
+      if (o.over > 8 && !o.queen) {
+        // 責められている最中に解ければ、その場で溢れる。解放されたあとなら、行き場を失って燻り、次に達する時に一度に来る
+        if (h.bound) releaseOverflow(w, o.over, { kind: o.mon, d: { name: o.monName, type: "惑" } }, "deny");
+        else { h.pent = { over: ((h.pent && h.pent.over) || 0) + o.over, mon: o.mon, monName: o.monName }; urgeUp(w, Math.min(40, o.over * 0.4), null); msg(w, "denyPent", { mon: o.monName }); say(w, "denyPent", {}); }
+      } else if (!o.queen) msg(w, "denyEnd", {}); } }
     // 暗示の引き金：前触れなく、無様の発作
     if (h.trigger) { h.trigT = (h.trigT ?? U.rf(20, 40)) - dt; if (h.trigT <= 0 && !h.bound) { h.trigT = U.rf(22, 45); h.freeze = 1.2; h.pleasure += 12 * intake(w); record(w, { kind: "fit", type: "惑", sev: 2 }); msg(w, "fit", {}); say(w, "fit", {}); } }
     // 洗脳はゆっくり薄れる
@@ -365,5 +386,5 @@
   /* ---- 捕まる・振りほどく ---- */
 
   Object.assign(G.F, { shasei, cumBlocked, urgeUp, MACHINE, IMPS, trait, heat, intake, resist, capped, releaseOverflow, addCharm, SLUGS, charmTouch, ATTACH, addAttach, addCum, addCrack, pray, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, applyEffect, drainMagic, untransform, engraveSigil, possess, tickStatus, endPossess });
-  G.F.bind.push(() => { ({ U, TIER_FX, say, live, msg, fx, logLine, record, checkClimax, release, defeat, openScene, flash } = G.F); });
+  G.F.bind.push(() => { ({ U, TIER_FX, say, live, msg, fx, logLine, record, checkClimax, release, defeat, openScene, flash, heroName, feed } = G.F); });
 })();

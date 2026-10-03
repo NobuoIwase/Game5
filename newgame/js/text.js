@@ -19,7 +19,21 @@ var G = (typeof G !== "undefined") ? G : {};
     return s;
   }
 
+  const HT = (name, base, key) => G.Hero.T(name, base, key);   // 遙の番は遙の表（js/haruka/*）から
   const ITEM = { star: "星の雫", salve: "治癒の軟膏", smelling: "気付け薬", ether: "魔力の水薬", cool: "熱冷まし", knife: "縄抜けの小刀" };
+  // 捕まっていた間のまとめの、今の有様（遙の番は js/haruka/field.js の LOOK）
+  const LOOK = {
+    limp: ["脚が 震えて、まともに 立てない", "腰が 抜けたように、しばらく 動けない", "熱に 浮かされた 目で、ふらりと 立ち上がった"],
+    cxN: ["膝が 笑って、壁に 手を ついた", "続けざまに 達した 身体が、まだ 小刻みに 跳ねている"],
+    cx1: ["達した 余韻が 抜けず、内腿が まだ 震えている", "息を 弾ませ、濡れた 内腿を 擦り合わせた"],
+    bare2: ["裂けた 衣装を 手で 押さえ、肌を 隠そうとした", "はだけた 胸元を 腕で 隠して、息を 整えた"],
+    dress2: ["乱れた 服を 直す 指が 震えている", "服の 中に 残った 感触を 振り払うように、身を すくめた", "頬を 赤くしたまま、衣装を 引き直した"],
+    bare: ["裂けた 裾を 押さえて、息を 整えた"],
+    dress: ["息を 整えながら、服の 裾を 直した", "小さく 息を ついて、身構え直した"],
+  };
+  // 技の名前・状態の札（遙の番は js/haruka/field.js の SPELL）
+  const SPELL = { shot: "ルミナ・ショット", twin: "ルミナ・ツインショット", melee: "ルミナ・ストライク", spear: "スター・スピア", burst: "シャイン・バスター", nova: "シャイン・ノヴァ",
+    flash: "ルミナ・フラッシュ", veil: "ルミナ・ヴェール", lastStand: "まだ……っ、負けない……！", noForm: "変身不可", civ: "素の姿", formCast: "変身詠唱", mp: "MP", magic: "魔力", form: "ルミナ" };
 
   /* ---- 吹き出し（ひかりの独り言）。form で変身中と素の姿を分けられる ---- */
   const BUBBLE = {
@@ -140,13 +154,7 @@ var G = (typeof G !== "undefined") ? G : {};
     strobe1: ["……っ、また、光った。……さっきから、ずっと、チカチカ……", "……なんでもない。……なんでもない、光。……ただの、灯り……"],
     strobe2: ["……あれ、あたし、いま、何、考えて……。……光、きれい……", "……パシャって、されるたび、……頭の、奥が、すうってする……"],
     strobe3: ["……イー……っ、……ちが、……ちがう、あたしは……っ", "……光、もっと……。……ちがう、だめ、……でも、命令、待って、……る……"],
-    strobe1H: ["……瞬く灯。目を閉じれば済む話……いや、閉じれば足元が見えぬ", "……一、二、三。呼吸を数えれば、光は数えずに済む"],
-    strobe2H: ["……えいっ、……い、……いっ……。気合が、光に、揃っていく……", "……構えが、勝手に、光の拍子を待っている……。私の剣は、こんな拍子では、ない……"],
-    strobe3H: ["……イーッ。……っ！？ いま、私、気合のつもりで……", "……礼を、せねば。……礼、……右手を、額へ……ちがう、それは、礼では……"],
     pavCx: ["ひぁっ……♡ イーッって、聞こえただけ、なのに……っ♡", "号令……っ、だめ、点検、思い出し……っ、ぁ……♡", "……っ、身体が、勝手に……イーッで、いっ……♡"],
-    // 戦闘員になったルミナ（遙の番に出る）
-    spotLumina: G.Hero.keep("……あの髪、あの髪飾り……っ。ひかり殿……！ 正気に、お戻りくだされ！|……ひかり殿、なのですか。……そのような、格好で……|……斬れぬ。……あれは、ひかり殿だ").split("|"),
-    luminaFlee: G.Hero.keep("……逃げられた。……ひかり殿、必ず、連れ戻します|……峰で打った。……今は、それしか|……あの敬礼が、目に焼きついて、離れぬ").split("|"),
     knowIt: ["{mon}ね。届くのは、あそこまで。……知ってる", "{mon}。前と同じなら、動きは読める", "{mon}……もう、同じ手には、かからないから", "知ってる相手。落ち着いて、いつもどおり"],
     mushiPit: ["穴……っ、底、なにか、うじゃって……っ", "ちっちゃいの、いっぱい……服の中、来な……っ！", "やだ、裾から、入ってくる……っ"],
     swell: ["……っ、吸われた、とこ……腫れて……", "……なんか、ぷっくり、して……擦れる……っ"],
@@ -259,10 +267,6 @@ var G = (typeof G !== "undefined") ? G : {};
     strobe1: ["パシャッ、パシャッ。灯が 瞬くたび、{n}の 瞬きが 遅れる……", "明滅に 合わせて、{n}の 足取りが 一拍 止まる……"],
     strobe2: ["パシャッ。{n}の 瞳が、光の 方へ 吸い寄せられた……", "灯が 瞬くたび、{n}の 口元が ゆるむ。洗脳が 進んでいる……"],
     strobe3: ["パシャッ。{n}の 右手が、ぴくりと 額の 方へ 上がりかけた……", "光を 浴びた {n}が、小さく『イー……』と 呟いた……"],
-    strobe0H: ["天井の 灯が 瞬いた。{n}は 目を 細めて、柄に 手を 添えた", "灯が 細かく 明滅している。{n}は 一歩ごとに 呼吸を 整える"],
-    strobe1H: ["パシャッ。光の 一拍ごとに、{n}の 呼吸の 数が 一つ 飛ぶ……", "明滅の 拍子で、{n}の 踏み込みが 半歩 遅れた……"],
-    strobe2H: ["パシャッ。{n}の 切っ先が、光の 来る 方へ 下がっていく……", "灯が 瞬くたび、{n}の 唇が、気合の 形に 小さく 開く……"],
-    strobe3H: ["パシャッ。{n}の 踵が 揃い、膝が 外へ 割れかけた……", "光を 浴びた {n}の 気合が、『イーッ』の 音に 変わった……"],
     drainCx: ["{mon}の 吸盤が、達した {n}の 魔力を 一気に 吸い上げた！", "達した 瞬間を 狙って、{mon}が 魔力を ごっそり 吸いとった……"],
     watched: ["{mon}が {n}を じっと 見ている……"],
     pop: ["{mon}が 弾けた！"],
@@ -534,21 +538,6 @@ var G = (typeof G !== "undefined") ? G : {};
     strobeConvert: [
       ["最下層の手前。灯は、もう瞬くのをやめていた。点きっぱなしの白い光が、{n}を正面から照らしている。", "『点検、完了。素体名、ルミナ。……消去』", "名前が、光の中に溶けていった。溶けるのは、ちっとも怖くなかった。", "右手が、額へ上がる。膝が外へ開く。誰にも命じられていないのに、身体が、いちばん正しい形を知っていた。", "「……イーッ♡」 白い光の中で、{n}だったものは、晴れ晴れと笑った。"],
     ],
-    // ---- 明滅の点検路（遙） ----
-    strobeEnterH: [
-      ["石段の下に、白い廊下。天井に、提灯ほどの丸い灯が、等間隔に吊られている。", "パシャッ。一つが瞬いた。", "{n}は足を止め、鯉口を切ったまま、しばらく灯を見上げた。……斬れるものでは、ない。", "「……目くらましにしては、弱すぎる。弱すぎるものほど、用心せねば」", "一歩ごとに、呼吸を一つ。光の数ではなく、己の息を数えて、{n}は歩き出した。"],
-      ["廊下の入口に、札が掛かっていた。『点検路　関係者以外立入禁止』。その下に、知らぬ紋と、知らぬ聖印。", "「……依頼書と、話が違う。監査官殿に、戻って伺うべきか」", "パシャッ。灯が瞬いた。", "……伺うほどのことでも、ない気がした。務めは、務めだ。", "{n}は札に一礼して、廊下へ踏み入った。礼をした指先が、ほんの少しだけ、額の方へ寄っていた。"],
-    ],
-    strobeDeepH: [
-      ["何階降りたか。……数えていたはずの呼吸が、いつの間にか、光の数と同じになっていた。", "パシャッ、で吸う。パシャッ、で吐く。剣の稽古の、あの拍子木の音に似ている。", "似ているから、身体が勝手に従う。構えを取る。光る。踏み込む。光る。", "「……えいっ、……えいっ、……い、……っ、イーッ」", "気合の声が、途中で別の音に化けた。{n}は口を押さえたが、押さえた手の方が、震えながら額へ上がろうとしていた。"],
-      ["廊下の先で、黒ずくめの者たちが、一列に並んで敬礼していた。誰に向けてでもない。光に向けて。", "（……揃っている。……あれほど揃った礼を、私は、道場でも見たことがない）", "美しい、と思ってしまった。", "パシャッ。思ってしまった所を、光がなぞる。なぞられた所が、熱を持つ。袴の奥が、じわりと湿った。", "「……っ、不覚……。……不覚、で、ござる……」 {n}は刀の柄を握りしめたまま、列から目を離せなかった。"],
-    ],
-    strobeRescueH: [
-      ["灯が、一斉に瞬いた。足が揃い、膝が割れ、右手が上がる——", "その時、懐で、何かが熱くなった。", G.Hero.keep("ひかりから預かった御守りだった。『遙さん、無茶しないでね』と、押しつけるように渡された、あの小さな袋。"), "袋の中の光が、天井の白い光を、ほんの一瞬、押し返した。", "「……っ！ ……ひかり殿、かたじけない」 {n}は上がりかけた右手で刀を抜き、一番近い灯を、鞘ごと叩き割った。"],
-    ],
-    strobeConvertH: [
-      ["最下層の扉の前。点きっぱなしの白い光の下で、{n}は、刀を床に置いた。", "置いたのは、自分の手だった。誰にも命じられていない。……いや、命じられていた。ずっと前から、光が。", "『点検、完了。素体名、白山遙。……剣士の登録を、抹消』", "「……承知、いたしました」 礼をしようとして、身体が選んだのは、額へ右手を当て、膝を外へ開く形だった。", "「イーッ！」 侍の気合よりも、ずっと大きく、ずっと晴れやかな声が、白い廊下に響いた。"],
-    ],
     // ---- 淫魔 ----
     beg: [
       ["三度目だった。女王の指が、あと一撫でのところで、また離れた。", "腰が勝手に追いかける。追いかけた先に、何もない。", "「……っ、なん、で……っ、あと、ちょっと、なの、に……」", "女王は頬杖をついたまま、首を傾げてみせる。『それで？ 言いたいことは？』", "「……い、言わない……言わない、から……っ、……お、ねがい……し……ま……」", "言い切る前に、女王が満足そうに笑った。許しは、{n}が言い終わるのを待ってくれなかった。"],
@@ -676,9 +665,6 @@ var G = (typeof G !== "undefined") ? G : {};
     ],
     permitBeg: [
       ["三度目の寸前だった。溜まった熱が、行き場を失って、身体の中で渦を巻いている。", "契約書の声が、頭の中で囁いた。『許可が、欲しい？』", "「……っ、……ほし、……ほしく、な……っ」", "『じゃあ、もう一回、寸前ね』", "「……っ、……ほ、しい、……です、……きょか、……ください……っ」", "『はい、許可♡』。——堰が、切れた。"],
-    ],
-    rescueLumina: [
-      ["黒いスーツの胸の紋章が、ひびを走らせて砕けた。", "膝をついた戦闘員の女その1が、ぱちぱちと瞬きをする。桃色の瞳に、少しずつ、光が戻っていく。", "「……イーッ……？ ……あ、……あれ。……あたし、……っ」", "震える手が、ガニ股のまま額に上がりかけて——止まった。", "「……っ、……ごめん。……ごめんね。……帰る。……帰りたい」", "黒いスーツの肩を抱いて、出口へ向かう。……背中の上で、まだ小さく『イーッ』と呟く声がした。"],
     ],
     rescueHaruka: [
       ["黒いスーツの紋章が、刃のような光に割られて砕けた。", "戦闘員の女その2が、組みついた手をほどき、ゆっくりと膝をつく。黒い瞳に、静かに光が戻っていく。", "「……イ、……っ。……ここは。……私は、何を……」", "額に上がりかけた右手を、もう片方の手が、震えながら押さえこんだ。", "「……不覚。……面目、次第も……っ。……帰らせて、くだされ」", "黒いスーツの肩を貸して、出口へ向かう。……歩くたびに、膝が少しだけ外へ割れていた。"],
@@ -977,33 +963,37 @@ var G = (typeof G !== "undefined") ? G : {};
     ["（……光るたび、頭の中が、少しずつ、白くなる。……白いところが、増えていく）", "（……さっきの階のこと、もう、ぼんやりしてる。……何しに来たんだっけ）", "（パシャってされると、……気持ちいい。……気持ちいいって、思っちゃだめなのに）"],
     ["（……イーッ、って、言いたい。……言ったら、楽になれる、気がする）", "（命令、されたい。……ちがう、ちがう、{n}は、……{n}、は……）", "（……下の階に行けば、もっと、光ってる。……行かなきゃ。……行きたい）"],
   ];
-  const STROBE_MIND_H = [null,
-    ["（灯の明滅など、稽古場の蝋燭の揺らぎと同じ。……心を、乱されるな）", "（数を数えるのは、呼吸だけ。光の数を数え始めたら、そこで負けだ）"],
-    ["（……黙想の時の、あの白さに似ている。……似ているから、抗い方が分からない）", "（剣を握る手が、光の拍子で、勝手に握り直す。……私の手、だろうか）", "（……さっきの階で何を斬ったか、思い出せぬ。……斬ったのか、私は）"],
-    ["（命じられれば、迷わずに済む。……侍とは、そういうもの、……では、なかったはず）", "（お仕えする方が、欲しい。……ちがう、主を選ぶのは、私だ。……私、だった）", "（下へ。……下に行けば、号令がある。号令があれば、斬らなくても、よい）"],
-  ];
+  G.TextL = Object.assign(G.TextL || {}, { SKILLS: G.SKILLS, SPELL, LOOK, ITEM, BUBBLE, BUBBLE_CIVILIAN, MSG, LOG, SCENE, NIGHT, NIGHT_MON, NIGHT_CAT, LAW_LINES, NIGHT_CLIMAX, NIGHT_OPEN, NIGHT_CLOSE, OFFICE, STROBE_MIND });   // 検査用：遙の表と鍵を突き合わせる
   G.Text = {
     ITEM, OFFICE,
-    lawLines(law, ctx) { return (LAW_LINES[law] || []).map(l => U.fill(l, ctx || {})); },
-    office(key, ctx) { const arr = key.split(".").reduce((o, k) => o && o[k], OFFICE); return arr ? U.fill(officePick(key, arr), ctx || {}) : ""; },
-    msg(key, ctx) { const s = pickFresh("m:" + key, MSG[key]); return s ? U.fill(s, ctx) : null; },
-    skillName(kind, how) { return SKILL[kind] || (how === "lure" ? "呼び声" : "攻撃"); },
-    bubble(key, ctx) {
-      const civ = ctx.h && ctx.h.form === "civilian" && BUBBLE_CIVILIAN[key];
-      const own = !civ && ctx.kind && BUBBLE[key + "@" + ctx.kind] && U.chance(0.65) ? key + "@" + ctx.kind : null;   // 魔物ごとの一言
-      const s = pickFresh("b:" + (own || key) + (civ ? ":c" : ""), civ ? BUBBLE_CIVILIAN[key] : BUBBLE[own || key]);
-      if (!s) return null;
-      return U.fill(s, Object.assign({}, ctx, { item: ITEM[ctx.item] || ctx.item }));
+    lawLines(law, ctx) { return (HT("LAW_LINES", LAW_LINES, law) || []).map(l => U.fill(l, ctx || {})); },
+    office(key, ctx) {
+      const path = key.split("."), last = path.pop(), box = path.reduce((o, k) => o && o[k], OFFICE), boxH = path.reduce((o, k) => o && o[k], G.TextH.OFFICE || {});
+      const arr = G.Hero.cur === "haruka" ? (boxH && boxH[last]) || (box && box[last] && (G.Hero.leak("OFFICE", key), box[last])) : box && box[last];
+      return arr ? U.fill(officePick(G.Hero.cur + key, arr), ctx || {}) : "";
     },
-    strobeMind(lv, n, haruka) { const T = haruka ? STROBE_MIND_H : STROBE_MIND; return U.fill(pickFresh((haruka ? "smh" : "sm") + lv, T[lv] || T[1]), { n: n || "ルミナ" }); },
-    log(key, ctx) { return U.fill(pickFresh("l:" + key, LOG[key]) || "", ctx); },
+    msg(key, ctx) { const s = pickFresh(G.Hero.cur + "m:" + key, HT("MSG", MSG, key)); return s ? U.fill(s, ctx) : null; },
+    skillName(kind, how) { return SKILL[kind] || (how === "lure" ? "呼び声" : "攻撃"); },
+    spell(k) { return HT("SPELL", SPELL, k); },
+    item(k) { return HT("ITEM", ITEM, k) || k; },
+    look() { return G.Hero.A("LOOK", LOOK); },
+    bubble(key, ctx) {
+      const civ = ctx.h && ctx.h.form === "civilian" && HT("BUBBLE_CIVILIAN", BUBBLE_CIVILIAN, key);
+      const own = !civ && ctx.kind && HT("BUBBLE", BUBBLE, key + "@" + ctx.kind) && U.chance(0.65) ? key + "@" + ctx.kind : null;   // 魔物ごとの一言
+      const s = pickFresh(G.Hero.cur + "b:" + (own || key) + (civ ? ":c" : ""), civ || HT("BUBBLE", BUBBLE, own || key));
+      if (!s) return null;
+      return U.fill(s, Object.assign({}, ctx, { item: HT("ITEM", ITEM, ctx.item) || ctx.item }));
+    },
+    strobeMind(lv, n) { const T = G.Hero.A("STROBE_MIND", STROBE_MIND); return U.fill(pickFresh(G.Hero.cur + "sm" + lv, T[lv] || T[1]), { n: n || "ルミナ" }); },
+    log(key, ctx) { return U.fill(pickFresh(G.Hero.cur + "l:" + key, HT("LOG", LOG, key)) || "", ctx); },
     scene(key, ctx) {
       const form = ctx.h && ctx.h.form;
-      let pool = SCENE[key + "#" + form] || SCENE[key + "_" + ctx.type] || SCENE[key], pk = key + ctx.type;
+      const T = k => G.Hero.T("SCENE", SCENE, k);              // 遙の番は、遙の書き下ろしから
+      let pool = T(key + "#" + form) || T(key + "_" + ctx.type) || T(key), pk = key + ctx.type;
       if (key === "hold") {
-        const own = SCENE["hold@" + ctx.kind];                 // 魔物ごとの捕まり方があれば、そちらを多めに
+        const own = T("hold@" + ctx.kind);                 // 魔物ごとの捕まり方があれば、そちらを多めに
         if (own && U.chance(0.75)) { pool = own; pk = "hold@" + ctx.kind; }
-        else pool = SCENE["hold_" + (ctx.type === "蕩" ? "蕩" : "絡")];
+        else pool = T("hold_" + (ctx.type === "蕩" ? "蕩" : "絡"));
       }
       if (!pool) return null;
       const lines = pickFresh("s:" + pk, pool);
@@ -1012,20 +1002,22 @@ var G = (typeof G !== "undefined") ? G : {};
     // 夜の一場面の部品（頭の地の文・絶頂の地の文・締め）。何をされたかは field で行為から組む
     nightParts(beat, ctx) {
       const head = [];
-      if (ctx.n === 0) head.push(U.pick(NIGHT_OPEN));
-      const own = beat.mon && NIGHT_MON[beat.mon], cat = beat.mon && G.Text.actorOf(beat.mon), byCat = cat && NIGHT_CAT[cat];
-      const line = own && U.chance(0.75) ? pickFresh("nm:" + beat.mon, own) : byCat ? pickFresh("ncat:" + cat, byCat) : pickFresh("n:" + beat.type, NIGHT[beat.type] || NIGHT["蕩"]);
+      const H = G.Hero.cur;
+      if (ctx.n === 0) head.push(U.pick(G.Hero.A("NIGHT_OPEN", NIGHT_OPEN)));
+      const own = beat.mon && HT("NIGHT_MON", NIGHT_MON, beat.mon), cat = beat.mon && G.Text.actorOf(beat.mon), byCat = cat && HT("NIGHT_CAT", NIGHT_CAT, cat);
+      const line = own && U.chance(0.75) ? pickFresh(H + "nm:" + beat.mon, own) : byCat ? pickFresh(H + "ncat:" + cat, byCat) : pickFresh(H + "n:" + beat.type, HT("NIGHT", NIGHT, beat.type) || HT("NIGHT", NIGHT, "蕩"));
       head.push(U.fill(line, { mon: beat.monName || "何か" }) + (beat.group && beat.group.length > 1 ? `（${beat.group.join("と")}）` : ""));
-      return { head, climax: U.chance(0.5) ? pickFresh("nc", NIGHT_CLIMAX) : null, close: U.pick(NIGHT_CLOSE) };
+      return { head, climax: U.chance(0.5) ? pickFresh(H + "nc", G.Hero.A("NIGHT_CLIMAX", NIGHT_CLIMAX)) : null, close: U.pick(G.Hero.A("NIGHT_CLOSE", NIGHT_CLOSE)) };
     },
     nightBeat(beat, ctx) {
       const out = [];
-      if (ctx.n === 0) out.push(U.pick(NIGHT_OPEN));
-      const own = beat.mon && NIGHT_MON[beat.mon];
-      const line = own && U.chance(0.6) ? pickFresh("nm:" + beat.mon, own) : pickFresh("n:" + beat.type, NIGHT[beat.type] || NIGHT["蕩"]);
+      const H = G.Hero.cur;
+      if (ctx.n === 0) out.push(U.pick(G.Hero.A("NIGHT_OPEN", NIGHT_OPEN)));
+      const own = beat.mon && HT("NIGHT_MON", NIGHT_MON, beat.mon);
+      const line = own && U.chance(0.6) ? pickFresh(H + "nm:" + beat.mon, own) : pickFresh(H + "n:" + beat.type, HT("NIGHT", NIGHT, beat.type) || HT("NIGHT", NIGHT, "蕩"));
       out.push(U.fill(line, { mon: beat.monName || "何か" }));
-      if (beat.climax) out.push(pickFresh("nc", NIGHT_CLIMAX));
-      if (ctx.n === ctx.total - 1) out.push(U.pick(NIGHT_CLOSE));
+      if (beat.climax) out.push(pickFresh(H + "nc", G.Hero.A("NIGHT_CLIMAX", NIGHT_CLIMAX)));
+      if (ctx.n === ctx.total - 1) out.push(U.pick(G.Hero.A("NIGHT_CLOSE", NIGHT_CLOSE)));
       return out;
     },
   };
@@ -1245,18 +1237,19 @@ var G = (typeof G !== "undefined") ? G : {};
     r.push(s); if (r.length > Math.min(5, arr.length - 1)) r.shift();
     return s;
   }
+  Object.assign(G.TextL || (G.TextL = {}), { ACTS, BUB, MSGS });
   Object.assign(G.Text, {
     ACTOR,
     actorOf(kind) { return ACTOR[kind] || null; },
     // 段階 stage までの行為から一つ（段階の高いものを多めに）
     act(cat, stage) {
-      const list = ACTS[cat]; if (!list) return null;
+      const list = G.Hero.T("ACTS", ACTS, cat); if (!list) return null;
       const ok = list.filter(a => a.s <= stage);
       const top = ok.filter(a => a.s === stage);
-      return fresh("act:" + cat, top.length && U.chance(0.65) ? top : ok);
+      return fresh(G.Hero.cur + "act:" + cat, top.length && U.chance(0.65) ? top : ok);
     },
-    actBubble(key) { return BUB[key] ? fresh("ab:" + key, BUB[key]) : null; },
-    actMsg(key, ctx) { return MSGS[key] ? U.fill(fresh("am:" + key, MSGS[key]), ctx) : null; },
+    actBubble(key) { const a = G.Hero.T("BUB", BUB, key); return a ? fresh(G.Hero.cur + "ab:" + key, a) : null; },
+    actMsg(key, ctx) { const a = G.Hero.T("MSGS", MSGS, key); return a ? U.fill(fresh(G.Hero.cur + "am:" + key, a), ctx) : null; },
     fillAct(a, ctx) { return U.fill(a.t, ctx); },
   });
 })();
@@ -1314,7 +1307,9 @@ var G = (typeof G !== "undefined") ? G : {};
   Object.assign(G.Text, {
     voice(kind, key) {
       const v = V[kind]; if (!v) return null;
-      const arr = v[key] || (key === "deny" || key === "omazuke" || key === "count" || key === "lure" || key === "mock" || key === "broadcast" ? v.attack : null);
+      let own = null;                                    // 遙の番：遙を名指す言葉だけ、遙に向けた言い直しがある
+      if (G.Hero.cur === "haruka") { const o = (G.TextH.V || {})[kind]; own = o && o[key]; if (!own && v[key] && v[key] === IMP[key]) own = (G.TextH.IMP || {})[key]; }
+      const arr = own || v[key] || (key === "deny" || key === "omazuke" || key === "count" || key === "lure" || key === "mock" || key === "broadcast" ? v.attack : null);
       return arr && arr.length ? U.pick(arr) : null;
     },
     hasVoice(kind) { return !!V[kind]; },
@@ -1394,7 +1389,8 @@ var G = (typeof G !== "undefined") ? G : {};
     kouro: ["香炉の 甘い 煙を 吸いこんだ。遠くの 淫魔の 声が、やけに 甘く 聞こえる……"],
     keiyaku: ["巻物を 開いた 瞬間、署名の 欄が 光った。……自分の 字で、名前が 書いてあった"],
   };
-  Object.assign(G.Text, { trapHit(effect, ctx) { const a = H[effect]; return a ? U.fill(U.pick(a), ctx) : null; } });
+  G.TextL = Object.assign(G.TextL || {}, { H });
+  Object.assign(G.Text, { trapHit(effect, ctx) { const a = G.Hero.T("H", H, effect); return a ? U.fill(U.pick(a), ctx) : null; } });
 })();
 
 /* ---- 魔物の攻撃が当たった時、身体のどこに何が起きたか（窓に出す）。[文, 擬音] ---- */
@@ -1450,7 +1446,8 @@ var G = (typeof G !== "undefined") ? G : {};
   };
   const SCENT = ["{mon}が {n}の 甘い 匂いに 気づいた！", "{n}の 火照った 匂いに、{mon}が 鼻を ひくつかせた……"];
   Object.assign(G.Text, { ambient(dg) { const a = AMB[dg]; return a ? U.pick(a) : null; }, scent(ctx) { return U.fill(U.pick(SCENT), ctx); } });
-  Object.assign(G.Text, { monHit(kind, ctx) { const a = M[kind]; if (!a) return null; const x = U.pick(a); return { text: U.fill(x[0], ctx), fx: x[1] }; } });
+  G.TextL = Object.assign(G.TextL || {}, { M });
+  Object.assign(G.Text, { monHit(kind, ctx) { const a = G.Hero.T("M", M, kind); if (!a) return null; const x = U.pick(a); return { text: U.fill(x[0], ctx), fx: x[1] }; } });
 })();
 
 /* ---- 種ごとの「されること」（あれば共通の型より優先して混ぜる）---- */
@@ -1889,10 +1886,12 @@ var G = (typeof G !== "undefined") ? G : {};
     ],
   };
   const baseAct = G.Text.act;
+  G.TextL = Object.assign(G.TextL || {}, { K });
   Object.assign(G.Text, {
     // 種ごとの型があれば、4回に3回はそちらから
     actFor(kind, cat, stage) {
-      const own = K[kind] && cat !== "futa" ? K[kind].filter(a => a.s <= stage) : null;
+      const KK = G.Hero.T("K", K, kind);
+      const own = KK && cat !== "futa" ? KK.filter(a => a.s <= stage) : null;
       if (own && own.length && U.chance(0.75)) { const top = own.filter(a => a.s === stage); return U.pick(top.length && U.chance(0.6) ? top : own); }
       return baseAct(cat, stage);
     },
@@ -1987,10 +1986,11 @@ var G = (typeof G !== "undefined") ? G : {};
     "defeat@kuchizuke": [["口づけの淫魔が、倒れた{n}を抱き寄せた。", "唇が塞がれる。舌が、歯列をなぞって、奥まで入ってくる。", "口づけをしたまま、淫魔の指が乳首を摘み、秘所を開き、クリトリスを撫でる。", "「……ん、……んぅ、……っ、ん……っ」", "唇は、朝まで一度も離れなかった。口づけの印が、深く、深く刻まれていく。"]],
     "defeat@suiyou": [["水妖の冷たい腕が、{n}の足首を掴み、水の中へ引きずりこんだ。", "濡れた衣装が透ける。水の指が、乳首をつまみ、水中でこりこりと転がす。", "水妖の身体そのものが、秘所に流れこんでくる。中を、水圧でゆっくりと押し広げる。", "「……っ、みず、が、……なか、いっぱい、……っ」", "水面から顔だけを出したまま、{n}は朝まで、水の中で揺らされつづけた。"]],
   };
+  G.TextL.D = D;
   const baseScene = G.Text.scene;
   G.Text.scene = function (key, ctx) {
     if (key === "defeat" && ctx && ctx.kind) {
-      const cat = G.Text.actorOf(ctx.kind), pool = D["defeat@" + ctx.kind] || (cat && D["defeat@" + cat]);
+      const cat = G.Text.actorOf(ctx.kind), pool = G.Hero.T("D", D, "defeat@" + ctx.kind) || (cat && G.Hero.T("D", D, "defeat@" + cat));
       if (pool && U.chance(0.85)) return U.pick(pool).map(l => U.fill(l, ctx));
     }
     return baseScene.call(this, key, ctx);
@@ -2171,59 +2171,67 @@ var G = (typeof G !== "undefined") ? G : {};
   ];
   const BREATH = [["……っ", "ん……", "……ふ"], ["……ん、ぁ", "は、……っ", "ふ、……ぅ"], ["はぁ、……っ、ぁ", "ぁ、……ん、ぅ", "……は、ぁ、……っ"], ["はっ、はぁっ、……ぁ", "ひ、……ぅ、ぁ", "あ、……っ、あ"]];
   const heart = p => p >= 90 ? "♡♡" : p >= 70 ? "♡" : "";
+  const LIVE_VESSEL = [["{n}の膝が、すとんと床に落ちた。両手が胸の前で組まれ、聖衣の開いた胸元で、乳首が尖っていく。", "何の前触れもなく、{n}は跪いた。祈りの形に組んだ指が、小刻みに震えている。", "歩いていた足が止まる。{n}は、そのまま床に膝をつき、天井を仰いで手を組んだ。"], ["……教祖さま……っ、器は、今日も、空っぽです……♡", "……満たして……っ、お祈り、するから……満たしてぇ……♡", "……ぁ、……祈ると、……中が、勝手に……っ♡"], ["半開きの唇から、舌がのぞく。祈るほどに、脚の間がとろりと濡れていく。", "組んだ手の下で、腰がゆっくりと前後に揺れる。誰にも触れられていないのに、聖衣の股が濡れて透けていく。", "瞳の奥に、きらきらと光が灯る。……教えが、器を満たしにくる。"]];
+  const LIVE_DRY = [["{mon}は、もう離れている。触れているものは、何もない。", "解かれた身体に、触れるものはもう何もない。……なのに、{n}の腰が、小さく揺れ続けている。", "振りほどいたはずの熱が、離れてくれない。"], ["……ぁ、……っ、だめ、離れた、のに……っ", "……とまって、……とまって、よ……っ", "……なんで、……っ、何も、されて、ない……っ"], ["空っぽの腰が、勝手に跳ねた。何も触れていないのに、熱だけが最後まで駆け上がっていく。", "乳首も、クリも、さっきまでの感触をなぞり続けている。触れられていない場所が、一番熱い。", "内腿をきつく閉じても、遅い。寸前まで運ばれた熱は、ひとりでに、縁を越えた。"]];
+  const LIVE_MIND = {
+    swarm: ["（……いくつ、いるの。……どこから触られてるのか、もう分からない……）", "（こんなに、いっぺんに……っ、ひとつに、集中、できない……）", "（数えちゃだめ。……数えたら、いま何か所触られてるか、分かっちゃう……）"],
+    watched: ["（……見られてる。……撮られてる。……顔、隠さなきゃ、なのに……）", "（こんなとこ、記録に、残るの……？ ……だめ、声、出したら……）"],
+    expect: ["（……この感じ、知ってる。……このあと、どうなるかも……）", "（だめ、思い出しちゃ、だめ……前の時のこと、なんか……）", "（身体が、先に、覚えてる……っ。……待ってなんか、ないのに……）", "（……前も、こう、だった……。次は、たぶん……っ）", "（期待なんか、して、ない……してない、のに……）", "（……知ってる手つき。……知ってるから、余計に……）"],
+    naked: ["（……直接、触られてる。……布一枚、もう、ない……）", "（服、どこまで、残ってるんだろ。……見たくない……）"],
+    t0: ["（落ち着いて。……隙を見て、抜ける。……それだけ）", "（こんなの、何でもない。……報告書に、一行で済む程度の、こと……）", "（顔に出すな。……{n}は、こんなことで、崩れない）"],
+    t1: ["（……なんで、こんなに、熱いの……？ まだ、少し触られただけなのに……）", "（だめ、変な声、出そうになる……。唇、噛んで……）", "（抜けなきゃ。……抜けなきゃ、いけない、のに……力が……）"],
+    t2: ["（いや、なのに。……いやなはず、なのに。……腰が、勝手に……）", "（身体が、応えちゃってる。……心は、ちゃんと、嫌がってるのに……）", "（……あとで、なんて報告しよう。……いまは、考えられない……）"],
+    t3: ["（……もっと、って、思っちゃった。……いま、思っちゃった……）", "（抜けなきゃ、……でも、……あと、少しだけ……）", "（どうせ、報告書には、書かないし……。……だから、少しくらい……）"],
+  };
+  const LIVE_OVERSENS = ["達したばかりの身体に、次の刺激が容赦なく重なる……", "敏感になりすぎた肌が、触れられるたびに跳ねる……", "まだ震えの引かない場所を、また責められる……"];
+  G.TextL = Object.assign(G.TextL || {}, { BUILD, CLIMAX, SQUIRT, DECLARE, BODY_TELL, CX_CAT, CX_MON, FIRST_PART, AFTER, RECOVER, BREATH, LIVE_VESSEL, LIVE_DRY, LIVE_MIND, LIVE_OVERSENS });
+  const L = (name, base) => G.Hero.A(name, base), F = (k) => G.Hero.cur + k;   // 遙の番は遙の表から
   G.Text.live = {
-    build: (tier, n) => U.fill(fresh("b" + tier, BUILD[Math.max(0, Math.min(3, tier))]), { n: n || "ルミナ" }),
-    breath: p => U.pick(BREATH[Math.min(3, Math.floor(p / 25))]),
+    build: (tier, n) => U.fill(fresh(F("b" + tier), L("BUILD", BUILD)[Math.max(0, Math.min(3, tier))]), { n: n || G.Hero.name("magica") }),
+    breath: p => U.pick(L("BREATH", BREATH)[Math.min(3, Math.floor(p / 25))]),
     heart,
     mark(line, p) { const hm = heart(p); return !hm || /♡$/.test(line) ? line : line + hm; },
     // 一回の決壊を、数行の流れに。{ cls, text } の配列
     climax(ctx) {
-      const k = Math.min(3, Math.max(0, (ctx.chain || 1) - 1)), c = fresh("c" + k, CLIMAX[k]), f = s => U.fill(s, Object.assign({ part: "身体", mon: "責め手" }, Object.fromEntries(Object.entries(ctx).filter(e => e[1] != null))));
+      const k = Math.min(3, Math.max(0, (ctx.chain || 1) - 1)), c = fresh(F("c" + k), L("CLIMAX", CLIMAX)[k]), f = s => U.fill(s, Object.assign({ part: "身体", mon: "責め手" }, Object.fromEntries(Object.entries(ctx).filter(e => e[1] != null))));
       const hm = k >= 2 ? "♡♡♡" : "♡♡";
       const out = [{ cls: "gauge cx", text: `快感 100／100　${k ? `（${ctx.chain}回目）` : "（決壊）"}` }];
       // 堕ちるほど、達する前に口走ってしまう
-      if ((ctx.tier || 0) >= 2 && k < 3 && U.chance(0.45)) out.push({ cls: "line cx", text: "「" + fresh("dc" + ctx.tier, DECLARE[ctx.tier >= 3 ? 1 : 0]) + "」" });
+      if ((ctx.tier || 0) >= 2 && k < 3 && U.chance(0.45)) out.push({ cls: "line cx", text: "「" + fresh(F("dc" + ctx.tier), L("DECLARE", DECLARE)[ctx.tier >= 3 ? 1 : 0]) + "」" });
       // 捕まっている相手ごとの達し方（同じ地の文の繰り返しを避ける）
-      const cm = ctx.kind && CX_MON[ctx.kind] && (ctx.bound !== false) && U.chance(k >= 3 ? 0.5 : 0.85) ? fresh("cm" + ctx.kind, CX_MON[ctx.kind]) : null;
+      const cmPool = ctx.kind && G.Hero.T("CX_MON", CX_MON, ctx.kind);
+      const cm = cmPool && (ctx.bound !== false) && U.chance(k >= 3 ? 0.5 : 0.85) ? fresh(F("cm" + ctx.kind), cmPool) : null;
       out.push({ cls: "sfx cx", text: (cm ? cm[0] : c.sfx) + "♡" }, { cls: "line cx", text: "「" + c.line + hm + "」" }, { cls: "body cx", text: f(cm ? cm[1] : c.body) });
-      const cc = !cm && ctx.cat && CX_CAT[ctx.cat];
-      if (cc && U.chance(0.75)) out.push({ cls: "body", text: fresh("cc" + ctx.cat, cc) });
-      else if (k < 2 && U.chance(0.6)) out.push({ cls: "body", text: fresh("tell", BODY_TELL) });
-      if (ctx.squirt) out.push({ cls: "body cx", text: f(fresh("sq", SQUIRT)) });
-      if (ctx.firstPart && FIRST_PART[ctx.firstPart]) out.push({ cls: "first", text: FIRST_PART[ctx.firstPart] });
+      const cc = !cm && ctx.cat && G.Hero.T("CX_CAT", CX_CAT, ctx.cat);
+      if (cc && U.chance(0.75)) out.push({ cls: "body", text: fresh(F("cc" + ctx.cat), cc) });
+      else if (k < 2 && U.chance(0.6)) out.push({ cls: "body", text: fresh(F("tell"), L("BODY_TELL", BODY_TELL)) });
+      if (ctx.squirt) out.push({ cls: "body cx", text: f(fresh(F("sq"), L("SQUIRT", SQUIRT))) });
+      const fp = ctx.firstPart && G.Hero.T("FIRST_PART", FIRST_PART, ctx.firstPart);
+      if (fp) out.push({ cls: "first", text: fp });
       return out;
     },
-    after: ctx => U.fill(fresh("af", AFTER), ctx),
-    vessel: ctx => [
-      { cls: "body", text: U.fill(fresh("ve0", ["{n}の膝が、すとんと床に落ちた。両手が胸の前で組まれ、聖衣の開いた胸元で、乳首が尖っていく。", "何の前触れもなく、{n}は跪いた。祈りの形に組んだ指が、小刻みに震えている。", "歩いていた足が止まる。{n}は、そのまま床に膝をつき、天井を仰いで手を組んだ。"]), ctx) },
-      { cls: "line", text: "「" + fresh("ve1", ["……教祖さま……っ、器は、今日も、空っぽです……♡", "……満たして……っ、お祈り、するから……満たしてぇ……♡", "……ぁ、……祈ると、……中が、勝手に……っ♡"]) + "」" },
-      { cls: "body", text: fresh("ve2", ["半開きの唇から、舌がのぞく。祈るほどに、脚の間がとろりと濡れていく。", "組んだ手の下で、腰がゆっくりと前後に揺れる。誰にも触れられていないのに、聖衣の股が濡れて透けていく。", "瞳の奥に、きらきらと光が灯る。……教えが、器を満たしにくる。"]) },
-    ],
-    dry: ctx => [
-      { cls: "body", text: U.fill(fresh("dry0", ["{mon}は、もう離れている。触れているものは、何もない。", "解かれた身体に、触れるものはもう何もない。……なのに、{n}の腰が、小さく揺れ続けている。", "振りほどいたはずの熱が、離れてくれない。"]), ctx) },
-      { cls: "line", text: "「" + fresh("dry1", ["……ぁ、……っ、だめ、離れた、のに……っ", "……とまって、……とまって、よ……っ", "……なんで、……っ、何も、されて、ない……っ"]) + "」" },
-      { cls: "body", text: fresh("dry2", ["空っぽの腰が、勝手に跳ねた。何も触れていないのに、熱だけが最後まで駆け上がっていく。", "乳首も、クリも、さっきまでの感触をなぞり続けている。触れられていない場所が、一番熱い。", "内腿をきつく閉じても、遅い。寸前まで運ばれた熱は、ひとりでに、縁を越えた。"]) },
-    ],
-    recover: (tier, n) => "「" + U.fill(fresh("r" + tier, RECOVER[Math.max(0, Math.min(3, tier))]), { n: n || "ルミナ" }) + "」",
+    after: ctx => U.fill(fresh(F("af"), L("AFTER", AFTER)), ctx),
+    vessel: ctx => { const V = L("LIVE_VESSEL", LIVE_VESSEL); return [
+      { cls: "body", text: U.fill(fresh(F("ve0"), V[0]), ctx) },
+      { cls: "line", text: "「" + fresh(F("ve1"), V[1]) + "」" },
+      { cls: "body", text: U.fill(fresh(F("ve2"), V[2]), ctx) },
+    ]; },
+    dry: ctx => { const D = L("LIVE_DRY", LIVE_DRY); return [
+      { cls: "body", text: U.fill(fresh(F("dry0"), D[0]), ctx) },
+      { cls: "line", text: "「" + fresh(F("dry1"), D[1]) + "」" },
+      { cls: "body", text: U.fill(fresh(F("dry2"), D[2]), ctx) },
+    ]; },
+    recover: (tier, n) => "「" + U.fill(fresh(F("r" + tier), L("RECOVER", RECOVER)[Math.max(0, Math.min(3, tier))]), { n: n || G.Hero.name("magica") }) + "」",
     hasFirst: part => !!FIRST_PART[part],
     hasCx: kind => !!CX_MON[kind],
     // 責められている最中の、心の声（状況ごと）
     mind(c) {
-      const M = {
-        swarm: ["（……いくつ、いるの。……どこから触られてるのか、もう分からない……）", "（こんなに、いっぺんに……っ、ひとつに、集中、できない……）", "（数えちゃだめ。……数えたら、いま何か所触られてるか、分かっちゃう……）"],
-        watched: ["（……見られてる。……撮られてる。……顔、隠さなきゃ、なのに……）", "（こんなとこ、記録に、残るの……？ ……だめ、声、出したら……）"],
-        expect: ["（……この感じ、知ってる。……このあと、どうなるかも……）", "（だめ、思い出しちゃ、だめ……前の時のこと、なんか……）", "（身体が、先に、覚えてる……っ。……待ってなんか、ないのに……）", "（……前も、こう、だった……。次は、たぶん……っ）", "（期待なんか、して、ない……してない、のに……）", "（……知ってる手つき。……知ってるから、余計に……）"],
-        naked: ["（……直接、触られてる。……布一枚、もう、ない……）", "（服、どこまで、残ってるんだろ。……見たくない……）"],
-        t0: ["（落ち着いて。……隙を見て、抜ける。……それだけ）", "（こんなの、何でもない。……報告書に、一行で済む程度の、こと……）", "（顔に出すな。……{n}は、こんなことで、崩れない）"],
-        t1: ["（……なんで、こんなに、熱いの……？ まだ、少し触られただけなのに……）", "（だめ、変な声、出そうになる……。唇、噛んで……）", "（抜けなきゃ。……抜けなきゃ、いけない、のに……力が……）"],
-        t2: ["（いや、なのに。……いやなはず、なのに。……腰が、勝手に……）", "（身体が、応えちゃってる。……心は、ちゃんと、嫌がってるのに……）", "（……あとで、なんて報告しよう。……いまは、考えられない……）"],
-        t3: ["（……もっと、って、思っちゃった。……いま、思っちゃった……）", "（抜けなきゃ、……でも、……あと、少しだけ……）", "（どうせ、報告書には、書かないし……。……だから、少しくらい……）"],
-      };
+      const M = L("LIVE_MIND", LIVE_MIND);
       const k = c.n >= 3 && U.chance(0.6) ? "swarm" : c.watched && U.chance(0.7) ? "watched" : c.expect > 0.4 && U.chance(0.6) ? "expect" : c.stage >= 2 && U.chance(0.35) ? "naked" : "t" + Math.max(0, Math.min(3, c.tier));
-      return U.fill(fresh("m" + k, M[k]), { n: c.name || "ルミナ" });
+      return U.fill(fresh(F("m" + k), M[k]), { n: c.name || G.Hero.name("magica") });
     },
     // 達したばかりの、敏感すぎる身体
-    oversens: () => fresh("os", ["達したばかりの身体に、次の刺激が容赦なく重なる……", "敏感になりすぎた肌が、触れられるたびに跳ねる……", "まだ震えの引かない場所を、また責められる……"]),
+    oversens: () => fresh(F("os"), L("LIVE_OVERSENS", LIVE_OVERSENS)),
   };
 })();
 /* ---- 満ちる触手の間：水位のように満ちてくる触手（Game2 の「満ちてくる触手の部屋」を、ひかり向けに書き直したもの） ---- */
@@ -2262,13 +2270,14 @@ var G = (typeof G !== "undefined") ? G : {};
     ["……っ、沈むほど、上に、来る……っ", "そこ、……沈んだとこから、のぼってこないで……っ"],
     ["上、もう、ない……っ、のに、まだ、増える……っ", "……っ、全部、……全部、触手……"],
   ];
+  G.TextL = Object.assign(G.TextL || {}, { FLOOD_SC: SC, FLOOD_STAGE: STAGE, FLOOD_SAY: SAY });
   G.Text.flood = {
-    stage: (st, ctx) => U.fill(fresh("fs" + st, STAGE[st]), ctx),
-    say: st => SAY[st] ? fresh("fy" + st, SAY[st]) : null,
+    stage: (st, ctx) => U.fill(fresh(G.Hero.cur + "fs" + st, G.Hero.A("FLOOD_STAGE", STAGE)[st]), ctx),
+    say: st => { const S = G.Hero.A("FLOOD_SAY", SAY); return S[st] ? fresh(G.Hero.cur + "fy" + st, S[st]) : null; },
   };
   const base = G.Text.scene;
   G.Text.scene = function (key, ctx) {
-    if (SC[key]) return fresh("fsc" + key, SC[key]).map(l => U.fill(l, Object.assign({ n: "ルミナ" }, ctx)));
+    if (SC[key]) return fresh(G.Hero.cur + "fsc" + key, G.Hero.T("FLOOD_SC", SC, key)).map(l => U.fill(l, Object.assign({ n: G.Hero.name("magica") }, ctx)));
     return base.call(this, key, ctx);
   };
   // 満ちてくる触手の責め：水位が上がるほど、上へ、深くなる
@@ -2283,9 +2292,10 @@ var G = (typeof G !== "undefined") ? G : {};
     A(2, "胸の 下まで 満ちた 触手が 服の 中へ 入り、{n}の 胸を 下から 持ち上げて 揉む", "むにゅう", "胸", "満ちた 触手に 胸を 揉まれて", 1.1),
     A(2, "かさの 中の 一本が、{n}の 一番 敏感な 突起を 巻きこんで、締めては ゆるめる", "きゅうっ", "突起", "突起を 巻きこまれて", 1.4),
   ];
+  G.TextL.FLOOD_ACT = ACT;
   const baseAct = G.Text.actFor;
   G.Text.actFor = function (kind, cat, stage) {
-    if (kind === "flood_orb" && cat !== "futa" && U.chance(0.75)) { const own = ACT.filter(a => a.s <= stage), top = own.filter(a => a.s === stage); return U.pick(top.length && U.chance(0.65) ? top : own); }
+    if (kind === "flood_orb" && cat !== "futa" && U.chance(0.75)) { const own = G.Hero.A("FLOOD_ACT", ACT).filter(a => a.s <= stage), top = own.filter(a => a.s === stage); return U.pick(top.length && U.chance(0.65) ? top : own); }
     return baseAct.call(this, kind, cat, stage);
   };
 })();

@@ -40,9 +40,11 @@ var G = (typeof G !== "undefined") ? G : {};
   for (const k in AILMENTS) AILMENTS[k].fee = Math.max(3, Math.round(AILMENTS[k].fee * 0.7));   // 処置は安め
   // 自分で何とかできる・時間で薄れるもの（一晩で引く）。それ以外は、放っておくと日ごとに重くなる
   const NATURAL = ["heat", "exposure", "soiled", "paralysis", "throb", "exhaustion"];
+  // 状態異常の名前と説明：遙の番は、ひかりに寄った分だけ js/haruka/field.js の AIL で差し替える（効き目は同じ）
+  const ail = id => (G.Hero.is("haruka") && G.TextH.AIL && G.TextH.AIL[id] ? Object.assign({}, AILMENTS[id], G.TextH.AIL[id]) : AILMENTS[id]);
   // 状態異常の表示名（魅了は向き先つき）
   function ailmentName(a) {
-    const A = AILMENTS[a.id]; if (!A) return a.id;
+    const A = ail(a.id); if (!A) return a.id;
     if (a.id === "charm" && a.to) return A.name + "（" + Object.keys(a.to).map(k => G.MONSTERS[k].name + ["", "Ⅰ", "Ⅱ", "Ⅲ"][a.to[k]]).join("・") + "）";
     if (a.id === "attached" && a.list) return A.name + "（" + a.list.join("・") + "）";
     if (a.id === "defeatBrand" && a.to) return A.name + "（" + G.MONSTERS[a.to].name + "）";
@@ -256,7 +258,7 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   // 確信された：裏のリソースを全部使って矯正（信頼は最大、リソースは0）
   function resolveConfront(s) {
-    s.log.push({ day: s.day, text: `違和感を抱いたひかりを矯正した（澱晶 ${s.dark} をすべて使った）` });
+    s.log.push({ day: s.day, text: G.Hero.keep(`違和感を抱いた${G.Hero.d.short}を矯正した（澱晶 ${s.dark} をすべて使った）`) });
     s.dark = 0; s.trust = 100; s.suspicion = 0; s.pendingEvent = null;
   }
 
@@ -364,6 +366,9 @@ var G = (typeof G !== "undefined") ? G : {};
   // 本人が覚えている件だけを、いつ・どこで・誰に・どこを・どう報告したか、まで残す
   const EP_PART = { "胸": "胸", "胸の先": "胸の先", "脚の間": "脚の間", "秘所": "あそこ", "突起": "クリ", "お尻": "お尻", "内腿": "内腿", "太腿": "太腿", "首筋": "首筋",
     "耳": "耳", "脇": "脇", "脇腹": "脇腹", "肌": "肌じゅう", "全身": "全身", "胸と秘所": "胸とあそこ", "生えたもの": "生えたの", "先端": "先っぽ", "脚の付け根": "脚の付け根", "胸の横": "胸の横", "足の裏": "足の裏" };
+  // 遙の番は js/haruka/diary.js の EP_PART（前の件を思い出して言う時の、部位の呼び方）
+  const epPart = k => G.Hero.A("EP_PART", EP_PART)[k] || k;
+  G.TextL = Object.assign(G.TextL || {}, { EP_PART });
   function recordEpisodes(s) {
     const rec = s.rec; if (!rec || rec.epDone) return;
     rec.epDone = true;
@@ -394,7 +399,7 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   function agoText(epDay, day) { const d = day - epDay; return d <= 1 ? "昨日" : d === 2 ? "一昨日" : d + "日前"; }
   function epCtx(ep, day) {
-    return { mon: ep.monName || G.MONSTERS[ep.mon].name, ago: agoText(ep.day, day), place: ep.place || "迷宮", floor: ep.floor, n: ep.climax, parts: ep.parts.map(k => EP_PART[k] || k).join("と、") || "身体じゅう" };
+    return { mon: ep.monName || G.MONSTERS[ep.mon].name, ago: agoText(ep.day, day), place: ep.place || "迷宮", floor: ep.floor, n: ep.climax, parts: ep.parts.map(epPart).join("と、") || (G.Hero.is("haruka") ? "身体のあちこち" : "身体じゅう") };
   }
   /* ================================================================ 帰還後：堕ち・状態異常・リソース */
   function advanceOf(req) { return Math.round(req.reward * [0, 0.3, 0.42, 0.5][(req.real && req.real.scale) || 2]); }
@@ -620,7 +625,7 @@ var G = (typeof G !== "undefined") ? G : {};
     s.fatigue = U.clamp(s.fatigue - 22, 0, 100);
     for (const id in s.archive || {}) if (s.archive[id] && typeof s.archive[id].fatigue === "number") s.archive[id].fatigue = U.clamp(s.archive[id].fatigue - 30, 0, 100);   // 潜らなかった方は、休んでいる
     // 一晩たつと：着替え・湯浴み・眠りで引くものは引く。処置しなかったものは、根を張って重くなる
-    s.healedNight = s.ailments.filter(a => NATURAL.includes(a.id) && a.day < s.day + 1).map(a => AILMENTS[a.id].name);
+    s.healedNight = s.ailments.filter(a => NATURAL.includes(a.id) && a.day < s.day + 1).map(a => ail(a.id).name);
     s.ailments = s.ailments.filter(a => !NATURAL.includes(a.id));
     let kept = 0;
     for (const a of s.ailments) {
@@ -646,7 +651,7 @@ var G = (typeof G !== "undefined") ? G : {};
   // 休養：今日は潜らない。疲労が大きく抜け、軽い状態異常（発情・過敏・疼き・疲弊）は自然に引く。堕ちも少し戻る。報酬は無い
   const REST_HEAL = ["heat", "sensitive", "throb", "exhaustion"];
   function rest(s) {
-    const healed = s.ailments.filter(a => REST_HEAL.includes(a.id)).map(a => AILMENTS[a.id].name);
+    const healed = s.ailments.filter(a => REST_HEAL.includes(a.id)).map(a => ail(a.id).name);
     s.ailments = s.ailments.filter(a => !REST_HEAL.includes(a.id));
     const f0 = s.fatigue, b0 = s.body, m0 = s.mind;
     s.fatigue = U.clamp(s.fatigue - 50, 0, 100);
@@ -669,6 +674,6 @@ var G = (typeof G !== "undefined") ? G : {};
 
   function taintStage(s) { return s.taint >= 100 ? 4 : s.taint >= 70 ? 3 : s.taint >= 42 ? 2 : s.taint >= 18 ? 1 : 0; }
 
-  G.Game = { finalizeLoss, swapHero, rescueAlly, addSequelae, SEQUELAE, HEROES, pget, freshPersonal, syncHero, PERSONAL, reintResult, pastEpisode, epCtx, EP_PART, advanceOf, NATURAL, equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, rest, buy, taintStage };
+  G.Game = { finalizeLoss, swapHero, rescueAlly, addSequelae, SEQUELAE, HEROES, pget, freshPersonal, syncHero, PERSONAL, reintResult, pastEpisode, epCtx, EP_PART, epPart, ail, advanceOf, NATURAL, equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, rest, buy, taintStage };
 })();
 if (typeof module !== "undefined") module.exports = G;

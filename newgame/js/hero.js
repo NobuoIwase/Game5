@@ -1,5 +1,5 @@
-/* hero.js — いま潜っているヒロイン（星野ひかり／仮設の白山遙）と、その見た目・言葉の置き換え。
- * 台詞はひかりの声で書かれている。遙の番は、名前・一人称・呼び方を置き換えて読ませる（仮設）。 */
+/* hero.js — いま潜っているヒロイン（星野ひかり／白山遙）と、その見た目・文の出どころ。
+ * 遙の文はすべて js/haruka/*.js の遙の表から出す（ひかりの文を置き換えて使わない）。表の取り違えは Hero.leaks に残り、tools/check/haruka.js で落とす。 */
 (function () {
   "use strict";
   const J = "⁠";                                  // 置き換えから守る印（見えない）
@@ -11,29 +11,33 @@
       appearance: "腰まで届く黒髪を高く束ねている。東方の巫女装束——紅の袴に白の小袖——が、この街では否応なく目を引く。所作は常に真っ直ぐで、隙がない。",
       personality: "忠義に厚く、受けた務めは何があっても果たそうとする。恥を「不忠」と結び付けて考えるため、己の失態を記録に残すことを何よりも恐れる。" },
   };
-  // 遙の番：ひかりの声の文を、遙の名前と言葉に寄せる（固有の書き下ろしが揃うまでの仮設）
-  const TX_HARUKA = [
-    [/星野[ 　]?ひかり/g, "白山 遙"], [/ほしの ひかり/g, "しらやま はるか"],
-    [/魔法少女ルミナ/g, "女剣士・遙"], [/魔法少女/g, "女剣士"],
-    [/ルミナ・?ストライク/g, "抜刀術「初雪」"],
-    [/ルミナちゃん|ひかりちゃん/g, "遙ちゃん"], [/ルミナ|ひかり/g, "遙"],
-    [/あたし/g, "私"], [/監査官さん/g, "監査官殿"],
-    [/プラム/g, "御守り"], [/コンパクト/g, "御守り"],
-    [/変身が解け/g, "構えが崩れ"], [/変身を解/g, "構えを解"], [/変身し直/g, "構え直"], [/再変身/g, "構え直し"], [/変身/g, "構え"],
-  ];
+  // 遙の書き下ろし（js/haruka/*.js）。表の名前ごとに、ひかりの表と同じ鍵で持つ
+  const TH = (typeof G !== "undefined" && G.TextH) || {};
+  if (typeof G !== "undefined") G.TextH = TH;
   const Hero = {
     J, keep, DATA,
     cur: "hikari",
+    leaks: {},
+    leak(name, key) { const k = name + ":" + key; Hero.leaks[k] = (Hero.leaks[k] || 0) + 1; },
+    // いまのヒロインの文：遙の番は遙の表から。遙の表に無ければ、漏れとして記録する（検査で落とす）
+    T(name, base, key) {
+      if (Hero.cur !== "haruka") return base ? base[key] : undefined;
+      const t = TH[name];
+      if (t && t[key] != null) return t[key];
+      if (base && base[key] != null) { Hero.leak(name, key); return base[key]; }
+      return undefined;
+    },
+    // 表まるごと（配列の表など）
+    A(name, base) {
+      if (Hero.cur !== "haruka") return base;
+      if (TH[name] != null) return TH[name];
+      Hero.leak(name, "*"); return base;
+    },
     set(id) { Hero.cur = DATA[id] ? id : "hikari"; return Hero.cur; },
     get d() { return DATA[Hero.cur]; },
     is(id) { return Hero.cur === id; },
-    // 文の置き換え（ひかりの番は、そのまま）
-    tx(t) {
-      if (t == null) return t;
-      let s = String(t);
-      if (Hero.cur === "haruka") for (const [re, to] of TX_HARUKA) s = s.replace(re, to);
-      return s;                                      // 守りの印（見えない）は残す：画面で二度置き換えても、名前が変わらないように
-    },
+    // 場に出る文の通り道（遙の文は遙の表から出るので、ここでは何も置き換えない。検査はここで文を拾う）
+    tx(t) { return t == null ? t : String(t); },
     // 場での名前（変身中はルミナ）
     name(form) { const d = DATA[Hero.cur]; return form === "magica" ? d.formName : d.civName; },
     // 場の立ち姿：教団の器・祈り・遙
@@ -153,7 +157,7 @@
     // 遙がワルドーに：戦闘員の女その2。先輩は、その1
     waldoLostHaruka: (withSenpai) => [
       { who: "n", img: "assets/haruka/haruka_waldo_front_1.png", text: "翌朝。監査官室の水晶が、また勝手に灯った。……見覚えのある、ワルドーの回線。" },
-      { who: "n", text: "映ったのは、腰まで届く黒髪と、紅い髪紐。……巫女装束は、どこにもない。首から爪先まで、黒く艶光りする全身スーツ。" },
+      { who: "n", text: "映ったのは、腰まで届く黒髪と、紅い髪紐。……巫女装束は、どこにもない。うなじから足の指の先まで、黒く照り光る、肌に吸いつく衣。" },
       { who: "w", name: UE, text: "えー、本日の新入り。……武家の、なんだっけ。まあいい。戦闘員の女、その2！ 前へ！" },
       { who: "h", img: "assets/haruka/haruka_salute_front.png", text: "……イ、イーッ。……戦闘員の女その2、白山……いえ。……その2、出頭、いたしました" },
       { who: "w", name: UE, text: "硬い硬い。……おい、その1。先輩として、手本を見せてやれ", senpai: 1 },
@@ -172,7 +176,7 @@
       { who: "n", text: "敬礼の手を額から離さぬまま、武家の娘は、無様に、律儀に、果てた。" },
       { who: "w", name: UE, text: "よーし！ 戦闘員の女その2、本日付で第七小隊！ ……あれ、隊長ってわしだっけ？" },
       { who: "h", img: "assets/haruka/haruka_salute_front.png", text: "イーッ！ ……戦闘員の女その2、……どこまでも、お供いたします。……ワルドー様に、栄光あれ" },
-      { who: "n", img: "assets/haruka/haruka_waldo_back_1.png", text: "黒いスーツの背中が、戦闘員の列に並んで、画面の奥へ行進していく。腰まで届く黒髪が揺れる。……少しだけ、ガニ股が抜けていなかった。" },
+      { who: "n", img: "assets/haruka/haruka_waldo_back_1.png", text: "黒い衣の背中が、戦闘員の列に加わって、水晶の奥へと行進していく。腰まで届く黒髪が揺れる。……少しだけ、ガニ股が抜けきっていなかった。" },
       { who: "n", text: "水晶の光が消えた。——白山遙は、ワルドーの戦闘員の女その2になった。" },
       { who: "a", text: "……救出を、手配する" },
       { who: "a", text: "…………" },
@@ -187,7 +191,7 @@
     // 遙が教団の器になった翌朝
     vesselMorningHaruka: () => [
       { who: "n", text: "扉が叩かれた。……いつもより、ずっと柔らかい音だった。" },
-      { who: "n", img: "assets/haruka/haruka_vessel_front_1.png", text: "入ってきた遙は、巫女装束を着ていなかった。白と金と碧の聖衣。胸元は大きく開き、裾は脚の付け根まで切れこんでいる。" },
+      { who: "n", img: "assets/haruka/haruka_vessel_front_1.png", text: "入ってきた遙は、巫女装束を着ていなかった。白と金と碧の聖衣。胸元は深く割れ、裾は腿の付け根まで裂けている。" },
       { who: "h", text: "おはようございます、監査官殿。……この装い、お見苦しくはございませんか。……教えの、正装にございます" },
       { who: "a", text: "……教団に、何をされた" },
       { who: "h", img: "assets/haruka/haruka_pray_front_1.png", text: "何も。……満たしていただいた、だけにございます。……ご覧に、入れます" },

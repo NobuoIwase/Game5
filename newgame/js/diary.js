@@ -19,7 +19,7 @@ var G = (typeof G !== "undefined") ? G : {};
     "耳": "耳", "脇": "脇", "脇腹": "脇腹", "肌": "肌じゅう", "全身": "全部", "胸と秘所": "胸とあそこ", "生えたもの": "生えたの", "先端": "先っぽ", "脚の付け根": "脚の付け根", "胸の横": "胸の横", "足の裏": "足の裏" };
 
   /* ---------------------------------------------------------------- 日記 */
-  const D = {
+  const D0 = {
     open: {
       cleared: ["今日は最後まで行けた。ちょっとだけ、自慢。", "踏破！ 転移陣の光、きれいだった。", "最下層まで。足が棒みたい。でも、行けた。", "依頼、達成。……帰り道のパン屋さん、閉まってた。"],
       retreat: ["今日は途中で引き返した。判断は、間違ってなかったと思う。", "撤退。悔しいけど、ちゃんと帰ってこられた。", "途中まで。……今日は、ここまでで精一杯だった。"],
@@ -77,15 +77,27 @@ var G = (typeof G !== "undefined") ? G : {};
       ["……早く、明日にならないかな。", "明日は、どこに行くんだろう。……どんな魔物が、いるんだろう。"],
     ],
   };
+  const INL = {
+    whatParts: "{parts}を、触られた。", whatTrap: "{trap}に、掛かった。", whatClimax: "……達しちゃった。", whatMon: "{mon}に、……された。", whatElse: "……本当は、あった。",
+    allBody: "身体じゅう", touched: "触られて",
+    nightCount: ["……{c}回。数えなきゃよかった。", "{c}回、いかされた。{a}回、触られた。……記録係の人が、そう言ってた。", "朝までに、{c}回。"],
+    vessel: ["今日、あたしは器になった。……ずっと、こうなるのを、待ってた気がする。", "心の壁、ぜんぶ割れちゃった。……割れたところから、教えが入ってきて、あったかい。"],
+    vesselPray: ["今日も、何度もお祈りした。……迷宮の真ん中で、膝をついて。……満たされて、いっちゃった。", "祈りの発作。魔物の前でも、跪いちゃう。……でも、教えのほうが、大事。", "お祈りしてる時の顔、たぶん、すごく、だらしない。……監査官さんには、見せたくない。……見てほしい。"],
+    weather: ["晴れ", "くもり", "雨", "晴れのち雨", "風が強い", "霧", "小雨"],
+    restWeather: ["晴れ", "くもり", "晴れのち雨", "小春日和", "薄曇り"],
+  };
+  // 遙の番は js/haruka/diary.js の DIARY_〜 から
+  const T = (name, base) => G.Hero.A("DIARY_" + name, base);
   const fill = (s, c) => U.fill(s, c || {});
   function partsText(acts) {
     if (!acts) return "";
-    return Object.entries(acts).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => PART[k] || k).join("と、");
+    const P = T("PART", PART);
+    return Object.entries(acts).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => P[k] || k).join("と、");
   }
   // 一日分を書く（処置のあと、翌日の前に呼ぶ）
   function write(s) {
     const rec = s.rec; if (!rec) return null;
-    const out = [], tier = G.tier(s.body, s.mind);
+    const out = [], tier = G.tier(s.body, s.mind), D = T("D", D0), IL = T("INL", INL), P = T("PART", PART);
     out.push(pick(D.open[rec.outcome] || D.open.retreat));
     const units = (rec.units || []).filter(u => !u.hidden).slice().sort((a, b) => b.shame - a.shame).slice(0, 3);
     const recalled = new Set();          // 前の件と比べるのは、相手ごとに一度・一日に二件まで
@@ -95,16 +107,16 @@ var G = (typeof G !== "undefined") ? G : {};
         if (u.acts) t += fill(pick(D.holdParts), { parts: partsText(u.acts) });
         if (u.stage >= 2) t += pick(D.holdStage2);
         if (u.swarm >= 3) t += fill(pick(D.holdSwarm), { n: u.swarm });
-        if (u.climax) t += fill(pick(D.holdClimax), { n: u.climax, p: ((u.climaxActs || [])[0] || "触られて").replace(/ /g, "") });
+        if (u.climax) t += fill(pick(D.holdClimax), { n: u.climax, p: ((u.climaxActs || [])[0] || IL.touched).replace(/ /g, "") });
         out.push(t);
         const ep = !recalled.has(u.mon) && recalled.size < 2 && G.Game.pastEpisode(s, u.mon, rec.day);
         if (ep) {
           recalled.add(u.mon);
-          const c = G.Game.epCtx(ep, rec.day), now = u.acts ? Object.entries(u.acts).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => G.Game.EP_PART[k] || k) : [];
-          const prevP = ep.parts.map(k => G.Game.EP_PART[k] || k), same = now.some(p => prevP.includes(p));
+          const c = G.Game.epCtx(ep, rec.day), now = u.acts ? Object.entries(u.acts).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => G.Game.epPart(k)) : [];
+          const prevP = ep.parts.map(k => G.Game.epPart(k)), same = now.some(p => prevP.includes(p));
           const liedNow = u.truth === "false" || u.docTruth === "false";
           const key = ep.defeat ? "defeat" : ep.lied && ep.caught ? (liedNow ? "caughtAgain" : "caught") : (u.stage || 0) >= 2 && ep.stage < 2 ? "escalate" : ep.climax && u.climax > ep.climax ? "more" : !now.length || !prevP.length ? "first" : same ? "same" : "diff";
-          out.push(fill(pick(D.recall[key]), { mon: c.mon, ago: c.ago, place: c.place, pf: ep.floor, prev: c.parts, now: now.join("と、") || "身体じゅう", pn: ep.climax, n: u.climax || 0 }));
+          out.push(fill(pick(D.recall[key]), { mon: c.mon, ago: c.ago, place: c.place, pf: ep.floor, prev: c.parts, now: now.join("と、") || IL.allBody, pn: ep.climax, n: u.climax || 0 }));
         }
       } else if (u.kind === "trap") out.push(fill(pick(D.trap), { trap: u.trapName }));
       else if (u.kind === "anticipate") out.push(fill(pick(D.anticipate), { mon: u.monName }));
@@ -114,7 +126,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const lies = (rec.units || []).filter(u => !u.hidden && (u.truth === "false" || u.docTruth === "false")).sort((a, b) => b.shame - a.shame);
     if (lies.length) {
       const u = lies[0];
-      const whatTxt = u.acts ? partsText(u.acts) + "を、触られた。" : u.kind === "trap" ? u.trapName + "に、掛かった。" : u.climax ? "……達しちゃった。" : (u.monName ? u.monName + "に、……された。" : "……本当は、あった。");
+      const whatTxt = fill(u.acts ? IL.whatParts : u.kind === "trap" ? IL.whatTrap : u.climax ? IL.whatClimax : u.monName ? IL.whatMon : IL.whatElse, { parts: partsText(u.acts), trap: u.trapName, mon: u.monName });
       out.push(fill(pick(D.lie), { what: whatTxt }));
       if (lies.length > 1) out.push(fill(pick(D.lieMore), { n: lies.length }));
       if (lies.some(x => x.writtenLie)) out.push(pick(D.writtenLie));
@@ -125,13 +137,13 @@ var G = (typeof G !== "undefined") ? G : {};
     if (rec.outcome === "defeat" && rec.night && rec.night.length) {
       const mons = [...new Set(rec.night.map(b => b.monName).filter(Boolean))].join("と") || "何か";
       const cl = rec.night.reduce((a, b) => a + (b.climaxN || (b.climax ? 1 : 0)), 0), acts = rec.night.reduce((a, b) => a + (b.acts || 0), 0);
-      out.push(fill(pick(D.night), { mons }) + (cl ? fill(pick(["……{c}回。数えなきゃよかった。", "{c}回、いかされた。{a}回、触られた。……記録係の人が、そう言ってた。", "朝までに、{c}回。"]), { c: cl, a: acts }) : ""));
+      out.push(fill(pick(D.night), { mons }) + (cl ? fill(pick(IL.nightCount), { c: cl, a: acts }) : ""));
     }
-    for (const f of (rec.firstParts || []).slice(0, 2)) out.push(fill(pick(D.firstPart), { part: PART[f.part] || f.part, mon: f.mon || "何か" }));
-    if ((rec.units || []).some(u => u.kind === "vessel")) out.push(pick(["今日、あたしは器になった。……ずっと、こうなるのを、待ってた気がする。", "心の壁、ぜんぶ割れちゃった。……割れたところから、教えが入ってきて、あったかい。"]));
-    else if ((rec.units || []).some(u => u.kind === "vesselPray")) out.push(pick(["今日も、何度もお祈りした。……迷宮の真ん中で、膝をついて。……満たされて、いっちゃった。", "祈りの発作。魔物の前でも、跪いちゃう。……でも、教えのほうが、大事。", "お祈りしてる時の顔、たぶん、すごく、だらしない。……監査官さんには、見せたくない。……見てほしい。"]));
+    for (const f of (rec.firstParts || []).slice(0, 2)) out.push(fill(pick(D.firstPart), { part: P[f.part] || f.part, mon: f.mon || "何か" }));
+    if ((rec.units || []).some(u => u.kind === "vessel")) out.push(pick(IL.vessel));
+    else if ((rec.units || []).some(u => u.kind === "vesselPray")) out.push(pick(IL.vesselPray));
     const gr = rec.growth;
-    if (gr && gr.inspired && gr.inspired.length) out.push(fill(pick(D.inspire), { skill: gr.inspired.map(id => G.SKILLS[id].name).join("』と『") }));
+    if (gr && gr.inspired && gr.inspired.length) out.push(fill(pick(D.inspire), { skill: gr.inspired.map(id => G.skillName(id)).join("』と『") }));
     if (gr && gr.lv > gr.lv0) out.push(pick(D.lvup));
     if (rec.lewdCheck) out.push(pick(D.rereportLewd));
     const ails = s.ailments.map(a => a.id).filter(id => D.ail[id]);
@@ -141,14 +153,14 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     if (s.trust >= 75 && U.chance(0.4)) out.push(pick(D.trust.high)); else if (s.trust < 30 && U.chance(0.5)) out.push(pick(D.trust.low));
     out.push(pick(D.close[tier]));
-    const page = { day: rec.day, weather: U.pick(["晴れ", "くもり", "雨", "晴れのち雨", "風が強い", "霧", "小雨"]), lines: out };
+    const page = { day: rec.day, weather: U.pick(IL.weather), lines: out };
     s.diary = s.diary || []; s.diary.push(page); if (s.diary.length > 60) s.diary.shift();
     return page;
   }
 
   /* ---------------------------------------------------------------- 魔物メモ */
   // 代表的な種は、本人の言葉で（三段：見た／知っている／よく知っている）
-  const OWN = {
+  const OWN0 = {
     goblin: ["緑の小鬼。一匹なら蹴っ飛ばせる。", "群れで来る。一匹が掴んだら、仲間が寄ってくる。囲まれる前に数を減らすこと。", "臭い。……あの臭い、嫌いなのに、覚えちゃった。"],
     slime: ["ぷるぷる。かわいい……って油断しちゃだめ。", "包みこまれると、服が溶ける。足元に注意。", "中に入ってくる。……それだけは、絶対に、だめ。"],
     drain_roper: ["吸盤だらけの触手。湿った所と、蔦の森にいる。", "腕は短い。一歩半より離れていれば届かない。魔力を吸われるのは、捕まってから。", "……いく時の魔力が、いちばん甘いんだって。だから、そこばっかり、吸ってくる。"],
@@ -166,7 +178,7 @@ var G = (typeof G !== "undefined") ? G : {};
     kuwaemushi: ["口しかない蟲。", "咥えられたら、剥がすのは無理。近寄らせない。", "……吸われて、出しちゃった。蟲に。"],
   };
   // それ以外は、攻撃の仕方と種類から
-  const GEN = {
+  const GEN0 = {
     first: { "絡": ["縛ってくる相手。", "捕まえに来る相手。"], "蕩": ["熱くしてくる相手。", "身体を火照らせる相手。"], "惑": ["頭をぼんやりさせる相手。", "心に入ってくる相手。"], "削": ["魔力を吸う相手。", "変身の力を削る相手。"] },
     tip: {
       grab: ["掴んでくる。届くのは{r}歩くらい。それより離れて撃つ。", "腕が届く距離は{r}歩。そこに入らないこと。"],
@@ -183,9 +195,9 @@ var G = (typeof G !== "undefined") ? G : {};
       "……次に会ったら、たぶん、また。……だめ。気をつけること。",
     ],
   };
-  const STAGE = ["見たことがある", "知っている", "よく知っている"];
+  const STAGE0 = ["見たことがある", "知っている", "よく知っている"];
   // 日付つきの書き足し（会うたびに増える）
-  const LOGW = {
+  const LOGW0 = {
     seen: ["初めて見た。", "初遭遇。"], killed: ["一体、倒した。", "倒せた。……ちょっと自慢。"], caught: ["捕まった。", "……捕まった。油断。"],
     direct: ["服の中まで、された。", "……直接、された。"], swarm: ["何体にも、いっぺんに。", "囲まれた。数が多いと、だめ。"],
     climax: ["……いかされた。", "……達した。こいつに。"], defeat: ["負けた。朝まで。", "負けた。……書きたくない。"], crave: ["見ただけで、身体が熱くなった。", "……会いたかった、わけじゃない。"],
@@ -193,14 +205,14 @@ var G = (typeof G !== "undefined") ? G : {};
   // 手帳のメモは書いた時の文のまま：読み返すたびに変わらないよう、魔物・日・内容から文を決める
   function fixed(a, key) { let h = 0; for (const c of String(key)) h = (h * 31 + c.charCodeAt(0)) >>> 0; return a[h % a.length]; }
   function monsterNotes(s) {
-    const out = [];
+    const out = [], OWN = T("OWN", OWN0), GEN = T("GEN", GEN0), STAGE = T("STAGE", STAGE0), LOGW = T("LOGW", LOGW0);
     for (const [kind, d] of Object.entries(G.MONSTERS)) {
       const k = (s.know || {})[kind] || 0; if (!k) continue;
       const lv = k >= 14 ? 2 : k >= 5 ? 1 : 0, ex = Math.min(1, ((s.lewd || {})[kind] || 0) / 30);
       const own = OWN[kind], lines = [];
       if (own) { for (let i = 0; i <= lv; i++) lines.push(own[i]); }
       else {
-        lines.push(fixed(GEN.first[d.type] || GEN.first["絡"], kind + ":first") + (d.desc ? "（" + d.desc + "）" : ""));
+        lines.push(fixed(GEN.first[d.type] || GEN.first["絡"], kind + ":first") + (d.desc && !G.Hero.is("haruka") ? "（" + d.desc + "）" : ""));   // 遙の覚え書きは、本人の言葉だけ
         if (lv >= 1) lines.push(fill(fixed(GEN.tip[d.atk.kind] || GEN.tip.aura, kind + ":tip"), { r: Math.round(((d.atk.range || 1) + 0.3) * 2) / 2 }));
         if (lv >= 2) lines.push(fill(fixed(GEN.weak, kind + ":weak"), { n: Math.max(1, Math.ceil(d.hp / 9)) }));
       }
@@ -217,19 +229,21 @@ var G = (typeof G !== "undefined") ? G : {};
   }
 
   // 休養の日のページ
-  const REST = {
+  const REST0 = {
     open: ["今日はお休み。監査官さんが『休め』って。", "一日、何もしない日。……何もしないの、久しぶり。", "休養日。朝、目覚ましを止めて、二度寝した。"],
     mid: ["大学の講義に出た。ノートを取ってる間は、迷宮のこと、忘れてられた。", "友だちとお茶した。『最近、顔色いいね』って。……そうかな。", "お風呂に長く浸かった。肩まで。", "一日じゅう、部屋で本を読んでた。", "駅前のパン屋さん、今日はちゃんと開いてた。", "洗濯して、布団を干した。お日さまの匂い。"],
     heal: ["{what}が、やっと引いた。", "ひと晩寝たら、{what}が落ち着いた。"],
     close: ["明日からまた、ルミナ、頑張ります。", "よく眠れそう。", "……休むのも、仕事のうち。たぶん。"],
   };
   function writeRest(s, r) {
+    const REST = T("REST", REST0);
     const out = [pick(REST.open), pick(REST.mid)];
     if (r && r.healed && r.healed.length) out.push(fill(pick(REST.heal), { what: r.healed.join("と") }));
     out.push(pick(REST.close));
-    const page = { day: s.day, weather: U.pick(["晴れ", "くもり", "晴れのち雨", "小春日和", "薄曇り"]), lines: out, rest: true };
+    const page = { day: s.day, weather: U.pick(T("INL", INL).restWeather), lines: out, rest: true };
     s.diary = s.diary || []; s.diary.push(page); if (s.diary.length > 60) s.diary.shift();
   }
+  G.TextL = Object.assign(G.TextL || {}, { DIARY_D: D0, DIARY_INL: INL, DIARY_PART: PART, DIARY_OWN: OWN0, DIARY_GEN: GEN0, DIARY_STAGE: STAGE0, DIARY_LOGW: LOGW0, DIARY_REST: REST0 });
   G.Diary = { write, writeRest, monsterNotes };
 })();
 if (typeof module !== "undefined") module.exports = G;

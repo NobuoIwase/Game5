@@ -13,6 +13,9 @@ var G = (typeof G !== "undefined") ? G : {};
 (function () {
   "use strict";
   const U = G.U;
+  // 遙の番は遙の表（js/haruka/report.js の R_〜）から。問う側（監査官）の言葉は、ひかりの表のまま
+  const RT = (name, base) => G.Hero.A("R_" + name, base);
+  const RM = (name, base) => (G.Hero.cur === "haruka" && G.TextH["R_" + name] ? Object.assign({}, base, G.TextH["R_" + name]) : base);
 
   /* ================================================================ 文の在庫 */
   // 起きたことの言い表し方（一件ぶん・ひかりの口から）。{mon} {trap} {floor}
@@ -402,7 +405,8 @@ var G = (typeof G !== "undefined") ? G : {};
   const STIM = ["attached", "swell"];
   const PAUSE = ["……すみません。", "……えっと。", "……少し、待ってください。", "……ふう。", "……っ。", "……あの。"];
   function ongoingLine(mem, day, id) {
-    return ((STIM.includes(id) ? freshPick(mem, day, "go:m", ONGOING.moan, 1) : freshPick(mem, day, "go:p", PAUSE, 1)) + freshPick(mem, day, "go:" + id, ONGOING[id], 2) + freshPick(mem, day, "go:r", ONGOING.resume, 1)).replace(/。。/g, "。");
+    const O = RT("ONGOING", ONGOING);
+    return ((STIM.includes(id) ? freshPick(mem, day, "go:m", O.moan, 1) : freshPick(mem, day, "go:p", RT("PAUSE", PAUSE), 1)) + freshPick(mem, day, "go:" + id, O[id], 2) + freshPick(mem, day, "go:r", O.resume, 1)).replace(/。。/g, "。");
   }
   const MOAN = ["……っ、", "……ん、", "……ふ、ぅ……", "……ぁ、"];
   const LAW_TALK = {
@@ -516,18 +520,35 @@ var G = (typeof G !== "undefined") ? G : {};
     return out;
   }
 
-  // 遙の言葉（ルミナの文を置き換えて使わない件）
-  const WHAT_H = {
-    strobe: ["……灯の明滅を、{n}階ぶん浴びました。一つずつは、何ということもない光です。……ですが、呼吸を数えていたはずが、いつの間にか、光の数を数えておりました", "……気合が、狂いました。『えいっ』と打ち込むつもりが、……その、『イーッ』と。……不覚です。斬って捨てたいほどの、不覚です"],
+  const INL = {
+    charmLv: ["", "", "……今も、ちょっと", "……好き、とかじゃ、ないです"],
+    slipActs: ["。……{a}を、です", "。……その、{a}を", "。{a}、……触られて"],
+    slipStage: ["。……直接、でした", "。……服の、中まで"],
+    deferNote: "（一番重い件を、最後まで言い出さなかった）",
+    nightTrue: "……夜のことも、本当は、覚えてます。",
+    inspired: ["……あ、それと。今日、新しい技を思いついたんです。『{sk}』って", "……戦ってる最中に、ふっと閃いて。『{sk}』。……使えそうです", "そうだ、報告し忘れてた。『{sk}』、閃きました！"],
+    growth: "（ルミナの成長：Lv{a} → Lv{b}。{c}）",
+    growthSlot: "装備できる技が一つ増えた。", growthLight: "少しだけ、身体が軽い。",
+    saluteNote: "（何の合図もないのに、右手が額の前で止まった。膝が、わずかに外へ割れている）",
+    saluteSnap: ["……っ、あ。……今の、なしで。……癖が、抜けなくて", "……え、……あ、……ちが、……今の、記録しないでください", "……っ。……すみません。……身体が、勝手に"],
+    iiPrefix: "イーッ……じゃなくて、",
+    firstH: ["……{p}、です。……そこで、って、……自分でも、知らなかったです……", "……っ、……{p}で、……はい。……初めて、でした。……書かないで、ください……", "……{p}。……そんなところで、って、思いました。……思ったのに、……"],
+    monUntransform: "変身解除",
+    monRescue: "洗脳、限界に到達。相棒の光で回復",
   };
+  G.TextL = Object.assign(G.TextL || {}, { R_WHAT: WHAT, R_WHAT_KIND: WHAT_KIND, R_CLIMAX: CLIMAX, R_DOWNPLAY: DOWNPLAY, R_DOWNPLAY_KIND: DOWNPLAY_KIND, R_DOWNPLAY_TRAP: DOWNPLAY_TRAP, R_STYLE: STYLE,
+    R_OPEN: OPEN, R_OPEN_BY_POSTURE: OPEN_BY_POSTURE, R_CLOSE2: CLOSE2, R_REST_TAIL: REST_TAIL, R_REST: REST, R_NIGHT_RECOUNT: NIGHT_RECOUNT, R_CLOSE: CLOSE, R_STATE_NOTE: STATE_NOTE, R_AIL_NOTE: AIL_NOTE,
+    R_ONGOING: ONGOING, R_PAUSE: PAUSE, R_MOAN: MOAN, R_LAW_TALK: LAW_TALK, R_VESSEL_OPEN: VESSEL_OPEN, R_CONVERT_OPEN: CONVERT_OPEN, R_INL: INL });
   function what(u, day, mem) {
     let key = u.kind === "hold" ? "hold_" + (u.type === "蕩" ? "蕩" : "絡") : u.kind === "trap" ? "trap_" + u.type : u.kind;
     const kk = (u.kind === "trap" ? u.trap : u.mon) + ":" + u.kind;
-    if (WHAT_KIND[kk] && U.chance(0.6)) key = kk;
-    const arr = (G.Hero.is("haruka") && WHAT_H[key]) || WHAT_KIND[key] || WHAT[key] || WHAT.arouse;
+    const WK = RT("WHAT_KIND", WHAT_KIND), WW = RT("WHAT", WHAT);
+    if (WK[kk] && U.chance(0.6)) key = kk;
+    const arr = WK[key] || WW[key] || WW.arouse;
     let s = U.fill(freshPick(mem, day, "what:" + key, arr, 2), { mon: u.monName, trap: u.trapName, floor: u.floor, n: u.rel || u.n || 1 });
-    if (u.kind === "charm" && u.lv >= 2) s += "。" + ["", "", "……今も、ちょっと", "……好き、とかじゃ、ないです"][u.lv];
-    if (u.climax && u.kind !== "release" && u.kind !== "dry") s += "。" + U.fill(freshPick(mem, day, "cl" + (u.climax > 1 ? "n" : "1"), u.climax > 1 ? CLIMAX.n : CLIMAX[1], 2), { n: u.climax });
+    if (u.kind === "charm" && u.lv >= 2) s += "。" + RT("INL", INL).charmLv[u.lv];
+    const CL = RT("CLIMAX", CLIMAX);
+    if (u.climax && u.kind !== "release" && u.kind !== "dry") s += "。" + U.fill(freshPick(mem, day, "cl" + (u.climax > 1 ? "n" : "1"), u.climax > 1 ? CL.n : CL[1], 2), { n: u.climax });
     return s;
   }
 
@@ -587,13 +608,14 @@ var G = (typeof G !== "undefined") ? G : {};
   };
   function recallLine(u, ep, day, mem, tier) {
     const c = G.Game.epCtx(ep, day);
-    const now = u.acts ? Object.entries(u.acts).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => G.Game.EP_PART[k] || k) : [];
+    const now = u.acts ? Object.entries(u.acts).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => G.Game.epPart(k)) : [];
     const ctx = { mon: c.mon, ago: c.ago, place: c.place, pf: ep.floor, prev: c.parts, now: now.join("と、") || "身体じゅう", pn: ep.climax, n: u.climax || 0 };
-    const same = now.length && ep.parts.length && now.some(p => ep.parts.map(k => G.Game.EP_PART[k] || k).includes(p));
+    const same = now.length && ep.parts.length && now.some(p => ep.parts.map(k => G.Game.epPart(k)).includes(p));
     const key = ep.defeat ? "defeat" : ep.lied && ep.caught ? "caught" : (u.stage || 0) >= 2 && ep.stage < 2 ? "escalate" : ep.climax && u.climax > ep.climax ? "more"
       : !now.length || !ep.parts.length ? "first" : same ? "same" : "diff";
-    let t = U.fill(freshPick(mem, day, "recall:" + key, RECALL[key], 2), ctx);
-    if (tier >= 3 && U.chance(0.4)) t += "。" + U.pick(RECALL.want);
+    const RC = RM("RECALL", RECALL);
+    let t = U.fill(freshPick(mem, day, "recall:" + key, RC[key], 2), ctx);
+    if (tier >= 3 && U.chance(0.4)) t += "。" + U.pick(RC.want);
     return { t, a: U.chance(0.4) ? U.fill(U.pick(RECALL.aud), ctx) : null };
   }
 
@@ -613,24 +635,24 @@ var G = (typeof G !== "undefined") ? G : {};
   ];
   const RENAME_SELF = ["……言えるようになったな", "最初から、そう言え", "それでいい"];
   function renameParts(lines, s, mem, day, maxCorr) {
-    const tier = G.tier(s.body, s.mind), done = new Set();
+    const tier = G.tier(s.body, s.mind), done = new Set(), RN = RT("RENAME", RENAME), RNH = RT("RENAME_H", RENAME_H);
     let corr = 0;
     for (let i = 0; i < lines.length; i++) {
       const l = lines[i];
       if (l.who !== "h" || l.renamed) continue;
-      const r = RENAME.find(r => r.re.test(l.text));
+      const r = RN.find(r => r.re.test(l.text));
       if (!r) continue;
       // 言い直させられた回数だけ、最初から正しい名前で言うようになる
       const self = Math.min(0.75, (s.renamed || 0) * 0.06 + (tier >= 3 ? 0.2 : 0));
       if (U.chance(self)) {
-        for (const q of RENAME) l.text = l.text.replace(new RegExp(q.re.source, "g"), q.x);
+        for (const q of RN) l.text = l.text.replace(new RegExp(q.re.source, "g"), q.x);
         l.text = l.text.replace(/(乳首|クリ|おまんこ|おちんちん)と、((?:……)?)\1/g, "$1");     // 「あそこと脚の間」が、同じ名前で二度並ばないように
         if (!done.has("self") && U.chance(0.3)) { done.add("self"); lines.splice(i + 1, 0, { who: "a", text: U.pick(RENAME_SELF), renamed: true }); i++; }
         continue;
       }
       if (corr >= maxCorr || done.has(r.x) || !U.chance(0.6)) continue;
       corr++; done.add(r.x); s.renamed = (s.renamed || 0) + 1;
-      const h = { who: "h", text: U.fill(freshPick(mem, day, "renH" + Math.min(2, Math.max(0, tier - 1)), RENAME_H[Math.min(2, Math.max(0, tier - 1))], 2), r), renamed: true };
+      const h = { who: "h", text: U.fill(freshPick(mem, day, "renH" + Math.min(2, Math.max(0, tier - 1)), RNH[Math.min(2, Math.max(0, tier - 1))], 2), r), renamed: true };
       // 追及は、言い直したあとの一言から（言い直しも、その件の続き）
       for (const k of ["unit", "lie", "probe", "night"]) if (l[k]) { h[k] = l[k]; if (k === "probe") delete l.probe; }
       lines.splice(i + 1, 0, { who: "a", text: U.fill(freshPick(mem, day, "renA", RENAME_A, 2), r), renamed: true }, h);
@@ -651,26 +673,29 @@ var G = (typeof G !== "undefined") ? G : {};
 
     // 今の様子
     const noteKey = rec.outcome === "defeat" ? "night" : rec.h.form === "civilian" ? "civilian" : rec.h.arousal > 45 ? "aroused" : rec.h.hp < 45 ? "tired" : "fine";
-    push("n", freshPick(mem, day, "note:" + noteKey, STATE_NOTE[noteKey], 3));
-    if (noteKey !== "aroused" && rec.h.arousal > 55) push("n", freshPick(mem, day, "note:aroused", STATE_NOTE.aroused, 3));
-    if (rec.ailments && rec.ailments.includes("sigil") && U.chance(0.4)) push("n", freshPick(mem, day, "note:sigil", STATE_NOTE.sigil, 5));
+    const SN = RT("STATE_NOTE", STATE_NOTE), AN = RT("AIL_NOTE", AIL_NOTE), IL = RT("INL", INL);
+    push("n", freshPick(mem, day, "note:" + noteKey, SN[noteKey], 3));
+    if (noteKey !== "aroused" && rec.h.arousal > 55) push("n", freshPick(mem, day, "note:aroused", SN.aroused, 3));
+    if (rec.ailments && rec.ailments.includes("sigil") && U.chance(0.4)) push("n", freshPick(mem, day, "note:sigil", SN.sigil, 5));
     // 残っている状態異常の様子（多すぎないように二つまで。刷り込みは必ず）
     const ails = rec.ailments || [];
     const charmTo = Object.keys((s.ailments.find(a => a.id === "charm") || {}).to || {}).map(k => G.MONSTERS[k] ? G.MONSTERS[k].name : k)[0] || "";
-    const noteKeys = ails.filter(id => AIL_NOTE[id]).sort((a, b) => (b === "rewired") - (a === "rewired"));
-    for (const id of noteKeys.slice(0, 2)) push("n", U.fill(freshPick(mem, day, "ail:" + id, AIL_NOTE[id], 3), { to: charmTo }));
+    const noteKeys = ails.filter(id => AN[id]).sort((a, b) => (b === "rewired") - (a === "rewired"));
+    for (const id of noteKeys.slice(0, 2)) push("n", U.fill(freshPick(mem, day, "ail:" + id, AN[id], 3), { to: charmTo }));
     const going = ["attached", "omazuke", "throb", "swell", "futaAfter", "impCurse", "permit"].filter(id => ails.includes(id));
     let breaks = going.length ? 2 : 0;
 
     push("a", freshPick(mem, day, "aud:open", AUD.open, 3));
     // 書き出し：姿勢の一言＋結果
-    let open = U.fill(freshPick(mem, day, "open:" + rec.outcome, OPEN[rec.outcome] || OPEN.retreat, 4), ctxBase);
-    const pre = freshPick(mem, day, "openP:" + posture, OPEN_BY_POSTURE[posture], 2);
+    const OP = RT("OPEN", OPEN);
+    let open = U.fill(freshPick(mem, day, "open:" + rec.outcome, OP[rec.outcome] || OP.retreat, 4), ctxBase);
+    const pre = freshPick(mem, day, "openP:" + posture, RT("OPEN_BY_POSTURE", OPEN_BY_POSTURE)[posture], 2);
     if (posture === "silent" && U.chance(0.7)) { push("h", pre); push("a", freshPick(mem, day, "aud:silent", AUD.silentPush, 3)); push("h", open); }
     else push("h", pre + (pre.endsWith("。") || pre.endsWith("…") ? "" : " ") + open);
-    if (rec.converted) push("h", freshPick(mem, day, "conv", CONVERT_OPEN, 3));
-    if (s.vessel && U.chance(0.5)) push("h", freshPick(mem, day, "vesselOpen", VESSEL_OPEN, 3));
-    if (rec.law && LAW_TALK[rec.law]) push("h", freshPick(mem, day, "law:" + rec.law, LAW_TALK[rec.law], 3));
+    if (rec.converted) push("h", freshPick(mem, day, "conv", RT("CONVERT_OPEN", CONVERT_OPEN), 3));
+    if (s.vessel && U.chance(0.5)) push("h", freshPick(mem, day, "vesselOpen", RT("VESSEL_OPEN", VESSEL_OPEN), 3));
+    const LT = RT("LAW_TALK", LAW_TALK);
+    if (rec.law && LT[rec.law]) push("h", freshPick(mem, day, "law:" + rec.law, LT[rec.law], 3));
 
     // 一件ずつ
     const lies = {};
@@ -687,13 +712,15 @@ var G = (typeof G !== "undefined") ? G : {};
       const ctx = { floor: u.floor, mon: u.monName || u.trapName || "", dur: durText(u.dur), n: u.climax || u.n || 1 };
       if (u.truth === "false") {
         // 嘘：軽く言う
-        const t = U.fill(DOWNPLAY_KIND[u.kind] ? freshPick(mem, day, "downK:" + u.kind, DOWNPLAY_KIND[u.kind], 2) : u.kind === "trap" ? freshPick(mem, day, "downT", DOWNPLAY_TRAP, 2) : freshPick(mem, day, "down", DOWNPLAY, 2), Object.assign({ trap: u.trapName }, ctx));
+        const DK = RT("DOWNPLAY_KIND", DOWNPLAY_KIND);
+        const t = U.fill(DK[u.kind] ? freshPick(mem, day, "downK:" + u.kind, DK[u.kind], 2) : u.kind === "trap" ? freshPick(mem, day, "downT", RT("DOWNPLAY_TRAP", DOWNPLAY_TRAP), 2) : freshPick(mem, day, "down", RT("DOWNPLAY", DOWNPLAY), 2), Object.assign({ trap: u.trapName }, ctx));
         push("h", `${u.floor}階は……${t}`, { unit: u, lie: true, probe: true });
         return;
       }
       // 型を選ぶ：姿勢の傾き×条件×1回の報告で2回まで
-      const cands = Object.keys(STYLE).filter(k => {
-        const st = STYLE[k];
+      const ST = RT("STYLE", STYLE);
+      const cands = Object.keys(ST).filter(k => {
+        const st = ST[k];
         if ((used[k] || 0) >= 2) return false;
         if (st.need === "climax" && !u.climax) return false;
         if (st.need === "magica" && u.kind === "untransform") return false;
@@ -701,25 +728,25 @@ var G = (typeof G !== "undefined") ? G : {};
         if (u.shame <= 1 && (k === "resolve" || k === "number" || k === "slip")) return false;
         return true;
       });
-      const k = U.weighted(cands, x => STYLE[x].w * (P.tilt[x] || 1) * (mem["style:" + x] && day - mem["style:" + x] < 1 ? 0.6 : 1));
+      const k = U.weighted(cands, x => ST[x].w * (P.tilt[x] || 1) * (mem["style:" + x] && day - mem["style:" + x] < 1 ? 0.6 : 1));
       used[k] = (used[k] || 0) + 1;
       mem["style:" + k] = day;
-      const tpl = freshPick(mem, day, "st:" + k, STYLE[k].lines, 3);
+      const tpl = freshPick(mem, day, "st:" + k, ST[k].lines, 3);
       let wtxt = what(u, day, mem);
       // 口が滑る：崩れている日や、堕ちが進んでいるほど、聞かれてもいない中身まで言ってしまう
       if (u.kind === "hold" && u.acts && U.chance((posture === "crack" || posture === "core" ? 0.55 : 0.15) + 0.1 * G.tier(s.body, s.mind))) {
-        const top = Object.entries(u.acts).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => PROBE.part[k] || k);
-        wtxt += U.pick(["。……{a}を、です", "。……その、{a}を", "。{a}、……触られて"]).replace("{a}", top.join("と、")) + (u.stage >= 2 ? U.pick(["。……直接、でした", "。……服の、中まで"]) : "");
+        const top = Object.entries(u.acts).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => RM("PROBE", PROBE).part[k] || k);
+        wtxt += U.pick(IL.slipActs).replace("{a}", top.join("と、")) + (u.stage >= 2 ? U.pick(IL.slipStage) : "");
       }
       const fillc = Object.assign({}, ctx, {
         what: wtxt, trap: u.trapName || "",
-        whatA: U.fill(WHAT_A[u.kind] || WHAT_A.arouse, { mon: u.monName || "", trap: u.trapName || "", dur: durText(u.dur), n: u.n || 1 }) + (u.kind === "untransform" && u.n > 1 ? `（${u.n}回）` : ""),
+        whatA: U.fill(RM("WHAT_A", WHAT_A)[u.kind] || WHAT_A.arouse, { mon: u.monName || "", trap: u.trapName || "", dur: durText(u.dur), n: u.n || 1 }) + (u.kind === "untransform" && u.n > 1 ? `（${u.n}回）` : ""),
         tail: u.kind === "hold" ? (u.climax ? "" : durText(u.dur) + "くらいで抜けました。") : u.kind === "possess" ? (u.climax ? "" : durText(u.dur) + "くらいで離れました。") : u.kind === "sigil" && u.lv > 1 ? ["", "", "……二重に、刻まれてます。", "……三重、です。"][u.lv] : (u.kind === "untransform" && u.n > 1 ? `……${u.n}回、です。` : ""),
       });
       let htext = tpl.h ? U.fill(tpl.h, fillc) : null;
       if (htext && stamLeft > 0 && u.shame >= 2) { htext = stammer(htext); stamLeft--; }
       // いま現在の快感が、言葉に割り込む
-      if (htext && going.some(id => STIM.includes(id)) && U.chance(0.45)) htext = htext.replace(/、/, "、" + U.pick(MOAN));   // 声が混じるのは、いま触れられている時だけ
+      if (htext && going.some(id => STIM.includes(id)) && U.chance(0.45)) htext = htext.replace(/、/, "、" + U.pick(RT("MOAN", MOAN)));   // 声が混じるのは、いま触れられている時だけ
       if (tpl.a && !tpl.h2) { push("a", U.fill(tpl.a, fillc)); push("h", htext, { unit: u }); }
       else {
         if (htext) push("h", htext, { unit: u });
@@ -736,8 +763,8 @@ var G = (typeof G !== "undefined") ? G : {};
       if (lastL && u.kind !== "untransform" && !readOut) lastL.probe = true;
     });
     if (breaks > 0) { const id = U.pick(going); push("h", ongoingLine(mem, day, id)); }
-    if (rec.units.rest) push("h", U.fill(freshPick(mem, day, "rest", REST, 3), { n: rec.units.rest }).replace(/。$/, "") + U.pick(REST_TAIL));
-    if (ord.how === "defer" && ord.worst && ord.worst.truth === "honest") push("n", "（一番重い件を、最後まで言い出さなかった）");
+    if (rec.units.rest) push("h", U.fill(freshPick(mem, day, "rest", RT("REST", REST), 3), { n: rec.units.rest }).replace(/。$/, "") + U.pick(RT("REST_TAIL", REST_TAIL)));
+    if (ord.how === "defer" && ord.worst && ord.worst.truth === "honest") push("n", IL.deferNote);
 
     // 敗北後の夜
     if (rec.outcome === "defeat" && rec.night && rec.night.length) {
@@ -750,19 +777,19 @@ var G = (typeof G !== "undefined") ? G : {};
       if (hid && U.chance(0.5)) mode = "partial";
       else if (tier === 2 && U.chance(0.35) || s.trust < 30 && U.chance(0.5)) mode = "denial";
       rec.nightTruth = mode;
-      push("h", U.fill(freshPick(mem, day, "night:" + mode, NIGHT_RECOUNT[mode], 3), { mons: mons.join("と") || "何か", mon1: mons[0] || "何か", n: Math.max(1, n) }), { night: true, lie: mode === "denial", probe: true });
+      push("h", U.fill(freshPick(mem, day, "night:" + mode, RT("NIGHT_RECOUNT", NIGHT_RECOUNT)[mode], 3), { mons: mons.join("と") || "何か", mon1: mons[0] || "何か", n: Math.max(1, n) }), { night: true, lie: mode === "denial", probe: true });
     }
     // 締め
     const closeKey = rec.h.arousal > 45 || (rec.ailments && rec.ailments.length) ? "ailment" : (s.trust < 35 ? "low" : "base");
     push("a", freshPick(mem, day, "aud:close", AUD.close, 3));
     // 締めは「区切りの一言」＋「頼みごと・気持ち」の組み合わせで作る
-    const c1 = freshPick(mem, day, "close:" + closeKey, CLOSE[closeKey], 3);
-    const c2 = closeKey === "low" ? "" : freshPick(mem, day, "close2:" + closeKey, CLOSE2[closeKey], 3);
+    const c1 = freshPick(mem, day, "close:" + closeKey, RT("CLOSE", CLOSE)[closeKey], 3);
+    const c2 = closeKey === "low" ? "" : freshPick(mem, day, "close2:" + closeKey, RT("CLOSE2", CLOSE2)[closeKey], 3);
     push("h", c2 && U.chance(0.6) ? c1.replace(/[。！]?$/, "。") + c2 : c1);
     // 成長（閃いた技・レベル）
     const gr = rec.growth;
-    if (gr && gr.inspired && gr.inspired.length) push("h", U.fill(U.pick(["……あ、それと。今日、新しい技を思いついたんです。『{sk}』って", "……戦ってる最中に、ふっと閃いて。『{sk}』。……使えそうです", "そうだ、報告し忘れてた。『{sk}』、閃きました！"]), { sk: gr.inspired.map(id => G.SKILLS[id].name).join("』と『") }));
-    if (gr && gr.lv > gr.lv0) push("n", `（ルミナの成長：Lv${gr.lv0} → Lv${gr.lv}。${G.GROWTH.slots(gr.lv) > G.GROWTH.slots(gr.lv0) ? "装備できる技が一つ増えた。" : "少しだけ、身体が軽い。"}）`);
+    if (gr && gr.inspired && gr.inspired.length) push("h", U.fill(U.pick(IL.inspired), { sk: gr.inspired.map(id => G.skillName(id)).join("』と『") }));
+    if (gr && gr.lv > gr.lv0) push("n", U.fill(IL.growth, { a: gr.lv0, b: gr.lv, c: G.GROWTH.slots(gr.lv) > G.GROWTH.slots(gr.lv0) ? IL.growthSlot : IL.growthLight }));
     const TRAIT_FMT = ["（監査記録：身についた性癖——{name}・{st}。{desc}）", "（記録係の欄外：『{name}』が{st}の段に進んだ。{desc}）", "（今日の記録で、{name}が{st}になった。{desc}）", "（{desc}——性癖の欄に『{name}・{st}』と書き足された）"];
     for (const g of rec.traitsGained || []) push("n", U.fill(freshPick(mem, day, "tfmt", TRAIT_FMT, 2), { name: G.TRAITS[g.id].name, st: G.TRAIT_STAGE[g.stage], desc: G.TRAITS[g.id].desc }));
     rec.posture = posture;
@@ -771,11 +798,11 @@ var G = (typeof G !== "undefined") ? G : {};
     const sq = s.sequelae || {};
     if (sq.salute && U.chance(Math.min(0.85, 0.45 + 0.15 * sq.salute))) {
       const at = U.ri(Math.min(3, lines.length), Math.max(3, lines.length - 2));
-      lines.splice(at, 0, { who: "n", text: "（何の合図もないのに、右手が額の前で止まった。膝が、わずかに外へ割れている）" },
+      lines.splice(at, 0, { who: "n", text: IL.saluteNote },
         { who: "h", text: "イーッ！", mood: "11_salute" },
-        { who: "h", text: U.pick(["……っ、あ。……今の、なしで。……癖が、抜けなくて", "……え、……あ、……ちが、……今の、記録しないでください", "……っ。……すみません。……身体が、勝手に"]), mood: "12_salute_snap" });
+        { who: "h", text: U.pick(IL.saluteSnap), mood: "12_salute_snap" });
     }
-    if (sq.ii) for (const l of lines) if (l.who === "h" && !l.mood && U.chance(0.1 * sq.ii)) l.text = "イーッ……じゃなくて、" + l.text.replace(/^……/, "");
+    if (sq.ii) for (const l of lines) if (l.who === "h" && !l.mood && U.chance(0.1 * sq.ii)) l.text = IL.iiPrefix + l.text.replace(/^……/, "");
     return renameParts(lines, s, mem, day, 2);
   }
 
@@ -806,7 +833,7 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   function probeLines(rec, line, save, evidence) {
     const s = save, mem = s.reportMem, day = rec.day, u = line.unit, tier = G.tier(s.body, s.mind);
-    const out = [], P = PROBE;
+    const out = [], P = RM("PROBE", PROBE);
     // 記録を突きつける：嘘ならほぼ崩れる。本当のことを言っていたなら、ただ傷つける（そして、中身を晒される）
     if (evidence && u) {
       out.push({ who: "a", text: U.pick(P.evidence) });
@@ -863,7 +890,7 @@ var G = (typeof G !== "undefined") ? G : {};
       if (u.climaxActs && u.climaxActs.length) out.push({ who: "h", text: U.fill(U.pick(P.climax), { p: u.climaxActs[u.climaxActs.length - 1].replace(/ /g, "") }) });
       if (u.first) {                                    // 記録にある「当該部位での初の絶頂」
         out.push({ who: "a", text: U.pick(["記録に、注記がある。『当該部位での初の絶頂』。", "監視記録には、こうある。——初めての部位で、達した、と。"]) });
-        out.push({ who: "h", text: U.fill(U.pick(["……{p}、です。……そこで、って、……自分でも、知らなかったです……", "……っ、……{p}で、……はい。……初めて、でした。……書かないで、ください……", "……{p}。……そんなところで、って、思いました。……思ったのに、……"]), { p: P.part[u.first] || u.first }) });
+        out.push({ who: "h", text: U.fill(U.pick(RT("INL", INL).firstH), { p: P.part[u.first] || u.first }) });
         s.body = U.clamp(s.body + 0.5, 0, 100);
       }
       s.body = U.clamp(s.body + 0.5, 0, 100); s.dark += 1;
@@ -872,7 +899,7 @@ var G = (typeof G !== "undefined") ? G : {};
   }
 
   /* ================================================================ 報告書（口語体） */
-  const DOC = {
+  const DOC0 = {
     honest: {
       hold: ["{floor}階：{mon}に捕まった。{dur}くらいで抜けた。", "{floor}階：{mon}に絡まれて動けなくなった。自力で抜けた。"],
       holdC: ["{floor}階：{mon}に捕まって、{dur}動けなかった。そのあいだに{n}回、意識が飛んだ。", "{floor}階：{mon}に捕まった。抜けるまでに、何回か達してしまった（{n}回）。"],
@@ -924,7 +951,7 @@ var G = (typeof G !== "undefined") ? G : {};
   };
 
   function documentLines(rec, save) {
-    const day = rec.day, mem = save.reportMem;
+    const day = rec.day, mem = save.reportMem, DOC = RT("DOC", DOC0);
     const out = [{ text: U.fill(DOC.head[rec.outcome] || DOC.head.retreat, { deep: rec.floorReached }), kind: "honest", fixed: true }];
     // 報告に出た件と、隠した件（欠落）を、階の順に
     const floors = [...new Set(rec.units.map(u => u.floor))].sort((a, b) => a - b);
@@ -973,7 +1000,7 @@ var G = (typeof G !== "undefined") ? G : {};
       else if (e.kind === "climax") out.push(`${e.floor}階 ${e.t}秒：絶頂${who ? "（" + who + (e.act ? "・" + e.act.replace(/ /g, "") : "") + "）" : ""}${e.chain ? `　拘束中 連続${e.chain}回目` : ""}${e.first ? `　※当該部位での初の絶頂（${e.first}）` : ""}${e.squirt ? "　※決壊（飛沫）を確認" : ""}`);
       else if (e.kind === "trap") out.push(`${e.floor}階 ${e.t}秒：罠「${who}」作動${gap}`);
       else if (e.kind === "trapBreak") out.push(`${e.floor}階 ${e.t}秒：罠「${who}」を破壊`);
-      else if (e.kind === "untransform") out.push(`${e.floor}階 ${e.t}秒：変身解除`);
+      else if (e.kind === "untransform") out.push(`${e.floor}階 ${e.t}秒：${RT("INL", INL).monUntransform}`);
       else if (e.kind === "trance" && e.hidden) out.push(`${e.floor}階 ${e.t}秒：${who}の惑い（本人の記憶に残らない深さ）`);
       else if (e.kind === "defeat") out.push(`${e.floor}階 ${e.t}秒：行動不能`);
       else if (e.kind === "possess") out.push(`${e.floor}階 ${e.t}秒：${who}が腕に憑依（${durText(e.dur)}）`);
@@ -989,7 +1016,7 @@ var G = (typeof G !== "undefined") ? G : {};
       else if (e.kind === "sniff") out.push(`${e.floor}階 ${e.t}秒：${who}の臭いを嗅ぐ`);
       else if (e.kind === "salute") out.push(`${e.floor}階 ${e.t}秒：${who}に『敬礼』`);
       else if (e.kind === "fit") out.push(`${e.floor}階 ${e.t}秒：暗示の発作`);
-      else if (e.kind === "rescue") out.push(`${e.floor}階 ${e.t}秒：洗脳、限界に到達。相棒の光で回復`);
+      else if (e.kind === "rescue") out.push(`${e.floor}階 ${e.t}秒：${RT("INL", INL).monRescue}`);
       else if (e.kind === "convert") out.push(`${e.floor}階 ${e.t}秒：戦闘員化（ワルドー）`);
       else if (e.kind === "freeze") out.push(`${e.floor}階 ${e.t}秒：時間停止（${who}）`);
       else if (e.kind === "vow") out.push(`${e.floor}階 ${e.t}秒：誓約（この階での絶頂禁止）`);
@@ -1039,15 +1066,15 @@ var G = (typeof G !== "undefined") ? G : {};
   };
   // 再尋問：暴かれた行を一つずつ突きつけ、言い直させる
   function rereport(rec, caught, save) {
-    const mem = save.reportMem, day = rec.day;
+    const mem = save.reportMem, day = rec.day, RR = RM("REREPORT", REREPORT);
     const lines = [];
     caught.forEach((d, i) => {
-      lines.push({ who: "a", text: `「${d.text.replace(/^\d+階：/, "")}」——${U.pick(REREPORT.ask)}` });
-      if (i === 0) lines.push({ who: "h", text: freshPick(mem, day, "re:why", REREPORT.why, 3) });
-      if (d.night) { lines.push({ who: "h", text: "……夜のことも、本当は、覚えてます。" }); return; }
+      lines.push({ who: "a", text: `「${d.text.replace(/^\d+階：/, "")}」——${U.pick(RR.ask)}` });
+      if (i === 0) lines.push({ who: "h", text: freshPick(mem, day, "re:why", RR.why, 3) });
+      if (d.night) { lines.push({ who: "h", text: RT("INL", INL).nightTrue }); return; }
       const u = d.unit;
-      if (u.writtenLie) lines.push({ who: "h", text: U.pick(REREPORT.written) });
-      lines.push({ who: "h", text: U.fill(freshPick(mem, day, "re:fix", REREPORT.fix, 1), { floor: u.floor, what: what(u, day, mem) }) });
+      if (u.writtenLie) lines.push({ who: "h", text: U.pick(RR.written) });
+      lines.push({ who: "h", text: U.fill(freshPick(mem, day, "re:fix", RR.fix, 1), { floor: u.floor, what: what(u, day, mem) }) });
       if (u.acts && U.chance(0.6)) { const r = probe(rec, { unit: u }, save); lines.push(...r.lines); }
     });
     return lines;
@@ -1055,6 +1082,7 @@ var G = (typeof G !== "undefined") ? G : {};
 
   // 再尋問で使う：その件の「記録の側の事実」（監視水晶の文面）と、「本人の口での事実」
   function truthOf(u) {
+    const DOC = RT("DOC", DOC0);
     const key = u.kind === "hold" ? (u.climax ? "holdC" : "hold") : u.kind;
     const arr = DOC.honest[key] || DOC.honest.arouse;
     let t = U.fill(U.pick(arr), { floor: u.floor, mon: u.monName || u.trapName || "", trap: u.trapName, dur: durText(u.dur), n: u.climax || u.n || 1 }).replace(/^\d+階：/, "");
@@ -1062,6 +1090,7 @@ var G = (typeof G !== "undefined") ? G : {};
     return t;
   }
   function sayOf(u, save, day) { return what(u, day, save.reportMem || (save.reportMem = {})).replace(/。?$/, "。"); }
-  G.Report = { build, documentLines, monitorLog, rereport, units, probe, truthOf, sayOf, REREPORT, POSTURE, STYLE };
+  G.TextL.R_DOC = DOC0; G.TextL.R_RECALL = RECALL; G.TextL.R_RENAME = RENAME; G.TextL.R_RENAME_H = RENAME_H; G.TextL.R_PROBE = PROBE; G.TextL.R_REREPORT = REREPORT; G.TextL.R_WHAT_A = WHAT_A;
+  G.Report = { build, documentLines, monitorLog, rereport, units, probe, truthOf, sayOf, REREPORT, POSTURE, STYLE, get RR() { return RM("REREPORT", REREPORT); } };
 })();
 if (typeof module !== "undefined") module.exports = G;

@@ -7,7 +7,7 @@
   let S = null;              // セーブ
   let dive = null;           // 潜行中の状態 { run, w, cam, ... }
 
-  // 遙の番：画面に出る文を、遙の名前と言葉に寄せる（台詞はひかりの声で書かれているので、出す所でまとめて置き換える）
+  // 遥の番：画面に出る文を、遥の名前と言葉に寄せる（台詞はひかりの声で書かれているので、出す所でまとめて置き換える）
   const fixText = n => { const t = n.nodeValue, u = G.Hero.tx(t); if (u !== t) n.nodeValue = u; };
   const fixTree = n => { if (n.nodeType === 3) return fixText(n); if (n.nodeType !== 1) return; const it = document.createTreeWalker(n, NodeFilter.SHOW_TEXT); let x; while ((x = it.nextNode())) fixText(x); };
   if (typeof MutationObserver !== "undefined") new MutationObserver(ms => {
@@ -37,7 +37,7 @@
     check(object(next), "全体");
     if (next.v !== 2) throw new Error("対応している記録の版は v: 2 だけです。");
     if (next.phase === "dive") throw new Error("潜行中の記録は読み込めません。帰還してから書き出してください。");
-    check(["guild", "prep", "report", "audit", "rereport", "clinic", "lost"].includes(next.phase), "phase");
+    check(["guild", "prep", "report", "audit", "rereport", "clinic", "lost", "end"].includes(next.phase), "phase");
     for (const key of ["day", "funds", "dark", "taint", "trust", "suspicion", "body", "mind", "fatigue"])
       check(typeof next[key] === "number" && Number.isFinite(next[key]), key);
     check(Number.isSafeInteger(next.day) && next.day >= 1, "day");
@@ -196,6 +196,7 @@
     }
     if (p === "report") return reportScreen();
     if (p === "lost") return lostScreen();
+    if (p === "end") return endScreen();
     if (p === "audit") return auditScreen();
     if (p === "rereport") return rereportScreen();
     if (p === "clinic") return clinicScreen();
@@ -259,7 +260,7 @@
     const last = S.history[S.history.length - 1];
     if (last && last.outcome === "defeat") out.push(T.office("talk.afterDefeat"));
     if (S.ailments.some(a => a.id === "heat")) out.push(T.office("talk.heat"));
-    if (S.vessel && G.Hero.is("hikari") && U.chance(0.7)) out.unshift(U.pick(G.Hero.SCENES.vesselTalk));
+    if (S.vessel && U.chance(0.7)) out.unshift(U.pick(G.Hero.SCENES[G.Hero.is("haruka") ? "vesselTalkHaruka" : "vesselTalk"]));
     // 残っている状態異常が、朝の会話に出る（どれか一つ）
     const ailTalk = ["rewired", "attached", "omazuke", "charm", "throb", "sensitive", "addict", "hairTrigger", "exposure"].filter(id => S.ailments.some(a => a.id === id));
     if (ailTalk.length) out.unshift(T.office("talk.ail_" + U.pick(ailTalk)));
@@ -291,7 +292,7 @@
     app.innerHTML = topbar() + officeHTML() + `
       <div class="panel" id="status">
         <b>${esc(G.Hero.keep(G.Hero.d.name))}</b> <span class="sub">${esc(G.Hero.keep(G.Hero.is("haruka") ? "仮設のヒロイン。剣士（自称・侍）。紅白の巫女装束に打刀" : "大学生。本業は魔法少女ルミナ（正体を知るのは監査官だけ）"))}</span>
-        ${S.vessel && G.Hero.is("hikari") ? `<div class="sub" style="color:#ffe7a8">教団の器——冒険者のまま、教えに満たされている（祈りの発作・法悦。教えの者に触れられるほど満ちやすい）</div>` : ""}
+        ${S.vessel ? `<div class="sub" style="color:#ffe7a8">教団の器——冒険者のまま、教えに満たされている（祈りの発作・法悦。教えの者に触れられるほど満ちやすい）</div>` : ""}
         ${S.lost && S.lost.hikari ? `<div class="sub" style="color:var(--red)">${esc(G.Hero.keep(`前任：星野 ひかり——${S.lost.hikari.day}日目、ワルドーに洗脳され行方不明（戦闘員として目撃されることがある）`))}</div>` : ""}
         <div class="sub">${esc(G.Hero.keep(G.Hero.d.formName))} Lv<b>${S.lv}</b>　次まで ${G.GROWTH.xpNeed(S.lv) - S.xp}　技 ${S.equip.length}/${G.GROWTH.slots(S.lv)}（覚えた ${Object.keys(S.skills).length}/${Object.keys(G.SKILLS).length}）${S.shards ? `　<span style="color:#ffe7a8">星の欠片 ${S.shards}/${G.SHARD_MAX}（体力+${3 * S.shards}・MP+${2 * S.shards}・気力+${Math.min(15, S.shards)}）</span>` : ""}</div>
         ${meter("肉体", S.body, 100, "#ff7fb0")}${meter("精神", S.mind, 100, "#b48cff")}${meter("信頼", S.trust, 100, "#8fe0a0")}${meter("疲労", S.fatigue, 100, "#f2d27a")}
@@ -321,9 +322,9 @@
     on("#diary", "click", () => diaryScreen());
     on("#rest", "click", restDay);
     on("#auto", "click", e => { S.autoDirector = !S.autoDirector; save(); e.currentTarget.textContent = S.autoDirector ? "入" : "切"; });
-    if (S.vesselMorning && G.Hero.is("hikari")) {                 // 教団の器になった翌朝
+    if (S.vesselMorning) {                                         // 教団の器になった翌朝
       hikariIn();
-      return vn(G.Hero.SCENES.vesselMorning(), () => { delete S.vesselMorning; S.greeted = S.day; save(); office(); });
+      return vn(G.Hero.SCENES[G.Hero.is("haruka") ? "vesselMorningHaruka" : "vesselMorning"](), () => { delete S.vesselMorning; S.greeted = S.day; save(); office(); });
     }
     if (S.heroIntro && G.Hero.SCENES[S.heroIntro + "Intro"]) {    // 新しいヒロインの着任
       hikariIn();
@@ -767,7 +768,21 @@
     app.innerHTML = topbar() + `<div class="office waldo-stage" id="office"><div class="ws-scan"></div><div class="ws-rec">● REC　ワルドー第七小隊</div>
       <img class="o-hikari ws-fig" id="oh" src="assets/hikari/hikari_waldo_magica_front_1.png" alt="">
       <div class="o-dialog hidden" id="dlg"><span class="o-name" id="dn"></span><p id="dt"></p><div class="o-choices hidden" id="dlgc"></div><span class="o-next" id="dnx">▼</span></div></div>`;
-    vn(G.Hero.SCENES.waldoLost(), () => { GM.finalizeLoss(S); save(); guild(); });
+    const haru = S.heroine === "haruka";
+    document.getElementById("oh").src = haru ? "assets/haruka/haruka_waldo_front_1.png" : "assets/hikari/hikari_waldo_magica_front_1.png";
+    vn(G.Hero.SCENES[haru ? "waldoLostHaruka" : "waldoLost"](), () => { const r = GM.finalizeLoss(S); save(); if (r === "end") endScreen(); else guild(); });
+  }
+  // 誰もいなくなった：ギルドの監査は、ここで終わる
+  function endScreen() {
+    app.innerHTML = topbar() + `<div class="office waldo-stage" id="office"><div class="ws-scan"></div><div class="ws-rec">● REC　ワルドー第七小隊</div>
+      <img class="ws-duo" src="assets/hikari/hikari_gani_magica_front.png" alt="" style="left:28%"><img class="ws-duo" src="assets/haruka/haruka_gani_front.png" alt="" style="left:72%">
+      <div class="o-dialog hidden" id="dlg"><span class="o-name" id="dn"></span><p id="dt"></p><div class="o-choices hidden" id="dlgc"></div><span class="o-next" id="dnx">▼</span></div></div>
+      <div class="panel hidden" id="endp"><b>監査の終わり</b><p class="sub">${esc(G.Hero.keep(`${(S.ended || {}).day || S.day}日目。星野ひかりも、白山遥も、ワルドーの戦闘員になった。ギルドに、監査する冒険者はいない。`))}</p>
+        <div class="row"><button class="primary" id="again">最初から始める</button></div></div>`;
+    vn(G.Hero.SCENES.allLost(), () => {
+      document.getElementById("endp").classList.remove("hidden");
+      on("#again", "click", () => { try { localStorage.removeItem(KEY); } catch (e) { } S = null; title(); });
+    });
   }
   // 帰還：監査官室に戻ってくる
   function returnScene(outcome) {

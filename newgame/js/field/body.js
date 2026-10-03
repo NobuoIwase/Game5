@@ -141,7 +141,7 @@
     record(w, { kind: "crack", type: "惑", lv: h.crack, mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: h.crack >= 5 ? 3 : 2 });
     msg(w, "crack", { c: h.crack }); if (h.crack === 1 || h.crack % 3 === 0) say(w, "crack", {});
     // 防護壁が割れきった：教団の器になる（冒険者のまま、教えに満たされる）
-    if (h.crack >= 10 && !h.vessel && (w.run.hero || "hikari") === "hikari") {
+    if (h.crack >= 10 && !h.vessel) {
       h.vessel = true; w.run.vesselNew = true; h.crack = 0;
       record(w, { kind: "vessel", type: "惑", mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: 3 });
       msg(w, "vessel", {}); say(w, "vessel", {});
@@ -198,7 +198,7 @@
       record(w, { kind: "convert", type: "惑", sev: 3, mon: src && src.kind, monName: src && src.d ? src.d.name : "" });
       msg(w, "convert", {});
       w.outcome = "defeat"; w.defeatBy = "waldo"; w.run.converted = true;
-      if ((w.run.hero || "hikari") === "hikari") w.run.lostHero = true;      // ひかりは、戻ってこない（ユニットロスト）
+      w.run.lostHero = true;      // 戻ってこない（ユニットロスト）
       openScene(w, "convert", src);
     }
   }

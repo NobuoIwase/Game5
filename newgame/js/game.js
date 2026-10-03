@@ -102,7 +102,7 @@ var G = (typeof G !== "undefined") ? G : {};
   /* ================================================================ 新しいゲーム */
   function newSave() {
     const decks = {};
-    for (const k in G.DUNGEONS) { const dg = G.DUNGEONS[k]; decks[k] = [dg.free.find(x => G.MONSTERS[x].type === "削"), "trap:" + dg.traps[0]]; }
+    for (const k in G.DUNGEONS) { const dg = G.DUNGEONS[k]; decks[k] = [dg.free.find(x => G.MONSTERS[x].type === "削" && x !== "drain_roper"), "trap:" + dg.traps[0]]; }
     return {
       v: 2, day: 1, phase: "guild",
       funds: 60, dark: 0, taint: 0, trust: 50, suspicion: 0, body: 0, mind: 0, fatigue: 0,
@@ -208,7 +208,8 @@ var G = (typeof G !== "undefined") ? G : {};
     s.crack = s.crack || 0; s.shards = s.shards || 0; s.futaMarks = s.futaMarks || 0; s.futaFixed = !!s.futaFixed;
     s.know = s.know || {}; s.lewd = s.lewd || {};
     s.lv = s.lv || 1; s.xp = s.xp || 0; s.skills = s.skills || {}; s.equip = (s.equip || []).filter(id => G.SKILLS[id]);
-    for (const k in G.DUNGEONS) if (!s.decks[k]) { const dg = G.DUNGEONS[k]; s.decks[k] = [dg.free.find(x => G.MONSTERS[x].type === "削"), "trap:" + dg.traps[0]]; }
+    for (const k in G.DUNGEONS) if (!s.decks[k]) { const dg = G.DUNGEONS[k]; s.decks[k] = [dg.free.find(x => G.MONSTERS[x].type === "削" && x !== "drain_roper"), "trap:" + dg.traps[0]]; }
+    for (const k in s.decks) { const dg = G.DUNGEONS[k]; if (dg && !dg.free.includes("drain_roper")) s.decks[k] = s.decks[k].map(c => c === "drain_roper" ? dg.free.find(x => G.MONSTERS[x] && G.MONSTERS[x].type === "削" && x !== "drain_roper") : c); }   // ドレインローパーは湿窟と蔦森だけに
     s.ailments = (s.ailments || []).filter(a => AILMENTS[a.id]);
     s.heroine = s.heroine || "hikari"; s.archive = s.archive || {}; s.vessel = !!s.vessel; s.captured = s.captured || {};
     s.sequelae = s.sequelae || {}; s.convN = s.convN || 0; if (s.rep == null) s.rep = 60;

@@ -259,6 +259,7 @@
     const sev = k * power >= 1.6 ? 2 : 1;
     if (type === "惑") {
       const was = h.trance > 0;
+      if (h.bound) power *= 1.15;                                   // 捕まって身動きできない時は、術がまっすぐ入ってくる
       if (trait(w, "hypnoObey")) power *= 1 + 0.1 * trait(w, "hypnoObey");
       h.hyp = Math.min(100, (h.hyp || 0) + 26 * power * k);          // 催眠度：一気に上がり、なかなか抜けない
       if (!(h.clearT > w.t)) h.trance = Math.max(h.trance, (1.0 + h.hyp / 70) * power * k);   // ルミナは、すぐ我に返る

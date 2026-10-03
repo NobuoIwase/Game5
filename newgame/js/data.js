@@ -54,8 +54,8 @@ var G = (typeof G !== "undefined") ? G : {};
                     atk: { kind: "aura", range: 5, power: 0.6, gaze: true }, desc: "責めない。ただ、じっと見ている" },
     mirror_slime: { name: "鏡面スライム",     type: "惑", art: "mirror_slime.png", hp: 30, spd: 1.0, r: 0.45, sight: 5, fov: 360, behavior: "wander", cost: 3, ct: 8, reflect: 0.35,
                     atk: { kind: "grab", range: 0.8, windup: 0.6, cd: 2.6, power: 0.9 }, desc: "光を映して跳ね返す。映った自分に見とれる" },
-    drain_roper:  { name: "ドレインローパー", type: "削", art: "drain_roper.png",  hp: 45, spd: 0.7, r: 0.55, sight: 5, fov: 360, behavior: "lurk", cost: 4, ct: 11,
-                    atk: { kind: "grab", range: 1.8, windup: 0.8, cd: 3.2, power: 0.8, drain: 3 }, desc: "絡めた先から魔力を吸い上げる" },
+    drain_roper:  { name: "ドレインローパー", type: "削", art: "drain_roper.png",  hp: 34, spd: 0.6, r: 0.55, sight: 4.5, fov: 360, behavior: "lurk", cost: 4, ct: 11,
+                    atk: { kind: "grab", range: 1.4, windup: 0.95, cd: 3.8, power: 0.6, drain: 2.2 }, desc: "吸盤だらけの触手で絡めとり、肌から魔力を吸い上げる。達した瞬間の魔力がいちばん甘いと知っていて、吸盤で乳首とクリトリスを狙う" },
     ghost_head:   { name: "ゴーストヘッド",   type: "削", art: "ghost_head.png",   hp: 20, spd: 1.6, r: 0.45, sight: 6, fov: 360, behavior: "float", cost: 3, ct: 8,
                     atk: { kind: "drain", range: 2.2, power: 1.0 }, desc: "近くにいるだけで魔力が抜けていく" },
     pot:          { name: "触手壺",           type: "削", art: "pot.png",          hp: 40, spd: 0,   r: 0.5, sight: 3, fov: 360, behavior: "static", cost: 3, ct: 10,
@@ -420,18 +420,18 @@ var G = (typeof G !== "undefined") ? G : {};
   };
 
   /* ---- ダンジョン ---- 固定枠4＋自由枠（候補から選ぶ）。削はどこでも自由枠に入れられる */
-  const DRAIN = ["drain_roper", "ghost_head", "pot", "wisp"];
+  const DRAIN = ["ghost_head", "pot", "wisp"];          // ドレインローパーは触手の湧く所（湿窟・蔦森）にだけ
   G.DUNGEONS = {
     mist: { name: "霧鏡の回廊", type: "惑", floors: 10, pal: { floor: "#3a3548", floor2: "#342f42", wall: "#0e0b14", wallTop: "#6a6080", edge: "#5a4e74", fog: "#8a7cc0" },
             fixed: ["gazer", "mind_roper", "moth", "mirror_slime"], free: ["imp", "peeper", "tsukite", "medama", "inma", "futago", "muma_queen", "shibire", "hitomi", "utaimp", ...DRAIN], traps: ["bell", "mirror", "decoy", "shrine", "basin", "pillory", "belt", "tower", "shadow", "echo_gate", "lull_voice", "stasis", "vow", "whisper_ring", "suit", "rune"],
             rooms: ["mirror_hall", "hypno_bell", "twin_shadow", "dreamwalk", "fungal_bed", "purify", "caliper", "pillory", "whisper", "shadow_hall", "imp_nest", "edge_parlor", "dream_throne", "echo_hall", "stasis_room", "box_room"],
             desc: "鏡と霧の遺跡。見たものを信じるほど深く迷う" },
     mire: { name: "蜜溜まりの湿窟", type: "蕩", floors: 10, pal: { floor: "#43323a", floor2: "#3b2c33", wall: "#100a0c", wallTop: "#7a5a64", edge: "#7a4a5c", fog: "#c07a98" },
-            fixed: ["slime", "slug", "jellyfish", "lure_cap"], free: ["fluff", "nikubana", "sasayaki", "miwakubana", "namekuji", "namequeen", "firstslug", "mitsusui", "bishin", "dakitake", "kouryuu", "shousha", "banjin", "sekitake", "kabeguchi", "inyoku", "hoshibami", "inma", "hiru", "hibiki", "tsurimushi", "doromushi", ...DRAIN], traps: ["glue", "vent", "urn", "shrine", "basin", "tease", "belt", "slime_drop", "bud", "altar", "saddle", "itch", "tickle", "aphro_wall", "toybox", "honey", "rune", "vow"],
+            fixed: ["slime", "slug", "jellyfish", "lure_cap"], free: ["fluff", "nikubana", "sasayaki", "miwakubana", "namekuji", "namequeen", "firstslug", "mitsusui", "bishin", "dakitake", "kouryuu", "shousha", "banjin", "sekitake", "kabeguchi", "inyoku", "hoshibami", "inma", "hiru", "hibiki", "tsurimushi", "doromushi", "drain_roper", ...DRAIN], traps: ["glue", "vent", "urn", "shrine", "basin", "tease", "belt", "slime_drop", "bud", "altar", "saddle", "itch", "tickle", "aphro_wall", "toybox", "honey", "rune", "vow"],
             rooms: ["tent_flood", "foam_cell", "mist_hall", "gel_urn", "tease_rack", "hot_spring", "purify", "fungal_bed", "feed_belt", "slime_ceil", "bud_hall", "flower_bed", "incense_pool", "hug_grove", "beam_hall", "seal_altar", "cocoon_room", "itch_cell", "saddle_pit", "tickle_hall", "honey_cave", "rune_road", "mouth_floor", "spore_field", "edge_parlor", "hive_cave", "drop_shaft", "mud_hall", "leech_bank"],
             desc: "甘い湿気の籠もる洞窟。息をするだけで熱がこもる" },
     vine: { name: "絡繰りの蔦森", type: "絡", floors: 10, pal: { floor: "#323d34", floor2: "#2c362e", wall: "#0a0e0b", wallTop: "#5e6a5c", edge: "#4a6a52", fog: "#7ab08a" },
-            fixed: ["roper", "hanging_vine", "puppet_hand", "gulper_worm"], free: ["goblin", "mimic", "nikubana", "miwakubana", "namekuji", "tsukite", "suiyou", "hoshibami", "tentacle_lord", "kabeguchi", "zuidou", "gitai", "haimushi", ...DRAIN], traps: ["vine", "rope", "glue", "shrine", "basin", "pillory", "belt", "root", "cocoon", "ratchet", "shadow", "armor", "net", "pitfall", "curtain", "sucker", "web", "exam"],
+            fixed: ["roper", "hanging_vine", "puppet_hand", "gulper_worm"], free: ["goblin", "mimic", "nikubana", "miwakubana", "namekuji", "tsukite", "suiyou", "hoshibami", "tentacle_lord", "kabeguchi", "zuidou", "gitai", "haimushi", "drain_roper", ...DRAIN], traps: ["vine", "rope", "glue", "shrine", "basin", "pillory", "belt", "root", "cocoon", "ratchet", "shadow", "armor", "net", "pitfall", "curtain", "sucker", "web", "exam"],
             rooms: ["tent_flood", "vine_hall", "kote_swarm", "tent_pit", "idle_cell", "caliper", "feed_belt", "pillory", "fungal_bed", "purify", "root_floor", "cocoon_room", "ratchet_room", "shadow_hall", "flower_bed", "armor_hall", "sucker_hall", "web_hall", "lord_den", "pond", "mouth_floor", "worm_nest", "mud_hall"],
             desc: "蔦に呑まれた古い砦。道も壁も、ゆっくり動く" },
     waldo: { name: "ワルドーの支部", type: "惑", floors: 10, pal: { floor: "#2e3240", floor2: "#282b38", wall: "#0a0b10", wallTop: "#565c74", edge: "#4c5a7a", fog: "#7a90c0" },

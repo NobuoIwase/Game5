@@ -177,7 +177,7 @@
     } else if (m.alert > 0 && !w.outcome) {
       // 構える：射程・視線・仲間の詠唱の枠
       const cap = w.monsters.filter(o => o.alert && o.hp > 0).length >= 3 ? 2 : 1;
-      const can = m.cd <= 0 && castingCount(w, m) < cap && (!h.bound || A.kind === "grab");
+      const can = m.cd <= 0 && castingCount(w, m) < cap && (!h.bound || A.kind === "grab" || BOUND_OK.includes(A.kind));   // 捕まっている間も、状態異常の術は届く
       const inRange = dist <= (A.range || 1) + (A.kind === "grab" ? 0.25 : 0);
       if (can && (A.kind === "grab" || A.kind === "shot" || A.kind === "lure" || (A.kind === "possess" && !h.possess) || A.kind === "deny" || A.kind === "omazuke" || A.kind === "attach" || (A.kind === "count" && !h.countGame)) && inRange && M.los(w.map, m.x, m.y, h.x, h.y) && !(A.kind === "lure" && A.alsoGrab && dist <= A.alsoGrab)) startCast(w, m, A.kind);
       else if (can && A.alsoGrab && dist <= A.alsoGrab) startCast(w, m, "grab2");
@@ -311,6 +311,7 @@
     m.mvx = (m.x - px) / Math.max(dt, 1e-3); m.mvy = (m.y - py) / Math.max(dt, 1e-3);
   }
 
+  const BOUND_OK = ["shot", "lure", "deny", "omazuke", "count"];   // 捕まって避けられない獲物にも撃てる術
   function startCast(w, m, kind) {
     const h = w.run.h, A = m.d.atk;
     const t = kind === "grab2" ? 0.7 : kind === "pounce" ? 0.5 : (A.windup || 0.6);

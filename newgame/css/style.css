@@ -271,3 +271,6 @@ select { font: inherit; color: var(--tx); background: var(--panel2); border: 1px
 @keyframes wsBlink { 50% { opacity: .35; } }
 .office.waldo-stage .ws-fig { height: 70%; bottom: 20%; filter: drop-shadow(0 0 10px rgba(120,160,255,0.55)) saturate(1.1); }
 .office.waldo-stage .ws-duo { position: absolute; bottom: 20%; height: 66%; transform: translateX(-50%); z-index: 2; filter: drop-shadow(0 0 10px rgba(120,160,255,0.55)); }
+/* 報告の間の立ち絵（表情・胸から上）。机の向こうに座って話す */
+.o-hikari.bust { height: 96%; bottom: 6%; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.45)); }
+.office.small .o-hikari.bust { height: 100%; bottom: 0; }

@@ -60,6 +60,32 @@
       if (h.vessel && (h.pleasure > 75 || h.arousal > 80)) return `assets/hikari/hikari_tongue_${h.form === "magica" ? "magica" : "civilian"}_front_${i}.png`;
       return Hero.sprite(h, "front", i);
     },
+    // 報告の立ち絵（表情）：その一言の中身と、件の重さで選ぶ。聖衣の絵には表情の差分が無いので、器の間は使わない
+    FACES: ["01_happy", "02_angry", "03_sad", "04_joyful", "05_embarrassed", "06_downcast_eyes", "07_cover_up", "08_sideways_blush", "09_bowed_head", "10_bowed_head_blush"],
+    faceImg(k) { return `assets/portrait/${Hero.cur}/${k}.png`; },
+    face(l, rec, s) {
+      if (!l || l.who !== "h" || (s && s.vessel)) return null;
+      const t = String(l.text || ""), u = l.unit;
+      let k = l.mood;
+      if (!k) {
+        if (l.lie) k = "07_cover_up";                                                     // ごまかす
+        else if (/ごめん|申し訳|すみません|面目|不忠|お詫び|失格/.test(t)) k = "09_bowed_head";     // 頭を下げる
+        else if (/本当は|嘘、でした|嘘でした|偽りました|嘘、書きました|白状|……言います|わかりました、言います|ばれ/.test(t)) k = "10_bowed_head_blush";   // 打ち明ける
+        else if (l.renamed) k = "08_sideways_blush";                                       // 言い直させられる
+        else if (/しつこい|疑われ|勘弁|もう、いいですよね|見せなくて|間違ってる|聞いてません|関係、?ない|何が言いたい/.test(t)) k = "02_angry";
+        else if (/イ[っくきッ]|いっちゃ|いかされ|達し|果て|頭が真っ白|イき/.test(t)) k = "10_bowed_head_blush";   // 達したことを口にする
+        else if (/乳首|クリ|おまんこ|おちんちん|あそこ|胸の、?先|中、まで|直接|奥まで|♡/.test(t)) k = "08_sideways_blush";
+        else if (l.night || /負け|朝まで|救出|助けて|帰れな/.test(t)) k = "03_sad";
+        else if (u && (u.climax || u.shame >= 3)) k = "05_embarrassed";
+        else if (u && u.shame >= 2) k = "05_embarrassed";
+        else if (u) k = "06_downcast_eyes";
+        else if (/思いつ|閃|新しい技|強く|身体が軽い|踏破|楽勝|簡単でした|頑張り|ファイト/.test(t)) k = "04_joyful";
+        else if (rec && rec.outcome === "defeat") k = "03_sad";
+        else if (rec && rec.outcome === "cleared") k = "01_happy";
+        else k = "06_downcast_eyes";
+      }
+      return Hero.faceImg(k);
+    },
     // 監査官室の立ち姿（素の姿）
     portrait(s, dir) {
       dir = dir || "front";

@@ -192,7 +192,7 @@
       sv.waldo.rescues++; h.brain = 45;
       if (h.bound) release(w, true);
       record(w, { kind: "rescue", type: "惑", sev: 2, n: sv.waldo.rescues });
-      msg(w, "rescue", {}); openScene(w, "rescue", src);
+      msg(w, "rescue", {}); openScene(w, w.dg && w.dg.strobe ? "strobeRescue" + (G.Hero.is("haruka") ? "H" : "") : "rescue", src);
     } else {
       sv.waldo.rescues = 0; sv.waldo.converted++;
       h.rewired = true;
@@ -200,10 +200,35 @@
       msg(w, "convert", {});
       w.outcome = "defeat"; w.defeatBy = "waldo"; w.run.converted = true;
       w.run.lostHero = true;      // 戻ってこない（ユニットロスト）
-      openScene(w, "convert", src);
+      openScene(w, w.dg && w.dg.strobe ? "strobeConvert" + (G.Hero.is("haruka") ? "H" : "") : "convert", src);
     }
   }
 
+  const STROBE_SRC = { kind: "strobe", d: { name: "明滅灯", type: "惑" } };
+  function strobeTick(w, dt) {
+    const h = w.run.h, S = w.dg.strobe, f = w.floorNo || 1;
+    h.strobeT = (h.strobeT ?? U.rf(0.8, 1.6)) - dt;
+    if (h.strobeT > 0) return;
+    const deep = 0.7 + 0.08 * f, k = mult(w, "惑");
+    h.strobeT = U.rf(1.0, 1.9) / (0.85 + 0.05 * f);                 // 深いほど、瞬きが細かい
+    const n = h.strobeN = (h.strobeN || 0) + 1;
+    fx(w, { kind: "flashCam", x: h.x + U.rf(-0.4, 0.4), y: h.y - U.rf(0.2, 0.9), life: 0.25 });
+    if (n % 3 === 0) fx(w, { kind: "sfx", text: U.pick(["パシャッ", "パシャ", "チカッ", "ぱしゃっ"]), x: h.x + U.rf(-0.8, 0.8), y: h.y - 1.4, life: 0.8, color: "#d8e4ff" });
+    h.hyp = Math.min(100, (h.hyp || 0) + 1.3 * deep * k);
+    const H = G.Hero.is("haruka") ? "H" : "";                                  // 遙には、遙の言葉と場面（ルミナの流用はしない）
+    if (w.strobeFloor !== f) {
+      w.strobeFloor = f; record(w, { kind: "strobe", type: "惑", mon: "strobe", monName: "明滅灯", sev: 2, brain: Math.round(h.brain || 0) });
+      if (!w.run.strobeIn) { w.run.strobeIn = true; openScene(w, "strobeEnter" + H, STROBE_SRC); }
+    }
+    addBrain(w, S.brain * deep * (h.bound ? 1.3 : 1), STROBE_SRC);
+    if (w.outcome) return;
+    if (n % 7 === 0) applyEffect(w, "惑", 0.22 * deep, STROBE_SRC);           // ときどき、少し強い一閃
+    if (S.crackEvery && n % S.crackEvery === 0 && (h.crack || 0) < 9) addCrack(w, 1, STROBE_SRC);   // 教団の灯：防護壁にも、細かいヒビ
+    const br = h.brain || 0, lv = br >= 85 ? 3 : br >= 60 ? 2 : br >= 30 ? 1 : 0;
+    if (n % 9 === 0) msg(w, "strobe" + lv + H, {}, 4);
+    if (lv > (h.strobeLv || 0)) { h.strobeLv = lv; say(w, "strobe" + lv + H, {}); feed(w, "mind", G.Text.strobeMind(lv, heroName(w), !!H)); if (lv >= 2 && !w.run.strobeDeep && !h.bound) { w.run.strobeDeep = true; openScene(w, "strobeDeep" + H, STROBE_SRC); } }
+    else if (lv < (h.strobeLv || 0) - 1) h.strobeLv = lv;                      // プラムの光で引き戻されたら、また沈んでいく
+  }
   // 後遺症：『イーッ』の号令を聞くと、点検の記憶で達してしまう
   function pavlov(w, m) {
     const h = w.run.h, n = (w.run.seq || {}).pavCx || 0;
@@ -366,7 +391,7 @@
         record(w, { kind: "seqSalute", type: "惑", sev: 1 }); msg(w, "seqSalute", {}); say(w, "seqSalute", {});
       }
     }
-    if (sq.suitAche && w.run.dungeon === "waldo") { h.arousal = Math.min(100, h.arousal + 0.45 * sq.suitAche * dt); if (U.chance(dt * 0.03)) msg(w, "suitAche", {}, 20); }
+    if (sq.suitAche && (w.run.dungeon === "waldo" || w.run.dungeon === "strobe")) { h.arousal = Math.min(100, h.arousal + 0.45 * sq.suitAche * dt); if (U.chance(dt * 0.03)) msg(w, "suitAche", {}, 20); }
     // 空でいく：寸前で抜けた身体が、触れられないまま、遅れて達する
     if (h.dryAt != null && w.t >= h.dryAt) {
       const by = h.dryMon; h.dryAt = null; h.dryMon = null;
@@ -417,8 +442,10 @@
       } else if (!o.queen) msg(w, "denyEnd", {}); } }
     // 暗示の引き金：前触れなく、無様の発作
     if (h.trigger) { h.trigT = (h.trigT ?? U.rf(20, 40)) - dt; if (h.trigT <= 0 && !h.bound) { h.trigT = U.rf(22, 45); h.freeze = 1.2; h.pleasure += 12 * intake(w); record(w, { kind: "fit", type: "惑", sev: 2 }); msg(w, "fit", {}); say(w, "fit", {}); } }
-    // 洗脳はゆっくり薄れる
-    if (h.brain > 0) h.brain = Math.max(0, h.brain - 0.15 * dt);
+    // 明滅の点検路：天井の灯が、弱い催眠光を細かく瞬かせる。一度ずつは何でもない。降りるほど、数が重なる
+    if (w.dg && w.dg.strobe && !w.outcome) strobeTick(w, dt);
+    // 洗脳はゆっくり薄れる（瞬きつづける灯の下では、薄れる暇がない）
+    if (h.brain > 0) h.brain = Math.max(0, h.brain - 0.15 * (w.dg && w.dg.strobe ? 0.2 : 1) * dt);
     // 潤沢の法則：空気そのものが媚薬
     if (w.run.law === "juntaku") h.arousal = Math.min(100, h.arousal + 0.2 * dt);
     checkClimax(w, null);
@@ -434,6 +461,6 @@
 
   /* ---- 捕まる・振りほどく ---- */
 
-  Object.assign(G.F, { pavlov, CULT, vesselFit, shasei, cumBlocked, urgeUp, MACHINE, IMPS, trait, heat, intake, resist, capped, releaseOverflow, addCharm, SLUGS, charmTouch, ATTACH, addAttach, addCum, addCrack, pray, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, applyEffect, drainMagic, untransform, engraveSigil, possess, tickStatus, endPossess });
+  Object.assign(G.F, { strobeTick, pavlov, CULT, vesselFit, shasei, cumBlocked, urgeUp, MACHINE, IMPS, trait, heat, intake, resist, capped, releaseOverflow, addCharm, SLUGS, charmTouch, ATTACH, addAttach, addCum, addCrack, pray, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, applyEffect, drainMagic, untransform, engraveSigil, possess, tickStatus, endPossess });
   G.F.bind.push(() => { ({ U, TIER_FX, say, live, msg, fx, logLine, record, checkClimax, release, defeat, openScene, flash, heroName, feed } = G.F); });
 })();

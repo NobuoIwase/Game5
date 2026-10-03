@@ -9,7 +9,7 @@ function measure({ seeds, runs }) {
     const s = G.Game.newSave();
     G.Game.morning(s);
     const ri = s.requests.findIndex(r => r.dungeon === dungeon);
-    G.Game.assign(s, ri, null, null);
+    G.Game.assign(s, Math.max(0, ri), null, ri < 0 ? dungeon : null);   // 依頼に出ない所（すり替え専用）は、行き先を差し替えて
     G.Game.prep(s);
     const dive = G.Game.startDive(s);
     for (let floor = 0; floor < runs; floor++) {

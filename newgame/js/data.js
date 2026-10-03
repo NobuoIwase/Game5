@@ -438,6 +438,11 @@ var G = (typeof G !== "undefined") ? G : {};
             fixed: ["waldo_grunt", "waldo_officer", "drone_capture", "drone_camera"], free: ["drone_tickle", "karte", "inma", "tsukite", ...DRAIN], traps: ["hypno_ray", "capture", "net", "pitfall", "exam", "furnace", "pod", "stasis", "echo_gate", "suit"],
             rooms: ["w_intake", "w_ray_room", "w_furnace", "w_lab", "w_pod_hall", "w_command", "w_drone_bay", "echo_hall", "stasis_room", "box_room"],
             desc: "催眠と洗脳で人を戦闘員に変える組織の支部。ひかりを狙っている" },
+    // ワルドーと教団の共同の点検路：天井の灯が、弱い催眠光を細かく瞬かせる。依頼には出ない（行き先のすり替えでだけ向かわせられる）
+    strobe: { name: "明滅の点検路", type: "惑", floors: 10, hidden: true, strobe: { brain: 0.72, crackEvery: 30 }, pal: { floor: "#383c48", floor2: "#32353f", wall: "#0b0c10", wallTop: "#6a7088", edge: "#8a6a7a", fog: "#b8c0e8" },
+            fixed: ["waldo_grunt", "drone_camera", "shinja", "sekkyoushi"], free: ["waldo_officer", "drone_capture", "karte", "chuushutsu", "kyouso", "tsukite", ...DRAIN], traps: ["hypno_ray", "net", "pitfall", "exam", "vow", "shashin", "kaikou", "pod", "echo_gate", "lull_voice", "stasis", "capture"],
+            rooms: ["w_ray_room", "w_intake", "w_pod_hall", "w_lab", "c_ray_room", "c_photo", "c_hall", "echo_hall", "stasis_room"],
+            desc: "ワルドーと教団が共同で使う、地下の点検路。天井の灯が、弱い催眠の光をパシャパシャと細かく瞬かせつづける。一度ずつは何でもない。降りるほど、数が重なる" },
     // 入ると『変生』（ふたなり化）の呪いがかかる。潜行のあいだだけ
     futa: { name: "変生の神殿", type: "蕩", floors: 10, futa: true, pal: { floor: "#4a3038", floor2: "#422a32", wall: "#140a0e", wallTop: "#8a5a68", edge: "#8a4a60", fog: "#d08aa8" },
             fixed: ["kuwaemushi", "tenohira", "sayagoke", "sakiimp"], free: ["ukegame", "hibiki", "futago", "inma", "hiru", "bishin", ...DRAIN], traps: ["ring", "temari", "lips", "gauze", "count_altar", "feather_bed", "namagoroshi", "suikan", "aphro_wall", "tease"],

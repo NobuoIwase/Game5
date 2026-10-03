@@ -228,6 +228,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const out = [];
     for (const k of U.shuffle(keys)) {
       const dg = G.DUNGEONS[k];
+      if (dg.hidden) continue;                              // すり替えでしか向かわせられない所
       const real = { main: U.pick(dg.fixed.concat(dg.free.filter(x => G.MONSTERS[x].type !== "削"))), level: U.ri(1, 3), scale: U.ri(1, 3), boss: U.chance(0.35 + s.day * 0.005), verb: U.pick(VERB) };
       if (U.chance(0.25)) real.species = real.main;          // ときどき種族特化
       out.push({ id: s.day + ":" + k, dungeon: k, real, place: placeName(k, real.species), title: requestTitle(real), stated: G.MONSTERS[real.main].type,
@@ -261,14 +262,14 @@ var G = (typeof G !== "undefined") ? G : {};
 
   // 依頼を割り当てる。paper＝依頼書に書く中身（主な魔物・規模・脅威度・長）、dest＝実際の行き先（すり替え）
   function forgeSize(real, paper, destChanged) {
-    return (paper.main !== real.main ? 2 : 0) + Math.abs(paper.level - real.level) + Math.abs(paper.scale - real.scale) + (real.boss && !paper.boss ? 2 : 0) + (destChanged ? 2 : 0);
+    return (destChanged && destChanged.hidden ? 3 : 0) + (paper.main !== real.main ? 2 : 0) + Math.abs(paper.level - real.level) + Math.abs(paper.scale - real.scale) + (real.boss && !paper.boss ? 2 : 0) + (destChanged ? 2 : 0);
   }
   function assign(s, reqIdx, paper, dest) {
     const r = s.requests[reqIdx];
     const real = Object.assign({}, r.real);
     paper = Object.assign({}, r.real, paper || {});
     const dungeon = dest || r.dungeon;
-    const size = forgeSize(real, paper, dungeon !== r.dungeon);
+    const size = forgeSize(real, paper, dungeon !== r.dungeon && (G.DUNGEONS[dungeon].hidden ? G.DUNGEONS[dungeon] : true));
     s.pick = { req: r, real, paper, title: requestTitle(paper), stated: G.MONSTERS[paper.main].type, dungeon, forged: size > 0, forgeSize: size };
     s.phase = "prep";
     return s.pick;
@@ -314,7 +315,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const has = id => s.ailments.some(a => a.id === id);
     const ail = id => s.ailments.find(a => a.id === id);
     // 迷宮の法則：入口で決まる。無い日もある（ワルドーの支部には無い）
-    const law = p.dungeon !== "waldo" && U.chance(0.45) ? U.pick(Object.keys(G.LAWS)) : null;
+    const law = p.dungeon !== "waldo" && p.dungeon !== "strobe" && U.chance(0.45) ? U.pick(Object.keys(G.LAWS)) : null;
     const run = {
       day: s.day, dungeon: p.dungeon, stated: p.stated, realType: G.DUNGEONS[p.dungeon].type, forged: p.forged,
       real: p.real, paper: p.paper, caution: p.caution || 1, forgeSize: p.forgeSize || 0,

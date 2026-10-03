@@ -40,7 +40,16 @@
     if (h.bound && h.bound.by.includes(m.id)) { h.bound.by = h.bound.by.filter(i => i !== m.id); if (!h.bound.by.length) release(w, true); }
     record(w, { kind: "kill", type: m.d.type, mon: m.kind, monName: m.d.name, sev: 0, boss: !!m.boss });
     if (m.boss) gainShard(w, "boss");                 // 長の身体から、魔石の欠片が零れる
-    if (m.kind === "lumina_grunt") { msg(w, "luminaFlee", { mon: m.d.name }); say(w, "luminaFlee", {}); return; }   // 倒れない：退いていく
+    if (m.d.grunt) {
+      // 救出の依頼で、戦闘員にされた相棒を打ち倒した：取り返した
+      if (w.run.rescue === m.d.grunt && !w.run.rescued) {
+        w.run.rescued = true; m.hp = 0;
+        record(w, { kind: "rescueAlly", type: "惑", mon: m.kind, monName: m.d.name, sev: 2 });
+        msg(w, "rescueAlly", { mon: m.d.name }); say(w, "rescueAlly", {}); openScene(w, m.d.grunt === "hikari" ? "rescueLumina" : "rescueHaruka", m);
+        return;
+      }
+      msg(w, "luminaFlee", { mon: m.d.name }); say(w, m.d.grunt === "hikari" ? "luminaFlee" : "harukaFlee", {}); return;   // 倒れない：退いていく
+    }
     msg(w, "kill", { mon: m.d.name });
     fx(w, { kind: "pop", x: m.x, y: m.y, color: "#ffe0f0", life: 0.5 });
     if (m.d.atk.burst && U.dist(m.x, m.y, h.x, h.y) < 1.6) applyEffect(w, "蕩", m.d.atk.power, m);
@@ -91,7 +100,7 @@
     m.hop = Math.max(0, m.hop - dt); m.rcl = Math.max(0, m.rcl - dt); m.lunge = Math.max(0, m.lunge - dt);
     m.pounceCd = Math.max(0, (m.pounceCd || 0) - dt); m.teaseCd = Math.max(0, (m.teaseCd || 0) - dt);
     // 戦闘員の女その1：見せつけるように、ガニ股で敬礼して媚びる（その間は止まる）
-    if (m.kind === "lumina_grunt") {
+    if (d.grunt) {
       m.salute = Math.max(0, (m.salute || 0) - dt);
       if (m.salute > 0) { m.vx = m.vy = 0; return; }
       if (m.alert > 0 && !w.outcome && !h.bound && U.dist(m.x, m.y, h.x, h.y) < 6 && w.t - (m.saluteT ?? -99) > 9 && U.chance(dt * 0.6)) {
@@ -269,7 +278,7 @@
       if (m.muskT > 1.5) { m.muskT = 0; if (U.chance(0.45)) { h.sniff = 1.4; h.arousal = Math.min(100, h.arousal + 6 * (1 + 0.2 * trait(w, "musk"))); record(w, { kind: "sniff", type: "蕩", mon: m.kind, monName: d.name, sev: 2 }); msg(w, "sniff", { mon: d.name }); say(w, "sniff", { mon: d.name }); } }
     }
     // 常識改変：ワルドーの者を見ると、教え込まれた「敬礼」をしてしまう
-    if (d.waldo && h.rewired && !w.outcome && !h.bound && !(h.salute > 0) && dist < 5 && monSees(w, m) && w.t - (h.saluteT ?? -99) > 10) {
+    if (d.waldo && (h.rewired || (w.run.seq || {}).salute) && !w.outcome && !h.bound && !(h.salute > 0) && dist < 5 && monSees(w, m) && w.t - (h.saluteT ?? -99) > 10) {
       h.saluteT = w.t; h.salute = 1.8; h.pleasure += 6 * intake(w, m); h.watched = 1;
       record(w, { kind: "salute", type: "惑", mon: m.kind, monName: d.name, sev: 2 }); msg(w, "salute", { mon: d.name }); say(w, "salute", {});
     }

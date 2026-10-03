@@ -7,8 +7,8 @@
   let S = null;              // セーブ
   let dive = null;           // 潜行中の状態 { run, w, cam, ... }
 
-  // 遥の番：画面に出る文を、遥の名前と言葉に寄せる（台詞はひかりの声で書かれているので、出す所でまとめて置き換える）
-  const fixText = n => { const t = n.nodeValue, u = G.Hero.tx(t); if (u !== t) n.nodeValue = u; };
+  // 遙の番：画面に出る文を、遙の名前と言葉に寄せる（台詞はひかりの声で書かれているので、出す所でまとめて置き換える）
+  const fixText = n => { const pe = n.parentElement; if (pe && pe.closest && pe.closest('[data-raw="1"]')) return; const t = n.nodeValue, u = G.Hero.tx(t); if (u !== t) n.nodeValue = u; };
   const fixTree = n => { if (n.nodeType === 3) return fixText(n); if (n.nodeType !== 1) return; const it = document.createTreeWalker(n, NodeFilter.SHOW_TEXT); let x; while ((x = it.nextNode())) fixText(x); };
   if (typeof MutationObserver !== "undefined") new MutationObserver(ms => {
     if (G.Hero.cur === "hikari") return;
@@ -240,6 +240,7 @@
       dn.textContent = l.name || (l.who === "h" ? G.Hero.d.short : l.who === "a" ? "監査官" : "");
       if (l.img) { const oh = document.getElementById("oh"); if (oh) { oh.src = l.img; oh.classList.toggle("bust", /\/portrait\//.test(l.img)); } }
       dn.style.display = l.who === "n" ? "none" : "";
+      dt.dataset.raw = l.raw ? "1" : ""; dn.dataset.raw = l.raw ? "1" : "";        // その人自身の言葉（遙の番の置き換えをしない）
       dt.textContent = l.text; dt.className = l.who === "n" ? "narr" : "";
       if (l.onShow) l.onShow(l);
       if (dc) { dc.innerHTML = ""; dc.classList.add("hidden"); }
@@ -291,11 +292,13 @@
     const tr = Object.keys(S.traits || {}).filter(k => S.traits[k] && G.TRAITS[k]).map(k => `<span class="tag" title="${esc(G.TRAITS[k].desc)}">${G.TRAITS[k].name}・${G.TRAIT_STAGE[S.traits[k]]}</span>`).join("") || `<span class="dim">まだ無い</span>`;
     app.innerHTML = topbar() + officeHTML() + `
       <div class="panel" id="status">
-        <b>${esc(G.Hero.keep(G.Hero.d.name))}</b> <span class="sub">${esc(G.Hero.keep(G.Hero.is("haruka") ? "仮設のヒロイン。剣士（自称・侍）。紅白の巫女装束に打刀" : "大学生。本業は魔法少女ルミナ（正体を知るのは監査官だけ）"))}</span>
+        <b>${esc(G.Hero.keep(G.Hero.d.name))}</b> <span class="sub">${esc(G.Hero.keep(G.Hero.is("haruka") ? "ひかりと組む剣士（自称・侍）。紅白の巫女装束に打刀" : "大学生。本業は魔法少女ルミナ（正体を知るのは監査官だけ）"))}</span>
         ${S.vessel ? `<div class="sub" style="color:#ffe7a8">教団の器——冒険者のまま、教えに満たされている（祈りの発作・法悦。教えの者に触れられるほど満ちやすい）</div>` : ""}
-        ${S.lost && S.lost.hikari ? `<div class="sub" style="color:var(--red)">${esc(G.Hero.keep(`前任：星野 ひかり——${S.lost.hikari.day}日目、ワルドーに洗脳され行方不明（戦闘員として目撃されることがある）`))}</div>` : ""}
+        <div class="row" style="margin:4px 0">${esc("今日潜らせる：")}${GM.HEROES.map(id => { const cap = (S.captured || {})[id], nm = G.Hero.keep(G.Hero.DATA[id].short); return `<button class="${id === S.heroine ? "primary" : ""}" data-hero="${id}" ${cap ? "disabled" : ""}>${esc(nm)}${cap ? esc("（ワルドーに捕らわれている）") : ""}</button>`; }).join("")}</div>
+        ${Object.keys(S.captured || {}).length ? `<div class="sub" style="color:var(--red)">${esc(G.Hero.keep(Object.keys(S.captured).map(id => `${G.Hero.DATA[id].name}は、${S.captured[id].day}日目にワルドーの戦闘員にされた。救出の依頼が出ている（支部の最下層で打ち倒せば、取り返せる）`).join("／")))}</div>` : ""}
+        ${Object.keys(S.sequelae || {}).length ? `<div class="sub">後遺症（戦闘員にされた回数 ${S.convN || 0}）：${Object.entries(S.sequelae).map(([k, n]) => `<span class="tag" title="${esc(GM.SEQUELAE[k].desc)}">${esc(GM.SEQUELAE[k].name)}${n > 1 ? "×" + n : ""}</span>`).join("")}</div>` : ""}
         <div class="sub">${esc(G.Hero.keep(G.Hero.d.formName))} Lv<b>${S.lv}</b>　次まで ${G.GROWTH.xpNeed(S.lv) - S.xp}　技 ${S.equip.length}/${G.GROWTH.slots(S.lv)}（覚えた ${Object.keys(S.skills).length}/${Object.keys(G.SKILLS).length}）${S.shards ? `　<span style="color:#ffe7a8">星の欠片 ${S.shards}/${G.SHARD_MAX}（体力+${3 * S.shards}・MP+${2 * S.shards}・気力+${Math.min(15, S.shards)}）</span>` : ""}</div>
-        ${meter("肉体", S.body, 100, "#ff7fb0")}${meter("精神", S.mind, 100, "#b48cff")}${meter("信頼", S.trust, 100, "#8fe0a0")}${meter("疲労", S.fatigue, 100, "#f2d27a")}
+        ${meter("評判", S.rep ?? 60, 100, "#9fc4ff")}${meter("肉体", S.body, 100, "#ff7fb0")}${meter("精神", S.mind, 100, "#b48cff")}${meter("信頼", S.trust, 100, "#8fe0a0")}${meter("疲労", S.fatigue, 100, "#f2d27a")}
         <div class="sub">堕ち：${TIER_NAME[tier]} ／ 状態異常：${ail}</div>
         <div class="sub">身についた性癖（通常の処置では抜けない）：${tr}</div>
         ${equipHTML("civilian")}
@@ -321,14 +324,21 @@
     on("#skill", "click", skillScreen);
     on("#diary", "click", () => diaryScreen());
     on("#rest", "click", restDay);
+    document.querySelectorAll("[data-hero]").forEach(b => b.onclick = () => { if (GM.swapHero(S, b.dataset.hero)) { save(); office(); } });
     on("#auto", "click", e => { S.autoDirector = !S.autoDirector; save(); e.currentTarget.textContent = S.autoDirector ? "入" : "切"; });
+    if (S.pendingScene) {                                          // 捕らわれた翌朝／救い出した翌朝／ギルドの救出
+      const k = S.pendingScene, note = S.rescueNote || {}; delete S.pendingScene;
+      const L = k === "partnerTaken" ? G.Hero.SCENES.partnerTaken(S.heroine) : k === "allyRescued" ? G.Hero.SCENES.allyRescued(note.who, note.got || []) : G.Hero.SCENES.guildRescue(note.got || {});
+      hikariIn();
+      return vn(L, () => { save(); office(); });
+    }
     if (S.vesselMorning) {                                         // 教団の器になった翌朝
       hikariIn();
       return vn(G.Hero.SCENES[G.Hero.is("haruka") ? "vesselMorningHaruka" : "vesselMorning"](), () => { delete S.vesselMorning; S.greeted = S.day; save(); office(); });
     }
-    if (S.heroIntro && G.Hero.SCENES[S.heroIntro + "Intro"]) {    // 新しいヒロインの着任
+    if (G.Hero.is("haruka") && !(S.met || {}).haruka) {          // はじめて遙を潜らせる日
       hikariIn();
-      return vn(G.Hero.SCENES[S.heroIntro + "Intro"](), () => { delete S.heroIntro; S.greeted = S.day; save(); office(); });
+      return vn(G.Hero.SCENES.harukaIntro(), () => { S.met = Object.assign({}, S.met, { haruka: true }); save(); office(); });
     }
     if (S.greeted === S.day) { hikariIn(); document.getElementById("dlg").classList.add("hidden"); return showMenu(); }
     const T = G.Text;
@@ -770,14 +780,14 @@
       <div class="o-dialog hidden" id="dlg"><span class="o-name" id="dn"></span><p id="dt"></p><div class="o-choices hidden" id="dlgc"></div><span class="o-next" id="dnx">▼</span></div></div>`;
     const haru = S.heroine === "haruka";
     document.getElementById("oh").src = haru ? "assets/haruka/haruka_waldo_front_1.png" : "assets/hikari/hikari_waldo_magica_front_1.png";
-    vn(G.Hero.SCENES[haru ? "waldoLostHaruka" : "waldoLost"](), () => { const r = GM.finalizeLoss(S); save(); if (r === "end") endScreen(); else guild(); });
+    vn(G.Hero.SCENES[haru ? "waldoLostHaruka" : "waldoLost"](!!(S.captured || {})[haru ? "hikari" : "haruka"]), () => { GM.finalizeLoss(S); save(); guild(); });
   }
   // 誰もいなくなった：ギルドの監査は、ここで終わる
   function endScreen() {
     app.innerHTML = topbar() + `<div class="office waldo-stage" id="office"><div class="ws-scan"></div><div class="ws-rec">● REC　ワルドー第七小隊</div>
       <img class="ws-duo" src="assets/hikari/hikari_gani_magica_front.png" alt="" style="left:28%"><img class="ws-duo" src="assets/haruka/haruka_gani_front.png" alt="" style="left:72%">
       <div class="o-dialog hidden" id="dlg"><span class="o-name" id="dn"></span><p id="dt"></p><div class="o-choices hidden" id="dlgc"></div><span class="o-next" id="dnx">▼</span></div></div>
-      <div class="panel hidden" id="endp"><b>監査の終わり</b><p class="sub">${esc(G.Hero.keep(`${(S.ended || {}).day || S.day}日目。星野ひかりも、白山遥も、ワルドーの戦闘員になった。ギルドに、監査する冒険者はいない。`))}</p>
+      <div class="panel hidden" id="endp"><b>監査の終わり</b><p class="sub">${esc(G.Hero.keep(`${(S.ended || {}).day || S.day}日目。星野ひかりも、白山遙も、ワルドーの戦闘員になった。ギルドに、監査する冒険者はいない。`))}</p>
         <div class="row"><button class="primary" id="again">最初から始める</button></div></div>`;
     vn(G.Hero.SCENES.allLost(), () => {
       document.getElementById("endp").classList.remove("hidden");

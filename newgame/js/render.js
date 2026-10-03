@@ -465,7 +465,7 @@ var G = (typeof G !== "undefined") ? G : {};
   const FIG = {
     waldo_grunt: [1.95, 8, 248], waldo_officer: [2.05, 8, 248], shinja: [1.9, 8, 248], sekkyoushi: [1.95, 8, 248], chuushutsu: [1.9, 8, 248], kyouso: [2.1, 8, 248],
     inma: [1.85, 8, 248], muma_queen: [1.95, 67, 248], kuchizuke: [1.8, 8, 248], hitomi: [1.8, 8, 248],
-    lumina_grunt: [1.9, 4, 252],
+    lumina_grunt: [1.9, 4, 252], haruka_grunt: [1.95, 4, 252],
     imp: [1.45, 8, 247], futago: [1.35, 8, 248], sakiimp: [1.45, 8, 248], jikkyou: [1.45, 8, 248], kusuguri: [1.45, 8, 248], kazoe: [1.45, 8, 248], azakeri: [1.45, 8, 248], utaimp: [1.45, 8, 248], tenazuke: [1.45, 8, 248],
   };
   function drawMonster(ctx, w, m, x, y, S) {

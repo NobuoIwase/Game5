@@ -97,7 +97,7 @@ var G = (typeof G !== "undefined") ? G : {};
   };
   function placeName(dungeon, species) { return species ? (DEN_NAME[species] || G.MONSTERS[species].name + "の巣") : G.DUNGEONS[dungeon].name; }
   // 依頼書に書ける主な魔物（削は主役にしない）
-  const MAINS = Object.keys(G.MONSTERS).filter(k => G.MONSTERS[k].type !== "削");
+  const MAINS = Object.keys(G.MONSTERS).filter(k => G.MONSTERS[k].type !== "削" && !G.MONSTERS[k].special);
 
   /* ================================================================ 新しいゲーム */
   function newSave() {
@@ -112,7 +112,30 @@ var G = (typeof G !== "undefined") ? G : {};
       requests: null, pick: null, rec: null, log: [],
       traits: {}, counts: {}, waldo: { rescues: 0, converted: 0 }, carry: {}, crack: 0, futaMarks: 0, futaFixed: false,
       lv: 1, xp: 0, skills: {}, equip: [], know: {}, lewd: {},
+      heroine: "hikari", lost: {}, archive: {}, vessel: false,
     };
+  }
+  /* ================================================================ ヒロインの交代 */
+  // ヒロインごとの記録（堕ち・状態・性癖・成長・手帳・知識）。ギルドの記録（資金・澱晶・日付・依頼の書）は残る
+  const PERSONAL = ["body", "mind", "trust", "suspicion", "fatigue", "ailments", "traits", "counts", "waldo", "carry", "crack", "futaMarks", "futaFixed", "lv", "xp", "skills", "equip",
+    "know", "lewd", "shards", "parts", "climaxParts", "monLog", "episodes", "reportMem", "lastPosture", "caughtDay", "renamed", "reintCount", "reintHonest", "reintDev", "lastGrowth",
+    "diary", "diarySeen", "vessel", "silentAccepted"];
+  // ワルドーに洗脳された日の後始末：手帳は書かない（書く者がいない）。その夜が明けて、次のヒロインが来る
+  function finalizeLoss(s) {
+    if (s.rec) { s.rec.diaryDone = true; s.rec.epDone = true; }
+    s.log = s.log || []; s.log.push({ day: s.day, text: G.Hero.keep("星野ひかり（魔法少女ルミナ）は、ワルドーに洗脳され、戦闘員の女その1として連れ去られた") });
+    loseHeroine(s, "waldo");
+    endDay(s);
+  }
+  function syncHero(s) { if (s) G.Hero.set(s.heroine || "hikari"); }
+  // ひかりを失った：記録をしまい、仮設の白山遙を迎える
+  function loseHeroine(s, why) {
+    const id = s.heroine || "hikari", fresh = newSave();
+    s.archive = s.archive || {}; s.archive[id] = {};
+    for (const k of PERSONAL) { s.archive[id][k] = s[k]; s[k] = fresh[k] !== undefined ? JSON.parse(JSON.stringify(fresh[k])) : undefined; }
+    s.lost = s.lost || {}; s.lost[id] = { day: s.day, why, lv: s.archive[id].lv || 1 };
+    s.heroine = "haruka"; s.heroIntro = "haruka"; s.trust = 50;
+    syncHero(s);
   }
   // 古いセーブに、後から足した項目を補う（v2 のまま）
   function upgradeSave(s) {
@@ -123,6 +146,8 @@ var G = (typeof G !== "undefined") ? G : {};
     s.lv = s.lv || 1; s.xp = s.xp || 0; s.skills = s.skills || {}; s.equip = (s.equip || []).filter(id => G.SKILLS[id]);
     for (const k in G.DUNGEONS) if (!s.decks[k]) { const dg = G.DUNGEONS[k]; s.decks[k] = [dg.free.find(x => G.MONSTERS[x].type === "削"), "trap:" + dg.traps[0]]; }
     s.ailments = (s.ailments || []).filter(a => AILMENTS[a.id]);
+    s.heroine = s.heroine || "hikari"; s.lost = s.lost || {}; s.archive = s.archive || {}; s.vessel = !!s.vessel;
+    syncHero(s);
     return s;
   }
 
@@ -140,6 +165,7 @@ var G = (typeof G !== "undefined") ? G : {};
     return out;
   }
   function morning(s) {
+    syncHero(s);
     s.phase = "guild";
     s.requests = makeRequests(s);
     s.pick = null;
@@ -206,6 +232,7 @@ var G = (typeof G !== "undefined") ? G : {};
 
   /* ================================================================ 潜行 */
   function startDive(s) {
+    syncHero(s);
     const p = s.pick;
     const has = id => s.ailments.some(a => a.id === id);
     const ail = id => s.ailments.find(a => a.id === id);
@@ -232,8 +259,9 @@ var G = (typeof G !== "undefined") ? G : {};
         futa: !!(G.DUNGEONS[p.dungeon].futa || s.futaFixed || has("futaAfter")), cum: 0, shasei: 0,
         futaCarry: has("futaAfter") && !G.DUNGEONS[p.dungeon].futa && !s.futaFixed,   // 名残だけで生えている（神殿の外）
         kissMark: has("kissMark"), permit: has("permit") ? { over: 0, edges: 0 } : null,
+        vessel: !!s.vessel && (s.heroine || "hikari") === "hikari",          // 教団の器：見た目と、祈りの発作
       },
-      law,
+      law, hero: s.heroine || "hikari",
       budgetBonus: s.upgrades.budget * 2,
     };
     s.phase = "dive";
@@ -293,6 +321,7 @@ var G = (typeof G !== "undefined") ? G : {};
   /* ================================================================ 帰還後：堕ち・状態異常・リソース */
   function advanceOf(req) { return Math.round(req.reward * [0, 0.3, 0.42, 0.5][(req.real && req.real.scale) || 2]); }
   function finishDive(s, run) {
+    syncHero(s);
     const ev = run.events;
     s.dirTotal = s.dirTotal || { placed: 0, holds: 0, acts: 0, climax: 0 };
     if (run.dirStats) for (const k in s.dirTotal) s.dirTotal[k] += run.dirStats[k] || 0;
@@ -338,6 +367,7 @@ var G = (typeof G !== "undefined") ? G : {};
     else if (H.futaCarry && run.law !== "yuuka") s.ailments = s.ailments.filter(a => a.id !== "futaAfter");   // 名残は、神殿の外で一度潜ると引く
     else if (H.futa && (H.shasei || 0) >= 1) add("futaAfter");
     s.crack = H.crack || 0;
+    if (run.vesselNew) { s.vessel = true; s.vesselMorning = true; s.crack = 0; s.ailments = s.ailments.filter(a => a.id !== "crack"); s.log = s.log || []; s.log.push({ day: s.day, text: "ひかりは、教団の器になった（冒険者のまま）" }); }
     if (s.crack > 0) { add("crack"); s.ailments.find(a => a.id === "crack").n = s.crack; }
     const IMPS2 = ["imp", "futago", "inma", "muma_queen", "sakiimp", "jikkyou", "kusuguri", "kazoe", "azakeri", "kuchizuke", "utaimp", "hitomi", "tenazuke"];
     if (ev.filter(e => (e.kind === "charm" || e.kind === "kiss" || e.kind === "beg" || e.kind === "countGame" || e.kind === "hold") && IMPS2.includes(e.mon)).length >= 3 || (run.outcome === "defeat" && IMPS2.includes(run.defeatBy))) add("impCurse");
@@ -433,6 +463,7 @@ var G = (typeof G !== "undefined") ? G : {};
     rec.monitor = G.Report.monitorLog(rec);
     s.rec = rec;
     s.phase = "report";
+    if (run.lostHero) { s.phase = "lost"; rec.lostHero = true; }        // ワルドーに連れ去られた：報告は無い
     s.history.push({ day: s.day, dungeon: run.dungeon, stated: run.stated, outcome: run.outcome, floor: run.floorReached, climax: climaxes, posture: rec.postureName, forged: run.forged, title: s.pick.title, realTitle: s.pick.req.title });
     if (s.history.length > 60) s.history.shift();
     return rec;
@@ -518,10 +549,12 @@ var G = (typeof G !== "undefined") ? G : {};
       kept++;
       if (a.id === "swell" && a.age % 2 === 0) { s.carry.swell = Math.min(3, (s.carry.swell || 1) + 1); a.n = s.carry.swell; }
       if (a.id === "crack" && a.age % 2 === 0) { s.crack = Math.min(10, (s.crack || 0) + 1); a.n = s.crack; }
+      if (a.id === "crack" && s.crack >= 10 && !s.vessel && (s.heroine || "hikari") === "hikari") { s.vessel = true; s.vesselMorning = true; s.crack = 0; a.gone = true; }   // 塞がないまま、夜のうちに割れきった
       if (a.id === "omazuke") s.carry.omazuke = (s.carry.omazuke || 40) + 15;
       if (a.id === "charm" && a.to && a.age % 3 === 0) for (const k in a.to) a.to[k] = Math.min(3, a.to[k] + 1);
       if (a.id === "mindTaint") s.mind = U.clamp(s.mind + 0.4, 0, 100);
     }
+    s.ailments = s.ailments.filter(a => !a.gone);
     // 抱えたままの夜は、少しずつ堕ちを進める
     s.body = U.clamp(s.body + Math.min(1.2, kept * 0.2), 0, 100); s.mind = U.clamp(s.mind + Math.min(0.5, kept * 0.08), 0, 100);
     s.day++;
@@ -556,6 +589,6 @@ var G = (typeof G !== "undefined") ? G : {};
 
   function taintStage(s) { return s.taint >= 100 ? 4 : s.taint >= 70 ? 3 : s.taint >= 42 ? 2 : s.taint >= 18 ? 1 : 0; }
 
-  G.Game = { reintResult, pastEpisode, epCtx, EP_PART, advanceOf, NATURAL, equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, rest, buy, taintStage };
+  G.Game = { finalizeLoss, loseHeroine, syncHero, PERSONAL, reintResult, pastEpisode, epCtx, EP_PART, advanceOf, NATURAL, equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, rest, buy, taintStage };
 })();
 if (typeof module !== "undefined") module.exports = G;

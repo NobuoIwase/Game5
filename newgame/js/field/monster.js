@@ -40,6 +40,7 @@
     if (h.bound && h.bound.by.includes(m.id)) { h.bound.by = h.bound.by.filter(i => i !== m.id); if (!h.bound.by.length) release(w, true); }
     record(w, { kind: "kill", type: m.d.type, mon: m.kind, monName: m.d.name, sev: 0, boss: !!m.boss });
     if (m.boss) gainShard(w, "boss");                 // 長の身体から、魔石の欠片が零れる
+    if (m.kind === "lumina_grunt") { msg(w, "luminaFlee", { mon: m.d.name }); say(w, "luminaFlee", {}); return; }   // 倒れない：退いていく
     msg(w, "kill", { mon: m.d.name });
     fx(w, { kind: "pop", x: m.x, y: m.y, color: "#ffe0f0", life: 0.5 });
     if (m.d.atk.burst && U.dist(m.x, m.y, h.x, h.y) < 1.6) applyEffect(w, "蕩", m.d.atk.power, m);
@@ -89,6 +90,15 @@
     if (m.bubble) { m.bubble.t -= dt; if (m.bubble.t <= 0) m.bubble = null; }
     m.hop = Math.max(0, m.hop - dt); m.rcl = Math.max(0, m.rcl - dt); m.lunge = Math.max(0, m.lunge - dt);
     m.pounceCd = Math.max(0, (m.pounceCd || 0) - dt); m.teaseCd = Math.max(0, (m.teaseCd || 0) - dt);
+    // 戦闘員の女その1：見せつけるように、ガニ股で敬礼して媚びる（その間は止まる）
+    if (m.kind === "lumina_grunt") {
+      m.salute = Math.max(0, (m.salute || 0) - dt);
+      if (m.salute > 0) { m.vx = m.vy = 0; return; }
+      if (m.alert > 0 && !w.outcome && !h.bound && U.dist(m.x, m.y, h.x, h.y) < 6 && w.t - (m.saluteT ?? -99) > 9 && U.chance(dt * 0.6)) {
+        m.saluteT = w.t; m.salute = 1.8; monSay(w, m, "salute"); msg(w, "luminaSalute", { mon: d.name }, 6);
+        h.arousal = Math.min(100, h.arousal + 5); return;
+      }
+    }
     // 魅了の脈動（ナメクジ女王）・甘い燐光／胞子（蜜吸い虫・媚芯茸）
     if (d.charmPulse && m.alert > 0 && !w.outcome) {
       const P = d.charmPulse; m.pulseT = (m.pulseT || 0) + dt;

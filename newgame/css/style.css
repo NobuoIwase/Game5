@@ -262,3 +262,11 @@ select { font: inherit; color: var(--tx); background: var(--panel2); border: 1px
 .ex-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0; }
 .ex-row button { font-size: 13px; padding: 4px 8px; }
 .ex-part { min-width: 3.5em; color: var(--pink); font-weight: bold; font-size: 13px; }
+/* ワルドーの水晶映像（ひかりを失った日） */
+.office.waldo-stage { height: 340px; background: radial-gradient(ellipse at 50% 35%, #2b3a5c 0%, #141a2c 55%, #07080f 100%); }
+.office.waldo-stage::before { inset: 0; background: repeating-linear-gradient(0deg, rgba(120,170,255,0.06) 0 2px, transparent 2px 5px); }
+.ws-scan { position: absolute; inset: 0; background: linear-gradient(transparent 0%, rgba(120,170,255,0.12) 50%, transparent 100%); background-size: 100% 40%; animation: wsScan 3.2s linear infinite; pointer-events: none; z-index: 3; }
+@keyframes wsScan { from { background-position: 0 -40%; } to { background-position: 0 140%; } }
+.ws-rec { position: absolute; top: 8px; left: 10px; color: #ff5a6e; font-size: 12px; letter-spacing: .1em; z-index: 4; animation: wsBlink 1.2s steps(2) infinite; }
+@keyframes wsBlink { 50% { opacity: .35; } }
+.office.waldo-stage .ws-fig { height: 70%; bottom: 20%; filter: drop-shadow(0 0 10px rgba(120,160,255,0.55)) saturate(1.1); }

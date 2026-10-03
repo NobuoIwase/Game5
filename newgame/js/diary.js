@@ -128,6 +128,8 @@ var G = (typeof G !== "undefined") ? G : {};
       out.push(fill(pick(D.night), { mons }) + (cl ? fill(pick(["……{c}回。数えなきゃよかった。", "{c}回、いかされた。{a}回、触られた。……記録係の人が、そう言ってた。", "朝までに、{c}回。"]), { c: cl, a: acts }) : ""));
     }
     for (const f of (rec.firstParts || []).slice(0, 2)) out.push(fill(pick(D.firstPart), { part: PART[f.part] || f.part, mon: f.mon || "何か" }));
+    if ((rec.units || []).some(u => u.kind === "vessel")) out.push(pick(["今日、あたしは器になった。……ずっと、こうなるのを、待ってた気がする。", "心の壁、ぜんぶ割れちゃった。……割れたところから、教えが入ってきて、あったかい。"]));
+    else if ((rec.units || []).some(u => u.kind === "vesselPray")) out.push(pick(["今日も、何度もお祈りした。……迷宮の真ん中で、膝をついて。……満たされて、いっちゃった。", "祈りの発作。魔物の前でも、跪いちゃう。……でも、教えのほうが、大事。", "お祈りしてる時の顔、たぶん、すごく、だらしない。……監査官さんには、見せたくない。……見てほしい。"]));
     const gr = rec.growth;
     if (gr && gr.inspired && gr.inspired.length) out.push(fill(pick(D.inspire), { skill: gr.inspired.map(id => G.SKILLS[id].name).join("』と『") }));
     if (gr && gr.lv > gr.lv0) out.push(pick(D.lvup));

@@ -104,6 +104,10 @@ var G = (typeof G !== "undefined") ? G : {};
       if (G.MONSTERS[id].deep && f < G.MONSTERS[id].deep) id = U.pick(dg.fixed.filter(k => !G.MONSTERS[k].deep) );   // 深い階にしか出ない魔物（教祖など）
       if (p) spawnMonster(w, id, p.x, p.y, false);
     }
+    // ひかりを失った後：ワルドーの戦闘員になったルミナが、ときどき紛れている
+    if (run.save && run.save.lost && run.save.lost.hikari && run.hero !== "hikari" && f >= 2 && U.chance(run.dungeon === "waldo" ? 0.5 : 0.07)) {
+      const p = M.randomFloor(map, far); if (p) spawnMonster(w, "lumina_grunt", p.x, p.y, false);
+    }
     // 長（ボス）：最下層の転移陣の手前に
     if (real.boss && map.last && real.main) {
       const p = M.randomFloor(map, (x, y) => U.dist(x, y, map.down.x, map.down.y) < 4 && U.dist(x, y, map.down.x, map.down.y) > 1.5) || M.randomFloor(map, far);

@@ -7,6 +7,14 @@
   let S = null;              // セーブ
   let dive = null;           // 潜行中の状態 { run, w, cam, ... }
 
+  // 遙の番：画面に出る文を、遙の名前と言葉に寄せる（台詞はひかりの声で書かれているので、出す所でまとめて置き換える）
+  const fixText = n => { const t = n.nodeValue, u = G.Hero.tx(t); if (u !== t) n.nodeValue = u; };
+  const fixTree = n => { if (n.nodeType === 3) return fixText(n); if (n.nodeType !== 1) return; const it = document.createTreeWalker(n, NodeFilter.SHOW_TEXT); let x; while ((x = it.nextNode())) fixText(x); };
+  if (typeof MutationObserver !== "undefined") new MutationObserver(ms => {
+    if (G.Hero.cur === "hikari") return;
+    for (const m of ms) { if (m.type === "characterData") fixText(m.target); else m.addedNodes.forEach(fixTree); }
+  }).observe(document.body, { childList: true, subtree: true, characterData: true });
+
   /* ================================================================ 小道具 */
   const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const tag = t => `<span class="tag t-${t}">${t}</span>`;
@@ -29,7 +37,7 @@
     check(object(next), "全体");
     if (next.v !== 2) throw new Error("対応している記録の版は v: 2 だけです。");
     if (next.phase === "dive") throw new Error("潜行中の記録は読み込めません。帰還してから書き出してください。");
-    check(["guild", "prep", "report", "audit", "rereport", "clinic"].includes(next.phase), "phase");
+    check(["guild", "prep", "report", "audit", "rereport", "clinic", "lost"].includes(next.phase), "phase");
     for (const key of ["day", "funds", "dark", "taint", "trust", "suspicion", "body", "mind", "fatigue"])
       check(typeof next[key] === "number" && Number.isFinite(next[key]), key);
     check(Number.isSafeInteger(next.day) && next.day >= 1, "day");
@@ -187,6 +195,7 @@
       S.phase = "prep"; return prepScreen();
     }
     if (p === "report") return reportScreen();
+    if (p === "lost") return lostScreen();
     if (p === "audit") return auditScreen();
     if (p === "rereport") return rereportScreen();
     if (p === "clinic") return clinicScreen();
@@ -199,7 +208,7 @@
   function officeHTML(extra) {
     return `<div class="office" id="office">
       <div class="o-window"><i></i><i></i></div><div class="o-shelf"></div><div class="o-door"></div>
-      <img class="o-hikari out" id="oh" src="assets/hikari/hikari_civilian_front_1.png" alt="">
+      <img class="o-hikari out" id="oh" src="${G.Hero.portrait(S)}" alt="">
       <div class="o-desk"><span class="o-paper"></span><span class="o-paper p2"></span><span class="o-lamp"></span></div>
       <div class="o-dialog hidden" id="dlg"><span class="o-name" id="dn"></span><p id="dt"></p><div class="o-choices hidden" id="dlgc"></div><span class="o-next" id="dnx">▼</span></div>
       ${extra || ""}</div>`;
@@ -214,7 +223,7 @@
     return c;
   }
   function hikariIn(src) { const el = document.getElementById("oh"); if (!el) return; if (src) el.src = src; el.classList.add(...moodClass()); requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove("out"))); }
-  function hikariOut(done) { const el = document.getElementById("oh"); if (!el) return done && done(); el.src = "assets/hikari/hikari_civilian_right_1.png"; el.classList.add("leave"); setTimeout(() => done && done(), 900); }
+  function hikariOut(done) { const el = document.getElementById("oh"); if (!el) return done && done(); el.src = G.Hero.portrait(S, "right"); el.classList.add("leave"); setTimeout(() => done && done(), 900); }
   // 会話を一行ずつ（押すと次へ）
   // 選択肢つき：l.choices = [{ label, fn }]。fn が返した行を、その場に差し込んで続ける
   // l.onShow：その行が出た時に呼ぶ（書き起こしなど）
@@ -227,7 +236,8 @@
       if (i >= lines.length) { dlg.classList.add("hidden"); dlg.onclick = null; return done && done(); }
       const l = lines[i++];
       dlg.classList.remove("hidden");
-      dn.textContent = l.who === "h" ? "ひかり" : l.who === "a" ? "監査官" : "";
+      dn.textContent = l.name || (l.who === "h" ? G.Hero.d.short : l.who === "a" ? "監査官" : "");
+      if (l.img) { const oh = document.getElementById("oh"); if (oh) oh.src = l.img; }
       dn.style.display = l.who === "n" ? "none" : "";
       dt.textContent = l.text; dt.className = l.who === "n" ? "narr" : "";
       if (l.onShow) l.onShow(l);
@@ -249,6 +259,7 @@
     const last = S.history[S.history.length - 1];
     if (last && last.outcome === "defeat") out.push(T.office("talk.afterDefeat"));
     if (S.ailments.some(a => a.id === "heat")) out.push(T.office("talk.heat"));
+    if (S.vessel && G.Hero.is("hikari") && U.chance(0.7)) out.unshift(U.pick(G.Hero.SCENES.vesselTalk));
     // 残っている状態異常が、朝の会話に出る（どれか一つ）
     const ailTalk = ["rewired", "attached", "omazuke", "charm", "throb", "sensitive", "addict", "hairTrigger", "exposure"].filter(id => S.ailments.some(a => a.id === id));
     if (ailTalk.length) out.unshift(T.office("talk.ail_" + U.pick(ailTalk)));
@@ -268,7 +279,7 @@
 
   function kitText(kit) { return Object.keys(GM.ITEMS).filter(k => kit[k] > 0).map(k => `${GM.ITEMS[k].name}×${kit[k]}`).join("、") || "なし"; }
   function equipHTML(form, prepName) {
-    const eq = G.HIKARI.equip[form] || [];
+    const eq = (G.Hero.is("haruka") ? G.HIKARI.equipHaruka : G.HIKARI.equip[form] || []).map(G.Hero.keep);
     return `<div class="sub" style="margin-top:4px">装備：${eq.map(esc).join("／")}${prepName ? `／<b>${esc(prepName)}</b>` : ""}</div>`;
   }
   function guild() { return office(); }
@@ -279,8 +290,10 @@
     const tr = Object.keys(S.traits || {}).filter(k => S.traits[k] && G.TRAITS[k]).map(k => `<span class="tag" title="${esc(G.TRAITS[k].desc)}">${G.TRAITS[k].name}・${G.TRAIT_STAGE[S.traits[k]]}</span>`).join("") || `<span class="dim">まだ無い</span>`;
     app.innerHTML = topbar() + officeHTML() + `
       <div class="panel" id="status">
-        <b>星野 ひかり</b> <span class="sub">大学生。本業は魔法少女ルミナ（正体を知るのは監査官だけ）</span>
-        <div class="sub">ルミナ Lv<b>${S.lv}</b>　次まで ${G.GROWTH.xpNeed(S.lv) - S.xp}　技 ${S.equip.length}/${G.GROWTH.slots(S.lv)}（覚えた ${Object.keys(S.skills).length}/${Object.keys(G.SKILLS).length}）${S.shards ? `　<span style="color:#ffe7a8">星の欠片 ${S.shards}/${G.SHARD_MAX}（体力+${3 * S.shards}・MP+${2 * S.shards}・気力+${Math.min(15, S.shards)}）</span>` : ""}</div>
+        <b>${esc(G.Hero.keep(G.Hero.d.name))}</b> <span class="sub">${esc(G.Hero.keep(G.Hero.is("haruka") ? "仮設のヒロイン。剣士（自称・侍）。紅白の巫女装束に打刀" : "大学生。本業は魔法少女ルミナ（正体を知るのは監査官だけ）"))}</span>
+        ${S.vessel && G.Hero.is("hikari") ? `<div class="sub" style="color:#ffe7a8">教団の器——冒険者のまま、教えに満たされている（祈りの発作・法悦。教えの者に触れられるほど満ちやすい）</div>` : ""}
+        ${S.lost && S.lost.hikari ? `<div class="sub" style="color:var(--red)">${esc(G.Hero.keep(`前任：星野 ひかり——${S.lost.hikari.day}日目、ワルドーに洗脳され行方不明（戦闘員として目撃されることがある）`))}</div>` : ""}
+        <div class="sub">${esc(G.Hero.keep(G.Hero.d.formName))} Lv<b>${S.lv}</b>　次まで ${G.GROWTH.xpNeed(S.lv) - S.xp}　技 ${S.equip.length}/${G.GROWTH.slots(S.lv)}（覚えた ${Object.keys(S.skills).length}/${Object.keys(G.SKILLS).length}）${S.shards ? `　<span style="color:#ffe7a8">星の欠片 ${S.shards}/${G.SHARD_MAX}（体力+${3 * S.shards}・MP+${2 * S.shards}・気力+${Math.min(15, S.shards)}）</span>` : ""}</div>
         ${meter("肉体", S.body, 100, "#ff7fb0")}${meter("精神", S.mind, 100, "#b48cff")}${meter("信頼", S.trust, 100, "#8fe0a0")}${meter("疲労", S.fatigue, 100, "#f2d27a")}
         <div class="sub">堕ち：${TIER_NAME[tier]} ／ 状態異常：${ail}</div>
         <div class="sub">身についた性癖（通常の処置では抜けない）：${tr}</div>
@@ -308,6 +321,14 @@
     on("#diary", "click", () => diaryScreen());
     on("#rest", "click", restDay);
     on("#auto", "click", e => { S.autoDirector = !S.autoDirector; save(); e.currentTarget.textContent = S.autoDirector ? "入" : "切"; });
+    if (S.vesselMorning && G.Hero.is("hikari")) {                 // 教団の器になった翌朝
+      hikariIn();
+      return vn(G.Hero.SCENES.vesselMorning(), () => { delete S.vesselMorning; S.greeted = S.day; save(); office(); });
+    }
+    if (S.heroIntro && G.Hero.SCENES[S.heroIntro + "Intro"]) {    // 新しいヒロインの着任
+      hikariIn();
+      return vn(G.Hero.SCENES[S.heroIntro + "Intro"](), () => { delete S.heroIntro; S.greeted = S.day; save(); office(); });
+    }
     if (S.greeted === S.day) { hikariIn(); document.getElementById("dlg").classList.add("hidden"); return showMenu(); }
     const T = G.Text;
     const lines = [{ who: "n", text: T.office("knock") }];
@@ -612,7 +633,7 @@
     if (el.classList.contains("paused") !== !!dive.paused) { el.classList.toggle("paused", !!dive.paused); const fb = document.getElementById("lvf"); if (fb) fb.scrollTop = fb.scrollHeight; }
     const mw = document.getElementById("msgwin"); if (mw) mw.classList.toggle("hidden", on);
     if (!on) return;
-    const img = document.getElementById("lvimg"), src = `assets/hikari/hikari_${h.form === "magica" ? "magica" : "civilian"}_front_${now % 1400 < 700 ? 1 : 0}.png`;
+    const img = document.getElementById("lvimg"), src = G.Hero.live(h, now % 1400 < 700 ? 1 : 0, now < (dive.cxUntil || 0));
     if (img.getAttribute("src") !== src) img.setAttribute("src", src);
     const fig = document.getElementById("lvfig");
     fig.classList.toggle("blush", h.arousal > 35 || h.pleasure > 40);
@@ -682,7 +703,7 @@
   function endFloor() {
     const w = dive.w, r = GM.afterFloor(dive.run, w);
     if (r === "next") { newFloor(); drawCards(); return; }
-    if (w.outcome === "defeat") { diveSnap(true); return startNight(); }
+    if (w.outcome === "defeat") { if (dive.run.lostHero) return finishDive(); diveSnap(true); return startNight(); }   // ワルドーに連れ去られた：夜は無い
     finishDive();
   }
 
@@ -738,7 +759,15 @@
     delete S.diveSave;
     dive = null;
     save();
+    if (S.phase === "lost") return lostScreen();
     returnScene(outcome);
+  }
+  // ワルドーに洗脳された：報告は無い。ギルドの水晶に、戦闘員の女その1が映る
+  function lostScreen() {
+    app.innerHTML = topbar() + `<div class="office waldo-stage" id="office"><div class="ws-scan"></div><div class="ws-rec">● REC　ワルドー第七小隊</div>
+      <img class="o-hikari ws-fig" id="oh" src="assets/hikari/hikari_waldo_magica_front_1.png" alt="">
+      <div class="o-dialog hidden" id="dlg"><span class="o-name" id="dn"></span><p id="dt"></p><div class="o-choices hidden" id="dlgc"></div><span class="o-next" id="dnx">▼</span></div></div>`;
+    vn(G.Hero.SCENES.waldoLost(), () => { GM.finalizeLoss(S); save(); guild(); });
   }
   // 帰還：監査官室に戻ってくる
   function returnScene(outcome) {
@@ -747,7 +776,7 @@
     const back = T.office("back." + (outcome || "retreat"));
     const first = outcome === "defeat" ? [{ who: "n", text: back }] : [{ who: "n", text: T.office("knock") }];
     vn(first, () => {
-      hikariIn(S.rec && S.rec.h.form === "civilian" ? "assets/hikari/hikari_civilian_front_1.png" : "assets/hikari/hikari_civilian_front_1.png");
+      hikariIn(G.Hero.portrait(S));
       setTimeout(() => vn(outcome === "defeat" ? [] : [{ who: "h", text: back }], () => reportScreen()), 650);
     });
   }

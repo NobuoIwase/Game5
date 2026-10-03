@@ -2,10 +2,10 @@
 (function () {
   "use strict";
   let U, learn, crave, possess, grab, defeat;
-  const heroName = w => w.run.h.form === "magica" ? "ルミナ" : "ひかり";
+  const heroName = w => G.Hero.name(w.run.h.form);
   function say(w, key, ctx) {
     const h = w.run.h;
-    const text = G.Text.bubble(key, Object.assign({ h, run: w.run }, ctx || {}));
+    const text = G.Hero.tx(G.Text.bubble(key, Object.assign({ h, run: w.run }, ctx || {})));
     if (!text) return;
     h.bubble = { text, t: 2.6 };
     if (live(w)) feed(w, "line", "「" + text + "」");
@@ -14,6 +14,7 @@
   function live(w) { const h = w.run.h; return !!h.bound || h.pleasure >= 85 || w.t - (h.lastClimaxT ?? -99) < 4 || w.t - (h.unboundT ?? -99) < 1.2 || w.t - (h.liveT ?? -99) < 2.5; }
   function feed(w, cls, text) {
     if (!text || w.feedMute) return;
+    text = G.Hero.tx(text);
     const f = w.feed, l = f[f.length - 1];
     if (l && l.text === text) return;
     f.push({ cls, text, t: w.t, id: ++w.feedN });
@@ -25,7 +26,7 @@
   function msg(w, key, ctx, gap) {
     if (gap && w.t - (w.msgGap[key] ?? -99) < gap) return;
     w.msgGap[key] = w.t;
-    const text = G.Text.msg(key, Object.assign({ n: heroName(w) }, ctx || {}));
+    const text = G.Hero.tx(G.Text.msg(key, Object.assign({ n: heroName(w) }, ctx || {})));
     if (!text) return;
     const last = w.msgs[w.msgs.length - 1];
     if (last && last.text === text && w.t - last.t < 1.2) return;
@@ -37,6 +38,7 @@
   // 出来上がった文をそのまま窓に出す（捕まっている間の「何をされたか」）
   function pushMsg(w, text, key) {
     if (!text) return;
+    text = G.Hero.tx(text);
     const last = w.msgs[w.msgs.length - 1];
     if (last && last.text === text && w.t - last.t < 1.2) return;
     w.msgs.push({ text, t: w.t, key: key || "act", id: w.msgSeq = (w.msgSeq || 0) + 1 });
@@ -49,7 +51,7 @@
     if (p !== undefined && !U.chance(p)) return;
     if (w.t - (m.sayT ?? -99) < 3.5 && key !== "climax") return;
     if (w.monsters.filter(o => o.bubble && o.bubble.t > 0.5 && o !== m).length >= 2) return;
-    const t = G.Text.voice(m.kind, key); if (!t) return;
+    const t = G.Hero.tx(G.Text.voice(m.kind, key)); if (!t) return;
     m.sayT = w.t; m.bubble = { text: t, t: 2.4 };
     if (live(w)) feed(w, "mon", m.d.name + (/^[「『]/.test(t) ? t : "「" + t + "」"));
   }
@@ -64,7 +66,7 @@
   function actBub(w, key) { const h = w.run.h, t = G.Text.actBubble(key); if (!t) return; h.bubble = { text: t, t: 2.2 }; if (live(w)) { const lewd = /^(moan|p:|touch)/.test(key); feed(w, "line", "「" + (lewd && h.pleasure >= 55 && U.chance(0.4) ? G.Text.live.breath(h.pleasure) + "、" : "") + (lewd ? G.Text.live.mark(t, h.pleasure) : t) + "」"); } }
   // 媚薬の靄（床に溜まって、しばらく残る）
   function addCloud(w, m, C) { w.clouds.push({ x: m.x, y: m.y, r: C.r, life: C.life, t: 0, power: C.power * (m.pow || 1), name: m.d.name, kind: m.kind }); }
-  function logLine(w, text, cls) { w.log.push({ t: w.t, text, cls: cls || "" }); if (w.log.length > 60) w.log.shift(); }
+  function logLine(w, text, cls) { w.log.push({ t: w.t, text: G.Hero.tx(text), cls: cls || "" }); if (w.log.length > 60) w.log.shift(); }
   function record(w, ev) {
     const e = Object.assign({ t: +w.t.toFixed(1), floor: w.floorNo }, ev), h = w.run.h;
     // 本人の記憶に残らない：深い催眠の最中の出来事／忘却の法則（されたという事実ごと奪う）

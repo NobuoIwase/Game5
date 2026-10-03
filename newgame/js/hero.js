@@ -21,9 +21,28 @@
     [/プラム/g, "御守り"], [/コンパクト/g, "御守り"],
     [/変身が解け/g, "構えが崩れ"], [/変身を解/g, "構えを解"], [/変身し直/g, "構え直"], [/再変身/g, "構え直し"], [/変身/g, "構え"],
   ];
+  // 遙の書き下ろし（js/haruka/*.js）。表の名前ごとに、ひかりの表と同じ鍵で持つ
+  const TH = (typeof G !== "undefined" && G.TextH) || {};
+  if (typeof G !== "undefined") G.TextH = TH;
   const Hero = {
     J, keep, DATA,
     cur: "hikari",
+    leaks: {},
+    leak(name, key) { const k = name + ":" + key; Hero.leaks[k] = (Hero.leaks[k] || 0) + 1; },
+    // いまのヒロインの文：遙の番は遙の表から。遙の表に無ければ、漏れとして記録する（検査で落とす）
+    T(name, base, key) {
+      if (Hero.cur !== "haruka") return base ? base[key] : undefined;
+      const t = TH[name];
+      if (t && t[key] != null) return t[key];
+      if (base && base[key] != null) { Hero.leak(name, key); return base[key]; }
+      return undefined;
+    },
+    // 表まるごと（配列の表など）
+    A(name, base) {
+      if (Hero.cur !== "haruka") return base;
+      if (TH[name] != null) return TH[name];
+      Hero.leak(name, "*"); return base;
+    },
     set(id) { Hero.cur = DATA[id] ? id : "hikari"; return Hero.cur; },
     get d() { return DATA[Hero.cur]; },
     is(id) { return Hero.cur === id; },

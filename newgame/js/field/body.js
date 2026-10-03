@@ -192,7 +192,7 @@
       sv.waldo.rescues++; h.brain = 45;
       if (h.bound) release(w, true);
       record(w, { kind: "rescue", type: "惑", sev: 2, n: sv.waldo.rescues });
-      msg(w, "rescue", {}); openScene(w, w.dg && w.dg.strobe ? "strobeRescue" + (G.Hero.is("haruka") ? "H" : "") : "rescue", src);
+      msg(w, "rescue", {}); openScene(w, w.dg && w.dg.strobe ? "strobeRescue" : "rescue", src);
     } else {
       sv.waldo.rescues = 0; sv.waldo.converted++;
       h.rewired = true;
@@ -200,7 +200,7 @@
       msg(w, "convert", {});
       w.outcome = "defeat"; w.defeatBy = "waldo"; w.run.converted = true;
       w.run.lostHero = true;      // 戻ってこない（ユニットロスト）
-      openScene(w, w.dg && w.dg.strobe ? "strobeConvert" + (G.Hero.is("haruka") ? "H" : "") : "convert", src);
+      openScene(w, w.dg && w.dg.strobe ? "strobeConvert" : "convert", src);
     }
   }
 
@@ -215,18 +215,17 @@
     fx(w, { kind: "flashCam", x: h.x + U.rf(-0.4, 0.4), y: h.y - U.rf(0.2, 0.9), life: 0.25 });
     if (n % 3 === 0) fx(w, { kind: "sfx", text: U.pick(["パシャッ", "パシャ", "チカッ", "ぱしゃっ"]), x: h.x + U.rf(-0.8, 0.8), y: h.y - 1.4, life: 0.8, color: "#d8e4ff" });
     h.hyp = Math.min(100, (h.hyp || 0) + 1.3 * deep * k);
-    const H = G.Hero.is("haruka") ? "H" : "";                                  // 遙には、遙の言葉と場面（ルミナの流用はしない）
     if (w.strobeFloor !== f) {
       w.strobeFloor = f; record(w, { kind: "strobe", type: "惑", mon: "strobe", monName: "明滅灯", sev: 2, brain: Math.round(h.brain || 0) });
-      if (!w.run.strobeIn) { w.run.strobeIn = true; openScene(w, "strobeEnter" + H, STROBE_SRC); }
+      if (!w.run.strobeIn) { w.run.strobeIn = true; openScene(w, "strobeEnter", STROBE_SRC); }
     }
     addBrain(w, S.brain * deep * (h.bound ? 1.3 : 1), STROBE_SRC);
     if (w.outcome) return;
     if (n % 7 === 0) applyEffect(w, "惑", 0.22 * deep, STROBE_SRC);           // ときどき、少し強い一閃
     if (S.crackEvery && n % S.crackEvery === 0 && (h.crack || 0) < 9) addCrack(w, 1, STROBE_SRC);   // 教団の灯：防護壁にも、細かいヒビ
     const br = h.brain || 0, lv = br >= 85 ? 3 : br >= 60 ? 2 : br >= 30 ? 1 : 0;
-    if (n % 9 === 0) msg(w, "strobe" + lv + H, {}, 4);
-    if (lv > (h.strobeLv || 0)) { h.strobeLv = lv; say(w, "strobe" + lv + H, {}); feed(w, "mind", G.Text.strobeMind(lv, heroName(w), !!H)); if (lv >= 2 && !w.run.strobeDeep && !h.bound) { w.run.strobeDeep = true; openScene(w, "strobeDeep" + H, STROBE_SRC); } }
+    if (n % 9 === 0) msg(w, "strobe" + lv, {}, 4);
+    if (lv > (h.strobeLv || 0)) { h.strobeLv = lv; say(w, "strobe" + lv, {}); feed(w, "mind", G.Text.strobeMind(lv, heroName(w))); if (lv >= 2 && !w.run.strobeDeep && !h.bound) { w.run.strobeDeep = true; openScene(w, "strobeDeep", STROBE_SRC); } }
     else if (lv < (h.strobeLv || 0) - 1) h.strobeLv = lv;                      // プラムの光で引き戻されたら、また沈んでいく
   }
   // 後遺症：『イーッ』の号令を聞くと、点検の記憶で達してしまう

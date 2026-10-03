@@ -238,7 +238,7 @@
       const l = lines[i++];
       dlg.classList.remove("hidden");
       dn.textContent = l.name || (l.who === "h" ? G.Hero.d.short : l.who === "a" ? "監査官" : "");
-      if (l.img) { const oh = document.getElementById("oh"); if (oh) oh.src = l.img; }
+      if (l.img) { const oh = document.getElementById("oh"); if (oh) { oh.src = l.img; oh.classList.toggle("bust", /\/portrait\//.test(l.img)); } }
       dn.style.display = l.who === "n" ? "none" : "";
       dt.textContent = l.text; dt.className = l.who === "n" ? "narr" : "";
       if (l.onShow) l.onShow(l);
@@ -798,9 +798,12 @@
 
   /* ================================================================ 報告（監査官室で、ひかりと向き合って聞く） */
   const OUTC = { cleared: "踏破", retreat: "撤退", ordered: "勧告で帰還", defeat: "敗北→翌日救出" };
+  // 報告の間は、表情の立ち絵（胸から上）で
+  const withFace = (l, rec) => { const f = G.Hero.face(l, rec, S); return f ? Object.assign(l, { img: f }) : l; };
+  function faceIn(k) { const oh = document.getElementById("oh"); if (!oh || S.vessel) return; oh.src = G.Hero.faceImg(k); oh.classList.add("bust"); }
   function transcriptAdd(l) {
     const box = document.getElementById("tr"); if (!box) return;
-    const who = { h: "ひかり", a: "監査官", n: "" }[l.who];
+    const who = { h: G.Hero.d.short, a: "監査官", n: "" }[l.who];
     box.insertAdjacentHTML("beforeend", `<div class="speech ${l.who}${l.lie ? " lie" : ""}">${who ? `<span class="who">${who}</span>` : ""}${esc(l.text)}</div>`);
   }
   function reportScreen() {
@@ -811,12 +814,12 @@
         <br><span class="dim">話の途中で「追及する」「記録を突きつける」を選べるのは、その件を言い終えた、その時だけ。嘘なら崩れることがある。本当のことなら、中身を言わされる（記録を突きつけると、嘘はほぼ崩れるが、本当だった時はひどく傷つける）。</span></div>
       <div class="row hidden" id="rdone"><button class="primary" id="todoc">報告書を受け取る</button></div>
       <details class="panel" id="trp"><summary>ここまでの話（書き起こし）</summary><div id="tr"></div></details>`;
-    hikariIn();
+    hikariIn(); faceIn("06_downcast_eyes");
     const seq = rec.report.map(l => {
-      const o = Object.assign({}, l, { onShow: transcriptAdd });
+      const o = withFace(Object.assign({}, l, { onShow: transcriptAdd }), rec);
       if (l.probe && l.who === "h") o.choices = [
-        { label: "追及する", cls: "danger", fn: () => { const r = G.Report.probe(rec, l, S); save(); return r.lines.map(x => Object.assign(x, { onShow: transcriptAdd })); } },
-        ...(l.unit ? [{ label: "記録を突きつける", fn: () => { const r = G.Report.probe(rec, l, S, true); save(); return r.lines.map(x => Object.assign(x, { onShow: transcriptAdd })); } }] : []),
+        { label: "追及する", cls: "danger", fn: () => { const r = G.Report.probe(rec, l, S); save(); return r.lines.map(x => withFace(Object.assign(x, { onShow: transcriptAdd }), rec)); } },
+        ...(l.unit ? [{ label: "記録を突きつける", fn: () => { const r = G.Report.probe(rec, l, S, true); save(); return r.lines.map(x => withFace(Object.assign(x, { onShow: transcriptAdd }), rec)); } }] : []),
         { label: "流す", fn: () => [] },
       ];
       return o;
@@ -876,11 +879,11 @@
         <div class="row"><button class="primary" id="rec">訂正を書かせて帰す</button><button class="danger" id="lewd">検分する（身体で裏を取る）</button></div>
         <p class="sub">検分は、信頼を下げる代わりに、澱晶とギルドの澱みを得る。ひかりの堕ちも進む。検分の事由は、虚偽の数だけ立つ（寸止めを重ねれば延びる）。</p></div>
       <details class="panel" id="trp"><summary>ここまでの話（書き起こし）</summary><div id="tr"></div></details>`;
-    hikariIn();
-    vn([{ who: "n", text: "報告書を手に、監査官はひかりを呼び戻した。" }].concat(lines).map(l => Object.assign({}, l, { onShow: transcriptAdd })), () => {
+    hikariIn(); faceIn("06_downcast_eyes");
+    vn([{ who: "n", text: "報告書を手に、監査官はひかりを呼び戻した。" }].concat(lines).map(l => withFace(Object.assign({}, l, { onShow: transcriptAdd }), S.rec)), () => {
       document.getElementById("rechoice").classList.remove("hidden");
-      on("#rec", "click", () => { document.getElementById("rechoice").classList.add("hidden"); vn(G.Reint.finish(sess, S, true).map(l => Object.assign({}, l, { onShow: transcriptAdd })), () => { GM.reintResult(S, sess, true); save(); clinicScreen(); }); });
-      on("#lewd", "click", () => { document.getElementById("rechoice").classList.add("hidden"); vn(G.Reint.transition().map(l => Object.assign({}, l, { onShow: transcriptAdd })), () => examPanel(sess)); });
+      on("#rec", "click", () => { document.getElementById("rechoice").classList.add("hidden"); vn(G.Reint.finish(sess, S, true).map(l => withFace(Object.assign({}, l, { onShow: transcriptAdd }), S.rec)), () => { GM.reintResult(S, sess, true); save(); clinicScreen(); }); });
+      on("#lewd", "click", () => { document.getElementById("rechoice").classList.add("hidden"); vn(G.Reint.transition().map(l => withFace(Object.assign({}, l, { onShow: transcriptAdd }), S.rec)), () => examPanel(sess)); });
     });
   }
   // 検分：選ぶたびに、監査官の問いとひかりの反応が出る。快感の目盛りが満ちると達する（上限は虚偽の数）
@@ -900,9 +903,9 @@
       const tail = () => {
         if (!r.ended) return examPanel(sess);
         box.remove();
-        vn(G.Reint.finish(sess, S, false).map(l => Object.assign({}, l, { onShow: transcriptAdd })), () => { GM.reintResult(S, sess, false); save(); clinicScreen(); });
+        vn(G.Reint.finish(sess, S, false).map(l => withFace(Object.assign({}, l, { onShow: transcriptAdd }), S.rec)), () => { GM.reintResult(S, sess, false); save(); clinicScreen(); });
       };
-      if (r.lines.length) vn(r.lines.map(l => Object.assign({}, l, { onShow: transcriptAdd })), tail); else tail();
+      if (r.lines.length) vn(r.lines.map(l => withFace(Object.assign({}, l, { onShow: transcriptAdd }), S.rec)), tail); else tail();
     });
   }
 

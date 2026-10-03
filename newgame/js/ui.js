@@ -389,7 +389,7 @@
       const r = S.requests[sel];
       paper = paper || Object.assign({}, r.real);
       const de = dest || r.dungeon;
-      const size = GM.forgeSize(r.real, paper, de !== r.dungeon);
+      const size = GM.forgeSize(r.real, paper, de !== r.dungeon && (G.DUNGEONS[de].hidden ? G.DUNGEONS[de] : true));   // どう見ても罠の所へ向かわせると、違和感は大きい
       const title = GM.requestTitle(paper), stType = G.MONSTERS[paper.main].type, P = G.PREP[stType];
       const lv = paper.level + (paper.boss ? 1 : 0);
       const kitTxt = lv <= 1 ? "少なめ（楽な相手だと思っている）" : lv === 2 ? "いつもどおり" : "多め（手強い相手だと思っている）";

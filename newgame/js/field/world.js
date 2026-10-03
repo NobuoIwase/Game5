@@ -107,7 +107,7 @@ var G = (typeof G !== "undefined") ? G : {};
     // 相棒がワルドーに捕らわれている：戦闘員にされた相棒が、ときどき紛れている（救出の依頼では、最下層で待つ）
     for (const id of run.captured || []) {
       if (id === run.hero || run.rescue === id) continue;
-      if (f >= 2 && U.chance(run.dungeon === "waldo" ? 0.5 : 0.07)) { const p = M.randomFloor(map, far); if (p) spawnMonster(w, id === "hikari" ? "lumina_grunt" : "haruka_grunt", p.x, p.y, false); }
+      if (f >= 2 && U.chance(run.dungeon === "waldo" ? 0.5 : run.dungeon === "strobe" ? 0.25 : 0.07)) { const p = M.randomFloor(map, far); if (p) spawnMonster(w, id === "hikari" ? "lumina_grunt" : "haruka_grunt", p.x, p.y, false); }
     }
     // 長（ボス）：最下層の転移陣の手前に
     if (real.boss && map.last && real.main) {

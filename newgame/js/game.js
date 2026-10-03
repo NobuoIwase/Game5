@@ -123,19 +123,25 @@ var G = (typeof G !== "undefined") ? G : {};
   // ワルドーに洗脳された日の後始末：手帳は書かない（書く者がいない）。その夜が明けて、次のヒロインが来る
   function finalizeLoss(s) {
     if (s.rec) { s.rec.diaryDone = true; s.rec.epDone = true; }
-    s.log = s.log || []; s.log.push({ day: s.day, text: G.Hero.keep("星野ひかり（魔法少女ルミナ）は、ワルドーに洗脳され、戦闘員の女その1として連れ去られた") });
-    loseHeroine(s, "waldo");
+    s.log = s.log || []; s.log.push({ day: s.day, text: G.Hero.keep(s.heroine === "haruka" ? "白山遥は、ワルドーに洗脳され、戦闘員の女その2として連れ去られた" : "星野ひかり（魔法少女ルミナ）は、ワルドーに洗脳され、戦闘員の女その1として連れ去られた") });
+    const id = s.heroine || "hikari";
+    if (!loseHeroine(s, "waldo")) return "end";
     endDay(s);
+    return id;
   }
   function syncHero(s) { if (s) G.Hero.set(s.heroine || "hikari"); }
-  // ひかりを失った：記録をしまい、仮設の白山遙を迎える
+  // ひかりを失った：記録をしまい、仮設の白山遥を迎える
   function loseHeroine(s, why) {
     const id = s.heroine || "hikari", fresh = newSave();
     s.archive = s.archive || {}; s.archive[id] = {};
     for (const k of PERSONAL) { s.archive[id][k] = s[k]; s[k] = fresh[k] !== undefined ? JSON.parse(JSON.stringify(fresh[k])) : undefined; }
     s.lost = s.lost || {}; s.lost[id] = { day: s.day, why, lv: s.archive[id].lv || 1 };
-    s.heroine = "haruka"; s.heroIntro = "haruka"; s.trust = 50;
+    // 次のヒロイン：まだ失っていない者。誰もいなければ、ギルドの監査はそこで終わる
+    const next = ["hikari", "haruka"].find(k => !s.lost[k]);
+    if (!next) { s.ended = { day: s.day, why }; s.phase = "end"; return null; }
+    s.heroine = next; s.heroIntro = next; s.trust = 50;
     syncHero(s);
+    return next;
   }
   // 古いセーブに、後から足した項目を補う（v2 のまま）
   function upgradeSave(s) {
@@ -259,7 +265,7 @@ var G = (typeof G !== "undefined") ? G : {};
         futa: !!(G.DUNGEONS[p.dungeon].futa || s.futaFixed || has("futaAfter")), cum: 0, shasei: 0,
         futaCarry: has("futaAfter") && !G.DUNGEONS[p.dungeon].futa && !s.futaFixed,   // 名残だけで生えている（神殿の外）
         kissMark: has("kissMark"), permit: has("permit") ? { over: 0, edges: 0 } : null,
-        vessel: !!s.vessel && (s.heroine || "hikari") === "hikari",          // 教団の器：見た目と、祈りの発作
+        vessel: !!s.vessel,          // 教団の器：見た目と、祈りの発作
       },
       law, hero: s.heroine || "hikari",
       budgetBonus: s.upgrades.budget * 2,
@@ -367,7 +373,7 @@ var G = (typeof G !== "undefined") ? G : {};
     else if (H.futaCarry && run.law !== "yuuka") s.ailments = s.ailments.filter(a => a.id !== "futaAfter");   // 名残は、神殿の外で一度潜ると引く
     else if (H.futa && (H.shasei || 0) >= 1) add("futaAfter");
     s.crack = H.crack || 0;
-    if (run.vesselNew) { s.vessel = true; s.vesselMorning = true; s.crack = 0; s.ailments = s.ailments.filter(a => a.id !== "crack"); s.log = s.log || []; s.log.push({ day: s.day, text: "ひかりは、教団の器になった（冒険者のまま）" }); }
+    if (run.vesselNew) { s.vessel = true; s.vesselMorning = true; s.crack = 0; s.ailments = s.ailments.filter(a => a.id !== "crack"); s.log = s.log || []; s.log.push({ day: s.day, text: G.Hero.keep(G.Hero.d.short + "は、教団の器になった（冒険者のまま）") }); }
     if (s.crack > 0) { add("crack"); s.ailments.find(a => a.id === "crack").n = s.crack; }
     const IMPS2 = ["imp", "futago", "inma", "muma_queen", "sakiimp", "jikkyou", "kusuguri", "kazoe", "azakeri", "kuchizuke", "utaimp", "hitomi", "tenazuke"];
     if (ev.filter(e => (e.kind === "charm" || e.kind === "kiss" || e.kind === "beg" || e.kind === "countGame" || e.kind === "hold") && IMPS2.includes(e.mon)).length >= 3 || (run.outcome === "defeat" && IMPS2.includes(run.defeatBy))) add("impCurse");
@@ -549,7 +555,7 @@ var G = (typeof G !== "undefined") ? G : {};
       kept++;
       if (a.id === "swell" && a.age % 2 === 0) { s.carry.swell = Math.min(3, (s.carry.swell || 1) + 1); a.n = s.carry.swell; }
       if (a.id === "crack" && a.age % 2 === 0) { s.crack = Math.min(10, (s.crack || 0) + 1); a.n = s.crack; }
-      if (a.id === "crack" && s.crack >= 10 && !s.vessel && (s.heroine || "hikari") === "hikari") { s.vessel = true; s.vesselMorning = true; s.crack = 0; a.gone = true; }   // 塞がないまま、夜のうちに割れきった
+      if (a.id === "crack" && s.crack >= 10 && !s.vessel) { s.vessel = true; s.vesselMorning = true; s.crack = 0; a.gone = true; }   // 塞がないまま、夜のうちに割れきった
       if (a.id === "omazuke") s.carry.omazuke = (s.carry.omazuke || 40) + 15;
       if (a.id === "charm" && a.to && a.age % 3 === 0) for (const k in a.to) a.to[k] = Math.min(3, a.to[k] + 1);
       if (a.id === "mindTaint") s.mind = U.clamp(s.mind + 0.4, 0, 100);

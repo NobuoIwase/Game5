@@ -1,22 +1,22 @@
-/* hero.js — いま潜っているヒロイン（星野ひかり／仮設の白山遙）と、その見た目・言葉の置き換え。
- * 台詞はひかりの声で書かれている。遙の番は、名前・一人称・呼び方を置き換えて読ませる（仮設）。 */
+/* hero.js — いま潜っているヒロイン（星野ひかり／仮設の白山遥）と、その見た目・言葉の置き換え。
+ * 台詞はひかりの声で書かれている。遥の番は、名前・一人称・呼び方を置き換えて読ませる（仮設）。 */
 (function () {
   "use strict";
   const J = "⁠";                                  // 置き換えから守る印（見えない）
   const keep = s => String(s).replace(/ひかり|ルミナ|魔法少女|星野|あたし/g, m => m[0] + J + m.slice(1));
   const DATA = {
     hikari: { id: "hikari", name: "星野 ひかり", kana: "ほしの ひかり", short: "ひかり", formName: "ルミナ", civName: "ひかり", first: "あたし", transforms: true },
-    haruka: { id: "haruka", name: "白山 遙", kana: "しらやま はるか", short: "遙", formName: "遙", civName: "遙", first: "私", transforms: false, temp: true,
+    haruka: { id: "haruka", name: "白山 遥", kana: "しらやま はるか", short: "遥", formName: "遥", civName: "遥", first: "私", transforms: false, temp: true,
       job: "剣士（自称・侍）",
       appearance: "腰まで届く黒髪を高く束ねている。東方の巫女装束——紅の袴に白の小袖——が、この街では否応なく目を引く。所作は常に真っ直ぐで、隙がない。",
       personality: "忠義に厚く、受けた務めは何があっても果たそうとする。恥を「不忠」と結び付けて考えるため、己の失態を記録に残すことを何よりも恐れる。" },
   };
-  // 遙の番：ひかりの声の文を、遙の名前と言葉に寄せる（固有の書き下ろしが揃うまでの仮設）
+  // 遥の番：ひかりの声の文を、遥の名前と言葉に寄せる（固有の書き下ろしが揃うまでの仮設）
   const TX_HARUKA = [
-    [/星野[ 　]?ひかり/g, "白山 遙"], [/ほしの ひかり/g, "しらやま はるか"],
-    [/魔法少女ルミナ/g, "女剣士・遙"], [/魔法少女/g, "女剣士"],
+    [/星野[ 　]?ひかり/g, "白山 遥"], [/ほしの ひかり/g, "しらやま はるか"],
+    [/魔法少女ルミナ/g, "女剣士・遥"], [/魔法少女/g, "女剣士"],
     [/ルミナ・?ストライク/g, "抜刀術「初雪」"],
-    [/ルミナちゃん|ひかりちゃん/g, "遙ちゃん"], [/ルミナ|ひかり/g, "遙"],
+    [/ルミナちゃん|ひかりちゃん/g, "遥ちゃん"], [/ルミナ|ひかり/g, "遥"],
     [/あたし/g, "私"], [/監査官さん/g, "監査官殿"],
     [/プラム/g, "御守り"], [/コンパクト/g, "御守り"],
     [/変身が解け/g, "構えが崩れ"], [/変身を解/g, "構えを解"], [/変身し直/g, "構え直"], [/再変身/g, "構え直し"], [/変身/g, "構え"],
@@ -36,10 +36,13 @@
     },
     // 場での名前（変身中はルミナ）
     name(form) { const d = DATA[Hero.cur]; return form === "magica" ? d.formName : d.civName; },
-    // 場の立ち姿：教団の器・祈り・遙
+    // 場の立ち姿：教団の器・祈り・遥
     sprite(h, dir, i) {
       i = i == null ? 1 : i;
-      if (Hero.cur === "haruka") return `assets/haruka/haruka_${dir}_${i}.png`;
+      if (Hero.cur === "haruka") {                     // 遥：変身はしない。器なら聖衣、祈りの間は跪く
+        if (h.vessel) return `assets/haruka/haruka_${h.pray > 0 ? "pray" : "vessel"}_${dir}_${i}.png`;
+        return `assets/haruka/haruka_${dir}_${i}.png`;
+      }
       const f = h.form === "magica" ? "magica" : "civilian";
       if (h.vessel) {
         if (h.pray > 0) return `assets/hikari/hikari_${h.arousal > 70 || h.pleasure > 70 ? "tongue" : "pray"}_${f}_${dir}_${i}.png`;
@@ -49,14 +52,18 @@
     },
     // 実況の立ち絵（前向き。i は 0/1 で交互）。達した時は、器なら法悦の顔
     live(h, i, cx) {
-      if (Hero.cur !== "haruka" && h.vessel && cx) return `assets/hikari/hikari_dream_${h.form === "magica" ? "magica" : "civilian"}.png`;
-      if (Hero.cur !== "haruka" && h.vessel && (h.pleasure > 75 || h.arousal > 80)) return `assets/hikari/hikari_tongue_${h.form === "magica" ? "magica" : "civilian"}_front_${i}.png`;
+      if (Hero.cur === "haruka") {
+        if (h.vessel && (cx || h.pleasure > 75 || h.arousal > 80)) return `assets/haruka/haruka_pray_front_${cx ? 2 : i}.png`;   // 遥の祈りの正面は、舌を出した法悦の顔
+        return Hero.sprite(h, "front", i);
+      }
+      if (h.vessel && cx) return `assets/hikari/hikari_dream_${h.form === "magica" ? "magica" : "civilian"}.png`;
+      if (h.vessel && (h.pleasure > 75 || h.arousal > 80)) return `assets/hikari/hikari_tongue_${h.form === "magica" ? "magica" : "civilian"}_front_${i}.png`;
       return Hero.sprite(h, "front", i);
     },
     // 監査官室の立ち姿（素の姿）
     portrait(s, dir) {
       dir = dir || "front";
-      if (Hero.cur === "haruka") return `assets/haruka/haruka_${dir}_1.png`;
+      if (Hero.cur === "haruka") return `assets/haruka/haruka_${s && s.vessel ? "vessel_" : ""}${dir}_1.png`;
       if (s && s.vessel) return `assets/hikari/hikari_vessel_civilian_${dir}_1.png`;
       return `assets/hikari/hikari_civilian_${dir}_1.png`;
     },
@@ -115,11 +122,59 @@
       { who: "h", img: IMG("vessel_civilian_front_1"), text: "はい♡ ……教えに誓って、正直に" },
     ],
     vesselTalk: ["……今朝も、お祈りしてから来ました♡ ……膝、ちょっと赤いの、そのせいです", "……教えの方たちに会うと、身体が勝手に跪いちゃうんです。……戦わなきゃ、なのに", "……監査官さんも、一緒に祈りませんか。……満たされると、ほんとに、きもちいいんですよ♡", "……聖衣、透けてます？ ……教えに隠しごとは、しちゃいけないので♡"],
-    // 仮設ヒロイン：白山遙の着任
+    // 遥がワルドーに：戦闘員の女その2。先輩は、その1
+    waldoLostHaruka: () => [
+      { who: "n", img: "assets/haruka/haruka_waldo_front_1.png", text: "翌朝。監査官室の水晶が、また勝手に灯った。……見覚えのある、ワルドーの回線。" },
+      { who: "n", text: "映ったのは、腰まで届く黒髪と、紅い髪紐。……巫女装束は、どこにもない。首から爪先まで、黒く艶光りする全身スーツ。" },
+      { who: "w", name: UE, text: "えー、本日の新入り。……武家の、なんだっけ。まあいい。戦闘員の女、その2！ 前へ！" },
+      { who: "h", img: "assets/haruka/haruka_salute_front.png", text: "……イ、イーッ。……戦闘員の女その2、白山……いえ。……その2、出頭、いたしました" },
+      { who: "w", name: UE, text: "硬い硬い。……おい、その1。先輩として、手本を見せてやれ" },
+      { who: "h", name: "戦闘員の女その1", img: IMG("gani_magica_front"), text: "イーッ♡ はぁい♡ ……いい？ 戦闘員の敬礼はね、こうやって、ガニ股で、腰を落として……股の縫い目、ぴんって張るまで♡" },
+      { who: "n", text: "黒いスーツの桃色の髪が、くすくす笑いながら、見本のように股を突き出してみせた。……かつて、この街で一番頼もしかった魔法少女が。" },
+      { who: "h", img: "assets/haruka/haruka_gani_front.png", text: "……っ。……こう、で、ございますか。……膝を、外へ……腰を……っ" },
+      { who: "n", text: "稽古で鍛えた脚が、律儀に外へ割れる。正座で鍛えた腰が、深く落ちる。……スーツの股が食い込み、袴の下に隠してきた形が、黒い艶にそのまま浮いた。" },
+      { who: "w", name: UE, text: "おお、上手い上手い。さすが武家。姿勢がいい。……では点検だ。『感度三倍仕様』、その2の分も確かめんとな" },
+      { who: "n", text: "上官の指が、張りつめた股の縫い目を前から後ろへなぞる。もう片方の手が、スーツ越しに尖った乳首を、くり、と捻った。" },
+      { who: "h", text: "……ぅ、く……っ。……不忠、で……いえ、……イーッ……。……戦闘員は、点検中、敬礼を崩しません……っ、ぁ……" },
+      { who: "h", name: "戦闘員の女その1", img: IMG("salute_magica_front"), text: "ほらぁ、声、我慢しなくていいんだよ♡ 上官どのに点検されるの、きもちいいでしょ？ 一緒に言お？ イーッ♡" },
+      { who: "h", img: "assets/haruka/haruka_gani_front.png", text: "……イ、イーッ……♡ ……っ、……私、いま……何を……っ、イーッ♡" },
+      { who: "n", text: "縫い目が、股の奥をくぐって擦り上げる。スーツ越しのクリに、硬い筋が何度も当たる。腰がかくかくと前へ出て、ガニ股の膝が震えた。" },
+      { who: "h", text: "……は、果て……っ、点検中に、果てては、ならぬ、のに……っ、イーッ♡ イーッ♡♡" },
+      { who: "n", text: "敬礼の手を額から離さぬまま、武家の娘は、無様に、律儀に、果てた。隣で、その1が嬉しそうに拍手している。" },
+      { who: "w", name: UE, text: "よーし！ 戦闘員の女その1、その2！ 二人そろって第七小隊！ ……あれ、隊長ってわしだっけ？" },
+      { who: "h", img: "assets/haruka/haruka_salute_front.png", text: "イーッ！ ……戦闘員の女その2、……どこまでも、お供いたします。……ワルドー様に、栄光あれ" },
+      { who: "n", img: "assets/haruka/haruka_waldo_back_1.png", text: "黒いスーツの背中が二つ、並んで画面の奥へ行進していく。片方は桃色の髪、片方は黒髪。どちらも、少しガニ股が抜けていなかった。" },
+      { who: "n", text: "水晶の光が消えた。——白山遥の名前も、行方不明者の欄に移された。" },
+      { who: "a", text: "…………" },
+    ].map(l => Object.assign(l, { text: keep(l.text) })),
+    // 誰もいなくなった
+    allLost: () => [
+      { who: "n", text: "水晶は、それから毎朝、勝手に灯るようになった。" },
+      { who: "h", name: "戦闘員の女その1", text: "イーッ♡ ギルドの監査官さーん、見てますかぁ♡ 今日も第七小隊、元気に点検されてまぁす♡" },
+      { who: "h", name: "戦闘員の女その2", text: "イーッ……♡ ……監査官殿。……報告は、正確に。……私どもは、今朝も、二度ずつ、果てました♡" },
+      { who: "n", text: "画面の中で、二人の元冒険者が、そろってガニ股で敬礼している。……監査官の机の上には、もう、提出される報告書がない。" },
+    ].map(l => Object.assign(l, { text: keep(l.text) })),
+    // 遥が教団の器になった翌朝
+    vesselMorningHaruka: () => [
+      { who: "n", text: "扉が叩かれた。……いつもより、ずっと柔らかい音だった。" },
+      { who: "n", img: "assets/haruka/haruka_vessel_front_1.png", text: "入ってきた遥は、巫女装束を着ていなかった。白と金と碧の聖衣。胸元は大きく開き、裾は脚の付け根まで切れこんでいる。" },
+      { who: "h", text: "おはようございます、監査官殿。……この装い、お見苦しくはございませんか。……教えの、正装にございます" },
+      { who: "a", text: "……教団に、何をされた" },
+      { who: "h", img: "assets/haruka/haruka_pray_front_1.png", text: "何も。……満たしていただいた、だけにございます。……ご覧に、入れます" },
+      { who: "n", text: "遥は、作法通りに膝をつき、胸の前で手を組んだ。……正座で鍛えた背筋が、祈りの形のまま、ゆるやかに反っていく。" },
+      { who: "n", img: "assets/haruka/haruka_pray_front_0.png", text: "唇がほどけ、舌先がのぞく。頬が上気し、組んだ手の下で、腰がゆっくりと揺れはじめた。" },
+      { who: "h", text: "……ぁ……祈りますと、……中が、満ちて……っ。……主君への忠義より、……ずっと、確かな……っ、ん、ぁ……♡" },
+      { who: "n", img: "assets/haruka/haruka_pray_front_2.png", text: "瞳の奥に、光が灯る。——監査官の目の前で、遥は、祈りだけで果てた。" },
+      { who: "h", text: "……ふふ。……務めは、果たします。冒険者として。……教えの、器として" },
+      { who: "a", text: "……報告は、正確に" },
+      { who: "h", img: "assets/haruka/haruka_vessel_front_1.png", text: "心得ております。……教えに誓って、偽りは申しませぬ" },
+    ],
+    vesselTalkHaruka: ["……今朝も、祈りを済ませてから参りました。……膝が赤いのは、そのためにございます", "……教えの方々を前にすると、身体が勝手に膝を折るのです。……刀を抜かねばならぬのに", "……監査官殿も、共に祈られませぬか。……満たされるというのは、まことに、心地よいものにございます", "……この聖衣、透けておりましょうか。……教えに、隠しごとはなりませぬゆえ"],
+    // 仮設ヒロイン：白山遥の着任
     harukaIntro: () => [
       { who: "n", text: "ギルドから回されてきた書類には、赤く『仮設』の判が押されていた。" },
       { who: "n", img: "assets/haruka/haruka_front_1.png", text: "扉が叩かれ、黒髪の娘が一礼して入ってくる。紅の袴に、白の小袖。腰には一振りの打刀。所作は真っ直ぐで、隙がない。" },
-      { who: "h", text: "本日より、こちらの監査を受けることになりました。白山 遙と申します。剣士として登録されておりますが……自称は、侍です" },
+      { who: "h", text: "本日より、こちらの監査を受けることになりました。白山 遥と申します。剣士として登録されておりますが……自称は、侍です" },
       { who: "a", text: "……前任者の件は、聞いているか" },
       { who: "h", text: keep("……はい。ワルドーなる者どもに、攫われたと。……星野ひかり殿。迷宮で見かけましたら、必ず、連れ戻します") },
       { who: "a", text: "……報告は、正確に。それだけだ" },

@@ -103,6 +103,7 @@
     msg(w, m.boss ? "spotBoss" : "spot", { mon: m.d.name }, 1.5);
     if (m.boss) { run.bossSeen = true; say(w, "spotBoss", { mon: m.d.name }); return; }
     if (m.kind === "lumina_grunt") { say(w, "spotLumina", {}); return; }
+    if (m.kind === "haruka_grunt") { say(w, "spotHaruka", {}); return; }
     if (h.vessel && G.F.CULT.includes(m.kind)) { say(w, "vesselMeet", { mon: m.d.name }); G.F.pray(w, m, 2.6); return; }   // 器は、教えの者を見ると、跪いてしまう
     const paper = run.paper || {};
     const odd = m.d.type !== run.stated && m.d.type !== "削";

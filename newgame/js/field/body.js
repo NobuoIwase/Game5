@@ -184,7 +184,8 @@
   function addBrain(w, n, src) {
     const h = w.run.h, sv = w.run.save;
     if (w.outcome) return;
-    h.brain = Math.min(100, (h.brain || 0) + n * mult(w, "惑") * (h.rewired ? 1.3 : 1));
+    const sq = w.run.seq || {};
+    h.brain = Math.min(100, (h.brain || 0) + n * mult(w, "惑") * (h.rewired ? 1.3 : 1) * (1 + 0.35 * (sq.brainEasy || 0) + 0.15 * (sq.crest || 0)));   // 後遺症：一度塗り替えられた頭は、塗り替えやすい
     if (h.brain < 100) return;
     sv.waldo = sv.waldo || { rescues: 0, converted: 0 };
     if (sv.waldo.rescues < 2) {
@@ -203,6 +204,16 @@
     }
   }
 
+  // 後遺症：『イーッ』の号令を聞くと、点検の記憶で達してしまう
+  function pavlov(w, m) {
+    const h = w.run.h, n = (w.run.seq || {}).pavCx || 0;
+    if (!n || w.outcome || w.t - (h.pavT ?? -99) < 10) return;
+    h.pavT = w.t; h.liveT = w.t;
+    h.pleasure += (30 + 12 * n) * intake(w, m); h.arousal = Math.min(100, h.arousal + 12);
+    record(w, { kind: "pavCx", type: "惑", mon: m && m.kind, monName: m && m.d ? m.d.name : "", sev: 3 });
+    msg(w, "pavCx", { mon: m && m.d ? m.d.name : "" }); say(w, "pavCx", {});
+    checkClimax(w, m);
+  }
   function mult(w, type) {
     const h = w.run.h, prep = G.PREP[w.run.stated];
     let k = G.HIKARI.resist[h.form][type] || 1;
@@ -345,6 +356,16 @@
         if (h.urge >= 60 && U.chance(dt * 0.12)) say(w, (h.futa ? "urgeF" : "urge") + (h.urge >= 90 ? 3 : 2), {});
       }
     }
+    // 後遺症：ふとした拍子の敬礼／ワルドーの気配で疼く黒スーツの記憶
+    const sq = w.run.seq || {};
+    if (sq.salute && !h.bound && !w.outcome && !(h.salute > 0) && (h.floorT || 0) > 6) {
+      h.salFitT = (h.salFitT ?? U.rf(40, 70)) - dt * sq.salute;
+      if (h.salFitT <= 0) {
+        h.salFitT = U.rf(45, 85); h.salute = 1.5; h.saluteT = w.t; h.pleasure += 4 * intake(w);
+        record(w, { kind: "seqSalute", type: "惑", sev: 1 }); msg(w, "seqSalute", {}); say(w, "seqSalute", {});
+      }
+    }
+    if (sq.suitAche && w.run.dungeon === "waldo") { h.arousal = Math.min(100, h.arousal + 0.45 * sq.suitAche * dt); if (U.chance(dt * 0.03)) msg(w, "suitAche", {}, 20); }
     // 空でいく：寸前で抜けた身体が、触れられないまま、遅れて達する
     if (h.dryAt != null && w.t >= h.dryAt) {
       const by = h.dryMon; h.dryAt = null; h.dryMon = null;
@@ -412,6 +433,6 @@
 
   /* ---- 捕まる・振りほどく ---- */
 
-  Object.assign(G.F, { CULT, vesselFit, shasei, cumBlocked, urgeUp, MACHINE, IMPS, trait, heat, intake, resist, capped, releaseOverflow, addCharm, SLUGS, charmTouch, ATTACH, addAttach, addCum, addCrack, pray, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, applyEffect, drainMagic, untransform, engraveSigil, possess, tickStatus, endPossess });
+  Object.assign(G.F, { pavlov, CULT, vesselFit, shasei, cumBlocked, urgeUp, MACHINE, IMPS, trait, heat, intake, resist, capped, releaseOverflow, addCharm, SLUGS, charmTouch, ATTACH, addAttach, addCum, addCrack, pray, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, applyEffect, drainMagic, untransform, engraveSigil, possess, tickStatus, endPossess });
   G.F.bind.push(() => { ({ U, TIER_FX, say, live, msg, fx, logLine, record, checkClimax, release, defeat, openScene, flash, heroName, feed } = G.F); });
 })();

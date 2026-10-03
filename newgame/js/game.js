@@ -112,36 +112,94 @@ var G = (typeof G !== "undefined") ? G : {};
       requests: null, pick: null, rec: null, log: [],
       traits: {}, counts: {}, waldo: { rescues: 0, converted: 0 }, carry: {}, crack: 0, futaMarks: 0, futaFixed: false,
       lv: 1, xp: 0, skills: {}, equip: [], know: {}, lewd: {},
-      heroine: "hikari", lost: {}, archive: {}, vessel: false,
+      heroine: "hikari", captured: {}, archive: {}, vessel: false, sequelae: {}, convN: 0, rep: 60,
     };
   }
   /* ================================================================ ヒロインの交代 */
   // ヒロインごとの記録（堕ち・状態・性癖・成長・手帳・知識）。ギルドの記録（資金・澱晶・日付・依頼の書）は残る
   const PERSONAL = ["body", "mind", "trust", "suspicion", "fatigue", "ailments", "traits", "counts", "waldo", "carry", "crack", "futaMarks", "futaFixed", "lv", "xp", "skills", "equip",
     "know", "lewd", "shards", "parts", "climaxParts", "monLog", "episodes", "reportMem", "lastPosture", "caughtDay", "renamed", "reintCount", "reintHonest", "reintDev", "lastGrowth",
-    "diary", "diarySeen", "vessel", "silentAccepted"];
-  // ワルドーに洗脳された日の後始末：手帳は書かない（書く者がいない）。その夜が明けて、次のヒロインが来る
-  function finalizeLoss(s) {
-    if (s.rec) { s.rec.diaryDone = true; s.rec.epDone = true; }
-    s.log = s.log || []; s.log.push({ day: s.day, text: G.Hero.keep(s.heroine === "haruka" ? "白山遥は、ワルドーに洗脳され、戦闘員の女その2として連れ去られた" : "星野ひかり（魔法少女ルミナ）は、ワルドーに洗脳され、戦闘員の女その1として連れ去られた") });
-    const id = s.heroine || "hikari";
-    if (!loseHeroine(s, "waldo")) return "end";
-    endDay(s);
-    return id;
+    "diary", "diarySeen", "vessel", "silentAccepted", "sequelae", "convN", "rep"];
+  const HEROES = ["hikari", "haruka"];
+  const other = id => (id === "hikari" ? "haruka" : "hikari");
+  // まだ誰も使っていない、ヒロイン一人分の記録
+  function freshPersonal() {
+    const f = newSave(), o = {};
+    for (const k of PERSONAL) o[k] = f[k] !== undefined ? JSON.parse(JSON.stringify(f[k])) : undefined;
+    return o;
   }
   function syncHero(s) { if (s) G.Hero.set(s.heroine || "hikari"); }
-  // ひかりを失った：記録をしまい、仮設の白山遥を迎える
-  function loseHeroine(s, why) {
-    const id = s.heroine || "hikari", fresh = newSave();
-    s.archive = s.archive || {}; s.archive[id] = {};
-    for (const k of PERSONAL) { s.archive[id][k] = s[k]; s[k] = fresh[k] !== undefined ? JSON.parse(JSON.stringify(fresh[k])) : undefined; }
-    s.lost = s.lost || {}; s.lost[id] = { day: s.day, why, lv: s.archive[id].lv || 1 };
-    // 次のヒロイン：まだ失っていない者。誰もいなければ、ギルドの監査はそこで終わる
-    const next = ["hikari", "haruka"].find(k => !s.lost[k]);
-    if (!next) { s.ended = { day: s.day, why }; s.phase = "end"; return null; }
-    s.heroine = next; s.heroIntro = next; s.trust = 50;
-    syncHero(s);
-    return next;
+  // 今日、潜らせるヒロインを替える：いまの記録をしまい、相手の記録を出す
+  function swapHero(s, id) {
+    const cur = s.heroine || "hikari";
+    if (id === cur || !HEROES.includes(id) || (s.captured || {})[id]) return false;      // 捕らわれている方は、潜らせられない
+    s.archive = s.archive || {};
+    const keep = {}; for (const k of PERSONAL) keep[k] = s[k];
+    const next = s.archive[id] || freshPersonal();
+    for (const k of PERSONAL) s[k] = next[k];
+    s.archive[cur] = keep; delete s.archive[id];
+    s.heroine = id; syncHero(s);
+    return true;
+  }
+  // 記録の一項目を、出ている方／しまってある方のどちらからでも
+  const pget = (s, id, k) => (id === (s.heroine || "hikari") ? s[k] : ((s.archive || {})[id] || {})[k]);
+  const pset = (s, id, k, v) => { if (id === (s.heroine || "hikari")) s[k] = v; else { s.archive[id] = s.archive[id] || freshPersonal(); s.archive[id][k] = v; } };
+
+  /* ================================================================ 後遺症（ワルドーの戦闘員にされた回数で、増えていく） */
+  const SEQUELAE = {
+    brainEasy: { name: "洗脳されやすい", desc: "一度塗り替えられた頭は、塗り替えの跡を覚えている。洗脳が進みやすい" },
+    salute:    { name: "敬礼の癖", desc: "ふとした拍子に、右手が額へ上がる。気づくと、ガニ股で敬礼している" },
+    swellPerm: { name: "乳首とクリの肥大（不可逆）", desc: "スーツの感度強化の名残。乳首とクリが、元に戻らない大きさに膨れたまま" },
+    repFall:   { name: "評判の失墜", desc: "戦闘員の映像は、街じゅうに流れた。ギルドでの評判は、地の底" },
+    pavCx:     { name: "号令で達する", desc: "『イーッ』の掛け声を聞くと、点検の記憶で、身体が勝手に達してしまう" },
+    suitAche:  { name: "黒スーツの疼き", desc: "肌が、あの黒い艶の締めつけを恋しがる。ワルドーの気配で、身体が熱くなる" },
+    ii:        { name: "戦闘員の口癖", desc: "話の端々に、『イーッ』が混ざる" },
+    willWear:  { name: "意志の摩耗", desc: "命令に従う心地よさを、身体が覚えてしまった。気力が戻りきらない" },
+    crest:     { name: "ワルドーの紋章", desc: "下腹に、組織の紋章が焼きついている。戦闘員たちは、それを目印に寄ってくる" },
+  };
+  // 何度目の戦闘員化で、何が残るか（二人とも堕ちた時は、さらに重く）
+  const SEQ_STEP = [["brainEasy", "salute"], ["swellPerm", "repFall"], ["pavCx", "suitAche"], ["ii", "willWear"], ["crest", "brainEasy"]];
+  function addSequelae(s, id, severe) {
+    const n = pget(s, id, "convN") || 1, seq = Object.assign({}, pget(s, id, "sequelae") || {}), got = [];
+    const add = k => { seq[k] = (seq[k] || 0) + 1; got.push(k); };
+    for (const k of SEQ_STEP[Math.min(SEQ_STEP.length - 1, n - 1)]) add(k);
+    if (severe) { add("repFall"); add("brainEasy"); const more = SEQ_STEP[Math.min(SEQ_STEP.length - 1, n)].find(k => !got.includes(k)); if (more) add(more); }
+    pset(s, id, "sequelae", seq);
+    if (got.includes("repFall")) pset(s, id, "rep", Math.max(0, (pget(s, id, "rep") ?? 60) - 30 * got.filter(k => k === "repFall").length));
+    return got;
+  }
+
+  /* ================================================================ ワルドーに捕らわれる・救い出す */
+  // 洗脳が仕上がった日の後始末：手帳は書かない。残った方が、明日から救出に向かう。二人とも捕らわれたら、ギルドの救出隊が出る
+  function finalizeLoss(s) {
+    if (s.rec) { s.rec.diaryDone = true; s.rec.epDone = true; }
+    const id = s.heroine || "hikari", o = other(id);
+    s.convN = (s.convN || 0) + 1;
+    s.captured = s.captured || {}; s.captured[id] = { day: s.day };
+    s.log = s.log || []; s.log.push({ day: s.day, text: G.Hero.keep(id === "haruka" ? "白山遙は、ワルドーに洗脳され、戦闘員の女その2として連れ去られた" : "星野ひかり（魔法少女ルミナ）は、ワルドーに洗脳され、戦闘員の女その1として連れ去られた") });
+    if (!s.captured[o]) {
+      endDay(s);
+      swapHero(s, o);
+      s.pendingScene = "partnerTaken";              // 残った方が、相棒を連れ戻すと誓う朝
+      morning(s);                                   // 救出の依頼を、残った方の朝に出す
+      return "swap";
+    }
+    // 二人とも：ギルドが総出で取り返す。数日かかり、重い後遺症が残る
+    const got = {}; for (const k of HEROES) { got[k] = addSequelae(s, k, true); }
+    s.captured = {};
+    s.rescueNote = { by: "guild", got, day: s.day };
+    endDay(s); endDay(s);                            // 救出に、二日かかった
+    s.pendingScene = "guildRescue";
+    return "double";
+  }
+  // 救出に成功した：相棒が戻ってくる（後遺症つきで）
+  function rescueAlly(s, id) {
+    if (!s.captured || !s.captured[id]) return null;
+    delete s.captured[id];
+    const got = addSequelae(s, id, false);
+    s.rescueNote = { by: s.heroine, who: id, got, day: s.day };
+    s.pendingScene = "allyRescued";
+    return got;
   }
   // 古いセーブに、後から足した項目を補う（v2 のまま）
   function upgradeSave(s) {
@@ -152,7 +210,13 @@ var G = (typeof G !== "undefined") ? G : {};
     s.lv = s.lv || 1; s.xp = s.xp || 0; s.skills = s.skills || {}; s.equip = (s.equip || []).filter(id => G.SKILLS[id]);
     for (const k in G.DUNGEONS) if (!s.decks[k]) { const dg = G.DUNGEONS[k]; s.decks[k] = [dg.free.find(x => G.MONSTERS[x].type === "削"), "trap:" + dg.traps[0]]; }
     s.ailments = (s.ailments || []).filter(a => AILMENTS[a.id]);
-    s.heroine = s.heroine || "hikari"; s.lost = s.lost || {}; s.archive = s.archive || {}; s.vessel = !!s.vessel;
+    s.heroine = s.heroine || "hikari"; s.archive = s.archive || {}; s.vessel = !!s.vessel; s.captured = s.captured || {};
+    s.sequelae = s.sequelae || {}; s.convN = s.convN || 0; if (s.rep == null) s.rep = 60;
+    // 前の仕組み（失ったら交代）の記録：失った方は「捕らわれている」に
+    if (s.lost) { for (const k in s.lost) if (k !== s.heroine) s.captured[k] = { day: s.lost[k].day }; delete s.lost; }
+    if (s.phase === "end") { delete s.ended; s.captured = {}; s.phase = "guild"; }
+    // 二人とも、最初からいる：まだ記録の無い方の分を用意する
+    for (const k of HEROES) if (k !== s.heroine && !s.archive[k]) s.archive[k] = freshPersonal();
     syncHero(s);
     return s;
   }
@@ -167,6 +231,12 @@ var G = (typeof G !== "undefined") ? G : {};
       if (U.chance(0.25)) real.species = real.main;          // ときどき種族特化
       out.push({ id: s.day + ":" + k, dungeon: k, real, place: placeName(k, real.species), title: requestTitle(real), stated: G.MONSTERS[real.main].type,
                  reward: Math.round((26 + real.level * 8 + real.scale * 4 + (real.boss ? 14 : 0)) * [0, 0.6, 0.82, 1][real.scale]) });   // 小さい依頼ほど、報酬は少ない
+    }
+    // 相棒がワルドーに捕らわれている：救出の依頼（支部の最下層に、戦闘員にされた相棒がいる）
+    for (const id in s.captured || {}) {
+      if (id === (s.heroine || "hikari")) continue;
+      const real = { main: id === "hikari" ? "lumina_grunt" : "haruka_grunt", level: 2, scale: 2, boss: true, verb: "救出" };
+      out.unshift({ id: s.day + ":rescue:" + id, dungeon: "waldo", real, rescue: id, place: "ワルドーの支部・最下層", title: G.Hero.keep(`救出：戦闘員にされた${id === "hikari" ? "星野ひかり" : "白山遙"}を連れ戻す`), stated: "惑", reward: 30 });
     }
     return out;
   }
@@ -253,7 +323,7 @@ var G = (typeof G !== "undefined") ? G : {};
       h: {
         lv: s.lv || 1, hpMax: G.GROWTH.hpMax(s.lv || 1) + 3 * (s.shards || 0), mpMax: G.GROWTH.mpMax(s.lv || 1) + 2 * (s.shards || 0), dmgMul: G.GROWTH.dmg(s.lv || 1), skills: (s.equip || []).slice(),
         hp: Math.round((G.GROWTH.hpMax(s.lv || 1) + 3 * (s.shards || 0)) * (1 - s.fatigue / 250)), mp: G.GROWTH.mpMax(s.lv || 1) + 2 * (s.shards || 0), magic: has("hollow") ? 60 : G.HIKARI.magicMax,
-        will: Math.round(100 + Math.min(15, s.shards || 0) - s.fatigue / 5 - (has("exhaustion") ? 20 : 0)), arousal: Math.min(70, (has("heat") ? 30 : 0) + (has("impCurse") ? 25 + 5 * Math.min(4, (ail("impCurse") || {}).age || 0) : 0)), pleasure: 0, climax: 0, form: "magica", kit: Object.assign({}, p.kit),
+        will: Math.round(100 + Math.min(15, s.shards || 0) - s.fatigue / 5 - (has("exhaustion") ? 20 : 0) - 8 * ((s.sequelae || {}).willWear || 0)), arousal: Math.min(70, (has("heat") ? 30 : 0) + (has("impCurse") ? 25 + 5 * Math.min(4, (ail("impCurse") || {}).age || 0) : 0)), pleasure: 0, climax: 0, form: "magica", kit: Object.assign({}, p.kit),
         sigil: has("sigil") ? 1 : 0,
         // 前の潜行から持ち越した状態
         sens: has("sensitive") ? Math.min(5, 2 + ((ail("sensitive") || {}).age || 0)) : 0, sensBase: has("sensitive") ? 1 : 0, ache: has("throb") ? 40 : 0, numb: has("paralysis") ? 20 : 0,
@@ -261,13 +331,13 @@ var G = (typeof G !== "undefined") ? G : {};
         charm: Object.assign({}, (ail("charm") || {}).to || {}), attach: (s.carry.attach || []).slice(),
         exposure: has("exposure"), addict: has("addict"), trigger: has("hairTrigger"), rewired: has("rewired"), taint: has("mindTaint"),
         brand: (ail("defeatBrand") || {}).to || null, brain: 0,
-        swell: has("swell") ? (s.carry.swell || 1) : 0, crack: s.crack || 0,
+        swell: Math.max(has("swell") ? (s.carry.swell || 1) : 0, Math.min(3, (s.sequelae || {}).swellPerm || 0)),      // 不可逆の肥大は、処置しても戻らない crack: s.crack || 0,
         futa: !!(G.DUNGEONS[p.dungeon].futa || s.futaFixed || has("futaAfter")), cum: 0, shasei: 0,
         futaCarry: has("futaAfter") && !G.DUNGEONS[p.dungeon].futa && !s.futaFixed,   // 名残だけで生えている（神殿の外）
         kissMark: has("kissMark"), permit: has("permit") ? { over: 0, edges: 0 } : null,
         vessel: !!s.vessel,          // 教団の器：見た目と、祈りの発作
       },
-      law, hero: s.heroine || "hikari",
+      law, hero: s.heroine || "hikari", rescue: (p.req && p.req.rescue) || null, captured: Object.keys(s.captured || {}), seq: Object.assign({}, s.sequelae || {}),
       budgetBonus: s.upgrades.budget * 2,
     };
     s.phase = "dive";
@@ -470,6 +540,7 @@ var G = (typeof G !== "undefined") ? G : {};
     s.rec = rec;
     s.phase = "report";
     if (run.lostHero) { s.phase = "lost"; rec.lostHero = true; }        // ワルドーに連れ去られた：報告は無い
+    if (run.rescued && !run.lostHero) { rec.rescued = run.rescue; rescueAlly(s, run.rescue); }   // 相棒を、取り返した
     s.history.push({ day: s.day, dungeon: run.dungeon, stated: run.stated, outcome: run.outcome, floor: run.floorReached, climax: climaxes, posture: rec.postureName, forged: run.forged, title: s.pick.title, realTitle: s.pick.req.title });
     if (s.history.length > 60) s.history.shift();
     return rec;
@@ -545,6 +616,7 @@ var G = (typeof G !== "undefined") ? G : {};
     // 残した状態異常は、ギルドの空気を少しずつ澱ませる
     s.taint = U.clamp(s.taint + s.ailments.length * 1.5, 0, 100);
     s.fatigue = U.clamp(s.fatigue - 22, 0, 100);
+    for (const id in s.archive || {}) if (s.archive[id] && typeof s.archive[id].fatigue === "number") s.archive[id].fatigue = U.clamp(s.archive[id].fatigue - 30, 0, 100);   // 潜らなかった方は、休んでいる
     // 一晩たつと：着替え・湯浴み・眠りで引くものは引く。処置しなかったものは、根を張って重くなる
     s.healedNight = s.ailments.filter(a => NATURAL.includes(a.id) && a.day < s.day + 1).map(a => AILMENTS[a.id].name);
     s.ailments = s.ailments.filter(a => !NATURAL.includes(a.id));
@@ -595,6 +667,6 @@ var G = (typeof G !== "undefined") ? G : {};
 
   function taintStage(s) { return s.taint >= 100 ? 4 : s.taint >= 70 ? 3 : s.taint >= 42 ? 2 : s.taint >= 18 ? 1 : 0; }
 
-  G.Game = { finalizeLoss, loseHeroine, syncHero, PERSONAL, reintResult, pastEpisode, epCtx, EP_PART, advanceOf, NATURAL, equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, rest, buy, taintStage };
+  G.Game = { finalizeLoss, swapHero, rescueAlly, addSequelae, SEQUELAE, HEROES, pget, freshPersonal, syncHero, PERSONAL, reintResult, pastEpisode, epCtx, EP_PART, advanceOf, NATURAL, equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, rest, buy, taintStage };
 })();
 if (typeof module !== "undefined") module.exports = G;

@@ -53,6 +53,7 @@
     if (w.monsters.filter(o => o.bubble && o.bubble.t > 0.5 && o !== m).length >= 2) return;
     const t = G.Hero.tx(G.Text.voice(m.kind, key)); if (!t) return;
     m.sayT = w.t; m.bubble = { text: t, t: 2.4 };
+    if (m.d.waldo && /イーッ/.test(t) && U.dist(m.x, m.y, w.run.h.x, w.run.h.y) < 7) G.F.pavlov(w, m);   // 号令
     if (live(w)) feed(w, "mon", m.d.name + (/^[「『]/.test(t) ? t : "「" + t + "」"));
   }
   // 魔物の攻撃が当たった：身体のどこに何が起きたか

@@ -13,7 +13,10 @@ var G = (typeof G !== "undefined") ? G : {};
   function preload() {
     for (const k in G.MONSTERS) img("assets/monsters/" + G.MONSTERS[k].art);
     for (const k in G.TRAPS) img(trapArt(k));
-    for (const f of ["civilian", "magica"]) for (const d of ["front", "back", "left", "right"]) img(`assets/hikari/hikari_${f}_${d}_1.png`);
+    for (const d of ["front", "back", "left", "right"]) {
+      for (const f of ["civilian", "magica"]) for (const v of ["", "vessel_", "pray_", "tongue_"]) img(`assets/hikari/hikari_${v}${f}_${d}_1.png`);
+      img(`assets/haruka/haruka_${d}_1.png`);
+    }
     for (const k in G.DUNGEONS) img(`assets/env/floor_${k}.png`);
     for (const skin of Object.values(G.ROOM_SKINS || {})) { img(skin.floor); img(skin.deco); }
     for (const n of ["dungeon.png", "chest_closed.webp", "chest_open.webp", "stairs_open.webp", "pool.webp"]) img("assets/env/" + n);
@@ -462,6 +465,7 @@ var G = (typeof G !== "undefined") ? G : {};
   const FIG = {
     waldo_grunt: [1.95, 8, 248], waldo_officer: [2.05, 8, 248], shinja: [1.9, 8, 248], sekkyoushi: [1.95, 8, 248], chuushutsu: [1.9, 8, 248], kyouso: [2.1, 8, 248],
     inma: [1.85, 8, 248], muma_queen: [1.95, 67, 248], kuchizuke: [1.8, 8, 248], hitomi: [1.8, 8, 248],
+    lumina_grunt: [1.9, 4, 252],
     imp: [1.45, 8, 247], futago: [1.35, 8, 248], sakiimp: [1.45, 8, 248], jikkyou: [1.45, 8, 248], kusuguri: [1.45, 8, 248], kazoe: [1.45, 8, 248], azakeri: [1.45, 8, 248], utaimp: [1.45, 8, 248], tenazuke: [1.45, 8, 248],
   };
   function drawMonster(ctx, w, m, x, y, S) {
@@ -495,7 +499,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (m.lunge > 0) { const u = 1 - m.lunge / 0.22, k = Math.sin(u * Math.PI); dx += Math.cos(m.lungeA) * S * 0.45 * k; dy += Math.sin(m.lungeA) * S * 0.25 * k; }
     if (Math.hypot(m.vx || 0, m.vy || 0) > 0.2) sk = U.clamp((m.vx || 0) / 6, -0.12, 0.12);
     const bob = d.behavior === "float" ? Math.sin(w.t * 3 + m.id) * S * 0.08 : 0;
-    const im = img("assets/monsters/" + d.art);
+    const im = img("assets/monsters/" + (m.salute > 0 && d.saluteArt ? d.saluteArt : d.art));
     ctx.save();
     ctx.globalAlpha = m.hidden ? 0.4 : (m.holding || m.molest) && h.bound ? 0.7 : 1;     // 群がっている魔物は、少し透かしてルミナを見せる
     ctx.translate(x + dx, y + S * 0.3 + dy + bob); ctx.transform(1, 0, -sk, 1, 0, 0); ctx.scale(sx, sy);
@@ -527,7 +531,7 @@ var G = (typeof G !== "undefined") ? G : {};
 
   function drawHikari(ctx, w, x, y, S) {
     const h = w.run.h;
-    const im = img(`assets/hikari/hikari_${h.form}_${U.dirName(h.a)}_1.png`);
+    const im = img(G.Hero.sprite(h, U.dirName(h.a), 1));
     ctx.fillStyle = "rgba(0,0,0,0.3)"; ctx.beginPath(); ctx.ellipse(x, y + S * 0.3, S * 0.4, S * 0.14, 0, 0, 7); ctx.fill();
     if (h.bound) { ctx.strokeStyle = "rgba(255,110,170,0.85)"; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(x, y - S * 0.4, S * 0.55, 0, 7); ctx.stroke(); }
     if (h.cast) {                                   // 詠唱の光

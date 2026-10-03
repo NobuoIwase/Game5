@@ -21,6 +21,7 @@
     if (h.attach && h.attach.some(a => a === "mushi" || a === "hibiki" || a === "hiru")) amp("wormCalm");
     if (h.futa) amp("shasei");
     if (h.pray > 0) amp("prayer");
+    if (h.vessel) { k *= 1.15; if (src && CULT.includes(src.kind)) k *= 1.25; }       // 器の身体：教えの者に触れられるほど、満ちやすい
     if (b && b.kiss) amp("kissHabit");
     return k;
   }
@@ -139,6 +140,24 @@
     if (h.crack === before) return;
     record(w, { kind: "crack", type: "惑", lv: h.crack, mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: h.crack >= 5 ? 3 : 2 });
     msg(w, "crack", { c: h.crack }); if (h.crack === 1 || h.crack % 3 === 0) say(w, "crack", {});
+    // 防護壁が割れきった：教団の器になる（冒険者のまま、教えに満たされる）
+    if (h.crack >= 10 && !h.vessel && (w.run.hero || "hikari") === "hikari") {
+      h.vessel = true; w.run.vesselNew = true; h.crack = 0;
+      record(w, { kind: "vessel", type: "惑", mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: 3 });
+      msg(w, "vessel", {}); say(w, "vessel", {});
+      openScene(w, "vessel", src);
+      h.pleasure = 100; checkClimax(w, src, true);
+    }
+  }
+  // 器の祈りの発作：何もされていないのに、膝をついて祈ってしまう。祈るほど、満たされて達する（法悦）
+  const CULT = ["shinja", "sekkyoushi", "chuushutsu", "kyouso"];
+  function vesselFit(w) {
+    const h = w.run.h;
+    h.pray = 3.4; h.intent = null; h.vx = h.vy = 0; h.liveT = w.t;
+    h.arousal = Math.min(100, h.arousal + 10); h.pleasure += 14 * intake(w);
+    record(w, { kind: "vesselPray", type: "惑", sev: 2, monName: "教え" });
+    msg(w, "vesselPray", {}); say(w, "vesselPray", {});
+    for (const t of G.Text.live.vessel({ n: heroName(w) })) feed(w, t.cls, t.text);
   }
   // 祈り（教団）：教祖に惹かれた身体が、腰を揺らして祈ってしまう。祈りは魔力を吸い、甘い
   function pray(w, src, t) {
@@ -179,6 +198,7 @@
       record(w, { kind: "convert", type: "惑", sev: 3, mon: src && src.kind, monName: src && src.d ? src.d.name : "" });
       msg(w, "convert", {});
       w.outcome = "defeat"; w.defeatBy = "waldo"; w.run.converted = true;
+      if ((w.run.hero || "hikari") === "hikari") w.run.lostHero = true;      // ひかりは、戻ってこない（ユニットロスト）
       openScene(w, "convert", src);
     }
   }
@@ -306,7 +326,14 @@
     const h = w.run.h;
     if (w.outcome) return;
     for (const k of ["numb", "high", "ache", "freeze", "sniff", "salute", "pray", "tipTease"]) if (h[k] > 0) h[k] = Math.max(0, h[k] - dt);
-    if (h.pray > 0) { h.pleasure += 3 * intake(w) * dt; h.vx = h.vy = 0; }
+    if (h.pray > 0) {
+      h.pleasure += (h.vessel ? 9 : 3) * intake(w) * dt; h.vx = h.vy = 0;
+      if (h.vessel) checkClimax(w, { kind: "kyouso", d: { name: "教えの法悦", type: "惑" } });
+    }
+    if (h.vessel && !h.bound && !w.outcome && !(h.pray > 0) && (h.floorT || 0) > 8) {
+      h.vesselT = (h.vesselT ?? U.rf(16, 28)) - dt;
+      if (h.vesselT <= 0) { h.vesselT = U.rf(24, 42) * (1 - Math.min(0.4, h.arousal / 250)); vesselFit(w); }
+    }
     // 欲求：止められたまま限界の近くにいると募り、気力を削る。止めるものが無くなれば、ゆっくり引く
     {
       const blocked = cumBlocked(w) || (capped(w) && h.pleasure >= 85);
@@ -385,6 +412,6 @@
 
   /* ---- 捕まる・振りほどく ---- */
 
-  Object.assign(G.F, { shasei, cumBlocked, urgeUp, MACHINE, IMPS, trait, heat, intake, resist, capped, releaseOverflow, addCharm, SLUGS, charmTouch, ATTACH, addAttach, addCum, addCrack, pray, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, applyEffect, drainMagic, untransform, engraveSigil, possess, tickStatus, endPossess });
+  Object.assign(G.F, { CULT, vesselFit, shasei, cumBlocked, urgeUp, MACHINE, IMPS, trait, heat, intake, resist, capped, releaseOverflow, addCharm, SLUGS, charmTouch, ATTACH, addAttach, addCum, addCrack, pray, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, applyEffect, drainMagic, untransform, engraveSigil, possess, tickStatus, endPossess });
   G.F.bind.push(() => { ({ U, TIER_FX, say, live, msg, fx, logLine, record, checkClimax, release, defeat, openScene, flash, heroName, feed } = G.F); });
 })();

@@ -98,6 +98,9 @@ var G = (typeof G !== "undefined") ? G : {};
     // musk: 近くにいると雄の臭い。発情していると、つい嗅いでしまう
     waldo_grunt:  { name: "ワルドー戦闘員",   type: "絡", art: "waldo_grunt.png",  hp: 16, spd: 2.1, r: 0.4, sight: 6, fov: 200, behavior: "wander", cost: 3, ct: 7, pack: 3, musk: 1.6, waldo: true,
                     atk: { kind: "grab", range: 0.8, windup: 0.5, cd: 2.2, power: 0.8 }, desc: "全身タイツの戦闘員。数で押さえ込み、捕らえて同じ戦闘員にしようとする" },
+    // ひかりを失った後だけ出る：洗脳された元・魔法少女（倒しても、退いていくだけ）
+    lumina_grunt: { name: "戦闘員の女その1", type: "惑", art: "../hikari/hikari_waldo_magica_front_1.png", hp: 46, spd: 2.0, r: 0.4, sight: 7, fov: 220, behavior: "wander", cost: 9, ct: 30, waldo: true, special: true,
+                    saluteArt: "../hikari/hikari_gani_magica_front.png", atk: { kind: "shot", range: 4.5, windup: 0.9, cd: 3.2, power: 1.0, brain: 6 }, desc: "黒い全身スーツの戦闘員。……桃色の髪と髪飾りに、見覚えがある。ワルドー仕様の光弾を撃ち、ガニ股で敬礼して媚びる" },
     // brain: 当たると洗脳が進む（100で戦闘員化）
     waldo_officer:{ name: "ワルドー幹部",     type: "惑", art: "waldo_officer.png", hp: 60, spd: 1.4, r: 0.45, sight: 7, fov: 220, behavior: "lurk", cost: 6, ct: 16, command: 5, waldo: true,
                     atk: { kind: "shot", range: 5, windup: 1.1, cd: 4.0, power: 1.0, fan: 0.45, brain: 14, alsoGrab: 1.0 }, desc: "マントに組織の紋章。掌から催眠の波を扇に放つ。戦闘員を急かし、抗う者ほど良い戦闘員になると笑う" },
@@ -485,6 +488,8 @@ var G = (typeof G !== "undefined") ? G : {};
       magica:   ["星杖「スターライト・ロッド」", "魔法衣装（白と菫）", "変身のコンパクト", "相棒の妖精（プラム）"],
       civilian: ["セーラー服", "変身のコンパクト", "相棒の妖精（プラム・鞄の中）"],
     },
+    // 仮設の白山遙（Game2 の設定から）。変身はしない
+    equipHaruka: ["打刀「忠」（腐食耐性。離れても手元へ還る）", "巫女装束（紅白）", "脛当てと草鞋", "故郷の御守り"],
   };
 
   /* ---- ひかりの成長：レベル（ゆっくり・上限あり）と、閃き（ロマサガ式）----

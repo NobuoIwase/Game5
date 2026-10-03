@@ -31,7 +31,7 @@
     if (last && last.text === text && w.t - last.t < 1.2) return;
     w.msgs.push({ text, t: w.t, key, id: w.msgSeq = (w.msgSeq || 0) + 1 });
     if (w.msgs.length > 40) w.msgs.shift();
-    if (live(w) && !FEED_SKIP.has(key)) feed(w, key === "grab" ? "act grab" : "act", plain(text));
+    if (live(w) && !FEED_SKIP.has(key)) feed(w, key === "grab" ? "act grab" : key === "countTick" ? "act count" : "act", plain(text));
   }
   function fx(w, o) { w.fx.push(Object.assign({ t: 0, life: 0.6 }, o)); }
   // 出来上がった文をそのまま窓に出す（捕まっている間の「何をされたか」）

@@ -53,7 +53,7 @@ var G = (typeof G !== "undefined") ? G : {};
       wantDown: false, stuckT: 0, lastX: map.up.x, lastY: map.up.y, cast: null, dashT: 0, react: {}, dashed: {},
       strafe: 1, strafeT: 0, search: null, glance: null, idleT: 0, kb: 0, kbA: 0, brakeT: 0, spPrev: 0, goal: null, state: "explore",
     });
-    Object.assign(h, { freeze: 0, sniff: 0, salute: 0, pray: 0, countGame: null, drawn: null, deny: null, altar: null });
+    Object.assign(h, { freeze: 0, sniff: 0, salute: 0, pray: 0, countGame: null, drawn: null, deny: null, altar: null, dryAt: null, dryMon: null });
     // 階の時計（w.t）は階ごとに0から。前の階の時刻・座標を持ち越すと、届かない目的地に向かい続けて固まる
     Object.assign(h, { ignore: {}, peekHold: 0, failN: 0, veilUsed: false, inspT: undefined, fireSpot: null, peekSpot: null, wallHits: 0, _pp: null, convey: null, cdMelee: 0, cdFlash: 0, cdBreak: 0, ifr: 0, thinkT: 0,
       charmT: {}, anticT: undefined, monoT: undefined, lastEscT: undefined, saluteT: undefined, bcastT: undefined, edgeT: undefined, lastClimaxT: undefined, ringT: undefined, tipT: undefined, spaceAt: null, walled: {}, chestT: null, chestSkip: [], tgt: null, lastStand: false, prayNext: undefined, tranceRun: 0, basinT: null, basinSkip: [], fightT: null, lastDmgT: undefined, clearT: undefined, liveT: undefined, unboundT: undefined, recoverAt: null });

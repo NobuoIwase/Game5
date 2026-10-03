@@ -22,6 +22,10 @@
       return;
     }
     if (h.pleasure < 100) return;
+    // 抜け出した直後：触れられていない熱は、いったん引いていく（寸前で抜けて「空でいく」時だけは別）
+    if (!forced && !h.bound && w.t - (h.unboundT ?? -99) < 5) { h.pleasure = 95; return; }
+    // 寸止めの呪いが解けたあと燻っていた分：次に達する時に、まとめて来る
+    if (!forced && h.pent) { const p = h.pent; h.pent = null; releaseOverflow(w, p.over, src || { kind: p.mon, d: { name: p.monName, type: "惑" } }, "deny"); return; }
     if (!forced && cumBlocked(w)) {                // 締環・先嬲り：出せないまま、絶頂の手前で止められる
       h.pleasure = 95; h.cum = Math.max(h.cum || 0, 94);
       if (h.ring) h.ring.over += 6;
@@ -142,6 +146,12 @@
     }
     if (broke) { h.lastEscT = w.t; say(w, "breakFree", {}); msg(w, "free", {}); fx(w, { kind: "burst", x: h.x, y: h.y, color: "#fff2a8", life: 0.6 }); if (b.src) learn(w, b.src.kind, 2); record(w, { kind: "escape", mon: b.src && b.src.kind, monName: b.src && b.src.d ? b.src.d.name : "", sev: 0 }); }
     h.bound = null; h.unboundT = w.t;
+    // 寸前で抜けた：たいていは堪えて引いていく。ときどき、もう触れられていないのに、そのまま達してしまう
+    if (h.pleasure >= 90 && w.t - (h.lastClimaxT ?? -99) > 1.5 && !capped(w) && !cumBlocked(w)) {
+      const tier = G.tier(w.run.save.body, w.run.save.mind);
+      if (U.chance(0.28 + 0.08 * tier + 0.04 * (h.sens || 0))) { h.dryAt = w.t + U.rf(0.9, 1.8); h.dryMon = b.src && b.src.d ? { kind: b.src.kind, name: b.src.d.name } : null; msg(w, "dryEdge", {}); say(w, "dryEdge", {}); }
+      else { msg(w, "edgeEscape", {}); say(w, "edgeEscape", {}); }
+    }
     h.trance = Math.max(h.trance, 0.3);
     h.think = Math.max(h.think || 0, broke ? 0.9 : 0.6); h.label = "息を整える";   // 抜けた直後は、よろめいて立て直す
   }

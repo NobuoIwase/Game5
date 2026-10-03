@@ -138,7 +138,8 @@
     }
     h.arousal = Math.max(0, h.arousal - (h.bound ? 0 : 0.3) * dt);
     // 快感は、責めが止めば引いていく。発情しているほど引きにくい
-    h.pleasure = Math.max(0, h.pleasure - (h.bound ? 0.7 : 2.2) * (1.3 - 0.9 * h.arousal / 100) * dt);
+    const cool = !h.bound && h.dryAt == null && w.t - (h.unboundT ?? -99) < 5 ? 3 : 1;        // 抜け出した直後は、息を整えて熱を逃がす
+    h.pleasure = Math.max(0, h.pleasure - (h.bound ? 0.7 : 2.2 * cool) * (1.3 - 0.9 * h.arousal / 100) * dt);
     if (!h.bound) h.will = Math.min(100, h.will + 1.2 * dt * (1 - h.arousal / 150) * (1 - (h.hyp || 0) / 110) * (sk(w, "breath") ? 1.5 : 1));
     perceive(w);
     liveliness(w, dt);
@@ -192,7 +193,7 @@
   function startNight(w) {
     w.night = { beat: 0, spent: 0, beats: [] };
     const h = w.run.h;
-    if (h.kinOver || h.omazuke || h.deny) { const over = ((h.kinOver || {}).over || 0) + ((h.omazuke || {}).over || 0) + ((h.deny || {}).over || 0); h.kinOver = h.omazuke = h.deny = null; if (over > 0) record(w, { kind: "release", type: "蕩", why: "night", n: 1 + Math.floor(over / 55), sev: 3 }); }
+    if (h.kinOver || h.omazuke || h.deny || h.pent) { const over = ((h.kinOver || {}).over || 0) + ((h.omazuke || {}).over || 0) + ((h.deny || {}).over || 0) + ((h.pent || {}).over || 0); h.kinOver = h.omazuke = h.deny = h.pent = null; if (over > 0) record(w, { kind: "release", type: "蕩", why: "night", n: 1 + Math.floor(over / 55), sev: 3 }); }
     for (const m of w.monsters) if (m.hp > 0 && m.d.spd > 0 && U.dist(m.x, m.y, h.x, h.y) < 9) { m.alert = 99; }
   }
   function nightBeat(w) {

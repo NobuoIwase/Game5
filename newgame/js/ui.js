@@ -593,6 +593,8 @@
       const mw0 = document.getElementById("msgwin"); if (mw0) mw0.classList.remove("hidden");
       return;
     }
+    // 数える声は、数えたその時に出す（溜めると「いーち」から「きゅーう」に飛んでしまう）
+    { const cs = q.filter(l => /\bcount\b/.test(l.cls)); if (cs.length) { for (const l of cs) q.splice(q.indexOf(l), 1); liveLine(cs[cs.length - 1], now); } }
     // 溜まりすぎたら、ありふれた行から間引く（決壊・場面は残す）
     const cap = dive.night ? 60 : h.bound || h.pleasure >= 85 ? 9 : 3;           // 解けたあとは、遅れを早めに畳む
     // 間引く順：効果音・心の声・目盛り → それでも多ければ、ありふれた行。触れた行（act）は最後まで残す

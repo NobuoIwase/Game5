@@ -8,7 +8,7 @@
     const text = G.Hero.tx(G.Text.bubble(key, Object.assign({ h, run: w.run }, ctx || {})));
     if (!text) return;
     h.bubble = { text, t: 2.6 };
-    if (live(w)) feed(w, "line", "「" + text + "」");
+    if (live(w)) feed(w, "line", (w.duo ? heroName(w) : "") + "「" + text + "」");
   }
   /* 実況：捕まっている間・達した直後は、立ち絵の横に一行ずつ流れる（画面側が間を取って出す） */
   function live(w) { const h = w.run.h; return !!h.bound || h.pleasure >= 85 || w.t - (h.lastClimaxT ?? -99) < 4 || w.t - (h.unboundT ?? -99) < 1.2 || w.t - (h.liveT ?? -99) < 2.5; }
@@ -69,7 +69,7 @@
   function addCloud(w, m, C) { w.clouds.push({ x: m.x, y: m.y, r: C.r, life: C.life, t: 0, power: C.power * (m.pow || 1), name: m.d.name, kind: m.kind }); }
   function logLine(w, text, cls) { w.log.push({ t: w.t, text: G.Hero.tx(text), cls: cls || "" }); if (w.log.length > 60) w.log.shift(); }
   function record(w, ev) {
-    const e = Object.assign({ t: +w.t.toFixed(1), floor: w.floorNo }, ev), h = w.run.h;
+    const e = Object.assign({ t: +w.t.toFixed(1), floor: w.floorNo }, ev, w.duo ? { hero: G.Hero.cur } : {}), h = w.run.h;
     // 本人の記憶に残らない：深い催眠の最中の出来事／忘却の法則（されたという事実ごと奪う）
     if (["hold", "trap", "arouse", "climax", "possess", "attach", "sniff", "salute"].includes(e.kind) && !e.hidden) {
       if ((h.hyp || 0) >= 60 || h.sleep > 0) e.hidden = true;

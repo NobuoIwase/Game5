@@ -32,9 +32,23 @@ var G = (typeof G !== "undefined") ? G : {};
     { struggle: 0.62, pleasure: 1.55, will: 0.6 },
   ];
   // 依頼の本当の脅威度（1 低い／2 並／3 高い）で魔物が強くなる
-  const LV = { 1: { hp: 0.8, pow: 0.85 }, 2: { hp: 1, pow: 1 }, 3: { hp: 1.35, pow: 1.2 } };
+  const LV = { 1: { hp: 0.8, pow: 0.85 }, 2: { hp: 1, pow: 1 }, 3: { hp: 1.35, pow: 1.2 }, 4: { hp: 1.7, pow: 1.4 } };   // 4＝高難度（二人推奨）
 
   /* ================================================================ 世界を作る */
+  // 階に入る時の、ヒロイン一人ぶんの支度（前の階の時刻・座標・目当ては持ち越さない）
+  function floorReset(h, map) {
+    Object.assign(h, {
+      x: map.up.x, y: map.up.y, torn: false, a: Math.PI / 2, vx: 0, vy: 0, face: null, intent: null, label: "探索", think: 0.3,
+      known: {}, bound: null, trance: 0, hyp: 0, dazeT: 0, lureTo: null, slow: 0, glue: 0, cdShot: 0, cdBurst: 0, cdShove: 0,
+      idleMp: 0, bubble: null, decoy: null, possess: null, drawn: null, altar: null, mislead: 0, rest: 0, shrineT: 0, floorT: 0, peekT: 0, peekHold: 0,
+      wantDown: false, stuckT: 0, lastX: map.up.x, lastY: map.up.y, cast: null, dashT: 0, react: {}, dashed: {},
+      strafe: 1, strafeT: 0, search: null, glance: null, idleT: 0, kb: 0, kbA: 0, brakeT: 0, spPrev: 0, goal: null, state: "explore",
+    });
+    Object.assign(h, { freeze: 0, sniff: 0, salute: 0, pray: 0, countGame: null, drawn: null, deny: null, altar: null, dryAt: null, dryMon: null, exitAt: null, waitSaid: false });
+    // 階の時計（w.t）は階ごとに0から。前の階の時刻・座標を持ち越すと、届かない目的地に向かい続けて固まる
+    Object.assign(h, { ignore: {}, peekHold: 0, failN: 0, veilUsed: false, inspT: undefined, fireSpot: null, peekSpot: null, wallHits: 0, _pp: null, convey: null, cdMelee: 0, cdFlash: 0, cdBreak: 0, ifr: 0, thinkT: 0,
+      charmT: {}, anticT: undefined, monoT: undefined, lastEscT: undefined, saluteT: undefined, bcastT: undefined, edgeT: undefined, lastClimaxT: undefined, ringT: undefined, tipT: undefined, spaceAt: null, walled: {}, chestT: null, chestSkip: [], tgt: null, lastStand: false, prayNext: undefined, tranceRun: 0, basinT: null, basinSkip: [], fightT: null, lastDmgT: undefined, clearT: undefined, liveT: undefined, unboundT: undefined, recoverAt: null });
+  }
   function createWorld(run, floorNo) {
     const dg0 = G.DUNGEONS[run.dungeon], dg = run.floors ? Object.assign({}, dg0, { floors: run.floors }) : dg0;   // 階数は依頼の規模で決まる
     const map = M.makeFloor(floorNo, dg.floors);
@@ -45,19 +59,11 @@ var G = (typeof G !== "undefined") ? G : {};
       dir: { spent: 0, cap: G.BAL.floorCost(floorNo), ct: {}, live: 0, auto: !!run.autoDirector, next: 2 },
       scene: null, nextId: 1, log: [], msgs: [], msgGap: {}, feed: [], feedN: 0,
     };
+    floorReset(run.h, map);
+    if (run.pair) floorReset(run.pair.h, map);
     const h = run.h;
-    Object.assign(h, {
-      x: map.up.x, y: map.up.y, torn: false, a: Math.PI / 2, vx: 0, vy: 0, face: null, intent: null, label: "探索", think: 0.3,
-      known: {}, bound: null, trance: 0, hyp: 0, dazeT: 0, lureTo: null, slow: 0, glue: 0, cdShot: 0, cdBurst: 0, cdShove: 0,
-      idleMp: 0, bubble: null, decoy: null, possess: null, drawn: null, altar: null, mislead: 0, rest: 0, shrineT: 0, floorT: 0, peekT: 0, peekHold: 0,
-      wantDown: false, stuckT: 0, lastX: map.up.x, lastY: map.up.y, cast: null, dashT: 0, react: {}, dashed: {},
-      strafe: 1, strafeT: 0, search: null, glance: null, idleT: 0, kb: 0, kbA: 0, brakeT: 0, spPrev: 0, goal: null, state: "explore",
-    });
-    Object.assign(h, { freeze: 0, sniff: 0, salute: 0, pray: 0, countGame: null, drawn: null, deny: null, altar: null, dryAt: null, dryMon: null });
-    // 階の時計（w.t）は階ごとに0から。前の階の時刻・座標を持ち越すと、届かない目的地に向かい続けて固まる
-    Object.assign(h, { ignore: {}, peekHold: 0, failN: 0, veilUsed: false, inspT: undefined, fireSpot: null, peekSpot: null, wallHits: 0, _pp: null, convey: null, cdMelee: 0, cdFlash: 0, cdBreak: 0, ifr: 0, thinkT: 0,
-      charmT: {}, anticT: undefined, monoT: undefined, lastEscT: undefined, saluteT: undefined, bcastT: undefined, edgeT: undefined, lastClimaxT: undefined, ringT: undefined, tipT: undefined, spaceAt: null, walled: {}, chestT: null, chestSkip: [], tgt: null, lastStand: false, prayNext: undefined, tranceRun: 0, basinT: null, basinSkip: [], fightT: null, lastDmgT: undefined, clearT: undefined, liveT: undefined, unboundT: undefined, recoverAt: null });
     map.seen = new Uint8Array(map.W * map.H);
+    if (run.pair) G.F.duoSetup(w);                        // 二人の潜行：二人目を隣に置く
     populate(w);
     msg(w, "floor", { floor: floorNo, dg: run.dungeonName || dg.name });
     if (w.trapFloor) msg(w, "trapFloor", {});
@@ -74,6 +80,14 @@ var G = (typeof G !== "undefined") ? G : {};
     // 迷宮の法則（入口で決まる）
     const law = run.law;
     if (law && floorNo === 1) { msg(w, "law", { law: G.LAWS[law].name }); w.scene = { key: "law", lines: G.Text.lawLines(law, { n: heroName(w) }), mon: null }; }
+    heroFloorIn(w, law, floorNo, dg);
+    if (w.duo) { G.F.duoCtx(w, 1); say(w, "floorIn", { floor: floorNo }); heroFloorIn(w, law, floorNo, dg); if (U.chance(0.5)) say(w, "duoFloor", { p: G.F.duoPartnerName(w) }); G.F.duoCtx(w, 0); }
+    return w;
+  }
+
+  // 入口で効く、ヒロインごとのもの（法則・変生・誓い）
+  function heroFloorIn(w, law, floorNo, dg) {
+    const run = w.run, h = run.h;
     if (law === "eibin") h.sens = Math.min(5, (h.sens || 0) + 1);
     if (law === "hakudatsu" && floorNo >= 2 && !h.exposure) { h.exposure = true; record(w, { kind: "exposure", sev: 2, monName: G.LAWS.hakudatsu.name }); msg(w, "strip", {}); }
     if (law === "kokuin" && floorNo === 1) engraveSigil(w, 1, { kind: "kokuin", d: { name: G.LAWS.kokuin.name } });
@@ -87,9 +101,8 @@ var G = (typeof G !== "undefined") ? G : {};
     if (h.omazuke && h.omazuke.floor && h.omazuke.floor < floorNo) {
       const o = h.omazuke; h.omazuke = null;
       releaseOverflow(w, (o.over || 0) + 40, { kind: "vow", d: { name: "誓いの祭壇" } }, "vow");
-      w.scene = { key: "vowRelease", lines: G.Text.scene("vowRelease", { run, h, n: heroName(w), floor: floorNo }) || [], mon: null };
+      w.scene = w.scene && w.duo ? Object.assign(w.scene, { lines: w.scene.lines.concat(G.Text.scene("vowRelease", { run, h, n: heroName(w), floor: floorNo }) || []) }) : { key: "vowRelease", lines: G.Text.scene("vowRelease", { run, h, n: heroName(w), floor: floorNo }) || [], mon: null };
     }
-    return w;
   }
 
   // 階の初期配置（ランダム生成）。依頼の本当の中身（主な魔物・規模・長）に沿う。コストはかからない
@@ -98,7 +111,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const far = (x, y) => U.dist(x, y, map.up.x, map.up.y) > 6 && U.dist(x, y, map.down.x, map.down.y) > 1.5;
     const pool = dg.fixed.concat(U.chance(0.35) ? [U.pick(dg.free)] : []);
     const scale = [0, 0.75, 1, 1.4][real.scale || 2];
-    const nMon = Math.round((3 + Math.floor(f / 2.5) + (U.chance(0.5) ? 1 : 0)) * scale);
+    const nMon = Math.round((3 + Math.floor(f / 2.5) + (U.chance(0.5) ? 1 : 0)) * scale * (real.level >= 4 ? 1.35 : 1));   // 高難度は数も多い
     for (let i = 0; i < nMon; i++) {
       let id = real.main && !G.MONSTERS[real.main].special && U.chance(real.species ? 0.7 : 0.45) ? real.main : U.pick(pool); const p = M.randomFloor(map, far);
       if (G.MONSTERS[id].deep && f < G.MONSTERS[id].deep) id = U.pick(dg.fixed.filter(k => !G.MONSTERS[k].deep) );   // 深い階にしか出ない魔物（教祖など）

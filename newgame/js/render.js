@@ -362,9 +362,17 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     // 魔物とひかりを、奥（上）から順に
     ctx.imageSmoothingEnabled = true;
-    const ents = w.monsters.filter(m => m.hp > 0).map(m => ({ y: m.y, m })).concat([{ y: h.y, h: true }]);
+    const heroes = w.duo ? [0, 1] : [-1];                // 二人の潜行：二人とも描く（手番を差し替えて）
+    const ents = w.monsters.filter(m => m.hp > 0).map(m => ({ y: m.y, m })).concat(heroes.map(i => ({ y: i < 0 ? h.y : w.duo.hs[i].y, hi: i, h: true })));
     ents.sort((a, b) => a.y - b.y);
-    for (const e of ents) e.h ? drawHikari(ctx, w, X(h.x), Y(h.y), S, ui) : drawMonster(ctx, w, e.m, X(e.m.x), Y(e.m.y), S);
+    for (const e of ents) {
+      if (!e.h) { drawMonster(ctx, w, e.m, X(e.m.x), Y(e.m.y), S); continue; }
+      if (e.hi < 0) { drawHikari(ctx, w, X(h.x), Y(h.y), S, ui); continue; }
+      G.F.duoCtx(w, e.hi); const hh = w.run.h;
+      if (hh.out) { ctx.save(); ctx.translate(X(hh.x), Y(hh.y)); ctx.rotate(-1.2); drawHikari(ctx, w, 0, 0, S, ui); ctx.restore(); drawDownMark(ctx, hh, X(hh.x), Y(hh.y), S); }   // 倒れている：横たわる
+      else drawHikari(ctx, w, X(hh.x), Y(hh.y), S, ui);
+      G.F.duoCtx(w, 0);
+    }
     // 弾
     for (const p of w.projs) {
       const c = p.owner === "h" ? "#fff3b0" : ({ mucus: "#ff9ad0", psy: "#c8a0ff", beam: "#f4c8ff", cold: "#9ff4ff", sigil: "#ff5fa8" }[p.kind] || "#fff");
@@ -421,8 +429,14 @@ var G = (typeof G !== "undefined") ? G : {};
       ctx.fillStyle = g; ctx.fillRect(0, 0, cv.width, cv.height);
     }
     // 吹き出しは明かりの上に
-    if (h.bubble && !ui.night && !ui.liveSay) drawBubble(ctx, h, X(h.x), Y(h.y), S);   // 実況中は、立ち絵の吹き出しで
-    if (h.bound && !ui.night) drawCapture(ctx, w, cv);
+    if (w.duo) {
+      for (let i = 0; i < 2; i++) { const hh = w.duo.hs[i]; if (hh.bubble && !ui.night) drawBubble(ctx, hh, X(hh.x), Y(hh.y), S); }
+      const bi = w.duo.hs.findIndex(x => x.bound);      // 捕まっている方の札
+      if (bi >= 0 && !ui.night) { G.F.duoCtx(w, bi); drawCapture(ctx, w, cv); G.F.duoCtx(w, 0); }
+    } else {
+      if (h.bubble && !ui.night && !ui.liveSay) drawBubble(ctx, h, X(h.x), Y(h.y), S);   // 実況中は、立ち絵の吹き出しで
+      if (h.bound && !ui.night) drawCapture(ctx, w, cv);
+    }
     // カードを選んでいる間は、置けるマスを薄く緑で示す（タッチでは見当がつかないので）。0.4秒ごとに数え直す
     if (ui.card) {
       const key = ui.card + ":" + (ui.night ? 1 : 0), c = w._placeOk;
@@ -529,6 +543,15 @@ var G = (typeof G !== "undefined") ? G : {};
     if (m.summoned) { ctx.strokeStyle = "rgba(255,120,190,0.5)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(x, y + S * 0.28, sh * 0.38, 0, 7); ctx.stroke(); }
   }
 
+  // 倒れて救出を待つ相棒：起こされるまでの輪
+  function drawDownMark(ctx, h, x, y, S) {
+    const p = Math.min(1, (h.out.rescueT || 0) / 2.6);
+    ctx.save(); ctx.strokeStyle = "rgba(255,90,120,0.8)"; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(x, y - S * 0.2, S * 0.7, 0, 7); ctx.stroke();
+    if (p > 0) { ctx.strokeStyle = "#fff2c0"; ctx.beginPath(); ctx.arc(x, y - S * 0.2, S * 0.7, -Math.PI / 2, -Math.PI / 2 + p * Math.PI * 2); ctx.stroke(); }
+    ctx.fillStyle = "#ffd0dc"; ctx.font = `bold ${Math.round(S * 0.3)}px sans-serif`; ctx.textAlign = "center"; ctx.fillText(p > 0 ? "救出中" : "救出を待つ", x, y - S * 1.1);
+    ctx.restore();
+  }
   function drawHikari(ctx, w, x, y, S) {
     const h = w.run.h;
     const im = img(G.Hero.sprite(h, U.dirName(h.a), 1));

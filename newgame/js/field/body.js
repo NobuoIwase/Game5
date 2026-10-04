@@ -240,7 +240,7 @@
   }
   function mult(w, type) {
     const h = w.run.h, prep = G.PREP[w.run.stated];
-    let k = G.HIKARI.resist[h.form][type] || 1;
+    let k = G.heroStats().resist[h.form][type] || 1;
     if (prep) k *= (prep.guard[type] || 1) * (prep.side[type] || 1);
     if (type === "蕩" && h.sigil) k *= 1 + 0.15 * h.sigil;       // 淫紋：刻まれた分だけ、熱が入りやすい
     if (type === "惑" && h.crack) k *= 1 + 0.05 * h.crack;      // 心のヒビ：防護壁の割れた分だけ、惑が通る
@@ -325,7 +325,7 @@
   function untransform(w, src) {
     const h = w.run.h;
     if (h.form !== "magica") return;
-    h.form = "civilian"; h.cast = null; h.noTransform = G.HIKARI.noTransform;
+    h.form = "civilian"; h.cast = null; h.noTransform = G.heroStats().noTransform;
     record(w, { kind: "untransform", type: "削", mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: 3 });
     logLine(w, G.Text.log("untransform", {}), "heavy");
     msg(w, "untransform", {});

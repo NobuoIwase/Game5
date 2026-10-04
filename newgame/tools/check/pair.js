@@ -15,8 +15,9 @@ const r = JSON.parse(vm.runInContext(`(function(){
       while (!w.outcome && t < 120) { w.scene = null; G.Field.step(w, 1 / 30); t += 1 / 30;
         if (!downed && t > 8) { downed = true; G.F.duoCtx(w, 1); G.F.defeat(w, w.monsters.find(m => m.hp > 0) || null); G.F.duoCtx(w, 0); } }
       if (run.events.some(e => e.kind === "duoRescue")) out.rescued++;
-      // 二人とも倒す
-      const m = w.monsters.find(x => x.hp > 0); w.outcome = null; w.scene = null;
+      // 二人とも倒す（倒す相手がもういなければ、一体呼ぶ。囲む魔物のいる夜にするため）
+      if (!w.monsters.some(x => x.hp > 0 && G.Text.actorOf(x.kind))) G.F.spawnMonster(w, "goblin", run.h.x + 0.6, run.h.y, false);
+      const m = w.monsters.find(x => x.hp > 0 && G.Text.actorOf(x.kind)) || w.monsters.find(x => x.hp > 0); w.outcome = null; w.scene = null;
       for (const i of [0, 1]) { G.F.duoCtx(w, i); G.F.defeat(w, m); } G.F.duoCtx(w, 0);
       if (w.outcome === "defeat" && w.scene && w.scene.lines.some(l => /ひ.?かり/.test(l) && /遙/.test(l))) out.bothScene++;
       w.scene = null; G.Field.startNight(w); for (let b = 0; b < 6; b++) G.Field.nightBeat(w);
@@ -31,5 +32,5 @@ const r = JSON.parse(vm.runInContext(`(function(){
   }
   return JSON.stringify(out); })()`, ctx));
 console.log("二人の潜行", JSON.stringify(r));
-const ok = r.errs.length === 0 && r.dives === 3 && r.recB === 3 && r.rescued >= 2 && r.bothScene === 3 && r.nightHeroes === 3 && r.nightMon >= 1 && r.abduct === r.nightMon && r.abductRec === r.nightMon;
+const ok = r.errs.length === 0 && r.dives === 3 && r.recB === 3 && r.rescued >= 2 && r.bothScene === 3 && r.nightHeroes === 3 && r.nightMon >= 2 && r.abduct === r.nightMon && r.abductRec === r.nightMon;
 if (!ok) { console.error("pair FAIL"); process.exitCode = 1; }

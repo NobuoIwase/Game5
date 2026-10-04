@@ -323,9 +323,10 @@ var G = (typeof G !== "undefined") ? G : {};
     const s = sv;
     const has = id => s.ailments.some(a => a.id === id);
     const ail = id => s.ailments.find(a => a.id === id);
+    const hpMul = (G.Hero.cur === "haruka" ? G.HARUKA.hpMul : 1) || 1;   // 遙は、ひかりほど頑丈ではない
     return {
-        lv: s.lv || 1, hpMax: G.GROWTH.hpMax(s.lv || 1) + 3 * (s.shards || 0), mpMax: G.GROWTH.mpMax(s.lv || 1) + 2 * (s.shards || 0), dmgMul: G.GROWTH.dmg(s.lv || 1), skills: (s.equip || []).slice(),
-        hp: Math.round((G.GROWTH.hpMax(s.lv || 1) + 3 * (s.shards || 0)) * (1 - s.fatigue / 250)), mp: G.GROWTH.mpMax(s.lv || 1) + 2 * (s.shards || 0), magic: has("hollow") ? 60 : G.HIKARI.magicMax,
+        lv: s.lv || 1, hpMax: Math.round((G.GROWTH.hpMax(s.lv || 1) + 3 * (s.shards || 0)) * hpMul), mpMax: G.GROWTH.mpMax(s.lv || 1) + 2 * (s.shards || 0), dmgMul: G.GROWTH.dmg(s.lv || 1), skills: (s.equip || []).slice(),
+        hp: Math.round((G.GROWTH.hpMax(s.lv || 1) + 3 * (s.shards || 0)) * hpMul * (1 - s.fatigue / 250)), mp: G.GROWTH.mpMax(s.lv || 1) + 2 * (s.shards || 0), magic: has("hollow") ? 60 : G.HIKARI.magicMax,
         will: Math.round(100 + Math.min(15, s.shards || 0) - s.fatigue / 5 - (has("exhaustion") ? 20 : 0) - 8 * ((s.sequelae || {}).willWear || 0)), arousal: Math.min(70, (has("heat") ? 30 : 0) + (has("impCurse") ? 25 + 5 * Math.min(4, (ail("impCurse") || {}).age || 0) : 0)), pleasure: 0, climax: 0, form: "magica", kit: Object.assign({}, p.kit),
         sigil: has("sigil") ? 1 : 0,
         // 前の潜行から持ち越した状態

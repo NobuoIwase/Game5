@@ -375,6 +375,11 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     // 弾
     for (const p of w.projs) {
+      if (p.kind === "blade") {                     // 飛刃：三日月の斬撃
+        const a = Math.atan2(p.vy, p.vx); ctx.strokeStyle = "#e8f4ff"; ctx.shadowColor = "#bfe0ff"; ctx.shadowBlur = 12; ctx.lineWidth = Math.max(2, S * 0.09);
+        ctx.beginPath(); ctx.arc(X(p.x) - Math.cos(a) * S * 0.25, Y(p.y) - Math.sin(a) * S * 0.25, S * 0.42, a - 1.1, a + 1.1); ctx.stroke(); ctx.shadowBlur = 0;
+        continue;
+      }
       const c = p.owner === "h" ? "#fff3b0" : ({ mucus: "#ff9ad0", psy: "#c8a0ff", beam: "#f4c8ff", cold: "#9ff4ff", sigil: "#ff5fa8" }[p.kind] || "#fff");
       ctx.fillStyle = c; ctx.shadowColor = c; ctx.shadowBlur = 12;
       ctx.beginPath(); ctx.arc(X(p.x), Y(p.y), Math.max(3, p.r * S), 0, 7); ctx.fill();
@@ -564,7 +569,7 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     const H = S * 1.9;
     // 傾き：進む方へ少し、急に止まった時は少しのけぞる。打たれた時は押される
-    const sp = G.HIKARI.spd[h.form], lx = U.clamp((h.vx || 0) / sp, -1, 1);
+    const sp = G.heroStats().spd[h.form], lx = U.clamp((h.vx || 0) / sp, -1, 1);
     h._lean = (h._lean || 0) + (lx * 0.035 - (h.brakeT > 0 ? Math.sign(h._leanDir || 0) * 0.06 * h.brakeT / 0.18 : 0) - (h._lean || 0)) * 0.25;
     if (Math.abs(lx) > 0.2) h._leanDir = Math.sign(lx);
     const shake = h.bound ? Math.sin(w.t * 30) * S * 0.04 : 0;
@@ -605,6 +610,10 @@ var G = (typeof G !== "undefined") ? G : {};
     for (let i = 0; i < (h.attach || []).length; i++) { ctx.fillStyle = "rgba(255,110,170,0.85)"; ctx.beginPath(); ctx.arc(x - S * 0.12 + i * S * 0.09, y - H * 0.58, S * 0.05 + Math.sin(w.t * 9 + i) * S * 0.01, 0, 7); ctx.fill(); }
     if (h.possess) { ctx.fillStyle = `rgba(230,236,255,${0.45 + 0.25 * Math.sin(w.t * 6)})`; ctx.beginPath(); ctx.arc(x - S * 0.22, y - H * 0.55, S * 0.12, 0, 7); ctx.fill(); }
     if (h.bound) { const b = h.bound; ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S, 5); ctx.fillStyle = "#fff0a0"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S * Math.min(1, b.struggle), 5); }
+    if (h.zan > 0.05 && !h.bound) {                 // 遙：居合の溜め（足元の弧が、満ちると白く光る）
+      ctx.save(); ctx.lineWidth = 2.5; ctx.strokeStyle = h.zan >= 1 ? "#ffffff" : "rgba(200,225,255,0.7)"; if (h.zan >= 1) { ctx.shadowColor = "#cfe6ff"; ctx.shadowBlur = 10; }
+      ctx.beginPath(); ctx.arc(x, y + S * 0.38, S * 0.42, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.min(1, h.zan)); ctx.stroke(); ctx.restore();
+    }
     if (h.cast && h.cast.kind === "transform") { ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S, 5); ctx.fillStyle = "#ffd6f0"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S * (1 - h.cast.t / G.HIKARI.transformCast), 5); }
   }
   // 捕まっている間の札（左上）：誰に・何体に・どこまで、快感はどれだけ溜まったか

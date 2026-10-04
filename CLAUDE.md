@@ -99,6 +99,7 @@ Browser test:
 - The modules share functions through `G.F`. Each module pushes a binder into `G.F.bind`, and `step.js` runs them.
 - `step()` = `heroPre` + `updateHikari` + `worldPart` + `heroPost`.
 - Keep the solo path's RNG order stable. `fingerprint.js` is the tripwire.
+- **遙's sword (`blade.js`)**: when `G.Hero.cur === "haruka"`, `hikariThink` hands combat, dodging and casting to `blade.js` (melee slash, 居合 stance, 受け流し parry from `grab()`, in-place sidestep, 飛刃 as a costly technique). Her numbers are `G.HARUKA` in `data.js`; field code reads stats through `G.heroStats()`.
 - **Two-heroine dives (`duo.js`)** re-use the single-heroine code:
   - `ctx(w,i)` swaps `w.run.h`, `w.run.save` and `G.Hero.cur` per turn.
   - Monsters target the heroine holding them, otherwise the nearest standing one.

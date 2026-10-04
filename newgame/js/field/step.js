@@ -75,9 +75,18 @@
   /* ================================================================ 1コマ進める */
   function step(w, dt) {
     if (w.scene || w.outcome) return;
+    if (w.duo) return G.F.duoStep(w, dt);
+    w.t += dt;
+    heroPre(w, dt, true);
+    updateHikari(w, dt);
+    worldPart(w, dt);
+    heroPost(w, dt);
+  }
+  // ヒロイン一人ぶんの、動く前の手当て（glob：階の時計・靄・閉じた扉など、世界に一つのものも進める）
+  function heroPre(w, dt, glob) {
     const h = w.run.h;
-    w.t += dt; h.floorT += dt;
-    for (const k in w.dir.ct) w.dir.ct[k] = Math.max(0, w.dir.ct[k] - dt);
+    h.floorT += dt;
+    if (glob) for (const k in w.dir.ct) w.dir.ct[k] = Math.max(0, w.dir.ct[k] - dt);
     h.cdShot = Math.max(0, h.cdShot - dt); h.cdBurst = Math.max(0, h.cdBurst - dt); h.cdShove = Math.max(0, h.cdShove - dt); h.cdMelee = Math.max(0, (h.cdMelee || 0) - dt);
     h.cdFlash = Math.max(0, (h.cdFlash || 0) - dt); h.cdBreak = Math.max(0, (h.cdBreak || 0) - dt); h.ifr = Math.max(0, (h.ifr || 0) - dt);
     h.slow = Math.max(0, h.slow - dt); h.glue = Math.max(0, h.glue - dt);
@@ -107,8 +116,7 @@
       if (h.altar.t <= 0) { const src = h.altar.src; h.altar = null; engraveSigil(w, h.will > 55 ? 2 : 1, src); }
     }
     // 媚薬の靄
-    for (const c of w.clouds) c.t += dt;
-    w.clouds = w.clouds.filter(c => c.t < c.life);
+    if (glob) { for (const c of w.clouds) c.t += dt; w.clouds = w.clouds.filter(c => c.t < c.life); }
     const cl = w.clouds.find(c => U.dist(c.x, c.y, h.x, h.y) < c.r);
     h.inCloud = !!cl;
     if (cl && !w.outcome) { h.cloudT = (h.cloudT || 0) + dt; if (h.cloudT > 1.2) { h.cloudT = 0; applyEffect(w, "蕩", cl.power, { d: { name: cl.name, type: "蕩" }, kind: cl.kind, x: cl.x, y: cl.y }); msg(w, "cloud", { mon: cl.name }, 5); } }
@@ -142,7 +150,7 @@
     h.pleasure = Math.max(0, h.pleasure - (h.bound ? 0.7 : 2.2 * cool) * (1.3 - 0.9 * h.arousal / 100) * dt);
     if (!h.bound) h.will = Math.min(100, h.will + 1.2 * dt * (1 - h.arousal / 150) * (1 - (h.hyp || 0) / 110) * (sk(w, "breath") ? 1.5 : 1));
     perceive(w);
-    liveliness(w, dt);
+    if (glob) liveliness(w, dt);
     const rm = roomAt(w, h.x, h.y);
     if (rm !== h.room) {
       h.room = rm;
@@ -151,18 +159,22 @@
     }
     for (const tr of w.trapRooms || []) {
       if (!tr.active) continue;
-      tr.t += dt;
-      if (tr.wakeT > 0) { tr.wakeT -= dt; if (tr.wakeT <= 0 && tr.wake) tr.wake(); }
-      if (tr.T.flood) floodTick(w, tr, dt);
+      if (glob) {
+        tr.t += dt;
+        if (tr.wakeT > 0) { tr.wakeT -= dt; if (tr.wakeT <= 0 && tr.wake) tr.wake(); }
+        if (tr.T.flood) floodTick(w, tr, dt);
+      }
       if (tr.T.aura && h.room === tr.r && !w.outcome) { tr.auraT = (tr.auraT || 0) + dt; if (tr.auraT > 1.3) { tr.auraT = 0; applyEffect(w, tr.T.aura[0], tr.T.aura[1], { d: { name: tr.T.name, type: tr.T.aura[0] }, kind: tr.key, x: h.x, y: h.y }); } }
     }
     if (w.sealed) {                               // 扉が閉まっている：部屋から出られない
-      w.sealed.t -= dt;
       const r = w.sealed.room.r;
-      h.x = U.clamp(h.x, r.x + 0.32, r.x + r.w - 0.32); h.y = U.clamp(h.y, r.y + 0.32, r.y + r.h - 0.32);
-      if (w.sealed.t <= 0) { w.sealed = null; msg(w, "unsealed", {}); }
+      if (glob) w.sealed.t -= dt;
+      if (glob || (h.x > r.x - 1 && h.x < r.x + r.w + 1 && h.y > r.y - 1 && h.y < r.y + r.h + 1)) { h.x = U.clamp(h.x, r.x + 0.32, r.x + r.w - 0.32); h.y = U.clamp(h.y, r.y + 0.32, r.y + r.h - 0.32); }
+      if (glob && w.sealed.t <= 0) { w.sealed = null; msg(w, "unsealed", {}); }
     }
-    updateHikari(w, dt);
+  }
+  // 世界に一つのもの：魔物・罠・弾・自動指揮・画面の効果
+  function worldPart(w, dt) {
     for (const m of w.monsters) updateMonster(w, m, dt);
     w.monsters = w.monsters.filter(m => m.hp > 0);
     updateTraps(w, dt);
@@ -170,6 +182,10 @@
     if (w.dir.auto) autoDirect(w, dt);
     for (const f of w.fx) f.t += dt;
     w.fx = w.fx.filter(f => f.t < f.life);
+  }
+  // ヒロイン一人ぶんの、動いた後の手当て（倒れたか・出口・溜めた熱の返り）
+  function heroPost(w, dt) {
+    const h = w.run.h;
     // 古い反応の覚えを捨てる
     if (Math.floor(w.t) !== Math.floor(w.t - dt)) for (const k in h.react) if (w.t - h.react[k].at > 4) { delete h.react[k]; delete h.dashed[k]; }
     if (h.hp <= 0 && !w.outcome) defeat(w, h.bound ? h.bound.src : null);
@@ -191,12 +207,14 @@
 
   /* ================================================================ 観測フェーズ（敗北後の一晩） */
   function startNight(w) {
+    if (w.duo && !w.duoNight) { w.duoNight = true; G.F.duoCtx(w, 1); startNight(w); G.F.duoCtx(w, 0); }   // 二人とも倒れた夜：二人ぶん支度する
     w.night = { beat: 0, spent: 0, beats: [] };
     const h = w.run.h;
     if (h.kinOver || h.omazuke || h.deny || h.pent) { const over = ((h.kinOver || {}).over || 0) + ((h.omazuke || {}).over || 0) + ((h.deny || {}).over || 0) + ((h.pent || {}).over || 0); h.kinOver = h.omazuke = h.deny = h.pent = null; if (over > 0) record(w, { kind: "release", type: "蕩", why: "night", n: 1 + Math.floor(over / 55), sev: 3 }); }
     for (const m of w.monsters) if (m.hp > 0 && m.d.spd > 0 && U.dist(m.x, m.y, h.x, h.y) < 9) { m.alert = 99; }
   }
   function nightBeat(w) {
+    if (w.duo && !w.duoBeat) { w.duoBeat = true; G.F.duoCtx(w, w.night.beat % 2); try { return nightBeat(w); } finally { w.duoBeat = false; G.F.duoCtx(w, 0); } }   // 二人の夜：場面ごとに、責められる方が替わる
     const h = w.run.h, n = w.night;
     for (const k in w.dir.ct) w.dir.ct[k] = 0;      // 夜は一場面ごとに、呼び直せる
     const around = w.monsters.filter(m => m.hp > 0 && (U.dist(m.x, m.y, h.x, h.y) < 9 || m.summoned));
@@ -209,6 +227,7 @@
     group.forEach((m, i) => { const a = i / Math.max(1, group.length) * Math.PI * 2 + U.rf(0, 1); const nx = h.x + Math.cos(a) * 0.7, ny = h.y + Math.sin(a) * 0.7; if (M.walkable(w.map, nx, ny)) { m.x = nx; m.y = ny; } });
     const scene = G.Text.nightParts(beat, { run: w.run, h, n: n.beat, total: G.BAL.nightBeats });
     const lines = scene.head.slice();
+    if (w.duo) { if (n.beat === 0) lines.unshift(G.Pair.nightOpen(beat.monName)); else if (U.chance(0.6)) lines.push(G.Pair.aside(G.Hero.cur)); }   // 二人の夜：相棒の気配
     for (const m of w.monsters) m.bubble = null;
     for (const m of group) { const v = G.Text.voice(m.kind, U.chance(0.5) ? "act" : "climax"); if (v && U.chance(0.7)) { lines.push(/^「/.test(v) ? `${m.d.name}${v}` : `${m.d.name}「${v}」`); m.bubble = { text: v, t: 99 }; } }
     // 何を、どのくらいされたか（夜はもう、直接）
@@ -244,8 +263,10 @@
       lines.push(G.Text.actMsg("nightSum", { mons: mons.join("・"), a: acts, c: cl, top }));
       if (scene.close) lines.push(scene.close);
     }
+    if (w.duo && n.beat === G.BAL.nightBeats - 1) lines.push(G.Pair.nightClose());
     beat.lines = lines;
     n.beats.push(beat);
+    if (w.duo) beat.hero = G.Hero.cur;
     w.run.night.push(beat);
     record(w, { kind: "night", type: beat.type, mon: beat.mon, monName: beat.monName, sev: 3, climax: beat.climax, n: beat.climaxN, acts: beat.acts, hidden: false });
     n.beat++;
@@ -315,7 +336,7 @@
     return out;
   }
 
-  Object.assign(G.F, { dirStat, byPlayer, cardInfo, canPlace, place, autoDirect, step, startNight, nightBeat, statusList });
+  Object.assign(G.F, { heroPre, worldPart, heroPost, dirStat, byPlayer, cardInfo, canPlace, place, autoDirect, step, startNight, nightBeat, statusList });
   G.F.bind.push(() => { ({ U, M, createWorld, enterTrapRoom, spawnMonster, spawnTrap, heroName, say, live, feed, msg, fx, actMsg, record, heat, releaseOverflow, ATTACH, pray, mult, tierFx, sk, crave, applyEffect, untransform, engraveSigil, possess, tickStatus, endPossess, checkClimax, grab, release, actCat, defeat, perceive, roomAt, liveliness, updateHikari, updateMonster, updateTraps, triggerTrap, updateProjs, floodTick, gainShard } = G.F); });
   for (const bind of G.F.bind) bind();
   delete G.F.bind;

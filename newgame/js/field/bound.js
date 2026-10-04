@@ -58,7 +58,7 @@
       const first = part && G.Text.live.hasFirst(part) && !cp.includes(part) ? part : null;
       if (first) e.first = first;
       if (h.bound && h.bound.climaxN > 1) e.chain = h.bound.climaxN;
-      if (first) { cp.push(first); (w.run.firstParts = w.run.firstParts || []).push({ part: first, mon: la ? la.mon : "" }); }
+      if (first) { cp.push(first); (w.run.firstParts = w.run.firstParts || []).push({ part: first, mon: la ? la.mon : "", hero: G.Hero.cur }); }
       const cat = la && la.kind ? G.Text.actorOf(la.kind) : src && src.kind ? G.Text.actorOf(src.kind) : null;
       for (const l of G.Text.live.climax({ chain: h.bound ? h.bound.climaxN : 1, tier: G.tier(w.run.save.body, w.run.save.mind), squirt: (e.squirt = U.chance(trait(w, "squirthabit") ? 0.5 : h.bound && h.bound.climaxN >= 3 ? 0.35 : 0)), part, cat, kind: la ? la.kind : src && src.kind, bound: !!h.bound, mon: la ? la.mon : (src && src.d ? (src.d.holdName || src.d.name) : null), n: heroName(w), firstPart: first })) feed(w, l.cls, l.text);
       feed(w, "pause", "……………………");
@@ -335,10 +335,15 @@
   }
   function defeat(w, src) {
     if (w.outcome) return;
+    if (w.duo && G.F.duoDown(w, src)) return;          // 二人の潜行：相棒が立っていれば、伏して救出を待つ
     record(w, { kind: "defeat", type: src && src.d ? src.d.type : "絡", mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: 3 });
     logLine(w, G.Text.log("defeat", { mon: src && src.d ? src.d.name : "" }), "heavy");
     msg(w, "defeat", {});
     w.outcome = "defeat"; w.defeatBy = src ? src.kind : null;
+    if (w.duo) {                                         // 二人とも倒れた：二人の場面
+      const L = G.Pair.defeat(src && src.kind, src && G.Text.actorOf(src.kind), src && src.d ? src.d.type : "", src && src.d ? src.d.name : "");
+      if (L) { w.scene = { key: "defeat", lines: L, mon: src && src.kind }; return; }
+    }
     openScene(w, "defeat", src);
   }
   function openScene(w, key, src) {

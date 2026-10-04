@@ -181,7 +181,7 @@
 
   function topbar() {
     const tier = G.tier(S.body, S.mind);
-    return `<div class="topbar"><span><b>${S.day}</b>日目</span><span>ギルド資金 <b>◈${S.funds}</b></span><span>澱晶 <b>${S.dark}</b></span>
+    return `<div class="topbar"><span><b>${S.day}</b>日目${(S.half || 1) === 2 ? "・午後" : ""}</span><span>ギルド資金 <b>◈${S.funds}</b></span><span>澱晶 <b>${S.dark}</b></span>
       <span>ギルドの空気 <b>${TAINT_NAME[GM.taintStage(S)]}</b></span><span>${esc(heroShort())} <b>${TIER_NAME[tier]}</b></span><span>信頼 <b>${Math.round(S.trust)}</b></span></div>`;
   }
   function meter(label, v, max, color) {
@@ -215,17 +215,17 @@
       if (S.diveSave && S.diveSave.run) return startDive(S.diveSave);
       S.phase = "prep"; return prepScreen();
     }
-    if (p === "report") return reportScreen();
+    if (p === "report") return S.rec && S.rec.pair ? pairReportScreen() : reportScreen();
     if (p === "lost") return lostScreen();
     if (p === "end") return endScreen();
-    if (p === "audit") return auditScreen();
+    if (p === "audit") return S.rec && S.rec.pair ? pairAuditScreen() : auditScreen();
     if (p === "rereport") return rereportScreen();
     if (p === "clinic") return clinicScreen();
     guild();
   }
 
   /* ================================================================ 監査官室 */
-  const LV_NAME = { 1: "低い", 2: "並", 3: "高い" }, SC_NAME = { 1: "小規模", 2: "中規模", 3: "大規模" };
+  const LV_NAME = { 1: "低い", 2: "並", 3: "高い", 4: "非常に高い" }, SC_NAME = { 1: "小規模", 2: "中規模", 3: "大規模" };
   // 部屋の絵（背景は CSS で描く）。ひかりは扉（右）から入って、机の前に立つ
   function officeHTML(extra) {
     return `<div class="office" id="office">
@@ -260,6 +260,7 @@
       dlg.classList.remove("hidden");
       dn.textContent = l.name || (l.who === "h" ? G.Hero.d.short : l.who === "a" ? "監査官" : "");
       if (l.img) { const oh = document.getElementById("oh"); if (oh) { oh.src = l.img; oh.classList.toggle("bust", /\/portrait\//.test(l.img)); } }
+      if (l.img2) { const o2 = document.getElementById("oh2"); if (o2) o2.src = l.img2; }   // 二人の報告：聞いている方
       dn.style.display = l.who === "n" ? "none" : "";
       dt.dataset.raw = l.raw ? "1" : ""; dn.dataset.raw = l.raw ? "1" : "";        // その人自身の言葉（遙の番の置き換えをしない）
       dt.textContent = l.text; dt.className = l.who === "n" ? "narr" : "";
@@ -279,7 +280,7 @@
   }
   function officeTalk() {
     const T = G.Text, out = [];
-    const last = S.history[S.history.length - 1];
+    const last = S.history.filter(h => !h.hero || h.hero === S.heroine).slice(-1)[0];   // 自分の前回（午前に潜った相棒の件ではなく）
     if (last && last.outcome === "defeat") out.push(T.office("talk.afterDefeat"));
     if (S.ailments.some(a => a.id === "heat")) out.push(T.office("talk.heat"));
     if (S.vessel && U.chance(0.7)) out.unshift(U.pick(G.Hero.SCENES[G.Hero.is("haruka") ? "vesselTalkHaruka" : "vesselTalk"]));
@@ -315,7 +316,7 @@
       <div class="panel" id="status">
         <b>${esc(G.Hero.keep(G.Hero.d.name))}</b> <span class="sub">${esc(G.Hero.keep(G.Hero.is("haruka") ? "ひかりと組む剣士（自称・侍）。紅白の巫女装束に打刀" : "大学生。本業は魔法少女ルミナ（正体を知るのは監査官だけ）"))}</span>
         ${S.vessel ? `<div class="sub" style="color:#ffe7a8">教団の器——冒険者のまま、教えに満たされている（祈りの発作・法悦。教えの者に触れられるほど満ちやすい）</div>` : ""}
-        <div class="row" style="margin:4px 0">${esc("今日潜らせる：")}${GM.HEROES.map(id => { const cap = (S.captured || {})[id], nm = G.Hero.keep(G.Hero.DATA[id].short); return `<button class="${id === S.heroine ? "primary" : ""}" data-hero="${id}" ${cap ? "disabled" : ""}>${esc(nm)}${cap ? esc("（ワルドーに捕らわれている）") : ""}</button>`; }).join("")}</div>
+        <div class="row" style="margin:4px 0">${esc("今日潜らせる：")}${GM.HEROES.map(id => { const cap = (S.captured || {})[id], nm = G.Hero.keep(G.Hero.DATA[id].short); const done = (S.sortied || []).includes(id); return `<button class="${id === S.heroine ? "primary" : ""}" data-hero="${id}" ${cap || done ? "disabled" : ""}>${esc(nm)}${cap ? esc("（ワルドーに捕らわれている）") : done ? esc("（午前に潜った）") : ""}</button>`; }).join("")}</div>
         ${Object.keys(S.captured || {}).length ? `<div class="sub" style="color:var(--red)">${esc(G.Hero.keep(Object.keys(S.captured).map(id => `${G.Hero.DATA[id].name}は、${S.captured[id].day}日目にワルドーの戦闘員にされた。救出の依頼が出ている（支部の最下層で打ち倒せば、取り返せる）`).join("／")))}</div>` : ""}
         ${Object.keys(S.sequelae || {}).length ? `<div class="sub">後遺症（戦闘員にされた回数 ${S.convN || 0}）：${Object.entries(S.sequelae).map(([k, n]) => `<span class="tag" title="${esc(GM.SEQUELAE[k].desc)}">${esc(GM.SEQUELAE[k].name)}${n > 1 ? "×" + n : ""}</span>`).join("")}</div>` : ""}
         <div class="sub">${esc(G.Hero.keep(G.Hero.d.formName))} Lv<b>${S.lv}</b>　次まで ${G.GROWTH.xpNeed(S.lv) - S.xp}　技 ${S.equip.length}/${G.GROWTH.slots(S.lv)}（覚えた ${Object.keys(S.skills).length}/${Object.keys(G.SKILLS).length}）${S.shards ? `　<span style="color:#ffe7a8">星の欠片 ${S.shards}/${G.SHARD_MAX}（体力+${3 * S.shards}・${G.Text.spell("mp")}+${2 * S.shards}・気力+${Math.min(15, S.shards)}）</span>` : ""}</div>
@@ -330,7 +331,7 @@
         <button id="shop">裏の取引（澱晶 ${S.dark}）</button>
         <button id="hist">これまでの記録</button>
         <button id="skill">${esc(ui("skillBtn"))}</button>
-        <button id="rest">休養させる（今日は潜らない）</button>
+        <button id="rest">${(S.half || 1) === 2 ? "午後は出さない（翌日へ）" : "休養させる（今日は潜らない）"}</button>
         <button id="diary">${esc(ui("diaryBtn"))}${(S.diary || []).length && S.diary[S.diary.length - 1].day !== S.diarySeen ? "（新しいページ）" : ""}</button>
         ${saveIOButtons(S)}
       </div>
@@ -367,7 +368,7 @@
     vn(lines, () => {
       hikariIn();
       setTimeout(() => {
-        const talk = [{ who: "h", text: T.office("enter") }].concat(officeTalk().map(t => ({ who: "h", text: t })));
+        const talk = [{ who: "h", text: T.office((S.half || 1) === 2 ? "enterPM" : "enter") }].concat(officeTalk().map(t => ({ who: "h", text: t })));
         if (S.pendingEvent === "silent") { S.pendingEvent = null; talk.push({ who: "h", text: ui("silent")[0] }, { who: "n", text: ui("silent")[1] }); }
         vn(talk, () => { S.greeted = S.day; save(); showMenu(); });
       }, 650);
@@ -420,7 +421,7 @@
         <p class="sub">${esc(ui("reqSub"))}前金は小規模で報酬の3割・中規模で4割・大規模で半分。失敗しても返さない。</p>
         <div class="grid2">${S.requests.map((q, i) => `<div class="card paper ${i === sel ? "sel" : ""}" data-i="${i}">
           <b>${esc(q.title)}</b><div class="sub">${esc(q.place || G.DUNGEONS[q.dungeon].name)}・報酬 ◈${q.reward}（前金 ◈${GM.advanceOf(q)}）</div>
-          <div class="sub">脅威度 ${LV_NAME[q.real.level]}・${SC_NAME[q.real.scale]}（${({ 1: 6, 2: 8, 3: 10 })[q.real.scale]}階）${q.real.boss ? "・長あり" : ""}</div></div>`).join("")}</div>
+          <div class="sub">脅威度 ${LV_NAME[q.real.level]}・${SC_NAME[q.real.scale]}（${({ 1: 6, 2: 8, 3: 10 })[q.real.scale]}階）${q.real.boss ? "・長あり" : ""}${q.hard ? `<br><b style="color:#ffe7a8">二人推奨</b>（一人では、まず戻れない）` : ""}</div></div>`).join("")}</div>
         <div class="panel">
           <h2 style="margin-top:0">書き換える</h2>
           <div class="col">
@@ -454,10 +455,12 @@
     const p = S.pick;
     if (!p || !p.kit) { S.phase = "guild"; return office(); }
     const P = G.PREP[p.stated], T = G.Text;
-    app.innerHTML = topbar() + officeHTML() + `<div class="row hidden" id="hv"><button class="primary" id="go">見送る（潜行へ）</button><button id="deck">デッキを組む</button></div>
+    const mate = GM.canPair(S) ? G.Hero.keep(G.Hero.DATA[S.heroine === "hikari" ? "haruka" : "hikari"].short) : null;
+    app.innerHTML = topbar() + officeHTML() + `<div class="row hidden" id="hv"><button class="primary" id="go">見送る（潜行へ）</button>${mate ? `<button id="goPair">${esc(mate)}も一緒に行かせる（二人で）</button>` : ""}<button id="deck">デッキを組む</button></div>
+      ${mate ? `<p class="sub hidden" id="hvp">二人で潜ると、救い合えるぶん、ずっと楽になる。深い階・強い魔物の依頼（高難度）向き。二人で潜った日は、午後の出撃は無い。</p>` : ""}
       <p class="sub hidden" id="hvn">行き先：${p.dungeon === p.req.dungeon ? esc(p.req.place) + "（" + G.DUNGEONS[p.dungeon].name + "）" : G.DUNGEONS[p.dungeon].name + "（実際の行き先）"}　持ち物：${P.name}、${kitText(p.kit)}（◈${p.kitCost || 0}）</p>`;
     hikariIn();
-    const lv = p.paper.level, readKey = p.paper.boss ? "read.boss" : lv === 1 ? "read.easy" : lv === 3 ? "read.hard" : "read.normal";
+    const lv = p.paper.level, readKey = p.paper.boss ? "read.boss" : lv === 1 ? "read.easy" : lv >= 3 ? "read.hard" : "read.normal";
     const ctx = { title: p.title, mon: G.MONSTERS[p.paper.main].name, prep: P.name, type: p.stated };
     vn([
       { who: "a", text: U.pick(["今日はこれを頼む。", "この依頼を。", "今日の分だ。"]) },
@@ -467,6 +470,13 @@
     ], () => {
       document.getElementById("hv").classList.remove("hidden");
       document.getElementById("hvn").classList.remove("hidden");
+      const hvp = document.getElementById("hvp"); if (hvp) hvp.classList.remove("hidden");
+      on("#goPair", "click", () => {                              // 二人で：相棒も呼んで、並んで見送る
+        document.getElementById("hv").classList.add("hidden");
+        S.pick.pair = true; save();
+        const L = G.Pair.depart(S.heroine).map(([who, id, text]) => ({ who, name: G.Hero.keep(G.Hero.DATA[id].short), raw: true, img: G.Hero.faceOf(id, "04_joyful"), text: G.Hero.keep(text) }));
+        vn(L, () => hikariOut(() => vn([{ who: "n", text: "扉が閉まる。……水晶に、迷宮の入口と、並んで歩く二つの背中が映った。" }], startDive)));
+      });
       on("#deck", "click", () => deckScreen(p.dungeon, handover));
       on("#go", "click", () => {
         document.getElementById("hv").classList.add("hidden");
@@ -492,7 +502,8 @@
     save();
   }
   function startDive(resume) {
-    const run = resume ? Object.assign(resume.run, { save: S }) : GM.startDive(S);
+    const run = resume ? Object.assign(resume.run, { save: S }) : GM.startDive(S, { pair: !!(S.pick && S.pick.pair) });
+    if (resume && run.pair) run.pair.save = GM.pview(S, run.pair.id);   // 二人の潜行：相棒の記録の窓を、作り直す
     if (resume) { delete S.diveSave; toast(resume.night ? "敗北した夜から再開" : `${run.floor}階の入口から再開`); }
     save();
     dive = { run, w: null, cam: { x: 0, y: 0, scale: 40 }, card: null, hover: null, speed: S.speed || 1, whole: false, last: 0, acc: 0, trans: 0, raf: 0 };
@@ -569,7 +580,8 @@
     else {
       const base = Math.max(26, Math.min(cv.width / 12, cv.height / 9)), want = base * (w.run.h.bound ? 1.6 : 1);   // 捕まっている間は、寄って見せる
       dive.zoom = (dive.zoom || base) + (want - (dive.zoom || base)) * Math.min(1, dt * 3); dive.cam.scale = dive.zoom;
-      dive.cam.x += (w.run.h.x - dive.cam.x) * Math.min(1, dt * 4); dive.cam.y += (w.run.h.y + (dive.liveOn ? cv.height * 0.12 / dive.cam.scale : 0) - dive.cam.y) * Math.min(1, dt * 4);   // 実況の間は、ひかりを上へ寄せる
+      const fh = w.duo ? { x: (w.duo.hs[0].x + w.duo.hs[1].x) / 2, y: (w.duo.hs[0].y + w.duo.hs[1].y) / 2 } : w.run.h;   // 二人の潜行：二人の間を映す
+      dive.cam.x += (fh.x - dive.cam.x) * Math.min(1, dt * 4); dive.cam.y += (fh.y + (dive.liveOn ? cv.height * 0.12 / dive.cam.scale : 0) - dive.cam.y) * Math.min(1, dt * 4);   // 実況の間は、ひかりを上へ寄せる
     }
     G.Render.draw(cv.getContext("2d"), w, dive.cam, { hover: dive.hover, card: dive.card, night: !!dive.night, liveSay: !!dive.liveOn });
     const ov = document.getElementById("ov");
@@ -590,9 +602,13 @@
     const hud = document.getElementById("hud");
     if (hud && (!dive.hudT || performance.now() - dive.hudT > 120)) {
       dive.hudT = performance.now();
-      hud.innerHTML = meter("体力", h.hp, h.hpMax || 100, "#8fe0a0") + meter(G.Text.spell("mp"), h.mp, h.mpMax || 60, "#6fc2ff") + meter(G.Text.spell("magic"), h.magic, 100, "#ffd6f0") +
+      const one = h => meter("体力", h.hp, h.hpMax || 100, "#8fe0a0") + meter(G.Text.spell("mp"), h.mp, h.mpMax || 60, "#6fc2ff") + meter(G.Text.spell("magic"), h.magic, 100, "#ffd6f0") +
         meter("気力", h.will, 100, "#f2d27a") + meter("発情", h.arousal, 100, "#ff7fb0") + meter("快感", Math.min(100, h.pleasure), 100, "#ff4f9a") +
-        `<div class="sub">Lv${h.lv || 1}　絶頂 ${h.climax}　持ち物：${kitText(h.kit)}</div>` + (h.skills && h.skills.length ? `<div class="sub">技：${h.skills.map(id => G.skillName(id)).join("・")}</div>` : "") + equipHTML(h.form, G.PREP[dive.run.stated] && G.PREP[dive.run.stated].name);
+        `<div class="sub">Lv${h.lv || 1}　絶頂 ${h.climax}　持ち物：${kitText(h.kit)}</div>` + (h.skills && h.skills.length ? `<div class="sub">技：${h.skills.map(id => G.skillName(id)).join("・")}</div>` : "");
+      if (w.duo) {                                         // 二人の潜行：二人ぶん並べる
+        hud.innerHTML = `<div class="grid2">${[0, 1].map(i => { G.F.duoCtx(w, i); const hh = w.run.h; const t = `<div><b>${esc(heroShort())}</b>${hh.out ? ` <span style="color:var(--red)">倒れている（救出を待つ）</span>` : hh.bound ? ` <span style="color:var(--pink)">捕まっている</span>` : ""}${one(hh)}</div>`; return t; }).join("")}</div>`;
+        G.F.duoCtx(w, 0);
+      } else hud.innerHTML = one(h) + equipHTML(h.form, G.PREP[dive.run.stated] && G.PREP[dive.run.stated].name);
       const chips = document.getElementById("chips");
       if (chips) {
         const st = G.Field.statusList(w);
@@ -638,6 +654,11 @@
   const LIVE_KEEP = /cx|first|scene|build|pause|after|recover|mine/;
   function liveGap(cls) { let g = 0; for (const k of cls.split(" ")) if (LIVE_GAP[k]) g = Math.max(g, LIVE_GAP[k]); return (g || 700) / (1 + 0.35 * ((dive.speed || 1) - 1)); }
   function drawLive(w, now) {
+    if (w.duo && !dive.liveCtx) {                        // 二人の潜行：捕まっている方・達したばかりの方を、立ち絵に出す
+      const hs = w.duo.hs, i = hs.findIndex(x => x.bound || x.out || w.t - (x.lastClimaxT ?? -99) < 4);
+      dive.liveCtx = true; G.F.duoCtx(w, i < 0 ? 0 : i);
+      try { return drawLive(w, now); } finally { dive.liveCtx = false; G.F.duoCtx(w, 0); }
+    }
     const el = document.getElementById("live"); if (!el) return;
     const h = w.run.h, q = dive.lq;
     for (const f of w.feed) if (f.id > dive.feedId) { dive.feedId = f.id; q.push({ cls: f.cls, text: f.text }); }
@@ -817,6 +838,7 @@
   }
   // 帰還：監査官室に戻ってくる
   function returnScene(outcome) {
+    if (S.rec && S.rec.pair) return pairReturnScene(outcome);
     app.innerHTML = topbar() + officeHTML();
     const T = G.Text;
     const back = T.office("back." + (outcome || "retreat"));
@@ -834,7 +856,7 @@
   function faceIn(k) { const oh = document.getElementById("oh"); if (!oh || S.vessel) return; oh.src = G.Hero.faceImg(k); oh.classList.add("bust"); }
   function transcriptAdd(l) {
     const box = document.getElementById("tr"); if (!box) return;
-    const who = { h: G.Hero.d.short, a: "監査官", n: "" }[l.who];
+    const who = l.name && l.who === "h" ? l.name : { h: G.Hero.d.short, a: "監査官", n: "" }[l.who];
     box.insertAdjacentHTML("beforeend", `<div class="speech ${l.who}${l.lie ? " lie" : ""}">${who ? `<span class="who">${who}</span>` : ""}${esc(l.text)}</div>`);
   }
   function reportScreen() {
@@ -861,8 +883,93 @@
     });
   }
 
+  /* ================================================================ 二人の報告（同じ席で、二人そろって聞く） */
+  const mateOf = () => (S.heroine === "hikari" ? "haruka" : "hikari");
+  const asHero = (id, fn) => { const cur = G.Hero.cur; G.Hero.set(id); try { return fn(); } finally { G.Hero.set(cur); } };
+  const shortOf = id => G.Hero.keep(G.Hero.DATA[id].short);
+  // 一行に、話し手の名前と顔、聞き手の顔を付ける
+  function pairLine(l, id, rec, sv) {
+    const o = Object.assign({}, l, { onShow: transcriptAdd });
+    if (l.who === "h") { o.name = shortOf(id); const f = asHero(id, () => G.Hero.face(l, rec, sv)); if (f) o.img = f; o.img2 = G.Hero.faceOf(id === "hikari" ? "haruka" : "hikari", "06_downcast_eyes"); }
+    return o;
+  }
+  function pairReturnScene(outcome) {
+    const o = mateOf();
+    app.innerHTML = topbar() + officeHTML(`<img class="o-mate" id="oh2" src="${G.Hero.faceOf(o, "06_downcast_eyes")}" alt="">`);
+    document.getElementById("office").classList.add("pair");
+    vn([{ who: "n", text: G.Hero.keep(G.Pair.back(outcome || "retreat")) }], () => { hikariIn(G.Hero.faceOf(S.heroine, "06_downcast_eyes")); setTimeout(pairReportScreen, 500); });
+  }
+  // 相棒の口添え：話の中身で選ぶ
+  function chimeKind(rec) {
+    const units = rec.units || [];
+    if ((rec.report || []).some(l => l.lie) && U.chance(0.55)) return "honest";
+    if (rec.outcome === "defeat") return U.pick(["worry", "cover"]);
+    if (units.some(u => u.climax)) return U.pick(["blush", "tease", "worry"]);
+    return U.pick(["tease", "worry", "cover"]);
+  }
+  function pairReportScreen() {
+    const recA = S.rec, a = S.heroine, b = mateOf(), vb = GM.pview(S, b), recB = S.duoRec;
+    if (!recA || !recB) { S.phase = "guild"; return guild(); }
+    app.innerHTML = topbar() + officeHTML(`<img class="o-mate" id="oh2" src="${G.Hero.faceOf(b, "06_downcast_eyes")}" alt="">`) + `
+      <div class="panel sub" id="rinfo"><b>口頭報告（二人）</b>　${esc(recA.dungeonName)}・${recA.floorReached}階まで・${OUTC[recA.outcome]}　${esc(shortOf(a))}の話し方：${esc(recA.postureName)}／${esc(shortOf(b))}の話し方：${esc(recB.postureName)}
+        <br><span class="dim">二人が同じ席で話す。片方の話の間、もう片方は隣で聞いていて、終わると口を挟む。追及・記録の突きつけは、二人のどちらの件にも使える。</span></div>
+      <div class="row hidden" id="rdone"><button class="primary" id="todoc">報告書を二通受け取る</button></div>
+      <details class="panel" id="trp"><summary>ここまでの話（書き起こし）</summary><div id="tr"></div></details>`;
+    document.getElementById("office").classList.add("pair");
+    hikariIn(G.Hero.faceOf(a, "06_downcast_eyes"));
+    // 前に出ている子の件：いつもどおり。相棒の件：前後を入れ替えてから問う
+    const probeA = (l, ev) => { const r = G.Report.probe(recA, l, S, ev); save(); return r.lines.map(x => pairLine(x, a, recA, S)); };
+    const probeB = (l, ev) => { GM.pairFlip(S); try { const r = G.Report.probe(recB, l, S, ev); return r.lines.map(x => pairLine(x, b, recB, vb)); } finally { GM.pairFlip(S); save(); } };
+    const withChoices = (l, id, rec, sv, probe) => {
+      const o = pairLine(l, id, rec, sv);
+      if (l.probe && l.who === "h") o.choices = [
+        { label: "追及する", cls: "danger", fn: () => probe(l, false) },
+        ...(l.unit ? [{ label: "記録を突きつける", fn: () => probe(l, true) }] : []),
+        { label: "流す", fn: () => [] },
+      ];
+      return o;
+    };
+    const chime = (who, about) => { const t = G.Pair.chime(who, chimeKind(about)); return t ? [{ who: "h", name: shortOf(who), raw: true, text: t, img: G.Hero.faceOf(who, "05_embarrassed"), img2: G.Hero.faceOf(who === a ? b : a, "06_downcast_eyes"), onShow: transcriptAdd }] : []; };
+    const seq = [{ who: "a", text: U.pick(["二人とも、座れ。……先に、" + shortOf(a) + "から聞く。", "並んで座れ。順に聞く。まず、" + shortOf(a) + "。"]) }]
+      .concat(recA.report.map(l => withChoices(l, a, recA, S, probeA)))
+      .concat(chime(b, recA))
+      .concat([{ who: "a", text: "次。" + shortOf(b) + "。" }])
+      .concat(recB.report.map(l => withChoices(l, b, recB, vb, probeB)))
+      .concat(chime(a, recB));
+    vn(seq, () => {
+      document.getElementById("rdone").classList.remove("hidden");
+      on("#todoc", "click", () => {
+        if (!recA.docWritten) GM.writeDoc(S);
+        if (!recB.docWritten) { GM.pairFlip(S); GM.writeDoc(S); GM.pairFlip(S); }
+        S.phase = "audit"; save(); pairAuditScreen();
+      });
+    });
+  }
+  // 書面は二通。並べて、嘘だと思う行に印を付ける
+  function pairAuditScreen() {
+    const recA = S.rec, a = S.heroine, b = mateOf(), recB = S.duoRec;
+    const fA = new Set(), fB = new Set();
+    const draw = keep(() => {
+      app.innerHTML = topbar() + `<h1>報告書の監査（二通）</h1>
+        <p class="sub">二人それぞれが書いて出した報告書。水晶の監視記録と見比べ、嘘だと思う行に印を付けて、二通まとめて確定する（一日一度きり）。</p>
+        <div class="grid2"><div>${docSheet(recA, fA, false, 0)}<details class="panel"><summary>${esc(shortOf(a))}の監視記録</summary><div class="monitor">${recA.monitor.map(esc).join("<br>") || "（記録なし）"}</div></details></div>
+        <div>${asHero(b, () => docSheet(recB, fB, false, 1))}<details class="panel"><summary>${esc(shortOf(b))}の監視記録</summary><div class="monitor">${recB.monitor.map(esc).join("<br>") || "（記録なし）"}</div></details></div></div>
+        <div class="row"><button class="primary" id="ok">この印で確定</button></div>`;
+      on(".ds-line", "click", e => { const i = +e.currentTarget.dataset.i, d = +e.currentTarget.dataset.d, rec = d ? recB : recA, f = d ? fB : fA; if (rec.doc[i].fixed) return; f.has(i) ? f.delete(i) : f.add(i); draw(); });
+      on("#ok", "click", () => {
+        const rA = GM.audit(S, [...fA]);
+        GM.pairFlip(S); const rB = GM.audit(S, [...fB]); GM.pairFlip(S);
+        S.pairRe = [rA.caught.length ? a : null, rB.caught.length ? b : null].filter(Boolean);
+        S.pairLead = a; S.phase = "clinic"; save();
+        const line = (id, r) => `<p>${esc(shortOf(id))}：摘発 <b>${r.caught.length}</b> ／ 誤った指摘 <b>${r.wrong.length}</b> ／ 見逃し <b>${r.missed.length}</b></p>`;
+        modal(line(a, rA) + line(b, rB) + `<div class="row"><button class="primary" id="ok2">${S.pairRe.length ? "呼び戻して、問いただす" : "一日を終える"}</button></div>`, m => m.querySelector("#ok2").onclick = () => { closeModal(); clinicScreen(); });
+      });
+    });
+    draw();
+  }
+
   /* ================================================================ 報告書（書面。記録に残るので、ここでまた嘘を書く） */
-  function docSheet(rec, flags, stamp) {
+  function docSheet(rec, flags, stamp, sheet) {
     const req = (S.pick && S.pick.title) || "";
     return `<div class="docsheet">
       <div class="ds-head"><span class="ds-guild">冒険者ギルド　迷宮監査課</span><span class="ds-no">第 ${rec.day} 号</span></div>
@@ -871,7 +978,7 @@
         <tr><th>依頼</th><td colspan="3">${esc(req)}</td></tr>
         <tr><th>行き先</th><td>${esc(rec.dungeonName)}</td><th>結果</th><td>${rec.floorReached}階・${OUTC[rec.outcome]}</td></tr></table>
       <div class="ds-sec">経過</div>
-      ${rec.doc.map((d, i) => `<div class="doc-line ds-line ${flags.has(i) ? "flag" : ""} ${d.fixed ? "fixed" : ""}" data-i="${i}"><span class="ds-n">${i + 1}.</span><span class="ds-t">${esc(d.text)}</span><span class="mark">${flags.has(i) ? "虚" : ""}</span></div>`).join("")}
+      ${rec.doc.map((d, i) => `<div class="doc-line ds-line ${flags.has(i) ? "flag" : ""} ${d.fixed ? "fixed" : ""}" data-i="${i}" data-d="${sheet || 0}"><span class="ds-n">${i + 1}.</span><span class="ds-t">${esc(d.text)}</span><span class="mark">${flags.has(i) ? "虚" : ""}</span></div>`).join("")}
       <div class="ds-foot"><span>上記のとおり、相違ないことを報告します。</span><span class="ds-sign">${esc(G.Hero.keep(ui("docSign")))}<i class="hanko">${esc(G.Hero.keep(ui("hanko")))}</i></span></div>
       ${stamp ? `<div class="ds-stamp">受理</div>` : ""}
     </div>`;
@@ -942,6 +1049,13 @@
 
   /* ================================================================ 処置 */
   function clinicScreen() {
+    if (S.pairRe && S.pairRe.length) {                    // 二人の日：嘘のあった方から順に、呼び戻して問いただす
+      const id = S.pairRe.shift();
+      if (id !== S.heroine) GM.pairFlip(S);
+      S.phase = "rereport"; save(); return rereportScreen();
+    }
+    if (S.pairLead && S.heroine !== S.pairLead) GM.pairFlip(S);   // 処置は、前に出ていた子の側から
+    if (S.duoRec) return pairClinicScreen();
     S.phase = "clinic"; save();
     // 初めは、払える分だけ選んでおく（安いものから）
     const sel = new Set(); { let left = S.funds; for (const a of S.ailments.filter(x => !GM.NATURAL.includes(x.id)).sort((x, y) => GM.AILMENTS[x.id].fee - GM.AILMENTS[y.id].fee)) { const f = GM.AILMENTS[a.id].fee; if (f <= left) { sel.add(a.id); left -= f; } } }
@@ -952,11 +1066,42 @@
         ${g ? `<div class="panel sub">今日の変化：肉体 +${g.body}　精神 +${g.mind}　ギルド資金 ${g.funds >= 0 ? "+" : ""}${g.funds}${g.pay ? `（前金 ${g.pay.advance}${g.pay.rest ? "・踏破 " + g.pay.rest : ""}${g.pay.bounty ? "・討伐 " + g.pay.bounty : ""}）` : ""}　澱晶 +${g.dark}${S.rec.forged ? `　違和感 +${g.sus}` : ""}</div>` : ""}
         <div class="panel">${S.ailments.length ? S.ailments.map(a => { const A = GM.ail(a.id); return `<label class="doc-line"><input type="checkbox" data-id="${a.id}" ${sel.has(a.id) ? "checked" : ""}> <span><b>${esc(GM.ailmentName(a))}</b>${A.kink ? "（深層処置）" : ""}${GM.NATURAL.includes(a.id) ? '<span class="sub">（一晩で引く）</span>' : ""}　◈${A.fee}<br><span class="sub">${A.note}</span></span></label>`; }).join("") : `<p class="sub">状態異常はない。</p>`}
           <p class="sub">処置しないで残すと、日ごとに根を張って重くなり（感度・紋・魅了・欲求などが深まる）、堕ちも少し進む。ギルドの空気も澱む。発情・汚れ・衣装の破れ・疲れ・痺れ・疼きは、一晩で自然に引く。</p></div>
-        <div class="row"><button class="primary" id="ok" ${fee > S.funds ? "disabled" : ""}>${sel.size ? `処置して（◈${fee}）` : "このまま"}翌日へ</button>${fee > S.funds ? `<span class="sub" style="color:var(--red)">資金が足りない（◈${S.funds}）。選び直す</span>` : ""}</div>`;
+        <div class="row"><button class="primary" id="ok" ${fee > S.funds ? "disabled" : ""}>${sel.size ? `処置して（◈${fee}）` : "このまま"}翌日へ</button>${GM.canSecond(S) ? `<button id="ok2nd" ${fee > S.funds ? "disabled" : ""}>${sel.size ? `処置して` : "このまま"}、午後は${esc(G.Hero.keep(G.Hero.DATA[S.heroine === "hikari" ? "haruka" : "hikari"].short))}を出す</button>` : ""}${fee > S.funds ? `<span class="sub" style="color:var(--red)">資金が足りない（◈${S.funds}）。選び直す</span>` : ""}</div>`;
       on("input[type=checkbox]", "change", e => { e.target.checked ? sel.add(e.target.dataset.id) : sel.delete(e.target.dataset.id); draw(); });
       on("#ok", "click", () => {
         if (fee > S.funds) return toast("ギルド資金が足りない");
         GM.treat(S, [...sel]); GM.endDay(S); save(); guild();
+      });
+      on("#ok2nd", "click", () => {
+        if (fee > S.funds) return toast("ギルド資金が足りない");
+        GM.treat(S, [...sel]); GM.secondSortie(S); save(); guild();
+      });
+    });
+    draw();
+  }
+
+  // 二人の日の処置：二人ぶんの状態異常を、一つの画面で
+  function pairClinicScreen() {
+    S.phase = "clinic"; save();
+    const a = S.heroine, b = mateOf(), vb = GM.pview(S, b);
+    const who = [[a, S, "A"], [b, vb, "B"]];
+    const sel = { A: new Set(), B: new Set() };
+    { let left = S.funds; for (const [, sv, k] of who) for (const x of sv.ailments.filter(x => !GM.NATURAL.includes(x.id)).sort((p, q) => GM.AILMENTS[p.id].fee - GM.AILMENTS[q.id].fee)) { const f = GM.AILMENTS[x.id].fee; if (f <= left) { sel[k].add(x.id); left -= f; } } }
+    const draw = keep(() => {
+      const fee = ["A", "B"].reduce((t, k) => t + [...sel[k]].reduce((u, id) => u + GM.AILMENTS[id].fee, 0), 0);
+      const g = S.rec ? S.rec.gain : null;
+      const block = ([id, sv, k]) => `<div class="panel"><b>${esc(shortOf(id))}</b>${sv.ailments.length ? asHero(id, () => sv.ailments.map(x => { const A = GM.ail(x.id); return `<label class="doc-line"><input type="checkbox" data-k="${k}" data-id="${x.id}" ${sel[k].has(x.id) ? "checked" : ""}> <span><b>${esc(GM.ailmentName(x))}</b>${A.kink ? "（深層処置）" : ""}${GM.NATURAL.includes(x.id) ? '<span class="sub">（一晩で引く）</span>' : ""}　◈${A.fee}<br><span class="sub">${A.note}</span></span></label>`; }).join("")) : `<p class="sub">状態異常はない。</p>`}</div>`;
+      app.innerHTML = topbar() + `<h1>一日の終わり（処置・二人）</h1>
+        ${g ? `<div class="panel sub">今日の報酬：ギルド資金 ${g.funds >= 0 ? "+" : ""}${g.funds}（二人で一つの依頼）　澱晶 +${g.dark + ((S.duoRec && S.duoRec.gain) ? S.duoRec.gain.dark : 0)}</div>` : ""}
+        <div class="grid2">${who.map(block).join("")}</div>
+        <p class="sub">処置しないで残すと、日ごとに根を張って重くなる。発情・汚れ・衣装の破れ・疲れ・痺れ・疼きは、一晩で自然に引く。</p>
+        <div class="row"><button class="primary" id="ok" ${fee > S.funds ? "disabled" : ""}>${fee ? `処置して（◈${fee}）` : "このまま"}翌日へ</button>${fee > S.funds ? `<span class="sub" style="color:var(--red)">資金が足りない（◈${S.funds}）。選び直す</span>` : ""}</div>`;
+      on("input[type=checkbox]", "change", e => { const k = e.target.dataset.k, id = e.target.dataset.id; e.target.checked ? sel[k].add(id) : sel[k].delete(id); draw(); });
+      on("#ok", "click", () => {
+        if (fee > S.funds) return toast("ギルド資金が足りない");
+        GM.treat(S, [...sel.A]); GM.treat(vb, [...sel.B]);
+        delete S.pairLead; delete S.pairRe;
+        GM.endDay(S); save(); guild();
       });
     });
     draw();
@@ -1037,7 +1182,7 @@
 
   function historyScreen() {
     const O = { cleared: "踏破", retreat: "撤退", ordered: "勧告", defeat: "敗北" };
-    app.innerHTML = topbar() + `<h1>これまでの記録</h1><div class="panel">${S.history.slice().reverse().map(h => `<div class="doc-line fixed"><span>${h.day}日目</span><span>${G.DUNGEONS[h.dungeon].name}・${O[h.outcome]}（${h.floor}階）　依頼書 ${tag(h.stated)}${h.forged ? " 偽装" : ""}　絶頂 ${h.climax}　${esc(h.posture || "")}</span></div>`).join("") || "<p class='sub'>まだ無い</p>"}</div>
+    app.innerHTML = topbar() + `<h1>これまでの記録</h1><div class="panel">${S.history.slice().reverse().map(h => `<div class="doc-line fixed"><span>${h.day}日目${h.half === 2 ? "午後" : ""}</span><span>${h.pair ? "二人で・" : h.hero ? esc(G.Hero.keep(G.Hero.DATA[h.hero].short)) + "・" : ""}${G.DUNGEONS[h.dungeon].name}・${O[h.outcome]}（${h.floor}階）　依頼書 ${tag(h.stated)}${h.forged ? " 偽装" : ""}　絶頂 ${h.climax}　${esc(h.posture || "")}</span></div>`).join("") || "<p class='sub'>まだ無い</p>"}</div>
       ${S.log.length ? `<div class="panel sub">${S.log.slice(-10).map(l => `${l.day}日目：${esc(l.text)}`).join("<br>")}</div>` : ""}
       <div class="row"><button id="back">戻る</button><button id="reset" class="danger" style="margin-left:auto;opacity:0.8">セーブを消す</button></div>`;
     on("#back", "click", guild);

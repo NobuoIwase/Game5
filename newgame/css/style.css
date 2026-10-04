@@ -83,6 +83,9 @@ h1 { font-size: 20px; margin: 4px 0 8px; } h2 { font-size: 16px; margin: 18px 0 
 .o-lamp { position: absolute; left: 12%; top: -34px; width: 34px; height: 34px; border-radius: 50% 50% 4px 4px; background: radial-gradient(#fff2c0, #d8a040 60%, #8a5a20); box-shadow: 0 0 40px 14px rgba(255,200,120,0.25); }
 .o-hikari { position: absolute; left: 50%; bottom: 22%; height: 62%; width: auto; transform: translateX(-50%); z-index: 2; transition: left .9s ease, opacity .6s ease; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); }
 .o-hikari.out { left: 86%; opacity: 0; }
+.office.pair .o-hikari { left: 64%; }
+.o-mate { position: absolute; left: 24%; bottom: 6%; height: 84%; width: auto; transform: translateX(-50%); z-index: 1; filter: brightness(0.72) drop-shadow(0 4px 6px rgba(0,0,0,0.5)); transition: filter .4s ease; }
+.office.small .o-mate { height: 92%; bottom: 0; }
 .o-hikari.leave { left: 88%; opacity: 0; transition: left .9s ease-in, opacity .9s ease-in; }
 .o-dialog { position: absolute; left: 3%; right: 3%; bottom: 4%; z-index: 5; background: rgba(12,10,20,0.92); border: 2px solid #eee; border-radius: 8px; padding: 10px 14px 12px; min-height: 64px; cursor: pointer; }
 .o-dialog p { margin: 0; } .o-dialog p.narr { color: var(--sub); }

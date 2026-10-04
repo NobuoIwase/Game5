@@ -134,7 +134,7 @@ var G = (typeof G !== "undefined") ? G : {};
   // 今日、潜らせるヒロインを替える：いまの記録をしまい、相手の記録を出す
   function swapHero(s, id) {
     const cur = s.heroine || "hikari";
-    if (id === cur || !HEROES.includes(id) || (s.captured || {})[id]) return false;      // 捕らわれている方は、潜らせられない
+    if (id === cur || !HEROES.includes(id) || (s.captured || {})[id] || (s.sortied || []).includes(id)) return false;   // 午前に潜った方は、午後にもう一度は出せない      // 捕らわれている方は、潜らせられない
     s.archive = s.archive || {};
     const keep = {}; for (const k of PERSONAL) keep[k] = s[k];
     const next = s.archive[id] || freshPersonal();
@@ -236,6 +236,13 @@ var G = (typeof G !== "undefined") ? G : {};
       out.push({ id: s.day + ":" + k, dungeon: k, real, place: placeName(k, real.species), title: requestTitle(real), stated: G.MONSTERS[real.main].type,
                  reward: Math.round((26 + real.level * 8 + real.scale * 4 + (real.boss ? 14 : 0)) * [0, 0.6, 0.82, 1][real.scale]) });   // 小さい依頼ほど、報酬は少ない
     }
+    // 高難度の依頼（二人推奨）：一日に一、二枚。深く、強く、長がいる。報酬も大きい
+    const nHard = s.day >= 2 ? (U.chance(0.4) ? 2 : 1) : 0;
+    for (const k of U.shuffle(keys.filter(k => !G.DUNGEONS[k].hidden && k !== "waldo")).slice(0, nHard)) {
+      const dg = G.DUNGEONS[k];
+      const real = { main: U.pick(dg.fixed.filter(x => G.MONSTERS[x].type !== "削")), level: 4, scale: 3, boss: true, verb: U.pick(VERB), hard: true };
+      out.push({ id: s.day + ":hard:" + k, dungeon: k, real, hard: true, place: placeName(k, null), title: "【高難度】" + requestTitle(Object.assign({}, real, { level: 3 })), stated: G.MONSTERS[real.main].type, reward: 120 + U.ri(0, 4) * 10 });
+    }
     // 相棒がワルドーに捕らわれている：救出の依頼（支部の最下層に、戦闘員にされた相棒がいる）
     for (const id in s.captured || {}) {
       if (id === (s.heroine || "hikari")) continue;
@@ -311,20 +318,12 @@ var G = (typeof G !== "undefined") ? G : {};
   }
 
   /* ================================================================ 潜行 */
-  function startDive(s) {
-    syncHero(s);
-    const p = s.pick;
+  // 潜るヒロインの、潜行中の身体（ヒロインごとの記録 sv から）
+  function heroOf(sv, p) {
+    const s = sv;
     const has = id => s.ailments.some(a => a.id === id);
     const ail = id => s.ailments.find(a => a.id === id);
-    // 迷宮の法則：入口で決まる。無い日もある（ワルドーの支部には無い）
-    const law = p.dungeon !== "waldo" && p.dungeon !== "strobe" && U.chance(0.45) ? U.pick(Object.keys(G.LAWS)) : null;
-    const run = {
-      day: s.day, dungeon: p.dungeon, stated: p.stated, realType: G.DUNGEONS[p.dungeon].type, forged: p.forged,
-      real: p.real, paper: p.paper, caution: p.caution || 1, forgeSize: p.forgeSize || 0,
-      dungeonName: p.dungeon === p.req.dungeon ? p.req.place + "（" + G.DUNGEONS[p.dungeon].name + "）" : placeName(p.dungeon, null),
-      events: [], night: [], deck: deckFor(s, p.dungeon), maxLive: G.BAL.maxLive + s.upgrades.live,
-      autoDirector: s.autoDirector, save: s, recall: false, floor: 1, mismatch: 0, floors: FLOORS_BY_SCALE[(p.real && p.real.scale) || 2],
-      h: {
+    return {
         lv: s.lv || 1, hpMax: G.GROWTH.hpMax(s.lv || 1) + 3 * (s.shards || 0), mpMax: G.GROWTH.mpMax(s.lv || 1) + 2 * (s.shards || 0), dmgMul: G.GROWTH.dmg(s.lv || 1), skills: (s.equip || []).slice(),
         hp: Math.round((G.GROWTH.hpMax(s.lv || 1) + 3 * (s.shards || 0)) * (1 - s.fatigue / 250)), mp: G.GROWTH.mpMax(s.lv || 1) + 2 * (s.shards || 0), magic: has("hollow") ? 60 : G.HIKARI.magicMax,
         will: Math.round(100 + Math.min(15, s.shards || 0) - s.fatigue / 5 - (has("exhaustion") ? 20 : 0) - 8 * ((s.sequelae || {}).willWear || 0)), arousal: Math.min(70, (has("heat") ? 30 : 0) + (has("impCurse") ? 25 + 5 * Math.min(4, (ail("impCurse") || {}).age || 0) : 0)), pleasure: 0, climax: 0, form: "magica", kit: Object.assign({}, p.kit),
@@ -340,10 +339,49 @@ var G = (typeof G !== "undefined") ? G : {};
         futaCarry: has("futaAfter") && !G.DUNGEONS[p.dungeon].futa && !s.futaFixed,   // 名残だけで生えている（神殿の外）
         kissMark: has("kissMark"), permit: has("permit") ? { over: 0, edges: 0 } : null,
         vessel: !!s.vessel,          // 教団の器：見た目と、祈りの発作
-      },
+      };
+  }
+  // 相棒の記録の窓：ヒロインごとの項目は相棒の記録へ、ギルドの項目（資金・日付など）は共通の記録へ読み書きする
+  function pview(s, id) {
+    const per = new Set(PERSONAL);
+    const own = t => (t.heroine || "hikari") === id;           // 入れ替わった後（いまの子が id）でも、正しい所を指す
+    const box = t => { t.archive = t.archive || {}; return t.archive[id] || (t.archive[id] = freshPersonal()); };
+    return new Proxy(s, {
+      get(t, k) { if (k === "heroine") return id; if (k === "rec") return own(t) ? t.rec : t.duoRec; if (per.has(k) && !own(t)) return box(t)[k]; return t[k]; },
+      set(t, k, v) { if (k === "heroine") return true; if (k === "rec") { if (own(t)) t.rec = v; else t.duoRec = v; return true; } if (per.has(k) && !own(t)) { box(t)[k] = v; return true; } t[k] = v; return true; },
+    });
+  }
+  // 二人の報告の間：前に出る子を入れ替える（記録・報告の束ごと）
+  function pairFlip(s) {
+    const cur = s.heroine || "hikari", o = other(cur);
+    s.archive = s.archive || {};
+    const keep = {}; for (const k of PERSONAL) keep[k] = s[k];
+    const next = s.archive[o] || freshPersonal();
+    for (const k of PERSONAL) s[k] = next[k];
+    s.archive[cur] = keep; delete s.archive[o];
+    s.heroine = o; const r = s.rec; s.rec = s.duoRec; s.duoRec = r;
+    syncHero(s);
+  }
+  function startDive(s, opt) {
+    syncHero(s);
+    const p = s.pick;
+    // 迷宮の法則：入口で決まる。無い日もある（ワルドーの支部には無い）
+    const law = p.dungeon !== "waldo" && p.dungeon !== "strobe" && U.chance(0.45) ? U.pick(Object.keys(G.LAWS)) : null;
+    const run = {
+      day: s.day, dungeon: p.dungeon, stated: p.stated, realType: G.DUNGEONS[p.dungeon].type, forged: p.forged,
+      real: p.real, paper: p.paper, caution: p.caution || 1, forgeSize: p.forgeSize || 0,
+      dungeonName: p.dungeon === p.req.dungeon ? p.req.place + "（" + G.DUNGEONS[p.dungeon].name + "）" : placeName(p.dungeon, null),
+      events: [], night: [], deck: deckFor(s, p.dungeon), maxLive: G.BAL.maxLive + s.upgrades.live,
+      autoDirector: s.autoDirector, save: s, recall: false, floor: 1, mismatch: 0, floors: FLOORS_BY_SCALE[(p.real && p.real.scale) || 2],
+      h: heroOf(s, p),
       law, hero: s.heroine || "hikari", rescue: (p.req && p.req.rescue) || null, captured: Object.keys(s.captured || {}), seq: Object.assign({}, s.sequelae || {}),
       budgetBonus: s.upgrades.budget * 2,
     };
+    // 二人で潜る：相棒の身体も用意する（持ち物は二人分を分けて持つ）
+    if (opt && opt.pair && canPair(s)) {
+      const o = other(s.heroine || "hikari"), v = pview(s, o);
+      G.Hero.set(o); run.pair = { id: o, h: heroOf(v, p), save: v }; G.Hero.set(s.heroine || "hikari");
+    }
     s.phase = "dive";
     return run;
   }
@@ -403,7 +441,22 @@ var G = (typeof G !== "undefined") ? G : {};
   }
   /* ================================================================ 帰還後：堕ち・状態異常・リソース */
   function advanceOf(req) { return Math.round(req.reward * [0, 0.3, 0.42, 0.5][(req.real && req.real.scale) || 2]); }
+  // 潜行の後始末。二人で潜った日は、一人ずつ（相棒の分は相棒の記録へ）。報酬と記録の一行は一度だけ
   function finishDive(s, run) {
+    if (!run.pair) return finishOne(s, run);
+    const lead = s.heroine || "hikari", o = run.pair.id;
+    const mine = id => e => (e.hero || lead) === id;
+    const part = (h, id) => ({ h, events: run.events.filter(mine(id)), defeatBy: h.out ? h.out.by : run.defeatBy, shards: run["shards_" + id] || 0, night: run.night.filter(b => (b.hero || lead) === id), firstParts: (run.firstParts || []).filter(f => (f.hero || lead) === id) });
+    const recA = finishOne(s, Object.assign({}, run, part(run.h, lead), { pairWith: o, allEvents: run.events }));
+    G.Hero.set(o);
+    const recB = finishOne(run.pair.save, Object.assign({}, run, part(run.pair.h, o), { noPay: true, rescue: null, rescued: false, lostHero: false, dirStats: null, pairWith: lead }));
+    G.Hero.set(lead);
+    recA.pair = o; recB.pair = lead; recB.partner = true;
+    s.sortied = [lead, o];
+    s.phase = "report";
+    return recA;
+  }
+  function finishOne(s, run) {
     syncHero(s);
     const ev = run.events;
     s.dirTotal = s.dirTotal || { placed: 0, holds: 0, acts: 0, climax: 0 };
@@ -450,7 +503,7 @@ var G = (typeof G !== "undefined") ? G : {};
     else if (H.futaCarry && run.law !== "yuuka") s.ailments = s.ailments.filter(a => a.id !== "futaAfter");   // 名残は、神殿の外で一度潜ると引く
     else if (H.futa && (H.shasei || 0) >= 1) add("futaAfter");
     s.crack = H.crack || 0;
-    if (run.vesselNew) { s.vessel = true; s.vesselMorning = true; s.crack = 0; s.ailments = s.ailments.filter(a => a.id !== "crack"); s.log = s.log || []; s.log.push({ day: s.day, text: G.Hero.keep(G.Hero.d.short + "は、教団の器になった（冒険者のまま）") }); }
+    if (run.vesselNew === true || run.vesselNew === (s.heroine || "hikari")) { s.vessel = true; s.vesselMorning = true; s.crack = 0; s.ailments = s.ailments.filter(a => a.id !== "crack"); s.log = s.log || []; s.log.push({ day: s.day, text: G.Hero.keep(G.Hero.d.short + "は、教団の器になった（冒険者のまま）") }); }
     if (s.crack > 0) { add("crack"); s.ailments.find(a => a.id === "crack").n = s.crack; }
     const IMPS2 = ["imp", "futago", "inma", "muma_queen", "sakiimp", "jikkyou", "kusuguri", "kazoe", "azakeri", "kuchizuke", "utaimp", "hitomi", "tenazuke"];
     if (ev.filter(e => (e.kind === "charm" || e.kind === "kiss" || e.kind === "beg" || e.kind === "countGame" || e.kind === "hold") && IMPS2.includes(e.mon)).length >= 3 || (run.outcome === "defeat" && IMPS2.includes(run.defeatBy))) add("impCurse");
@@ -514,8 +567,8 @@ var G = (typeof G !== "undefined") ? G : {};
     const req = s.pick.req;
     // 前金（失敗しても返さない。小さい依頼ほど割合も低い）。踏破で残り。倒した魔物には討伐手当
     const advance = advanceOf(req), rest = run.outcome === "cleared" ? req.reward - advance : 0;
-    const bounty = ev.filter(e => e.kind === "kill").reduce((a, e) => { const d = G.MONSTERS[e.mon]; return a + (e.boss ? 12 : d ? Math.max(1, Math.round((d.hp || 8) / 9)) : 1); }, 0);
-    const funds = advance + rest + bounty;
+    const bounty = (run.allEvents || ev).filter(e => e.kind === "kill").reduce((a, e) => { const d = G.MONSTERS[e.mon]; return a + (e.boss ? 12 : d ? Math.max(1, Math.round((d.hp || 8) / 9)) : 1); }, 0);
+    const funds = run.noPay ? 0 : advance + rest + bounty;           // 二人の日は、報酬は一度だけ
     s.funds = Math.max(0, s.funds + funds);
     run.pay = { advance, rest, bounty };
     const sevSum = ev.reduce((a, e) => a + (["hold", "climax", "trap", "trance", "arouse", "untransform"].includes(e.kind) ? (e.sev || 0) : 0), 0);
@@ -548,8 +601,9 @@ var G = (typeof G !== "undefined") ? G : {};
     s.phase = "report";
     if (run.lostHero) { s.phase = "lost"; rec.lostHero = true; }        // ワルドーに連れ去られた：報告は無い
     if (run.rescued && !run.lostHero) { rec.rescued = run.rescue; rescueAlly(s, run.rescue); }   // 相棒を、取り返した
-    s.history.push({ day: s.day, dungeon: run.dungeon, stated: run.stated, outcome: run.outcome, floor: run.floorReached, climax: climaxes, posture: rec.postureName, forged: run.forged, title: s.pick.title, realTitle: s.pick.req.title });
+    if (!run.noPay) s.history.push({ day: s.day, hero: s.heroine || "hikari", pair: run.pairWith ? [s.heroine || "hikari", run.pairWith] : null, half: s.half || 1, dungeon: run.dungeon, stated: run.stated, outcome: run.outcome, floor: run.floorReached, climax: climaxes, posture: rec.postureName, forged: run.forged, title: s.pick.title, realTitle: s.pick.req.title });
     if (s.history.length > 60) s.history.shift();
+    if (run.pairWith) rec.pairWith = run.pairWith;
     return rec;
   }
 
@@ -620,10 +674,20 @@ var G = (typeof G !== "undefined") ? G : {};
   function endDay(s) {
     if (G.Diary && s.rec && !s.rec.diaryDone) { s.rec.diaryDone = true; G.Diary.write(s); }   // その夜、ひかりは手帳を書く
     recordEpisodes(s);                                  // 手帳を書いたあとで、今日の件を覚えておく（今日の手帳は、前の件と比べて書く）
+    if (s.duoRec) {                                     // 二人で潜った日：相棒も、自分の手帳を書く
+      const v = pview(s, other(s.heroine || "hikari"));
+      G.Hero.set(v.heroine);
+      if (G.Diary && !s.duoRec.diaryDone) { s.duoRec.diaryDone = true; G.Diary.write(v); }
+      recordEpisodes(v);
+      v.fatigue = U.clamp(v.fatigue - 22, 0, 100);
+      syncHero(s);
+      s.duoRec = null;
+    }
     // 残した状態異常は、ギルドの空気を少しずつ澱ませる
     s.taint = U.clamp(s.taint + s.ailments.length * 1.5, 0, 100);
     s.fatigue = U.clamp(s.fatigue - 22, 0, 100);
-    for (const id in s.archive || {}) if (s.archive[id] && typeof s.archive[id].fatigue === "number") s.archive[id].fatigue = U.clamp(s.archive[id].fatigue - 30, 0, 100);   // 潜らなかった方は、休んでいる
+    for (const id in s.archive || {}) if (s.archive[id] && typeof s.archive[id].fatigue === "number" && !(s.sortied || []).includes(id)) s.archive[id].fatigue = U.clamp(s.archive[id].fatigue - 30, 0, 100);   // 潜らなかった方は、休んでいる（午前に潜った方は、午後に休んだ分を引いてある）
+    s.half = 1; s.sortied = [];
     // 一晩たつと：着替え・湯浴み・眠りで引くものは引く。処置しなかったものは、根を張って重くなる
     s.healedNight = s.ailments.filter(a => NATURAL.includes(a.id) && a.day < s.day + 1).map(a => ail(a.id).name);
     s.ailments = s.ailments.filter(a => !NATURAL.includes(a.id));
@@ -646,6 +710,29 @@ var G = (typeof G !== "undefined") ? G : {};
     s.lastGrowth = s.rec && s.rec.growth || null;      // 翌朝の会話で使う
     s.rec = null;
     morning(s);
+  }
+
+  // 二人で潜れるか：相棒が捕らわれておらず、今日まだ潜っていない（午前の部だけ）
+  function canPair(s) { const o = other(s.heroine || "hikari"); return (s.half || 1) === 1 && !(s.captured || {})[o]; }
+  /* ================================================================ 一日に二度の出撃（一人ずつなら交互に） */
+  // 午前に潜った方の処置が済んだら、午後はもう一人を出せる。同じ子を二度は出さない
+  function canSecond(s) {
+    const o = other(s.heroine || "hikari");
+    return (s.half || 1) === 1 && !(s.captured || {})[o] && !(s.rec && s.rec.pair);
+  }
+  function secondSortie(s) {
+    if (!canSecond(s)) return false;
+    const cur = s.heroine || "hikari";
+    if (G.Diary && s.rec && !s.rec.diaryDone) { s.rec.diaryDone = true; G.Diary.write(s); }   // 午前の子は、ここで今日の手帳を書く
+    recordEpisodes(s);
+    s.fatigue = U.clamp(s.fatigue - 22, 0, 100);       // 午後は休める（夜に休む分を、先に）
+    s.sortied = [cur];
+    s.rec = null; s.pick = null;
+    swapHero(s, other(cur));
+    s.half = 2; s.phase = "guild";
+    s.requests = makeRequests(s);                       // 午後の依頼の束
+    s.greeted = null;
+    return true;
   }
 
   // 休養：今日は潜らない。疲労が大きく抜け、軽い状態異常（発情・過敏・疼き・疲弊）は自然に引く。堕ちも少し戻る。報酬は無い
@@ -674,6 +761,6 @@ var G = (typeof G !== "undefined") ? G : {};
 
   function taintStage(s) { return s.taint >= 100 ? 4 : s.taint >= 70 ? 3 : s.taint >= 42 ? 2 : s.taint >= 18 ? 1 : 0; }
 
-  G.Game = { finalizeLoss, swapHero, rescueAlly, addSequelae, SEQUELAE, HEROES, pget, freshPersonal, syncHero, PERSONAL, reintResult, pastEpisode, epCtx, EP_PART, epPart, ail, advanceOf, NATURAL, equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, rest, buy, taintStage };
+  G.Game = { canPair, pview, pairFlip, heroOf, canSecond, secondSortie, finalizeLoss, swapHero, rescueAlly, addSequelae, SEQUELAE, HEROES, pget, freshPersonal, syncHero, PERSONAL, reintResult, pastEpisode, epCtx, EP_PART, epPart, ail, advanceOf, NATURAL, equipSkill, writeDoc, upgradeSave, ailmentName, placeName, ITEMS, AILMENTS, SHOP, SCALE_NAME, LEVEL_NAME, MAINS, requestTitle, forgeSize, newSave, morning, resolveConfront, assign, prep, deckFor, freeCandidates, startDive, makeFloor, afterFloor, finishDive, audit, rereportChoice, treat, endDay, rest, buy, taintStage };
 })();
 if (typeof module !== "undefined") module.exports = G;

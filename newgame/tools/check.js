@@ -32,5 +32,7 @@ if (simulation !== null) {
 command("check/stuck.js", ["--seeds", "1", "--runs", "1"]);
 // 遙の文：ひかりの表の取り違え・ひかりの言葉・ひかりと同じ文が無いか（遙で何日か回す）
 command("check/haruka.js", ["8", "3"]);
+// 二人で潜る：救出・二人とも倒れた時の場面と一夜・二人ぶんの報告
+command("check/pair.js", []);
 console.log(failed ? "check FAIL" : "check PASS", "elapsed", ((performance.now() - start) / 1000).toFixed(2) + "s");
 if (failed) process.exitCode = 1;

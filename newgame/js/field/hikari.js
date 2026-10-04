@@ -517,7 +517,7 @@
         else if (goToward(w, basin.x, basin.y, 0.8, tr_label(basin))) return;
       }
     }
-    explore(w);
+    if (!(w.duo && G.F.duoMove(w))) explore(w);        // 二人の潜行：救出・相棒を追う・出口の相棒のもとへ
   }
 
   function tr_label(tr) { return tr.kind === "spring" ? "湯へ" : "手水へ"; }
@@ -607,7 +607,7 @@
   }
   // 星の欠片：拾うたびに、ルミナの光が少しずつ強くなる（帰ってから身につく）
   function gainShard(w, why) {
-    w.run.shards = (w.run.shards || 0) + 1;
+    w.run.shards = (w.run.shards || 0) + 1; if (w.duo) { const k = "shards_" + G.Hero.cur; w.run[k] = (w.run[k] || 0) + 1; }
     record(w, { kind: "shard", why, sev: 0 });
     msg(w, "shard" + (why === "boss" ? "Boss" : why === "clear" ? "Clear" : ""), {}); say(w, "shard", {});
     fx(w, { kind: "burst", x: w.run.h.x, y: w.run.h.y, color: "#fff6b0", life: 0.8 });

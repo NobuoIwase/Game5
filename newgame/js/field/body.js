@@ -142,7 +142,7 @@
     msg(w, "crack", { c: h.crack }); if (h.crack === 1 || h.crack % 3 === 0) say(w, "crack", {});
     // 防護壁が割れきった：教団の器になる（冒険者のまま、教えに満たされる）
     if (h.crack >= 10 && !h.vessel) {
-      h.vessel = true; w.run.vesselNew = true; h.crack = 0;
+      h.vessel = true; w.run.vesselNew = w.duo ? G.Hero.cur : true; h.crack = 0;   // 二人の潜行では、器になった方を覚えておく
       record(w, { kind: "vessel", type: "惑", mon: src && src.kind, monName: src && src.d ? src.d.name : "", sev: 3 });
       msg(w, "vessel", {}); say(w, "vessel", {});
       openScene(w, "vessel", src);
@@ -188,7 +188,7 @@
     h.brain = Math.min(100, (h.brain || 0) + n * mult(w, "惑") * (h.rewired ? 1.3 : 1) * (1 + 0.35 * (sq.brainEasy || 0) + 0.15 * (sq.crest || 0)));   // 後遺症：一度塗り替えられた頭は、塗り替えやすい
     if (h.brain < 100) return;
     sv.waldo = sv.waldo || { rescues: 0, converted: 0 };
-    if (sv.waldo.rescues < 2) {
+    if (sv.waldo.rescues < 2 || w.duo) {                 // 二人の潜行では、相棒がいる限り引き戻される
       sv.waldo.rescues++; h.brain = 45;
       if (h.bound) release(w, true);
       record(w, { kind: "rescue", type: "惑", sev: 2, n: sv.waldo.rescues });

@@ -446,7 +446,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (!run.pair) return finishOne(s, run);
     const lead = s.heroine || "hikari", o = run.pair.id;
     const mine = id => e => (e.hero || lead) === id;
-    const part = (h, id) => ({ h, events: run.events.filter(mine(id)), defeatBy: h.out ? h.out.by : run.defeatBy, shards: run["shards_" + id] || 0, night: run.night.filter(b => (b.hero || lead) === id), firstParts: (run.firstParts || []).filter(f => (f.hero || lead) === id) });
+    const part = (h, id) => ({ h, events: run.events.filter(mine(id)), defeatBy: h.out ? h.out.by : run.defeatBy, shards: run["shards_" + id] || 0, night: run.night.filter(b => (b.hero || lead) === id), firstParts: (run.firstParts || []).filter(f => (f.hero || lead) === id), abduct: (run.abduct || []).filter(a => a.hero === id) });
     const recA = finishOne(s, Object.assign({}, run, part(run.h, lead), { pairWith: o, allEvents: run.events }));
     G.Hero.set(o);
     const recB = finishOne(run.pair.save, Object.assign({}, run, part(run.pair.h, o), { noPay: true, rescue: null, rescued: false, lostHero: false, dirStats: null, pairWith: lead }));
@@ -466,7 +466,7 @@ var G = (typeof G !== "undefined") ? G : {};
     const climaxes = run.h.climax;
     // 肉体は一晩で一段（25）まで。精神は、その日の肉体の伸びの1/3まで
     // 堕ちはゆっくり。一日の上限を低くし、進むほど進みにくい（抗う心がまだ強い）
-    const bodyGain = Math.min(5, climaxes * 0.45 + holdSec * 0.03 + nightBeats * 0.6 + run.h.arousal * 0.008) * (1 - s.body / 125);
+    const bodyGain = Math.min(5, climaxes * 0.45 + holdSec * 0.03 + nightBeats * 0.6 + run.h.arousal * 0.008 + ((run.abduct || [])[0] ? 0.6 : 0)) * (1 - s.body / 125);
     // 心は、身体の覚えたことに少し遅れてついていく（達した数・捕まった時間・一夜・負け）
     let mindGain = ((run.outcome === "defeat" ? 1.5 : 0) + nightBeats * 0.3 + climaxes * 0.12 + holdSec * 0.008) * (1 - s.mind / 150);
     mindGain = Math.min(bodyGain * 0.6, 2.6, mindGain);
@@ -516,6 +516,7 @@ var G = (typeof G !== "undefined") ? G : {};
     if (H.addict) add("addict");
     if (H.trigger) add("hairTrigger");
     if (H.rewired) add("rewired");
+    { const ab = (run.abduct || [])[0]; if (ab) { s.counts = s.counts || {}; s.counts["abduct:" + ab.mon] = (s.counts["abduct:" + ab.mon] || 0) + 1; } }   // 巣へ持ち帰られた回数（相手ごと）
     // 敗北洗脳：同じ種に二度負けると
     if (run.outcome === "defeat" && run.defeatBy && G.MONSTERS[run.defeatBy]) {
       s.counts["lost:" + run.defeatBy] = (s.counts["lost:" + run.defeatBy] || 0) + 1;
@@ -591,7 +592,7 @@ var G = (typeof G !== "undefined") ? G : {};
       day: s.day, dungeon: run.dungeon, dungeonName: run.dungeonName || G.DUNGEONS[run.dungeon].name, stated: run.stated, realType: run.realType, forged: run.forged,
       outcome: run.outcome, floorReached: run.floorReached, events: ev, night: run.night, mismatch: run.mismatch || 0,
       h: { hp: run.h.hp, arousal: run.h.arousal, form: run.h.form, climax: climaxes, attach: (run.h.attach || []).slice(), rewired: !!run.h.rewired }, ailments: s.ailments.map(a => a.id),
-      law: run.law || null, dirStats: run.dirStats || null, merit, traitsGained: run.traitsGained || [], converted: !!run.converted, growth: run.growth, firstParts: run.firstParts || [],
+      law: run.law || null, dirStats: run.dirStats || null, merit, traitsGained: run.traitsGained || [], converted: !!run.converted, growth: run.growth, firstParts: run.firstParts || [], abduct: (run.abduct || [])[0] || null,
       gain: { body: +bodyGain.toFixed(1), mind: +mindGain.toFixed(1), funds, dark, sus: +sus.toFixed(1), pay: run.pay },
     };
     rec.report = G.Report.build(rec, s);
@@ -601,7 +602,7 @@ var G = (typeof G !== "undefined") ? G : {};
     s.phase = "report";
     if (run.lostHero) { s.phase = "lost"; rec.lostHero = true; }        // ワルドーに連れ去られた：報告は無い
     if (run.rescued && !run.lostHero) { rec.rescued = run.rescue; rescueAlly(s, run.rescue); }   // 相棒を、取り返した
-    if (!run.noPay) s.history.push({ day: s.day, hero: s.heroine || "hikari", pair: run.pairWith ? [s.heroine || "hikari", run.pairWith] : null, half: s.half || 1, dungeon: run.dungeon, stated: run.stated, outcome: run.outcome, floor: run.floorReached, climax: climaxes, posture: rec.postureName, forged: run.forged, title: s.pick.title, realTitle: s.pick.req.title });
+    if (!run.noPay) s.history.push({ day: s.day, hero: s.heroine || "hikari", pair: run.pairWith ? [s.heroine || "hikari", run.pairWith] : null, half: s.half || 1, dungeon: run.dungeon, stated: run.stated, outcome: run.outcome, floor: run.floorReached, climax: climaxes, posture: rec.postureName, forged: run.forged, title: s.pick.title, realTitle: s.pick.req.title, abduct: rec.abduct ? rec.abduct.place : null });
     if (s.history.length > 60) s.history.shift();
     if (run.pairWith) rec.pairWith = run.pairWith;
     return rec;

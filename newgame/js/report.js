@@ -339,6 +339,11 @@ var G = (typeof G !== "undefined") ? G : {};
     partial: ["……倒れたあとのことは、あんまり覚えてなくて。{mon1}がいたのは、覚えてます", "夜のことは……ほとんど、寝てたと思います。たぶん"],
     denial: ["……何も、なかったです。気を失ってただけで", "倒れてからは、朝まで気を失ってました。それだけです"],
   };
+  // 夜明け前に、巣へ持ち帰られた（{mon}＝持ち帰った魔物、{place}＝巣、{n}＝そこで果てた数）
+  const ABDUCT_TELL = {
+    honest: ["……それで、朝になる前に、{mon}に、連れていかれて。……{place}、でした。そこで、また", "救出隊が来る前に、{mon}に運ばれたんです。……{place}で、朝まで。……{n}回、です", "……迷宮の外まで、{mon}に。……巣、だと思います。{place}。そこのことは、……あんまり、聞かないでください"],
+    hide: ["……朝は、迷宮の中で見つけてもらいました。それだけです", "救出隊が来た時、あたし、倒れた場所にいました。……たぶん"],
+  };
   const CLOSE = {
     base: ["……以上です。詳しいことは、報告書に書きました", "報告、おわりです", "以上、です。……次は、もっとうまくやります",
            "以上です。質問あれば、どうぞ", "こんなところです。……あ、報告書、これです", "報告おわり！ ……疲れたぁ"],
@@ -779,6 +784,12 @@ var G = (typeof G !== "undefined") ? G : {};
       rec.nightTruth = mode;
       push("h", U.fill(freshPick(mem, day, "night:" + mode, RT("NIGHT_RECOUNT", NIGHT_RECOUNT)[mode], 3), { mons: mons.join("と") || "何か", mon1: mons[0] || "何か", n: Math.max(1, n) }), { night: true, lie: mode === "denial", probe: true });
     }
+    // 夜明け前に、巣へ持ち帰られた（夜を伏せた日は、こちらも伏せる）
+    if (rec.outcome === "defeat" && rec.abduct) {
+      const ab = rec.abduct, hide = rec.nightTruth && rec.nightTruth !== "honest";
+      rec.abductTruth = hide ? "hide" : "honest";
+      push("h", U.fill(freshPick(mem, day, "abduct:" + rec.abductTruth, RT("ABDUCT_TELL", ABDUCT_TELL)[rec.abductTruth], 2), { mon: ab.monName, place: ab.place, n: ab.climax }), { night: true, lie: hide, probe: true });
+    }
     // 締め
     const closeKey = rec.h.arousal > 45 || (rec.ailments && rec.ailments.length) ? "ailment" : (s.trust < 35 ? "low" : "base");
     push("a", freshPick(mem, day, "aud:close", AUD.close, 3));
@@ -947,6 +958,7 @@ var G = (typeof G !== "undefined") ? G : {};
     false: ["{floor}階：{mon}とすれ違った。特に問題なし。", "{floor}階：{mon}に一瞬つかまれたけど、すぐ振りほどいた。", "{floor}階：{mon}がいたので避けて通った。"],
     missing: ["{floor}階：特に何もなし。", "{floor}階：静かだった。すぐ下の階へ。"],
     head: { cleared: "結果：最下層まで行って、転移陣で帰った。", retreat: "結果：{deep}階で撤退。", ordered: "結果：勧告に従って{deep}階で戻った。", defeat: "結果：{deep}階で動けなくなり、翌日救出された。" },
+    abduct: { honest: "夜明け前：{mon}に運ばれて、{place}にいた。朝、そこで救出された（絶頂 {n}回）。", hide: "救出：倒れた場所で見つけてもらった。" },
     night: { honest: "救出まで：倒れたあと、{mons}に朝まで囲まれていた。", partial: "救出まで：あまり覚えていない。{mon1}がいた気がする。", denial: "救出まで：気を失っていた。何もなかった。" },
   };
 
@@ -983,6 +995,7 @@ var G = (typeof G !== "undefined") ? G : {};
       const mode = rec.nightTruth || "honest";
       const cl = rec.night.reduce((a, b) => a + (b.climaxN || (b.climax ? 1 : 0)), 0);
       out.push({ text: U.fill(DOC.night[mode], { mons: mons.join("と"), mon1: mons[0] || "何か" }) + (mode === "honest" && cl ? `（絶頂 ${cl}回）` : ""), kind: mode === "denial" ? "false" : mode === "partial" ? "missing" : "honest", night: true });
+      if (rec.abduct) { const ab = rec.abduct, t = rec.abductTruth || "honest"; out.push({ text: U.fill(DOC.abduct[t], { mon: ab.monName, place: ab.place, n: ab.climax }), kind: t === "hide" ? "false" : "honest", night: true }); }
     }
     return out;
   }
@@ -1052,6 +1065,7 @@ var G = (typeof G !== "undefined") ? G : {};
       const sum = rec.night.reduce((a, b) => ({ acts: a.acts + (b.acts || 0), cl: a.cl + (b.climaxN || 0) }), { acts: 0, cl: 0 });
       out.push(`夜 合計：行為 ${sum.acts}回・絶頂 ${sum.cl}回`);
     }
+    if (rec.abduct) out.push(`夜明け前：${rec.abduct.monName}が本人を迷宮の外（${rec.abduct.place}）へ搬出。翌朝、同所で発見・収容（絶頂 ${rec.abduct.climax}回）`);
     return out;
   }
 
@@ -1090,7 +1104,7 @@ var G = (typeof G !== "undefined") ? G : {};
     return t;
   }
   function sayOf(u, save, day) { return what(u, day, save.reportMem || (save.reportMem = {})).replace(/。?$/, "。"); }
-  G.TextL.R_DOC = DOC0; G.TextL.R_RECALL = RECALL; G.TextL.R_RENAME = RENAME; G.TextL.R_RENAME_H = RENAME_H; G.TextL.R_PROBE = PROBE; G.TextL.R_REREPORT = REREPORT; G.TextL.R_WHAT_A = WHAT_A;
+  G.TextL.R_DOC = DOC0; G.TextL.R_ABDUCT_TELL = ABDUCT_TELL; G.TextL.R_RECALL = RECALL; G.TextL.R_RENAME = RENAME; G.TextL.R_RENAME_H = RENAME_H; G.TextL.R_PROBE = PROBE; G.TextL.R_REREPORT = REREPORT; G.TextL.R_WHAT_A = WHAT_A;
   G.Report = { build, documentLines, monitorLog, rereport, units, probe, truthOf, sayOf, REREPORT, POSTURE, STYLE, get RR() { return RM("REREPORT", REREPORT); } };
 })();
 if (typeof module !== "undefined") module.exports = G;

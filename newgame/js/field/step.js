@@ -270,7 +270,14 @@
     w.run.night.push(beat);
     record(w, { kind: "night", type: beat.type, mon: beat.mon, monName: beat.monName, sev: 3, climax: beat.climax, n: beat.climaxN, acts: beat.acts, hidden: false });
     n.beat++;
+    if (n.beat === G.BAL.nightBeats && G.Abduct) abductAll(w);
     return beat;
+  }
+  // 夜明け前：囲んでいた中の一体が、彼女を巣へ持ち帰る（二人の夜は、一人ずつ）
+  function abductAll(w) {
+    const n = w.night;
+    if (!w.duo) return G.Abduct.take(w, n.beats, w.defeatBy);
+    for (let i = 0; i < 2; i++) { G.F.duoCtx(w, i); const h = w.run.h; G.Abduct.take(w, n.beats.filter(b => b.hero === G.Hero.cur), h.out ? h.out.by : w.defeatBy); }
   }
 
   // ひかりの今の状態（ステータス欄のチップ）。{ name, t（残り秒）, cls }

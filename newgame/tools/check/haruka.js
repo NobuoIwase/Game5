@@ -63,7 +63,7 @@ const out = vm.runInContext(`(function(){
       if (G.Game.afterFloor(run, w) === "end") break;
     }
     const rec = G.Game.finishDive(s, run);
-    put("report", rec.report); put("doc", rec.doc); put("monitor", rec.monitor);
+    put("abduct", (run.abduct || []).map(a => a.lines.concat(a.place))); put("report", rec.report); put("doc", rec.doc); put("monitor", rec.monitor);
     const flags = []; rec.doc.forEach((x, i) => { if (x.kind === "false" && U.chance(0.8)) flags.push(i); });
     const res = G.Game.audit(s, flags);
     if (s.phase === "rereport") {

@@ -774,7 +774,7 @@
     log.innerHTML = `<div class="heavy">${esc(ui("nightStart"))}</div>`;
     drawCards();
     const next = () => {
-      if (dive.w.night.beat >= G.BAL.nightBeats) return finishDive();
+      if (dive.w.night.beat >= G.BAL.nightBeats) return dawn();
       const b = G.Field.nightBeat(dive.w);
       log.innerHTML += b.lines.map(l => `<div>${esc(l)}</div>`).join("") + "<hr style='border-color:#2a2433'>";
       log.scrollTop = log.scrollHeight;
@@ -783,7 +783,35 @@
       if (dive.w.night.beat >= G.BAL.nightBeats) document.getElementById("nx").textContent = "朝になった";
     };
     on("#nx", "click", next);
-    on("#skip", "click", () => { while (dive.w.night.beat < G.BAL.nightBeats) G.Field.nightBeat(dive.w); finishDive(); });
+    on("#skip", "click", () => { while (dive.w.night.beat < G.BAL.nightBeats) G.Field.nightBeat(dive.w); dawn(); });
+  }
+  // 夜明け前：囲んでいた一体が、巣へ持ち帰る（敗北の一枚絵の場面）。それから朝へ
+  function dawn() {
+    if (!dive || dive.dawn) return;
+    dive.dawn = true;
+    abductScene((dive.run.abduct || []).slice(), finishDive);
+  }
+  const AB_WHY = { cx: "その夜、いちばん果てさせた相手", lead: "その夜、いちばん長く責めた相手", defeat: "とどめを刺した相手" };
+  const AB_BG = { "絡": "bind", "蕩": "melt", "惑": "charm", "削": "drain" };
+  function abductScene(list, done) {
+    if (!list.length) return done();
+    const a = list.shift(), d = G.MONSTERS[a.mon], who = G.Hero.DATA[a.hero].short;
+    const el = document.createElement("div");
+    el.className = "abduct ab-" + (AB_BG[d.type] || "melt");
+    el.innerHTML = `<div class="ab-stage"><img class="ab-mon" src="assets/monsters/${d.art}" alt=""${d.tint ? ` style="filter:hue-rotate(${d.tint}deg) saturate(1.2)"` : ""}><img class="ab-her" src="assets/portrait/${a.hero}/10_bowed_head_blush.png" alt=""><div class="ab-place">${esc(a.place)}</div></div>
+      <div class="ab-text"><div class="ab-who">${esc(who)}を連れ去った：${esc(a.monName)}<span>（${AB_WHY[a.why] || ""}）</span></div><div class="ab-lines" id="abl"></div><div class="row"><button class="primary" id="abn">▼</button><button id="abs">飛ばす</button></div></div>`;
+    document.body.appendChild(el);
+    const box = el.querySelector("#abl"), nb = el.querySelector("#abn");
+    let i = 0;
+    const close = () => { el.remove(); abductScene(list, done); };
+    const step = () => {
+      if (i >= a.lines.length) return close();
+      box.insertAdjacentHTML("beforeend", `<p>${esc(a.lines[i++])}</p>`);
+      box.scrollTop = box.scrollHeight;
+      if (i >= a.lines.length) nb.textContent = list.length ? "もう一人は——" : "朝になった";
+    };
+    nb.onclick = step; el.querySelector("#abs").onclick = close;
+    step();
   }
 
   // 夜の場面も、立ち絵の横に流す。達した所は、決壊として

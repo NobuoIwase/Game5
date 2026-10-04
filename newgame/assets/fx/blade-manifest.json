@@ -1,0 +1,150 @@
+{
+  "source_sha256": "de338a5e854560243618b50906a3783239aec67c831e571005757d57ecbff60b",
+  "source_size": [
+    1536,
+    1024
+  ],
+  "frame_size": 64,
+  "frames": 4,
+  "palette": [
+    [
+      48,
+      64,
+      92
+    ],
+    [
+      70,
+      97,
+      138
+    ],
+    [
+      87,
+      132,
+      196
+    ],
+    [
+      121,
+      173,
+      231
+    ],
+    [
+      165,
+      207,
+      246
+    ],
+    [
+      204,
+      228,
+      251
+    ],
+    [
+      230,
+      244,
+      255
+    ],
+    [
+      255,
+      255,
+      255
+    ]
+  ],
+  "alpha": "binary; remove generated low-opacity glow before resize",
+  "assets": {
+    "blade-slash": {
+      "file": "blade-slash.png",
+      "source_cell": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "source_bounds": [
+        112,
+        55,
+        413,
+        458
+      ],
+      "bytes": 2015
+    },
+    "blade-thrust": {
+      "file": "blade-thrust.png",
+      "source_cell": [
+        512,
+        0,
+        512,
+        512
+      ],
+      "source_bounds": [
+        5,
+        229,
+        493,
+        285
+      ],
+      "bytes": 430
+    },
+    "blade-flight": {
+      "file": "blade-flight.png",
+      "source_cell": [
+        1024,
+        0,
+        512,
+        512
+      ],
+      "source_bounds": [
+        159,
+        99,
+        411,
+        417
+      ],
+      "bytes": 1995
+    },
+    "blade-spin": {
+      "file": "blade-spin.png",
+      "source_cell": [
+        0,
+        512,
+        512,
+        512
+      ],
+      "source_bounds": [
+        68,
+        42,
+        454,
+        440
+      ],
+      "bytes": 2348
+    },
+    "blade-parry": {
+      "file": "blade-parry.png",
+      "source_cell": [
+        512,
+        512,
+        512,
+        512
+      ],
+      "source_bounds": [
+        102,
+        86,
+        512,
+        377
+      ],
+      "bytes": 1187
+    },
+    "blade-iai": {
+      "file": "blade-iai.png",
+      "source_cell": [
+        1024,
+        512,
+        512,
+        512
+      ],
+      "source_bounds": [
+        0,
+        168,
+        483,
+        298
+      ],
+      "bytes": 488
+    }
+  }
+}

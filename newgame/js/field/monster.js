@@ -2,7 +2,7 @@
 (function () {
   "use strict";
   let U, M, SPREAD, spawnMonster, say, live, msg, fx, monSay, hitDesc, actMsg, actBub, addCloud, record, trait, intake, releaseOverflow, addCharm, addAttach, addCum, addCrack, pray, addBrain, mult, knowledge, applyEffect, drainMagic, possess, grab, release, openScene, move, pathDir, turnTo, flash, gainShard;
-  function hurtMon(w, m, dmg) {
+  function hurtMon(w, m, dmg, combatFx) {
     const before = m.hp;
     dmg *= 1 + 0.15 * knowledge(w, m.kind);           // 弱いところを知っている
     const cl = (w.run.h.charm && w.run.h.charm[m.kind]) || 0;
@@ -14,7 +14,7 @@
     }
     m.hp -= dmg; m.hitT2 = w.t; w.run.h.lastDmgT = w.t; m.flash = 0.2; m.rcl = 0.26; m.rclX = Math.sign(m.x - w.run.h.x) || 1;
     alertMon(w, m, 1);
-    fx(w, { kind: "hit", x: m.x, y: m.y, color: "#fff6c8", life: 0.3 });
+    fx(w, { kind: "hit", combatFx: combatFx || (G.Hero.cur === "haruka" ? "blade-parry" : "hit-spark"), x: m.x, y: m.y, color: "#fff6c8", life: 0.3 });
     if (m.d.swarmOnHit && U.chance(m.d.swarmOnHit) && w.monsters.filter(o => o.hp > 0 && o.kind === m.kind).length < 8) {   // 撃つたび壁が鳴って、群れが増える
       const p = M.randomFloor(w.map, (x, y) => U.dist(x, y, m.x, m.y) < 3 && U.dist(x, y, m.x, m.y) > 1);
       if (p) { const o = spawnMonster(w, m.kind, p.x, p.y, false); o.alert = 6; msg(w, "swarm", { mon: m.d.name }, 3); }

@@ -50,7 +50,7 @@
       if (m.hp <= 0 || U.dist(h.x, h.y, m.x, m.y) > range + m.d.r * 0.6) continue;
       if (Math.abs(U.angDiff(a, U.angle(h.x, h.y, m.x, m.y))) > arc / 2 + 0.2) continue;
       let dm = dmg;
-      if (h.riposte && h.riposte.id === m.id && w.t < h.riposte.until) { dm *= B().parry.riposte; h.riposte = null; msg(w, "riposte", { mon: m.d.name }, 0); fx(w, { kind: "ring", x: m.x, y: m.y, color: "#ffd0d0", r: 0.7, life: 0.35 }); }
+      if (h.riposte && h.riposte.id === m.id && w.t < h.riposte.until) { dm *= B().parry.riposte; h.riposte = null; msg(w, "riposte", { mon: m.d.name }, 0); fx(w, { kind: "ring", combatFx: "blade-iai", a, x: m.x, y: m.y, color: "#ffd0d0", r: 0.7, life: 0.35 }); }
       hurtMon(w, m, dm); onHit(m); if (m.cast) { m.cast = null; msg(w, "interrupt", { mon: m.d.name }, 1); } hit++;
     }
     for (const tr of w.traps.slice()) {                 // 壊せる仕掛け（満ち引きの玉）も、斬れる
@@ -67,21 +67,21 @@
     if (c.kind === "melee") {
       h.cdMelee = S.melee.cd; zanDecay(h);
       const spear = sk(w, "spear"), r = S.melee.range + (spear ? 0.35 : 0);
-      fx(w, { kind: "slash", x: h.x + Math.cos(a) * 0.7, y: h.y + Math.sin(a) * 0.7, a, color: "#e8f4ff", life: 0.22 });
+      fx(w, { kind: "slash", combatFx: spear ? "blade-thrust" : "blade-slash", reach: r, x: h.x + Math.cos(a) * 0.7, y: h.y + Math.sin(a) * 0.7, a, color: "#e8f4ff", life: 0.22 });
       const hit = cut(w, a, r, S.melee.arc, (S.melee.dmg + (spear ? 3 : 0)) * mul, m => { knock(w, m, U.angle(h.x, h.y, m.x, m.y), 0.35); m.stun = Math.max(m.stun, 0.22); });
       if (!hit) msg(w, "whiff", {}, 2); else inspire(w, "melee");
       record(w, { kind: "melee", sev: 0 });
     } else if (c.kind === "iai") {                       // 居合：溜めた構えから、一閃
       h.cdMelee = S.melee.cd + 0.3; h.zan = 0;
-      fx(w, { kind: "slash", x: h.x + Math.cos(a) * 0.9, y: h.y + Math.sin(a) * 0.9, a, color: "#ffffff", life: 0.35 });
-      fx(w, { kind: "ring", x: h.x, y: h.y, color: "#cfe6ff", r: S.iai.range * 0.6, life: 0.3 });
+      fx(w, { kind: "slash", combatFx: "blade-iai", reach: S.iai.range, x: h.x + Math.cos(a) * 0.9, y: h.y + Math.sin(a) * 0.9, a, color: "#ffffff", life: 0.35 });
+      fx(w, { kind: "ring", combatFx: "blade-spin", x: h.x, y: h.y, color: "#cfe6ff", r: S.iai.range * 0.6, life: 0.3 });
       const hit = cut(w, a, S.iai.range, S.iai.arc, S.iai.dmg * mul, m => { knock(w, m, U.angle(h.x, h.y, m.x, m.y), 0.7); m.stun = Math.max(m.stun, S.iai.stun); });
       msg(w, hit ? "iai" : "whiff", {}, 0); if (hit) inspire(w, "melee");
       record(w, { kind: "iai", sev: 0 });
     } else if (c.kind === "burst") {                     // 風車：自分のまわりを薙ぐ
       h.mp -= S.burst.cost; h.cdBurst = S.burst.cd; h.idleMp = 0; zanDecay(h);
       const nova = sk(w, "nova"), r = S.burst.radius + (nova ? 0.5 : 0);
-      fx(w, { kind: "ring", x: h.x, y: h.y, color: "#e8f4ff", r, life: 0.45 });
+      fx(w, { kind: "ring", combatFx: "blade-spin", x: h.x, y: h.y, color: "#e8f4ff", r, life: 0.45 });
       for (const m of w.monsters) if (m.hp > 0 && U.dist(m.x, m.y, h.x, h.y) < r + m.d.r * 0.5) { hurtMon(w, m, (S.burst.dmg + (nova ? 4 : 0)) * mul); knock(w, m, U.angle(h.x, h.y, m.x, m.y), 0.6); m.stun = Math.max(m.stun, 0.4); if (m.cast) m.cast = null; }
       record(w, { kind: "burst", sev: 0 }); inspire(w, "burst");
     } else {                                             // 飛刃：三日月の斬撃が飛ぶ
@@ -114,7 +114,7 @@
     knock(w, src, U.angle(h.x, h.y, src.x, src.y), 0.55);
     h.riposte = { id: src.id, until: w.t + P.win };
     h.cdMelee = Math.min(h.cdMelee, 0.05);                                               // 返しの一太刀は、すぐ
-    fx(w, { kind: "ring", x: (h.x + src.x) / 2, y: (h.y + src.y) / 2, color: "#ffffff", r: 0.5, life: 0.25 });
+    fx(w, { kind: "ring", combatFx: "blade-parry", x: (h.x + src.x) / 2, y: (h.y + src.y) / 2, color: "#ffffff", r: 0.5, life: 0.25 });
     msg(w, "parry", { mon: src.d.name }, 0); if (U.chance(0.35)) say(w, "parry", { mon: src.d.name });
     record(w, { kind: "parry", mon: src.kind, monName: src.d.name, sev: 0 }); inspire(w, "dodge");
     return true;

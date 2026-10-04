@@ -88,6 +88,7 @@
     h.floorT += dt;
     if (glob) for (const k in w.dir.ct) w.dir.ct[k] = Math.max(0, w.dir.ct[k] - dt);
     h.cdShot = Math.max(0, h.cdShot - dt); h.cdBurst = Math.max(0, h.cdBurst - dt); h.cdShove = Math.max(0, h.cdShove - dt); h.cdMelee = Math.max(0, (h.cdMelee || 0) - dt);
+    if (G.F.isBlade()) G.F.bladeTick(w, dt);
     h.cdFlash = Math.max(0, (h.cdFlash || 0) - dt); h.cdBreak = Math.max(0, (h.cdBreak || 0) - dt); h.ifr = Math.max(0, (h.ifr || 0) - dt);
     h.slow = Math.max(0, h.slow - dt); h.glue = Math.max(0, h.glue - dt);
     if (h.trance > 0) { h.tranceRun = (h.tranceRun || 0) + dt; if (h.tranceRun > 6 && !h.sleep) { h.trance = 0.001; } } else h.tranceRun = 0;   // 惑いが6秒続いたら、首を振って振り払う
@@ -142,7 +143,7 @@
     if (h.form === "magica") {
       h.magic = Math.max(0, h.magic - G.BAL.passiveMagicDrain * dt);
       if (h.magic <= 0) untransform(w, null);
-      if (h.idleMp > 1.5) h.mp = Math.min(h.mpMax || G.HIKARI.mpMax, h.mp + (h.rest > 0 ? G.HIKARI.mpRest : G.HIKARI.mpRegen) * (sk(w, "breath") ? 1.4 : 1) * dt);
+      if (h.idleMp > 1.5) h.mp = Math.min(h.mpMax || G.heroStats().mpMax, h.mp + (h.rest > 0 ? G.heroStats().mpRest : G.heroStats().mpRegen) * (sk(w, "breath") ? 1.4 : 1) * dt);
     }
     h.arousal = Math.max(0, h.arousal - (h.bound ? 0 : 0.3) * dt);
     // 快感は、責めが止めば引いていく。発情しているほど引きにくい

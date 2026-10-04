@@ -90,6 +90,7 @@
   function grab(w, src, power, type) {
     const h = w.run.h;
     if (h.ifr > 0 && src.d && src.d.spd !== undefined) return false;
+    if (G.F.bladeParry && G.F.isBlade() && G.F.bladeParry(w, src)) return false;   // 遙：受け流し
     if (!h.bound && sk(w, "veil") && !h.veilUsed && src.d && src.d.spd !== undefined) {   // ルミナ・ヴェール：階ごとに一度、掴む手を弾く
       h.veilUsed = true; h.ifr = 0.6; msg(w, "veil", { mon: src.d.name }); h.bubble = { text: G.Text.spell("veil") + "！", t: 1.2 };
       fx(w, { kind: "ring", x: h.x, y: h.y, color: "#fff2c0", r: 1.2, life: 0.6 }); return false;
@@ -260,7 +261,7 @@
     for (const id of b.by) { const m = w.monsters.find(x => x.id === id); if (m && m.d.atk.drain) drainMagic(w, m.d.atk.drain * dt, m); }
     if (h.kit.knife > 0 && b.t > 0.8 && !b.knifed && b.type === "絡" && !b.noKnife) { b.knifed = true; h.kit.knife--; b.struggle += 0.6; msg(w, "item", { item: G.Text.item("knife") }); record(w, { kind: "item", item: "knife", sev: 0 }); }
     const arms = b.by.length + (b.shadow && b.shadow.arms >= 4 ? 1 : 0);      // 影の腕が増えたら、二か所以上に掴まれたのと同じ
-    if (h.form === "magica" && !b.noFlash && h.cdFlash <= 0 && h.mp >= G.HIKARI.flash.cost && h.trance <= 0 && !b.wait && b.t > 5.5 && (arms >= 2 || (b.t > 7 && pressure(w, h.x, h.y, 2.4).n >= 3))) { flash(w); return; }
+    if (h.form === "magica" && !b.noFlash && h.cdFlash <= 0 && h.mp >= G.heroStats().flash.cost && h.trance <= 0 && !b.wait && b.t > 5.5 && (arms >= 2 || (b.t > 7 && pressure(w, h.x, h.y, 2.4).n >= 3))) { flash(w); return; }
     const prep = G.PREP[w.run.stated];
     let rate = (0.2 + h.will / 260) * (h.form === "magica" ? 1.25 : 0.7) * tf.struggle / Math.max(0.5, k * p) * (b.slowStruggle || 1) * resist(w);
     rate /= 1 + 0.25 * (b.nAct > 1 ? b.nAct - 1 : 0);                // 群がられるほど、もがく隙がない
@@ -326,7 +327,7 @@
     }
     // ルミナの底力：気力が尽きかけた時、階ごとに一度だけ、光で全部を弾き飛ばす（変身中・MP があれば）
     if (h.will < 10 && h.hp > 0 && !h.lastStand && h.form === "magica" && h.mp >= 6 && !b.noFlash) {
-      h.lastStand = true; h.mp += G.HIKARI.flash.cost; flash(w); h.will = Math.max(h.will, 50); h.ifr = Math.max(h.ifr, 2);
+      h.lastStand = true; h.mp += G.heroStats().flash.cost; flash(w); h.will = Math.max(h.will, 50); h.ifr = Math.max(h.ifr, 2);
       msg(w, "lastStand", {}); h.bubble = { text: G.Text.spell("lastStand"), t: 1.8 };
       return;
     }

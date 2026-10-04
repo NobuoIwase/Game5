@@ -251,7 +251,7 @@
   }
   // ルミナ・フラッシュ：拘束を弾き、まわりを押し返して怯ませる
   function flash(w) {
-    const h = w.run.h, F0 = G.HIKARI.flash, v = sk(w, "flash2");
+    const h = w.run.h, F0 = G.heroStats().flash, v = sk(w, "flash2");
     const F = v ? Object.assign({}, F0, { cost: F0.cost - 4, cd: F0.cd - 3, radius: F0.radius + 0.8 }) : F0;
     h.mp -= F.cost; h.cdFlash = F.cd; h.ifr = 0.8; inspire(w, "flash");
     if (h.bound) release(w, true);
@@ -272,7 +272,7 @@
   }
   // 空いている方へ突き抜ける（12方向を調べ、行き先のまわりの魔物が一番少ない所）
   function breakout(w) {
-    const h = w.run.h, B = G.HIKARI.breakout;
+    const h = w.run.h, B = G.heroStats().breakout;
     const here = pressure(w, h.x, h.y, 3).n;
     let best = null, bs = 1e9;
     for (let k = 0; k < 12; k++) {
@@ -294,7 +294,7 @@
   /* ================================================================ ひかり：考える */
   function hikariSpeed(w) {
     const h = w.run.h, prep = G.PREP[w.run.stated];
-    let s = G.HIKARI.spd[h.form];
+    let s = G.heroStats().spd[h.form];
     if (prep && prep.slow) s *= prep.slow;
     if (h.slow > 0) s *= 0.55;
     if (h.glue > 0) s *= 0.1;
@@ -320,20 +320,20 @@
   }
 
   function hikariThink(w) {
-    const h = w.run.h, run = w.run, map = w.map, S = G.HIKARI;
+    const h = w.run.h, run = w.run, map = w.map, S = G.heroStats();
     const caution = run.caution || 1;         // 依頼書の脅威度で変わる用心深さ
     // 道具
     if (h.hp < 38 && h.kit.salve > 0) { h.kit.salve--; h.hp = Math.min(h.hpMax || S.hpMax, h.hp + 35); say(w, "useSalve", {}); msg(w, "item", { item: G.Text.item("salve") }); record(w, { kind: "item", item: "salve", sev: 0 }); }
     const use = (k, fn) => { h.kit[k]--; fn(); msg(w, "item", { item: G.Text.item(k) }); record(w, { kind: "item", item: k, sev: 0 }); };
     if ((h.will < 32 || h.trance > 1.2 || h.hyp > 55) && h.kit.smelling > 0) use("smelling", () => { h.will = Math.min(100, h.will + 30); h.trance = Math.min(h.trance, 0.2); h.hyp = Math.max(0, h.hyp - 50); if (h.hyp <= 0 && h.sleep <= 0) h.hypno = null; });
     // MP：戦いの最中に切れそうなら水薬。静かなら、使わずに息を整える
-    if (h.form === "magica" && h.kit.ether > 0 && h.mp < 14 && threats(w).some(o => o.d < 6)) use("ether", () => { h.mp = Math.min(h.mpMax || G.HIKARI.mpMax, h.mp + 30); });
+    if (h.form === "magica" && h.kit.ether > 0 && h.mp < 14 && threats(w).some(o => o.d < 6)) use("ether", () => { h.mp = Math.min(h.mpMax || G.heroStats().mpMax, h.mp + 30); });
     // 火照り：自分で気づけている分だけ（鎮心の香が効いていると気づけない）
     if (h.kit.cool > 0 && perceivedArousal(w) > 55) use("cool", () => { h.arousal = Math.max(0, h.arousal - 35); h.pleasure = Math.max(0, h.pleasure - 20); });
     const ts = threats(w), near = ts.filter(o => o.d < 4.2);
     // 変身し直し：解けてからしばらくは無理。安全な時に、時間をかけて
     if (h.form === "civilian" && h.kit.star > 0 && (h.noTransform || 0) <= 0 && !ts.some(o => o.d < 4.5) && !h.cast) {
-      h.cast = { kind: "transform", t: G.HIKARI.transformCast, tx: h.x, ty: h.y };
+      h.cast = { kind: "transform", t: G.heroStats().transformCast, tx: h.x, ty: h.y };
       h.intent = null; h.label = "変身";
       say(w, "retransform", {}); msg(w, "transformStart", {});
       return;
@@ -343,14 +343,15 @@
     h.surrounded = pr.n >= 3 || pr.p >= 1.3;
     if (h.surrounded) {
       if (!h.wasSurrounded) { say(w, h.form === "magica" ? "surrounded" : "surroundedCiv", {}); msg(w, "surrounded", {}); }
-      if (h.form === "magica" && h.cdFlash <= 0 && h.mp >= G.HIKARI.flash.cost && h.trance <= 0 && pr.n >= 4) { flash(w); h.wasSurrounded = true; return; }
+      if (h.form === "magica" && h.cdFlash <= 0 && h.mp >= G.heroStats().flash.cost && h.trance <= 0 && pr.n >= 4) { flash(w); h.wasSurrounded = true; return; }
       if (h.cdBreak <= 0 && breakout(w)) { h.wasSurrounded = true; return; }
-      if (h.form === "magica" && h.cdFlash <= 0 && h.mp >= G.HIKARI.flash.cost && h.trance <= 0) { flash(w); h.wasSurrounded = true; return; }
+      if (h.form === "magica" && h.cdFlash <= 0 && h.mp >= G.heroStats().flash.cost && h.trance <= 0) { flash(w); h.wasSurrounded = true; return; }
       if (h.form === "civilian") h.will = Math.max(0, h.will - 0.6);
     }
     h.wasSurrounded = h.surrounded;
     // 危険を避ける（最優先）
     const u = urgent(w);
+    if (u && G.F.isBlade() && h.form === "magica") { G.F.bladeEvade(w, u, ts); return; }   // 遙：受けの構え／その場の捌き
     if (u) {
       const v = bestDodge(w, u, ts[0] && ts[0].m);
       if (!h.dashed[u.key]) { h.dashed[u.key] = 1; h.dashT = 0.28; if (sk(w, "stardust")) { h.dashT = 0.36; h.ifr = Math.max(h.ifr, 0.3); } inspire(w, "dodge"); }
@@ -394,7 +395,7 @@
       }
     }
     // 道にある、見破った罠を撃って壊す（近くに魔物がいない時）
-    if (h.form === "magica" && h.cdShot <= 0 && h.mp >= S.shot.cost * 2 && !ts.some(o => o.d < 6)) {
+    if (h.form === "magica" && !G.F.isBlade() && h.cdShot <= 0 && h.mp >= S.shot.cost * 2 && !ts.some(o => o.d < 6)) {
       const g = h.goal || h.search;
       const tr = w.traps.filter(t => t.found && t.armed && !t.room && !t.d.lure && U.dist(h.x, h.y, t.x, t.y) < 4.5 && U.dist(h.x, h.y, t.x, t.y) > 0.9 && shotClear(map, h.x, h.y, t.x, t.y)
         && (!g || U.dist(t.x, t.y, g.x, g.y) < U.dist(h.x, h.y, g.x, g.y) + 1)).sort((a, b) => U.dist(h.x, h.y, a.x, a.y) - U.dist(h.x, h.y, b.x, b.y))[0];
@@ -416,6 +417,7 @@
     }
     if (t0) {
       const m = t0.m, seenNow = t0.k.seen && w.t - t0.k.t < 0.5, vis = seenNow && shotClear(map, h.x, h.y, m.x, m.y);
+      if (G.F.isBlade() && h.form === "magica") { h.state = "combat"; h.fireSpot = null; G.F.bladeCombat(w, t0, ts, vis, seenNow); return; }   // 遙：寄って斬る
       // 見えているのに射線が通らない（角・柱）／弾が壁に当たり続けた：撃てる位置へ動く
       if (h.form === "magica" && seenNow && (!vis || h.wallHits >= 2)) {
         h.wallHits = 0;
@@ -435,7 +437,7 @@
         // 近接：MP が少ない時、相手が攻撃のあとの隙を見せている時、触手の短い相手には踏み込んで打つ
         const A2 = m.d.atk, reachy = (A2.kind === "grab" && (A2.range || 1) > 1.4) || A2.kind === "drain" || (A2.kind === "aura" && !A2.burst);
         const opening = !m.cast && (m.cd > 0.35 || m.stun > 0);
-        const saving = h.mp < (h.mpMax || G.HIKARI.mpMax) * 0.5;          // MP を切らさないように
+        const saving = h.mp < (h.mpMax || G.heroStats().mpMax) * 0.5;          // MP を切らさないように
         const wantMelee = seenNow && (!!h.possess || (saving && !reachy) || h.mp < S.shot.cost * 2 || (opening && !reachy) || (m.d.spd === 0 && !reachy));
         if (wantMelee && h.mp >= S.melee.cost) {
           if (d <= S.melee.range + m.d.r * 0.5 && h.cdMelee <= 0) { tryCast(w, m, "melee"); if (h.cast || h.think > 0) return; }   // 角に阻まれて打てなければ、ほかの手へ
@@ -635,7 +637,8 @@
 
   /* ---- 魔法：短く唱えてから放つ（名前を叫ぶ） ---- */
   function tryCast(w, target, kind) {
-    const h = w.run.h, S = G.HIKARI;
+    if (G.F.isBlade()) return G.F.bladeCast(w, target, kind);   // 遙：剣の手（飛刃・斬・風車）
+    const h = w.run.h, S = G.heroStats();
     if (h.cast || h.bound || h.form !== "magica") return;
     if (kind === "shot" && (h.cdShot > 0 || h.mp < S.shot.cost)) return;
     if (kind === "burst" && (h.cdBurst > 0 || h.mp < S.burst.cost)) return;
@@ -654,7 +657,7 @@
     msg(w, "cast", { spell: name }, kind === "burst" ? 0 : 1.2);
   }
   function releaseCast(w) {
-    const h = w.run.h, S = G.HIKARI, c = h.cast;
+    const h = w.run.h, S = G.heroStats(), c = h.cast;
     h.cast = null;
     if (c.kind === "transform") {
       h.kit.star--; h.magic = 45; h.form = "magica"; h.mp = Math.max(h.mp, 20);
@@ -662,6 +665,7 @@
       fx(w, { kind: "burst", x: h.x, y: h.y, color: "#ffe6f6", life: 1.0 });
       return;
     }
+    if (c.blade) return G.F.bladeRelease(w, c);
     const tgt = c.target && c.target.hp > 0 ? c.target : { x: c.tx, y: c.ty };
     if (c.kind === "melee") {
       h.mp -= S.melee.cost; h.cdMelee = S.melee.cd; h.idleMp = 0;

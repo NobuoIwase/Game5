@@ -26,6 +26,7 @@ for(let i=0;i<500;i++){
     for(let k=0;k<600;k++){ if(d.w.scene){return 'scene'} if(d.w.outcome||d.night) break; G.Field.step(d.w,1/30);} return d.night?'night':'run';});
   if(st==='scene'){ await p.waitForTimeout(120); const mo=await p.$('#modal:not(.hidden) #ok'); if(mo) await mo.click(); }   // 戦闘中の場面は窓を出さず、実況に流れる
   if(st==='night'){ await p.waitForTimeout(300); await p.click('#nx'); await p.click('#skip'); }
+  for(let k=0;k<3;k++){ const ab=await p.$('.abduct #abs'); if(!ab) break; await ab.click(); await p.waitForTimeout(200); }   // 夜明け前の持ち帰りの場面を飛ばす
   if(st==='done') break;
   await p.waitForTimeout(40);
 }

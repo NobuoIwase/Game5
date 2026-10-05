@@ -12,6 +12,7 @@
       const add = dmg * 0.3; m.maxHp += add; m.hp += add; m.pow = Math.min(2.2, (m.pow || 1) + dmg / 140);
       if (U.chance(0.25)) msg(w, "grows", { mon: m.d.name }, 5);
     }
+    if (m.dash) { m.dash = null; m.stun = Math.max(m.stun || 0, 0.6); m.cd = Math.max(m.cd || 0, 1); msg(w, "rushStop", { mon: m.d.name }, 1.5); }   // 突進は、打てば止まる
     m.hp -= dmg; m.hitT2 = w.t; w.run.h.lastDmgT = w.t; m.flash = 0.2; m.rcl = 0.26; m.rclX = Math.sign(m.x - w.run.h.x) || 1;
     alertMon(w, m, 1);
     fx(w, { kind: "hit", combatFx: combatFx || (G.Hero.cur === "haruka" ? "blade-parry" : "hit-spark"), x: m.x, y: m.y, color: "#fff6c8", life: 0.3 });
@@ -55,6 +56,7 @@
     if (m.d.atk.burst && U.dist(m.x, m.y, h.x, h.y) < 1.6) applyEffect(w, "蕩", m.d.atk.power, m);
     if (m.d.atk.popCloud) { addCloud(w, m, m.d.atk.popCloud); msg(w, "popCloud", { mon: m.d.name }); }
     if (U.chance(0.25)) say(w, "kill", { mon: m.d.name });
+    if (G.F.isBlade() && !w.monsters.some(o => o.hp > 0 && o.alert > 0 && U.dist(o.x, o.y, h.x, h.y) < 6)) msg(w, "zanshin", {}, 8);   // 遙：最後の一体を斬って、残心
   }
 
   /* ================================================================ ひかり：1コマ */

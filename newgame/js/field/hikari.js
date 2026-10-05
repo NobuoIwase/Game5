@@ -349,9 +349,15 @@
       if (h.form === "civilian") h.will = Math.max(0, h.will - 0.6);
     }
     h.wasSurrounded = h.surrounded;
+    // 突進・飛びかかり：万全なら、打って止める（当てれば突進は止まる）
+    if (h.form === "magica" && G.F.fray(w) < 0.6) {
+      const rush = w.monsters.find(m => m.hp > 0 && (m.dash || (m.cast && m.cast.kind === "pounce" && m.cast.t < 0.3)) && U.dist(m.x, m.y, h.x, h.y) < (G.F.isBlade() ? 2.4 : 2.0));
+      if (rush && h.cdMelee <= 0 && h.mp >= S.melee.cost && !h.cast) { h.face = { x: rush.x, y: rush.y, t: 0.4 }; tryCast(w, rush, "melee"); if (h.cast) { h.label = "迎え撃つ"; msg(w, "counterRush", { mon: rush.d.name }, 3); return; } }
+    }
     // 危険を避ける（最優先）
     const u = urgent(w);
     if (u && G.F.isBlade() && h.form === "magica") { G.F.bladeEvade(w, u, ts); return; }   // 遙：受けの構え／その場の捌き
+    if (u && h.form === "magica" && G.F.fray(w) < 0.45) { G.F.sidestep(w, u, ts); return; }   // 万全：大きく飛びのかず、小さく見切る
     if (u) {
       const v = bestDodge(w, u, ts[0] && ts[0].m);
       if (!h.dashed[u.key]) { h.dashed[u.key] = 1; h.dashT = 0.28; if (sk(w, "stardust")) { h.dashT = 0.36; h.ifr = Math.max(h.ifr, 0.3); } inspire(w, "dodge"); }

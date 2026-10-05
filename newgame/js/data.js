@@ -486,6 +486,7 @@ var G = (typeof G !== "undefined") ? G : {};
     burst: { dmg: 11, cost: 16, cd: 5, cast: 0.7, radius: 2.3, magic: 3 },   // シャイン・バスター
     flash: { cost: 12, cd: 9, radius: 2.3, push: 1.3, stun: 1.2 },   // ルミナ・フラッシュ（囲まれた・二か所以上掴まれた時に弾き飛ばす）
     breakout: { cd: 5, dist: 2.8 },                                    // 囲まれたら、空いている方へ突き抜ける
+    step: { dist: 0.8, ifr: 0.22, cd: 0.5 },                           // 万全な時の小さな見切り（その場で半身にかわす）
     mpRegen: 2.6, mpRest: 6.5,
     noTransform: 25,                                       // 変身が解けてから、また変身できるまで（秒）
     transformCast: 1.6,                                    // 星の雫で変身し直すのにかかる時間
@@ -511,11 +512,11 @@ var G = (typeof G !== "undefined") ? G : {};
     },
     hpMul: 0.85,                                                      // 体力は、ひかりの八割五分
     spd: { magica: 3.35, civilian: 2.6 },
-    shot:  { dmg: 10, cost: 12, cd: 3.2, cast: 0.32, speed: 9, range: 5.5 },        // 飛刃（技）
-    melee: { dmg: 12, cost: 0, cd: 0.55, cast: 0.12, range: 1.55, arc: 1.7 },       // 斬（霊力いらず）
-    burst: { dmg: 12, cost: 14, cd: 5, cast: 0.35, radius: 1.9, magic: 2 },         // 白山流・風車（自分のまわりを薙ぐ）
+    shot:  { dmg: 14, cost: 12, cd: 3.2, cast: 0.32, speed: 9, range: 5.5 },        // 飛刃（技）
+    melee: { dmg: 17, cost: 0, cd: 0.55, cast: 0.12, range: 1.55, arc: 1.7 },       // 斬（霊力いらず。刀なので重い）
+    burst: { dmg: 16, cost: 14, cd: 5, cast: 0.35, radius: 1.9, magic: 2 },         // 白山流・風車（自分のまわりを薙ぐ）
     flash: { cost: 12, cd: 9, radius: 2.1, push: 1.1, stun: 1.0 },                  // 破邪の一閃
-    iai:   { dmg: 24, range: 1.95, arc: 1.3, ready: 0.9, stun: 0.8 },               // 居合：構えを ready 秒保つと、抜き打てる
+    iai:   { dmg: 34, range: 1.95, arc: 1.3, ready: 0.9, stun: 0.8 },               // 居合：構えを ready 秒保つと、抜き打てる
     parry: { base: 0.42, stance: 0.33, cd: 1.4, stun: 1.3, arc: 1.4, riposte: 1.8, win: 1.0 },   // 受け流し：成功率＝基本＋構え×溜め、返しの一太刀は×1.8
     step:  { dist: 0.85, ifr: 0.24, cd: 0.5 },                                      // その場の捌き（小さく避けて、間合いに残る）
     lunge: { cd: 2.2, dist: 2.6 },                                                  // 踏み込み（離れた相手へ、一息に詰める）

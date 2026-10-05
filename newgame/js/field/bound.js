@@ -1,7 +1,7 @@
 /* field/bound.js — field 内部。tools/files.js と index.html の順で読み込む。 */
 (function () {
   "use strict";
-  let U, M, heroName, say, live, feed, msg, fx, pushMsg, monSay, actMsg, actBub, logLine, record, trait, heat, intake, resist, capped, releaseOverflow, addCharm, charmTouch, addCum, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, drainMagic, possess, endPossess, free, pressure, flash, alertMon, shasei, cumBlocked, urgeUp, dirStat, byPlayer;
+  let fray, U, M, heroName, say, live, feed, msg, fx, pushMsg, monSay, actMsg, actBub, logLine, record, trait, heat, intake, resist, capped, releaseOverflow, addCharm, charmTouch, addCum, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, drainMagic, possess, endPossess, free, pressure, flash, alertMon, shasei, cumBlocked, urgeUp, dirStat, byPlayer;
   function checkClimax(w, src, forced) {
     const h = w.run.h;
     if (!forced && h.pleasure >= 96 && capped(w)) {        // 栓をされている：あと少しで止まり、溢れた分が溜まる
@@ -34,7 +34,7 @@
       if (w.t - (h.edgeT ?? -99) > 4) { h.edgeT = w.t; record(w, { kind: "edge", type: "蕩", sev: 2, mon: src && src.kind, monName: src && src.d ? src.d.name : "" }); msg(w, h.ring ? "ringFull" : "edgeCap", {}); say(w, h.ring ? "ringFull" : "edgeCap", {}); }
       return;
     }
-    h.pleasure = 22 + 8 * trait(w, "squirthabit"); h.climax++; h.lastClimaxT = w.t;
+    h.pleasure = 6 + 30 * fray(w) + 8 * trait(w, "squirthabit"); h.climax++; h.lastClimaxT = w.t;   // 達した後の余熱：崩れているほど、すぐまた昇る
     if (h.futa) shasei(w, src);                     // 変生した身体は、達するたびに出してしまう
     h.will = Math.max(0, h.will - 2.5);
     h.trance = Math.max(h.trance, 1.6);
@@ -87,10 +87,27 @@
     return here ? src : null;
   }
   // 淫紋を刻む（その潜行のあいだ蕩が効きやすくなる。帰還後は状態異常「淫紋」として残る）
+  // 振り払い：魔物の手（罠・不意打ちは別）。万全ならまず捕まらず、崩れるほど振り払えなくなる。惑い・眠り・静止・足止めの最中は無理（搦手）
+  function shrug(w, src) {
+    const h = w.run.h;
+    if (h.bound || !src.d || src.d.spd === undefined || src.hidden || h.form !== "magica") return false;
+    if (h.trance > 0 || h.sleep > 0 || h.freeze > 0 || h.glue > 0 || h.salute > 0 || h.pray > 0 || h.sniff > 0 || h.convey) return false;
+    const lv = (h.charm && h.charm[src.kind]) || 0;
+    const p = 0.88 * Math.pow(1 - fray(w), 2.2) * (1 - 0.25 * lv) * (1 - 0.5 * expectation(w, src.kind));
+    if (!U.chance(p)) return false;
+    src.stun = Math.max(src.stun || 0, 0.7); src.cast = null; src.dash = null; src.holding = false; src.cd = Math.max(src.cd || 0, 1.4);
+    knock(w, src, U.angle(h.x, h.y, src.x, src.y), 0.6);
+    h.ifr = Math.max(h.ifr || 0, 0.6);
+    fx(w, { kind: "ring", x: h.x, y: h.y, color: "#fff2c0", r: 0.9, life: 0.35 });
+    msg(w, "shrug", { mon: src.d.name }, 1.5);
+    record(w, { kind: "shrug", mon: src.kind, monName: src.d.name, sev: 0 });
+    return true;
+  }
   function grab(w, src, power, type) {
     const h = w.run.h;
     if (h.ifr > 0 && src.d && src.d.spd !== undefined) return false;
     if (G.F.bladeParry && G.F.isBlade() && G.F.bladeParry(w, src)) return false;   // 遙：受け流し
+    if (shrug(w, src)) return false;                                              // 万全なら、掴む手を振り払う
     if (!h.bound && sk(w, "veil") && !h.veilUsed && src.d && src.d.spd !== undefined) {   // ルミナ・ヴェール：階ごとに一度、掴む手を弾く
       h.veilUsed = true; h.ifr = 0.6; msg(w, "veil", { mon: src.d.name }); h.bubble = { text: G.Text.spell("veil") + "！", t: 1.2 };
       fx(w, { kind: "ring", x: h.x, y: h.y, color: "#fff2c0", r: 1.2, life: 0.6 }); return false;
@@ -221,9 +238,9 @@
     for (const m of w.monsters) if (m.hp > 0 && !m.alert && U.dist(m.x, m.y, h.x, h.y) < 4.5 && G.Text.actorOf(m.kind)) alertMon(w, m, 0.6);   // 声が、近くの魔物を呼ぶ
     if (act.watch) { h.watched = 1.5; h.arousal = Math.min(100, h.arousal + 2.5); if (U.chance(0.5)) actBub(w, "watched"); return; }
     const k = mult(w, "蕩"), swarm = (1 + 0.18 * (n - 1)) * (n >= 3 ? 1 + 0.1 * trait(w, "swarmHabit") : 1);
-    const over = w.t - (h.lastClimaxT ?? -99) < 5 ? 1.2 : 1;          // 達したばかりの身体は、敏感すぎる
+    const fr = fray(w), over = w.t - (h.lastClimaxT ?? -99) < 5 ? (fr > 0.6 ? 1.2 : 0.7) : 1;   // 達したばかりの身体：崩れていれば敏感すぎ、まだ保てていれば一度引く
     if (over > 1 && !b.overSaid && !act.watch) { b.overSaid = true; feed(w, "after", G.Text.live.oversens()); }
-    const gain = over * 1.6 * act.pw * (who.pow || 1) * k * intake(w, who) * swarm * tf.pleasure * (w.run.law === "seishi" ? 0.8 : 1) * (act.tickle ? 0.7 : 1) * (sk(w, "heartlock") ? 0.82 : 1);
+    const gain = over * 1.6 * act.pw * (who.pow || 1) * k * intake(w, who) * swarm * (0.45 + 0.8 * Math.pow(fr, 1.4)) * (w.run.law === "seishi" ? 0.8 : 1) * (act.tickle ? 0.7 : 1) * (sk(w, "heartlock") ? 0.82 : 1);
     if (act.cum && h.futa) addCum(w, 8 * act.pw * swarm * intake(w, who), who); else h.pleasure += gain;
     h.arousal = Math.min(100, h.arousal + 1.1 * act.pw * k);
     if (act.tickle) h.will = Math.max(0, h.will - 3);
@@ -254,7 +271,8 @@
     if (!b.by.length) { release(w, false); return; }
     const k = mult(w, b.type), p = b.power;
     h.hp = Math.max(0, h.hp - 0.3 * p * dt);
-    h.will = Math.max(0, h.will - 0.27 * p * k * tf.will * dt);   // ルミナは心が強い      // 拘束は長く見せる分、一秒あたりは緩め
+    const fr = fray(w);
+    h.will = Math.max(0, h.will - 0.27 * p * k * tf.will * (0.5 + fr) * dt);   // ルミナは心が強い。万全なら、捕まっても心は削れにくい      // 拘束は長く見せる分、一秒あたりは緩め
     // 縛られているだけでは、熱は上がらない。触れられて、はじめて上がる
     lewdTick(w, dt);
     if (!h.bound) return;
@@ -271,8 +289,8 @@
     rate *= 1 - 0.12 * ((h.charm && h.charm[b.src.kind]) || 0);   // 好きな相手の腕は、本気で振りほどけない（魅了拘束）
     rate *= 1 - expectation(w, b.src.kind) * 0.3;       // 気持ちよさを覚えている相手だと、本気で振りほどけない
     if (sk(w, "hodoki")) rate *= 1.3;
-    if (b.t < 6) rate *= 0.2;                              // 捕まった直後は、まず何もできない
-    rate *= 0.45;                                          // 捕まっている時間は長く、そのあいだに熱がゆっくり上がっていく
+    if (b.t < 2 + 4 * fr) rate *= 0.2;                     // 捕まった直後は、まず何もできない（崩れているほど長い）
+    rate *= 0.45 * (1 + 1.6 * Math.pow(1 - fr, 2));        // 捕まっている時間は長く、そのあいだに熱がゆっくり上がっていく。万全なら、ずっと早く抜ける
     if (h.trance > 0) rate *= 0.5;                         // 催眠・惑いが効いている間は、もがく手に力が入らない
     if (h.will < 25) rate *= 1.5;                          // 追い詰められて、最後の力を振り絞る
     if (!b.nAct) rate *= 1.8;                              // 縛られているだけ（誰も触れてこない）なら、落ち着いて解ける
@@ -355,6 +373,6 @@
 
   /* ================================================================ ひかり：知覚 */
 
-  Object.assign(G.F, { presentSrc, checkClimax, grab, callPack, release, knock, actCat, lewdTick, updateBound, defeat, openScene });
-  G.F.bind.push(() => { ({ U, M, heroName, say, live, feed, msg, fx, pushMsg, monSay, actMsg, actBub, logLine, record, trait, heat, intake, resist, capped, releaseOverflow, addCharm, charmTouch, addCum, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, drainMagic, possess, endPossess, free, pressure, flash, alertMon, shasei, cumBlocked, urgeUp, dirStat, byPlayer } = G.F); });
+  Object.assign(G.F, { shrug, presentSrc, checkClimax, grab, callPack, release, knock, actCat, lewdTick, updateBound, defeat, openScene });
+  G.F.bind.push(() => { ({ fray, U, M, heroName, say, live, feed, msg, fx, pushMsg, monSay, actMsg, actBub, logLine, record, trait, heat, intake, resist, capped, releaseOverflow, addCharm, charmTouch, addCum, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, drainMagic, possess, endPossess, free, pressure, flash, alertMon, shasei, cumBlocked, urgeUp, dirStat, byPlayer } = G.F); });
 })();

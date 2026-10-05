@@ -1,0 +1,150 @@
+{
+  "source_sha256": "56af823bc951dbec9bd93cc84df613f15943a173896a0b8fcad1de1de40b14d1",
+  "source_size": [
+    1536,
+    1024
+  ],
+  "frame_size": 64,
+  "frames": 4,
+  "palette": [
+    [
+      100,
+      55,
+      36
+    ],
+    [
+      170,
+      98,
+      38
+    ],
+    [
+      222,
+      154,
+      51
+    ],
+    [
+      255,
+      202,
+      81
+    ],
+    [
+      255,
+      230,
+      142
+    ],
+    [
+      255,
+      246,
+      200
+    ],
+    [
+      255,
+      255,
+      239
+    ],
+    [
+      143,
+      229,
+      235
+    ]
+  ],
+  "alpha": "binary; remove generated low-opacity glow before resize",
+  "assets": {
+    "staff-sweep": {
+      "file": "staff-sweep.png",
+      "source_cell": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "source_bounds": [
+        74,
+        33,
+        481,
+        470
+      ],
+      "bytes": 2645
+    },
+    "staff-thrust": {
+      "file": "staff-thrust.png",
+      "source_cell": [
+        512,
+        0,
+        512,
+        512
+      ],
+      "source_bounds": [
+        0,
+        30,
+        495,
+        168
+      ],
+      "bytes": 923
+    },
+    "star-bolt": {
+      "file": "star-bolt.png",
+      "source_cell": [
+        1024,
+        0,
+        512,
+        512
+      ],
+      "source_bounds": [
+        57,
+        20,
+        416,
+        193
+      ],
+      "bytes": 1453
+    },
+    "light-burst": {
+      "file": "light-burst.png",
+      "source_cell": [
+        0,
+        512,
+        512,
+        512
+      ],
+      "source_bounds": [
+        28,
+        3,
+        500,
+        471
+      ],
+      "bytes": 3262
+    },
+    "repel-ring": {
+      "file": "repel-ring.png",
+      "source_cell": [
+        512,
+        512,
+        512,
+        512
+      ],
+      "source_bounds": [
+        19,
+        0,
+        508,
+        460
+      ],
+      "bytes": 2252
+    },
+    "hit-spark": {
+      "file": "hit-spark.png",
+      "source_cell": [
+        1024,
+        512,
+        512,
+        512
+      ],
+      "source_bounds": [
+        127,
+        83,
+        418,
+        365
+      ],
+      "bytes": 2123
+    }
+  }
+}

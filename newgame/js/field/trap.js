@@ -247,7 +247,7 @@
             p.owner = "m"; p.vx = -p.vx; p.vy = -p.vy; p.type = "惑"; p.power = 0.7; p.src = m; p.kind = "psy";
             say(w, "reflect", {}); msg(w, "reflect", { mon: m.d.name }); break;
           }
-          hurtMon(w, m, p.dmg); p.life = 0; h.wallHits = 0; break;
+          hurtMon(w, m, p.dmg, p.kind === "blade" ? "blade-parry" : "hit-spark"); p.life = 0; h.wallHits = 0; break;
         }
       } else if (p.life > 0 && !w.outcome && U.dist(p.x, p.y, h.x, h.y) < HR + p.r) {
         p.life = 0;

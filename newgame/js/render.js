@@ -10,7 +10,50 @@ var G = (typeof G !== "undefined") ? G : {};
   const IMG = {};
   function img(src) { if (!IMG[src]) { const i = new Image(); i.src = src; IMG[src] = i; } return IMG[src]; }
   const ok = i => i && i.complete && i.naturalWidth > 0;
+  // Generated light-magic silhouettes, rasterized once per orientation/size.
+  // All combat effects share 24 source pixels per map tile, even when zoomed.
+  const COMBAT_FX = ["staff-sweep", "staff-thrust", "star-bolt", "light-burst", "repel-ring", "hit-spark", "blade-slash", "blade-thrust", "blade-flight", "blade-spin", "blade-parry", "blade-iai"];
+  const combatCache = new Map(), FX_DENSITY = 24, FX_CACHE_LIMIT = 256;
+  function combatSprite(ctx, name, x, y, size, angle, frame, S, alpha, progress = 1) {
+    const source = img("assets/fx/" + name + ".png");
+    if (!ok(source)) return false; // Existing drawing remains usable while loading/on failure.
+    const side = Math.max(8, Math.round(size * FX_DENSITY));
+    const turn = ((Math.round((angle || 0) / (Math.PI * 2) * 32) % 32) + 32) % 32;
+    const fill = Math.max(1, Math.min(8, Math.ceil(progress * 8)));
+    const key = name + ":" + side + ":" + turn + ":" + frame + ":" + fill;
+    let tile = combatCache.get(key);
+    if (!tile) {
+      tile = document.createElement("canvas");
+      tile.width = tile.height = Math.ceil(side * 1.42) + 2;
+      const c = tile.getContext("2d"); c.imageSmoothingEnabled = false;
+      c.translate(tile.width / 2, tile.height / 2);
+      if (fill < 8) { c.beginPath(); c.moveTo(0, 0); c.arc(0, 0, tile.width, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * fill / 8); c.closePath(); c.clip(); }
+      c.rotate(turn * Math.PI * 2 / 32);
+      c.drawImage(source, frame * 64, 0, 64, 64, -side / 2, -side / 2, side, side);
+      if (combatCache.size >= FX_CACHE_LIMIT) combatCache.delete(combatCache.keys().next().value);
+      combatCache.set(key, tile);
+    }
+    const zoom = S / FX_DENSITY;
+    ctx.save(); ctx.imageSmoothingEnabled = false; ctx.shadowBlur = 0;
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(tile, Math.round(x - tile.width * zoom / 2), Math.round(y - tile.height * zoom / 2), tile.width * zoom, tile.height * zoom);
+    ctx.restore(); return true;
+  }
+  function combatEffect(ctx, f, x, y, S) {
+    if (!f.combatFx) return false;
+    const k = Math.max(0, Math.min(1, f.t / f.life)), frame = Math.min(3, Math.floor(k * 4));
+    let size, a = f.a || 0;
+    if (f.combatFx === "staff-sweep") { size = 2.7; x -= Math.cos(a) * S * 0.7; y -= Math.sin(a) * S * 0.7; }
+    else if (f.combatFx === "staff-thrust") { size = 2.05; x += Math.cos(a) * S * 0.18; y += Math.sin(a) * S * 0.18; }
+    else if (f.combatFx === "blade-slash") { size = (f.reach || 1.55) * 2; x -= Math.cos(a) * S * 0.7; y -= Math.sin(a) * S * 0.7; }
+    else if (f.combatFx === "blade-thrust") { size = (f.reach || 1.9) * 1.2; x += Math.cos(a) * S * 0.16; y += Math.sin(a) * S * 0.16; }
+    else if (f.combatFx === "blade-iai") size = f.reach ? f.reach * 1.7 : 1.4;
+    else if (f.combatFx === "blade-parry" || f.combatFx === "hit-spark") size = 0.85;
+    else size = (f.r || 1.2) * 2; // Radius never exceeds the actual affected area.
+    return combatSprite(ctx, f.combatFx, x, y, size, a, frame, S, (1 - k) * (f.combatFx === "light-burst" ? 0.8 : 1));
+  }
   function preload() {
+    for (const name of COMBAT_FX) img("assets/fx/" + name + ".png");
     for (const k in G.MONSTERS) img("assets/monsters/" + G.MONSTERS[k].art);
     for (const k in G.TRAPS) img(trapArt(k));
     for (const d of ["front", "back", "left", "right"]) {
@@ -375,6 +418,10 @@ var G = (typeof G !== "undefined") ? G : {};
     }
     // 弾
     for (const p of w.projs) {
+      if (p.owner === "h" && (p.kind === "star" || p.kind === "blade")) {
+        const a = Math.atan2(p.vy, p.vx), blade = p.kind === "blade";
+        if (combatSprite(ctx, blade ? "blade-flight" : "star-bolt", X(p.x) - Math.cos(a) * S * (blade ? 0.13 : 0.22), Y(p.y) - Math.sin(a) * S * (blade ? 0.13 : 0.22), blade ? 1.2 : 1.1, a, Math.floor(w.t * 12) % 4, S, 1)) continue;
+      }
       if (p.kind === "blade") {                     // 飛刃：三日月の斬撃
         const a = Math.atan2(p.vy, p.vx); ctx.strokeStyle = "#e8f4ff"; ctx.shadowColor = "#bfe0ff"; ctx.shadowBlur = 12; ctx.lineWidth = Math.max(2, S * 0.09);
         ctx.beginPath(); ctx.arc(X(p.x) - Math.cos(a) * S * 0.25, Y(p.y) - Math.sin(a) * S * 0.25, S * 0.42, a - 1.1, a + 1.1); ctx.stroke(); ctx.shadowBlur = 0;
@@ -390,6 +437,7 @@ var G = (typeof G !== "undefined") ? G : {};
     // 効果
     for (const f of w.fx) {
       const k = f.t / f.life, cx = X(f.x), cy = Y(f.y);
+      if (combatEffect(ctx, f, cx, cy, S)) continue;
       ctx.globalAlpha = 1 - k;
       ctx.strokeStyle = ctx.fillStyle = f.color || "#fff";
       if (f.kind === "ring") { ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(cx, cy, S * (f.r || 0.9) * (0.4 + k), 0, 7); ctx.stroke(); }
@@ -562,7 +610,9 @@ var G = (typeof G !== "undefined") ? G : {};
     const im = img(G.Hero.sprite(h, U.dirName(h.a), 1));
     ctx.fillStyle = "rgba(0,0,0,0.3)"; ctx.beginPath(); ctx.ellipse(x, y + S * 0.3, S * 0.4, S * 0.14, 0, 0, 7); ctx.fill();
     if (h.bound) { ctx.strokeStyle = "rgba(255,110,170,0.85)"; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(x, y - S * 0.4, S * 0.55, 0, 7); ctx.stroke(); }
-    if (h.cast) {                                   // 詠唱の光
+    if (h.cast && h.cast.kind !== "transform" && combatSprite(ctx, h.cast.blade ? "blade-parry" : "hit-spark", x + Math.cos(h.a) * S * 0.35, y - S * 0.55, h.cast.blade ? 0.45 : 0.8, 0, Math.floor(w.t * 12) % 4, S, 0.65)) {
+      // The blade glints at readiness; magic gathers at the staff.
+    } else if (h.cast) {                            // 詠唱の光
       const g = ctx.createRadialGradient(x, y - S * 0.6, 0, x, y - S * 0.6, S * (h.cast.kind === "transform" ? 1.4 : 0.9));
       g.addColorStop(0, "rgba(255,240,200,0.55)"); g.addColorStop(1, "rgba(255,200,240,0)");
       ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y - S * 0.6, S * 1.4, 0, 7); ctx.fill();
@@ -610,7 +660,11 @@ var G = (typeof G !== "undefined") ? G : {};
     for (let i = 0; i < (h.attach || []).length; i++) { ctx.fillStyle = "rgba(255,110,170,0.85)"; ctx.beginPath(); ctx.arc(x - S * 0.12 + i * S * 0.09, y - H * 0.58, S * 0.05 + Math.sin(w.t * 9 + i) * S * 0.01, 0, 7); ctx.fill(); }
     if (h.possess) { ctx.fillStyle = `rgba(230,236,255,${0.45 + 0.25 * Math.sin(w.t * 6)})`; ctx.beginPath(); ctx.arc(x - S * 0.22, y - H * 0.55, S * 0.12, 0, 7); ctx.fill(); }
     if (h.bound) { const b = h.bound; ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S, 5); ctx.fillStyle = "#fff0a0"; ctx.fillRect(x - S * 0.5, y + S * 0.45, S * Math.min(1, b.struggle), 5); }
-    if (h.zan > 0.05 && !h.bound) {                 // 遙：居合の溜め（足元の弧が、満ちると白く光る）
+    if (G.Hero.cur === "haruka" && h.dashT > 0 && Math.hypot(h.vx || 0, h.vy || 0) > 0.1) {
+      const a = Math.atan2(h.vy, h.vx);
+      combatSprite(ctx, "blade-thrust", x - Math.cos(a) * S * 0.45, y + S * 0.3 - Math.sin(a) * S * 0.45, 0.85, a, 1, S, Math.min(0.45, h.dashT * 2));
+    }
+    if (h.zan > 0.05 && !h.bound && !combatSprite(ctx, "blade-spin", x, y + S * 0.38, 1.0, 0, 1, S, h.zan >= 1 ? 1 : 0.6, h.zan)) { // 遙：居合の溜め
       ctx.save(); ctx.lineWidth = 2.5; ctx.strokeStyle = h.zan >= 1 ? "#ffffff" : "rgba(200,225,255,0.7)"; if (h.zan >= 1) { ctx.shadowColor = "#cfe6ff"; ctx.shadowBlur = 10; }
       ctx.beginPath(); ctx.arc(x, y + S * 0.38, S * 0.42, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.min(1, h.zan)); ctx.stroke(); ctx.restore();
     }

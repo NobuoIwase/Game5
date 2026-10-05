@@ -267,7 +267,7 @@
       h.attach = h.attach.filter(id => !ATTACH[id].flash);
       if (h.attach.length < before) msg(w, "attachOff", {});
     }
-    fx(w, { kind: "burst", x: h.x, y: h.y, color: "#fff8d0", r: F.radius, life: 0.7 });
+    fx(w, { kind: "burst", combatFx: G.Hero.cur === "haruka" ? "blade-spin" : "repel-ring", x: h.x, y: h.y, color: "#fff8d0", r: F.radius, life: 0.7 });
     record(w, { kind: "flash", sev: 0 });
   }
   // 空いている方へ突き抜ける（12方向を調べ、行き先のまわりの魔物が一番少ない所）
@@ -670,7 +670,7 @@
     if (c.kind === "melee") {
       h.mp -= S.melee.cost; h.cdMelee = S.melee.cd; h.idleMp = 0;
       const a = U.angle(h.x, h.y, c.tx, c.ty), spear = sk(w, "spear"), mRange = S.melee.range + (spear ? 0.35 : 0), mDmg = (S.melee.dmg + (spear ? 3 : 0)) * (h.dmgMul || 1);
-      fx(w, { kind: "slash", x: h.x + Math.cos(a) * 0.7, y: h.y + Math.sin(a) * 0.7, a, color: "#fff4c0", life: 0.25 });
+      fx(w, { kind: "slash", combatFx: spear ? "staff-thrust" : "staff-sweep", x: h.x + Math.cos(a) * 0.7, y: h.y + Math.sin(a) * 0.7, a, color: "#fff4c0", life: 0.25 });
       let hit = 0;
       for (const m of w.monsters) {
         if (m.hp <= 0 || U.dist(h.x, h.y, m.x, m.y) > mRange + m.d.r * 0.6) continue;
@@ -690,7 +690,7 @@
       h.mp -= S.burst.cost; h.cdBurst = S.burst.cd; h.cdShot = 0.9; h.idleMp = 0;
       drainMagic(w, S.burst.magic, null);
       const nova = sk(w, "nova"), bR = S.burst.radius + (nova ? 0.5 : 0);
-      fx(w, { kind: "burst", x: tgt.x, y: tgt.y, color: "#fff4c0", r: bR, life: 0.7 });
+      fx(w, { kind: "burst", combatFx: "light-burst", x: tgt.x, y: tgt.y, color: "#fff4c0", r: bR, life: 0.7 });
       for (const m of w.monsters) if (m.hp > 0 && U.dist(m.x, m.y, tgt.x, tgt.y) < bR) hurtMon(w, m, (S.burst.dmg + (nova ? 4 : 0)) * (h.dmgMul || 1));
       record(w, { kind: "burst", sev: 0 }); inspire(w, "burst");
     } else {

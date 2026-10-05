@@ -8,10 +8,21 @@
   function trait(w, id) { return ((w.run.save && w.run.save.traits) || {})[id] || 0; }
   // 快感の入り：堕ちの段階・敏感化・ハイ・その場面に噛み合った性癖
   // 熱：素の身体は、そう簡単には達しない。発情（媚薬・靄・匂い）と敏感化で、一気に達しやすくなる
-  function heat(w) { const h = w.run.h; return (0.5 + 1.1 * (h.arousal / 100) + 0.06 * (h.sens || 0)) * (h.form === "magica" ? 0.8 : 1); }   // 変身中は、魔力の衣が熱を逃がす
+  // 発情は段階で効く：冷めている（〜29）／火照り（30〜54）／疼き（55〜79）／蕩け（80〜）。敏感化も一段ずつ重なる
+  const HEAT_STAGE = [0.22, 0.42, 0.72, 1.1], SENS_STAGE = [1, 1.08, 1.18, 1.3, 1.44, 1.6];
+  function heatStage(h) { const a = h.arousal; return a >= 80 ? 3 : a >= 55 ? 2 : a >= 30 ? 1 : 0; }
+  function heat(w) { const h = w.run.h; return HEAT_STAGE[heatStage(h)] * SENS_STAGE[Math.min(5, Math.round(h.sens || 0))] * (h.form === "magica" ? 0.85 : 1); }   // 変身中・構えている間は、熱を逃がせる
+  // 崩れ（0＝万全〜1＝終わりかけ）：堕ちの段階・発情・敏感・この潜行で達した数・気力・体力。万全なら、まず捕まらない
+  function fray(w) {
+    const h = w.run.h, sv = w.run.save || {};
+    const tier = G.tier(sv.body || 0, sv.mind || 0);
+    const d = 0.36 * tier / 3 + 0.22 * heatStage(h) / 3 + 0.1 * Math.min(5, h.sens || 0) / 5 + 0.16 * Math.min(1, (h.climax || 0) / 8)
+      + 0.1 * (1 - h.will / 100) + 0.06 * (1 - h.hp / (h.hpMax || 145));
+    return U.clamp(d, 0, 1);
+  }
   function intake(w, src) {
     const h = w.run.h, b = h.bound;
-    let k = heat(w) * tierFx(w).pleasure * (1 + 0.07 * (h.sens || 0)) * (h.high > 0 ? 1.3 : 1) * (1 + 0.08 * (h.swell || 0));
+    let k = heat(w) * tierFx(w).pleasure * (h.high > 0 ? 1.3 : 1) * (1 + 0.08 * (h.swell || 0));
     const amp = id => { k *= 1 + 0.12 * trait(w, id); };
     if (b) { amp("bindhabit"); if (b.by.length >= 2 || h.surrounded) amp("loser"); if (b.type === "蕩") amp("engulfCalm"); if (b.tickle) amp("ticklish"); if (b.src && MACHINE.includes(b.src.kind)) amp("rhythmSub"); }
     if (h.watched > 0) amp("publicHeat");
@@ -460,6 +471,6 @@
 
   /* ---- 捕まる・振りほどく ---- */
 
-  Object.assign(G.F, { strobeTick, pavlov, CULT, vesselFit, shasei, cumBlocked, urgeUp, MACHINE, IMPS, trait, heat, intake, resist, capped, releaseOverflow, addCharm, SLUGS, charmTouch, ATTACH, addAttach, addCum, addCrack, pray, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, applyEffect, drainMagic, untransform, engraveSigil, possess, tickStatus, endPossess });
+  Object.assign(G.F, { fray, heatStage, strobeTick, pavlov, CULT, vesselFit, shasei, cumBlocked, urgeUp, MACHINE, IMPS, trait, heat, intake, resist, capped, releaseOverflow, addCharm, SLUGS, charmTouch, ATTACH, addAttach, addCum, addCrack, pray, kiss, addBrain, mult, tierFx, knowledge, learn, expectation, sk, inspire, crave, applyEffect, drainMagic, untransform, engraveSigil, possess, tickStatus, endPossess });
   G.F.bind.push(() => { ({ U, TIER_FX, say, live, msg, fx, logLine, record, checkClimax, release, defeat, openScene, flash, heroName, feed } = G.F); });
 })();

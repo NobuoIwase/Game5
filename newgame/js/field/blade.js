@@ -130,7 +130,11 @@
       if (!h.dashed[u.key]) { h.dashed[u.key] = 1; msg(w, "guard", { mon: m.d.name }, 3); }
       return;
     }
-    // その場の捌き：短く、横へ。そのぶん一瞬だけ、何にも掛からない
+    sidestep(w, u, ts);
+  }
+  // その場の捌き（ひかりも、万全なら小さく見切る）：短く、横へ。そのぶん一瞬だけ、何にも掛からない
+  function sidestep(w, u, ts) {
+    const h = w.run.h, S = G.heroStats(), m = u.m;
     const sp = S.step.dist + (sk(w, "stardust") ? 0.3 : 0);
     let best = null;
     const base = m ? U.angle(m.x, m.y, h.x, h.y) : h.a;
@@ -147,7 +151,7 @@
       msg(w, "dodge", {}, 2.5); zanDecay(h);
     }
     h.cast = null;
-    setIntent(h, best.x, best.y, h.dashT > 0 ? 2.0 : 1.1, "捌き", ts[0] ? ts[0].m : null);
+    setIntent(h, best.x, best.y, h.dashT > 0 ? 2.0 : 1.1, isBlade() ? "捌き" : "見切り", ts[0] ? ts[0].m : null);
   }
 
   // 戦いの手（hikariThink から。手を打ったら true）
@@ -194,6 +198,6 @@
     if (Math.hypot(h.vx || 0, h.vy || 0) > 0.6 && h.label !== "受けの構え") h.zan = Math.max(0, (h.zan || 0) - dt * 1.2);   // 動けば、溜めは抜ける
   }
 
-  Object.assign(G.F, { isBlade, bladeCast, bladeRelease, bladeParry: parry, bladeEvade: evade, bladeCombat: combat, bladeTick: tick });
+  Object.assign(G.F, { isBlade, bladeCast, bladeRelease, bladeParry: parry, bladeEvade: evade, sidestep, bladeCombat: combat, bladeTick: tick });
   G.F.bind.push(() => { ({ U, HR, msg, say, fx, record, sk, inspire, knowledge, hurtMon, knock, alertMon, hitTrap, shotClear, goToward, setIntent, clearPath, danger, threats } = G.F); });
 })();

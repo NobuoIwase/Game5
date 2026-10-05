@@ -255,6 +255,9 @@ var G = (typeof G !== "undefined") ? G : {};
     cast: ["{spell}！", "{n}は {spell}を 放った！", "「{spell}！」"],
     dmg: ["{mon}に {n}の ダメージ！"],
     kill: ["{mon}を たおした！"],
+    shrug: ["{n}は {mon}の 手を ふりはらった！", "{mon}が つかみかかる——{n}は 光をまとって はじきかえした！", "{n}は {mon}の 腕を すり抜けた！"],
+    rushStop: ["{mon}の 突進が 止まった！"],
+    counterRush: ["{n}は 飛びこんでくる {mon}を 迎え撃つ！"],
     flee: ["{mon}は 悲鳴をあげて 逃げだした！"],
     miss: ["{mon}の 攻撃は 空を切った！"],
     monCast: ["{mon}の {skill}！"],
@@ -435,7 +438,7 @@ var G = (typeof G !== "undefined") ? G : {};
   // 魔物の技の名前（メッセージ窓で叫ぶ）
   const SKILL = {
     slug: "粘液吐き", gazer: "催眠の凝視", mind_roper: "囁きの波", wisp: "冷たい火", imp: "甘い呼び声",
-    shousha: "絶頂照射", banjin: "淫紋の光弾",
+    shousha: "絶頂照射", banjin: "淫紋の礫",
   };
 
   /* ---- 記録（下の窓に流れる一行） ---- */

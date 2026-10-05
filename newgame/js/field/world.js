@@ -26,10 +26,10 @@ var G = (typeof G !== "undefined") ? G : {};
     return 0;
   };
   const TIER_FX = [
-    { struggle: 1.12, pleasure: 0.8, will: 1.25 },
+    { struggle: 1.12, pleasure: 0.7, will: 1.25 },
     { struggle: 1.0, pleasure: 1.0, will: 1.0 },
     { struggle: 0.82, pleasure: 1.3, will: 0.8 },
-    { struggle: 0.62, pleasure: 1.55, will: 0.6 },
+    { struggle: 0.62, pleasure: 1.6, will: 0.6 },
   ];
   // 依頼の本当の脅威度（1 低い／2 並／3 高い）で魔物が強くなる
   const LV = { 1: { hp: 0.8, pow: 0.85 }, 2: { hp: 1, pow: 1 }, 3: { hp: 1.35, pow: 1.2 }, 4: { hp: 1.7, pow: 1.4 } };   // 4＝高難度（二人推奨）
